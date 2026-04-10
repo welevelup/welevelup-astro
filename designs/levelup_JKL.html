@@ -1,0 +1,584 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900&display=swap');
+:root{--y:#CCFF33;--n:#EEEBD3;--nv:#0C0A3E;--p:#A89CED;--f:'DM Sans',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+.root{font-family:var(--f);}
+a{color:inherit;text-decoration:none;}
+
+.tabs{display:flex;background:rgba(12,10,62,0.96);border-bottom:1px solid rgba(238,235,211,0.1);padding:0 20px;gap:4px;}
+.tab{padding:13px 22px;font-family:var(--f);font-size:12px;font-weight:700;letter-spacing:-0.02em;color:rgba(238,235,211,0.35);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;transition:all 0.2s;}
+.tab.on{color:var(--y);border-bottom-color:var(--y);}
+.des{display:none;}
+.des.on{display:block;}
+
+/* ══════════════════════════════
+   J — BOLD SPLIT SCROLL
+   Left side sticky headline,
+   right side scrolls content,
+   cursor-following yellow blob
+══════════════════════════════ */
+.j{background:var(--nv);color:var(--n);font-family:var(--f);position:relative;overflow:hidden;}
+
+/* Cursor blob */
+.j-blob{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(204,255,51,0.08) 0%,transparent 70%);pointer-events:none;z-index:0;transform:translate(-50%,-50%);transition:left 0.8s ease,top 0.8s ease;}
+
+.j-nav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:56px;border-bottom:1px solid rgba(238,235,211,0.08);position:relative;z-index:10;}
+.j-logo{font-size:17px;font-weight:900;letter-spacing:-0.045em;color:var(--n);}
+.j-logo span{color:var(--y);}
+.j-links{display:flex;gap:22px;}
+.j-links a{font-size:11px;font-weight:500;color:rgba(238,235,211,0.38);transition:color 0.2s;}
+.j-links a:hover{color:var(--n);}
+.j-ctas{display:flex;gap:8px;}
+.j-btn-y{background:var(--y);color:var(--nv);font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;border:none;cursor:pointer;transition:all 0.2s;}
+.j-btn-y:hover{background:#d4ff4a;transform:translateY(-1px);}
+.j-btn-o{border:1.5px solid rgba(238,235,211,0.18);color:rgba(238,235,211,0.55);background:none;font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;cursor:pointer;transition:all 0.2s;}
+.j-btn-o:hover{border-color:rgba(238,235,211,0.4);color:var(--n);}
+
+.j-hero{display:grid;grid-template-columns:1fr 1fr;min-height:520px;position:relative;z-index:2;}
+.j-hero-l{padding:72px 48px 72px 28px;border-right:1px solid rgba(238,235,211,0.08);display:flex;flex-direction:column;justify-content:center;}
+.j-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(238,235,211,0.3);margin-bottom:20px;
+  opacity:0;animation:jFadeUp 0.6s 0.1s forwards;}
+@keyframes jFadeUp{to{opacity:1;transform:translateY(0);}from{opacity:0;transform:translateY(20px);}}
+.j-h1{font-size:88px;font-weight:900;letter-spacing:-0.045em;line-height:0.88;margin-bottom:24px;}
+.j-h1 .l1{display:block;color:var(--n);opacity:0;animation:jFadeUp 0.65s 0.2s forwards;}
+.j-h1 .l2{display:block;color:var(--y);opacity:0;animation:jFadeUp 0.65s 0.35s forwards;}
+.j-h1 .l3{display:block;color:var(--n);-webkit-text-stroke:1.5px rgba(238,235,211,0.4);-webkit-text-fill-color:transparent;opacity:0;animation:jFadeUp 0.65s 0.5s forwards;}
+.j-sub{font-size:15px;color:rgba(238,235,211,0.48);line-height:1.7;max-width:380px;margin-bottom:36px;
+  opacity:0;animation:jFadeUp 0.6s 0.6s forwards;}
+.j-cta-row{display:flex;gap:10px;opacity:0;animation:jFadeUp 0.6s 0.75s forwards;}
+.j-btn-big{background:var(--y);color:var(--nv);font-family:var(--f);font-size:13px;font-weight:700;padding:13px 28px;border:none;cursor:pointer;transition:all 0.2s;}
+.j-btn-big:hover{background:#d4ff4a;transform:translateY(-2px);}
+.j-btn-ghost{border:2px solid rgba(238,235,211,0.18);color:rgba(238,235,211,0.55);background:none;font-family:var(--f);font-size:13px;font-weight:700;padding:13px 28px;cursor:pointer;transition:all 0.2s;}
+.j-btn-ghost:hover{border-color:rgba(238,235,211,0.4);color:var(--n);}
+
+.j-hero-r{display:flex;flex-direction:column;gap:0;}
+.j-camp{padding:32px 28px 32px 40px;border-bottom:1px solid rgba(238,235,211,0.08);cursor:pointer;transition:background 0.25s;position:relative;overflow:hidden;}
+.j-camp::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--y);transform:scaleY(0);transition:transform 0.25s;transform-origin:top;}
+.j-camp:hover{background:rgba(204,255,51,0.04);}
+.j-camp:hover::after{transform:scaleY(1);}
+.j-camp.featured{background:var(--y);}
+.j-camp.featured::after{display:none;}
+.j-camp-tag{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(238,235,211,0.28);margin-bottom:8px;}
+.j-camp.featured .j-camp-tag{color:rgba(12,10,62,0.45);}
+.j-camp-h{font-size:32px;font-weight:900;letter-spacing:-0.04em;line-height:0.92;color:var(--n);margin-bottom:8px;}
+.j-camp.featured .j-camp-h{color:var(--nv);}
+.j-camp-c{font-size:12px;color:rgba(238,235,211,0.4);font-weight:500;}
+.j-camp.featured .j-camp-c{color:rgba(12,10,62,0.5);}
+.j-camp-arr{font-size:18px;color:rgba(238,235,211,0.15);float:right;margin-top:-32px;transition:color 0.2s,transform 0.2s;}
+.j-camp.featured .j-camp-arr{color:rgba(12,10,62,0.3);}
+.j-camp:hover .j-camp-arr{color:var(--y);transform:translateX(4px);}
+.j-camp.featured:hover .j-camp-arr{color:var(--nv);}
+
+.j-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(238,235,211,0.08);position:relative;z-index:2;}
+.j-stat{padding:28px;border-right:1px solid rgba(238,235,211,0.08);}
+.j-stat:last-child{border-right:none;}
+.j-sn{font-size:44px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--y);}
+.j-sl{font-size:11px;color:rgba(238,235,211,0.28);margin-top:6px;line-height:1.4;}
+
+.j-who{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(238,235,211,0.08);position:relative;z-index:2;}
+.j-who-l{padding:72px 48px 72px 28px;border-right:1px solid rgba(238,235,211,0.08);}
+.j-who-r{background:var(--p);display:flex;align-items:flex-end;padding:36px;}
+.j-stag{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(238,235,211,0.25);margin-bottom:10px;}
+.j-sh{font-size:48px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:20px;}
+.j-sh em{font-style:normal;color:var(--y);}
+.j-rule{width:36px;height:3px;background:var(--y);margin-bottom:22px;}
+.j-who-l p{font-size:14px;color:rgba(238,235,211,0.48);line-height:1.75;margin-bottom:12px;}
+.j-who-r-text{font-size:24px;font-weight:900;letter-spacing:-0.04em;line-height:1.05;color:var(--nv);}
+
+.j-blog{padding:72px 28px;border-top:1px solid rgba(238,235,211,0.08);position:relative;z-index:2;}
+.j-blog-h{font-size:48px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:32px;}
+.j-blog-h em{font-style:normal;color:var(--y);}
+.j-blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.j-blog-feat{background:var(--p);padding:40px;min-height:320px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;transition:opacity 0.2s;}
+.j-blog-feat:hover{opacity:0.9;}
+.j-blog-meta{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(12,10,62,0.45);margin-bottom:8px;}
+.j-blog-ft{font-size:26px;font-weight:900;letter-spacing:-0.04em;line-height:1.05;color:var(--nv);margin-bottom:10px;}
+.j-blog-fp{font-size:13px;color:rgba(12,10,62,0.58);line-height:1.6;}
+.j-blog-list{display:flex;flex-direction:column;}
+.j-blog-item{background:rgba(238,235,211,0.03);border-bottom:1px solid rgba(238,235,211,0.08);padding:22px 28px;cursor:pointer;transition:background 0.15s,padding-left 0.2s;}
+.j-blog-item:hover{background:rgba(204,255,51,0.04);padding-left:36px;}
+.j-blog-im{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--y);opacity:0.55;margin-bottom:5px;}
+.j-blog-it{font-size:14px;font-weight:700;letter-spacing:-0.025em;color:var(--n);line-height:1.2;}
+
+.j-join{background:var(--y);padding:80px 28px;text-align:center;position:relative;z-index:2;}
+.j-join-h{font-size:56px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--nv);margin-bottom:18px;}
+.j-join-p{font-size:15px;color:rgba(12,10,62,0.58);max-width:440px;margin:0 auto 32px;line-height:1.65;}
+.j-join-btn{background:var(--nv);color:var(--y);font-family:var(--f);font-size:13px;font-weight:700;padding:14px 36px;border:none;cursor:pointer;transition:all 0.2s;display:inline-block;}
+.j-join-btn:hover{background:#140f5a;transform:translateY(-2px);}
+
+
+/* ══════════════════════════════
+   K — NEWSPAPER FRONT PAGE
+   Big masthead, dense editorial,
+   columns, pull quotes, ruled lines
+══════════════════════════════ */
+.k{background:var(--n);color:var(--nv);font-family:var(--f);}
+
+.k-top{background:var(--nv);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:40px;}
+.k-top-links{display:flex;gap:20px;}
+.k-top-links a{font-size:10px;font-weight:500;color:rgba(238,235,211,0.38);letter-spacing:0.04em;}
+.k-top-date{font-size:10px;color:rgba(238,235,211,0.3);letter-spacing:0.04em;}
+.k-top-ctas{display:flex;gap:8px;}
+.k-top-btn{font-family:var(--f);font-size:10px;font-weight:700;padding:5px 14px;cursor:pointer;border:none;transition:all 0.2s;}
+.k-top-btn-y{background:var(--y);color:var(--nv);}
+.k-top-btn-o{border:1px solid rgba(238,235,211,0.2);color:rgba(238,235,211,0.5);background:none;}
+
+.k-masthead{text-align:center;padding:28px 28px 16px;border-bottom:3px solid var(--nv);}
+.k-overline{font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(12,10,62,0.4);margin-bottom:10px;}
+.k-logo{font-size:80px;font-weight:900;letter-spacing:-0.05em;line-height:0.85;color:var(--nv);margin-bottom:6px;}
+.k-tagline{font-size:13px;color:rgba(12,10,62,0.5);letter-spacing:0.04em;font-style:italic;}
+.k-rules{display:flex;align-items:center;gap:12px;margin-top:14px;}
+.k-rules-line{flex:1;height:1px;background:var(--nv);}
+.k-rules-text{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(12,10,62,0.4);white-space:nowrap;}
+
+/* Ticker beneath masthead */
+.k-ticker{background:var(--nv);overflow:hidden;padding:8px 0;}
+.k-tick-track{display:flex;white-space:nowrap;animation:kTick 20s linear infinite;}
+.k-tick-track:hover{animation-play-state:paused;}
+.k-tick-item{display:inline-flex;align-items:center;gap:16px;padding:0 24px;font-size:11px;font-weight:700;color:var(--y);letter-spacing:-0.01em;}
+.k-tick-item span{color:rgba(238,235,211,0.3);font-weight:400;}
+@keyframes kTick{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* Front page grid */
+.k-front{display:grid;grid-template-columns:2fr 1px 1fr 1px 1fr;gap:0;padding:0 28px;border-bottom:2px solid var(--nv);}
+.k-divider{background:rgba(12,10,62,0.15);align-self:stretch;}
+.k-lead{padding:28px 24px 28px 0;}
+.k-lead-tag{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--nv);opacity:0.4;margin-bottom:8px;}
+.k-lead-h{font-size:64px;font-weight:900;letter-spacing:-0.045em;line-height:0.88;color:var(--nv);margin-bottom:14px;}
+.k-lead-h em{font-style:normal;background:var(--nv);color:var(--y);padding:0 4px;}
+.k-lead-byline{font-size:11px;color:rgba(12,10,62,0.45);margin-bottom:14px;font-style:italic;}
+.k-lead-p{font-size:14px;color:rgba(12,10,62,0.62);line-height:1.7;margin-bottom:16px;}
+.k-lead-btn{display:inline-block;background:var(--nv);color:var(--y);font-family:var(--f);font-size:11px;font-weight:700;padding:9px 20px;cursor:pointer;border:none;transition:all 0.2s;}
+.k-lead-btn:hover{background:#140f5a;transform:translateY(-1px);}
+
+.k-side{padding:28px 0 28px 24px;}
+.k-side-tag{font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--nv);opacity:0.4;margin-bottom:10px;}
+.k-side-h{font-size:22px;font-weight:900;letter-spacing:-0.04em;line-height:1.0;color:var(--nv);margin-bottom:8px;}
+.k-side-count{font-size:36px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--y);background:var(--nv);padding:4px 10px;display:inline-block;margin:8px 0;}
+.k-side-label{font-size:11px;color:rgba(12,10,62,0.45);margin-bottom:12px;display:block;}
+.k-side-p{font-size:12px;color:rgba(12,10,62,0.55);line-height:1.65;margin-bottom:14px;}
+.k-side-btn{font-size:11px;font-weight:700;color:var(--nv);border-bottom:2px solid var(--nv);padding-bottom:1px;display:inline-block;cursor:pointer;transition:opacity 0.2s;}
+.k-side-btn:hover{opacity:0.6;}
+
+/* Second row — 3 equal cols */
+.k-row2{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;gap:0;padding:0 28px;border-bottom:1px solid rgba(12,10,62,0.12);}
+.k-col{padding:20px 20px 20px 0;}
+.k-col:not(:first-child){padding-left:20px;}
+.k-col-tag{font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--nv);opacity:0.35;margin-bottom:6px;}
+.k-col-h{font-size:18px;font-weight:900;letter-spacing:-0.04em;line-height:1.05;color:var(--nv);margin-bottom:8px;}
+.k-col-p{font-size:12px;color:rgba(12,10,62,0.55);line-height:1.65;}
+.k-col-stat{font-size:40px;font-weight:900;letter-spacing:-0.045em;color:var(--nv);line-height:0.9;}
+
+/* Pull quote */
+.k-pull{background:var(--nv);padding:28px;margin:0 28px;border-left:6px solid var(--y);}
+.k-pull-q{font-size:22px;font-weight:700;letter-spacing:-0.03em;line-height:1.2;color:var(--n);font-style:italic;margin-bottom:10px;}
+.k-pull-attr{font-size:11px;color:rgba(238,235,211,0.4);letter-spacing:0.04em;}
+
+/* Pet list */
+.k-pets{padding:28px;border-top:1px solid rgba(12,10,62,0.1);}
+.k-pets-h{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(12,10,62,0.35);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--nv);}
+.k-pet-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(12,10,62,0.1);}
+.k-pt{font-size:14px;font-weight:700;letter-spacing:-0.025em;color:var(--nv);}
+.k-pc{font-size:11px;color:rgba(12,10,62,0.45);margin-top:3px;}
+.k-pb{background:var(--nv);color:var(--y);font-family:var(--f);font-size:10px;font-weight:700;padding:7px 14px;border:none;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+.k-pb:hover{background:#140f5a;}
+
+.k-footer-strip{background:var(--nv);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;}
+.k-footer-logo{font-size:14px;font-weight:900;letter-spacing:-0.04em;color:var(--y);}
+.k-footer-links{display:flex;gap:16px;}
+.k-footer-links a{font-size:10px;color:rgba(238,235,211,0.35);transition:color 0.2s;}
+.k-footer-links a:hover{color:var(--n);}
+.k-footer-addr{font-size:10px;color:rgba(238,235,211,0.25);}
+
+
+/* ══════════════════════════════
+   L — FULL SCREEN STACKS
+   Each section takes full width,
+   alternating yellow/navy, with
+   large numbers and bold splits
+══════════════════════════════ */
+.l{background:var(--nv);color:var(--n);font-family:var(--f);}
+
+.l-nav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:56px;background:var(--y);border-bottom:2px solid var(--nv);}
+.l-logo{font-size:18px;font-weight:900;letter-spacing:-0.045em;color:var(--nv);}
+.l-links{display:flex;gap:22px;}
+.l-links a{font-size:11px;font-weight:500;color:rgba(12,10,62,0.5);transition:color 0.2s;}
+.l-links a:hover{color:var(--nv);}
+.l-ctas{display:flex;gap:8px;}
+.l-btn-nv{background:var(--nv);color:var(--y);font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;border:none;cursor:pointer;transition:all 0.2s;}
+.l-btn-nv:hover{background:#140f5a;}
+.l-btn-on{border:2px solid var(--nv);color:var(--nv);background:none;font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;cursor:pointer;transition:all 0.2s;}
+.l-btn-on:hover{background:var(--nv);color:var(--y);}
+
+/* Section 1 — yellow hero */
+.l-s1{background:var(--y);padding:72px 28px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;border-bottom:3px solid var(--nv);}
+.l-s1-left{}
+.l-tag{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(12,10,62,0.4);margin-bottom:14px;}
+.l-h1{font-size:96px;font-weight:900;letter-spacing:-0.045em;line-height:0.88;color:var(--nv);margin-bottom:20px;}
+.l-h1 em{font-style:normal;-webkit-text-stroke:2.5px var(--nv);-webkit-text-fill-color:transparent;}
+.l-sub{font-size:15px;color:rgba(12,10,62,0.58);line-height:1.65;max-width:380px;margin-bottom:32px;}
+.l-btn-row{display:flex;gap:10px;}
+.l-s1-right{display:flex;flex-direction:column;gap:2px;}
+.l-camp-row{background:var(--nv);padding:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;transition:background 0.2s;position:relative;overflow:hidden;}
+.l-camp-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(204,255,51,0.08);transition:width 0.3s;}
+.l-camp-row:hover::before{width:100%;}
+.l-camp-title{font-size:16px;font-weight:700;letter-spacing:-0.025em;color:var(--n);line-height:1.2;position:relative;z-index:1;}
+.l-camp-meta{font-size:11px;color:var(--y);font-weight:500;margin-top:3px;position:relative;z-index:1;}
+.l-camp-btn{background:var(--y);color:var(--nv);font-family:var(--f);font-size:10px;font-weight:700;padding:8px 14px;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;position:relative;z-index:1;transition:background 0.2s;}
+.l-camp-row:hover .l-camp-btn{background:#d4ff4a;}
+
+/* Section 2 — navy stats */
+.l-s2{background:var(--nv);display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(238,235,211,0.08);}
+.l-stat-big{padding:40px 28px;border-right:1px solid rgba(238,235,211,0.08);}
+.l-stat-big:last-child{border-right:none;}
+.l-stat-n{font-size:56px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--y);}
+.l-stat-l{font-size:11px;color:rgba(238,235,211,0.3);margin-top:8px;line-height:1.4;}
+
+/* Section 3 — neutral who */
+.l-s3{background:var(--n);color:var(--nv);padding:80px 28px;display:grid;grid-template-columns:auto 1fr;gap:72px;align-items:start;border-bottom:3px solid var(--nv);}
+.l-s3-num{font-size:180px;font-weight:900;letter-spacing:-0.05em;line-height:0.88;color:rgba(12,10,62,0.08);user-select:none;}
+.l-s3-content{}
+.l-s3-tag{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(12,10,62,0.35);margin-bottom:10px;}
+.l-s3-h{font-size:56px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--nv);margin-bottom:24px;}
+.l-s3-rule{width:40px;height:3px;background:var(--nv);margin-bottom:24px;}
+.l-s3-p{font-size:15px;color:rgba(12,10,62,0.6);line-height:1.75;margin-bottom:14px;}
+.l-s3-link{font-size:12px;font-weight:700;color:var(--nv);border-bottom:2px solid var(--nv);padding-bottom:2px;display:inline-block;margin-top:10px;}
+
+/* Section 4 — purple ted */
+.l-s4{background:var(--p);padding:80px 28px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;border-bottom:3px solid var(--nv);}
+.l-s4-tag{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(12,10,62,0.4);margin-bottom:10px;}
+.l-s4-h{font-size:52px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--nv);margin-bottom:20px;}
+.l-s4-rule{width:40px;height:3px;background:var(--nv);margin-bottom:20px;}
+.l-s4-p{font-size:14px;color:rgba(12,10,62,0.6);line-height:1.7;margin-bottom:28px;}
+.l-s4-btn{background:var(--nv);color:var(--y);font-family:var(--f);font-size:13px;font-weight:700;padding:13px 28px;border:none;cursor:pointer;transition:all 0.2s;display:inline-block;}
+.l-s4-btn:hover{background:#140f5a;transform:translateY(-2px);}
+.l-video{background:var(--nv);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;}
+.l-video::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(204,255,51,0.03) 0,rgba(204,255,51,0.03) 1px,transparent 1px,transparent 12px);}
+.l-play{width:64px;height:64px;background:var(--y);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:transform 0.2s;}
+.l-video:hover .l-play{transform:scale(1.1);}
+.l-play::after{content:'';border-top:12px solid transparent;border-bottom:12px solid transparent;border-left:20px solid var(--nv);margin-left:5px;}
+
+/* Section 5 — navy blog */
+.l-s5{background:var(--nv);padding:72px 28px;border-bottom:3px solid var(--y);}
+.l-s5-h{font-size:52px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:36px;}
+.l-s5-h em{font-style:normal;color:var(--y);}
+.l-blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.l-blog-feat{background:var(--p);padding:40px;min-height:320px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;transition:opacity 0.2s;}
+.l-blog-feat:hover{opacity:0.9;}
+.l-blog-meta{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(12,10,62,0.45);margin-bottom:8px;}
+.l-blog-ft{font-size:26px;font-weight:900;letter-spacing:-0.04em;line-height:1.05;color:var(--nv);margin-bottom:10px;}
+.l-blog-fp{font-size:13px;color:rgba(12,10,62,0.58);line-height:1.6;}
+.l-blog-list{display:flex;flex-direction:column;}
+.l-blog-item{background:rgba(238,235,211,0.03);border-bottom:1px solid rgba(238,235,211,0.08);padding:22px 28px;cursor:pointer;transition:background 0.15s,padding-left 0.2s;}
+.l-blog-item:hover{background:rgba(204,255,51,0.04);padding-left:36px;}
+.l-blog-im{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--y);opacity:0.55;margin-bottom:5px;}
+.l-blog-it{font-size:14px;font-weight:700;letter-spacing:-0.025em;color:var(--n);line-height:1.2;}
+
+/* Section 6 — yellow join */
+.l-s6{background:var(--y);padding:80px 28px;text-align:center;}
+.l-s6-h{font-size:60px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--nv);margin-bottom:18px;}
+.l-s6-p{font-size:15px;color:rgba(12,10,62,0.58);max-width:440px;margin:0 auto 32px;line-height:1.65;}
+.l-s6-btn{background:var(--nv);color:var(--y);font-family:var(--f);font-size:13px;font-weight:700;padding:14px 36px;border:none;cursor:pointer;transition:all 0.2s;display:inline-block;}
+.l-s6-btn:hover{background:#140f5a;transform:translateY(-2px);}
+</style>
+
+<div class="root">
+<div class="tabs">
+  <button class="tab on" onclick="sw('j',this)">J — Cursor Blob</button>
+  <button class="tab" onclick="sw('k',this)">K — Newspaper</button>
+  <button class="tab" onclick="sw('l',this)">L — Bold Stacks</button>
+</div>
+
+<!-- ══ J ══ -->
+<div id="dj" class="des on"><div class="j" id="jRoot">
+  <div class="j-blob" id="jBlob"></div>
+  <div class="j-nav">
+    <div class="j-logo">Level<span>Up</span></div>
+    <div class="j-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Community</a><a href="#">Contact</a></div>
+    <div class="j-ctas"><button class="j-btn-y">Donate</button><button class="j-btn-o">Join Us</button></div>
+  </div>
+  <div class="j-hero">
+    <div class="j-hero-l">
+      <div class="j-eyebrow">Feminist community · Gender justice UK</div>
+      <h1 class="j-h1">
+        <span class="l1">We are</span>
+        <span class="l2">Level</span>
+        <span class="l3">Up</span>
+      </h1>
+      <p class="j-sub">A feminist community campaigning for gender justice in the UK — fighting for a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+      <div class="j-cta-row">
+        <button class="j-btn-big">Who we are</button>
+        <button class="j-btn-ghost">Our campaigns</button>
+      </div>
+    </div>
+    <div class="j-hero-r">
+      <div class="j-camp featured">
+        <div class="j-camp-tag">Active · Most urgent</div>
+        <div class="j-camp-h">#No More Lyes</div>
+        <div class="j-camp-c">6,400 supporters · Sign now <span class="j-camp-arr">→</span></div>
+      </div>
+      <div class="j-camp">
+        <div class="j-camp-tag">Active</div>
+        <div class="j-camp-h">Pregnancy<br/>in Prison</div>
+        <div class="j-camp-c">13,100 supporters <span class="j-camp-arr">→</span></div>
+      </div>
+      <div class="j-camp">
+        <div class="j-camp-tag">Active</div>
+        <div class="j-camp-h">Abortion is<br/>Healthcare</div>
+        <div class="j-camp-c">6,100 supporters <span class="j-camp-arr">→</span></div>
+      </div>
+      <div class="j-camp">
+        <div class="j-camp-tag">Active</div>
+        <div class="j-camp-h">Dignity for<br/>Dead Women</div>
+        <div class="j-camp-c">29,200 supporters <span class="j-camp-arr">→</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="j-stats">
+    <div class="j-stat"><div class="j-sn">29.2K</div><div class="j-sl">Dignity for Dead Women</div></div>
+    <div class="j-stat"><div class="j-sn">13.1K</div><div class="j-sl">Pregnancy in Prison</div></div>
+    <div class="j-stat"><div class="j-sn">6.4K</div><div class="j-sl">#NoMoreLyes</div></div>
+    <div class="j-stat"><div class="j-sn">6.1K</div><div class="j-sl">Abortion is Healthcare</div></div>
+  </div>
+  <div class="j-who">
+    <div class="j-who-l">
+      <div class="j-stag">About us</div>
+      <h2 class="j-sh">Who We <em>Are</em></h2>
+      <div class="j-rule"></div>
+      <p>We create digital tools and campaigns that interrupt cultural moments — like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island.</p>
+      <p>Working towards a world where people of all genders are loved and liberated from bodily and systemic violence. Through campaign coalitions and monthly workshops on bystander intervention.</p>
+    </div>
+    <div class="j-who-r">
+      <div class="j-who-r-text">Building a world where everyone is loved &amp; liberated</div>
+    </div>
+  </div>
+  <div class="j-blog">
+    <h2 class="j-blog-h">From the <em>Blog</em></h2>
+    <div class="j-blog-grid">
+      <div class="j-blog-feat">
+        <div class="j-blog-meta">Levelup · March 5, 2026</div>
+        <h3 class="j-blog-ft">It's Time to Reclaim the Socialist Roots of International Women's Day</h3>
+        <p class="j-blog-fp">International Working Women's Day began as a protest for labour rights. Reclaiming its radical roots has never been more urgent.</p>
+      </div>
+      <div class="j-blog-list">
+        <div class="j-blog-item"><div class="j-blog-im">Vic Parsons · December 4, 2025</div><div class="j-blog-it">Gender Critical Feminism Isn't Feminist</div></div>
+        <div class="j-blog-item"><div class="j-blog-im">Seyi Falodun-Liburd · November 2025</div><div class="j-blog-it">The Griefs Left Unattended</div></div>
+        <div class="j-blog-item"><div class="j-blog-im">Starling · August 2025</div><div class="j-blog-it">Beyond Sympathy: Feminist Solidarity Without Deservingness</div></div>
+        <div class="j-blog-item"><div class="j-blog-im">Levelup · June 2025</div><div class="j-blog-it">Why Expanding Criminalisation is a Feminist Issue</div></div>
+        <div class="j-blog-item"><div class="j-blog-im">Ruvimbo Kuuzabuwe · February 2025</div><div class="j-blog-it">Why We Need to Start Moving Offline</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="j-join">
+    <h2 class="j-join-h">Join the Level Up Community</h2>
+    <p class="j-join-p">Become part of a feminist movement fighting for gender justice in the UK. Together we create change.</p>
+    <button class="j-join-btn">Join Us →</button>
+  </div>
+</div></div>
+
+<!-- ══ K ══ -->
+<div id="dk" class="des"><div class="k">
+  <div class="k-top">
+    <div class="k-top-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Contact</a></div>
+    <div class="k-top-date">Tuesday, 17 March 2026</div>
+    <div class="k-top-ctas"><button class="k-top-btn k-top-btn-y">Donate</button><button class="k-top-btn k-top-btn-o">Join Us</button></div>
+  </div>
+  <div class="k-masthead">
+    <div class="k-overline">Feminist campaigns for gender justice in the UK</div>
+    <div class="k-logo">LEVEL UP</div>
+    <div class="k-tagline">"A world where people of all genders are loved and liberated"</div>
+    <div class="k-rules"><div class="k-rules-line"></div><div class="k-rules-text">Est. 2016 · welevelup.org</div><div class="k-rules-line"></div></div>
+  </div>
+  <div class="k-ticker">
+    <div class="k-tick-track">
+      <span class="k-tick-item">6,400 signed <span>#NoMoreLyes</span></span>
+      <span class="k-tick-item">13,100 signed <span>Pregnancy in Prison</span></span>
+      <span class="k-tick-item">29,200 signed <span>Dignity for Dead Women</span></span>
+      <span class="k-tick-item">6,100 signed <span>Abortion is Healthcare</span></span>
+      <span class="k-tick-item">6,400 signed <span>#NoMoreLyes</span></span>
+      <span class="k-tick-item">13,100 signed <span>Pregnancy in Prison</span></span>
+      <span class="k-tick-item">29,200 signed <span>Dignity for Dead Women</span></span>
+      <span class="k-tick-item">6,100 signed <span>Abortion is Healthcare</span></span>
+    </div>
+  </div>
+  <div class="k-front">
+    <div class="k-lead">
+      <div class="k-lead-tag">Featured Campaign</div>
+      <h1 class="k-lead-h">#No<br/>More<br/><em>Lyes</em></h1>
+      <div class="k-lead-byline">Level Up Campaign Team</div>
+      <p class="k-lead-p">Big beauty brands like L'Oréal must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health. Our research submission to Parliament documents the harm caused by these products.</p>
+      <p class="k-lead-p">6,400 people have already signed — add your name to demand change.</p>
+      <button class="k-lead-btn">Sign the petition →</button>
+    </div>
+    <div class="k-divider"></div>
+    <div class="k-side">
+      <div class="k-side-tag">Also Active</div>
+      <div class="k-side-h">Pregnancy<br/>in Prison</div>
+      <div class="k-side-count">13,100</div>
+      <span class="k-side-label">supporters</span>
+      <p class="k-side-p">1 in 10 women give birth inside their cell or on the way to hospital. Stop sending pregnant women to prison.</p>
+      <span class="k-side-btn">Sign now →</span>
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid rgba(12,10,62,0.1);">
+        <div class="k-side-tag">Also Active</div>
+        <div class="k-side-h">Abortion is<br/>Healthcare</div>
+        <div class="k-side-count">6,100</div>
+        <span class="k-side-label">supporters</span>
+        <span class="k-side-btn">Sign now →</span>
+      </div>
+    </div>
+    <div class="k-divider"></div>
+    <div class="k-side">
+      <div class="k-side-tag">Who We Are</div>
+      <p class="k-side-p">We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — like flying a plane banner over a football match to break the silence around rape in sports.</p>
+      <p class="k-side-p">Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice.</p>
+      <div style="margin-top:16px;">
+        <div class="k-side-tag">Total Supporters</div>
+        <div class="k-side-count">55K+</div>
+      </div>
+    </div>
+  </div>
+  <div class="k-pull">
+    <div class="k-pull-q">"The price of Black women's beauty should never be our health."</div>
+    <div class="k-pull-attr">Level Up — #NoMoreLyes Campaign</div>
+  </div>
+  <div class="k-row2">
+    <div class="k-col">
+      <div class="k-col-tag">Dignity for Dead Women</div>
+      <div class="k-col-h">IPSO must protect how media reports domestic abuse deaths</div>
+      <div class="k-col-stat" style="color:var(--y);background:var(--nv);padding:4px 8px;display:inline-block;margin:8px 0;">29.2K</div>
+      <p class="k-col-p">Our most supported campaign — pushing for clearer guidelines on how media reports women killed by partners.</p>
+    </div>
+    <div class="k-divider"></div>
+    <div class="k-col">
+      <div class="k-col-tag">Sexual Violence in Football</div>
+      <div class="k-col-h">Premier League and FA must act on sexual violence</div>
+      <div class="k-col-stat" style="color:var(--y);background:var(--nv);padding:4px 8px;display:inline-block;margin:8px 0;">4.3K</div>
+      <p class="k-col-p">We flew a banner over a live Premier League match to break the silence. The fight continues.</p>
+    </div>
+    <div class="k-divider"></div>
+    <div class="k-col">
+      <div class="k-col-tag">From the Blog</div>
+      <div class="k-col-h">It's Time to Reclaim the Socialist Roots of International Women's Day</div>
+      <p class="k-col-p" style="margin-top:8px;">As corporations reshape the narrative, reclaiming its radical roots has never been more urgent. — Levelup, March 2026</p>
+    </div>
+  </div>
+  <div class="k-pets">
+    <div class="k-pets-h">Sign Our Petitions</div>
+    <div class="k-pet-row"><div><div class="k-pt">#NoMoreLyes — Take toxic hair relaxers off the shelves</div><div class="k-pc">6,400 supporters</div></div><button class="k-pb">Sign now</button></div>
+    <div class="k-pet-row"><div><div class="k-pt">Stop sending pregnant women to prison</div><div class="k-pc">13,100 supporters</div></div><button class="k-pb">Sign now</button></div>
+    <div class="k-pet-row"><div><div class="k-pt">Abortion is Healthcare</div><div class="k-pc">6,100 supporters</div></div><button class="k-pb">Sign now</button></div>
+    <div class="k-pet-row"><div><div class="k-pt">IPSO: Dignity for Dead Women</div><div class="k-pc">29,200 supporters</div></div><button class="k-pb">Sign now</button></div>
+  </div>
+  <div class="k-footer-strip">
+    <div class="k-footer-logo">Level Up</div>
+    <div class="k-footer-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Resources</a><a href="#">Contact</a></div>
+    <div class="k-footer-addr">hello@welevelup.org · New Derwent House, London WC1X 8TA</div>
+  </div>
+</div></div>
+
+<!-- ══ L ══ -->
+<div id="dl" class="des"><div class="l">
+  <div class="l-nav">
+    <div class="l-logo">Level Up</div>
+    <div class="l-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Community</a><a href="#">Contact</a></div>
+    <div class="l-ctas"><button class="l-btn-nv">Donate</button><button class="l-btn-on">Join Us</button></div>
+  </div>
+
+  <div class="l-s1">
+    <div class="l-s1-left">
+      <div class="l-tag">Feminist community · Gender justice UK</div>
+      <h1 class="l-h1">We<br/>are<br/><em>Level</em><br/><em>Up</em></h1>
+      <p class="l-sub">A feminist community campaigning for gender justice in the UK — fighting for a world where people of all genders are loved and liberated.</p>
+      <div class="l-btn-row">
+        <button class="l-btn-nv" style="font-size:13px;padding:13px 28px;">Who we are</button>
+        <button class="l-btn-on" style="font-size:13px;padding:13px 28px;">Our campaigns</button>
+      </div>
+    </div>
+    <div class="l-s1-right">
+      <div class="l-camp-row"><div><div class="l-camp-title">#No More Lyes</div><div class="l-camp-meta">6,400 supporters</div></div><button class="l-camp-btn">Sign now</button></div>
+      <div class="l-camp-row"><div><div class="l-camp-title">Stop sending pregnant women to prison</div><div class="l-camp-meta">13,100 supporters</div></div><button class="l-camp-btn">Sign now</button></div>
+      <div class="l-camp-row"><div><div class="l-camp-title">Abortion is Healthcare</div><div class="l-camp-meta">6,100 supporters</div></div><button class="l-camp-btn">Sign now</button></div>
+      <div class="l-camp-row"><div><div class="l-camp-title">IPSO: Dignity for Dead Women</div><div class="l-camp-meta">29,200 supporters</div></div><button class="l-camp-btn">Sign now</button></div>
+      <div class="l-camp-row"><div><div class="l-camp-title">Sexual violence in football</div><div class="l-camp-meta">4,300 supporters</div></div><button class="l-camp-btn">Sign now</button></div>
+    </div>
+  </div>
+
+  <div class="l-s2">
+    <div class="l-stat-big"><div class="l-stat-n">29.2K</div><div class="l-stat-l">Dignity for Dead Women</div></div>
+    <div class="l-stat-big"><div class="l-stat-n">13.1K</div><div class="l-stat-l">Pregnancy in Prison</div></div>
+    <div class="l-stat-big"><div class="l-stat-n">6.4K</div><div class="l-stat-l">#NoMoreLyes</div></div>
+    <div class="l-stat-big"><div class="l-stat-n">6.1K</div><div class="l-stat-l">Abortion is Healthcare</div></div>
+  </div>
+
+  <div class="l-s3">
+    <div class="l-s3-num">01</div>
+    <div class="l-s3-content">
+      <div class="l-s3-tag">About us</div>
+      <h2 class="l-s3-h">Who We Are</h2>
+      <div class="l-s3-rule"></div>
+      <p class="l-s3-p">We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths.</p>
+      <p class="l-s3-p">Working towards a world where people of all genders are loved and liberated from bodily and systemic violence. Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice.</p>
+      <a href="#" class="l-s3-link">Learn more about us →</a>
+    </div>
+  </div>
+
+  <div class="l-s4">
+    <div>
+      <div class="l-s4-tag">TedxLondon 2023</div>
+      <h2 class="l-s4-h">How Collective Care Can Change Society</h2>
+      <div class="l-s4-rule"></div>
+      <p class="l-s4-p">Level Up co-directors Seyi and Janey explained what collective care means for building a world where everyone is loved and liberated — TedxLondon, March 2023.</p>
+      <button class="l-s4-btn">Watch the talk →</button>
+    </div>
+    <div class="l-video">
+      <div class="l-play"></div>
+    </div>
+  </div>
+
+  <div class="l-s5">
+    <h2 class="l-s5-h">From the <em>Blog</em></h2>
+    <div class="l-blog-grid">
+      <div class="l-blog-feat">
+        <div class="l-blog-meta">Levelup · March 5, 2026</div>
+        <h3 class="l-blog-ft">It's Time to Reclaim the Socialist Roots of International Women's Day</h3>
+        <p class="l-blog-fp">International Working Women's Day began as a protest for labour rights. Reclaiming its radical roots has never been more urgent.</p>
+      </div>
+      <div class="l-blog-list">
+        <div class="l-blog-item"><div class="l-blog-im">Vic Parsons · December 4, 2025</div><div class="l-blog-it">Gender Critical Feminism Isn't Feminist</div></div>
+        <div class="l-blog-item"><div class="l-blog-im">Seyi Falodun-Liburd · November 2025</div><div class="l-blog-it">The Griefs Left Unattended</div></div>
+        <div class="l-blog-item"><div class="l-blog-im">Starling · August 2025</div><div class="l-blog-it">Beyond Sympathy: Feminist Solidarity Without Deservingness</div></div>
+        <div class="l-blog-item"><div class="l-blog-im">Levelup · June 2025</div><div class="l-blog-it">Why Expanding Criminalisation is a Feminist Issue</div></div>
+        <div class="l-blog-item"><div class="l-blog-im">Ruvimbo Kuuzabuwe · February 2025</div><div class="l-blog-it">Why We Need to Start Moving Offline</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="l-s6">
+    <h2 class="l-s6-h">Join the Level Up Community</h2>
+    <p class="l-s6-p">Become part of a feminist movement fighting for gender justice in the UK. Together we create change.</p>
+    <button class="l-s6-btn">Join Us →</button>
+  </div>
+</div></div>
+
+</div>
+
+<script>
+function sw(id,btn){
+  document.querySelectorAll('.des').forEach(d=>d.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('d'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+// J — cursor-following blob
+const jRoot=document.getElementById('jRoot');
+const jBlob=document.getElementById('jBlob');
+if(jRoot&&jBlob){
+  jRoot.addEventListener('mousemove',e=>{
+    const r=jRoot.getBoundingClientRect();
+    jBlob.style.left=(e.clientX-r.left)+'px';
+    jBlob.style.top=(e.clientY-r.top)+'px';
+  });
+}
+</script>

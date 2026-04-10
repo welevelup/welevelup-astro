@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Level Up — Feminist campaigns for gender justice in the UK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,400&display=swap" rel="stylesheet"/>
+<style>
+:root{--y:#CCFF33;--n:#EEEBD3;--nv:#0C0A3E;--p:#A89CED;--f:'DM Sans',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--f);background:var(--nv);color:var(--n);line-height:1;}
+a{color:inherit;text-decoration:none;}
+img{display:block;max-width:100%;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 28px;}
+
+/* NAV */
+nav{border-bottom:1px solid rgba(238,235,211,0.1);}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:56px;}
+.logo{font-size:17px;font-weight:900;letter-spacing:-0.045em;color:var(--n);}
+.logo mark{background:var(--y);color:var(--nv);padding:1px 7px;margin-left:3px;}
+.nav-links{display:flex;gap:24px;}
+.nav-links a{font-size:11px;font-weight:500;color:rgba(238,235,211,0.4);letter-spacing:-0.01em;transition:color 0.15s;}
+.nav-links a:hover{color:var(--n);}
+.nav-ctas{display:flex;gap:8px;}
+.btn{font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;cursor:pointer;letter-spacing:-0.01em;transition:all 0.15s;display:inline-block;}
+.btn-y{background:var(--y);color:var(--nv);}
+.btn-y:hover{background:#d4ff4a;}
+.btn-o{border:1.5px solid rgba(238,235,211,0.22);color:var(--n);background:none;}
+.btn-o:hover{border-color:var(--n);}
+.btn-lg{font-size:13px;padding:12px 26px;}
+.btn-nv{background:var(--nv);color:var(--y);}
+.btn-nv:hover{background:#140f5a;}
+
+/* TICKER */
+.ticker{background:var(--y);overflow:hidden;}
+.ticker-inner{display:flex;gap:48px;padding:9px 28px;white-space:nowrap;}
+.ticker-inner span{font-size:11px;font-weight:700;color:var(--nv);letter-spacing:-0.01em;}
+.ticker-inner span::before{content:'↗  ';}
+
+/* HERO */
+.hero{padding:56px 0 0;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;}
+.hero-left{}
+.hero-tag{display:inline-block;background:var(--y);color:var(--nv);font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:4px 10px;margin-bottom:20px;}
+.hero-h1{font-size:96px;font-weight:900;letter-spacing:-0.045em;line-height:0.88;color:var(--n);margin-bottom:20px;}
+.hero-h1 em{font-style:normal;color:var(--y);}
+.hero-sub{font-size:15px;font-weight:400;color:rgba(238,235,211,0.5);line-height:1.65;max-width:400px;margin-bottom:32px;}
+.hero-ctas{display:flex;gap:10px;flex-wrap:wrap;}
+
+.hero-right{display:flex;flex-direction:column;gap:12px;}
+.camp-card{background:var(--y);padding:36px;position:relative;overflow:hidden;}
+.camp-card::before{content:'!';position:absolute;right:-8px;bottom:-40px;font-size:180px;font-weight:900;color:rgba(12,10,62,0.07);line-height:1;pointer-events:none;}
+.camp-tag{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(12,10,62,0.45);margin-bottom:10px;}
+.camp-h{font-size:56px;font-weight:900;letter-spacing:-0.045em;line-height:0.88;color:var(--nv);margin-bottom:14px;}
+.camp-p{font-size:13px;color:rgba(12,10,62,0.62);line-height:1.6;margin-bottom:24px;}
+.camp-btns{display:flex;gap:10px;flex-wrap:wrap;}
+
+.also-card{background:rgba(238,235,211,0.04);border:1px solid rgba(238,235,211,0.1);padding:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;transition:border-color 0.15s;}
+.also-card:hover{border-color:rgba(238,235,211,0.25);}
+.also-tag{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(238,235,211,0.3);margin-bottom:4px;}
+.also-title{font-size:14px;font-weight:700;letter-spacing:-0.025em;color:var(--n);}
+.also-count{font-size:11px;color:var(--y);font-weight:500;margin-top:3px;}
+
+/* STATS BAR */
+.stats-bar{border-top:1px solid rgba(238,235,211,0.1);margin-top:48px;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);}
+.stat-item{padding:28px 0;border-right:1px solid rgba(238,235,211,0.08);}
+.stat-item:last-child{border-right:none;}
+.stat-n{font-size:44px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--y);}
+.stat-l{font-size:11px;color:rgba(238,235,211,0.35);margin-top:6px;line-height:1.4;}
+
+/* WHO WE ARE */
+.who{padding:80px 0;border-top:1px solid rgba(238,235,211,0.08);}
+.who-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
+.section-tag{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--y);opacity:0.6;margin-bottom:10px;}
+.section-h{font-size:52px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:20px;}
+.section-rule{width:40px;height:3px;background:var(--y);margin-bottom:24px;}
+.who-text p{font-size:14px;color:rgba(238,235,211,0.55);line-height:1.75;margin-bottom:14px;}
+.readmore{font-size:12px;font-weight:700;color:var(--y);border-bottom:2px solid var(--y);padding-bottom:2px;display:inline-block;margin-top:10px;letter-spacing:-0.01em;}
+.who-visual{background:var(--p);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:28px;position:relative;overflow:hidden;}
+.who-visual::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(12,10,62,0.06) 0,rgba(12,10,62,0.06) 1px,transparent 1px,transparent 9px);}
+.who-caption{font-size:20px;font-weight:900;letter-spacing:-0.03em;line-height:1.1;color:var(--nv);position:relative;z-index:1;}
+
+/* TED */
+.ted{background:rgba(238,235,211,0.03);border-top:1px solid rgba(238,235,211,0.08);padding:80px 0;}
+.ted-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;}
+.ted .section-h em{font-style:normal;color:var(--y);}
+.ted p{font-size:14px;color:rgba(238,235,211,0.5);line-height:1.75;margin-bottom:28px;}
+.video-box{background:rgba(238,235,211,0.04);border:1px solid rgba(238,235,211,0.1);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;}
+.video-box::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(204,255,51,0.03) 0,rgba(204,255,51,0.03) 1px,transparent 1px,transparent 12px);}
+.play{width:64px;height:64px;background:var(--y);border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;transition:transform 0.2s;}
+.video-box:hover .play{transform:scale(1.1);}
+.play::after{content:'';border-top:12px solid transparent;border-bottom:12px solid transparent;border-left:20px solid var(--nv);margin-left:5px;}
+
+/* PETITIONS */
+.petitions{padding:80px 0;border-top:1px solid rgba(238,235,211,0.08);}
+.pet-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;}
+.pet-header .section-h{margin-bottom:0;}
+.pet-header .section-h em{font-style:normal;color:var(--y);}
+.pet-row{display:grid;grid-template-columns:48px 1fr auto;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid rgba(238,235,211,0.08);cursor:pointer;transition:background 0.15s;}
+.pet-row:first-of-type{border-top:1px solid rgba(238,235,211,0.08);}
+.pet-row:hover{background:rgba(204,255,51,0.03);}
+.pet-n{font-size:36px;font-weight:900;letter-spacing:-0.045em;color:rgba(238,235,211,0.1);line-height:1;}
+.pet-t{font-size:16px;font-weight:700;letter-spacing:-0.03em;color:var(--n);line-height:1.2;}
+.pet-c{font-size:11px;color:var(--y);font-weight:500;margin-top:4px;}
+.pet-btn{background:var(--y);color:var(--nv);font-family:var(--f);font-size:11px;font-weight:700;padding:9px 18px;white-space:nowrap;cursor:pointer;transition:background 0.15s;}
+.pet-row:hover .pet-btn{background:#d4ff4a;}
+
+/* CAMPAIGNS */
+.campaigns{padding:80px 0;border-top:1px solid rgba(238,235,211,0.08);}
+.camp-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;}
+.see-all{font-size:11px;font-weight:700;color:var(--y);border-bottom:2px solid var(--y);padding-bottom:2px;letter-spacing:-0.01em;}
+.camp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.ccard{display:flex;flex-direction:column;transition:transform 0.15s;cursor:pointer;}
+.ccard:hover{transform:translateY(-3px);}
+.ccard-img{aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;padding:20px;}
+.ccard-img-text{font-size:26px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;text-align:center;}
+.ccard-body{background:rgba(238,235,211,0.04);border:1px solid rgba(238,235,211,0.08);border-top:none;padding:20px;flex:1;display:flex;flex-direction:column;}
+.ccard-tag{display:inline-block;background:var(--y);color:var(--nv);font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:2px 7px;margin-bottom:10px;align-self:flex-start;}
+.ccard-title{font-size:15px;font-weight:700;letter-spacing:-0.025em;color:var(--n);line-height:1.25;margin-bottom:10px;flex:1;}
+.ccard-stat{font-size:11px;color:rgba(238,235,211,0.4);font-weight:500;}
+.ccard-stat strong{color:var(--y);font-weight:700;}
+
+/* BLOG */
+.blog{padding:80px 0;border-top:1px solid rgba(238,235,211,0.08);}
+.blog-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;}
+.blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.blog-featured{background:var(--p);padding:40px;display:flex;flex-direction:column;justify-content:flex-end;min-height:360px;cursor:pointer;transition:opacity 0.15s;}
+.blog-featured:hover{opacity:0.92;}
+.blog-meta{font-size:10px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(12,10,62,0.5);margin-bottom:8px;}
+.blog-ft{font-size:28px;font-weight:900;letter-spacing:-0.04em;line-height:1.0;color:var(--nv);margin-bottom:12px;}
+.blog-fp{font-size:13px;color:rgba(12,10,62,0.65);line-height:1.6;}
+.blog-list{display:flex;flex-direction:column;}
+.blog-item{background:rgba(238,235,211,0.03);border-bottom:1px solid rgba(238,235,211,0.08);padding:22px 28px;cursor:pointer;transition:background 0.15s;}
+.blog-item:hover{background:rgba(204,255,51,0.04);}
+.blog-im{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--y);opacity:0.6;margin-bottom:5px;}
+.blog-it{font-size:14px;font-weight:700;letter-spacing:-0.025em;color:var(--n);line-height:1.2;}
+
+/* JOIN */
+.join{background:var(--y);padding:80px 0;text-align:center;}
+.join .section-tag{color:rgba(12,10,62,0.4);}
+.join .section-h{color:var(--nv);font-size:56px;margin-bottom:20px;}
+.join p{font-size:15px;color:rgba(12,10,62,0.6);max-width:460px;margin:0 auto 32px;line-height:1.65;}
+
+/* FOOTER */
+footer{background:var(--nv);border-top:2px solid var(--y);padding:64px 0 32px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px;margin-bottom:48px;}
+.footer-logo{font-size:22px;font-weight:900;letter-spacing:-0.045em;margin-bottom:12px;}
+.footer-logo mark{background:var(--y);color:var(--nv);padding:1px 7px;}
+.footer-about{font-size:13px;color:rgba(238,235,211,0.4);line-height:1.75;margin-bottom:20px;}
+.footer-addr{font-size:12px;color:rgba(238,235,211,0.3);line-height:1.9;margin-top:16px;}
+.socials{display:flex;gap:8px;margin-bottom:4px;}
+.social{width:34px;height:34px;border:1px solid rgba(238,235,211,0.15);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(238,235,211,0.4);text-transform:uppercase;transition:all 0.15s;cursor:pointer;}
+.social:hover{background:var(--y);border-color:var(--y);color:var(--nv);}
+.footer-col h5{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--y);margin-bottom:18px;}
+.footer-col ul{list-style:none;}
+.footer-col li{margin-bottom:10px;}
+.footer-col li a{font-size:13px;color:rgba(238,235,211,0.4);transition:color 0.15s;}
+.footer-col li a:hover{color:var(--n);}
+.footer-bottom{border-top:1px solid rgba(238,235,211,0.08);padding-top:24px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:rgba(238,235,211,0.25);}
+.footer-bottom a{color:rgba(238,235,211,0.35);text-decoration:underline;}
+
+@media(max-width:900px){
+  .hero-grid,.who-grid,.ted-grid,.camp-grid,.blog-grid,.footer-grid{grid-template-columns:1fr;}
+  .hero-h1{font-size:64px;}
+  .section-h{font-size:38px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-inner">
+      <a href="/" class="logo">Level<mark>Up</mark></a>
+      <div class="nav-links">
+        <a href="/about-us/">About Us</a>
+        <a href="/our-work/">Campaigns</a>
+        <a href="/all-resources/">Resources</a>
+        <a href="/blog/">Blog</a>
+        <a href="/press/">Press</a>
+        <a href="/blog/">Community</a>
+        <a href="/contact/">Contact</a>
+      </div>
+      <div class="nav-ctas">
+        <a href="https://welevelup.org/donate/" class="btn btn-y">Donate</a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="btn btn-o">Join Us</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="ticker">
+  <div class="wrap">
+    <div class="ticker-inner">
+      <span>6,400 signed #NoMoreLyes</span>
+      <span>13,100 signed Pregnancy in Prison</span>
+      <span>29,200 signed Dignity for Dead Women</span>
+      <span>6,100 signed Abortion is Healthcare</span>
+      <span>4,300 signed Sexual violence in football</span>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="hero-tag">Feminist community · Gender justice UK</div>
+        <h1 class="hero-h1">We<br/>are<br/><em>Level</em><br/><em>Up</em></h1>
+        <p class="hero-sub">A feminist community campaigning for gender justice in the UK — fighting for a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+        <div class="hero-ctas">
+          <a href="/about-us/" class="btn btn-y btn-lg">Who we are</a>
+          <a href="/our-work/" class="btn btn-o btn-lg">Our campaigns</a>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="camp-card">
+          <div class="camp-tag">Active Campaign</div>
+          <h2 class="camp-h">#No<br/>More<br/>Lyes</h2>
+          <p class="camp-p">Big beauty brands like L'Oréal must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health.</p>
+          <div class="camp-btns">
+            <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="btn btn-nv btn-lg">Sign the petition</a>
+            <a href="https://committees.parliament.uk/writtenevidence/160638/pdf/" class="btn btn-lg" style="background:rgba(12,10,62,0.1);color:var(--nv);">Read research ↗</a>
+          </div>
+        </div>
+        <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" class="also-card">
+          <div>
+            <div class="also-tag">Also active</div>
+            <div class="also-title">Stop sending pregnant women to prison</div>
+            <div class="also-count">13,100 supporters</div>
+          </div>
+          <div class="btn btn-o" style="font-size:11px;padding:8px 14px;flex-shrink:0;">Sign now →</div>
+        </a>
+        <a href="https://levelup.yourmovement.org/p/abortion-is-healthcare" class="also-card">
+          <div>
+            <div class="also-tag">Also active</div>
+            <div class="also-title">Abortion is Healthcare</div>
+            <div class="also-count">6,100 supporters</div>
+          </div>
+          <div class="btn btn-o" style="font-size:11px;padding:8px 14px;flex-shrink:0;">Sign now →</div>
+        </a>
+      </div>
+    </div>
+    <div class="stats-bar">
+      <div class="stats-grid">
+        <div class="stat-item"><div class="stat-n">29.2K</div><div class="stat-l">Dignity for<br/>Dead Women</div></div>
+        <div class="stat-item" style="padding-left:24px;"><div class="stat-n">13.1K</div><div class="stat-l">Pregnancy<br/>in Prison</div></div>
+        <div class="stat-item" style="padding-left:24px;"><div class="stat-n">6.4K</div><div class="stat-l">#NoMoreLyes</div></div>
+        <div class="stat-item" style="padding-left:24px;"><div class="stat-n">6.1K</div><div class="stat-l">Abortion is<br/>Healthcare</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="who">
+  <div class="wrap">
+    <div class="who-grid">
+      <div class="who-text">
+        <div class="section-tag">About us</div>
+        <h2 class="section-h">Who We Are</h2>
+        <div class="section-rule"></div>
+        <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths.</p>
+        <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through monthly workshops on bystander intervention and intervening in police violence.</p>
+        <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+        <a href="/about-us/" class="readmore">Learn more about us →</a>
+      </div>
+      <div class="who-visual">
+        <div class="who-caption">Building a world where everyone is loved &amp; liberated</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ted">
+  <div class="wrap">
+    <div class="ted-grid">
+      <div>
+        <div class="section-tag">TedxLondon 2023</div>
+        <h2 class="section-h">How Collective Care Can <em>Change Society</em></h2>
+        <div class="section-rule"></div>
+        <p>Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world. Level Up co-directors Seyi and Janey explained what this means in a TedxLondon talk in March 2023.</p>
+        <a href="#" class="btn btn-y btn-lg">Watch the talk</a>
+      </div>
+      <div class="video-box">
+        <div class="play"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="petitions">
+  <div class="wrap">
+    <div class="pet-header">
+      <div>
+        <div class="section-tag">Take action</div>
+        <h2 class="section-h">Sign Our <em>Petitions</em></h2>
+      </div>
+    </div>
+    <div>
+      <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="pet-row"><div class="pet-n">01</div><div><div class="pet-t">#NoMoreLyes — Take toxic hair relaxers off the shelves</div><div class="pet-c">6,400 supporters</div></div><div class="pet-btn">Sign now</div></a>
+      <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" class="pet-row"><div class="pet-n">02</div><div><div class="pet-t">Stop sending pregnant women to prison</div><div class="pet-c">13,100 supporters</div></div><div class="pet-btn">Sign now</div></a>
+      <a href="https://levelup.yourmovement.org/p/abortion-is-healthcare" class="pet-row"><div class="pet-n">03</div><div><div class="pet-t">Abortion is Healthcare</div><div class="pet-c">6,100 supporters</div></div><div class="pet-btn">Sign now</div></a>
+      <a href="https://levelup.yourmovement.org/p/dignity-for-dead-women" class="pet-row"><div class="pet-n">04</div><div><div class="pet-t">IPSO: Dignity for Dead Women</div><div class="pet-c">29,200 supporters</div></div><div class="pet-btn">Sign now</div></a>
+      <a href="https://levelup.yourmovement.org/p/sexual-violence-in-football" class="pet-row"><div class="pet-n">05</div><div><div class="pet-t">Sexual violence in football — Premier League and FA</div><div class="pet-c">4,300 supporters</div></div><div class="pet-btn">Sign now</div></a>
+    </div>
+  </div>
+</section>
+
+<section class="campaigns">
+  <div class="wrap">
+    <div class="camp-header">
+      <div>
+        <div class="section-tag">Our work</div>
+        <h2 class="section-h">Campaigns</h2>
+      </div>
+      <a href="/our-work/" class="see-all">See all campaigns →</a>
+    </div>
+    <div class="camp-grid">
+      <a href="/active-campaigns/nomorelyes-2/" class="ccard">
+        <div class="ccard-img" style="background:var(--nv);"><div class="ccard-img-text" style="color:var(--y);">#No<br/>More<br/>Lyes</div></div>
+        <div class="ccard-body"><span class="ccard-tag">Active</span><div class="ccard-title">Take toxic hair relaxers off the shelves</div><div class="ccard-stat"><strong>6,400</strong> supporters · 1.1K this month</div></div>
+      </a>
+      <a href="/active-campaigns/pregnancy-in-prison/" class="ccard">
+        <div class="ccard-img" style="background:var(--y);"><div class="ccard-img-text" style="color:var(--nv);">Pregnancy<br/>in Prison</div></div>
+        <div class="ccard-body"><span class="ccard-tag">Active</span><div class="ccard-title">Stop sending pregnant women to prison</div><div class="ccard-stat"><strong>13,100</strong> supporters · 2.8K this month</div></div>
+      </a>
+      <a href="/active-campaigns/abortion-is-healthcare/" class="ccard">
+        <div class="ccard-img" style="background:var(--p);"><div class="ccard-img-text" style="color:var(--nv);">Abortion<br/>is Healthcare</div></div>
+        <div class="ccard-body"><span class="ccard-tag">Active</span><div class="ccard-title">Abortion is Healthcare — Decriminalise now</div><div class="ccard-stat"><strong>6,100</strong> supporters · 717 this month</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="blog">
+  <div class="wrap">
+    <div class="blog-header">
+      <div><div class="section-tag">Writing</div><h2 class="section-h">From the Blog</h2></div>
+      <a href="/blog/" class="see-all">See all posts →</a>
+    </div>
+    <div class="blog-grid">
+      <a href="/blog/its-time-to-reclaim-the-socialist-roots-of-international-womens-day/" class="blog-featured">
+        <div class="blog-meta">Levelup · March 5, 2026</div>
+        <h3 class="blog-ft">It's Time to Reclaim the Socialist Roots of International Women's Day</h3>
+        <p class="blog-fp">International Working Women's Day began as a protest for labour rights and solidarity. Reclaiming its radical roots has never been more urgent.</p>
+      </a>
+      <div class="blog-list">
+        <a href="/blog/gender-critical-feminism-isnt-feminist/" class="blog-item"><div class="blog-im">Vic Parsons · December 4, 2025</div><div class="blog-it">Gender Critical Feminism Isn't Feminist</div></a>
+        <a href="/blog/the-griefs-left-unattended/" class="blog-item"><div class="blog-im">Seyi Falodun-Liburd · November 19, 2025</div><div class="blog-it">The Griefs Left Unattended</div></a>
+        <a href="/blog/beyond-sympathy-feminist-solidarity-without-deservingness/" class="blog-item"><div class="blog-im">Starling · August 19, 2025</div><div class="blog-it">Beyond Sympathy: Feminist Solidarity Without Deservingness</div></a>
+        <a href="/blog/why-expanding-criminalisation-is-a-feminist-issue/" class="blog-item"><div class="blog-im">Levelup · June 26, 2025</div><div class="blog-it">Why Expanding Criminalisation is a Feminist Issue</div></a>
+        <a href="/blog/why-we-need-to-start-moving-offline/" class="blog-item"><div class="blog-im">Ruvimbo Kuuzabuwe · February 28, 2025</div><div class="blog-it">Why We Need to Start Moving Offline</div></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="join">
+  <div class="wrap">
+    <div class="section-tag">Community</div>
+    <h2 class="section-h">Join the Level Up Community</h2>
+    <p>Become part of a feminist movement fighting for gender justice in the UK. Together we create change.</p>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="btn btn-nv btn-lg">Join Us →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Level<mark>Up</mark></div>
+        <p class="footer-about">A feminist community campaigning for gender justice in the UK. Working towards a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+        <div class="socials">
+          <a href="https://www.facebook.com/levelupaction" class="social">Fb</a>
+          <a href="https://x.com/we_level_up" class="social">X</a>
+          <a href="https://www.instagram.com/levelup_uk/" class="social">Ig</a>
+        </div>
+        <div class="footer-addr">hello@welevelup.org<br/>New Derwent House<br/>69–73 Theobalds Road<br/>London WC1X 8TA</div>
+      </div>
+      <div class="footer-col"><h5>About</h5><ul><li><a href="/about-us/">What we do</a></li><li><a href="/our-team/">Who we are</a></li><li><a href="/what-we-are-proud-of/">What we are proud of</a></li><li><a href="/contact/">Contact</a></li></ul></div>
+      <div class="footer-col"><h5>Campaigns</h5><ul><li><a href="/active-campaigns/nomorelyes-2/">#NoMoreLyes</a></li><li><a href="/active-campaigns/pregnancy-in-prison/">Pregnancy in Prison</a></li><li><a href="/active-campaigns/abortion-is-healthcare/">Abortion is Healthcare</a></li><li><a href="/active-campaigns/media-guidelines-domestic-abuse/">Dignity for Dead Women</a></li><li><a href="/active-campaigns/sexual-violence-in-football/">Sexual violence in football</a></li><li><a href="/active-campaigns/we-protect-us/">We Protect Us</a></li></ul></div>
+      <div class="footer-col"><h5>Community</h5><ul><li><a href="/blog/">Blog</a></li><li><a href="/news-and-events/">Events</a></li><li><a href="/press/">Press Coverage</a></li><li><a href="/all-resources/">Resources</a></li><li><a href="/stories-of-the-community/">Space for memory</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2018–2025 Level Up. All Rights Reserved.</span>
+      <span>Licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/">CC BY-NC-ND 4.0</a></span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

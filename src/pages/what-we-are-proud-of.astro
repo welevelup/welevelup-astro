@@ -1,0 +1,393 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const campaigns = [
+  {
+    id: "premier-league",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/Artboard-1-copy-10-1-1024x1024.webp",
+    imageAlt: "What we are proud of",
+    imageAspect: "square",
+    title: "PUSHING THE PREMIER LEAGUE TO INTRODUCE CONSENT TRAINING",
+    issue: "With several Premier League footballers accused, arrested and charged with assault, it's clear football has a culture of gender-based violence, but clubs remain silent.",
+    intervention: "In February 2022, Level Up teamed up with The 3 Hijabis and End Violence Against Women coalition to send an open letter to the Premier League and FA demanding that they introduce consent training and disciplinaries. In June, Level Up visited Premier League HQ to follow up.",
+    impact: "In August 2022, the Premier League committed to our first demand: rolling out mandatory consent training across all players and staff. The campaign continues.",
+    petitionUrl: "/petition/petition-premier-league-violence/",
+    hasPetitionBtn: true,
+  },
+  {
+    id: "love-island",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/13.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "FORCING ITV TO DROP PLASTIC SURGERY ADVERTS FROM LOVE ISLAND",
+    issue: "the most-watched reality TV show of the summer of 2018 was displaying plastic surgery adverts and diet pill adverts in the breaks",
+    intervention: "Level Up teamed up with the British Association for Aesthetic Plastic Surgeons and the Mental Health Foundation to take a stand against the ads. Level Up also commissioned and released research in the Daily Mail on the impact of Love Island on female viewers' body confidence, and members sent 3,214 emails to senior ITV leaders with personal accounts of how the adverts were harmful to them and their daughters.",
+    impact: "ITV dropped the ads, and the CEO admitted fault on BBC Breakfast.",
+    petitionUrl: null,
+    hasPetitionBtn: false,
+  },
+  {
+    id: "trans-rights",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/14.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "MOBILISING FEMINISTS TO STAND IN SOLIDARITY WITH TRANS RIGHTS",
+    issue: "During the 2018 Gender Recognition Act consultation, the women's sector was the epicentre of transphobia in the UK. Level Up knows that trans rights are a feminist issue, and we know that there are more feminists that support trans rights than don't.",
+    intervention: "Working with trans members of the Level Up community, Level Up cut through the frenzy of transphobia by creating an easy-to-use online portal for responding to the consultation on the most important questions. Level Up produced a video where trans people explained what was at stake, and why solidarity was important.",
+    impact: "Over 7,000 people used our portal to voice their support for trans rights in the consultation, and we opened a direct doorway to the Government Equalities Office for trans-inclusive feminist organisations and domestic abuse services to voice their support too.",
+    petitionUrl: null,
+    hasPetitionBtn: false,
+  },
+  {
+    id: "domestic-abuse",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/12.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "CHANGING THE WAY DOMESTIC ABUSE DEATHS ARE REPORTED IN THE PRESS",
+    issue: "2 women a week are murdered by a partner or ex, yet newspapers report it in a harmful, sensationalist way that traumatises bereaved families and contributes to a wider culture of victim-blaming.",
+    intervention: "Level Up worked with families bereaved by domestic homicide, journalists and the media to create the UK's first press guidelines on reporting domestic abuse deaths. We launched the guidelines with a media splash and a petition signed by 22,190 people which called for regulators to change their Editor's Code and support the guidelines.",
+    impact: "Both UK press regulators came to the negotiating table and have agreed to back the guidelines. Level Up now works alongside AVA to deliver newsroom trainings to journalists.",
+    petitionUrl: "/petition/dignity-for-dead-women/",
+    hasPetitionBtn: true,
+  },
+  {
+    id: "facebook",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/11.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "CALLING OUT FACEBOOK'S HARASSMENT PROBLEM",
+    issue: "Facebook's harassment guidelines are very weak, especially when it comes to Sexism and non-consensual images.",
+    intervention: "Level Up partnered with the Sunday Times on an investigation into Facebook's failure to deal with sexism on its platform, finding that half of all women had experienced abuse. Level Up members also mass-reported the group 'Women Who Eat On Tubes', crashed Facebook's Carnaby St popup to grill staff on their lack of care for female users and Level Up secured meetings with a Facebook executive.",
+    impact: "Level Up's investigation had media coverage across the board from the Sunday Times to the Sun, which helped the team secure meetings with a Facebook executive, and advocate for a stalking survivor.",
+    petitionUrl: null,
+    hasPetitionBtn: false,
+  },
+  {
+    id: "plane-banner",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/7.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "FLYING A PLANE OVER A MANCHESTER UTD FOOTBALL GAME TO PROTEST RAPE CULTURE IN FOOTBALL",
+    issue: "when Cristiano Ronaldo returned to play for Manchester United in September 2021, the live rape allegations against him were shrouded in silence.",
+    intervention: "Level Up flew a plane banner over the football stadium that read 'Believe Kathryn Mayorga', the woman who alleges she was raped by Cristiano Ronaldo.",
+    impact: "Level Up punctured the silence around the rape allegations: the plane made global news, and sports press came alive with vital conversations on sexual violence in sports culture. The campaign has since evolved into a broader demand for the Premier League to implement a gender-based violence strategy.",
+    petitionUrl: "/petition/petition-premier-league-violence/",
+    hasPetitionBtn: true,
+  },
+  {
+    id: "pregnancy-prison",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/10.webp",
+    imageAlt: "No Births Behind Bars: End the Criminalisation of Pregnancy",
+    imageAspect: "landscape",
+    title: "HOSTING THE BIGGEST BABY PROTEST IN HISTORY TO DEMAND AN END TO PRISON FOR PREGNANT WOMEN",
+    issue: "Two babies have died in English prisons when their mothers went into labour without medical assistance. Prison will never be a safe place to be pregnant, yet courts are still sending pregnant women to prison.",
+    intervention: "Working behind the scenes with a coalition of women who were pregnant in prison, academics and charities Birth Companions and Women in Prison, Level Up launched a campaign coalition demanding a complete end to sending pregnant people to prison. As a campaign escalation, for Mother's Day 2022, Level Up joined forces with No Births Behind Bars to host the biggest baby protest in history.",
+    impact: "Level Up has built the first broad-based public campaign to demand an end to imprisonment for pregnant women. The campaign is growing from strength to strength.",
+    petitionUrl: "https://levelup.yourmovement.org/p/pregnancy-in-prison",
+    hasPetitionBtn: true,
+  },
+  {
+    id: "lgbt-education",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/9.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "FIGHTING FOR LGBT+ INCLUSIVE EDUCATION THE CURRICULUM",
+    issue: "When the government updated the Sex and Relationships Education (SRE) curriculum in 2018, LGBT+ experiences were left as an optional footnote. Knowing that there are young LGBT+ people in every school who need access to information and education about healthy relationships, we had to fight for change.",
+    intervention: "Level Up teamed up with Stonewall, parents and grandparents of young LGBT+ people, and LGBT+ inclusive faith groups to write to the government and submit specialist evidence to the consultation that demonstrated that LGBT+ relationships education belonged in all schools.",
+    impact: "As of September 2020, all secondary schools are now required to teach about sexual orientation and gender identity, and all primary schools are required to teach about different families.",
+    petitionUrl: null,
+    hasPetitionBtn: false,
+  },
+  {
+    id: "muslim-women",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/8.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "STANDING WITH MUSLIM WOMEN",
+    issue: "When politician Boris Johnson published an Islamophobic article describing Muslim women as 'letter boxes', no feminist organisation spoke out in solidarity.",
+    intervention: "Level Up secured broadcast interviews with Muslim women within our community, and encouraged all non-Muslim supporters to sign a 'Stand with Muslim Women' pledge.",
+    impact: "We challenged the government's Islamophobia across the press, and 8,761 members took a public pledge as feminists who stand in solidarity with Muslim women and their right to bodily autonomy and freedom of expression.",
+    petitionUrl: null,
+    hasPetitionBtn: false,
+  },
+  {
+    id: "metoo",
+    image: "https://welevelup.org/wp-content/uploads/2025/07/Copia-de-website-images-1.webp",
+    imageAlt: "",
+    imageAspect: "landscape",
+    title: "INTERSECTIONAL FEMINISM IN THE TIME OF #METOO: MARAI LARASI AND CHELSEA FULLER",
+    issue: null,
+    intervention: null,
+    impact: null,
+    body: '<em>Intersectional Feminism in the Time of #MeToo</em> is presented by the ICA and <a href="https://welevelup.org/ourstory/">Level Up</a>, a feminist organisation launched in January 2018 with the mission of building a community of feminists who can work together to end sexism in the UK.',
+    petitionUrl: null,
+    hasPetitionBtn: false,
+  },
+];
+---
+
+<Layout title="What we are proud of | Level Up" description="Ten campaign achievements Level Up is proud of — from changing press guidelines to protest actions and solidarity campaigns.">
+
+  {/* ===== HERO BANNER (4f537676 / sub-page-hero-banner) ===== */}
+  <section class="proud-hero">
+    <div class="proud-hero__inner">
+      <h2 class="proud-hero__title">What we are proud of</h2>
+    </div>
+  </section>
+
+  {/* ===== CAMPAIGN SECTIONS ===== */}
+  {campaigns.map((item, index) => (
+    <section class={`proud-section ${index % 2 === 0 ? 'proud-section--cream' : 'proud-section--white'}`}>
+      <div class="proud-section__boxed">
+        <div class="proud-section__image-col">
+          <img
+            src={item.image}
+            alt={item.imageAlt}
+            class={`proud-section__img ${item.imageAspect === 'square' ? 'proud-section__img--square' : ''}`}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </div>
+        <div class="proud-section__text-col">
+          <h2 class="proud-section__heading">{item.title}</h2>
+          {item.body ? (
+            <div class="proud-section__body" set:html={item.body} />
+          ) : (
+            <>
+              {item.issue && (
+                <p class="proud-section__para"><strong>The issue:</strong> {item.issue}</p>
+              )}
+              {item.intervention && (
+                <p class="proud-section__para"><strong>The intervention:</strong> {item.intervention}</p>
+              )}
+              {item.impact && (
+                <p class="proud-section__para"><strong>The impact:</strong> {item.impact}</p>
+              )}
+            </>
+          )}
+          {item.hasPetitionBtn && item.petitionUrl && (
+            <div class="proud-section__btn-wrap">
+              <a href={item.petitionUrl} target="_blank" rel="noopener" class="proud-section__btn">
+                SIGN THE PETITION
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  {/* ===== JOIN CTA (35021c9f) ===== */}
+  <section class="proud-cta">
+    <div class="proud-cta__inner">
+      <h2 class="proud-cta__title">
+        <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener">
+          Click and Join the Level Up Community
+        </a>
+      </h2>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ===== HERO BANNER (4f537676 / sub-page-hero-banner)
+     bg: navy (#0D0A3E), boxed, flex col, center */
+  .proud-hero {
+    background-color: #0D0A3E;
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+  }
+  .proud-hero__inner {
+    max-width: 1130px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* 10c64000: page-title heading, cream, DM Sans/blogh style */
+  .proud-hero__title {
+    font-family: "blogh", "DM Sans", sans-serif;
+    font-size: 2vw;
+    font-weight: 800;
+    color: #EEEBD3;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: -0.45px;
+    margin: 0;
+  }
+
+  /* ===== CAMPAIGN SECTIONS (9d4c1d8 etc.)
+     Full-width containers, alternating bg colors */
+  .proud-section {
+    width: 100%;
+    padding: 60px 20px;
+  }
+  .proud-section--cream {
+    background-color: #EDEBD2;
+  }
+  .proud-section--white {
+    background-color: #FFFFFF;
+  }
+
+  /* Boxed inner: max 1130px, flex row, gap 40px */
+  .proud-section__boxed {
+    max-width: 1130px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  /* Image column: ~50% width */
+  .proud-section__image-col {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .proud-section__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  /* Square image (first item) */
+  .proud-section__img--square {
+    aspect-ratio: 1 / 1;
+  }
+
+  /* Text column: ~50% width, flex col */
+  .proud-section__text-col {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Section heading: blogh/DM Sans, 2vw, navy */
+  .proud-section__heading {
+    font-family: "blogh", "DM Sans", sans-serif;
+    font-size: 2vw;
+    font-weight: 800;
+    color: #0D0A3E;
+    line-height: 1.15;
+    letter-spacing: -0.45px;
+    margin: 0 0 20px 0;
+  }
+
+  /* Text paragraphs: Montserrat 18px/400/24px, navy */
+  .proud-section__para {
+    font-family: "Montserrat", "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #0D0A3E;
+    margin: 0 0 20px 0;
+  }
+
+  /* Body text (rich HTML) */
+  .proud-section__body {
+    font-family: "Montserrat", "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #0D0A3E;
+    margin: 0 0 20px 0;
+  }
+  .proud-section__body a {
+    color: #0D0A3E;
+    text-decoration: underline;
+  }
+
+  /* CTA button: navy bg, lime text, blogh font */
+  .proud-section__btn-wrap {
+    margin-top: 4px;
+  }
+  .proud-section__btn {
+    display: inline-block;
+    background-color: #0D0A3E;
+    color: #CBFF32;
+    font-family: "blogh", "DM Sans", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 900;
+    text-decoration: none;
+    padding: 13px 50px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .proud-section__btn:hover {
+    opacity: 0.85;
+    color: #CBFF32;
+  }
+
+  /* ===== JOIN CTA (35021c9f)
+     bg: #AB9DEA, boxed, centered heading */
+  .proud-cta {
+    background-color: #AB9DEA;
+    padding: 3em 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .proud-cta__inner {
+    max-width: 1130px;
+    width: 75%;
+    text-align: center;
+  }
+  /* 30e5291 section-sub-title: DM Sans 3vw/700 */
+  .proud-cta__title {
+    font-family: "DM Sans", sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.45px;
+    margin: 0;
+  }
+  .proud-cta__title a {
+    color: #0D0A3E;
+    text-decoration: none;
+  }
+  .proud-cta__title a:hover {
+    opacity: 0.7;
+  }
+
+  /* ===== RESPONSIVE: TABLET (max 1024px) ===== */
+  @media (max-width: 1024px) {
+    .proud-hero { padding: 40px 4%; }
+    .proud-hero__title { font-size: 3.5vw; }
+
+    .proud-section { padding: 48px 4%; }
+    .proud-section__boxed { gap: 30px; }
+    .proud-section__heading { font-size: 2.2vw; }
+    .proud-section__para { font-size: 16px; }
+    .proud-section__body { font-size: 16px; }
+
+    .proud-cta { padding: 2.5em 4%; }
+    .proud-cta__title { font-size: 2.5vw; }
+    .proud-cta__inner { width: 90%; }
+  }
+
+  /* ===== RESPONSIVE: MOBILE (max 767px) ===== */
+  @media (max-width: 767px) {
+    .proud-hero { padding: 2rem 2rem; }
+    .proud-hero__title { font-size: 7vw; }
+
+    .proud-section { padding: 2.5rem 2rem; }
+    .proud-section__boxed {
+      flex-direction: column;
+      gap: 24px;
+    }
+    .proud-section__image-col { width: 100%; }
+    .proud-section__text-col { width: 100%; }
+    .proud-section__heading { font-size: 5vw; }
+    .proud-section__para { font-size: 15px; line-height: 1.5; }
+    .proud-section__body { font-size: 15px; line-height: 1.5; }
+    .proud-section__btn { font-size: 1rem; padding: 10px 24px; }
+
+    .proud-cta { padding: 2rem; }
+    .proud-cta__title { font-size: 5.5vw; }
+    .proud-cta__inner { width: 100%; }
+  }
+</style>

@@ -1,0 +1,344 @@
+/* ============================================
+   LEVEL UP — Design Tokens & Global Styles
+   Extracted from WordPress/Elementor post-7.css
+   ============================================ */
+
+/* ============================================
+   CUSTOM FONT: blogh
+   Used for h2, h3, h5, h6 and section labels
+   Falls back to DM Sans weight 800
+   ============================================ */
+/* @font-face for "blogh" should be added here if/when the font file is available */
+
+:root {
+  /* ---- Colors ---- */
+  --color-primary:       #0D0A3E;   /* navy */
+  --color-secondary:     #CBFF32;   /* lime */
+  --color-text:          #0D0A3E;   /* body text */
+  --color-bg:            #EDEBD2;   /* cream / page background */
+  --color-purple-light:  #AB9DEA;
+  --color-purple:        #A89CED;
+  --color-white:         #FFFFFF;
+  --color-dark-variant:  #0B0A3E;
+
+  /* Shorthand aliases kept for convenience */
+  --navy:   #0D0A3E;
+  --lime:   #CBFF32;
+  --cream:  #EDEBD2;
+  --purple: #A89CED;
+  --white:  #FFFFFF;
+
+  /* ---- Typography ---- */
+  --font-primary:    "DM Sans", sans-serif;
+  --font-heading:    "blogh", "DM Sans", sans-serif; /* h2, h3, h5, h6 */
+  --font-h4:         "Montserrat", "DM Sans", sans-serif;
+  --font-button:     "Corporative Alt", "DM Sans", sans-serif;
+
+  --letter-spacing:  -0.45px;
+
+  /* Body / text */
+  --fs-body:         18px;
+  --fw-body:         400;
+  --lh-body:         24px;
+
+  /* Accent text */
+  --fs-accent:       16px;
+  --fw-accent:       400;
+
+  /* Primary label (e.g. "FROM THE BLOG" section title) */
+  --fs-primary-label: 2vw;
+  --fw-primary-label: normal;
+
+  /* Secondary section title */
+  --fs-section-title: 4.7vw;
+  --fw-section-title: 600;
+
+  /* Headings */
+  --fs-h1: 3.7vw;
+  --fw-h1: 500;
+
+  --fs-h2: 2vw;
+  --fw-h2: 800;
+
+  --fs-h3: 1.8vw;
+  --fw-h3: 800;
+
+  --fs-h4: 16px;
+  --fw-h4: 700;
+
+  --fs-h5: inherit;
+  --fw-h5: 800;
+
+  --fs-h6: inherit;
+  --fw-h6: 800;
+
+  /* ---- Layout ---- */
+  --container-max-width: 1130px;
+  --container-padding:   0px 20px;
+  --widget-spacing:      20px;
+}
+
+/* ============================================
+   RESET
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   BODY
+   ============================================ */
+body {
+  font-family: var(--font-primary);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--letter-spacing);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================================
+   HEADINGS
+   ============================================ */
+h1 {
+  font-family: var(--font-primary);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-h1);
+  letter-spacing: var(--letter-spacing);
+  line-height: 1.1;
+}
+
+/* h2, h3, h5, h6 use "blogh" (custom) — fallback to DM Sans weight 800 */
+h2 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-h2);
+  letter-spacing: var(--letter-spacing);
+  line-height: 1em;
+}
+
+h3 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-h3);
+  letter-spacing: var(--letter-spacing);
+  line-height: 1em;
+}
+
+/* h4 uses Montserrat, uppercase */
+h4 {
+  font-family: var(--font-h4);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-h4);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing);
+  line-height: 1.2;
+}
+
+h5 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-h5);
+  letter-spacing: var(--letter-spacing);
+  line-height: 1em;
+}
+
+h6 {
+  font-family: var(--font-heading);
+  font-size: var(--fs-h6);
+  font-weight: var(--fw-h6);
+  letter-spacing: var(--letter-spacing);
+  line-height: 1em;
+}
+
+/* ============================================
+   BODY TEXT / PARAGRAPHS
+   ============================================ */
+p {
+  font-family: var(--font-primary);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-body);
+  letter-spacing: var(--letter-spacing);
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+  padding: var(--container-padding);
+}
+
+/* ============================================
+   SECTION SPACING
+   ============================================ */
+section {
+  padding-block: clamp(3rem, 6vw, 6rem);
+}
+
+/* ============================================
+   BUTTONS
+   Exact values from post-7.css
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-button);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: var(--letter-spacing);
+  padding: 12px 28px;
+  border-radius: 0px;           /* square — NOT rounded */
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+
+  /* Default: navy bg, lime text */
+  background-color: var(--color-primary);
+  color: #CBFB32;               /* slightly different lime from button spec */
+}
+
+.btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* Variant: lime background, navy text */
+.btn--lime {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+/* Variant: navy background, lime text (same as default, explicit class) */
+.btn--navy {
+  background-color: var(--color-primary);
+  color: #CBFB32;
+}
+
+/* Variant: outlined */
+.btn--outline {
+  background-color: transparent;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Variant: white background */
+.btn--white {
+  background-color: var(--color-white);
+  color: var(--color-primary);
+}
+
+/* ============================================
+   SECTION LABEL / SECTION-SUB-TITLE
+   Matches Elementor ".section-sub-title" class
+   Uses "blogh" font, weight 800, line-height 1em
+   ============================================ */
+.section-label,
+.section-sub-title {
+  display: inline-block;
+  font-family: var(--font-heading);   /* "blogh" / DM Sans fallback */
+  font-size: var(--fs-primary-label); /* 2vw */
+  font-weight: 800;
+  line-height: 1em;
+  letter-spacing: var(--letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Larger section title variant (e.g. "FROM THE BLOG" heading) */
+.section-title {
+  font-family: var(--font-primary);
+  font-size: var(--fs-section-title); /* 4.7vw */
+  font-weight: var(--fw-section-title); /* 600 */
+  line-height: 1em;
+  letter-spacing: var(--letter-spacing);
+}
+
+/* ============================================
+   ACCESSIBILITY: Visually hidden
+   ============================================ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   Matching Elementor's 1024px (tablet) and 767px (mobile)
+   ============================================ */
+
+/* ---- Tablet: max-width 1024px ---- */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 1024px;
+    padding: 0% 4%;
+  }
+
+  h2 {
+    font-size: 2vw;
+  }
+
+  h3 {
+    font-size: 1.8vw;
+  }
+}
+
+/* ---- Mobile: max-width 767px ---- */
+@media (max-width: 767px) {
+  .container {
+    max-width: 767px;
+    padding: 0rem 2rem;
+  }
+
+  h2 {
+    font-size: 4.8vw;
+  }
+
+  h3 {
+    font-size: 4.8vw;
+  }
+
+  .btn {
+    font-size: 16px;
+    padding: 6px 25px;
+  }
+
+  .section-label,
+  .section-sub-title {
+    font-size: 4vw;
+  }
+}

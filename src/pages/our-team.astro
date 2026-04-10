@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const team = [
+  { name: 'Seyi Falodun-Liburd', role: 'Co-Director' },
+  { name: 'Janey Starling', role: 'Co-Director' },
+];
+---
+
+<Layout title="Our Team | Level Up" description="Meet the Level Up team working for gender justice in the UK.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>Our Team</h1>
+      <p class="subtitle">The people behind Level Up</p>
+    </div>
+  </section>
+
+  <section class="team-section">
+    <div class="container">
+      <div class="team-grid">
+        {team.map((member) => (
+          <div class="team-card">
+            <div class="team-card__avatar">
+              <span>{member.name.split(' ').map(n => n[0]).join('')}</span>
+            </div>
+            <h2 class="team-card__name">{member.name}</h2>
+            <p class="team-card__role">{member.role}</p>
+          </div>
+        ))}
+      </div>
+      <div class="team-note">
+        <p>
+          Level Up is powered by a growing community of feminists, volunteers, and campaigners
+          from all backgrounds. <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener">Join us</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    background-color: var(--navy);
+    color: var(--cream);
+    padding: 6rem 0 4rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    opacity: 0.85;
+  }
+
+  .team-section {
+    background-color: var(--cream);
+  }
+
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+
+  .team-card {
+    background-color: var(--white);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .team-card__avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--purple);
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 1rem;
+  }
+
+  .team-card__name {
+    font-size: 1.25rem;
+    text-transform: none;
+    margin-bottom: 0.25rem;
+  }
+
+  .team-card__role {
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+
+  .team-note {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .team-note a {
+    color: var(--navy);
+    text-decoration: underline;
+    text-decoration-color: var(--purple);
+    font-weight: 600;
+  }
+</style>

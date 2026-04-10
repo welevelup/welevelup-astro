@@ -1,0 +1,111 @@
+---
+import CampaignLayout from '../layouts/CampaignLayout.astro';
+---
+
+<CampaignLayout
+  title="Media Guidelines for Reporting Fatal Domestic Abuse | Level Up"
+  description="Level Up's campaign to change the way press reports fatal domestic abuse."
+  heroImage="https://welevelup.org/wp-content/uploads/2025/08/Level-Up-at-IPSO-e1680513085600-800x418-1-e1769804722383.jpg"
+  heroTitle="Media Guidelines"
+  heroSubtitle="Changing the way press reports fatal domestic abuse"
+  petitionUrl="https://welevelup.org/petition/dignity-for-dead-women/"
+  petitionLabel="SIGN THE PETITION"
+>
+  <!-- Campaign main title -->
+  <h2 class="campaign-main-title">MEDIA GUIDELINES CAMPAIGN</h2>
+
+  <!-- Intro text -->
+  <div class="campaign-section" style="flex-direction: column; gap: 20px; padding-top: 1.5em;">
+    <p class="campaign-main-description">
+      The Media Guidelines campaign is led by Level Up to challenge harmful and inaccurate media reporting on fatal domestic abuse and domestic homicide.
+    </p>
+    <p class="campaign-main-description">
+      Every three days in the UK, a woman is killed by a partner or ex-partner. Media coverage often misrepresents these killings as isolated incidents or "crimes of passion", rather than the predictable outcome of sustained coercive control.
+    </p>
+    <p class="campaign-main-description">
+      Level Up's Media Guidelines campaign calls for accurate, responsible and dignified reporting of fatal domestic abuse to prevent further deaths and improve public understanding of domestic abuse.
+    </p>
+  </div>
+
+  <!-- Alternating color blocks for timeline/resources -->
+  <div class="campaign-block campaign-block--navy">
+    <h3 class="campaign-block__heading">SIGN THE PETITION</h3>
+  </div>
+
+  <div class="campaign-block campaign-block--purple">
+    <p class="campaign-block__text">
+      In consultation with a coalition of domestic violence experts and victims' families, Level Up produced the UK's first media guidelines on how to report domestic abuse deaths. They are endorsed by both press regulators IPSO and IMPRESS.
+    </p>
+  </div>
+
+  <!-- Why this matters section -->
+  <div class="campaign-section">
+    <div class="campaign-section__label">
+      <h2>Why this matters</h2>
+    </div>
+    <div class="campaign-section__text">
+      <p>
+        Every three days, a woman is killed by a partner or ex-partner in the UK. Media coverage often misrepresents these killings. Media reports directly influence public understanding of domestic abuse. When women are killed by partners, it marks the endpoint of sustained coercive control.
+      </p>
+    </div>
+  </div>
+
+  <!-- Our aim -->
+  <div class="campaign-section">
+    <div class="campaign-section__label">
+      <h2>Our aim</h2>
+    </div>
+    <div class="campaign-section__text">
+      <p>Change the way press reports fatal domestic abuse across the UK and beyond.</p>
+    </div>
+  </div>
+
+  <!-- Campaign timeline -->
+  <div class="campaign-section" style="flex-direction: column;">
+    <h2 style="font-family: 'blogh', 'DM Sans', sans-serif; font-weight: 800; text-transform: uppercase; line-height: 1em; letter-spacing: -0.45px;">Campaign timeline</h2>
+    <div class="timeline">
+      <div class="timeline__item"><span class="timeline__year">2018</span><p>Launched petition targeting IPSO with 20,000+ signatures</p></div>
+      <div class="timeline__item"><span class="timeline__year">2019</span><p>Guidelines backed by both IPSO and IMPRESS press regulators</p></div>
+      <div class="timeline__item"><span class="timeline__year">2020</span><p>Published research: 2 in 3 families bereaved by homicide had grieving negatively impacted by media</p></div>
+      <div class="timeline__item"><span class="timeline__year">2021</span><p>Rolled out CPD-accredited online trainings with AVA; trained 500+ journalists</p></div>
+      <div class="timeline__item"><span class="timeline__year">2022</span><p>Delivered training at International Journalism Festival in Perugia; trained European journalists</p></div>
+      <div class="timeline__item"><span class="timeline__year">2023</span><p>Expanded training internationally</p></div>
+    </div>
+  </div>
+
+  <!-- CTA buttons -->
+  <div style="display: flex; gap: 15px; flex-wrap: wrap; padding: 1.5em 0;">
+    <a href="https://welevelup.org/petition/dignity-for-dead-women/" target="_blank" rel="noopener" class="campaign-btn">Sign the petition</a>
+    <a href="mailto:mediasupport@welevelup.org" class="campaign-btn" style="background-color: transparent; border: 2px solid #0D0A3E; color: #0D0A3E;">Get in touch for training</a>
+  </div>
+</CampaignLayout>
+
+<style>
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+
+  .timeline__item {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .timeline__year {
+    font-family: "blogh", "DM Sans", sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #A89CED;
+  }
+
+  .timeline__item p {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+  }
+</style>

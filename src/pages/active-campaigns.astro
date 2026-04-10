@@ -1,0 +1,180 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const campaigns = [
+  {
+    id: 'abortion',
+    title: 'Abortion is Healthcare',
+    description: 'Free, safe, legal and local access to abortion for all. Despite being essential healthcare, abortion is still regulated under outdated criminal law, causing harm, stigma and barriers to care.',
+    image: 'https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.20.png',
+    petitionUrl: 'https://welevelup.org/petition/abortion-is-healthcare/',
+    campaignUrl: '/campaigns/abortion-is-healthcare',
+    supporters: '6.1K',
+  },
+  {
+    id: 'pregnancy-prison',
+    title: 'Stop sending pregnant women to prison',
+    description: 'Prison is no place to be pregnant. Level Up campaigns to end the imprisonment of pregnant women and new mothers in England. Evidence shows that pregnancy in prison is inherently unsafe, placing women and babies at serious risk of harm, trauma and death.',
+    image: 'https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.40-e1771105055980.png',
+    petitionUrl: 'https://levelup.yourmovement.org/p/pregnancy-in-prison',
+    campaignUrl: '/campaigns/pregnancy-in-prison',
+    supporters: '13.1K',
+  },
+  {
+    id: 'nomorelyes',
+    title: '#NoMoreLyes — Take Toxic Hair Relaxers Off the Shelves',
+    description: 'The #NoMoreLyes campaign challenges beauty brands to remove toxic chemicals from hair products used by Black women. Research has linked chemical hair relaxers to increased risks of breast cancer, uterine cancer, fibroids and other serious health conditions.',
+    image: 'https://welevelup.org/wp-content/uploads/2025/07/3-720x540-1.jpg',
+    petitionUrl: 'https://levelup.yourmovement.org/p/no-more-lyes',
+    campaignUrl: '/campaigns/no-more-lyes',
+    supporters: '6.4K',
+  },
+  {
+    id: 'football',
+    title: 'Sexual Violence in Football',
+    description: 'Level Up challenges the culture of impunity around gender-based violence in professional football, calling on the Premier League and The FA to take action and ensure that gender-based violence has consequences on and off the pitch.',
+    image: 'https://welevelup.org/wp-content/uploads/2025/08/1553e305-ff32-46ed-a997-a255d801a668_tfywcj-1-e1769823018750.webp',
+    petitionUrl: 'https://welevelup.org/petition/petition-premier-league-violence/',
+    campaignUrl: '/campaigns/sexual-violence-in-football',
+    supporters: '4.3K',
+  },
+  {
+    id: 'weprotectus',
+    title: 'Free Bystander Intervention Training — We Protect Us',
+    description: 'Join Level Up\'s free online bystander intervention training and learn how to safely interrupt harassment in public, at work, in your family or in your community.',
+    image: 'https://welevelup.org/wp-content/uploads/2025/09/we-protect-us-2.webp',
+    petitionUrl: 'https://levelup.yourmovement.org/p/we-protect-us',
+    campaignUrl: '/campaigns/we-protect-us',
+    supporters: '',
+  },
+  {
+    id: 'holloway',
+    title: 'Islington Council: Finish Holloway Women\'s Centre',
+    description: 'When Holloway women\'s prison closed in 2016, a women\'s centre was promised on the site. Ten years on, it\'s still not delivered. We\'re calling on Islington Council to honour their promise.',
+    image: 'https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png',
+    petitionUrl: 'https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre',
+    campaignUrl: '/campaigns/holloway',
+    supporters: '',
+  },
+];
+---
+
+<Layout title="All Campaigns | Level Up" description="Join Level Up's active campaigns for gender justice in the UK.">
+  <section class="page-hero">
+    <div class="container">
+      <h1>ALL CAMPAIGNS</h1>
+    </div>
+  </section>
+
+  <section class="campaigns-list">
+    <div class="container">
+      {campaigns.map((c) => (
+        <article class="campaign-row" id={c.id}>
+          {c.image && (
+            <div class="campaign-row__img">
+              <a href={c.campaignUrl}>
+                <img src={c.image} alt={c.title} loading="lazy" />
+              </a>
+            </div>
+          )}
+          <div class="campaign-row__content">
+            <h2><a href={c.campaignUrl}>{c.title}</a></h2>
+            <p>{c.description}</p>
+            <div class="campaign-row__actions">
+              <a href={c.petitionUrl} target="_blank" rel="noopener" class="btn btn--lime">Sign the petition</a>
+              {c.supporters && <span class="supporters-badge">{c.supporters} supporters</span>}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .page-hero {
+    background-color: var(--navy);
+    color: var(--cream);
+    padding: 6rem 0 4rem;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    opacity: 0.85;
+  }
+
+  .campaigns-list {
+    background-color: var(--cream);
+  }
+
+  .campaign-row {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2.5rem;
+    align-items: center;
+    padding: 3rem 0;
+    border-bottom: 1px solid rgba(13, 10, 62, 0.1);
+  }
+
+  .campaign-row:last-child {
+    border-bottom: none;
+  }
+
+  .campaign-row:not(:has(.campaign-row__img)) {
+    grid-template-columns: 1fr;
+  }
+
+  .campaign-row__img {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .campaign-row__img img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+
+  .campaign-row__content h2 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: 1rem;
+    text-transform: none;
+  }
+
+  .campaign-row__content p {
+    font-size: 1.05rem;
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+    max-width: 550px;
+  }
+
+  .campaign-row__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .supporters-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background-color: var(--navy);
+    color: var(--lime);
+    padding: 0.5em 1em;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .campaign-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

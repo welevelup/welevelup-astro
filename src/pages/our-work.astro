@@ -1,0 +1,368 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="All Campaigns | Level Up" description="All feminist campaigns from Level Up — fighting for gender justice in the UK.">
+
+  <!-- Hero Banner -->
+  <section id="sub-page-hero-banner" class="hero-banner">
+    <div class="hero-inner">
+      <h2 class="hero-title">ALL CAMPAIGNS</h2>
+    </div>
+  </section>
+
+  <!-- Search Section -->
+  <section class="search-section">
+    <div class="container">
+      <form class="search-form" action="/search" method="get" role="search">
+        <label class="search-label" for="campaign-search">
+          <svg aria-hidden="true" class="search-icon" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+        </label>
+        <input
+          id="campaign-search"
+          type="search"
+          name="s"
+          placeholder="Type some words related to the campaign"
+          class="search-input"
+          autocomplete="off"
+        />
+        <button type="submit" class="search-submit">Search</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Campaign Cards Grid -->
+  <section class="campaigns-section">
+    <div class="container">
+      <div class="campaigns-grid">
+
+        <article class="campaign-card">
+          <div class="card-image-wrapper">
+            <a href="/petition/abortion-is-healthcare/" target="_blank" rel="noopener" class="card-image-link">
+              <img
+                src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.20.png"
+                alt="Abortion is Healthcare"
+                width="800"
+                height="601"
+              />
+              <span class="external-icon" aria-hidden="true">
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"/></svg>
+              </span>
+            </a>
+          </div>
+          <h2 class="card-title">
+            <a href="/petition/abortion-is-healthcare/" target="_blank" rel="noopener">Abortion is Healthcare</a>
+          </h2>
+          <div class="card-meta">
+            <span class="supporter-count">
+              <svg aria-hidden="true" class="user-icon" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>
+              6,1K supporters
+            </span>
+          </div>
+        </article>
+
+        <article class="campaign-card">
+          <div class="card-image-wrapper">
+            <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" target="_blank" rel="noopener" class="card-image-link">
+              <img
+                src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.40-e1771105055980.png"
+                alt="Stop sending pregnant women to prison"
+                width="800"
+                height="606"
+              />
+              <span class="external-icon" aria-hidden="true">
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"/></svg>
+              </span>
+            </a>
+          </div>
+          <h2 class="card-title">
+            <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" target="_blank" rel="noopener">Stop sending pregnant women to prison</a>
+          </h2>
+          <div class="card-meta">
+            <span class="supporter-count">
+              <svg aria-hidden="true" class="user-icon" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>
+              13,1K supporters
+            </span>
+          </div>
+        </article>
+
+        <article class="campaign-card">
+          <div class="card-image-wrapper">
+            <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="card-image-link">
+              <img
+                src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.10-e1771105231897.png"
+                alt="#NoMoreLyes Take toxic hair relaxers off the shelves"
+                width="800"
+                height="604"
+              />
+              <span class="external-icon" aria-hidden="true">
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"/></svg>
+              </span>
+            </a>
+          </div>
+          <h2 class="card-title">
+            <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener">#NoMoreLyes Take toxic hair relaxers off the shelves</a>
+          </h2>
+          <div class="card-meta">
+            <span class="supporter-count">
+              <svg aria-hidden="true" class="user-icon" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>
+              6,4K supporters
+            </span>
+          </div>
+        </article>
+
+        <article class="campaign-card">
+          <div class="card-image-wrapper">
+            <a href="/petition/dignity-for-dead-women/" target="_blank" rel="noopener" class="card-image-link">
+              <img
+                src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.28-e1771105118340.png"
+                alt="Dignity for dead women"
+                width="800"
+                height="601"
+              />
+              <span class="external-icon" aria-hidden="true">
+                <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M432,320H400a16,16,0,0,0-16,16V448H64V128H208a16,16,0,0,0,16-16V80a16,16,0,0,0-16-16H48A48,48,0,0,0,0,112V464a48,48,0,0,0,48,48H400a48,48,0,0,0,48-48V336A16,16,0,0,0,432,320ZM488,0h-128c-21.37,0-32.05,25.91-17,41l35.73,35.73L135,320.37a24,24,0,0,0,0,34L157.67,377a24,24,0,0,0,34,0L435.28,133.32,471,169c15,15,41,4.5,41-17V24A24,24,0,0,0,488,0Z"/></svg>
+              </span>
+            </a>
+          </div>
+          <h2 class="card-title">
+            <a href="/petition/dignity-for-dead-women/" target="_blank" rel="noopener">Dignity for dead women</a>
+          </h2>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  :root {
+    --navy: #0D0A3E;
+    --lime: #CBFF32;
+    --cream: #EDEBD2;
+    --white: #FFFFFF;
+  }
+
+  .hero-banner {
+    background-color: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 0;
+    min-height: 200px;
+  }
+
+  .hero-inner {
+    max-width: 1130px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px 20px;
+  }
+
+  .hero-title {
+    font-family: 'blogh', 'DM Sans', sans-serif;
+    font-size: 7vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-align: center;
+    width: 100%;
+    margin: 0;
+  }
+
+  .container {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Search Section */
+  .search-section {
+    background-color: var(--navy);
+    padding: 1.5rem 0;
+  }
+
+  .search-form {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background-color: var(--white);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .search-label {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    cursor: pointer;
+  }
+
+  .search-icon {
+    width: 16px;
+    height: 16px;
+    fill: var(--navy);
+  }
+
+  .search-input {
+    flex: 1;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--navy);
+    padding: 12px 0;
+    border: none;
+    outline: none;
+    background: transparent;
+  }
+
+  .search-input::placeholder {
+    color: #999;
+  }
+
+  .search-submit {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: var(--cream);
+    color: var(--navy);
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .search-submit:hover {
+    background-color: var(--lime);
+  }
+
+  /* Campaigns Grid */
+  .campaigns-section {
+    background-color: var(--navy);
+    padding: 2rem 0 4rem;
+  }
+
+  .campaigns-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .campaign-card {
+    background-color: var(--navy);
+    padding: 25px;
+    box-sizing: border-box;
+  }
+
+  .card-image-wrapper {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .card-image-link {
+    display: block;
+    position: relative;
+  }
+
+  .card-image-link img {
+    width: 100%;
+    display: block;
+  }
+
+  .external-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    background-color: #1A1919E0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .card-image-link:hover .external-icon {
+    opacity: 1;
+    background-color: #DBD8D8BF;
+  }
+
+  .external-icon svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--cream);
+  }
+
+  .card-title {
+    font-family: 'blogh', 'DM Sans', sans-serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin: 0 0 10px;
+    line-height: 1.1;
+  }
+
+  .card-title a {
+    color: var(--cream);
+    text-decoration: none;
+  }
+
+  .card-title a:hover {
+    text-decoration: underline;
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .supporter-count {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--cream);
+  }
+
+  .user-icon {
+    width: 14px;
+    height: 14px;
+    fill: var(--cream);
+  }
+
+  @media (max-width: 1024px) {
+    .hero-title {
+      font-size: 6vw;
+    }
+
+    .card-title {
+      font-size: 2.5vw;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-title {
+      font-size: 8.2vw;
+    }
+
+    .campaigns-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .card-title {
+      font-size: 7vw;
+    }
+  }
+</style>

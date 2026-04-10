@@ -1,0 +1,765 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&display=swap');
+  .lu-root {
+    --yellow:  #CCFF33;
+    --neutral: #EEEBD3;
+    --navy:    #0C0A3E;
+    --purple:  #A89CED;
+    --fh: 'Barlow Condensed', sans-serif;
+    --fb: 'Barlow', sans-serif;
+    font-family: var(--fb);
+    background: var(--navy);
+    color: var(--neutral);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .lu-root * { box-sizing: border-box; margin: 0; padding: 0; }
+  .lu-root a { color: inherit; text-decoration: none; }
+
+  /* HEADER */
+  .lu-header {
+    background: var(--navy);
+    border-bottom: 2px solid var(--yellow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    height: 56px;
+  }
+  .lu-logo {
+    font-family: var(--fh);
+    font-weight: 900;
+    font-size: 24px;
+    color: var(--yellow);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .lu-nav {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    height: 100%;
+  }
+  .lu-nav a {
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-family: var(--fh);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(238,235,211,0.75);
+    border-right: 1px solid rgba(255,255,255,0.07);
+    transition: color 0.15s, background 0.15s;
+  }
+  .lu-nav a:hover { color: var(--yellow); background: rgba(204,255,51,0.06); }
+  .lu-header-ctas { display: flex; gap: 8px; align-items: center; }
+  .lu-btn {
+    font-family: var(--fh);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+  }
+  .lu-btn-y { background: var(--yellow); color: var(--navy); }
+  .lu-btn-y:hover { background: #d4ff4a; }
+  .lu-btn-oy { border: 2px solid var(--yellow); color: var(--yellow); background: transparent; }
+  .lu-btn-oy:hover { background: var(--yellow); color: var(--navy); }
+  .lu-btn-on { border: 2px solid var(--navy); color: var(--navy); background: transparent; }
+  .lu-btn-on:hover { background: var(--navy); color: var(--yellow); }
+
+  /* HERO */
+  .lu-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 420px;
+  }
+  .lu-hero-left {
+    background: var(--navy);
+    padding: 56px 40px 56px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 2px solid rgba(204,255,51,0.18);
+  }
+  .lu-eyebrow {
+    font-family: var(--fh);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 12px;
+    opacity: 0.85;
+  }
+  .lu-hero-title {
+    font-family: var(--fh);
+    font-weight: 900;
+    font-size: 64px;
+    line-height: 0.93;
+    text-transform: uppercase;
+    color: var(--neutral);
+    margin-bottom: 20px;
+  }
+  .lu-hero-title em { font-style: normal; color: var(--yellow); }
+  .lu-hero-sub {
+    font-size: 15px;
+    color: rgba(238,235,211,0.65);
+    max-width: 380px;
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+  .lu-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .lu-hero-right {
+    background: var(--yellow);
+    padding: 48px 24px 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .lu-hero-right::before {
+    content: '';
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 2px solid rgba(12,10,62,0.1);
+  }
+  .lu-campaign-label {
+    font-family: var(--fh);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(12,10,62,0.5);
+    margin-bottom: 10px;
+  }
+  .lu-campaign-title {
+    font-family: var(--fh);
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 0.93;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+  .lu-campaign-desc {
+    font-size: 14px;
+    color: rgba(12,10,62,0.72);
+    line-height: 1.6;
+    margin-bottom: 28px;
+    max-width: 340px;
+  }
+
+  /* DIVIDER */
+  .lu-divider { height: 1px; background: rgba(238,235,211,0.1); }
+
+  /* WHO WE ARE */
+  .lu-who {
+    background: var(--navy);
+    padding: 72px 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .lu-section-label {
+    font-family: var(--fh);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 10px;
+    opacity: 0.75;
+  }
+  .lu-section-title {
+    font-family: var(--fh);
+    font-weight: 900;
+    font-size: 46px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--neutral);
+    margin-bottom: 8px;
+  }
+  .lu-rule { width: 48px; height: 3px; background: var(--yellow); margin: 18px 0 24px; }
+  .lu-who-text p { font-size: 14px; color: rgba(238,235,211,0.72); line-height: 1.75; margin-bottom: 14px; }
+  .lu-readmore {
+    font-family: var(--fh);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    border-bottom: 2px solid var(--yellow);
+    padding-bottom: 2px;
+    display: inline-block;
+    margin-top: 8px;
+  }
+  .lu-who-visual {
+    background: var(--purple);
+    aspect-ratio: 4/5;
+    display: flex;
+    align-items: flex-end;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .lu-who-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(-45deg, rgba(12,10,62,0.06) 0px, rgba(12,10,62,0.06) 1px, transparent 1px, transparent 9px);
+  }
+  .lu-visual-caption {
+    font-family: var(--fh);
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--navy);
+    line-height: 1.2;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* PETITIONS */
+  .lu-petitions {
+    background: var(--navy);
+    padding: 72px 24px;
+    border-top: 1px solid rgba(238,235,211,0.1);
+  }
+  .lu-petitions-header { margin-bottom: 36px; }
+  .lu-petition-row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(238,235,211,0.1);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .lu-petition-row:first-of-type { border-top: 1px solid rgba(238,235,211,0.1); }
+  .lu-petition-row:hover { background: rgba(204,255,51,0.03); }
+  .lu-petition-num {
+    font-family: var(--fh);
+    font-size: 40px;
+    font-weight: 900;
+    color: rgba(238,235,211,0.1);
+    text-align: center;
+    line-height: 1;
+  }
+  .lu-petition-title {
+    font-family: var(--fh);
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    color: var(--neutral);
+    line-height: 1.15;
+    margin-bottom: 3px;
+    letter-spacing: 0.02em;
+  }
+  .lu-petition-count {
+    font-family: var(--fh);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--yellow);
+    letter-spacing: 0.06em;
+  }
+  .lu-petition-cta {
+    font-family: var(--fh);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--yellow);
+    color: var(--navy);
+    padding: 9px 16px;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .lu-petition-row:hover .lu-petition-cta { background: #d4ff4a; }
+
+  /* CAMPAIGNS */
+  .lu-campaigns {
+    background: var(--neutral);
+    padding: 72px 24px;
+  }
+  .lu-campaigns-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+  .lu-campaigns-header .lu-section-label { color: rgba(12,10,62,0.45); }
+  .lu-campaigns-header .lu-section-title { color: var(--navy); }
+  .lu-see-all {
+    font-family: var(--fh);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+    border-bottom: 2px solid var(--navy);
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+  }
+  .lu-campaigns-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 2px;
+  }
+  .lu-card {
+    background: white;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s;
+    cursor: pointer;
+  }
+  .lu-card:hover { transform: translateY(-3px); }
+  .lu-card-img {
+    aspect-ratio: 3/2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .lu-card-img-text {
+    font-family: var(--fh);
+    font-weight: 900;
+    font-size: 22px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 16px;
+    line-height: 1.1;
+  }
+  .lu-card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+  .lu-tag {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--navy);
+    font-family: var(--fh);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+  }
+  .lu-card-title {
+    font-family: var(--fh);
+    font-weight: 800;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: var(--navy);
+    line-height: 1.2;
+    margin-bottom: 10px;
+    flex: 1;
+  }
+  .lu-card-stat {
+    font-size: 12px;
+    color: rgba(12,10,62,0.5);
+    font-family: var(--fh);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+  .lu-card-stat strong { color: var(--navy); font-weight: 800; }
+
+  /* BLOG */
+  .lu-blog {
+    background: var(--navy);
+    padding: 72px 24px;
+    border-top: 1px solid rgba(238,235,211,0.1);
+  }
+  .lu-blog-header {
+    display: flex; align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+  .lu-blog-header .lu-see-all { color: var(--yellow); border-color: var(--yellow); }
+  .lu-blog-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .lu-blog-featured {
+    background: var(--purple);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 320px;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .lu-blog-featured:hover { opacity: 0.92; }
+  .lu-blog-meta {
+    font-family: var(--fh);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 8px;
+    opacity: 0.6;
+  }
+  .lu-blog-featured-title {
+    font-family: var(--fh);
+    font-weight: 900;
+    font-size: 26px;
+    text-transform: uppercase;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .lu-blog-featured-exc { font-size: 13px; color: rgba(12,10,62,0.72); line-height: 1.6; }
+  .lu-blog-list { display: flex; flex-direction: column; }
+  .lu-blog-item {
+    background: rgba(238,235,211,0.03);
+    border-bottom: 1px solid rgba(238,235,211,0.09);
+    padding: 22px 28px;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex: 1;
+  }
+  .lu-blog-item:hover { background: rgba(204,255,51,0.04); }
+  .lu-blog-item-meta {
+    font-family: var(--fh);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    opacity: 0.65;
+    margin-bottom: 5px;
+  }
+  .lu-blog-item-title {
+    font-family: var(--fh);
+    font-weight: 800;
+    font-size: 15px;
+    text-transform: uppercase;
+    color: var(--neutral);
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+
+  /* JOIN */
+  .lu-join {
+    background: var(--yellow);
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .lu-join .lu-section-label { color: rgba(12,10,62,0.45); margin-bottom: 14px; }
+  .lu-join .lu-section-title { color: var(--navy); font-size: 52px; margin-bottom: 20px; }
+  .lu-join p { font-size: 15px; color: rgba(12,10,62,0.68); max-width: 460px; margin: 0 auto 32px; line-height: 1.65; }
+
+  /* FOOTER */
+  .lu-footer {
+    background: var(--navy);
+    border-top: 2px solid var(--yellow);
+    padding: 56px 24px 32px;
+  }
+  .lu-footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 40px;
+  }
+  .lu-footer-logo {
+    font-family: var(--fh);
+    font-weight: 900;
+    font-size: 24px;
+    color: var(--yellow);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .lu-footer-about { font-size: 13px; color: rgba(238,235,211,0.45); line-height: 1.75; margin-bottom: 20px; }
+  .lu-footer-addr { font-size: 12px; color: rgba(238,235,211,0.35); line-height: 1.9; margin-top: 16px; }
+  .lu-socials { display: flex; gap: 8px; }
+  .lu-social {
+    width: 32px; height: 32px;
+    border: 1px solid rgba(238,235,211,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--fh); font-size: 10px; font-weight: 800;
+    color: rgba(238,235,211,0.45);
+    letter-spacing: 0;
+    transition: all 0.15s;
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .lu-social:hover { background: var(--yellow); border-color: var(--yellow); color: var(--navy); }
+  .lu-footer-col h5 {
+    font-family: var(--fh); font-size: 10px; font-weight: 800;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--yellow); margin-bottom: 16px;
+  }
+  .lu-footer-col ul { list-style: none; }
+  .lu-footer-col li { margin-bottom: 9px; }
+  .lu-footer-col li a { font-size: 13px; color: rgba(238,235,211,0.45); transition: color 0.15s; }
+  .lu-footer-col li a:hover { color: var(--neutral); }
+  .lu-footer-bottom {
+    border-top: 1px solid rgba(238,235,211,0.1);
+    padding-top: 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px; color: rgba(238,235,211,0.28);
+  }
+</style>
+
+<div class="lu-root">
+
+<!-- HEADER -->
+<header class="lu-header">
+  <div class="lu-logo">Level Up</div>
+  <nav class="lu-nav">
+    <a href="#">About Us</a>
+    <a href="#">Campaigns</a>
+    <a href="#">Resources</a>
+    <a href="#">Blog</a>
+    <a href="#">Press</a>
+    <a href="#">Community</a>
+    <a href="#">Contact</a>
+  </nav>
+  <div class="lu-header-ctas">
+    <a href="#" class="lu-btn lu-btn-y">Donate</a>
+    <a href="#" class="lu-btn lu-btn-oy">Join Us</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="lu-hero">
+  <div class="lu-hero-left">
+    <div class="lu-eyebrow">Feminist community · Gender justice UK</div>
+    <h1 class="lu-hero-title">We are<br/><em>Level Up</em></h1>
+    <p class="lu-hero-sub">A feminist community campaigning for gender justice in the UK, fighting for a world where people of all genders are loved and liberated.</p>
+    <div class="lu-ctas">
+      <a href="#" class="lu-btn lu-btn-oy">Who we are</a>
+      <a href="#" class="lu-btn" style="border:2px solid rgba(238,235,211,0.25);color:rgba(238,235,211,0.6);background:transparent;font-family:var(--fh);font-weight:800;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 18px;">Our campaigns</a>
+    </div>
+  </div>
+  <div class="lu-hero-right">
+    <div class="lu-campaign-label">Active Campaign</div>
+    <h2 class="lu-campaign-title">#No<br/>More<br/>Lyes</h2>
+    <p class="lu-campaign-desc">Big beauty brands like L'Oréal must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health.</p>
+    <div class="lu-ctas">
+      <a href="#" class="lu-btn lu-btn-on">Sign the petition</a>
+      <a href="#" class="lu-btn" style="background:rgba(12,10,62,0.1);color:var(--navy);font-family:var(--fh);font-weight:800;font-size:12px;letter-spacing:0.12em;text-transform:uppercase;padding:8px 18px;">Read research ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- WHO WE ARE -->
+<div class="lu-who">
+  <div class="lu-who-text">
+    <div class="lu-section-label">About us</div>
+    <h2 class="lu-section-title">Who<br/>We Are</h2>
+    <div class="lu-rule"></div>
+    <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island.</p>
+    <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through monthly workshops on bystander intervention.</p>
+    <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice.</p>
+    <a href="#" class="lu-readmore">Learn more about us →</a>
+  </div>
+  <div class="lu-who-visual">
+    <div class="lu-visual-caption">Building a world<br/>where everyone<br/>is loved &amp; liberated</div>
+  </div>
+</div>
+
+<!-- PETITIONS -->
+<div class="lu-petitions">
+  <div class="lu-petitions-header">
+    <div class="lu-section-label">Take action</div>
+    <h2 class="lu-section-title">Sign Our Petitions</h2>
+  </div>
+  <div>
+    <div class="lu-petition-row">
+      <div class="lu-petition-num">01</div>
+      <div>
+        <div class="lu-petition-title">#NoMoreLyes — Take toxic hair relaxers off the shelves</div>
+        <div class="lu-petition-count">6,400 supporters</div>
+      </div>
+      <div class="lu-petition-cta">Sign now</div>
+    </div>
+    <div class="lu-petition-row">
+      <div class="lu-petition-num">02</div>
+      <div>
+        <div class="lu-petition-title">Stop sending pregnant women to prison</div>
+        <div class="lu-petition-count">13,100 supporters</div>
+      </div>
+      <div class="lu-petition-cta">Sign now</div>
+    </div>
+    <div class="lu-petition-row">
+      <div class="lu-petition-num">03</div>
+      <div>
+        <div class="lu-petition-title">Abortion is Healthcare</div>
+        <div class="lu-petition-count">6,100 supporters</div>
+      </div>
+      <div class="lu-petition-cta">Sign now</div>
+    </div>
+    <div class="lu-petition-row">
+      <div class="lu-petition-num">04</div>
+      <div>
+        <div class="lu-petition-title">IPSO: Dignity for Dead Women</div>
+        <div class="lu-petition-count">29,200 supporters</div>
+      </div>
+      <div class="lu-petition-cta">Sign now</div>
+    </div>
+    <div class="lu-petition-row">
+      <div class="lu-petition-num">05</div>
+      <div>
+        <div class="lu-petition-title">Sexual violence in football — Premier League and FA</div>
+        <div class="lu-petition-count">4,300 supporters</div>
+      </div>
+      <div class="lu-petition-cta">Sign now</div>
+    </div>
+  </div>
+</div>
+
+<!-- CAMPAIGNS -->
+<div class="lu-campaigns">
+  <div class="lu-campaigns-header">
+    <div>
+      <div class="lu-section-label" style="color:rgba(12,10,62,0.45);">Our work</div>
+      <h2 class="lu-section-title" style="color:var(--navy);">Campaigns</h2>
+    </div>
+    <a href="#" class="lu-see-all">See all →</a>
+  </div>
+  <div class="lu-campaigns-grid">
+    <div class="lu-card">
+      <div class="lu-card-img" style="background:var(--navy);">
+        <div class="lu-card-img-text" style="color:var(--yellow);">#No<br/>More<br/>Lyes</div>
+      </div>
+      <div class="lu-card-body">
+        <span class="lu-tag">Active</span>
+        <div class="lu-card-title">Take toxic hair relaxers off the shelves</div>
+        <div class="lu-card-stat"><strong>6,400</strong> supporters · 1.1K this month</div>
+      </div>
+    </div>
+    <div class="lu-card">
+      <div class="lu-card-img" style="background:var(--yellow);">
+        <div class="lu-card-img-text" style="color:var(--navy);">Pregnancy<br/>in Prison</div>
+      </div>
+      <div class="lu-card-body">
+        <span class="lu-tag">Active</span>
+        <div class="lu-card-title">Stop sending pregnant women to prison</div>
+        <div class="lu-card-stat"><strong>13,100</strong> supporters · 2.8K this month</div>
+      </div>
+    </div>
+    <div class="lu-card">
+      <div class="lu-card-img" style="background:var(--purple);">
+        <div class="lu-card-img-text" style="color:var(--navy);">Abortion<br/>is Healthcare</div>
+      </div>
+      <div class="lu-card-body">
+        <span class="lu-tag">Active</span>
+        <div class="lu-card-title">Abortion is Healthcare — Decriminalise now</div>
+        <div class="lu-card-stat"><strong>6,100</strong> supporters · 717 this month</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG -->
+<div class="lu-blog">
+  <div class="lu-blog-header">
+    <div>
+      <div class="lu-section-label">Writing</div>
+      <h2 class="lu-section-title">From the Blog</h2>
+    </div>
+    <a href="#" class="lu-see-all" style="color:var(--yellow);border-color:var(--yellow);">See all posts →</a>
+  </div>
+  <div class="lu-blog-grid">
+    <div class="lu-blog-featured">
+      <div class="lu-blog-meta">Levelup · March 5, 2026</div>
+      <h3 class="lu-blog-featured-title">It's Time to Reclaim the Socialist Roots of International Women's Day</h3>
+      <p class="lu-blog-featured-exc">International Working Women's Day began as a protest for labour rights and solidarity. Reclaiming its radical roots has never been more urgent.</p>
+    </div>
+    <div class="lu-blog-list">
+      <div class="lu-blog-item">
+        <div class="lu-blog-item-meta">Vic Parsons · December 4, 2025</div>
+        <div class="lu-blog-item-title">Gender Critical Feminism Isn't Feminist</div>
+      </div>
+      <div class="lu-blog-item">
+        <div class="lu-blog-item-meta">Seyi Falodun-Liburd · November 19, 2025</div>
+        <div class="lu-blog-item-title">The Griefs Left Unattended</div>
+      </div>
+      <div class="lu-blog-item">
+        <div class="lu-blog-item-meta">Starling · August 19, 2025</div>
+        <div class="lu-blog-item-title">Beyond Sympathy: Feminist Solidarity Without Deservingness</div>
+      </div>
+      <div class="lu-blog-item">
+        <div class="lu-blog-item-meta">Levelup · June 26, 2025</div>
+        <div class="lu-blog-item-title">Why Expanding Criminalisation is a Feminist Issue</div>
+      </div>
+      <div class="lu-blog-item">
+        <div class="lu-blog-item-meta">Ruvimbo Kuuzabuwe · February 28, 2025</div>
+        <div class="lu-blog-item-title">Why We Need to Start Moving Offline</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JOIN -->
+<div class="lu-join">
+  <div class="lu-section-label">Community</div>
+  <h2 class="lu-section-title" style="color:var(--navy);font-size:52px;">Join the Level Up Community</h2>
+  <p>Become part of a feminist movement fighting for gender justice in the UK. Together we create change.</p>
+  <a href="#" class="lu-btn lu-btn-on" style="padding:14px 36px;font-size:15px;">Join Us</a>
+</div>
+
+<!-- FOOTER -->
+<div class="lu-footer">
+  <div class="lu-footer-grid">
+    <div>
+      <div class="lu-footer-logo">Level Up</div>
+      <p class="lu-footer-about">A feminist community campaigning for gender justice in the UK. Working towards a world where people of all genders are loved and liberated.</p>
+      <div class="lu-socials">
+        <a class="lu-social">Fb</a>
+        <a class="lu-social">X</a>
+        <a class="lu-social">Ig</a>
+      </div>
+      <div class="lu-footer-addr">hello@welevelup.org<br/>New Derwent House<br/>69–73 Theobalds Road<br/>London WC1X 8TA</div>
+    </div>
+    <div class="lu-footer-col">
+      <h5>About</h5>
+      <ul>
+        <li><a href="#">What we do</a></li>
+        <li><a href="#">Who we are</a></li>
+        <li><a href="#">What we are proud of</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+    <div class="lu-footer-col">
+      <h5>Campaigns</h5>
+      <ul>
+        <li><a href="#">#NoMoreLyes</a></li>
+        <li><a href="#">Pregnancy in Prison</a></li>
+        <li><a href="#">Abortion is Healthcare</a></li>
+        <li><a href="#">Dignity for Dead Women</a></li>
+        <li><a href="#">Sexual violence in football</a></li>
+        <li><a href="#">We Protect Us</a></li>
+      </ul>
+    </div>
+    <div class="lu-footer-col">
+      <h5>Community</h5>
+      <ul>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Events</a></li>
+        <li><a href="#">Press Coverage</a></li>
+        <li><a href="#">Resources</a></li>
+        <li><a href="#">Space for memory</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="lu-footer-bottom">
+    <span>© 2018–2025 Level Up. All Rights Reserved.</span>
+    <span>Licensed under CC BY-NC-ND 4.0</span>
+  </div>
+</div>
+
+</div>

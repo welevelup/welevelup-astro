@@ -1,0 +1,303 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="End Illegal Cuffing | Level Up" description="Campaign against the handcuffing of pregnant women during childbirth. Demanding accountability and systemic change from the Ministry of Justice.">
+
+  <!-- Hero Banner -->
+  <section id="sub-page-hero-banner" class="hero-banner">
+    <div class="hero-inner">
+      <h2 class="hero-title">Demand an investigation into illegal cuffing during childbirth</h2>
+    </div>
+  </section>
+
+  <!-- Content + Form Section -->
+  <section class="content-section">
+    <div class="container">
+      <div class="content-row">
+        <!-- Intro text -->
+        <div class="intro-text">
+          <p>Shocking reports have emerged of pregnant women being handcuffed to male officers during childbirth at HMP Bronzefield in Surrey. One woman who was cuffed to an officer for 48 hours says &ldquo;I feel I was treated as less than an animal.&rdquo;</p>
+          <p>This is unlawful and a human rights violation.</p>
+          <p>The women are demanding an independent investigation into why this was allowed to happen to them &ndash; they want accountability and justice. So far, the Ministry of Justice has ignored them.</p>
+          <p>Please show your support by writing to the Secretary of State for Justice, Shabana Mahmood, and Director of HMPPS Amy Rees, to support their calls for an independent investigation into unlawful use of restraints.</p>
+          <p>Until we totally end the imprisonment of pregnant women and mothers, the most valuable action you can take is to amplify the voices, experiences and demands of women who have experienced pregnancy in prison.</p>
+        </div>
+
+        <!-- Action Form -->
+        <div class="form-wrapper">
+          <form class="action-form" id="tell-shabana-form" method="post" action="https://welevelup.org/investigation/" novalidate>
+            <div class="form-fields">
+
+              <div class="field-group field-half">
+                <label for="field-name" class="field-label">First Name</label>
+                <input type="text" id="field-name" name="form_fields[name]" class="field-input" required />
+              </div>
+
+              <div class="field-group field-half">
+                <label for="field-last-name" class="field-label">Last Name</label>
+                <input type="text" id="field-last-name" name="form_fields[field_727a6a2]" class="field-input" required />
+              </div>
+
+              <div class="field-group field-full">
+                <label for="field-email" class="field-label">Email</label>
+                <input type="email" id="field-email" name="form_fields[email]" class="field-input" required />
+              </div>
+
+              <div class="field-group field-full">
+                <label for="field-address" class="field-label">Address</label>
+                <input type="text" id="field-address" name="form_fields[field_62abaa7]" class="field-input" placeholder="ZIP / Postal Code" required />
+              </div>
+
+              <div class="field-group field-full">
+                <label class="field-label">Subscribe to newsletter</label>
+                <div class="radio-group">
+                  <span class="radio-option">
+                    <input type="radio" value="Yes" id="field-subscribe" name="form_fields[field_2bcd981]" />
+                    <label for="field-subscribe">Yes</label>
+                  </span>
+                </div>
+              </div>
+
+              <div class="field-group field-full field-html">
+                <p>By submitting your email and checking this box, you agree for Level Up to contact you with updates on our campaigns work. You can unsubscribe at any time. Your personal information will be kept private and held securely. By submitting information you are agreeing to the use of data and cookies in accordance with our Privacy Policy.</p>
+              </div>
+
+              <div class="field-group field-full">
+                <label for="field-org" class="field-label">Organisation name (if applicable):</label>
+                <input type="text" id="field-org" name="form_fields[field_81071c9]" class="field-input" />
+              </div>
+
+              <div class="field-group field-full">
+                <label for="field-letter" class="field-label">You can adjust, change, or delete any part of it as needed</label>
+                <textarea id="field-letter" name="form_fields[field_77f8c45]" class="field-textarea" rows="15">Dear Shabana Mahmood and Amy Rees,
+
+I am extremely concerned by the horrifying accounts of pregnant women in prison being cuffed during childbirth and antenatal examinations.
+
+I am writing to urge you to commission the Prison and Probation Ombudsman (PPO) to conduct an independent investigation into the widespread use of unlawful restraints on pregnant women by Sodexo Staff at HMP Bronzefield.
+
+The use of unlawful restraints on pregnant women over a period of years raises the Secretary of State's obligations under Articles 3 and 8 of the European Convention of Human Rights (right to freedom from torture, inhuman or degrading treatment and right to a private or family life).
+
+This harrowing ill-treatment of women must be investigated without delay to ensure it can never happen again.
+
+Kind regards,</textarea>
+              </div>
+
+              <div class="field-group field-full">
+                <button type="submit" class="btn-submit">Submit</button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  :root {
+    --navy: #0D0A3E;
+    --lime: #CBFF32;
+    --cream: #EDEBD2;
+    --purple: #A89CED;
+    --white: #FFFFFF;
+  }
+
+  .hero-banner {
+    background-color: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 0;
+  }
+
+  .hero-inner {
+    max-width: 1130px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px 20px;
+  }
+
+  .hero-title {
+    font-size: 3vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-align: center;
+    width: 100%;
+    margin: 0;
+  }
+
+  .container {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .content-section {
+    background-color: var(--purple);
+    padding: 0;
+  }
+
+  .content-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .intro-text {
+    padding: 2.5rem 0 0 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    line-height: 1.6;
+  }
+
+  .intro-text p {
+    margin: 0 0 1em;
+  }
+
+  .form-wrapper {
+    padding: 1.5rem 0 2.5rem 0;
+  }
+
+  .action-form {
+    width: 100%;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: calc(-20px / 2);
+    margin-right: calc(-20px / 2);
+    margin-bottom: -20px;
+  }
+
+  .field-group {
+    padding-right: calc(20px / 2);
+    padding-left: calc(20px / 2);
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  .field-half {
+    width: 50%;
+  }
+
+  .field-full {
+    width: 100%;
+  }
+
+  .field-label {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    padding-bottom: 10px;
+  }
+
+  .field-html {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  .field-html p {
+    margin: 0;
+  }
+
+  .field-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--navy);
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+  }
+
+  .field-textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--navy);
+    padding: 10px 14px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    resize: vertical;
+  }
+
+  .radio-group {
+    display: flex;
+    gap: 16px;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--navy);
+  }
+
+  .btn-submit {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    background-color: var(--white);
+    color: var(--cream);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 20px;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .btn-submit:hover {
+    color: var(--white);
+    background-color: var(--navy);
+  }
+
+  @media (max-width: 1024px) {
+    .hero-banner {
+      padding: 3.5rem 0;
+    }
+
+    .hero-title {
+      font-size: 2.5vw;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-title {
+      font-size: 7vw;
+      text-align: center;
+    }
+
+    .field-half {
+      width: 100%;
+    }
+  }
+</style>

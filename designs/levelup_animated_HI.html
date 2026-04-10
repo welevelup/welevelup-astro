@@ -1,0 +1,543 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900&display=swap');
+:root{--y:#CCFF33;--n:#EEEBD3;--nv:#0C0A3E;--p:#A89CED;--f:'DM Sans',sans-serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+.root{font-family:var(--f);background:var(--nv);}
+a{color:inherit;text-decoration:none;}
+
+.tabs{display:flex;background:rgba(238,235,211,0.05);border-bottom:1px solid rgba(238,235,211,0.1);padding:0 20px;gap:4px;}
+.tab{padding:13px 22px;font-family:var(--f);font-size:12px;font-weight:700;letter-spacing:-0.02em;color:rgba(238,235,211,0.35);cursor:pointer;border:none;border-bottom:2px solid transparent;background:none;transition:all 0.2s;}
+.tab.on{color:var(--y);border-bottom-color:var(--y);}
+.des{display:none;}
+.des.on{display:block;}
+
+/* ══════════════════
+   H — KINETIC TYPE
+   Words fly in, counters count up,
+   hero text cycles through campaigns
+══════════════════ */
+.h{background:var(--nv);color:var(--n);font-family:var(--f);overflow:hidden;}
+
+.h-nav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:56px;border-bottom:1px solid rgba(238,235,211,0.08);position:relative;z-index:10;}
+.h-logo{font-size:17px;font-weight:900;letter-spacing:-0.045em;color:var(--n);}
+.h-logo em{font-style:normal;color:var(--y);}
+.h-links{display:flex;gap:22px;}
+.h-links a{font-size:11px;font-weight:500;color:rgba(238,235,211,0.38);transition:color 0.2s;}
+.h-links a:hover{color:var(--n);}
+.h-ctas{display:flex;gap:8px;}
+.h-btn-y{background:var(--y);color:var(--nv);font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;cursor:pointer;border:none;transition:background 0.2s;}
+.h-btn-y:hover{background:#d4ff4a;}
+.h-btn-o{border:1.5px solid rgba(238,235,211,0.2);color:rgba(238,235,211,0.6);background:none;font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;cursor:pointer;transition:all 0.2s;}
+.h-btn-o:hover{border-color:rgba(238,235,211,0.5);color:var(--n);}
+
+.h-hero{min-height:480px;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;}
+.h-hero-left{padding:56px 40px 56px 28px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(238,235,211,0.08);position:relative;z-index:2;}
+.h-eyebrow{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--y);opacity:0.7;margin-bottom:18px;
+  opacity:0;transform:translateY(16px);animation:fadeUp 0.6s 0.1s forwards;}
+.h-h1{font-size:80px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:20px;}
+.h-h1-line1{display:block;opacity:0;transform:translateY(24px);animation:fadeUp 0.6s 0.2s forwards;}
+.h-h1-line2{display:block;color:var(--y);opacity:0;transform:translateY(24px);animation:fadeUp 0.6s 0.35s forwards;}
+.h-sub{font-size:15px;color:rgba(238,235,211,0.5);line-height:1.65;max-width:380px;margin-bottom:32px;
+  opacity:0;transform:translateY(16px);animation:fadeUp 0.6s 0.5s forwards;}
+.h-cta-row{display:flex;gap:10px;opacity:0;transform:translateY(16px);animation:fadeUp 0.6s 0.65s forwards;}
+.h-btn-big{background:var(--y);color:var(--nv);font-family:var(--f);font-size:13px;font-weight:700;padding:13px 28px;cursor:pointer;border:none;transition:background 0.2s,transform 0.15s;}
+.h-btn-big:hover{background:#d4ff4a;transform:translateY(-2px);}
+.h-btn-ghost{border:2px solid rgba(238,235,211,0.2);color:rgba(238,235,211,0.6);background:none;font-family:var(--f);font-size:13px;font-weight:700;padding:13px 28px;cursor:pointer;transition:all 0.2s;}
+.h-btn-ghost:hover{border-color:rgba(238,235,211,0.45);color:var(--n);}
+
+/* Cycling campaign panel */
+.h-hero-right{background:var(--y);position:relative;overflow:hidden;min-height:480px;}
+.h-camp-slide{position:absolute;inset:0;padding:48px 36px;display:flex;flex-direction:column;justify-content:center;opacity:0;transform:translateX(30px);transition:opacity 0.5s,transform 0.5s;pointer-events:none;}
+.h-camp-slide.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+.h-slide-tag{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(12,10,62,0.45);margin-bottom:10px;}
+.h-slide-h{font-size:52px;font-weight:900;letter-spacing:-0.045em;line-height:0.88;color:var(--nv);margin-bottom:16px;}
+.h-slide-p{font-size:14px;color:rgba(12,10,62,0.62);line-height:1.6;margin-bottom:28px;max-width:320px;}
+.h-slide-count{font-size:13px;font-weight:700;color:rgba(12,10,62,0.5);margin-bottom:20px;letter-spacing:-0.02em;}
+.h-slide-count span{font-size:32px;font-weight:900;color:var(--nv);display:block;letter-spacing:-0.045em;line-height:0.9;margin-bottom:2px;}
+.h-slide-btn{display:inline-block;background:var(--nv);color:var(--y);font-family:var(--f);font-size:12px;font-weight:700;padding:11px 22px;cursor:pointer;border:none;transition:transform 0.15s,background 0.2s;align-self:flex-start;}
+.h-slide-btn:hover{transform:translateY(-2px);background:#140f5a;}
+
+/* Dots */
+.h-dots{position:absolute;bottom:24px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:5;}
+.h-dot{width:6px;height:6px;border-radius:50%;background:rgba(12,10,62,0.25);cursor:pointer;transition:background 0.2s,transform 0.2s;}
+.h-dot.active{background:var(--nv);transform:scale(1.4);}
+
+/* Animated stats */
+.h-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(238,235,211,0.08);}
+.h-stat{padding:28px;border-right:1px solid rgba(238,235,211,0.08);opacity:0;transform:translateY(20px);}
+.h-stat.visible{animation:fadeUp 0.5s forwards;}
+.h-stat:last-child{border-right:none;}
+.h-sn{font-size:44px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--y);font-variant-numeric:tabular-nums;}
+.h-sl{font-size:11px;color:rgba(238,235,211,0.3);margin-top:6px;line-height:1.4;}
+
+/* Petition rows animate in */
+.h-pet{padding:64px 28px;border-top:1px solid rgba(238,235,211,0.08);}
+.h-pet-h{font-size:52px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:32px;}
+.h-pet-h em{font-style:normal;color:var(--y);}
+.h-pet-row{display:grid;grid-template-columns:48px 1fr auto;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid rgba(238,235,211,0.08);cursor:pointer;opacity:0;transform:translateX(-20px);transition:background 0.15s;}
+.h-pet-row.visible{animation:slideRight 0.4s forwards;}
+.h-pet-row:first-of-type{border-top:1px solid rgba(238,235,211,0.08);}
+.h-pet-row:hover{background:rgba(204,255,51,0.03);}
+.h-pn{font-size:36px;font-weight:900;letter-spacing:-0.045em;color:rgba(238,235,211,0.1);line-height:1;}
+.h-pt{font-size:16px;font-weight:700;letter-spacing:-0.03em;color:var(--n);line-height:1.2;}
+.h-pc{font-size:11px;color:var(--y);font-weight:500;margin-top:4px;}
+.h-psign{background:var(--y);color:var(--nv);font-family:var(--f);font-size:11px;font-weight:700;padding:9px 18px;white-space:nowrap;cursor:pointer;border:none;transition:background 0.15s,transform 0.15s;}
+.h-pet-row:hover .h-psign{background:#d4ff4a;transform:scale(1.03);}
+
+/* Who section with parallax-ish reveal */
+.h-who{padding:72px 28px;border-top:1px solid rgba(238,235,211,0.08);display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.h-stag{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--y);opacity:0.6;margin-bottom:10px;}
+.h-sh{font-size:48px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:20px;}
+.h-rule{width:36px;height:3px;background:var(--y);margin-bottom:22px;}
+.h-who p{font-size:14px;color:rgba(238,235,211,0.5);line-height:1.75;margin-bottom:12px;}
+.h-who-vis{background:var(--p);aspect-ratio:4/5;display:flex;align-items:flex-end;padding:28px;position:relative;overflow:hidden;opacity:0;transform:translateY(40px);transition:opacity 0.7s,transform 0.7s;}
+.h-who-vis.visible{opacity:1;transform:translateY(0);}
+.h-who-vis::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,rgba(12,10,62,0.06) 0,rgba(12,10,62,0.06) 1px,transparent 1px,transparent 9px);}
+.h-who-caption{font-size:18px;font-weight:900;letter-spacing:-0.03em;line-height:1.1;color:var(--nv);position:relative;z-index:1;}
+
+/* Keyframes */
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+@keyframes slideRight{to{opacity:1;transform:translateX(0);}}
+
+
+/* ══════════════════
+   I — MARQUEE / SCROLL
+   Scrolling text banner, hover reveals,
+   staggered card entrance
+══════════════════ */
+.i{background:var(--nv);color:var(--n);font-family:var(--f);}
+
+.i-nav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:56px;border-bottom:2px solid var(--y);}
+.i-logo{font-size:17px;font-weight:900;letter-spacing:-0.045em;color:var(--y);}
+.i-links{display:flex;gap:22px;}
+.i-links a{font-size:11px;font-weight:500;color:rgba(238,235,211,0.38);transition:color 0.2s;}
+.i-links a:hover{color:var(--n);}
+.i-ctas{display:flex;gap:8px;}
+.i-btn-y{background:var(--y);color:var(--nv);font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;cursor:pointer;border:none;transition:all 0.2s;}
+.i-btn-y:hover{background:#d4ff4a;transform:translateY(-1px);}
+.i-btn-o{border:1.5px solid rgba(238,235,211,0.2);color:rgba(238,235,211,0.6);background:none;font-family:var(--f);font-size:11px;font-weight:700;padding:8px 18px;cursor:pointer;transition:all 0.2s;}
+
+/* Marquee */
+.i-marquee{background:var(--y);overflow:hidden;padding:10px 0;border-bottom:1px solid rgba(12,10,62,0.15);}
+.i-marquee-track{display:flex;gap:0;white-space:nowrap;animation:marquee 22s linear infinite;}
+.i-marquee-track:hover{animation-play-state:paused;}
+.i-marquee-item{display:inline-flex;align-items:center;gap:12px;padding:0 28px;font-size:12px;font-weight:700;color:var(--nv);letter-spacing:-0.01em;}
+.i-marquee-dot{width:5px;height:5px;border-radius:50%;background:rgba(12,10,62,0.3);flex-shrink:0;}
+
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* Hero — big with reveal on load */
+.i-hero{padding:72px 28px;position:relative;overflow:hidden;border-bottom:1px solid rgba(238,235,211,0.08);}
+.i-hero-bg-text{position:absolute;top:-20px;left:-10px;font-size:200px;font-weight:900;letter-spacing:-0.045em;line-height:1;color:rgba(204,255,51,0.03);pointer-events:none;white-space:nowrap;animation:bgDrift 20s ease-in-out infinite alternate;}
+@keyframes bgDrift{from{transform:translateX(0);}to{transform:translateX(-40px);}}
+.i-hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.i-kicker{font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:rgba(238,235,211,0.35);margin-bottom:16px;
+  opacity:0;animation:fadeUp2 0.7s 0.1s forwards;}
+.i-h1{font-size:84px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:20px;}
+.i-h1 .w1{display:block;opacity:0;animation:fadeUp2 0.6s 0.2s forwards;}
+.i-h1 .w2{display:block;color:var(--y);opacity:0;animation:fadeUp2 0.6s 0.35s forwards;}
+.i-h1 .w3{display:block;opacity:0;animation:fadeUp2 0.6s 0.5s forwards;}
+.i-sub{font-size:15px;color:rgba(238,235,211,0.48);line-height:1.65;max-width:380px;margin-bottom:32px;
+  opacity:0;animation:fadeUp2 0.6s 0.65s forwards;}
+.i-cta-row{display:flex;gap:10px;opacity:0;animation:fadeUp2 0.6s 0.8s forwards;}
+.i-btn-big{background:var(--y);color:var(--nv);font-family:var(--f);font-size:13px;font-weight:700;padding:13px 28px;cursor:pointer;border:none;transition:all 0.2s;}
+.i-btn-big:hover{background:#d4ff4a;transform:translateY(-2px);}
+.i-btn-outline{border:2px solid rgba(238,235,211,0.2);color:rgba(238,235,211,0.6);background:none;font-family:var(--f);font-size:13px;font-weight:700;padding:13px 28px;cursor:pointer;transition:all 0.2s;}
+.i-btn-outline:hover{border-color:rgba(238,235,211,0.5);color:var(--n);}
+
+/* Campaign card with hover flip-ish effect */
+.i-camp-card{background:var(--y);padding:40px;position:relative;overflow:hidden;
+  opacity:0;animation:fadeUp2 0.7s 0.4s forwards;}
+.i-camp-card::after{content:'';position:absolute;bottom:-60px;right:-30px;width:180px;height:180px;border-radius:50%;background:rgba(12,10,62,0.06);transition:transform 0.4s;}
+.i-camp-card:hover::after{transform:scale(1.4);}
+.i-ctag{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:rgba(12,10,62,0.42);margin-bottom:8px;}
+.i-ch{font-size:52px;font-weight:900;letter-spacing:-0.045em;line-height:0.88;color:var(--nv);margin-bottom:14px;position:relative;z-index:1;}
+.i-cp{font-size:13px;color:rgba(12,10,62,0.58);line-height:1.6;margin-bottom:24px;position:relative;z-index:1;}
+.i-cbtn{background:var(--nv);color:var(--y);font-family:var(--f);font-size:12px;font-weight:700;padding:11px 22px;cursor:pointer;border:none;transition:all 0.2s;position:relative;z-index:1;}
+.i-cbtn:hover{background:#140f5a;transform:translateY(-2px);}
+
+@keyframes fadeUp2{to{opacity:1;transform:translateY(0);}}
+
+/* Stats — count up animation */
+.i-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(238,235,211,0.08);}
+.i-stat{padding:28px;border-right:1px solid rgba(238,235,211,0.08);opacity:0;transform:translateY(16px);}
+.i-stat.vis{animation:fadeUp2 0.5s forwards;}
+.i-stat:last-child{border-right:none;}
+.i-sn{font-size:44px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--y);font-variant-numeric:tabular-nums;}
+.i-sl{font-size:11px;color:rgba(238,235,211,0.3);margin-top:6px;line-height:1.4;}
+
+/* Cards hover reveal */
+.i-cards{padding:64px 28px;border-top:1px solid rgba(238,235,211,0.08);}
+.i-cards-h{font-size:48px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:32px;}
+.i-cards-h em{font-style:normal;color:var(--y);}
+.i-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.i-card{background:rgba(238,235,211,0.04);border:1px solid rgba(238,235,211,0.08);padding:28px;cursor:pointer;
+  opacity:0;transform:translateY(24px);
+  transition:border-color 0.25s,background 0.25s,transform 0.25s;}
+.i-card.vis{animation:fadeUp2 0.5s forwards;}
+.i-card:hover{border-color:var(--y);background:rgba(204,255,51,0.05);transform:translateY(-4px);}
+.i-card-num{font-size:52px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:rgba(238,235,211,0.07);margin-bottom:12px;}
+.i-card-tag{display:inline-block;background:var(--y);color:var(--nv);font-size:9px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;padding:2px 7px;margin-bottom:10px;}
+.i-card-t{font-size:15px;font-weight:700;letter-spacing:-0.025em;color:var(--n);line-height:1.25;margin-bottom:12px;}
+.i-card-c{font-size:12px;color:rgba(238,235,211,0.35);font-weight:500;}
+.i-card-c strong{color:var(--y);font-weight:700;}
+.i-card-arrow{font-size:20px;color:rgba(238,235,211,0.15);margin-top:16px;transition:color 0.2s,transform 0.2s;}
+.i-card:hover .i-card-arrow{color:var(--y);transform:translateX(4px);}
+
+/* Blog */
+.i-blog{padding:64px 28px;border-top:1px solid rgba(238,235,211,0.08);}
+.i-blog-h{font-size:48px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--n);margin-bottom:32px;}
+.i-blog-h em{font-style:normal;color:var(--y);}
+.i-blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.i-blog-feat{background:var(--p);padding:40px;min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;
+  transition:opacity 0.2s;}
+.i-blog-feat:hover{opacity:0.9;}
+.i-blog-meta{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(12,10,62,0.45);margin-bottom:8px;}
+.i-blog-ft{font-size:26px;font-weight:900;letter-spacing:-0.04em;line-height:1.05;color:var(--nv);margin-bottom:10px;}
+.i-blog-fp{font-size:13px;color:rgba(12,10,62,0.6);line-height:1.6;}
+.i-blog-list{display:flex;flex-direction:column;}
+.i-blog-item{background:rgba(238,235,211,0.03);border-bottom:1px solid rgba(238,235,211,0.08);padding:22px 28px;cursor:pointer;
+  transition:background 0.15s,padding-left 0.2s;}
+.i-blog-item:hover{background:rgba(204,255,51,0.04);padding-left:36px;}
+.i-blog-im{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--y);opacity:0.6;margin-bottom:5px;}
+.i-blog-it{font-size:14px;font-weight:700;letter-spacing:-0.025em;color:var(--n);line-height:1.2;}
+
+/* Join */
+.i-join{background:var(--y);padding:80px 28px;text-align:center;}
+.i-join-h{font-size:56px;font-weight:900;letter-spacing:-0.045em;line-height:0.9;color:var(--nv);margin-bottom:18px;}
+.i-join-p{font-size:15px;color:rgba(12,10,62,0.6);max-width:440px;margin:0 auto 32px;line-height:1.65;}
+.i-join-btn{background:var(--nv);color:var(--y);font-family:var(--f);font-size:13px;font-weight:700;padding:14px 36px;cursor:pointer;border:none;transition:all 0.2s;display:inline-block;}
+.i-join-btn:hover{background:#140f5a;transform:translateY(-2px);}
+</style>
+
+<div class="root">
+<div class="tabs">
+  <button class="tab on" onclick="sw('h',this)">H — Kinetic Type</button>
+  <button class="tab" onclick="sw('i',this)">I — Marquee + Hover</button>
+</div>
+
+<!-- ══ H ══ -->
+<div id="dh" class="des on"><div class="h">
+  <div class="h-nav">
+    <div class="h-logo">Level<em>Up</em></div>
+    <div class="h-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Community</a><a href="#">Contact</a></div>
+    <div class="h-ctas"><button class="h-btn-y">Donate</button><button class="h-btn-o">Join Us</button></div>
+  </div>
+
+  <div class="h-hero">
+    <div class="h-hero-left">
+      <div class="h-eyebrow">Feminist community · Gender justice UK</div>
+      <h1 class="h-h1"><span class="h-h1-line1">We are</span><span class="h-h1-line2">Level Up</span></h1>
+      <p class="h-sub">A feminist community campaigning for gender justice in the UK — fighting for a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+      <div class="h-cta-row">
+        <button class="h-btn-big">Who we are</button>
+        <button class="h-btn-ghost">Our campaigns</button>
+      </div>
+    </div>
+
+    <!-- Cycling campaign slides -->
+    <div class="h-hero-right" id="hSlider">
+      <div class="h-camp-slide active" data-slide="0">
+        <div class="h-slide-tag">Active Campaign 1/4</div>
+        <h2 class="h-slide-h">#No<br/>More<br/>Lyes</h2>
+        <p class="h-slide-p">Big beauty brands like L'Oréal must remove toxic ingredients from hair relaxers.</p>
+        <div class="h-slide-count"><span id="hc0">0</span>supporters</div>
+        <button class="h-slide-btn">Sign now →</button>
+      </div>
+      <div class="h-camp-slide" data-slide="1">
+        <div class="h-slide-tag">Active Campaign 2/4</div>
+        <h2 class="h-slide-h">Pregnancy<br/>in Prison</h2>
+        <p class="h-slide-p">Stop sending pregnant women to prison. 1 in 10 women give birth inside their cell.</p>
+        <div class="h-slide-count"><span id="hc1">0</span>supporters</div>
+        <button class="h-slide-btn">Sign now →</button>
+      </div>
+      <div class="h-camp-slide" data-slide="2">
+        <div class="h-slide-tag">Active Campaign 3/4</div>
+        <h2 class="h-slide-h">Abortion<br/>is Health<br/>care</h2>
+        <p class="h-slide-p">Abortion remains criminalised in Britain. Full decriminalisation is urgently needed.</p>
+        <div class="h-slide-count"><span id="hc2">0</span>supporters</div>
+        <button class="h-slide-btn">Sign now →</button>
+      </div>
+      <div class="h-camp-slide" data-slide="3">
+        <div class="h-slide-tag">Active Campaign 4/4</div>
+        <h2 class="h-slide-h">Dignity<br/>for Dead<br/>Women</h2>
+        <p class="h-slide-p">IPSO must establish clear guidelines on how media reports domestic abuse deaths.</p>
+        <div class="h-slide-count"><span id="hc3">0</span>supporters</div>
+        <button class="h-slide-btn">Sign now →</button>
+      </div>
+      <div class="h-dots">
+        <div class="h-dot active" onclick="goSlide(0)"></div>
+        <div class="h-dot" onclick="goSlide(1)"></div>
+        <div class="h-dot" onclick="goSlide(2)"></div>
+        <div class="h-dot" onclick="goSlide(3)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Animated stats -->
+  <div class="h-stats" id="hStats">
+    <div class="h-stat"><div class="h-sn" id="hs0">0</div><div class="h-sl">Dignity for Dead Women</div></div>
+    <div class="h-stat"><div class="h-sn" id="hs1">0</div><div class="h-sl">Pregnancy in Prison</div></div>
+    <div class="h-stat"><div class="h-sn" id="hs2">0</div><div class="h-sl">#NoMoreLyes</div></div>
+    <div class="h-stat"><div class="h-sn" id="hs3">0</div><div class="h-sl">Abortion is Healthcare</div></div>
+  </div>
+
+  <!-- Animated petition rows -->
+  <div class="h-pet" id="hPet">
+    <h2 class="h-pet-h">Sign Our <em>Petitions</em></h2>
+    <div class="h-pet-row"><div class="h-pn">01</div><div><div class="h-pt">#NoMoreLyes — Take toxic hair relaxers off the shelves</div><div class="h-pc">6,400 supporters</div></div><button class="h-psign">Sign now</button></div>
+    <div class="h-pet-row"><div class="h-pn">02</div><div><div class="h-pt">Stop sending pregnant women to prison</div><div class="h-pc">13,100 supporters</div></div><button class="h-psign">Sign now</button></div>
+    <div class="h-pet-row"><div class="h-pn">03</div><div><div class="h-pt">Abortion is Healthcare</div><div class="h-pc">6,100 supporters</div></div><button class="h-psign">Sign now</button></div>
+    <div class="h-pet-row"><div class="h-pn">04</div><div><div class="h-pt">IPSO: Dignity for Dead Women</div><div class="h-pc">29,200 supporters</div></div><button class="h-psign">Sign now</button></div>
+    <div class="h-pet-row"><div class="h-pn">05</div><div><div class="h-pt">Sexual violence in football — Premier League and FA</div><div class="h-pc">4,300 supporters</div></div><button class="h-psign">Sign now</button></div>
+  </div>
+
+  <!-- Who -->
+  <div class="h-who" id="hWho">
+    <div>
+      <div class="h-stag">About us</div>
+      <h2 class="h-sh">Who We Are</h2>
+      <div class="h-rule"></div>
+      <p>We create digital tools and campaigns that interrupt cultural moments — like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island.</p>
+      <p>Working towards a world where people of all genders are loved and liberated from bodily and systemic violence. Through campaign coalitions and monthly workshops on bystander intervention.</p>
+    </div>
+    <div class="h-who-vis" id="hVis">
+      <div class="h-who-caption">Building a world where everyone is loved &amp; liberated</div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ══ I ══ -->
+<div id="di" class="des"><div class="i">
+  <div class="i-nav">
+    <div class="i-logo">Level Up</div>
+    <div class="i-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Community</a><a href="#">Contact</a></div>
+    <div class="i-ctas"><button class="i-btn-y">Donate</button><button class="i-btn-o">Join Us</button></div>
+  </div>
+
+  <!-- Marquee -->
+  <div class="i-marquee">
+    <div class="i-marquee-track" id="iMarq">
+      <span class="i-marquee-item">6,400 signed #NoMoreLyes<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">13,100 signed Pregnancy in Prison<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">29,200 signed Dignity for Dead Women<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">6,100 signed Abortion is Healthcare<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">4,300 signed Sexual violence in football<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">6,400 signed #NoMoreLyes<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">13,100 signed Pregnancy in Prison<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">29,200 signed Dignity for Dead Women<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">6,100 signed Abortion is Healthcare<span class="i-marquee-dot"></span></span>
+      <span class="i-marquee-item">4,300 signed Sexual violence in football<span class="i-marquee-dot"></span></span>
+    </div>
+  </div>
+
+  <div class="i-hero">
+    <div class="i-hero-bg-text">LEVEL UP</div>
+    <div class="i-hero-inner">
+      <div>
+        <div class="i-kicker">Feminist community · Gender justice UK</div>
+        <h1 class="i-h1"><span class="w1">We are</span><span class="w2">Level</span><span class="w3">Up</span></h1>
+        <p class="i-sub">A feminist community campaigning for gender justice in the UK — fighting for a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+        <div class="i-cta-row">
+          <button class="i-btn-big">Who we are</button>
+          <button class="i-btn-outline">Our campaigns</button>
+        </div>
+      </div>
+      <div class="i-camp-card">
+        <div class="i-ctag">Active Campaign</div>
+        <h2 class="i-ch">#No<br/>More<br/>Lyes</h2>
+        <p class="i-cp">Big beauty brands like L'Oréal must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health.</p>
+        <button class="i-cbtn">Sign the petition →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="i-stats" id="iStats">
+    <div class="i-stat"><div class="i-sn" id="is0">0</div><div class="i-sl">Dignity for Dead Women</div></div>
+    <div class="i-stat"><div class="i-sn" id="is1">0</div><div class="i-sl">Pregnancy in Prison</div></div>
+    <div class="i-stat"><div class="i-sn" id="is2">0</div><div class="i-sl">#NoMoreLyes</div></div>
+    <div class="i-stat"><div class="i-sn" id="is3">0</div><div class="i-sl">Abortion is Healthcare</div></div>
+  </div>
+
+  <!-- Campaign cards with hover -->
+  <div class="i-cards" id="iCards">
+    <h2 class="i-cards-h">Campaigns</h2>
+    <div class="i-cards-grid">
+      <div class="i-card">
+        <div class="i-card-num">01</div>
+        <span class="i-card-tag">Active</span>
+        <div class="i-card-t">#NoMoreLyes — Take toxic hair relaxers off the shelves</div>
+        <div class="i-card-c"><strong>6,400</strong> supporters</div>
+        <div class="i-card-arrow">→</div>
+      </div>
+      <div class="i-card">
+        <div class="i-card-num">02</div>
+        <span class="i-card-tag">Active</span>
+        <div class="i-card-t">Stop sending pregnant women to prison</div>
+        <div class="i-card-c"><strong>13,100</strong> supporters</div>
+        <div class="i-card-arrow">→</div>
+      </div>
+      <div class="i-card">
+        <div class="i-card-num">03</div>
+        <span class="i-card-tag">Active</span>
+        <div class="i-card-t">Abortion is Healthcare — Decriminalise now</div>
+        <div class="i-card-c"><strong>6,100</strong> supporters</div>
+        <div class="i-card-arrow">→</div>
+      </div>
+      <div class="i-card">
+        <div class="i-card-num">04</div>
+        <span class="i-card-tag">Active</span>
+        <div class="i-card-t">IPSO: Dignity for Dead Women</div>
+        <div class="i-card-c"><strong>29,200</strong> supporters</div>
+        <div class="i-card-arrow">→</div>
+      </div>
+      <div class="i-card">
+        <div class="i-card-num">05</div>
+        <span class="i-card-tag">Active</span>
+        <div class="i-card-t">Sexual violence in football — Premier League and FA</div>
+        <div class="i-card-c"><strong>4,300</strong> supporters</div>
+        <div class="i-card-arrow">→</div>
+      </div>
+      <div class="i-card" style="display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;">
+        <div style="font-size:11px;font-weight:700;color:var(--y);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;">See all campaigns</div>
+        <div style="font-size:36px;color:var(--y);font-weight:900;">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Blog -->
+  <div class="i-blog" id="iBlog">
+    <h2 class="i-blog-h">From the <em>Blog</em></h2>
+    <div class="i-blog-grid">
+      <a href="#" class="i-blog-feat">
+        <div class="i-blog-meta">Levelup · March 5, 2026</div>
+        <h3 class="i-blog-ft">It's Time to Reclaim the Socialist Roots of International Women's Day</h3>
+        <p class="i-blog-fp">International Working Women's Day began as a protest for labour rights. Reclaiming its radical roots has never been more urgent.</p>
+      </a>
+      <div class="i-blog-list">
+        <a href="#" class="i-blog-item"><div class="i-blog-im">Vic Parsons · December 4, 2025</div><div class="i-blog-it">Gender Critical Feminism Isn't Feminist</div></a>
+        <a href="#" class="i-blog-item"><div class="i-blog-im">Seyi Falodun-Liburd · November 19, 2025</div><div class="i-blog-it">The Griefs Left Unattended</div></a>
+        <a href="#" class="i-blog-item"><div class="i-blog-im">Starling · August 19, 2025</div><div class="i-blog-it">Beyond Sympathy: Feminist Solidarity Without Deservingness</div></a>
+        <a href="#" class="i-blog-item"><div class="i-blog-im">Levelup · June 26, 2025</div><div class="i-blog-it">Why Expanding Criminalisation is a Feminist Issue</div></a>
+        <a href="#" class="i-blog-item"><div class="i-blog-im">Ruvimbo Kuuzabuwe · February 28, 2025</div><div class="i-blog-it">Why We Need to Start Moving Offline</div></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="i-join">
+    <h2 class="i-join-h">Join the Level Up Community</h2>
+    <p class="i-join-p">Become part of a feminist movement fighting for gender justice in the UK. Together we create change.</p>
+    <button class="i-join-btn">Join Us →</button>
+  </div>
+</div></div>
+
+</div>
+
+<script>
+// ─── TAB SWITCHER ───
+function sw(id,btn){
+  document.querySelectorAll('.des').forEach(d=>d.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('d'+id).classList.add('on');
+  btn.classList.add('on');
+  if(id==='h') initH();
+  if(id==='i') initI();
+}
+
+// ─── H: SLIDE + COUNTUP ───
+const slideTargets=[6400,13100,6100,29200];
+const slideIds=['hc0','hc1','hc2','hc3'];
+let hCurrent=0,hTimer=null,hInited=false;
+
+function goSlide(n){
+  const slides=document.querySelectorAll('#dh .h-camp-slide');
+  const dots=document.querySelectorAll('#dh .h-dot');
+  slides.forEach(s=>s.classList.remove('active'));
+  dots.forEach(d=>d.classList.remove('active'));
+  slides[n].classList.add('active');
+  dots[n].classList.add('active');
+  hCurrent=n;
+  countUp(slideIds[n],slideTargets[n],1000);
+}
+
+function countUp(id,target,duration){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const start=Date.now();
+  const step=()=>{
+    const p=Math.min((Date.now()-start)/duration,1);
+    const ease=1-Math.pow(1-p,3);
+    const val=Math.floor(ease*target);
+    el.textContent=val.toLocaleString();
+    if(p<1)requestAnimationFrame(step);
+    else el.textContent=target.toLocaleString();
+  };
+  requestAnimationFrame(step);
+}
+
+function initH(){
+  if(hInited)return;
+  hInited=true;
+  countUp('hc0',6400,1200);
+  // Stats count up
+  const statTargets=[29200,13100,6400,6100];
+  const statIds=['hs0','hs1','hs2','hs3'];
+  const statEls=document.querySelectorAll('#dh .h-stat');
+  statEls.forEach((el,i)=>{
+    el.classList.add('visible');
+    el.style.animationDelay=(i*0.12)+'s';
+    setTimeout(()=>countUp(statIds[i],statTargets[i],1400),300+i*150);
+  });
+  // Petition rows stagger
+  const rows=document.querySelectorAll('#dh .h-pet-row');
+  rows.forEach((r,i)=>{
+    r.classList.add('visible');
+    r.style.animationDelay=(i*0.1)+'s';
+  });
+  // Who visual
+  setTimeout(()=>document.getElementById('hVis').classList.add('visible'),400);
+  // Auto slide
+  hTimer=setInterval(()=>{
+    goSlide((hCurrent+1)%4);
+  },3500);
+}
+
+// ─── I: COUNTUP + STAGGER ───
+let iInited=false;
+function initI(){
+  if(iInited)return;
+  iInited=true;
+  const targets=[29200,13100,6400,6100];
+  const ids=['is0','is1','is2','is3'];
+  const statEls=document.querySelectorAll('#di .i-stat');
+  statEls.forEach((el,i)=>{
+    el.classList.add('vis');
+    el.style.animationDelay=(i*0.1)+'s';
+    setTimeout(()=>countUpI(ids[i],targets[i],1400),200+i*120);
+  });
+  const cards=document.querySelectorAll('#di .i-card');
+  cards.forEach((c,i)=>{
+    c.classList.add('vis');
+    c.style.animationDelay=(i*0.08)+'s';
+  });
+}
+function countUpI(id,target,duration){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const start=Date.now();
+  const step=()=>{
+    const p=Math.min((Date.now()-start)/duration,1);
+    const ease=1-Math.pow(1-p,3);
+    const val=Math.floor(ease*target);
+    el.textContent=val.toLocaleString();
+    if(p<1)requestAnimationFrame(step);
+    else el.textContent=target.toLocaleString();
+  };
+  requestAnimationFrame(step);
+}
+
+// Auto-init H since it's the default visible tab
+setTimeout(initH,300);
+</script>

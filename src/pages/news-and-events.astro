@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Events | Level Up" description="Upcoming events from Level Up — feminist campaigns for gender justice in the UK.">
+
+  <!-- Hero Banner -->
+  <section id="sub-page-hero-banner" class="hero-banner">
+    <div class="hero-inner">
+      <h2 class="hero-title">Events</h2>
+    </div>
+  </section>
+
+  <!-- Events Section -->
+  <section class="events-section">
+    <div class="container">
+      <div class="no-events-message">
+        There are no upcoming events right now. Subscribe to our mailing list to stay updated
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2 class="cta-heading">
+        <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener">Join the Level Up Community</a>
+      </h2>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  :root {
+    --navy: #0D0A3E;
+    --lime: #CBFF32;
+    --cream: #EDEBD2;
+    --white: #FFFFFF;
+  }
+
+  .hero-banner {
+    min-height: 500px;
+    background-color: var(--navy);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 0;
+  }
+
+  .hero-inner {
+    max-width: 1130px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px 20px;
+  }
+
+  .hero-title {
+    font-size: 3vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-align: center;
+    width: 100%;
+    margin: 0;
+  }
+
+  .container {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .events-section {
+    padding: 5rem 0;
+  }
+
+  .no-events-message {
+    color: #000000;
+    background-color: #e8e8e8;
+    padding: 20px;
+    border: 1px solid #c4c4c4;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+  }
+
+  .cta-section {
+    background-color: var(--navy);
+    padding: 2rem 0;
+  }
+
+  .cta-heading {
+    font-family: 'blogh', 'DM Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    margin: 0;
+  }
+
+  .cta-heading a {
+    color: var(--cream);
+    text-decoration: none;
+  }
+
+  .cta-heading a:hover {
+    text-decoration: underline;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-banner {
+      padding: 3.5em 0;
+    }
+
+    .hero-title {
+      font-size: 2.5vw;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-title {
+      font-size: 7vw;
+      text-align: center;
+    }
+
+    .events-section {
+      padding: 2.5rem 0;
+    }
+  }
+</style>

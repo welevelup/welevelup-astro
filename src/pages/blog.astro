@@ -1,0 +1,310 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+// Sort posts by date descending, posts without dates go last
+const posts = allPosts.sort((a, b) => {
+  if (!a.data.date && !b.data.date) return 0;
+  if (!a.data.date) return 1;
+  if (!b.data.date) return -1;
+  return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+});
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+---
+
+<Layout title="BLOG - We Level Up" description="Read the latest from Level Up — feminist perspectives on gender justice, campaigns, and movement building.">
+
+  <!-- Blog page header -->
+  <div class="blog-page-header">
+    <div class="blog-page-header__inner">
+      <h1 class="blog-page-title">BLOG</h1>
+    </div>
+  </div>
+
+  <!-- Blog listing grid -->
+  <div class="blog-listing-section">
+    <div class="blog-listing-inner">
+      <div class="blog-grid" id="blog-listing-grid">
+        {posts.map((post) => (
+          <a href={`/blog/${post.slug}`} class="blog-card" data-postid={post.slug}>
+            <!-- Featured image -->
+            <div class="blog-card__image-wrap">
+              {post.data.image ? (
+                <img
+                  src={post.data.image}
+                  alt={post.data.title}
+                  width="495"
+                  height="619"
+                  loading="lazy"
+                  class="blog-card__img"
+                />
+              ) : (
+                <div class="blog-card__img-placeholder">
+                  <span>LEVEL UP</span>
+                </div>
+              )}
+            </div>
+
+            <!-- Card content -->
+            <div class="blog-card__content">
+              <!-- Title -->
+              <h3 class="blog-card__title">{post.data.title}</h3>
+
+              <!-- Author -->
+              <p class="blog-card__author">{post.data.author}</p>
+
+              <!-- Divider -->
+              <div class="blog-card__divider"></div>
+
+              <!-- Excerpt -->
+              <p class="blog-card__excerpt">{post.data.excerpt}</p>
+
+              <!-- Divider -->
+              <div class="blog-card__divider"></div>
+
+              <!-- Date -->
+              {post.data.date && (
+                <div class="blog-card__date">
+                  <svg class="blog-card__date-icon" aria-hidden="true" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M400 64h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V160h352v298c0 3.3-2.7 6-6 6z"></path>
+                  </svg>
+                  <span>{formatDate(post.data.date)}</span>
+                </div>
+              )}
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+</Layout>
+
+<style>
+  /* =============================================
+     BLOG PAGE HEADER
+     Matches the original page hero style
+  ============================================= */
+  .blog-page-header {
+    background-color: var(--navy);
+    padding: 60px 20px 60px;
+  }
+
+  .blog-page-header__inner {
+    max-width: 1130px;
+    margin: 0 auto;
+  }
+
+  .blog-page-title {
+    font-family: "DM Sans", sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    color: var(--lime);
+    letter-spacing: -0.45px;
+    margin: 0;
+    text-align: center;
+  }
+
+  /* =============================================
+     BLOG LISTING SECTION
+     Background matches page: #EDEBD2 (cream)
+  ============================================= */
+  .blog-listing-section {
+    background-color: var(--cream);
+    padding: 60px 20px;
+  }
+
+  .blog-listing-inner {
+    max-width: 1130px;
+    margin: 0 auto;
+  }
+
+  /* =============================================
+     BLOG GRID
+     Matches: display:grid; 3 columns on desktop
+  ============================================= */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+
+  /* =============================================
+     BLOG CARD
+     Matches: ue-grid-item — flex column, overflow hidden
+     Card is clickable (anchor wrapping whole card)
+  ============================================= */
+  .blog-card {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    background-color: var(--cream);
+    transition: opacity 0.2s ease;
+  }
+
+  .blog-card:hover {
+    opacity: 0.85;
+  }
+
+  /* =============================================
+     FEATURED IMAGE SECTION
+     Matches: elementor-element-56fc161 (display:flex)
+     elementor-element-5d689be img {width:100%}
+  ============================================= */
+  .blog-card__image-wrap {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .blog-card__img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .blog-card__img-placeholder {
+    width: 100%;
+    aspect-ratio: 495 / 400;
+    background-color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lime);
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+  }
+
+  /* =============================================
+     CARD CONTENT SECTION
+     Matches: elementor-element-77e6b51
+     --display:flex; --gap:10px 10px; --row-gap:10px; --column-gap:10px;
+  ============================================= */
+  .blog-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 0 10px;
+    flex: 1;
+  }
+
+  /* =============================================
+     TITLE
+     Matches: elementor-element-8ab4b23 .elementor-heading-title
+     text-align:center; font-family:"blogh"/DM Sans; 1.8vw → ~18px;
+     font-weight:800 (from h3 global styles); -webkit-text-stroke-color:#000;
+     Primary font size from kit: --e-global-typography-primary-font-size:2vw
+  ============================================= */
+  .blog-card__title {
+    text-align: center;
+    font-family: "DM Sans", sans-serif;
+    font-size: clamp(1rem, 1.8vw, 1.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.45px;
+    color: var(--navy);
+    margin: 0;
+    -webkit-text-stroke: 0.3px #000;
+  }
+
+  /* =============================================
+     AUTHOR
+     Matches: elementor-element-7572e12
+     text-align:center; font-family:"Montserrat"; font-size:16px;
+     font-weight:500; line-height:20px;
+  ============================================= */
+  .blog-card__author {
+    text-align: center;
+    font-family: "Montserrat", "DM Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--navy);
+    margin: 0;
+  }
+
+  /* =============================================
+     DIVIDER
+     Matches: elementor-element-b802b24 / elementor-element-3210f35
+     --divider-border-style:solid; --divider-color:#000; --divider-border-width:1px;
+     .elementor-divider-separator { width:18%; margin:0 auto; }
+     .elementor-divider { text-align:center; padding-block-start:15px; padding-block-end:15px; }
+  ============================================= */
+  .blog-card__divider {
+    width: 18%;
+    height: 1px;
+    background-color: #000;
+    margin: 15px auto;
+    flex-shrink: 0;
+  }
+
+  /* =============================================
+     EXCERPT
+     Matches: elementor-element-cc82c67
+     text-align:center; font-family:"Montserrat"; font-size:16px;
+     font-weight:500; line-height:20px;
+  ============================================= */
+  .blog-card__excerpt {
+    text-align: center;
+    font-family: "Montserrat", "DM Sans", sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px;
+    color: var(--navy);
+    margin: 0;
+  }
+
+  /* =============================================
+     DATE
+     Matches: elementor-element-2947045 (icon-list, align:center)
+     --e-icon-list-icon-size:11px; --icon-vertical-offset:0px;
+     .elementor-icon-list-text { color:var(--e-global-color-text)=#0D0A3E }
+     Displayed inline with calendar SVG icon
+  ============================================= */
+  .blog-card__date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: var(--navy);
+  }
+
+  .blog-card__date-icon {
+    width: 11px;
+    height: 11px;
+    fill: var(--navy);
+    flex-shrink: 0;
+  }
+</style>

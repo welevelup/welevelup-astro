@@ -1,0 +1,434 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Contact Level Up | Media Enquiries &amp; Campaign Ideas"
+  description="Get in touch with Level Up. Contact us for media enquiries, campaign ideas, partnerships or collaboration opportunities. Based in London, working across the UK."
+>
+  <!-- Hero banner: navy background, centred heading -->
+  <section class="contact-hero" id="sub-page-hero-banner">
+    <div class="contact-hero__inner">
+      <h1 class="contact-hero__title">Contact Level Up</h1>
+    </div>
+  </section>
+
+  <!-- Main content: white background, two columns -->
+  <section class="contact-body">
+
+    <!-- Intro text -->
+    <div class="contact-intro">
+      <p><strong>Get in touch with the Level Up team</strong></p>
+      <p>
+        We're a UK-based feminist campaigning organisation working to end bodily and systemic violence.
+        If you're a journalist, supporter, potential partner, or someone with a campaign idea — we'd love to hear from you.
+      </p>
+    </div>
+
+    <!-- Two-column layout: contact info (35%) + form (65%) -->
+    <div class="contact-columns">
+
+      <!-- Left: contact info -->
+      <div class="contact-info">
+        <p class="contact-info__label">For media enquiries:</p>
+        <p class="contact-info__email">
+          <a href="mailto:media@welevelup.org"><b>media@welevelup.org</b></a>
+        </p>
+
+        <div class="contact-divider"></div>
+
+        <p class="contact-info__label">Got a campaign idea, or just want to say hi?</p>
+        <p class="contact-info__email">
+          <a href="mailto:hello@welevelup.org"><b>hello@welevelup.org</b></a>
+        </p>
+
+        <div class="contact-divider"></div>
+
+        <p class="contact-info__label">Work with us</p>
+      </div>
+
+      <!-- Right: contact form -->
+      <div class="contact-form-wrap">
+        <form class="contact-form" method="post" name="New Form" aria-label="New Form">
+          <div class="form-fields">
+
+            <!-- Name + Last Name: two columns -->
+            <div class="form-field form-field--half">
+              <label for="form-field-name" class="form-label">Name</label>
+              <input type="text" name="form_fields[name]" id="form-field-name" class="form-input" />
+            </div>
+
+            <div class="form-field form-field--half">
+              <label for="form-field-lastname" class="form-label">Last Name</label>
+              <input type="text" name="form_fields[field_50190f1]" id="form-field-lastname" class="form-input" />
+            </div>
+
+            <!-- Email: full width, required -->
+            <div class="form-field form-field--full">
+              <label for="form-field-email" class="form-label">
+                Email <span class="form-required" aria-hidden="true">*</span>
+              </label>
+              <input type="email" name="form_fields[email]" id="form-field-email" class="form-input" required />
+            </div>
+
+            <!-- Message: full width, required -->
+            <div class="form-field form-field--full">
+              <label for="form-field-message" class="form-label">
+                Message <span class="form-required" aria-hidden="true">*</span>
+              </label>
+              <textarea name="form_fields[message]" id="form-field-message" rows="10" class="form-input form-textarea" required></textarea>
+            </div>
+
+            <!-- Submit button -->
+            <div class="form-field form-field--submit">
+              <button type="submit" class="form-submit">Submit</button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Registered address -->
+    <div class="contact-address">
+      <p><strong>Registered Address</strong></p>
+      <p>
+        Level Up<br />
+        New Derwent House<br />
+        69&#8211;73 Theobalds Road<br />
+        London<br />
+        WC1X 8TA<br />
+        United Kingdom
+      </p>
+    </div>
+
+  </section>
+</Layout>
+
+<style>
+  /* ==========================================
+     HERO BANNER
+     background: var(--e-global-color-primary) = #0D0A3E (navy)
+     padding: 1.8em top/bottom (desktop), 3.5rem on tablet
+     justify-content: center; align-items: center
+  ========================================== */
+  .contact-hero {
+    background-color: #0D0A3E;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1.8em;
+    padding-bottom: 1.8em;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .contact-hero__inner {
+    max-width: 1130px;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Title: 3vw, weight 700, uppercase, color #EEEBD3 (--e-global-color-40971d2) */
+  .contact-hero__title {
+    font-family: "DM Sans", sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #EEEBD3;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ==========================================
+     MAIN CONTENT BODY
+     background: var(--e-global-color-70202c2) = #FFFFFF
+     padding: 5rem top/bottom
+  ========================================== */
+  .contact-body {
+    background-color: #FFFFFF;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    width: 100%;
+  }
+
+  /* Constrained inner containers */
+  .contact-intro,
+  .contact-columns,
+  .contact-address {
+    max-width: 1130px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* ==========================================
+     INTRO TEXT
+     font: DM Sans 18px/24px (text global)
+     color: #0D0A3E
+  ========================================== */
+  .contact-intro {
+    margin-bottom: 20px;
+  }
+
+  .contact-intro p {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #0D0A3E;
+    margin: 0 0 8px 0;
+  }
+
+  .contact-intro p strong {
+    font-weight: 700;
+  }
+
+  /* ==========================================
+     TWO-COLUMN LAYOUT
+     gap: 24px (row + column)
+     left: 35% | right: 65% (at >= 768px)
+  ========================================== */
+  .contact-columns {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 20px;
+  }
+
+  /* ==========================================
+     LEFT COLUMN: contact info
+     width: 35%
+     gap: 0px between items
+  ========================================== */
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 0 0 calc(35% - 12px);
+    max-width: calc(35% - 12px);
+    min-width: 200px;
+  }
+
+  /* Label text: Montserrat 16px bold, line-height 24px */
+  .contact-info__label {
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #0D0A3E;
+    margin: 0;
+  }
+
+  /* Email link: Montserrat 16px bold, color #AEAEAE */
+  .contact-info__email {
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0D0A3E;
+    margin: 0;
+  }
+
+  .contact-info__email a {
+    color: #AEAEAE;
+    text-decoration: none;
+  }
+
+  .contact-info__email a:hover {
+    color: #0D0A3E;
+  }
+
+  /* Divider: solid #AEAEAE, 1.8px, full width, 18px padding top+bottom */
+  .contact-divider {
+    width: 100%;
+    border: none;
+    border-top: 1.8px solid #AEAEAE;
+    margin-top: 18px;
+    margin-bottom: 18px;
+  }
+
+  /* ==========================================
+     RIGHT COLUMN: form
+     width: 65%
+  ========================================== */
+  .contact-form-wrap {
+    flex: 1 1 calc(65% - 12px);
+    min-width: 280px;
+  }
+
+  /* ==========================================
+     FORM STYLES
+     field group padding: 10px left/right, margin-bottom: 20px
+     wrapper negative margin: -10px left/right, -20px bottom
+  ========================================== */
+  .contact-form {
+    width: 100%;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -10px;
+    margin-right: -10px;
+    margin-bottom: -20px;
+  }
+
+  .form-field {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+  }
+
+  /* Half-width fields (Name, Last Name) */
+  .form-field--half {
+    width: 50%;
+  }
+
+  /* Full-width fields (Email, Message) */
+  .form-field--full {
+    width: 100%;
+  }
+
+  /* Submit button column: 20% width */
+  .form-field--submit {
+    width: 20%;
+    min-width: 120px;
+  }
+
+  /* Labels: Montserrat 16px bold */
+  .form-label {
+    display: block;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0D0A3E;
+    padding-bottom: 10px;
+  }
+
+  .form-required {
+    color: #0D0A3E;
+  }
+
+  /* Inputs and textarea:
+     font: Montserrat 16px 400, text-transform: capitalize
+     background: #ffffff, border: 2px solid #F7F7F7
+  */
+  .form-input {
+    width: 100%;
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: capitalize;
+    background-color: #ffffff;
+    border: 2px solid #F7F7F7;
+    color: #0D0A3E;
+    padding: 7px 14px;
+    box-sizing: border-box;
+    outline: none;
+  }
+
+  .form-input:focus {
+    border-color: #0D0A3E;
+  }
+
+  .form-textarea {
+    resize: vertical;
+    text-transform: none;
+  }
+
+  /* Submit button:
+     font: Montserrat 16px bold
+     background: #F7F7F7, color: #5A5A5A
+     hover: background #0D0A3E, color #ffffff
+  */
+  .form-submit {
+    font-family: "Montserrat", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    background-color: #F7F7F7;
+    color: #5A5A5A;
+    border: none;
+    cursor: pointer;
+    padding: 12px 28px;
+    width: 100%;
+    text-align: center;
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  .form-submit:hover {
+    background-color: #0D0A3E;
+    color: #ffffff;
+  }
+
+  /* ==========================================
+     REGISTERED ADDRESS
+  ========================================== */
+  .contact-address {
+    margin-top: 20px;
+  }
+
+  .contact-address p {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #0D0A3E;
+    margin: 0 0 4px 0;
+  }
+
+  .contact-address p strong {
+    font-weight: 700;
+  }
+
+  /* ==========================================
+     RESPONSIVE
+  ========================================== */
+
+  /* Tablet (max 1024px): hero padding 3.5rem, title 2.5vw */
+  @media (max-width: 1024px) {
+    .contact-hero {
+      padding-top: 3.5rem;
+      padding-bottom: 3.5rem;
+    }
+
+    .contact-hero__title {
+      font-size: 2.5vw;
+    }
+  }
+
+  /* Mobile (max 767px): title 7vw, stack columns */
+  @media (max-width: 767px) {
+    .contact-hero__title {
+      font-size: 7vw;
+      text-align: center;
+    }
+
+    .contact-columns {
+      flex-direction: column;
+    }
+
+    .contact-info {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+
+    .contact-form-wrap {
+      flex: 1 1 100%;
+    }
+
+    .form-field--half {
+      width: 100%;
+    }
+
+    .form-field--submit {
+      width: 100%;
+    }
+  }
+</style>

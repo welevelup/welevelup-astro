@@ -1,0 +1,239 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="What we do | Level Up" description="Working together for gender justice in the UK.">
+  {/* ===== HERO (eeb95b8) — bg navy, flex col center, pad 1.8em ===== */}
+  <section class="about-hero">
+    <div class="about-hero__inner">
+      <h2 class="about-hero__title">What we do</h2>
+      <h2 class="about-hero__title">Working together for gender justice in the UK</h2>
+    </div>
+  </section>
+
+  {/* ===== VISION (9fbf917) — bg white, flex col ===== */}
+  <section class="about-vision">
+    {/* a4d8b4c — boxed, pad 2rem top 1.5rem bottom */}
+    <div class="about-vision__quote">
+      <h2>We envision a world where people of all genders are loved and liberated from bodily and systemic violence.</h2>
+    </div>
+    {/* 584b5d6 — boxed, body text */}
+    <div class="about-vision__body">
+      <p>We are a feminist community campaigning for gender justice in the UK. We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – <a href="/what-we-are-proud-of">like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths.</a></p>
+      <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through <a href="/campaigns/we-protect-us">gathering with community like our monthly workshops on bystander intervention and intervening in police violence.</a></p>
+      <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+    </div>
+  </section>
+
+  {/* ===== PILLARS (636e79d) — bg white, pad 1.5em, grid 3 cols ===== */}
+  <section class="about-pillars">
+    <div class="about-pillars__grid">
+      <div class="about-pillars__col">
+        <h2>Pop culture</h2>
+        <div class="about-pillars__text">
+          <p>We identify interventions where collective action can interrupt and dismantle systems of injustice. We believe in power-building, not power-begging, and we create tools, resources and campaign strategies that centre this principle. This is why we tend to focus on cultural moments, rather than political machinery.</p>
+        </div>
+      </div>
+      <div class="about-pillars__col">
+        <h2>Gender</h2>
+        <div class="about-pillars__text">
+          <p>Our focus is on gender whilst holding the ways that race, class, disability and other oppressions intersect, creating different experiences for different individuals and communities. Our organising includes trans and gender nonconforming people, and we try to centre the experiences of the most marginalised people in our work.</p>
+        </div>
+      </div>
+      <div class="about-pillars__col">
+        <h2>Community</h2>
+        <div class="about-pillars__text">
+          <p>Building a loving, more liberated world means coming together across our differences to build power and solidarity. We have a diverse membership of all ages, from all social backgrounds, and we strive to make our movement accessible, relatable, easy to understand and easy to take part in.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== JOIN CTA (85c3923) — bg #AB9DEA, pad 3em ===== */}
+  <section class="about-cta">
+    <div class="about-cta__inner">
+      <h2><a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener">Click and Join the Level Up Community</a></h2>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ===== HERO (eeb95b8) =====
+     bg: navy, flex column, center, pad 1.8em */
+  .about-hero {
+    background-color: #0D0A3E;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 0;
+  }
+  .about-hero__inner {
+    max-width: 1130px;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px 20px;
+  }
+  /* f2188bd + ef1c5a8: 3vw/700/uppercase, color cream (#EEEBD3) */
+  .about-hero__title {
+    font-family: "DM Sans", sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #EEEBD3;
+    text-align: center;
+    line-height: 1.1;
+    letter-spacing: -0.45px;
+    margin: 0;
+  }
+
+  /* ===== VISION (9fbf917) =====
+     bg: white, flex column */
+  .about-vision {
+    background-color: #FFFFFF;
+    padding: 0;
+  }
+  /* a4d8b4c: boxed, pad 2rem top 1.5rem bottom */
+  .about-vision__quote {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 2rem 20px 1.5rem;
+  }
+  /* 5537fed: DM Sans primary 2vw, centered */
+  .about-vision__quote h2 {
+    font-family: "DM Sans", sans-serif;
+    font-size: 2vw;
+    font-weight: normal;
+    line-height: 1.2;
+    letter-spacing: -0.45px;
+    text-align: center;
+    color: #0D0A3E;
+  }
+  /* 584b5d6: boxed */
+  .about-vision__body {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  /* ab41935, 30bddde, e91ca0c: Montserrat 18px/400/24px, navy, pad-bottom 1rem */
+  .about-vision__body p {
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #0D0A3E;
+    padding-bottom: 1rem;
+    margin: 0;
+  }
+  .about-vision__body a {
+    text-decoration: underline;
+    color: #0D0A3E;
+  }
+
+  /* ===== PILLARS (636e79d) =====
+     bg: white, flex column, pad 1.5em */
+  .about-pillars {
+    background-color: #FFFFFF;
+    padding: 1.5em 0;
+  }
+  /* a760e75: grid 3 cols */
+  .about-pillars__grid {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+  }
+  .about-pillars__col {
+    display: flex;
+    flex-direction: column;
+  }
+  /* d7882aa, 22589ff, ecdcb09: DM Sans primary, centered */
+  .about-pillars__col h2 {
+    font-family: "DM Sans", sans-serif;
+    font-size: 2vw;
+    font-weight: normal;
+    line-height: 1.2;
+    letter-spacing: -0.45px;
+    text-align: center;
+    margin: 0 0 20px;
+  }
+  /* 1f3bab9, 8d6809e, 773dfe3: min-h 230px, flex, center, pad 2px top 10px bottom */
+  .about-pillars__text {
+    display: flex;
+    min-height: 230px;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2px 0 10px;
+  }
+  /* e4085c2, 030e223, 4748874: Montserrat 18px/400/24px, navy, centered, pad-bottom 1rem */
+  .about-pillars__text p {
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #0D0A3E;
+    text-align: center;
+    padding-bottom: 1rem;
+    margin: 0;
+  }
+
+  /* ===== JOIN CTA (85c3923) =====
+     bg: #AB9DEA, flex row, pad 3em */
+  .about-cta {
+    background-color: #AB9DEA;
+    padding: 3em 0;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .about-cta__inner {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 75%;
+    text-align: center;
+  }
+  /* d64c53b: DM Sans 3vw/700 */
+  .about-cta h2 {
+    font-family: "DM Sans", sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0;
+  }
+  .about-cta a {
+    color: #0D0A3E;
+    text-decoration: none;
+  }
+  .about-cta a:hover { opacity: 0.7; }
+
+  /* ===== RESPONSIVE: TABLET (max 1024px) ===== */
+  @media (max-width: 1024px) {
+    .about-hero { padding: 3.5rem 0; }
+    .about-hero__title { font-size: 2.5vw; }
+    .about-vision { padding: 0 4rem; }
+    .about-vision__quote { padding-left: 0; padding-right: 0; }
+    .about-vision__body { padding-left: 0; padding-right: 0; }
+    .about-pillars { padding: 1.5rem 4rem; }
+    .about-pillars__grid { padding: 0; }
+    .about-cta h2 { font-size: 2.5vw; }
+  }
+
+  /* ===== RESPONSIVE: MOBILE (max 767px) ===== */
+  @media (max-width: 767px) {
+    .about-hero__title { font-size: 7vw; }
+    .about-vision { padding: 0 2rem; }
+    .about-pillars { padding: 1.5rem 2rem; }
+    .about-pillars__grid {
+      grid-template-columns: repeat(1, 1fr);
+      padding: 0;
+    }
+    .about-cta h2 { font-size: 7vw; }
+    .about-cta__inner { width: 100%; }
+  }
+</style>

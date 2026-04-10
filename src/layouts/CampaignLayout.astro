@@ -1,0 +1,378 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  heroImage?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  petitionUrl?: string;
+  petitionLabel?: string;
+}
+
+const {
+  title,
+  description = '',
+  heroImage = '',
+  heroTitle = '',
+  heroSubtitle = '',
+  petitionUrl = '',
+  petitionLabel = 'SIGN THE PETITION',
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <link rel="icon" type="image/webp" href="/images/logo.webp" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <!-- Facebook Pixel -->
+  <script is:inline>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','1862990614381002');fbq('track','PageView');
+  </script>
+</head>
+<body class="campaign-page">
+  <Nav />
+  <main>
+    <!-- HERO: full-width image, min-height 430px -->
+    {heroImage && (
+      <section class="campaign-hero" style={`background-image: url('${heroImage}')`}>
+        <div class="campaign-hero__overlay">
+          {heroTitle && <h1 class="campaign-hero__title">{heroTitle}</h1>}
+          {heroSubtitle && <p class="campaign-hero__subtitle">{heroSubtitle}</p>}
+        </div>
+      </section>
+    )}
+
+    <!-- MAIN CONTENT -->
+    <div class="campaign-body">
+      <slot />
+    </div>
+
+    <!-- PETITION BANNER -->
+    {petitionUrl && (
+      <section class="petition-banner">
+        <div class="petition-banner__inner">
+          <h2 class="petition-banner__title">{petitionLabel}</h2>
+          <a href={petitionUrl} target="_blank" rel="noopener" class="petition-banner__btn">Sign</a>
+        </div>
+      </section>
+    )}
+  </main>
+  <Footer />
+</body>
+</html>
+
+<style is:global>
+  .campaign-page {
+    background-color: #FFFFFF;
+  }
+
+  /* ═══ HERO ═══ */
+  .campaign-hero {
+    min-height: 430px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 20px;
+    position: relative;
+  }
+
+  .campaign-hero__overlay {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 1130px;
+    width: 100%;
+  }
+
+  .campaign-hero__title {
+    font-family: "DM Sans", sans-serif;
+    font-size: 3.7vw;
+    font-weight: 500;
+    color: #CBFF32;
+    text-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .campaign-hero__subtitle {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #FFFFFF;
+    text-shadow: 0px 0px 10px rgba(0,0,0,0.4);
+    line-height: 24px;
+  }
+
+  /* ═══ BODY ═══ */
+  .campaign-body {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ═══ Campaign section: label + text row ═══ */
+  .campaign-section {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 1.5em 0;
+  }
+
+  .campaign-section__label {
+    display: flex;
+    justify-content: flex-start;
+    width: 63%;
+    min-width: 200px;
+  }
+
+  .campaign-section__label h2 {
+    font-family: "blogh", "DM Sans", sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1em;
+    letter-spacing: -0.45px;
+  }
+
+  .campaign-section__text {
+    flex: 1;
+    align-self: flex-start;
+    padding-top: 8px;
+  }
+
+  .campaign-section__text p {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    margin-bottom: 1rem;
+  }
+
+  .campaign-section__text p:last-child {
+    margin-bottom: 0;
+  }
+
+  .campaign-section__text a {
+    color: #A89CED;
+  }
+
+  /* ═══ Campaign title centered ═══ */
+  .campaign-main-title {
+    font-family: "DM Sans", sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #0D0A3E;
+    text-align: center;
+    padding: 1.5em 0 0;
+  }
+
+  .campaign-main-description {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    padding: 8px 0 0;
+    max-width: 900px;
+  }
+
+  /* ═══ Alternating color blocks ═══ */
+  .campaign-block {
+    padding: 30px 20px;
+    margin: 0 -20px;
+  }
+
+  .campaign-block--navy {
+    background-color: #0D0A3E;
+    color: #CBFF32;
+  }
+
+  .campaign-block--navy a { color: #0D0A3E; }
+
+  .campaign-block--purple {
+    background-color: #AB9DEA;
+    color: #0D0A3E;
+  }
+
+  .campaign-block--purple-dark {
+    background-color: #AB9CF1;
+    color: #0D0A3E;
+  }
+
+  .campaign-block--lime {
+    background-color: #CBFF32;
+    color: #0D0A3E;
+  }
+
+  .campaign-block--cream {
+    background-color: #EEEBD3;
+    color: #0D0A3E;
+  }
+
+  .campaign-block--cream a { color: #A89CED; }
+
+  /* ═══ Block heading (Montserrat 3.5rem/900) ═══ */
+  .campaign-block__heading {
+    font-family: "Montserrat", sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .campaign-block__text {
+    font-family: "DM Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 24px;
+    padding-top: 8px;
+  }
+
+  /* ═══ PETITION BANNER ═══ */
+  .petition-banner {
+    background-color: #A89CED;
+    padding: 30px 20px;
+  }
+
+  .petition-banner__inner {
+    max-width: 1130px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .petition-banner__title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #0D0A3E;
+    line-height: 1.1;
+  }
+
+  .petition-banner__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #CBFF32;
+    color: #0D0A3E;
+    font-family: "Montserrat", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 12px 40px;
+    border-radius: 20px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+
+  .petition-banner__btn:hover {
+    opacity: 0.85;
+  }
+
+  /* ═══ CTA buttons inside campaign ═══ */
+  .campaign-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #CBFF32;
+    color: #0D0A3E;
+    font-family: "Montserrat", sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 12px 30px;
+    border-radius: 20px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .campaign-btn:hover {
+    opacity: 0.85;
+  }
+
+  /* ═══ RESPONSIVE ═══ */
+  @media (max-width: 1024px) {
+    .campaign-hero {
+      padding: 3.5rem 20px;
+    }
+
+    .campaign-main-title {
+      font-size: 2.5vw;
+    }
+
+    .campaign-section__label {
+      width: 35%;
+    }
+
+    .campaign-section__label h2 {
+      font-size: 1.8rem;
+    }
+
+    .campaign-block__heading,
+    .petition-banner__title {
+      font-size: 4.5vw;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .campaign-hero {
+      min-height: 320px;
+    }
+
+    .campaign-hero__title {
+      font-size: 6vw;
+    }
+
+    .campaign-main-title {
+      font-size: 7vw;
+    }
+
+    .campaign-section {
+      flex-direction: column;
+    }
+
+    .campaign-section__label {
+      width: 100%;
+    }
+
+    .campaign-block__heading,
+    .petition-banner__title {
+      font-size: 7vw;
+    }
+
+    .petition-banner__inner {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .campaign-btn {
+      border-radius: 4px;
+      padding: 12px 20px;
+    }
+
+    .petition-banner__btn {
+      border-radius: 4px;
+      padding: 12px 20px;
+    }
+  }
+</style>

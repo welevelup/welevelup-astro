@@ -1,0 +1,550 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,400&display=swap');
+
+:root {
+  --y: #CCFF33;
+  --n: #EEEBD3;
+  --nv: #0C0A3E;
+  --p: #A89CED;
+  --f: 'DM Sans', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body, .root { font-family: var(--f); background: var(--nv); }
+
+/* TAB SWITCHER */
+.tabs {
+  display: flex;
+  background: rgba(238,235,211,0.06);
+  border-bottom: 1px solid rgba(238,235,211,0.12);
+  padding: 0 20px;
+  gap: 4px;
+}
+.tab {
+  padding: 12px 20px;
+  font-family: var(--f);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: rgba(238,235,211,0.4);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+.tab:hover { color: var(--n); }
+.tab.active { color: var(--y); border-bottom-color: var(--y); }
+
+.design { display: none; }
+.design.active { display: block; }
+
+/* ══════════════════════════════════════
+   OPTION A — BRUTAL EDITORIAL
+   Full-bleed split, massive type
+══════════════════════════════════════ */
+.a-root { background: var(--nv); color: var(--n); font-family: var(--f); }
+
+.a-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px;
+  border-bottom: 1px solid rgba(238,235,211,0.1);
+}
+.a-nav-logo { font-size: 18px; font-weight: 900; letter-spacing: -0.045em; color: var(--y); line-height: 0.9; }
+.a-nav-links { display: flex; gap: 24px; }
+.a-nav-links a { font-size: 12px; font-weight: 500; color: rgba(238,235,211,0.5); letter-spacing: -0.02em; }
+.a-nav-ctas { display: flex; gap: 8px; }
+.a-btn { font-family: var(--f); font-size: 12px; font-weight: 700; letter-spacing: -0.02em; padding: 8px 18px; cursor: pointer; }
+.a-btn-y { background: var(--y); color: var(--nv); }
+.a-btn-o { border: 1.5px solid rgba(238,235,211,0.3); color: var(--n); background: none; }
+
+.a-hero {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  min-height: 380px;
+}
+.a-hero-l {
+  padding: 56px 32px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  border-right: 1px solid rgba(238,235,211,0.1);
+}
+.a-hero-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--y); opacity: 0.7;
+  margin-bottom: 12px;
+}
+.a-hero-h1 {
+  font-size: 88px; font-weight: 900;
+  letter-spacing: -0.045em; line-height: 0.9;
+  color: var(--n); margin-bottom: 24px;
+}
+.a-hero-h1 span { color: var(--y); }
+.a-hero-sub { font-size: 15px; font-weight: 400; color: rgba(238,235,211,0.55); line-height: 1.6; max-width: 400px; margin-bottom: 32px; }
+.a-hero-r {
+  background: var(--y);
+  padding: 40px 32px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.a-camp-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(12,10,62,0.5); margin-bottom: 10px; }
+.a-camp-h { font-size: 52px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--nv); margin-bottom: 16px; }
+.a-camp-p { font-size: 13px; color: rgba(12,10,62,0.65); line-height: 0.96; margin-bottom: 24px; }
+.a-camp-btn { display: inline-block; background: var(--nv); color: var(--y); font-family: var(--f); font-size: 12px; font-weight: 700; padding: 10px 20px; letter-spacing: -0.02em; }
+
+.a-strip {
+  display: flex;
+  border-top: 1px solid rgba(238,235,211,0.1);
+}
+.a-strip-item {
+  flex: 1; padding: 28px 32px;
+  border-right: 1px solid rgba(238,235,211,0.1);
+}
+.a-strip-item:last-child { border-right: none; }
+.a-strip-num { font-size: 36px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--y); }
+.a-strip-label { font-size: 11px; color: rgba(238,235,211,0.4); margin-top: 4px; }
+
+.a-who {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid rgba(238,235,211,0.1);
+}
+.a-who-l { padding: 56px 32px; border-right: 1px solid rgba(238,235,211,0.1); }
+.a-who-r { background: var(--p); display: flex; align-items: flex-end; padding: 32px; }
+.a-section-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--y); opacity: 0.6; margin-bottom: 10px; }
+.a-section-h { font-size: 44px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--n); margin-bottom: 20px; }
+.a-who-l p { font-size: 14px; color: rgba(238,235,211,0.6); line-height: 1.65; margin-bottom: 12px; }
+.a-who-r-text { font-size: 22px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--nv); }
+
+.a-pet { padding: 56px 32px; border-top: 1px solid rgba(238,235,211,0.1); }
+.a-pet-row {
+  display: grid; grid-template-columns: 48px 1fr auto;
+  gap: 20px; align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(238,235,211,0.08);
+}
+.a-pet-n { font-size: 32px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: rgba(238,235,211,0.1); }
+.a-pet-t { font-size: 16px; font-weight: 700; letter-spacing: -0.03em; line-height: 0.9; color: var(--n); }
+.a-pet-c { font-size: 12px; color: var(--y); font-weight: 500; margin-top: 4px; }
+.a-pet-btn { background: var(--y); color: var(--nv); font-family: var(--f); font-size: 11px; font-weight: 700; padding: 8px 14px; }
+
+/* ══════════════════════════════════════
+   OPTION B — MAGAZINE / EDITORIAL GRID
+   NYT/Guardian vibes but feminist
+══════════════════════════════════════ */
+.b-root { background: var(--n); color: var(--nv); font-family: var(--f); }
+
+.b-header {
+  background: var(--nv);
+  padding: 12px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.b-logo { font-size: 20px; font-weight: 900; letter-spacing: -0.045em; color: var(--y); line-height: 0.9; }
+.b-nav-links { display: flex; gap: 20px; }
+.b-nav-links a { font-size: 11px; font-weight: 500; color: rgba(238,235,211,0.5); text-transform: uppercase; letter-spacing: 0.08em; }
+.b-ctas { display: flex; gap: 8px; }
+.b-btn-y { background: var(--y); color: var(--nv); font-family: var(--f); font-size: 11px; font-weight: 700; padding: 7px 16px; }
+.b-btn-o { border: 1.5px solid rgba(238,235,211,0.3); color: var(--n); background: none; font-family: var(--f); font-size: 11px; font-weight: 700; padding: 7px 16px; }
+
+.b-ticker {
+  background: var(--y);
+  padding: 8px 32px;
+  display: flex; gap: 32px;
+  overflow: hidden;
+}
+.b-ticker span { font-size: 11px; font-weight: 700; color: var(--nv); white-space: nowrap; letter-spacing: -0.01em; }
+.b-ticker span::before { content: '→ '; }
+
+.b-hero {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  border-bottom: 2px solid var(--nv);
+}
+.b-hero-main {
+  grid-column: span 2;
+  background: var(--nv);
+  padding: 56px 40px;
+  border-right: 2px solid var(--nv);
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.b-hero-main::before {
+  content: 'LEVEL UP';
+  position: absolute;
+  top: -20px; right: -10px;
+  font-size: 120px; font-weight: 900;
+  letter-spacing: -0.045em; line-height: 0.9;
+  color: rgba(204,255,51,0.05);
+  pointer-events: none;
+}
+.b-hero-tag2 { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--y); opacity: 0.7; margin-bottom: 8px; }
+.b-hero-h { font-size: 64px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--n); margin-bottom: 16px; }
+.b-hero-h em { font-style: normal; color: var(--y); }
+.b-hero-p { font-size: 14px; color: rgba(238,235,211,0.55); line-height: 1.6; max-width: 360px; margin-bottom: 28px; }
+.b-hero-side {
+  background: var(--p);
+  padding: 32px 28px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.b-side-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(12,10,62,0.55); margin-bottom: 8px; }
+.b-side-h { font-size: 36px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--nv); margin-bottom: 12px; }
+.b-side-p { font-size: 12px; color: rgba(12,10,62,0.65); line-height: 1.55; margin-bottom: 20px; }
+.b-side-btn { background: var(--nv); color: var(--y); font-family: var(--f); font-size: 11px; font-weight: 700; padding: 9px 16px; display: inline-block; }
+
+.b-3col {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  border-bottom: 1px solid rgba(12,10,62,0.15);
+}
+.b-col { padding: 32px; border-right: 1px solid rgba(12,10,62,0.12); }
+.b-col:last-child { border-right: none; }
+.b-col-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--nv); opacity: 0.4; margin-bottom: 8px; }
+.b-col-h { font-size: 20px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--nv); margin-bottom: 10px; }
+.b-col-p { font-size: 13px; color: rgba(12,10,62,0.6); line-height: 1.6; }
+.b-col-num { font-size: 40px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--y); margin: 0; display: inline-block; background: var(--nv); padding: 2px 10px; }
+.b-col-numlabel { font-size: 11px; color: rgba(12,10,62,0.5); margin-top: 4px; }
+
+.b-pet-strip { background: var(--nv); padding: 0 32px; }
+.b-pet-h { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--y); opacity: 0.6; padding: 20px 0 12px; border-bottom: 1px solid rgba(238,235,211,0.1); }
+.b-pet-row2 {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(238,235,211,0.07);
+}
+.b-pet-t2 { font-size: 14px; font-weight: 700; letter-spacing: -0.025em; color: var(--n); }
+.b-pet-c2 { font-size: 11px; color: var(--y); font-weight: 500; }
+.b-pet-btn2 { background: var(--y); color: var(--nv); font-family: var(--f); font-size: 10px; font-weight: 700; padding: 6px 12px; flex-shrink: 0; }
+
+/* ══════════════════════════════════════
+   OPTION C — BOLD MINIMALIST
+   Lots of white space, huge type, clean
+══════════════════════════════════════ */
+.c-root { background: var(--n); color: var(--nv); font-family: var(--f); }
+.c-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 40px;
+  background: var(--n);
+  border-bottom: 2px solid var(--nv);
+}
+.c-logo { font-size: 18px; font-weight: 900; letter-spacing: -0.045em; color: var(--nv); line-height: 0.9; }
+.c-logo span { color: var(--y); background: var(--nv); padding: 2px 6px; }
+.c-nav-links { display: flex; gap: 28px; }
+.c-nav-links a { font-size: 12px; font-weight: 500; color: rgba(12,10,62,0.5); letter-spacing: -0.01em; }
+.c-nav-ctas { display: flex; gap: 8px; }
+.c-btn-y { background: var(--y); color: var(--nv); font-family: var(--f); font-size: 12px; font-weight: 700; padding: 9px 20px; }
+.c-btn-n { background: var(--nv); color: var(--y); font-family: var(--f); font-size: 12px; font-weight: 700; padding: 9px 20px; }
+
+.c-hero { padding: 80px 40px 0; }
+.c-hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(12,10,62,0.4); margin-bottom: 16px; }
+.c-hero-h { font-size: 100px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--nv); margin-bottom: 8px; }
+.c-hero-h .accent { color: var(--nv); -webkit-text-stroke: 2px var(--nv); -webkit-text-fill-color: transparent; }
+.c-hero-rule { height: 4px; background: var(--nv); margin: 24px 0; }
+.c-hero-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding-bottom: 48px; }
+.c-hero-sub { font-size: 16px; color: rgba(12,10,62,0.6); line-height: 1.65; }
+.c-hero-camp { background: var(--nv); padding: 32px; }
+.c-camp-tag3 { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--y); opacity: 0.7; margin-bottom: 8px; }
+.c-camp-h3 { font-size: 40px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--y); margin-bottom: 12px; }
+.c-camp-p3 { font-size: 13px; color: rgba(238,235,211,0.55); line-height: 1.6; margin-bottom: 20px; }
+.c-camp-btn3 { background: var(--y); color: var(--nv); font-family: var(--f); font-size: 11px; font-weight: 700; padding: 9px 18px; display: inline-block; }
+
+.c-stats { display: grid; grid-template-columns: repeat(4,1fr); background: var(--nv); }
+.c-stat { padding: 32px; border-right: 1px solid rgba(238,235,211,0.08); }
+.c-stat:last-child { border-right: none; }
+.c-stat-n { font-size: 48px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--y); }
+.c-stat-l { font-size: 11px; color: rgba(238,235,211,0.4); margin-top: 6px; }
+
+.c-who3 { padding: 72px 40px; display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start; border-top: 1px solid rgba(12,10,62,0.12); }
+.c-who3-title { font-size: 52px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--nv); position: sticky; top: 20px; }
+.c-who3-title span { display: block; color: var(--y); background: var(--nv); padding: 2px 8px; width: fit-content; }
+.c-who3-content p { font-size: 15px; color: rgba(12,10,62,0.65); line-height: 1.65; margin-bottom: 16px; }
+.c-who3-content a { font-size: 12px; font-weight: 700; color: var(--nv); border-bottom: 2px solid var(--nv); padding-bottom: 1px; }
+
+.c-pet3 { background: var(--nv); padding: 72px 40px; }
+.c-pet3-h { font-size: 52px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--n); margin-bottom: 40px; }
+.c-pet3-h span { color: var(--y); }
+.c-pet3-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 20px 0; border-bottom: 1px solid rgba(238,235,211,0.08); }
+.c-pet3-t { font-size: 18px; font-weight: 700; letter-spacing: -0.03em; color: var(--n); }
+.c-pet3-right { display: flex; align-items: center; gap: 16px; }
+.c-pet3-count { font-size: 13px; color: var(--y); font-weight: 500; white-space: nowrap; }
+.c-pet3-btn { background: var(--y); color: var(--nv); font-family: var(--f); font-size: 11px; font-weight: 700; padding: 9px 16px; white-space: nowrap; }
+
+/* ══════════════════════════════════════
+   OPTION D — VIBRANT / PLAYFUL
+   Card-based, more color, dynamic
+══════════════════════════════════════ */
+.d-root { background: var(--nv); font-family: var(--f); }
+.d-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 28px; height: 56px;
+  background: var(--y);
+}
+.d-logo { font-size: 20px; font-weight: 900; letter-spacing: -0.045em; color: var(--nv); line-height: 0.9; }
+.d-nav-links { display: flex; gap: 20px; }
+.d-nav-links a { font-size: 12px; font-weight: 600; color: rgba(12,10,62,0.6); letter-spacing: -0.01em; }
+.d-ctas { display: flex; gap: 8px; }
+.d-btn-n { background: var(--nv); color: var(--y); font-family: var(--f); font-size: 12px; font-weight: 700; padding: 8px 18px; }
+.d-btn-o2 { border: 2px solid var(--nv); color: var(--nv); background: none; font-family: var(--f); font-size: 12px; font-weight: 700; padding: 8px 18px; }
+
+.d-hero { padding: 64px 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.d-hero-left {}
+.d-hero-tag { display: inline-block; background: var(--y); color: var(--nv); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; padding: 4px 10px; margin-bottom: 16px; }
+.d-hero-h { font-size: 72px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--n); margin-bottom: 20px; }
+.d-hero-h em { font-style: normal; -webkit-text-stroke: 2px var(--y); -webkit-text-fill-color: transparent; }
+.d-hero-p { font-size: 14px; color: rgba(238,235,211,0.55); line-height: 1.65; max-width: 360px; margin-bottom: 28px; }
+.d-hero-btns { display: flex; gap: 10px; }
+.d-btn-y2 { background: var(--y); color: var(--nv); font-family: var(--f); font-size: 12px; font-weight: 700; padding: 10px 20px; }
+.d-btn-oy2 { border: 2px solid var(--y); color: var(--y); background: none; font-family: var(--f); font-size: 12px; font-weight: 700; padding: 10px 20px; }
+
+.d-hero-right { display: flex; flex-direction: column; gap: 12px; }
+.d-camp-card { background: var(--y); padding: 32px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.d-camp-card2 { background: var(--p); padding: 32px; }
+.d-camp-tag4 { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(12,10,62,0.5); margin-bottom: 6px; }
+.d-camp-h4 { font-size: 32px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--nv); margin-bottom: 10px; }
+.d-camp-p4 { font-size: 12px; color: rgba(12,10,62,0.65); line-height: 1.5; margin-bottom: 16px; }
+.d-camp-btn4 { display: inline-block; background: var(--nv); color: var(--y); font-family: var(--f); font-size: 11px; font-weight: 700; padding: 8px 16px; align-self: flex-start; }
+.d-camp-btn5 { display: inline-block; background: var(--nv); color: var(--n); font-family: var(--f); font-size: 11px; font-weight: 700; padding: 8px 16px; }
+
+.d-petitions { padding: 0 28px 64px; }
+.d-pet-h { font-size: 40px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: var(--n); margin-bottom: 20px; }
+.d-pet-h span { color: var(--y); }
+.d-pet-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.d-pet-card { background: rgba(238,235,211,0.04); border: 1px solid rgba(238,235,211,0.1); padding: 24px; transition: border-color 0.2s; cursor: pointer; }
+.d-pet-card:hover { border-color: var(--y); }
+.d-pet-num2 { font-size: 48px; font-weight: 900; letter-spacing: -0.045em; line-height: 0.9; color: rgba(238,235,211,0.08); }
+.d-pet-title2 { font-size: 14px; font-weight: 700; letter-spacing: -0.025em; color: var(--n); margin-bottom: 8px; }
+.d-pet-count2 { font-size: 12px; color: var(--y); font-weight: 600; margin-bottom: 16px; }
+.d-pet-sign2 { font-size: 11px; font-weight: 700; color: var(--y); letter-spacing: 0.06em; }
+</style>
+
+<div class="root">
+  <div class="tabs">
+    <button class="tab active" onclick="show('a')">A — Brutal Editorial</button>
+    <button class="tab" onclick="show('b')">B — Magazine Grid</button>
+    <button class="tab" onclick="show('c')">C — Bold Minimalist</button>
+    <button class="tab" onclick="show('d')">D — Vibrant Cards</button>
+  </div>
+
+  <!-- ═══ OPTION A ═══ -->
+  <div id="des-a" class="design active">
+  <div class="a-root">
+    <div class="a-nav">
+      <div class="a-nav-logo">Level Up</div>
+      <div class="a-nav-links">
+        <a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Community</a><a href="#">Contact</a>
+      </div>
+      <div class="a-nav-ctas">
+        <button class="a-btn a-btn-y">Donate</button>
+        <button class="a-btn a-btn-o">Join Us</button>
+      </div>
+    </div>
+    <div class="a-hero">
+      <div class="a-hero-l">
+        <div class="a-hero-tag">Feminist community · UK</div>
+        <h1 class="a-hero-h1">We are<br/><span>Level</span><br/>Up</h1>
+        <p class="a-hero-sub">A feminist community campaigning for gender justice in the UK — fighting for a world where people of all genders are loved and liberated.</p>
+        <div style="display:flex;gap:10px;">
+          <button class="a-btn a-btn-y">Who we are</button>
+          <button class="a-btn a-btn-o">Our campaigns</button>
+        </div>
+      </div>
+      <div class="a-hero-r">
+        <div class="a-camp-tag">Active Campaign</div>
+        <h2 class="a-camp-h">#No<br/>More<br/>Lyes</h2>
+        <p class="a-camp-p">Big beauty brands like L'Oréal must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health.</p>
+        <button class="a-camp-btn">Sign the petition →</button>
+      </div>
+    </div>
+    <div class="a-strip">
+      <div class="a-strip-item"><div class="a-strip-num">29.2K</div><div class="a-strip-label">Dignity for Dead Women</div></div>
+      <div class="a-strip-item"><div class="a-strip-num">13.1K</div><div class="a-strip-label">Pregnancy in Prison</div></div>
+      <div class="a-strip-item"><div class="a-strip-num">6.4K</div><div class="a-strip-label">#NoMoreLyes</div></div>
+      <div class="a-strip-item"><div class="a-strip-num">6.1K</div><div class="a-strip-label">Abortion is Healthcare</div></div>
+    </div>
+    <div class="a-who">
+      <div class="a-who-l">
+        <div class="a-section-tag">About us</div>
+        <h2 class="a-section-h">Who<br/>We Are</h2>
+        <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — like flying a plane banner over a football match to break the silence around rape in sports.</p>
+        <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+      </div>
+      <div class="a-who-r">
+        <div class="a-who-r-text">Building a world where everyone is loved &amp; liberated</div>
+      </div>
+    </div>
+    <div class="a-pet">
+      <div class="a-section-tag">Take action</div>
+      <h2 class="a-section-h" style="margin-bottom:28px;">Sign Our Petitions</h2>
+      <div class="a-pet-row"><div class="a-pet-n">01</div><div><div class="a-pet-t">#NoMoreLyes — Take toxic hair relaxers off the shelves</div><div class="a-pet-c">6,400 supporters</div></div><button class="a-pet-btn">Sign now</button></div>
+      <div class="a-pet-row"><div class="a-pet-n">02</div><div><div class="a-pet-t">Stop sending pregnant women to prison</div><div class="a-pet-c">13,100 supporters</div></div><button class="a-pet-btn">Sign now</button></div>
+      <div class="a-pet-row"><div class="a-pet-n">03</div><div><div class="a-pet-t">Abortion is Healthcare</div><div class="a-pet-c">6,100 supporters</div></div><button class="a-pet-btn">Sign now</button></div>
+      <div class="a-pet-row"><div class="a-pet-n">04</div><div><div class="a-pet-t">IPSO: Dignity for Dead Women</div><div class="a-pet-c">29,200 supporters</div></div><button class="a-pet-btn">Sign now</button></div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ═══ OPTION B ═══ -->
+  <div id="des-b" class="design">
+  <div class="b-root">
+    <div class="b-header">
+      <div class="b-logo">Level Up</div>
+      <div class="b-nav-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Community</a></div>
+      <div class="b-ctas"><button class="b-btn-y">Donate</button><button class="b-btn-o">Join Us</button></div>
+    </div>
+    <div class="b-ticker">
+      <span>#NoMoreLyes — 6,400 supporters</span>
+      <span>Pregnancy in Prison — 13,100 supporters</span>
+      <span>Dignity for Dead Women — 29,200 supporters</span>
+      <span>Abortion is Healthcare — 6,100 supporters</span>
+    </div>
+    <div class="b-hero">
+      <div class="b-hero-main">
+        <div class="b-hero-tag2">Feminist community · Gender justice UK</div>
+        <h1 class="b-hero-h">We are<br/><em>Level Up</em></h1>
+        <p class="b-hero-p">A feminist community campaigning for gender justice in the UK, fighting for a world where people of all genders are loved and liberated from violence.</p>
+        <div style="display:flex;gap:10px;"><button class="b-btn-y" style="font-size:13px;padding:10px 22px;">Who we are</button><button class="b-btn-o" style="font-size:13px;padding:10px 22px;">Our campaigns</button></div>
+      </div>
+      <div class="b-hero-side">
+        <div>
+          <div class="b-side-label">Active Campaign</div>
+          <h2 class="b-side-h">#No<br/>More<br/>Lyes</h2>
+          <p class="b-side-p">Big beauty brands must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health.</p>
+          <button class="b-side-btn">Sign the petition →</button>
+        </div>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(12,10,62,0.15);">
+          <div class="b-side-label" style="margin-bottom:6px;">Also active</div>
+          <div style="font-size:13px;font-weight:700;letter-spacing:-0.025em;color:var(--nv);margin-bottom:4px;">Pregnancy in Prison</div>
+          <div style="font-size:13px;font-weight:700;letter-spacing:-0.025em;color:var(--nv);">Abortion is Healthcare</div>
+        </div>
+      </div>
+    </div>
+    <div class="b-3col">
+      <div class="b-col">
+        <div class="b-col-tag">Supporters</div>
+        <div class="b-col-num">29.2K</div>
+        <div class="b-col-numlabel">Dignity for Dead Women</div>
+      </div>
+      <div class="b-col">
+        <div class="b-col-tag">Who we are</div>
+        <h3 class="b-col-h">Digital tools for gender justice</h3>
+        <p class="b-col-p">We create campaigns that interrupt cultural moments — from plane banners over football matches to the UK's first media guidelines on domestic abuse reporting.</p>
+      </div>
+      <div class="b-col">
+        <div class="b-col-tag">Community</div>
+        <h3 class="b-col-h">Monthly workshops on bystander intervention</h3>
+        <p class="b-col-p">We Protect Us — free online sessions on how to intervene safely and effectively when witnessing violence or harassment.</p>
+      </div>
+    </div>
+    <div class="b-pet-strip">
+      <div class="b-pet-h">Sign Our Petitions</div>
+      <div class="b-pet-row2"><div><div class="b-pet-t2">#NoMoreLyes — Toxic hair relaxers off the shelves</div><div class="b-pet-c2">6,400 supporters</div></div><button class="b-pet-btn2">Sign now</button></div>
+      <div class="b-pet-row2"><div><div class="b-pet-t2">Stop sending pregnant women to prison</div><div class="b-pet-c2">13,100 supporters</div></div><button class="b-pet-btn2">Sign now</button></div>
+      <div class="b-pet-row2"><div><div class="b-pet-t2">Abortion is Healthcare</div><div class="b-pet-c2">6,100 supporters</div></div><button class="b-pet-btn2">Sign now</button></div>
+      <div class="b-pet-row2"><div><div class="b-pet-t2">IPSO: Dignity for Dead Women</div><div class="b-pet-c2">29,200 supporters</div></div><button class="b-pet-btn2">Sign now</button></div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ═══ OPTION C ═══ -->
+  <div id="des-c" class="design">
+  <div class="c-root">
+    <div class="c-header">
+      <div class="c-logo">Level<span>Up</span></div>
+      <div class="c-nav-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Resources</a><a href="#">Blog</a><a href="#">Contact</a></div>
+      <div class="c-nav-ctas"><button class="c-btn-y">Donate</button><button class="c-btn-n">Join Us</button></div>
+    </div>
+    <div class="c-hero">
+      <div class="c-hero-eyebrow">Feminist community campaigning for gender justice in the UK</div>
+      <h1 class="c-hero-h">We<br/>Level<br/><span class="accent">Up</span></h1>
+      <div class="c-hero-rule"></div>
+      <div class="c-hero-bottom">
+        <p class="c-hero-sub">We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — fighting for a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+        <div class="c-hero-camp">
+          <div class="c-camp-tag3">Active Campaign</div>
+          <h2 class="c-camp-h3">#NoMoreLyes</h2>
+          <p class="c-camp-p3">Big beauty brands must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health.</p>
+          <button class="c-camp-btn3">Sign the petition →</button>
+        </div>
+      </div>
+    </div>
+    <div class="c-stats">
+      <div class="c-stat"><div class="c-stat-n">29.2K</div><div class="c-stat-l">Dignity for Dead Women</div></div>
+      <div class="c-stat"><div class="c-stat-n">13.1K</div><div class="c-stat-l">Pregnancy in Prison</div></div>
+      <div class="c-stat"><div class="c-stat-n">6.4K</div><div class="c-stat-l">#NoMoreLyes</div></div>
+      <div class="c-stat"><div class="c-stat-n">6.1K</div><div class="c-stat-l">Abortion is Healthcare</div></div>
+    </div>
+    <div class="c-who3">
+      <div class="c-who3-title">Who<br/>We<br/><span>Are</span></div>
+      <div class="c-who3-content">
+        <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths.</p>
+        <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through monthly workshops on bystander intervention and intervening in police violence.</p>
+        <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+        <a href="#">Learn more about us →</a>
+      </div>
+    </div>
+    <div class="c-pet3">
+      <h2 class="c-pet3-h">Sign Our <span>Petitions</span></h2>
+      <div class="c-pet3-row"><div class="c-pet3-t">#NoMoreLyes — Toxic hair relaxers off the shelves</div><div class="c-pet3-right"><div class="c-pet3-count">6,400 supporters</div><button class="c-pet3-btn">Sign now</button></div></div>
+      <div class="c-pet3-row"><div class="c-pet3-t">Stop sending pregnant women to prison</div><div class="c-pet3-right"><div class="c-pet3-count">13,100 supporters</div><button class="c-pet3-btn">Sign now</button></div></div>
+      <div class="c-pet3-row"><div class="c-pet3-t">Abortion is Healthcare</div><div class="c-pet3-right"><div class="c-pet3-count">6,100 supporters</div><button class="c-pet3-btn">Sign now</button></div></div>
+      <div class="c-pet3-row"><div class="c-pet3-t">IPSO: Dignity for Dead Women</div><div class="c-pet3-right"><div class="c-pet3-count">29,200 supporters</div><button class="c-pet3-btn">Sign now</button></div></div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ═══ OPTION D ═══ -->
+  <div id="des-d" class="design">
+  <div class="d-root">
+    <div class="d-header">
+      <div class="d-logo">Level Up</div>
+      <div class="d-nav-links"><a href="#">About</a><a href="#">Campaigns</a><a href="#">Blog</a><a href="#">Community</a></div>
+      <div class="d-ctas"><button class="d-btn-n">Donate</button><button class="d-btn-o2">Join Us</button></div>
+    </div>
+    <div class="d-hero">
+      <div class="d-hero-left">
+        <div class="d-hero-tag">Feminist community · Gender justice UK</div>
+        <h1 class="d-hero-h">We are<br/><em>Level</em><br/><em>Up</em></h1>
+        <p class="d-hero-p">A feminist community campaigning for gender justice in the UK — fighting for a world where people of all genders are loved and liberated from bodily and systemic violence.</p>
+        <div class="d-hero-btns">
+          <button class="d-btn-y2">Who we are</button>
+          <button class="d-btn-oy2">Our campaigns</button>
+        </div>
+      </div>
+      <div class="d-hero-right">
+        <div class="d-camp-card">
+          <div>
+            <div class="d-camp-tag4">Active Campaign</div>
+            <h2 class="d-camp-h4">#No More<br/>Lyes</h2>
+            <p class="d-camp-p4">Big beauty brands must remove toxic ingredients from hair relaxers. The price of Black women's beauty should never be our health.</p>
+          </div>
+          <button class="d-camp-btn4">Sign the petition →</button>
+        </div>
+        <div class="d-camp-card2">
+          <div class="d-camp-tag4" style="color:rgba(12,10,62,0.5);">Also active</div>
+          <h3 class="d-camp-h4" style="font-size:24px;color:var(--nv);">Pregnancy in Prison</h3>
+          <p class="d-camp-p4" style="font-size:11px;margin-bottom:14px;">13,100 supporters — 2.8K this month</p>
+          <button class="d-camp-btn5">Sign now →</button>
+        </div>
+      </div>
+    </div>
+    <div class="d-petitions">
+      <h2 class="d-pet-h">Sign Our <span>Petitions</span></h2>
+      <div class="d-pet-grid">
+        <div class="d-pet-card"><div class="d-pet-num2">01</div><div class="d-pet-title2">#NoMoreLyes</div><div class="d-pet-count2">6,400 supporters</div><div class="d-pet-sign2">Sign now →</div></div>
+        <div class="d-pet-card"><div class="d-pet-num2">02</div><div class="d-pet-title2">Stop sending pregnant women to prison</div><div class="d-pet-count2">13,100 supporters</div><div class="d-pet-sign2">Sign now →</div></div>
+        <div class="d-pet-card"><div class="d-pet-num2">03</div><div class="d-pet-title2">Abortion is Healthcare</div><div class="d-pet-count2">6,100 supporters</div><div class="d-pet-sign2">Sign now →</div></div>
+        <div class="d-pet-card"><div class="d-pet-num2">04</div><div class="d-pet-title2">IPSO: Dignity for Dead Women</div><div class="d-pet-count2">29,200 supporters</div><div class="d-pet-sign2">Sign now →</div></div>
+        <div class="d-pet-card"><div class="d-pet-num2">05</div><div class="d-pet-title2">Sexual violence in football</div><div class="d-pet-count2">4,300 supporters</div><div class="d-pet-sign2">Sign now →</div></div>
+        <div class="d-pet-card" style="border-color:var(--y);background:rgba(204,255,51,0.04);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;"><div style="font-size:14px;font-weight:700;color:var(--y);letter-spacing:-0.02em;">See all campaigns</div><div style="font-size:24px;color:var(--y);margin-top:4px;">→</div></div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.design').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('des-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

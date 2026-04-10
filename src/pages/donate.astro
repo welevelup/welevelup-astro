@@ -1,0 +1,520 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Support Level Up | Donate to Feminist Campaigns in the UK"
+  description="Support Level Up's feminist campaigns in the UK. Your donation powers work on reproductive justice, abortion decriminalisation, ending imprisonment of pregnant women and challenging systemic violence."
+>
+
+  <!-- Hero Banner -->
+  <section class="donate-hero" id="sub-page-hero-banner">
+    <div class="donate-hero__inner">
+      <h1 class="donate-hero__title">Support Level Up's Feminist Campaigns</h1>
+    </div>
+  </section>
+
+  <!-- Intro / Description -->
+  <section class="donate-intro">
+    <div class="donate-intro__inner">
+      <div class="donate-intro__spacer"></div>
+
+      <p class="donate-intro__text">
+        Level Up is a UK-based feminist campaigning organisation working to advance reproductive
+        justice, abortion decriminalisation and freedom from systemic violence. We build
+        people-powered movements that challenge institutions, shift culture and win material change.
+      </p>
+
+      <div class="donate-intro__helps">
+        <p><strong>Your donation helps us:</strong></p>
+        <p><a href="/campaigns/abortion-is-healthcare">Campaign to fully decriminalise abortion in Britain</a></p>
+        <p><a href="/campaigns/pregnancy-in-prison">End the imprisonment of pregnant women</a></p>
+        <p><a href="/media-guidelines">Challenge media narratives that blame victims</a></p>
+        <p><a href="/campaigns/sexual-violence-football">Challenge sexism and sexual violence in football</a></p>
+        <p><a href="/campaigns/no-more-lyes">Hold beauty corporations accountable for selling harmful products to Black women</a></p>
+        <p><a href="/campaigns/we-protect-us">Train communities to intervene in violence</a></p>
+      </div>
+
+      <p class="donate-intro__closing">
+        When you donate, you're not just giving money — you're strengthening a feminist community
+        in the UK committed to collective liberation.
+      </p>
+    </div>
+  </section>
+
+  <!-- Donation Form Embed -->
+  <section class="donate-form-section">
+    <div class="donate-form-section__inner">
+      <div class="donate-form-embed">
+        <p class="donate-form-embed__cta">
+          To donate, please visit&nbsp;<a
+            href="https://welevelup.org/donate/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="donate-form-embed__link"
+          >welevelup.org/donate</a>
+        </p>
+        <a
+          href="https://welevelup.org/donate/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="donate-form-embed__button"
+        >Donate now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Impact: heading + first item (text + image side by side) -->
+  <section class="donate-impact-section">
+    <!-- "Supported by people like you" heading -->
+    <div class="donate-impact-heading-wrap">
+      <div class="donate-impact-heading-inner">
+        <h2 class="donate-impact-heading">Supported by people like you, Level Up has…</h2>
+      </div>
+    </div>
+
+    <!-- First impact: text left, image right -->
+    <div class="donate-impact-row">
+      <div class="donate-impact-row__inner">
+        <div class="donate-impact-row__text-col">
+          <p class="donate-impact-row__text">
+            Changed sentencing policy to prevent pregnant women going to prison
+          </p>
+          <div class="donate-impact-row__divider"></div>
+        </div>
+        <div class="donate-impact-row__image-col">
+          <img
+            src="https://welevelup.org/wp-content/uploads/2025/08/FREEBABIES3-1-scaled-1-1024x683.webp"
+            alt="Free Babies campaign — Level Up campaigning to end imprisonment of pregnant women"
+            width="800"
+            height="534"
+            loading="lazy"
+            class="donate-impact-row__image"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Three-column impact grid -->
+    <div class="donate-impact-grid-section">
+      <div class="donate-impact-grid">
+        <div class="donate-impact-grid__item">
+          <h2 class="donate-impact-grid__heading">Pushed the Premier League to issue consent training</h2>
+          <img
+            src="https://welevelup.org/wp-content/uploads/2025/08/FootbALL-1-e1771974200995.webp"
+            alt="Football campaign — challenging sexual violence in football"
+            width="437"
+            height="341"
+            loading="lazy"
+            class="donate-impact-grid__image"
+          />
+        </div>
+
+        <div class="donate-impact-grid__item">
+          <h2 class="donate-impact-grid__heading">Changed how the media reports on domestic homicide</h2>
+          <img
+            src="https://welevelup.org/wp-content/uploads/2025/09/we-protect-us-1.webp"
+            alt="We Protect Us — media guidelines campaign"
+            width="510"
+            height="385"
+            loading="lazy"
+            class="donate-impact-grid__image"
+          />
+        </div>
+
+        <div class="donate-impact-grid__item">
+          <h2 class="donate-impact-grid__heading">Trained 413 people in bystander intervention</h2>
+          <img
+            src="https://welevelup.org/wp-content/uploads/2025/09/we-protect-us-2.webp"
+            alt="We Protect Us — bystander intervention training"
+            width="510"
+            height="385"
+            loading="lazy"
+            class="donate-impact-grid__image"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  /* ──────────────────────────────────────────────
+     Hero Banner
+     background-color: var(--e-global-color-primary) → #0D0A3E (navy)
+     background-image: image-5.webp
+     min-height: 500px; padding: 1.8em 0
+  ────────────────────────────────────────────── */
+  .donate-hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 0;
+    background-color: #0D0A3E;
+    background-image: url('https://welevelup.org/wp-content/uploads/2026/01/image-5.webp');
+    background-size: cover;
+    background-position: center;
+    min-height: 500px;
+  }
+
+  .donate-hero__inner {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  /* font-size: 3vw; font-weight: 700; text-transform: uppercase; color: white */
+  .donate-hero__title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-align: center;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  /* ──────────────────────────────────────────────
+     Intro Section
+     background-color: var(--e-global-color-40971d2) → white (#ffffff)
+     text-align: center; color: #0D0A3E
+  ────────────────────────────────────────────── */
+  .donate-intro {
+    background-color: #ffffff;
+  }
+
+  .donate-intro__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .donate-intro__spacer {
+    height: 20px; /* --spacer-size: 20px */
+  }
+
+  .donate-intro__text {
+    text-align: center;
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #0D0A3E;
+    padding-bottom: 1rem;
+    margin: 0;
+  }
+
+  .donate-intro__helps {
+    text-align: center;
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #0D0A3E;
+    padding-bottom: 1rem;
+  }
+
+  .donate-intro__helps p {
+    margin: 0 0 0.35rem 0;
+  }
+
+  /* links: color: var(--e-global-color-53b0ae4) → #0D0A3E (navy) with underline */
+  .donate-intro__helps a,
+  .donate-intro__text a {
+    color: #0D0A3E;
+    text-decoration: underline;
+  }
+
+  .donate-intro__helps a:hover,
+  .donate-intro__text a:hover {
+    opacity: 0.7;
+  }
+
+  .donate-intro__closing {
+    text-align: center;
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #0D0A3E;
+    padding-bottom: 1rem;
+    margin: 0;
+  }
+
+  /* ──────────────────────────────────────────────
+     Donation Form Section
+     GiveWP embed placeholder — styled to match
+     the primary/secondary colors from the embed:
+     --givewp-primary-color: #0b72d9
+  ────────────────────────────────────────────── */
+  .donate-form-section {
+    padding: 2rem 0;
+    background-color: #ffffff;
+  }
+
+  .donate-form-section__inner {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .donate-form-embed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    border: 2px solid #0b72d9;
+    border-radius: 5px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+  }
+
+  .donate-form-embed__cta {
+    font-family: "DM Sans", sans-serif;
+    font-size: 1.05rem;
+    color: #0D0A3E;
+    margin: 0;
+  }
+
+  .donate-form-embed__link {
+    color: #0b72d9;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  /* givewp button: background: var(--givewp-primary-color, #0b72d9) */
+  .donate-form-embed__button {
+    display: inline-block;
+    background-color: #0b72d9;
+    color: #ffffff;
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    padding: 0.75rem 1.25rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  .donate-form-embed__button:hover {
+    background-color: color-mix(in srgb, #0b72d9, #000 20%);
+  }
+
+  /* ──────────────────────────────────────────────
+     Impact Section wrapper
+     background-color: var(--e-global-color-40971d2) → white (#ffffff)
+  ────────────────────────────────────────────── */
+  .donate-impact-section {
+    background-color: #ffffff;
+  }
+
+  /* Heading row: padding-top/bottom: 1rem */
+  .donate-impact-heading-wrap {
+    background-color: #ffffff;
+    padding: 1rem 0;
+  }
+
+  .donate-impact-heading-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* font-family: "Montserrat"; font-size: 18px; font-weight: 700; line-height: 24px */
+  .donate-impact-heading {
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 24px;
+    text-align: center;
+    color: #0D0A3E;
+    margin: 0;
+  }
+
+  /* ── First impact row: text + image ── */
+  .donate-impact-row {
+    background-color: #ffffff;
+  }
+
+  .donate-impact-row__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    gap: 10px; /* --gap: 010px 010px */
+    align-items: flex-start;
+  }
+
+  .donate-impact-row__text-col {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* text-align: center; color: #0D0A3E; padding-bottom: 1rem */
+  .donate-impact-row__text {
+    font-family: "DM Sans", sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #0D0A3E;
+    text-align: center;
+    padding-bottom: 1rem;
+    margin: 0;
+  }
+
+  /* divider: --divider-border-style:solid; --divider-color:#000; --divider-border-width:3.2px
+     width: 48px; margin: 0 auto; padding-block: 2px */
+  .donate-impact-row__divider {
+    width: 48px;
+    height: 3.2px;
+    background-color: #000;
+    margin: 2px auto;
+  }
+
+  .donate-impact-row__image-col {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* width: 55% (desktop default from CSS) */
+  .donate-impact-row__image {
+    width: 55%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── Three-column impact grid ── */
+  .donate-impact-grid-section {
+    background-color: #ffffff;
+  }
+
+  /* --e-con-grid-template-columns: repeat(3, 1fr)
+     --padding-top: 02rem; --padding-bottom: 3.5rem */
+  .donate-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center;
+    align-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2rem 3.5rem;
+    gap: 0;
+  }
+
+  /* --display: flex; --justify-content: space-between */
+  .donate-impact-grid__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+  }
+
+  /* font-family: "Montserrat"; font-size: 18px; font-weight: 400;
+     text-transform: uppercase; line-height: 24px */
+  .donate-impact-grid__heading {
+    font-family: "Montserrat", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 24px;
+    text-align: center;
+    color: #0D0A3E;
+    margin: 0 0 1rem 0;
+  }
+
+  .donate-impact-grid__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ──────────────────────────────────────────────
+     Responsive — tablet (max-width: 1024px)
+  ────────────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .donate-hero {
+      padding: 3.5rem 0;
+    }
+
+    .donate-hero__title {
+      font-size: 2.5vw;
+    }
+
+    /* --padding-left: 4rem; --padding-right: 4rem */
+    .donate-intro__inner {
+      padding: 0 4rem;
+      max-width: 100%;
+    }
+
+    .donate-impact-heading-inner,
+    .donate-impact-row__inner {
+      padding: 0 4rem;
+      max-width: 100%;
+    }
+
+    .donate-impact-grid {
+      padding: 2rem 4rem 3.5rem;
+      max-width: 100%;
+    }
+
+    /* width: 60% on tablet */
+    .donate-impact-row__image {
+      width: 60%;
+    }
+  }
+
+  /* ──────────────────────────────────────────────
+     Responsive — mobile (max-width: 767px)
+  ────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    /* font-size: 7vw on mobile */
+    .donate-hero__title {
+      font-size: 7vw;
+    }
+
+    /* --padding-left: 2rem; --padding-right: 2rem */
+    .donate-intro__inner {
+      padding: 0 2rem;
+      max-width: 100%;
+    }
+
+    .donate-impact-heading-inner,
+    .donate-impact-row__inner {
+      padding: 0 2rem;
+      max-width: 100%;
+    }
+
+    .donate-impact-row__inner {
+      flex-direction: column;
+    }
+
+    /* width: 100% on mobile */
+    .donate-impact-row__image {
+      width: 100%;
+    }
+
+    /* --e-con-grid-template-columns: repeat(1, 1fr) on mobile */
+    .donate-impact-grid {
+      grid-template-columns: repeat(1, 1fr);
+      padding: 2rem 2rem 3.5rem;
+      max-width: 100%;
+    }
+
+    .donate-impact-grid__item {
+      margin-bottom: 2rem;
+    }
+  }
+</style>

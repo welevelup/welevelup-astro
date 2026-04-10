@@ -1,0 +1,324 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Dignity for Dead Women Resources | Level Up" description="Level Up's Dignity for Dead Women media guidelines — the UK's first guidelines on reporting domestic abuse deaths, endorsed by IPSO and IMPRESS.">
+
+  <!-- Hero Banner -->
+  <section id="sub-page-hero-banner" class="hero-banner">
+    <div class="hero-inner">
+      <h2 class="hero-title visually-hidden">DDW Resources</h2>
+    </div>
+  </section>
+
+  <!-- Campaign Info Section -->
+  <section class="campaign-section">
+    <div class="container">
+      <div class="campaign-layout">
+        <div class="campaign-image">
+          <img src="https://welevelup.org/wp-content/uploads/2025/08/result-1-1.webp" alt="Dignity for Dead Women" width="720" height="405" />
+        </div>
+        <div class="campaign-content">
+          <h2 class="campaign-heading">DIGNITY FOR DEAD WOMEN</h2>
+          <div class="campaign-body">
+            <p>In consultation with a coalition of domestic violence experts and victims' families, Level Up produced the UK's first media guidelines on how to report domestic abuse deaths. They are endorsed by both press regulators IPSO and IMPRESS.</p>
+            <p>Level Up has trained over 500 journalists in how to report fatal domestic abuse, using our guidelines and a four-point acronym AIDA (Accountability, Images, Dignity, Accuracy).</p>
+            <p>If you are interested in booking a CPD-accredited training for yourself or your newsroom, please contact <em><a href="mailto:mediasupport@welevelup.org">mediasupport@welevelup.org</a></em></p>
+            <p>Working with victims' families, Level Up produced research into the impact of media reporting on families' bereavement in the aftermath of a domestic abuse death. The majority of families who participated said their grieving process was negatively impacted by media reporting.</p>
+          </div>
+          <a href="/petition/dignity-for-dead-women/" class="btn-petition" target="_blank" rel="noopener">SIGN THE PETITION</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resources Grid -->
+  <section class="resources-section">
+    <div class="container">
+      <div class="resources-grid">
+
+        <article class="resource-card">
+          <div class="card-body">
+            <h3 class="card-title"><a href="https://welevelup.org/wp-content/uploads/2025/08/Final-LU-AAFDA-families-report.pdf" target="_blank" rel="noopener">Families report</a></h3>
+            <p class="card-meta">Level Up</p>
+            <p class="card-meta">2020</p>
+          </div>
+        </article>
+
+        <article class="resource-card">
+          <a href="https://welevelup.org/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" target="_blank" rel="noopener" class="card-image-link">
+            <img src="https://welevelup.org/wp-content/uploads/2025/07/19-720x540-1.jpg" alt="Media Guidelines cover" />
+          </a>
+          <div class="card-body">
+            <h3 class="card-title"><a href="https://welevelup.org/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" target="_blank" rel="noopener">Media Guidelines</a></h3>
+            <p class="card-meta">Level Up</p>
+            <p class="card-meta">2022</p>
+          </div>
+        </article>
+
+        <article class="resource-card">
+          <a href="https://onlinelibrary.wiley.com/doi/10.1111/newe.12336" target="_blank" rel="noopener" class="card-image-link">
+            <img src="https://welevelup.org/wp-content/uploads/2024/04/Screenshot-2024-04-03-at-16.34.22.png" alt="Dignity for dead women journal article" />
+          </a>
+          <div class="card-body">
+            <h3 class="card-title"><a href="https://onlinelibrary.wiley.com/doi/10.1111/newe.12336" target="_blank" rel="noopener">Dignity for dead women</a></h3>
+            <p class="card-meta">Janey Starling, Jade Hammond</p>
+            <p class="card-meta">06 April 2023</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+</Layout>
+
+<style>
+  :root {
+    --navy: #0D0A3E;
+    --lime: #CBFF32;
+    --cream: #EDEBD2;
+    --white: #FFFFFF;
+  }
+
+  .hero-banner {
+    min-height: 500px;
+    background-color: var(--navy);
+    background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SWA-LD030-1.webp');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 0;
+  }
+
+  .hero-inner {
+    max-width: 1130px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .container {
+    max-width: 1130px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .campaign-section {
+    background-color: var(--cream);
+    padding: 5rem 0;
+  }
+
+  .campaign-layout {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 40px;
+    align-items: stretch;
+    flex-wrap: wrap-reverse;
+  }
+
+  .campaign-image {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .campaign-image img {
+    width: 100%;
+    height: 334px;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  .campaign-content {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .campaign-heading {
+    font-family: 'blogh', 'DM Sans', sans-serif;
+    font-weight: 800;
+    line-height: 1em;
+    color: var(--navy);
+    margin: 0;
+    text-align: start;
+  }
+
+  .campaign-body {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--navy);
+  }
+
+  .campaign-body p {
+    margin: 0 0 1em;
+  }
+
+  .campaign-body a {
+    color: var(--navy);
+  }
+
+  .btn-petition {
+    display: inline-block;
+    font-family: monospace, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    padding: 10px 12px;
+    background-color: var(--lime);
+    color: var(--navy);
+    text-decoration: none;
+    transition: color 0.2s;
+    align-self: flex-start;
+  }
+
+  .btn-petition:hover,
+  .btn-petition:focus {
+    color: var(--cream);
+  }
+
+  .resources-section {
+    padding: 5rem 0;
+    background-color: var(--cream);
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .resource-card {
+    background-color: var(--white);
+    border: 1px solid #e0e0e0;
+    transition: all 200ms ease-in-out;
+    overflow: hidden;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+  }
+
+  .resource-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  }
+
+  .card-image-link {
+    display: block;
+  }
+
+  .card-image-link img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    object-position: center center;
+    display: block;
+  }
+
+  .card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .card-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 22px;
+    margin: 0 0 6px;
+  }
+
+  .card-title a {
+    color: var(--navy);
+    text-decoration: none;
+  }
+
+  .card-title a:hover {
+    text-decoration: underline;
+  }
+
+  .card-meta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--navy);
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .hero-banner {
+      padding: 3.5em 0;
+    }
+
+    .campaign-layout {
+      flex-direction: column;
+      flex-wrap: wrap;
+    }
+
+    .campaign-image {
+      width: 100%;
+      align-self: center;
+    }
+
+    .resources-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 767px) {
+    .hero-banner {
+      padding: 3.5em 0;
+    }
+
+    .campaign-section {
+      padding: 2rem 0;
+    }
+
+    .campaign-image img {
+      width: 100%;
+      height: auto;
+    }
+
+    .resources-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .campaign-image {
+      max-width: 80%;
+    }
+  }
+
+  @media (max-width: 1024px) and (min-width: 768px) {
+    .campaign-image {
+      max-width: 100%;
+    }
+  }
+</style>

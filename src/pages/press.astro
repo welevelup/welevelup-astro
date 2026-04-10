@@ -1,0 +1,1472 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Level Up Press Coverage | Feminist Campaigning in the UK"
+  description="Explore media coverage of Level Up, a UK-based feminist campaigning organisation working on reproductive justice, abortion decriminalisation and gender justice."
+>
+
+<!-- Hero Banner -->
+<section id="sub-page-hero-banner">
+  <div class="hero-inner">
+    <h2 class="page-title">Press Coverage | Level Up UK</h2>
+  </div>
+</section>
+
+<style>
+  /* ── Hero ───────────────────────────────────────────── */
+  #sub-page-hero-banner {
+    background-color: #0C0A3E;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.8em 0;
+  }
+
+  .hero-inner {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .page-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #ffffff;
+    text-align: center;
+    margin: 0;
+  }
+
+  @media (max-width: 1024px) {
+    #sub-page-hero-banner {
+      padding: 3.5rem 0;
+    }
+    .page-title {
+      font-size: 2.5vw;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .page-title {
+      font-size: 7vw;
+    }
+  }
+
+  /* ── Page Container ─────────────────────────────────── */
+  .page-container {
+    font-family: 'DM Sans', sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .page-container * {
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── Filter Buttons ─────────────────────────────────── */
+  .filter-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+
+  .filter-buttons button {
+    padding: 10px 16px;
+    background: transparent;
+    border: 1px solid #0C0A3E;
+    border-radius: 0;
+    color: #0C0A3E;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+  }
+
+  .filter-buttons button.active,
+  .filter-buttons button:hover {
+    background: #0C0A3E;
+    color: #fff;
+  }
+
+  /* ── Grid ───────────────────────────────────────────── */
+  .press-posts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+
+  /* ── Cards ──────────────────────────────────────────── */
+  .press-post {
+    position: relative;
+    height: 380px;
+    border-radius: 18px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    transition: transform 0.32s ease, box-shadow 0.32s ease;
+    text-decoration: none;
+  }
+
+  .press-post:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+  }
+
+  .press-post::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(12, 10, 62, 0.30) 0%,
+      rgba(12, 10, 62, 0.16) 45%,
+      rgba(0, 0, 0, 0.04) 100%
+    );
+    z-index: 1;
+  }
+
+  .press-post a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    text-decoration: none;
+    color: #fff;
+    position: relative;
+    z-index: 2;
+  }
+
+  .press-overlay {
+    width: 100%;
+    margin: 14px;
+    padding: 16px 16px 14px;
+    border-radius: 16px;
+    background: rgba(12, 10, 62, 0.38);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+
+  .press-post h2 {
+    margin: 0 0 10px;
+    font-size: 1.18rem;
+    line-height: 1.15;
+    color: #fff;
+    text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
+    font-weight: 600;
+  }
+
+  .press-post p {
+    margin: 0 0 12px;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.92);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
+    font-weight: 400;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .press-date {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.88);
+  }
+
+  /* ── Responsive ─────────────────────────────────────── */
+  @media (max-width: 1024px) {
+    .press-posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .press-posts-grid {
+      grid-template-columns: 1fr;
+    }
+    .press-post {
+      height: 330px;
+    }
+  }
+</style>
+
+<div class="page-container">
+
+  <div class="filter-buttons">
+    <button class="active" data-filter="all">All</button>
+    <button data-filter="abortion">Abortion is Healthcare</button>
+    <button data-filter="femicide">Domestic Abuse in Media</button>
+    <button data-filter="beauty">Toxic Chemicals in Hair Relaxers</button>
+    <button data-filter="football">Sexual Violence in Football</button>
+    <button data-filter="pregnancy-in-prison">Pregnancy in Prison</button>
+    <button data-filter="other">Other</button>
+  </div>
+
+  <div class="press-posts-grid">
+
+    <!-- 1 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20250530"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/93390da7-476a-4b06-9ec7-2a7f45062bee.jpg');">
+      <a href="https://www.thetimes.com/article/85026ca4-a398-41a2-838e-4917f6595e2b" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Prisoners who gave birth in handcuffs sue Ministry of Justice</h2>
+          <p>One of five women who went into labour while an inmate at HMP Bronzefield says she begged officers to remove her restraints in the hospital</p>
+          <span class="press-date">May 30, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 2 -->
+    <div class="press-post" data-topic="beauty" data-date="20250528"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/rsz_gettyimages-1167753539_1.jpg');">
+      <a href="https://www.voice-online.co.uk/news/uk-news/2025/05/27/black-women-call-for-a-ban-on-toxic-hair-products-linked-to-cancer/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Black women call for a ban on toxic hair products linked to cancer - Voice Online</h2>
+          <p>Black women are calling for a ban on toxic hair ingredients - which have been linked to an increased risk of cancer and fibroids</p>
+          <span class="press-date">May 28, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 3 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20250315"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/209602.jpeg');">
+      <a href="https://www.counselmagazine.co.uk/articles/sentencing-of-pregnant-women-a-21st-century-approach" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Sentencing of pregnant women: a 21st century approach</h2>
+          <p>Maya Sikand KC and Janey Starling, co-authors of a new toolkit, Representing pregnant women and mothers in the criminal justice system, believe that advocates can play a critical role in ensuring that sentencers get it right</p>
+          <span class="press-date">March 15, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 4 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20250222"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SEI_240415609-b585_1740213612.jpg');">
+      <a href="https://metro.co.uk/2025/02/22/pregnant-prison-i-thought-baby-died-treated-like-inconvenience-22578382/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnant in prison: 'When I thought my baby had died nobody seemed to care'</h2>
+          <p>Pregnant women in prison are seven times more likely to suffer stillbirth and twice as likely to give birth prematurely.</p>
+          <span class="press-date">February 22, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 5 -->
+    <div class="press-post" data-topic="other" data-date="20231114"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/ZH0hNo8W_image-1-1920x1080-1.png');">
+      <a href="https://www.channel4.com/news/a-mothers-fight-for-justice-after-baby-dies-in-prison" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>A mother's fight for justice after baby dies in prison</h2>
+          <p>Baby Aisha Cleary died in a prison cell after her then teenage mother, Rianna, was left to give birth alone in 2019. Earlier this year, a coroner ruled that multiple systemic failures led to her death.</p>
+          <span class="press-date">November 14, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 6 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20250223"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5184.jpg');">
+      <a href="https://www.theguardian.com/society/2025/feb/23/alarming-data-reveals-high-diabetes-risk-for-pregnant-women-in-english-jails" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Alarming data reveals high diabetes risk for pregnant women in English jails</h2>
+          <p>Freedom of information requests show that female prisoners are three times more likely to suffer gestational diabetes</p>
+          <span class="press-date">February 23, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 7 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20250221"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/47d44d6d-eeb0-4147-b6a3-9e7f693d559e.jpg');">
+      <a href="https://www.thetimes.com/uk/crime/article/pregnant-women-prison-birth-handcuffed-male-officers-5f0698ks8" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Prisoners forced to give birth handcuffed to male officers</h2>
+          <p>At least two female prisoners have come forward over incidents that occurred at HMP Bronzefield in Surrey between 2021 and 2023</p>
+          <span class="press-date">February 21, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 8 -->
+    <div class="press-post" data-topic="other" data-date="20250219"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/story-4-thumb-1-1920x1080-1.png');">
+      <a href="https://www.channel4.com/news/prison-will-never-be-a-safe-place-to-be-pregnant-campaigner" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'Prison will never be a safe place to be pregnant' – campaigner</h2>
+          <p>We spoke to Janey Starling, from the feminist campaign group Level Up, and former prison governor Pia Sinha, who now heads the Prison Reform Trust.</p>
+          <span class="press-date">February 19, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 9 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5027-1.jpg');">
+      <a href="https://www.theguardian.com/society/2021/sep/22/damning-report-published-into-death-of-baby-born-to-teenager-in-prison-cell" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Damning report published into death of baby born to teenager in prison cell</h2>
+          <p>Inquiry into how 18-year-old gave birth on her own in HMP Bronzefield in Ashford finds many failings</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 10 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20240119"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/3500-2.jpg');">
+      <a href="https://www.theguardian.com/society/2024/jan/19/pregnant-woman-jail-sentence-quashed-in-landmark-uk-ruling" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnant woman's jail sentence quashed in 'landmark' UK ruling</h2>
+          <p>Campaigners hail decision to replace 22-year-old's prison term for firearm possession with suspended sentence</p>
+          <span class="press-date">January 19, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 11 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20240224"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/7864.jpg');">
+      <a href="https://www.theguardian.com/society/2024/feb/24/pregnant-women-and-new-mothers-shouldnt-be-sent-to-jail-uk-public-says" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnant women and new mothers shouldn't be sent to jail, UK public says</h2>
+          <p>Poll shared with Observer shows high support for reform of prison sentencing to stop lives being torn apart</p>
+          <span class="press-date">February 24, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 12 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20231028"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/9528.jpg');">
+      <a href="https://www.theguardian.com/society/2023/oct/28/revealed-one-in-three-jailed-pregnant-women-in-england-and-wales-still-to-face-trial" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Revealed: one in three jailed pregnant women in England and Wales still to face trial</h2>
+          <p>New data on prisons has added to calls by campaigners to end custodial sentences for expectant mothers</p>
+          <span class="press-date">October 28, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 13 -->
+    <div class="press-post" data-topic="beauty" data-date="20230421"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/6000.jpg');">
+      <a href="https://www.theguardian.com/society/2023/apr/21/loreal-urged-to-withdraw-hair-relaxers-after-studies-find-cancer-risk" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>L'Oréal urged to withdraw hair relaxers after studies find cancer risk</h2>
+          <p>Research claims to show link between cancer and lye-containing products largely used by black women</p>
+          <span class="press-date">April 21, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 14 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220924"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/3500-1.jpg');">
+      <a href="https://www.theguardian.com/society/2022/sep/24/urgent-call-for-review-into-sentencing-pregnant-women-due-to-health-risks" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Urgent call for review into sentencing pregnant women due to health risks</h2>
+          <p>Experts and campaigners write open letter to justice secretary and Sentencing Council warning of dangers of giving birth in jail</p>
+          <span class="press-date">September 24, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 15 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220328"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5568-1.jpg');">
+      <a href="https://www.theguardian.com/society/2022/mar/28/female-former-inmates-protest-uk-imprisonment-pregnant-women" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Mothers and babies join protest against UK imprisonment of pregnant women</h2>
+          <p>Two babies have died in women's prisons in UK in past three years, when mothers gave birth without medical assistance</p>
+          <span class="press-date">March 28, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 16 -->
+    <div class="press-post" data-topic="football" data-date="20220205"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5568.jpg');">
+      <a href="https://www.theguardian.com/society/2022/feb/05/fa-and-premier-league-urged-to-help-tackle-gender-based-violence" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>FA and Premier League urged to help tackle gender-based violence</h2>
+          <p>Letter makes demands including letting clubs suspend without pay players suspected of abuse</p>
+          <span class="press-date">February 5, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 17 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20240121"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/7864-1.jpg');">
+      <a href="https://www.theguardian.com/society/2024/jan/21/uk-prison-hmp-bronzefield-pregnant-women-aisha-cleary" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>UK prison where baby died gives women rape alarms to call for help during labour</h2>
+          <p>Campaigners renew calls to end incarceration of pregnant women after introduction of measure at HMP Bronzefield</p>
+          <span class="press-date">January 21, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 18 -->
+    <div class="press-post" data-topic="other" data-date="20190304"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/3500-3.jpg');">
+      <a href="https://www.theguardian.com/technology/2019/mar/04/facebook-women-abuse-harassment-social-media-amnesty" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Facebook criticised after women complain of inaction over abuse</h2>
+          <p>Amnesty says social media firm must do more to support users who report harassment</p>
+          <span class="press-date">March 4, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 19 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/NINTCHDBPICT000681521626.jpg');">
+      <a href="https://www.thesun.co.uk/news/16207265/pregnant-teen-dead-baby-prison-ignored-help/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnant teen, 18, found with dead baby in cell after being ignored for 12 HOURS</h2>
+          <p>A TEENAGE girl who gave birth in prison was found clinging to her dead baby girl after her cries for help were ignored for 12 hours.</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 20 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210925"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5027-2.jpg');">
+      <a href="https://www.theguardian.com/society/2021/sep/25/prison-guards-but-not-mother-get-counselling-after-baby-dies-in-cell" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Prison guards, but not mother, get counselling after baby dies in cell</h2>
+          <p>Exclusive: Report from the ombudsman found that the guards who failed to help were offered bereavement support but not the grieving teenager</p>
+          <span class="press-date">September 25, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 21 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20250122"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SEI_235145292-55e6_1737539059.jpg');">
+      <a href="https://metro.co.uk/2025/01/22/like-eastenders-sonia-prison-pregnant-dehumanising-22394436/amp/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Like EastEnders' Sonia, I was in prison while pregnant - it was dehumanising</h2>
+          <p>Prison is no place for pregnant women</p>
+          <span class="press-date">January 22, 2025</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 22 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20241201"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/0_POLS-EXC.jpg');">
+      <a href="https://www.mirror.co.uk/news/politics/i-baby-jail-heres-truth-34225160" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>I had a baby in jail - here's the truth about Lauren's Coronation Street plot</h2>
+          <p>A woman who gave birth in prison has said it has been 'emotional' seeing soap Coronation Street tell the storyline of character Lauren having a baby in jail on TV</p>
+          <span class="press-date">December 1, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 23 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/methodetimesprodwebbin5a8bf95c-1b88-11ec-8d6d-67649e90fafa.jpg');">
+      <a href="https://www.thetimes.co.uk/article/prisoner-18-tried-to-save-baby-after-giving-birth-alone-in-cell-frsb9kkgf" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Prisoner, 18, tried to save baby after giving birth alone in cell</h2>
+          <p>An 18-year-old prisoner who gave birth alone at night in her cell bit through the umbilical cord to free the baby, who was either stillborn or died soon after</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 24 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20230727"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/methodetimesprodwebbin90744092-2c89-11ee-b33d-6d3f5a636b40.jpg');">
+      <a href="https://www.thetimes.co.uk/article/jailed-teen-lost-baby-giving-birth-alone-cutting-umbilical-cord-with-teeth-qqcwq70zt" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Jailed teen lost baby after giving birth alone and cutting cord with teeth</h2>
+          <p>Campaigners have demanded an end to the "high-risk" practice of sending pregnant women to prison as new figures show that nearly 200 expectant mothers were behind bars</p>
+          <span class="press-date">July 27, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 25 -->
+    <div class="press-post" data-topic="other" data-date="20190302"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/methodetimesprodwebbin06883b58-3d06-11e9-ac2f-7ff26270aa53.jpg');">
+      <a href="https://www.thetimes.co.uk/article/half-of-young-women-on-facebook-suffer-abuse-3lxbhhnjj?region=global" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Half of young women on Facebook suffer abuse</h2>
+          <p>Emily Robins describes the harassment she faced over Facebook as "virtual psychological abuse". New research shows more than half of young women on Facebook have experienced abuse.</p>
+          <span class="press-date">March 2, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 26 -->
+    <div class="press-post" data-topic="football" data-date="20210911"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/methodesundaytimesprodwebbinc3af2970-1329-11ec-b01e-096275f2ac22.jpg');">
+      <a href="https://www.thetimes.co.uk/article/concerned-united-fan-behind-protest-at-old-trafford-mt28z3z5j" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Concerned United fan behind protest at Old Trafford</h2>
+          <p>When a public figure responds to an allegation against them with the words "fake news", they invoke a certain Trumpian disdain, an air of dismissal.</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 27 -->
+    <div class="press-post" data-topic="football" data-date="20210911"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/sp-ron-manu-compv2.jpg');">
+      <a href="https://www.thesun.co.uk/sport/16111439/cristiano-ronaldo-protest-banner-kathryn-mayorga-rape/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Ronaldo protest group flies banner naming his rape accuser over Old Trafford</h2>
+          <p>A BANNER bearing the name of Cristiano Ronaldo's alleged rape victim has been flown over Old Trafford in protest against the Portugal captain.</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 28 -->
+    <div class="press-post" data-topic="other" data-date="20190304"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/NINTCHDBPICT000246439563.jpg');">
+      <a href="https://www.thesun.co.uk/news/8553780/young-women-using-facebook-experienced-harassment/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>More than half of young women using Facebook have 'experienced harassment'</h2>
+          <p>MORE than half the young women using Facebook have been harassed, including some being stalked, a study found.</p>
+          <span class="press-date">March 4, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 29 -->
+    <div class="press-post" data-topic="football" data-date="20210911"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/0_Manchester-United-v-Newcastle-United-Premier-League-Old-Trafford.jpg');">
+      <a href="https://www.mirror.co.uk/sport/football/news/cristiano-ronaldo-banner-kathryn-mayorga-24962667" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Ronaldo protestors fly banner in support of rape accuser on Man Utd debut</h2>
+          <p>The Portuguese forward was making his first appearance for Manchester United since 2009 but feminist group Level Up aimed to "disrupt the fanfare" with the banner</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 30 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20231115"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/0_HMP-Bronzefield-report-1.jpg');">
+      <a href="https://www.mirror.co.uk/news/uk-news/young-mum-18-slams-cruel-31441633" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Young mum, 18, slams 'cruel' prison system as baby dies in her arms inside cell</h2>
+          <p>Rianna Cleary was six months pregnant in the biggest women's prison in the country when she gave birth alone in a prison cell before her baby Aisha died in her arms</p>
+          <span class="press-date">November 15, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 31 -->
+    <div class="press-post" data-topic="beauty" data-date="20230422"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/2FYMNK4355HX5IASC3RVXQBJPU.jpg');">
+      <a href="https://www.elespectador.com/salud/piden-a-loreal-retirar-productos-para-el-cabello-que-al-parecer-causarian-cancer/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Piden a L'Oreal retirar productos para el cabello que, al parecer, causarían cáncer</h2>
+          <p>Una carta de activistas británicas se suma a las demandas que ha recibido la empresa francesa por el presunto uso de químicos peligrosos.</p>
+          <span class="press-date">April 22, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 32 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20240318"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/1_6141927E-1F83-494F-9073-0CBBBDEA323BJPG.jpg');">
+      <a href="https://www.mirror.co.uk/news/uk-news/prisoner-biting-umbilical-cord-cell-32379333" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Fewer pregnant women to be jailed after major shift in sentencing policy</h2>
+          <p>Two babies died in UK prisons after their mums were jailed. The new sentencing guidelines, which come in to force on April 1, will see fewer women who are pregnant or have recently given birth behind bars</p>
+          <span class="press-date">March 18, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 33 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20230728"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/0_HMP-Bronzefield-report.jpg');">
+      <a href="https://www.mirror.co.uk/news/uk-news/blood-covered-teen-found-holding-30576184" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Teen found holding dead baby in cell after biting through umbilical cord</h2>
+          <p>An inquest into the death of a baby who was found dead in her mother's arms inside a prison cell, has slammed both the prison and hospital involved in looking after her pregnant teenage mother</p>
+          <span class="press-date">July 28, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 34 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/gm-d1f88ade-e95e-466d-bfd6-ec29016e440b-hmp-bronzefield2.jpg');">
+      <a href="https://www.mailplus.co.uk/edition/news/society/107952/unsurprising-experts-damning-verdict-on-teenager-whose-baby-died-after-giving-birth-in-cell-alone" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'Unsurprising': Expert's damning verdict on teenager whose baby died after giving birth in cell alone</h2>
+          <p>Expert's damning verdict on the systemic failures that led to the tragedy at HMP Bronzefield</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 35 -->
+    <div class="press-post" data-topic="femicide" data-date="20181008"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5bb93470200000c70101ed7c.jpeg');">
+      <a href="https://www.huffingtonpost.co.uk/entry/domestic-violence-ipso-guidelines-campaign_uk_5bb92027e4b0876eda9e86d7" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Campaigners Warn Media Is Failing Domestic Homicide Victims As They Launch 'Dignity For Dead Women' Petition</h2>
+          <p>"Every bad article on domestic violence is a missed opportunity to help prevent further deaths."</p>
+          <span class="press-date">October 8, 2018</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 36 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20211016"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/PREGNANT-PRISON-010823-GettyImages-1532268495_L.jpg');">
+      <a href="https://www.glamourmagazine.co.uk/article/pregnant-in-prison" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnant in prison: What it's like to be an expecting mum behind bars in the UK</h2>
+          <p>Rianna Cleary gave birth alone in a prison cell and had to endure the death of her baby.</p>
+          <span class="press-date">October 16, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 37 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220926"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/should-pregnant-women-really-be-sent-to-prison-1635777570.png');">
+      <a href="https://www.cosmopolitan.com/uk/reports/a37988401/pregnant-prison/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>What is it like to be pregnant in prison?</h2>
+          <p>Three women bravely share their stories of motherhood behind bars</p>
+          <span class="press-date">September 26, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 38 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220924"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/24173348-7630e365-505b-4bca-848f-b1bfa527eb07.jpg');">
+      <a href="https://www.standard.co.uk/news/crime/hmp-bronzefield-activists-emma-hughes-evans-surrey-b1027886.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Protesters gather at HMP Bronzefield to call for end to pregnant women in prison</h2>
+          <p>It comes as the latest in a sequence of public protests over mothers in prison, organised by campaign groups No Births Behind Bars and Level Up.</p>
+          <span class="press-date">September 24, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 39 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20231114"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/prison.jpg');">
+      <a href="https://www.standard.co.uk/news/crime/mother-rianna-cleary-baby-died-prison-coroner-bronzefield-woking-surrey-b1120332.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Mum whose baby died in prison blasts 'cruel system' as coroner rejects report</h2>
+          <p>An inquest found "clear evidence" of "systemic failings" in the death of Aisha Cleary</p>
+          <span class="press-date">November 14, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 40 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20211205"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5027.jpg');">
+      <a href="https://www.theguardian.com/society/2021/dec/05/jailed-women-in-uk-five-times-more-likely-to-suffer-stillbirths-data-shows" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Jailed women in UK five times more likely to suffer stillbirths, data shows</h2>
+          <p>Call for system overhaul amid increasing concerns for women who give birth while behind bars</p>
+          <span class="press-date">December 5, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 41 -->
+    <div class="press-post" data-topic="beauty" data-date="20240410"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/5324.jpg');">
+      <a href="https://www.theguardian.com/global-development/2024/apr/10/black-women-beauty-hair-relaxers" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>The truth about hair relaxers: in the US, lawsuits over cancer. In Africa, soaring sales</h2>
+          <p>Despite criticism for the use of potentially harmful chemicals, companies are still selling the products around the world</p>
+          <span class="press-date">April 10, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 42 -->
+    <div class="press-post" data-topic="football" data-date="20210911"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/1422.jpg');">
+      <a href="https://www.theguardian.com/football/2021/sep/11/cristiano-ronaldo-plane-banner-protest-as-striker-returns-to-manchester-united" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Cristiano Ronaldo: plane banner protest as striker returns to Manchester United</h2>
+          <p>Feminist group Level Up says it flew message over Old Trafford in support of woman accusing footballer of sexual assault</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 43 -->
+    <div class="press-post" data-topic="other" data-date="20190308"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/3474.jpg');">
+      <a href="https://www.theguardian.com/commentisfree/2019/mar/08/women-feminism-trade-unions-feminism" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>T-shirts are all very well. But it's unions that win rights for women | Janey Starling</h2>
+          <p>Feminism was forged in the struggle to escape the sweatshop, says campaigner Janey Starling</p>
+          <span class="press-date">March 8, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 44 -->
+    <div class="press-post" data-topic="other" data-date="20181029"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/3500.jpg');">
+      <a href="https://www.theguardian.com/commentisfree/2018/oct/29/facebook-listen-users-stop-hosting-hatred-silent-about-sexual-harassment" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Facebook, listen to your users and stop tolerating hatred | Carys Afoko</h2>
+          <p>The social media giant said sorry about Cambridge Analytica but is silent about sexual harassment</p>
+          <span class="press-date">October 29, 2018</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 45 -->
+    <div class="press-post" data-topic="femicide" data-date="20181008"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/650.jpg');">
+      <a href="https://www.theguardian.com/commentisfree/2018/oct/08/husband-murdered-media-melanie-clark-domestic-violence-deaths" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Her husband murdered her. Then the media took away her dignity | Janey Starling</h2>
+          <p>Melanie Clark's case highlights the shameful reporting of domestic violence deaths. A new press code would save lives, says Janey Starling of feminist organisation Level Up</p>
+          <span class="press-date">October 8, 2018</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 46 -->
+    <div class="press-post" data-topic="other" data-date="20181119"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/640.jpg');">
+      <a href="https://www.theguardian.com/commentisfree/2018/nov/19/feminist-celebrating-international-mens-day" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>I run a feminist group, but today I am celebrating International Men's Day - Carys Afoko</h2>
+          <p>It's time we stopped being part of a culture that vilifies men, says Carys Afoko, founder of a feminist organisation</p>
+          <span class="press-date">November 19, 2018</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 47 -->
+    <div class="press-post" data-topic="beauty" data-date="20230421"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/294f9cb343c6c9659e2acd6660f30838Y29udGVudHNlYXJjaGFwaSwxNjQ4NTM5NjM4-2.50345949-2.jpg');">
+      <a href="https://www.standard.co.uk/news/world/loreal-hair-relaxers-cancer-risk-study-open-letter-b1075881.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>L'Oreal urged to stop selling hair relaxers after studies find cancer link</h2>
+          <p>Female activists also asked the company to invest in research on the long-term use of chemical relaxers, which make hair easier to straighten</p>
+          <span class="press-date">April 21, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 48 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20240318"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/b3fb4274b47218418a22b675ab382eafY29udGVudHNlYXJjaGFwaSwxNzEwNjk5OTIx-2.36732601.jpg');">
+      <a href="https://www.standard.co.uk/news/crime/prison-nhs-england-pregnancy-surrey-b1145886.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnancy and maternity to be new mitigating factor for sentencing offenders</h2>
+          <p>The Sentencing Council will replace the existing reference to pregnancy with a dedicated factor for pregnancy, childbirth and post-natal care.</p>
+          <span class="press-date">March 18, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 49 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220925"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/109103181_hmpbronzefield.jpg');">
+      <a href="https://www.bbc.com/news/uk-england-surrey-63025914" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>HMP Bronzefield Surrey protest calls for 'no more babies in prison'</h2>
+          <p>The protest was set up like a child's birthday party with dancing and people singing nursery rhymes.</p>
+          <span class="press-date">September 25, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 50 -->
+    <div class="press-post" data-topic="beauty" data-date="20230421"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/istockphoto-1428512928-612x612-1.jpg');">
+      <a href="https://www.binoticias.com/mundo/activistas-piden-loreal-que-retire-sus-productos-para-alisar-el-cabello-por-vinculo-con" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Activistas piden a L'Oréal que retire sus productos para alisar el cabello por vínculo con cáncer</h2>
+          <p>Podría haber un vínculo entre el cáncer y productos que contienen lejía, señalan</p>
+          <span class="press-date">April 21, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 51 -->
+    <div class="press-post" data-topic="beauty" data-date="20230421"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/business-telegraph-LOGO.png'); background-color: #f5f5f5;">
+      <a href="https://www.businesstelegraph.co.uk/loreal-urged-to-withdraw-hair-relaxers-after-studies-find-cancer-risk/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>L'Oréal urged to withdraw hair relaxers after studies find cancer risk</h2>
+          <p>Campaigners are calling on the cosmetics company L'Oréal to withdraw its hair-straightening products that are largely used by black women after research linked it to an increased risk of cancer.</p>
+          <span class="press-date">April 21, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 52 -->
+    <div class="press-post" data-topic="beauty" data-date="20240220"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/2e3800e0-4359-440e-8097-e039ff15de0e-gettyimages-1167753549.jpg');">
+      <a href="https://www.bustle.com/wellness/the-no-more-lyes-hair-relaxer-petition-explained" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>The #NoMoreLyes Hair Relaxer Petition, Explained</h2>
+          <p>The #NoMoreLyes petition now has almost 3,000 signatures.</p>
+          <span class="press-date">February 20, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 53 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20231003"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SEI_174399754.jpg');">
+      <a href="https://inews.co.uk/opinion/doctors-agree-that-prison-isnt-safe-for-pregnant-women-so-why-are-we-still-locking-them-up-2657607" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'I woke up in handcuffs': Prison isn't safe for pregnant women, so why are they there?</h2>
+          <p>Two babies have died in England's prisons in recent years, and pregnant women have appalling stories to tell</p>
+          <span class="press-date">October 3, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 54 -->
+    <div class="press-post" data-topic="football" data-date="20231130"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/131851161_index-footballers-behaviour-976x549-1.png');">
+      <a href="https://www.bbc.com/news/uk-67508310" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Premier League teams are playing footballers facing abuse claims</h2>
+          <p>Alleged victims tell the BBC top clubs prioritise commercial interests over the safety of women.</p>
+          <span class="press-date">November 30, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 55 -->
+    <div class="press-post" data-topic="beauty" data-date="20230424"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/129483790_nomorelyes_final-21-credit_yvonnee.maxwell-2.jpg');">
+      <a href="https://www.bbc.com/news/newsbeat-65189531" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Why people are suing L'Oréal over hair relaxers</h2>
+          <p>Some are worried about ingredients in products used to style afro hair - but the science isn't clear.</p>
+          <span class="press-date">April 24, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 56 -->
+    <div class="press-post" data-topic="femicide" data-date="20190416"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Barbara-template-11.jpg');">
+      <a href="https://inews.co.uk/opinion/ipso-impress-domestic-violence-guidelines-280968" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>These headlines show how not to report on domestic homicides</h2>
+          <p>This kind of reporting is not just lazy or cliched, it's dangerous - and hopefully we'll see an end to it soon, with UK press regulators publishing new guidelines on how journalists should report fatal domestic abuse.</p>
+          <span class="press-date">April 16, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 57 -->
+    <div class="press-post" data-topic="other" data-date="20190303"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/sei_54119608-d3e5_1551633392.jpg');">
+      <a href="https://metro.co.uk/2019/03/03/more-than-half-of-young-women-have-been-abused-on-facebook-8796171/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>More than half of young women have been abused on Facebook</h2>
+          <p>From unwanted pictures of penises to full profile hacks, women continue to be a target for harassment.</p>
+          <span class="press-date">March 3, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 58 -->
+    <div class="press-post" data-topic="beauty" data-date="20220524"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/NoMoreLyes_FINAL-21-Credit_-Yvonne-E.-Maxwell-dc2c_1653399876.jpg');">
+      <a href="https://metro.co.uk/2022/05/24/calls-for-brands-to-remove-dangerous-lye-from-black-hair-products-16697851/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Majority of Black women experienced 'scalp burns or hair loss' from relaxers</h2>
+          <p>Campaigners are demanding beauty brands remove dangerous chemicals from Black hair products.</p>
+          <span class="press-date">May 24, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 59 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220607"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SEC_108537476_1654761876.jpg');">
+      <a href="https://metro.co.uk/2022/06/07/breastfeeding-mums-demand-end-to-prison-for-pregnant-women-in-protest-16786214/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Breastfeeding mums demand end to prison for pregnant women in protest</h2>
+          <p>Two babies are known to have died in women's prisons in the past three years.</p>
+          <span class="press-date">June 7, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 60 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20230318"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SEI_148811141-f0eb_1679169661.jpg');">
+      <a href="https://metro.co.uk/2023/03/18/london-protesters-demand-an-end-to-the-imprisonment-of-pregnant-women-18465479/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Protesters in London demand an end to the imprisonment of pregnant women</h2>
+          <p>Armed with signs, the group sang nursery rhymes in the London drizzle as they called for change.</p>
+          <span class="press-date">March 18, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 61 -->
+    <div class="press-post" data-topic="femicide" data-date="20181010"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SWA-LD049-e1539100641899-scaled.jpg');">
+      <a href="https://pressgazette.co.uk/ipso-domestic-violence-guidelines/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>IPSO to discuss potential for new media guidelines on reporting of domestic violence deaths with feminist group</h2>
+          <p>The UK's largest press regulator will enter discussions over potentially introducing guidelines on the reporting of domestic violence deaths.</p>
+          <span class="press-date">October 10, 2018</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 62 -->
+    <div class="press-post" data-topic="femicide" data-date="20230404"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Level-Up-at-IPSO-e1680513085600-800x418-1-e1769804722383.jpg');">
+      <a href="https://pressgazette.co.uk/media_law/editors-code-media-domestic-abuse-reporting/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Petitioners call for ban on domestic abuse victim-blaming in Editors' Code</h2>
+          <p>A voluntary approach to improving reporting of domestic abuse stories in UK newsrooms is no longer enough, according to feminist campaigners.</p>
+          <span class="press-date">April 4, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 63 -->
+    <div class="press-post" data-topic="football" data-date="20210911"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/120517587_bkm-nc.jpg');">
+      <a href="https://www.bbc.co.uk/news/uk-england-manchester-58528893" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Cristiano Ronaldo: Plane protest over sex assault claim</h2>
+          <p>A plane showing support for a woman who accused the player of rape flies over Old Trafford.</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 64 – no image, solid colour -->
+    <div class="press-post" data-topic="femicide" data-date="20181008"
+         style="background: #A89CED;">
+      <a href="https://qz.com/1416958/theres-no-such-thing-as-a-perfect-husband-who-suddenly-commits-domestic-violence/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>The media makes excuses for men who kill women. Here's how to stop it</h2>
+          <p>Time to call out the "perfect husband" trope.</p>
+          <span class="press-date">October 8, 2018</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 65 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220814"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/10-holloway-8549-edited-1.jpg');">
+      <a href="https://prisonreformtrust.org.uk/women-on-remand-more-likely-to-self-harm/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Women on remand more likely to self-harm | Prison Reform Trust</h2>
+          <p>In 2021, over half of women on remand self-harmed in custody.</p>
+          <span class="press-date">August 14, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 66 -->
+    <div class="press-post" data-topic="other" data-date="20190416"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SWA-LD090-1-e1555406514743-scaled.jpg');">
+      <a href="https://pressgazette.co.uk/press-regulators-ipso-and-impress-back-level-up-new-guidelines-on-reporting-domestic-violence-deaths/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>UK press regulators back feminist group's new guidelines on reporting domestic violence deaths</h2>
+          <p>The UK's two press regulators have endorsed a feminist campaign group's new set of guidelines on the reporting of domestic violence deaths.</p>
+          <span class="press-date">April 16, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 67 -->
+    <div class="press-post" data-topic="beauty" data-date="20210809"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Hair_Perm_t750x550.jpg');">
+      <a href="https://www.independent.co.uk/news/uk/home-news/black-hair-lye-no-more-lyes-b1893747.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Campaign urges beauty firms to pull 'toxic' hair products aimed at Black women</h2>
+          <p>If the lives of Black women and girls matter to these companies, they'll take these poisonous products off the shelves.</p>
+          <span class="press-date">August 9, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 68 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/bronzefield.jpg');">
+      <a href="https://www.independent.co.uk/news/uk/home-news/baby-death-bronzefield-prison-uk-b1924060.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Woman left to give birth alone in prison cell despite calling for help, report finds</h2>
+          <p>Ms A had to bite through umbilical cord herself before trying to wipe up blood from floor, say investigators</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 69 -->
+    <div class="press-post" data-topic="beauty" data-date="20230307"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/HN5Y5MZ2WZFDRKHW23KMOO3A4Y.jpg');">
+      <a href="https://www.businessoffashion.com/news/beauty/revlon-faces-hair-relaxer-cancer-claims-as-bankruptcy-nears-end/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Revlon Faces Hair Relaxer Cancer Claims as Bankruptcy Nears End</h2>
+          <p>Revlon's bankruptcy judge extended the deadline by which customers with certain types of cancer can file claims against the company.</p>
+          <span class="press-date">March 7, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 70 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20230628"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Pills.jpg');">
+      <a href="https://www.independent.co.uk/news/uk/home-news/abortions-police-investigation-women-b2358894.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Dozens of women accused of illegal abortions face police investigations</h2>
+          <p>Women who have abortions after legal cut-off are 'always in desperately vulnerable situations and are victims not criminals,' prominent doctor warns</p>
+          <span class="press-date">June 28, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 71 -->
+    <div class="press-post" data-topic="beauty" data-date="20220525"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/NoMoreLyes_FINAL-19-2.jpg');">
+      <a href="https://www.independent.co.uk/life-style/black-hair-relaxers-side-effects-b2085554.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Majority of Black British women suffer side effects from hair relaxers such as burnt scalp, study finds</h2>
+          <p>Exclusive: Major study into impact of products containing lye, a harsh chemical used in drain unblockers.</p>
+          <span class="press-date">May 25, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 72 -->
+    <div class="press-post" data-topic="beauty" data-date="20201023"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/httpsd1e00ek4ebabms.cloudfront.netproductionf02fc848-bab3-4bbb-8ee4-ef04df38c58e.jpg');">
+      <a href="https://www.ft.com/content/ef79585c-43b3-47f5-9d27-b5899cbc8970" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Beauty brands face backlash on race</h2>
+          <p>Activists press companies to match social media commitments to anti-racism with action on products and hiring policies</p>
+          <span class="press-date">October 23, 2020</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 73 -->
+    <div class="press-post" data-topic="football" data-date="20210911"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/i.jpg');">
+      <a href="https://www.espn.co.uk/football/manchester-united-engman_utd/story/4472367/banner-flown-over-cristiano-ronaldos-man-united-return-in-support-of-woman-who-accused-him-of-rape" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Banner protests Ronaldo over rape accusation</h2>
+          <p>Gender justice group Level Up flew a plane over Old Trafford on Saturday in protest of Cristiano Ronaldo's debut for Manchester United.</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 74 -->
+    <div class="press-post" data-topic="beauty" data-date="20230710"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/527442_gettyimages554999647_138537_crop.jpg');">
+      <a href="https://www.chemistryworld.com/features/are-hair-relaxers-damaging-to-health/4017658.article" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Are hair relaxers damaging to health?</h2>
+          <p>Different chemistries have been designed to turn curly hair straight, but in all cases questions remain about their safety, finds Rachel Brazil</p>
+          <span class="press-date">July 10, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 75 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20230728"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Aisha-Cleary-Prison-and-healthcare-failures-indycomp-news.jpg');">
+      <a href="https://www.independent.co.uk/news/uk/home-news/aisha-cleary-prison-death-coroner-b2383719.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Aisha Cleary: Baby died after 'vulnerable' Black teenage mother gave birth alone in prison cell</h2>
+          <p>Aisha Cleary: Baby died after 'vulnerable' Black teenage mother gave birth alone in prison cell</p>
+          <span class="press-date">July 28, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 76 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20211207"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/16-Cornton-Vale-Prison-PA.jpg');">
+      <a href="https://www.independent.co.uk/news/uk/home-news/prisons-pregnant-women-remand-children-b1970551.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Ministers urged to end jailing of pregnant women under amendment to policing bill</h2>
+          <p>Exclusive: One ex-prisoner tells The Independent she was forced to sleep on top bunk of bed in double room</p>
+          <span class="press-date">December 7, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 77 -->
+    <div class="press-post" data-topic="football" data-date="20210911"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/km.jpg');">
+      <a href="https://www.independent.co.uk/sport/football/manchester-united-believe-kathryn-mayorga-plane-b1918413.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Plane with sign reading 'Believe Kathryn Mayorga' flies over Manchester United stadium</h2>
+          <p>The plane flew overhead to reject the "culture of silence around abuse from the football community"</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 78 -->
+    <div class="press-post" data-topic="other" data-date="20190303"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/facebook-1.jpg');">
+      <a href="https://inews.co.uk/news/uk/facebook-women-harassment-abuse-social-media-level-up-265212" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Over half of women reporting Facebook abuse get no response or action</h2>
+          <p>More than half of women who have reported harassment on Facebook claim they got no response or were told there would be no action as it did not violate community guidelines.</p>
+          <span class="press-date">March 3, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 79 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/PRI_199989971-e1632234443962.jpg');">
+      <a href="https://inews.co.uk/inews-lifestyle/women/pregnant-women-new-campaign-jail-prison-harm-baby-1210160" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'Stop sending pregnant women to prison' petition aims to change sentencing laws for mothers</h2>
+          <p>One woman shares her story as campaigners say prisons will never be safe for pregnant women, new mothers and babies</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 80 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20231103"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/SEI_178513859.jpg');">
+      <a href="https://inews.co.uk/inews-lifestyle/the-guilt-i-feel-for-having-my-son-in-that-environment-is-unreal-what-its-like-to-give-birth-in-prison-2729284" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>I gave birth to my son as a prisoner</h2>
+          <p>Anna was terrified she might lose her first-born while pregnant in prison. She says the BBC show Time is an accurate representation of her harrowing experience</p>
+          <span class="press-date">November 3, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 81 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20230612"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/PRI_220590987-1200x630-pl-big-reads.jpg');">
+      <a href="https://inews.co.uk/inews-lifestyle/miscarriage-prison-plight-pregnant-women-behind-bars-2399114" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'I was terrified I would miscarry in prison': The plight of pregnant women behind bars</h2>
+          <p>As the inquest into the death of Aisha Cleary, born in her 18-year-old mother's cell in 2019, comes to a close, Lauren Crosby Medlicott speaks to other women who have given birth while locked up</p>
+          <span class="press-date">June 12, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 82 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/pregnantprison.jpg');">
+      <a href="https://graziadaily.co.uk/life/parenting/giving-birth-in-prison-1/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'I Had No Idea How Much Time I Would Get With My Newborn Son'</h2>
+          <p>As a new campaign launches to prevent pregnant women being sent to prison, an anonymous mother describes her experience of being pregnant in prison, being in labour in handcuffs and looking after a newborn behind bars.</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 83 -->
+    <div class="press-post" data-topic="beauty" data-date="20191210"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Sally-challen-scaled.jpg');">
+      <a href="https://graziadaily.co.uk/life/in-the-news/sally-challenged-retrial-coercive-control/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>It's Impossible To Overstate The Significance Of Sally Challen's Retrial</h2>
+          <p>Last night, a BBC Two documentary aired detailing the case of Sally Challen...</p>
+          <span class="press-date">December 10, 2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 84 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210922"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/shutterstock_656470525.jpg');">
+      <a href="https://flockmag.com/its-2021-so-why-are-women-still-birthing-behind-bars-in-britain/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>It's 2021 – why are women birthing behind bars? | Power 2021 | The Flock</h2>
+          <p>It's 2021 – why are women still birthing behind bars in Britain? Lauren Crosby Medlicott on the campaign to keep pregnant women out of prison</p>
+          <span class="press-date">September 22, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 85 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20240318"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/1811.jpg');">
+      <a href="https://amp.theguardian.com/law/2024/mar/18/woman-baby-stillborn-hmp-styal-prison-sentencing-guidance" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Woman whose baby was stillborn in HMP Styal praises sentencing changes</h2>
+          <p>Louise Powell says she hopes new guidance means fewer pregnant women are jailed and it can be the legacy of her child Brooke</p>
+          <span class="press-date">March 18, 2024</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 86 -->
+    <div class="press-post" data-topic="football" data-date="20210912"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/skysports-cristiano-ronaldo_5509099.jpg');">
+      <a href="https://www.skysports.com/football/news/11095/12405811/cristiano-ronaldo-believe-kathryn-mayorga-banner-flown-over-man-utd-stadium-to-protest-sexual-assault-allegations" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Cristiano Ronaldo: 'Believe Kathryn Mayorga' banner flown over Man Utd stadium to protest sexual assault allegations</h2>
+          <p>Feminist group Level Up were responsible for the banner, which read: Believe Kathryn Mayorga. Kathryn Mayorga alleged that Cristiano Ronaldo raped her in a Las Vegas hotel room in the summer of 2009. He has denied these claims.</p>
+          <span class="press-date">September 12, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 87 – solid colour -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210101"
+         style="background: #A89CED;">
+      <a href="https://www.huckmag.com/article/i-was-pregnant-in-prison-the-reality-of-it-was-devastating" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>I was pregnant in prison – the reality of it was devastating</h2>
+          <p>A formerly incarcerated woman shares her experience of finding out she was pregnant while in prison, exposing the total lack of support available today.</p>
+          <span class="press-date">January 1, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 88 -->
+    <div class="press-post" data-topic="football" data-date="20210101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/47787755-0-image-a-35_1631372561770.jpg');">
+      <a href="https://www.dailymail.co.uk/sport/sportsnews/article-9980479/Cristiano-Ronaldos-Manchester-United-homecoming-met-feminist-protest-flying-banner.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Ronaldo's United homecoming is met by feminist protest</h2>
+          <p>Cristiano Ronaldo's return to Manchester United was met with a feminist protest in the sky above Old Trafford relating to rape allegations brought by an American woman he met in Las Vegas in 2009.</p>
+          <span class="press-date">September 11, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 89 -->
+    <div class="press-post" data-topic="beauty" data-date="20210101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/PRI_196278152.jpg');">
+      <a href="https://inews.co.uk/opinion/hair-relaxers-harming-black-women-big-brands-stop-selling-them-1163725" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Hair relaxers could be harming Black women - we're calling on big brands to stop selling them</h2>
+          <p>An Oxford University report found that women repeatedly using hair relaxers containing lye could be 30 per cent more at risk of breast cancer</p>
+          <span class="press-date">August 9, 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 90 -->
+    <div class="press-post" data-topic="other" data-date="20231001"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/iStock-860845028-1.jpg');">
+      <a href="https://neweconomics.org/2023/10/pregnant-in-prison" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnant in prison</h2>
+          <p>Pregnant women are being forced to give birth in prison, affecting their own and their children's life chances. Janey Starling explains why no woman should be imprisoned in pregnancy.</p>
+          <span class="press-date">October 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 91 -->
+    <div class="press-post" data-topic="other" data-date="20230101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/hair-straightening-1-scaled.jpg');">
+      <a href="https://medicalxpress.com/news/2023-04-hair-affect-ability.html" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Hair relaxer use may affect ability to conceive</h2>
+          <p>A first-of-its-kind study showed that use of chemical hair straighteners was associated with a slight reduction in the likelihood of pregnancy.</p>
+          <span class="press-date">April 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 92 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/gettyimages-181874783-1920x1080-1.jpg');">
+      <a href="https://www.stylist.co.uk/health/birth-behind-bars-pregnant-women/567488" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Pregnant women are facing poor conditions in UK prisons - here's one woman's story</h2>
+          <p>"Putting a pregnant woman, or a mother and child behind a locked door is never going to be a safe place."</p>
+          <span class="press-date">2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 93 -->
+    <div class="press-post" data-topic="femicide" data-date="20190101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/crime-1.jpg');">
+      <a href="https://www.stylist.co.uk/life/level-up-campaign-change-reporting-domestic-homicides-violence-deaths-media-guidelines-women-killed-by-partners-2/230587" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>These new guidelines will change how the media reports domestic violence deaths</h2>
+          <p>For the families of women killed by violent current and former partners, it couldn't come a moment too soon.</p>
+          <span class="press-date">2019</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 94 -->
+    <div class="press-post" data-topic="other" data-date="20230101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/maxresdefault-3.jpg');">
+      <a href="https://bit.ly/3ZR4wTK" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>How collective care can change society | Janey Starling &amp; Seyi Falodun-Liburd | TEDxLondonWomen</h2>
+          <p>What would the world look like if we prioritised building the emotional and physical structures we all need to live more loving and liberated lives?</p>
+          <span class="press-date">2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 95 -->
+    <div class="press-post" data-topic="beauty" data-date="20230421"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/QTVUTKE3KVEPDF23USDOOE7NYY.jpg');">
+      <a href="https://www.businessoffashion.com/news/beauty/loreal-urged-to-withdraw-hair-relaxers-after-studies-find-cancer-risk/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>L'Oréal Urged to Withdraw Hair Relaxers After Studies Find Cancer Risk</h2>
+          <p>In an open letter, coordinated by the UK feminist group Level Up, campaigners also ask the company to invest in research on the long-term use of chemical relaxers, which make hair easier to straighten.</p>
+          <span class="press-date">April 21, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 96 -->
+    <div class="press-post" data-topic="beauty" data-date="20230418"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/court-witness-stand_ss_1540934891-scaled-8.jpg');">
+      <a href="https://www.aboutlawsuits.com/hair-relaxer-lawsuits-status-conference/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Status of Hair Relaxer Lawsuits Discussed at MDL Conference</h2>
+          <p>A joint status conference is being held today for hair relaxer lawsuits consolidated as part of a multidistrict litigation in federal court.</p>
+          <span class="press-date">April 18, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 97 -->
+    <div class="press-post" data-topic="beauty" data-date="20230601"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/straight-brunette-hair@large.jpg');">
+      <a href="https://newyork.legalexaminer.com/legal/feminist-community-calls-for-loreal-to-remove-toxic-ingredients-from-hair-relaxers/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Feminist Community Calls for L'Oréal to Remove Toxic Ingredients from Hair Relaxers</h2>
+          <p>The UK feminist community Level Up has called for beauty products manufacturer L'Oréal to either make these products safer or take them off the shelves.</p>
+          <span class="press-date">June 1, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 98 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20231023"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/skynews-women-in-prison-behind-bars_6332766.jpg');">
+      <a href="https://news.sky.com/story/should-pregnant-women-be-spared-jail-sentencing-council-reviews-the-impact-of-prison-on-unborn-babies-12991044" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>Should pregnant women be spared jail? Sentencing Council reviews the impact of prison on unborn babies</h2>
+          <p>Sky News has spoken to three women who've experienced pregnancy in jail and describe it as a frightening, isolating and humiliating experience.</p>
+          <span class="press-date">October 23, 2023</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 99 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20220924"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/skynews-hmp-bronzefield-surrey_5910063.jpg');">
+      <a href="https://news.sky.com/story/childs-birthday-party-protest-outside-prison-to-demonstrate-against-jailing-pregnant-women-and-new-mothers-12704801" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'Child's birthday party' protest outside prison to demonstrate against jailing pregnant women and new mothers</h2>
+          <p>It comes as the latest in a sequence of public protests over mothers in prison, organised by campaign groups No Births Behind Bars and Level Up.</p>
+          <span class="press-date">September 24, 2022</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 100 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/TELEMMGLPICT000252955062_trans_NvBQzQNjv4BqpVlberWd9EgFPZtcLiMQf0Rf_Wk3V23H2268P_XkPxc.jpeg');">
+      <a href="https://www.telegraph.co.uk/women/life/whole-experience-traumatic-reality-pregnancy-prison/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>'The whole experience was traumatic': The reality of pregnancy in prison</h2>
+          <p>As a campaign launched today calls for an end to prison sentencing for pregnant women in the UK, one woman shares her experience</p>
+          <span class="press-date">September 2021</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 101 -->
+    <div class="press-post" data-topic="femicide" data-date="20180101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/TELEMMGLPICT000170261776_trans_NvBQzQNjv4BqpVlberWd9EgFPZtcLiMQfyf2A9a6I9YchsjMeADBa08.jpeg');">
+      <a href="https://www.telegraph.co.uk/women/life/met-lot-wife-killers-murder-never-crime-passion-believe/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>I've met a lot of wife killers and murder is never a 'crime of passion', believe me</h2>
+          <p>As a forensic criminologist, I'm regularly aghast at the way we report on and talk about men who murder their wives.</p>
+          <span class="press-date">2018</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- 102 -->
+    <div class="press-post" data-topic="pregnancy-in-prison" data-date="20210101"
+         style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/TELEMMGLPICT000279616331_trans_NvBQzQNjv4BqhiiDzkMQKRGfjeOG8vz7B1HwtdpQwyNje2OyIL7x97s.jpeg');">
+      <a href="https://www.telegraph.co.uk/women/life/jail-mother-condemn-child/" target="_blank" rel="noopener noreferrer">
+        <div class="press-overlay">
+          <h2>When we jail a mother, we condemn her child too</h2>
+          <p>The legal system can strip innocent children of their home and carer - sometimes, in cases like Arthur Labinjo-Hughes, with tragic effect</p>
+          <span class="press-date">2021</span>
+        </div>
+      </a>
+    </div>
+
+  </div><!-- /.press-posts-grid -->
+</div><!-- /.page-container -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const buttons = document.querySelectorAll('.filter-buttons button');
+  const posts = Array.from(document.querySelectorAll('.press-post'));
+
+  function applyFilter(filter) {
+    const f = (filter || '').toLowerCase().trim();
+    posts.forEach(post => {
+      const topic = (post.getAttribute('data-topic') || '').toLowerCase().trim();
+      post.style.display = (f === 'all' || topic === f) ? '' : 'none';
+    });
+  }
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilter(btn.getAttribute('data-filter'));
+    });
+  });
+
+  applyFilter('all');
+});
+</script>
+
+</Layout>

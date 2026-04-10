@@ -1,0 +1,125 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<Layout title={`${post.data.title} | Level Up`} description={post.data.excerpt}>
+  <section class="post-hero">
+    <div class="container">
+      {post.data.image && (
+        <img src={post.data.image} alt={post.data.title} class="post-hero__img" />
+      )}
+      <h1>{post.data.title}</h1>
+      <div class="post-hero__meta">
+        <span class="post-hero__author">{post.data.author}</span>
+        {post.data.date && <time>{new Date(post.data.date).toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</time>}
+      </div>
+    </div>
+  </section>
+
+  <article class="post-body">
+    <div class="container">
+      <div class="post-content">
+        <Content />
+      </div>
+      <div class="post-footer">
+        <a href="/blog" class="btn btn--outline">Back to Blog</a>
+      </div>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .post-hero {
+    background-color: var(--navy);
+    color: var(--cream);
+    padding: 6rem 0 3rem;
+  }
+
+  .post-hero__img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+  }
+
+  .post-hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    text-transform: none;
+    line-height: 1.1;
+    max-width: 800px;
+    margin-bottom: 1rem;
+  }
+
+  .post-hero__meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    opacity: 0.75;
+  }
+
+  .post-hero__author {
+    font-weight: 600;
+  }
+
+  .post-body {
+    background-color: var(--cream);
+  }
+
+  .post-content {
+    max-width: 700px;
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+
+  .post-content :global(p) {
+    margin-bottom: 1.25rem;
+  }
+
+  .post-content :global(h2) {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    text-transform: none;
+  }
+
+  .post-content :global(h3) {
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    text-transform: none;
+  }
+
+  .post-content :global(blockquote) {
+    border-left: 4px solid var(--purple);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    opacity: 0.9;
+  }
+
+  .post-content :global(a) {
+    color: var(--navy);
+    text-decoration: underline;
+    text-decoration-color: var(--purple);
+    text-underline-offset: 3px;
+  }
+
+  .post-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(13, 10, 62, 0.1);
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+/**
+ * Landing page Mollie redirects donors to after they finish (or abandon) the
+ * checkout. Mollie does NOT pass payment status here — for that we rely on
+ * the webhook. The page is intentionally generic.
+ */
+import Layout from '../../layouts/Layout.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <main class="lu-thanks">
+    <h1>Thank you</h1>
+    <p>
+      Your donation is being processed by Mollie. You'll receive a confirmation
+      email at the address you provided shortly.
+    </p>
+    <p>
+      If you set up a monthly donation, your subscription will start once this
+      first payment clears — usually within minutes for cards, a few days for
+      direct debit.
+    </p>
+    <p>
+      Questions? Email
+      <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
+      and we'll get back to you.
+    </p>
+    <p class="lu-thanks__back">
+      <a href="/">← Back to welevelup.org</a>
+    </p>
+  </main>
+
+  <style is:global>
+    .lu-thanks {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 96px 24px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      color: #0d0a3e;
+    }
+    .lu-thanks h1 {
+      font-size: 56px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 0 0 24px;
+    }
+    .lu-thanks p {
+      font-size: 18px;
+      line-height: 1.55;
+      margin: 0 0 16px;
+    }
+    .lu-thanks__back {
+      margin-top: 40px;
+    }
+    .lu-thanks__back a {
+      color: #0d0a3e;
+      text-decoration: underline;
+    }
+  </style>
+</Layout>

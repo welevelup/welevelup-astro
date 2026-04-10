@@ -1,7 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import mainHtml from '../_fragments/index-main.html?raw';
+import { extract } from '../lib/extractHtml';
+import rawHtml from '../_clone/index.html?raw';
+
+const { headInner, bodyClass, bodyInner } = extract(rawHtml);
 ---
-<Layout>
-  <Fragment set:html={mainHtml} />
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Fragment set:html={bodyInner} />
 </Layout>

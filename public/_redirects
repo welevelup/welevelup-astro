@@ -1,0 +1,61 @@
+# Trailing slash removal (WordPress → Astro, trailingSlash: 'never')
+# Auto-generated from src/_clone manifest
+
+/abortion-is-healthcare-resources/  /abortion-is-healthcare-resources  301
+/about-us/  /about-us  301
+/active-campaigns/abortion-is-healthcare/  /active-campaigns/abortion-is-healthcare  301
+/active-campaigns/islington-council-finish-holloway-womens-centre/  /active-campaigns/islington-council-finish-holloway-womens-centre  301
+/active-campaigns/media-guidelines-domestic-abuse/  /active-campaigns/media-guidelines-domestic-abuse  301
+/active-campaigns/nomorelyes/  /active-campaigns/nomorelyes  301
+/active-campaigns/nomorelyes-2/  /active-campaigns/nomorelyes-2  301
+/active-campaigns/pregnancy-in-prison/  /active-campaigns/pregnancy-in-prison  301
+/active-campaigns/premier-league-and-fa/  /active-campaigns/premier-league-and-fa  301
+/active-campaigns/sexual-violence-in-football/  /active-campaigns/sexual-violence-in-football  301
+/active-campaigns/we-protect-us/  /active-campaigns/we-protect-us  301
+/all-resources/  /all-resources  301
+/beyond-sympathy-feminist-solidarity-without-deservingness/  /beyond-sympathy-feminist-solidarity-without-deservingness  301
+/blog/  /blog  301
+/blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers/  /blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers  301
+/blog/beyond-sympathy-feminist-solidarity-without-deservingness/  /blog/beyond-sympathy-feminist-solidarity-without-deservingness  301
+/blog/ending-prison-for-pregnant-women-a-non-reformist-reform/  /blog/ending-prison-for-pregnant-women-a-non-reformist-reform  301
+/blog/gender-critical-feminism-isnt-feminist/  /blog/gender-critical-feminism-isnt-feminist  301
+/blog/how-we-choose-our-campaigns/  /blog/how-we-choose-our-campaigns  301
+/blog/its-time-to-reclaim-the-socialist-roots-of-international-womens-day/  /blog/its-time-to-reclaim-the-socialist-roots-of-international-womens-day  301
+/blog/the-griefs-left-unattended/  /blog/the-griefs-left-unattended  301
+/blog/why-expanding-criminalisation-is-a-feminist-issue/  /blog/why-expanding-criminalisation-is-a-feminist-issue  301
+/blog/why-the-media-should-focus-on-diddys-violence-not-his-kinks/  /blog/why-the-media-should-focus-on-diddys-violence-not-his-kinks  301
+/blog/why-we-need-to-start-moving-offline/  /blog/why-we-need-to-start-moving-offline  301
+/contact/  /contact  301
+/ddw-resources/  /ddw-resources  301
+/donate/  /donate  301
+/media-guidelines/  /media-guidelines  301
+/nbbb-letter/  /nbbb-letter  301
+/news-and-events/  /news-and-events  301
+/nomorelyes-open-letter-to-loreal/  /nomorelyes-open-letter-to-loreal  301
+/nomorelyes-relaxer-info-kit/  /nomorelyes-relaxer-info-kit  301
+/our-work/  /our-work  301
+/petition/abortion-is-healthcare/  /petition/abortion-is-healthcare  301
+/petition/dignity-for-dead-women/  /petition/dignity-for-dead-women  301
+/petition/ipso-dignity-for-dead-women/  /petition/ipso-dignity-for-dead-women  301
+/petition/islington-council-fund-holloway-womens-centre/  /petition/islington-council-fund-holloway-womens-centre  301
+/petition/nomorelyes-take-toxic-hair-relaxers-off-the-shelves/  /petition/nomorelyes-take-toxic-hair-relaxers-off-the-shelves  301
+/petition/petition-premier-league-violence/  /petition/petition-premier-league-violence  301
+/petition/premier-league-and-fa/  /petition/premier-league-and-fa  301
+/petition/stop-sending-pregnant-women-to-prison/  /petition/stop-sending-pregnant-women-to-prison  301
+/pp-resources/  /pp-resources  301
+/press/  /press  301
+/solidarity-with-katie/  /solidarity-with-katie  301
+/stories-of-the-community/  /stories-of-the-community  301
+/surveys/abortion-stories-complete/  /surveys/abortion-stories-complete  301
+/the-griefs-left-unattended/  /the-griefs-left-unattended  301
+/what-we-are-proud-of/  /what-we-are-proud-of  301
+/why-expanding-criminalisation-is-a-feminist-issue/  /why-expanding-criminalisation-is-a-feminist-issue  301
+
+# WordPress artifacts → homepage
+/wp-admin       /  301
+/wp-admin/*     /  301
+/wp-login.php   /  301
+/feed           /  301
+/feed/          /  301
+/comments/feed  /  301
+/?p=:id         /  301

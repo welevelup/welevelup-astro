@@ -1,27 +1,15 @@
 ---
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
-import headInner from '../_fragments/head-inner.html?raw';
-import bodyPreHeader from '../_fragments/body-pre-header.html?raw';
-import bodyPostFooter from '../_fragments/body-post-footer.html?raw';
-
 interface Props {
+  headHtml: string;
   bodyClass?: string;
 }
 
-// Default body class matches the WordPress home page. Override per page when porting.
-const {
-  bodyClass = 'home wp-singular page-template-default page page-id-1818 wp-custom-logo wp-embed-responsive wp-theme-hello-elementor wp-child-theme-hello-theme-child-master give-recurring mega-menu-menu-1 hello-elementor-default elementor-default elementor-template-full-width elementor-kit-7 elementor-page elementor-page-1818',
-} = Astro.props;
+const { headHtml, bodyClass = '' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">
-  <head set:html={headInner}></head>
+  <head set:html={headHtml}></head>
   <body class={bodyClass}>
-    <Fragment set:html={bodyPreHeader} />
-    <Nav />
     <slot />
-    <Footer />
-    <Fragment set:html={bodyPostFooter} />
   </body>
 </html>

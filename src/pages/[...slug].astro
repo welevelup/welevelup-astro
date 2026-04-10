@@ -1,0 +1,28 @@
+---
+/**
+ * Catch-all that serves every cloned WordPress page (except the home, which
+ * has its own src/pages/index.astro).
+ *
+ * At build time, src/lib/cloneManifest walks src/_clone/ and returns one
+ * CloneRoute per index.html. Each route reads its source HTML, pulls out
+ * head + body + bodyClass via extract(), and renders through Layout.
+ */
+import { readFileSync } from 'node:fs';
+import Layout from '../layouts/Layout.astro';
+import { extract } from '../lib/extractHtml';
+import { getCloneRoutes } from '../lib/cloneManifest';
+
+export async function getStaticPaths() {
+  return getCloneRoutes().map(({ slug, file }) => ({
+    params: { slug },
+    props: { file },
+  }));
+}
+
+const { file } = Astro.props;
+const rawHtml = readFileSync(file, 'utf-8');
+const { headInner, bodyClass, bodyInner } = extract(rawHtml);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Fragment set:html={bodyInner} />
+</Layout>

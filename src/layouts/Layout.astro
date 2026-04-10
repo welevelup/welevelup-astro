@@ -1,78 +1,27 @@
 ---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import '../styles/global.css';
+import headInner from '../_fragments/head-inner.html?raw';
+import bodyPreHeader from '../_fragments/body-pre-header.html?raw';
+import bodyPostFooter from '../_fragments/body-post-footer.html?raw';
 
 interface Props {
-  title?: string;
-  description?: string;
+  bodyClass?: string;
 }
 
+// Default body class matches the WordPress home page. Override per page when porting.
 const {
-  title = 'Level Up | Feminist campaigns for gender justice in the UK',
-  description = 'Level Up is a feminist organisation in the UK leading campaigns and collective action to advance gender justice, equality and women\'s rights.',
+  bodyClass = 'home wp-singular page-template-default page page-id-1818 wp-custom-logo wp-embed-responsive wp-theme-hello-elementor wp-child-theme-hello-theme-child-master give-recurring mega-menu-menu-1 hello-elementor-default elementor-default elementor-template-full-width elementor-kit-7 elementor-page elementor-page-1818',
 } = Astro.props;
 ---
-<!DOCTYPE html>
-<html lang="en-GB">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{title}</title>
-  <meta name="description" content={description} />
-
-  <!-- Open Graph -->
-  <meta property="og:locale" content="en_GB" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content={title} />
-  <meta property="og:description" content={description} />
-  <meta property="og:site_name" content="Level Up" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@we_level_up" />
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/webp" href="/images/logo.webp" />
-
-  <!-- DM Sans + Montserrat -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Google Analytics 4 -->
-  <script is:inline>
-    // Replace GA_MEASUREMENT_ID with your actual GA4 ID
-    // window.dataLayer = window.dataLayer || [];
-    // function gtag(){dataLayer.push(arguments);}
-    // gtag('js', new Date());
-    // gtag('config', 'GA_MEASUREMENT_ID');
-  </script>
-
-  <!-- Facebook Pixel -->
-  <script is:inline>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1862990614381002');
-    fbq('track', 'PageView');
-  </script>
-  <noscript>
-    <img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1862990614381002&ev=PageView&noscript=1" alt="" />
-  </noscript>
-</head>
-<body>
-  <Nav />
-  <main>
+<!doctype html>
+<html lang="en-GB" prefix="og: https://ogp.me/ns#">
+  <head set:html={headInner}></head>
+  <body class={bodyClass}>
+    <Fragment set:html={bodyPreHeader} />
+    <Nav />
     <slot />
-  </main>
-  <Footer />
-</body>
+    <Footer />
+    <Fragment set:html={bodyPostFooter} />
+  </body>
 </html>

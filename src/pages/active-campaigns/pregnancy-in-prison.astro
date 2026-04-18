@@ -14,8 +14,18 @@ const { headInner, bodyClass } = extract(homeRaw);
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
 
-  <!-- HERO -->
+  <!-- HERO WITH VIDEO BACKGROUND -->
   <section class="dp-hero">
+    <div class="dp-hero-video-bg">
+      <iframe
+        src="https://www.youtube.com/embed/m-svZxxLVms?autoplay=1&mute=1&loop=1&playlist=m-svZxxLVms&controls=0&showinfo=0&modestbranding=1&playsinline=1"
+        title="Background video"
+        frameborder="0"
+        allow="autoplay"
+        loading="eager"
+      ></iframe>
+    </div>
+    <div class="dp-hero-overlay"></div>
     <div class="dp-hero-inner">
       <span class="dp-label">Criminalisation &amp; Justice</span>
       <h1 class="dp-title">Pregnancy<br/>in Prison</h1>
@@ -405,10 +415,40 @@ const { headInner, bodyClass } = extract(homeRaw);
     .dp-hero {
       background: #0C0A3E;
       padding: 100px 24px 80px;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+    }
+    .dp-hero-video-bg {
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      right: -60px;
+      bottom: -60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .dp-hero-video-bg iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.2);
+    }
+    .dp-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 10, 62, 0.75);
+      z-index: 1;
     }
     .dp-hero-inner {
       max-width: 900px;
       margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+      width: 100%;
     }
     .dp-label {
       font: 600 12px/1 'DM Sans', sans-serif;
@@ -486,7 +526,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     .dp-section--navy { background: #0C0A3E; }
     .dp-section--neutral { background: #fff; }
     .dp-section--white { background: #fff; }
-    .dp-content { max-width: 900px; margin: 0 auto; }
+    .dp-content { max-width: 900px; margin: 0 auto; padding: 0 24px; }
     .dp-content h2 {
       font: 800 40px/0.9 'DM Sans', sans-serif !important;
       color: #0C0A3E !important;
@@ -832,8 +872,19 @@ const { headInner, bodyClass } = extract(homeRaw);
     .dp-btn-secondary-light:hover { background: #0C0A3E; color: #CCFF33; }
 
     /* CTA */
-    .dp-cta { background: #0C0A3E; padding: 80px 24px; }
-    .dp-cta h2 { margin-bottom: 0; }
+    .dp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; }
+    .dp-cta h2 {
+      margin: 0 0 16px;
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+    }
+    .dp-cta p {
+      color: rgba(238, 235, 211, 0.6) !important;
+      font: 400 17px/1.5 'DM Sans', sans-serif !important;
+      max-width: 440px;
+      margin: 0 auto 32px !important;
+    }
 
     @media (max-width: 768px) {
       .dp-hero { padding: 80px 24px 60px; }

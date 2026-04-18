@@ -1,0 +1,649 @@
+---
+/**
+ * Campaign: Abortion Is Healthcare
+ * Editorial hero + Timeline for "The journey so far"
+ * Real content from the campaign.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HERO — plain navy (no video for this campaign) -->
+  <section class="dp-hero" style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Screenshot-2024-06-14-at-12-1.webp'); background-size: cover; background-position: center;">
+    <div class="dp-hero-overlay"></div>
+    <div class="dp-hero-inner">
+      <span class="dp-label">Reproductive Justice</span>
+      <h1 class="dp-title">Abortion is<br/>Healthcare<br/>Campaign</h1>
+      <p class="dp-tagline">Abortion Is Healthcare is a campaign by Level Up calling for the decriminalisation of abortion in Britain.</p>
+      <div class="dp-hero-cta">
+        <a href="https://welevelup.org/petition/abortion-is-healthcare/" class="dp-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AIM -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Aim</h2>
+      <p>Free, safe, legal and local access to abortion for all people in Britain.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <p><strong>Abortion Is Healthcare</strong> is a campaign by Level Up calling for the decriminalisation of abortion in Britain. Despite being essential healthcare, abortion is still regulated under outdated criminal law, causing harm, stigma and barriers to care. This campaign works to shift public narratives, build compassion and secure free, safe, legal and local access to abortion for everyone who needs it.</p>
+    </div>
+  </section>
+
+  <!-- WHY? -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Why Abortion Must Be Decriminalised?</h2>
+      <p>Abortion is healthcare and anyone needing an abortion should be met with compassion and dignity, not criminalisation. Yet contrary to popular belief, abortion is still a criminal offence in Britain due to the Offences Against the Person Act 1861, an old Victorian law passed 50 years before women won the right to vote. The fact that an old criminal law still stands means that pregnancies can be policed – with devastating impacts. Criminalising abortion stigmatises this form of healthcare and can cause significant harm to a person's health and wellbeing. It can delay or prevent access to post abortion care, intensify shame and stigma, heighten barriers in access to legal care and create a chilling effect on medical professionals' provision of information.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT BEGAN -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <h2>How the Abortion Is Healthcare Campaign Began</h2>
+      <p>In 2022, the overturning of Roe vs Wade in the United States sent shockwaves across the globe. It became clearer than ever that we can't take our access to reproductive healthcare for granted. So Level Up responded by launching the Abortion is Healthcare campaign to decriminalise abortion in Britain.</p>
+      <p>We already knew there were reproductive justice organisations and abortion service providers who have been doing brilliant work on this for decades. And we knew that we could support the movement by using our pop culture approach to campaigning. </p>
+      <p>Level Up prioritises reframing the dominant narrative around the injustice that we're working to dismantle. We do this to shift cultural attitudes on the issue that will set the stage for meaningful change. Culture change always precedes policy change. </p>
+      <p>By reframing abortion as a healthcare issue, we started by shifting the narrative away from shame and stigma and towards abortion as an essential procedure that everyone needs safe access to.</p>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <span class="dp-label">The Journey So Far</span>
+      <h2>The journey so far</h2>
+
+      <div class="dp-timeline">
+
+        <!-- 2022 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot"></div>
+          <div class="dp-tl-year">2022</div>
+          <div class="dp-tl-body">
+            <p>After the Roe v Wade news broke on 24 June 2022, Level Up polled the public to find out what people knew about abortion access and law in Britain. We found that a third of women don't know how to get an abortion. The polling was published in the Independent and the petition steadily gained traction. In August 2022, Protest Stencil hacked London bus stop ads in support of the Abortion is Healthcare campaign.</p>
+            <div class="dp-tl-image">
+              <img src="https://welevelup.org/wp-content/uploads/2025/08/Screenshot-2024-06-14-at-12-1-276x300.webp" alt="Abortion is Healthcare campaign 2022" loading="lazy" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 2023 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--purple"></div>
+          <div class="dp-tl-year">2023</div>
+          <div class="dp-tl-body">
+            <p>Fast-forward to June 2023, when Carla Foster is prosecuted for ending a pregnancy after ordering abortion pills online because she did not want any more children. She was sentenced to prison based on Britain's archaic abortion laws, and the Level Up community responded by sending over 250 messages of solidarity. Two months later, Carla was released after persistent public outcry. Dame Victoria Sharp, the judge at the Court of Appeal, described it as a "very sad case" that "calls for compassion, not punishment".</p>
+            <p>Level Up also responded by opening up space for people to share their anonymous abortion stories – as part of our strategy to move the conversation away from "debate" and towards compassion.</p>
+          </div>
+        </div>
+
+        <!-- 2024 -->
+        <div class="dp-tl-node dp-tl-node--highlight">
+          <div class="dp-tl-dot dp-tl-dot--yellow"></div>
+          <div class="dp-tl-year">2024</div>
+          <div class="dp-tl-body">
+            <p>On 23 February, Level Up launched media guidelines for reporting on abortion in Britain, building on our strategy of reframing the dominant narrative. We developed them in collaboration with reproductive justice organisations, abortion service providers, activists, and journalists – and they're inspired by the powerful work of Abortion Dream Team in Poland. The guidelines are backed by Britain's biggest abortion service providers: BPAS and MSI Reproductive Choices. Stylist magazine covered their launch. Now, we're calling for members of the Level Up community to call out bad reporting when they see it.</p>
+            <p>To hear more about the campaign and how you can support it, join our mailing list. You can also make a donation to support this ongoing work.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW YOU CAN HELP -->
+  <section class="dp-section dp-section--neutral">
+    <div class="dp-content">
+      <span class="dp-label">Take Action</span>
+      <h2>How you can help</h2>
+      <div class="dp-actions">
+        <a href="https://welevelup.org/petition/abortion-is-healthcare/" class="dp-action" target="_blank" rel="noopener">
+          <strong>Sign the petition</strong>
+          <p>Demand the decriminalisation of abortion in Britain</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="/donate" class="dp-action">
+          <strong>Donate</strong>
+          <p>Support this ongoing work</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="dp-action" target="_blank" rel="noopener">
+          <strong>Join the Level Up Community</strong>
+          <p>Stay updated and take action with us</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="dp-final-cta">
+    <div class="dp-content">
+      <h2 class="dp-h2--light">Support this campaign</h2>
+      <div class="dp-final-cta-buttons">
+        <a href="https://welevelup.org/petition/abortion-is-healthcare/" class="dp-btn-primary dp-btn-large" target="_blank" rel="noopener">Sign the petition</a>
+        <a href="/donate" class="dp-btn-secondary-light dp-btn-large">Donate</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA: JOIN -->
+  <section class="dp-cta">
+    <div class="dp-content" style="text-align:center">
+      <h2 class="dp-h2--light">Join the Level Up community</h2>
+      <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="dp-btn-primary" target="_blank" rel="noopener">Join us</a>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style is:global>
+    /* ── CAMPAIGN DEMO ───────────────────────────── */
+
+    .dp-hero {
+      background: #0C0A3E;
+      padding: 100px 24px 80px;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+    }
+    .dp-hero-video-bg {
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      right: -60px;
+      bottom: -60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .dp-hero-video-bg iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.2);
+    }
+    .dp-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 10, 62, 0.75);
+      z-index: 1;
+    }
+    .dp-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+    .dp-label {
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .dp-label--light { color: rgba(238,235,211,0.45); }
+    .dp-title {
+      font: 800 clamp(48px,10vw,88px)/0.88 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.045em !important;
+      margin: 0 0 24px;
+    }
+    .dp-tagline {
+      font: 400 20px/1.4 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.65) !important;
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+    .dp-hero-cta { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .dp-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .dp-btn-primary:hover { background: #fff; }
+    .dp-supporters {
+      font: 700 14px/1 'DM Sans', sans-serif;
+      color: rgba(238,235,211,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Stats */
+    .dp-stats { background: #CCFF33; }
+    .dp-stats-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .dp-stat {
+      padding: 36px 20px;
+      text-align: center;
+      border-right: 1px solid rgba(12,10,62,0.1);
+    }
+    .dp-stat:last-child { border-right: none; }
+    .dp-stat-num {
+      display: block;
+      font: 800 44px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.04em;
+    }
+    .dp-stat-label {
+      display: block;
+      font: 500 11px/1.3 'DM Sans', sans-serif;
+      color: rgba(12,10,62,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 8px;
+    }
+
+    /* Sections */
+    .dp-section { padding: 80px 24px; }
+    .dp-section--cream { background: #EEEBD3; }
+    .dp-section--navy { background: #0C0A3E; }
+    .dp-section--neutral { background: #fff; }
+    .dp-section--white { background: #fff; }
+    .dp-content { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .dp-content h2 {
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.045em !important;
+      margin: 8px 0 24px;
+    }
+    .dp-h2--light { color: #CCFF33 !important; }
+    .dp-content p {
+      font: 400 18px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.8) !important;
+      margin: 0 0 16px;
+    }
+    .dp-p--light { color: rgba(238,235,211,0.7) !important; }
+    .dp-section--navy .dp-content p { color: rgba(238,235,211,0.7) !important; }
+    .dp-content a { color: #0C0A3E; }
+    .dp-section--navy .dp-content a { color: #CCFF33; }
+
+    /* Demands (from Demo A) */
+    .dp-demands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+    .dp-demand {
+      border-left: 3px solid #CCFF33;
+      padding-left: 20px;
+    }
+    .dp-demand-num {
+      font: 800 32px/1 'DM Sans', sans-serif;
+      color: #CCFF33;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .dp-demand h3 {
+      font: 700 20px/1.1 'DM Sans', sans-serif !important;
+      color: #EEEBD3 !important;
+      margin: 0 0 8px;
+    }
+    .dp-demand p { color: rgba(238,235,211,0.6) !important; font-size: 16px !important; }
+
+    /* ── TIMELINE ───────────────────────────────────────── */
+    .dp-timeline {
+      position: relative;
+      padding-left: 56px;
+      margin-top: 48px;
+    }
+    .dp-timeline::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        rgba(12,10,62,0.1) 0%,
+        #A89CED 30%,
+        #CCFF33 70%,
+        #4CAF50 100%
+      );
+    }
+
+    .dp-tl-node {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 0 16px;
+      margin-bottom: 64px;
+    }
+    .dp-tl-node:last-child { margin-bottom: 0; }
+
+    .dp-tl-dot {
+      position: absolute;
+      left: -56px;
+      top: 4px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #0C0A3E;
+      border: 4px solid #EEEBD3;
+      z-index: 1;
+    }
+    .dp-tl-dot--purple { background: #A89CED; }
+    .dp-tl-dot--yellow { background: #CCFF33; }
+    .dp-tl-dot--green { background: #4CAF50; }
+
+    .dp-tl-year {
+      font: 800 28px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.03em;
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .dp-tl-year-alt {
+      font: 800 20px/1.1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.03em;
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .dp-tl-body {
+      grid-column: 2;
+    }
+    .dp-tl-body h3 {
+      font: 700 22px/1.05 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em !important;
+      margin: 0 0 10px;
+    }
+    .dp-tl-body p {
+      font: 400 16px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.7) !important;
+      margin: 0 0 12px;
+    }
+    .dp-tl-body strong { color: #0C0A3E; }
+    .dp-tl-body a { color: #0C0A3E; text-decoration: underline; }
+
+    /* Timeline images */
+    .dp-tl-image {
+      margin: 32px 0;
+      clear: both;
+      overflow: hidden;
+    }
+    .dp-tl-image img {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block !important;
+      float: none !important;
+      position: relative;
+    }
+    .dp-tl-images {
+      margin: 32px 0;
+      clear: both;
+      overflow: hidden;
+    }
+    .dp-tl-images--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .dp-tl-images--grid img {
+      width: 100%;
+      height: auto;
+      display: block !important;
+      object-fit: cover;
+      aspect-ratio: 3/2;
+    }
+
+    /* Footer fix */
+    footer[data-elementor-type="footer"],
+    .elementor-location-footer {
+      background: #0C0A3E !important;
+      color: #EEEBD3 !important;
+    }
+    footer[data-elementor-type="footer"] p,
+    footer[data-elementor-type="footer"] a,
+    footer[data-elementor-type="footer"] span,
+    footer[data-elementor-type="footer"] div {
+      color: rgba(238, 235, 211, 0.7) !important;
+    }
+    footer[data-elementor-type="footer"] a:hover {
+      color: #CCFF33 !important;
+    }
+    footer[data-elementor-type="footer"] img[data-src] {
+      content: attr(data-src);
+    }
+
+    /* Highlight node */
+    .dp-tl-node--highlight .dp-tl-body {
+      background: rgba(204,255,51,0.12);
+      padding: 20px;
+      margin: -8px -20px;
+      border-left: 3px solid #CCFF33;
+    }
+    .dp-tl-highlight-box {
+      background: #0C0A3E;
+      color: #CCFF33;
+      padding: 16px 20px;
+      margin: 12px 0 16px;
+      font: 600 15px/1.4 'DM Sans', sans-serif;
+    }
+    .dp-tl-highlight-box span { color: #CCFF33 !important; }
+
+    /* Actions */
+    .dp-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .dp-action {
+      background: #EEEBD3;
+      padding: 32px 24px;
+      text-decoration: none;
+      color: #0C0A3E;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .dp-action:hover { border-color: #CCFF33; }
+    .dp-action strong { font: 700 20px/1.1 'DM Sans', sans-serif !important; }
+    .dp-action p { font-size: 15px !important; color: rgba(12,10,62,0.6) !important; margin: 0 !important; }
+    .dp-arrow { font-size: 20px; color: #CCFF33; margin-top: auto; padding-top: 8px; }
+
+    /* ── IMAGES — card style like home campaign cards ──── */
+    .dp-tl-image,
+    .dp-tl-images--grid img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      margin: 16px 0;
+      max-height: 420px;
+    }
+    .dp-tl-images--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .dp-tl-images--grid img {
+      aspect-ratio: 4/3;
+      height: 100%;
+    }
+
+    /* ── RELATED BLOG CARDS ─────────────────────────────── */
+    .dp-related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .dp-related-card {
+      background: rgba(238,235,211,0.06);
+      padding: 28px 24px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid rgba(238,235,211,0.1);
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    .dp-related-card:hover { border-color: #CCFF33; }
+    .dp-related-tag {
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+    }
+    .dp-related-card h3 { font: 700 18px/1.2 'DM Sans', sans-serif !important; color: #EEEBD3 !important; margin: 0; }
+    .dp-related-read { font: 600 13px/1 'DM Sans', sans-serif; color: #CCFF33; margin-top: auto; }
+
+    /* ── PRESS LIST ─────────────────────────────────────── */
+    .dp-press-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 24px;
+    }
+    .dp-press-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      background: #fff;
+      text-decoration: none;
+      color: #0C0A3E;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+    .dp-press-item:hover {
+      border-left-color: #CCFF33;
+      background: rgba(204,255,51,0.06);
+    }
+    .dp-press-outlet {
+      font: 700 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: #0C0A3E;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .dp-press-title {
+      font: 500 16px/1.3 'DM Sans', sans-serif;
+      flex: 1;
+    }
+    .dp-press-arrow {
+      font-size: 18px;
+      color: #CCFF33;
+      flex-shrink: 0;
+    }
+    .dp-press-more {
+      display: inline-block;
+      margin-top: 20px;
+      font: 600 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0C0A3E;
+      text-decoration: none;
+    }
+    .dp-press-more:hover { color: #A89CED; }
+
+    /* ── FINAL CTA (donate + petition) ──────────────────── */
+    .dp-final-cta {
+      background: #A89CED;
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .dp-final-cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .dp-btn-large {
+      padding: 22px 48px !important;
+      font-size: 16px !important;
+    }
+    .dp-btn-secondary-light {
+      display: inline-block;
+      background: transparent;
+      color: #0C0A3E;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none;
+      border: 2px solid #0C0A3E;
+      transition: all 0.2s;
+    }
+    .dp-btn-secondary-light:hover { background: #0C0A3E; color: #CCFF33; }
+
+    /* CTA */
+    .dp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; }
+    .dp-cta h2 {
+      margin: 0 0 16px;
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+    }
+    .dp-cta p {
+      color: rgba(238, 235, 211, 0.6) !important;
+      font: 400 17px/1.5 'DM Sans', sans-serif !important;
+      max-width: 440px;
+      margin: 0 auto 32px !important;
+    }
+
+    @media (max-width: 768px) {
+      .dp-hero { padding: 80px 24px 60px; }
+      .dp-stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .dp-stat { border-bottom: 1px solid rgba(12,10,62,0.1); }
+      .dp-demands { grid-template-columns: 1fr; }
+      .dp-tl-node { grid-template-columns: 1fr; }
+      .dp-tl-year { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+      .dp-tl-year-alt { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+      .dp-tl-body { grid-column: 1; }
+      .dp-timeline { padding-left: 48px; }
+      .dp-tl-dot { left: -48px; width: 36px; height: 36px; }
+      .dp-tl-images--grid { grid-template-columns: 1fr; }
+      .dp-press-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .dp-final-cta-buttons { flex-direction: column; align-items: center; }
+      .dp-related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</Layout>

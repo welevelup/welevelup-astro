@@ -1,0 +1,263 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+<div class="mo-page">
+  <h1 class="mo-title">Menu Options</h1>
+  <p class="mo-subtitle">3 options for the navigation. Scroll down to compare.</p>
+
+  <!-- ═══════ OPTION A: Compact bar + mega dropdown ═══════ -->
+  <section class="mo-section">
+    <h2>Option A — Compact bar + Mega dropdown</h2>
+    <p>Simple top bar. Campaigns opens a full-width mega-menu grid.</p>
+  </section>
+
+  <header class="nav-a">
+    <div class="nav-a-inner">
+      <a href="/" class="nav-a-logo">
+        <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="32" />
+      </a>
+      <nav class="nav-a-links">
+        <div class="nav-a-group">
+          <span class="nav-a-item">About Us ▾</span>
+          <div class="nav-a-drop nav-a-drop--simple">
+            <a href="/about-us">What we do</a>
+            <a href="/what-we-are-proud-of">What we are proud of</a>
+          </div>
+        </div>
+        <div class="nav-a-group">
+          <span class="nav-a-item">Campaigns ▾</span>
+          <div class="nav-a-drop nav-a-drop--mega">
+            <div class="nav-a-mega">
+              <div class="nav-a-mega-col">
+                <strong>Media Guidelines</strong>
+                <a href="/media-guidelines">Campaign page</a>
+                <a href="/petition/dignity-for-dead-women">Sign the petition</a>
+                <a href="/ddw-resources">Resources</a>
+              </div>
+              <div class="nav-a-mega-col">
+                <strong>Pregnancy in Prison</strong>
+                <a href="/active-campaigns/pregnancy-in-prison">Campaign page</a>
+                <a href="/pp-resources">Resources</a>
+              </div>
+              <div class="nav-a-mega-col">
+                <strong>Sexual Violence in Football</strong>
+                <a href="/active-campaigns/sexual-violence-in-football">Campaign page</a>
+              </div>
+              <div class="nav-a-mega-col">
+                <strong>Abortion is Healthcare</strong>
+                <a href="/active-campaigns/abortion-is-healthcare">Campaign page</a>
+                <a href="/abortion-is-healthcare-resources">Resources</a>
+              </div>
+              <div class="nav-a-mega-col">
+                <strong>#NoMoreLyes</strong>
+                <a href="/active-campaigns/nomorelyes-2">Campaign page</a>
+                <a href="/nomorelyes-relaxer-info-kit">Relaxer Info Kit</a>
+                <a href="/nomorelyes-open-letter-to-loreal">Open letter to L'Oréal</a>
+              </div>
+              <div class="nav-a-mega-col">
+                <strong>We Protect Us</strong>
+                <a href="/active-campaigns/we-protect-us">Trainings</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a href="/all-resources" class="nav-a-item">Resources</a>
+        <a href="/blog" class="nav-a-item">Blog</a>
+        <a href="/press" class="nav-a-item">Press</a>
+        <a href="/contact" class="nav-a-item">Contact</a>
+      </nav>
+      <div class="nav-a-ctas">
+        <a href="/donate" class="nav-a-btn nav-a-btn--outline">Donate</a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="nav-a-btn nav-a-btn--fill">Join Us</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="mo-spacer"></div>
+
+  <!-- ═══════ OPTION B: Two-row nav ═══════ -->
+  <section class="mo-section">
+    <h2>Option B — Two rows: brand + actions on top, links below</h2>
+    <p>Logo and CTAs on the first row, navigation links on the second. Cleaner separation.</p>
+  </section>
+
+  <header class="nav-b">
+    <div class="nav-b-top">
+      <a href="/" class="nav-b-logo">
+        <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="36" />
+        <span>We're working together for gender justice in the UK. Will you join us?</span>
+      </a>
+      <div class="nav-b-ctas">
+        <a href="/donate" class="nav-b-btn nav-b-btn--primary">Donate</a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="nav-b-btn nav-b-btn--outline">Join Us</a>
+      </div>
+    </div>
+    <nav class="nav-b-bar">
+      <div class="nav-b-group">
+        <span>About Us ▾</span>
+        <div class="nav-b-drop">
+          <a href="/about-us">What we do</a>
+          <a href="/what-we-are-proud-of">What we are proud of</a>
+        </div>
+      </div>
+      <div class="nav-b-group">
+        <span>Campaigns ▾</span>
+        <div class="nav-b-drop nav-b-drop--mega">
+          <div class="nav-b-mega">
+            <div><strong>Media Guidelines</strong><a href="/media-guidelines">View</a><a href="/ddw-resources">Resources</a></div>
+            <div><strong>Pregnancy in Prison</strong><a href="/active-campaigns/pregnancy-in-prison">View</a><a href="/pp-resources">Resources</a></div>
+            <div><strong>Sexual Violence in Football</strong><a href="/active-campaigns/sexual-violence-in-football">View</a></div>
+            <div><strong>Abortion is Healthcare</strong><a href="/active-campaigns/abortion-is-healthcare">View</a><a href="/abortion-is-healthcare-resources">Resources</a></div>
+            <div><strong>#NoMoreLyes</strong><a href="/active-campaigns/nomorelyes-2">View</a><a href="/nomorelyes-relaxer-info-kit">Info Kit</a></div>
+            <div><strong>We Protect Us</strong><a href="/active-campaigns/we-protect-us">Trainings</a></div>
+          </div>
+        </div>
+      </div>
+      <div class="nav-b-group">
+        <span>Community ▾</span>
+        <div class="nav-b-drop">
+          <a href="/active-campaigns/premier-league-and-fa">Premier League & FA</a>
+          <a href="/active-campaigns/islington-council-finish-holloway-womens-centre">Islington Council</a>
+          <a href="/solidarity-with-katie">Solidarity with Katie</a>
+        </div>
+      </div>
+      <a href="/all-resources">Resources</a>
+      <a href="/blog">Blog</a>
+      <a href="/press">Press Coverage</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="mo-spacer"></div>
+
+  <!-- ═══════ OPTION C: Centered minimal ═══════ -->
+  <section class="mo-section">
+    <h2>Option C — Centered minimal with side CTAs</h2>
+    <p>Logo centered, nav links evenly distributed, CTAs on the far right. Minimal, editorial.</p>
+  </section>
+
+  <header class="nav-c">
+    <div class="nav-c-inner">
+      <div class="nav-c-left">
+        <div class="nav-c-group">
+          <span>About ▾</span>
+          <div class="nav-c-drop"><a href="/about-us">What we do</a><a href="/what-we-are-proud-of">Proud of</a></div>
+        </div>
+        <div class="nav-c-group">
+          <span>Campaigns ▾</span>
+          <div class="nav-c-drop nav-c-drop--mega">
+            <div class="nav-c-mega">
+              <div><strong>Media Guidelines</strong><a href="/media-guidelines">View</a></div>
+              <div><strong>Pregnancy in Prison</strong><a href="/active-campaigns/pregnancy-in-prison">View</a></div>
+              <div><strong>Football</strong><a href="/active-campaigns/sexual-violence-in-football">View</a></div>
+              <div><strong>Abortion</strong><a href="/active-campaigns/abortion-is-healthcare">View</a></div>
+              <div><strong>#NoMoreLyes</strong><a href="/active-campaigns/nomorelyes-2">View</a></div>
+              <div><strong>We Protect Us</strong><a href="/active-campaigns/we-protect-us">View</a></div>
+            </div>
+          </div>
+        </div>
+        <a href="/all-resources">Resources</a>
+      </div>
+      <a href="/" class="nav-c-logo">
+        <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="38" />
+      </a>
+      <div class="nav-c-right">
+        <a href="/blog">Blog</a>
+        <a href="/press">Press</a>
+        <a href="/contact">Contact</a>
+        <a href="/donate" class="nav-c-btn">Donate</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="mo-spacer"></div>
+</div>
+
+<style is:global>
+  .mo-page { font-family: 'DM Sans', sans-serif; background: #EEEBD3; }
+  .mo-title { font: 800 48px/1 'DM Sans'; color: #0C0A3E; text-align: center; padding: 64px 24px 8px; letter-spacing: -0.04em; }
+  .mo-subtitle { text-align: center; color: rgba(12,10,62,0.5); font-size: 16px; margin-bottom: 48px; }
+  .mo-section { padding: 48px 24px 16px; max-width: 900px; margin: 0 auto; }
+  .mo-section h2 { font: 700 24px/1.1 'DM Sans'; color: #0C0A3E; margin: 0 0 8px; }
+  .mo-section p { font: 400 15px/1.4 'DM Sans'; color: rgba(12,10,62,0.6); }
+  .mo-spacer { height: 200px; background: #f5f3e8; border-top: 1px solid rgba(12,10,62,0.05); display: flex; align-items: center; justify-content: center; }
+  .mo-spacer::after { content: '↑ hover the menu above to see dropdowns'; font: 400 14px 'DM Sans'; color: rgba(12,10,62,0.3); }
+
+  /* ═══ OPTION A ═══ */
+  .nav-a { background: #0C0A3E; position: sticky; top: 0; z-index: 100; }
+  .nav-a-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 14px 24px; gap: 24px; }
+  .nav-a-logo img { height: 32px; }
+  .nav-a-links { display: flex; align-items: center; gap: 2px; flex: 1; }
+  .nav-a-item, .nav-a-links > a { font: 600 12px/1 'DM Sans'; color: rgba(238,235,211,0.6); text-decoration: none; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; }
+  .nav-a-item:hover, .nav-a-links > a:hover { color: #CCFF33; }
+  .nav-a-group { position: relative; }
+  .nav-a-drop { display: none; position: absolute; top: 100%; left: 0; background: #0C0A3E; border: 1px solid rgba(238,235,211,0.1); min-width: 200px; padding: 8px 0; z-index: 200; }
+  .nav-a-drop--mega { left: -100px; }
+  .nav-a-group:hover .nav-a-drop { display: block; }
+  .nav-a-drop a { display: block; padding: 8px 16px; font: 400 13px/1.3 'DM Sans'; color: rgba(238,235,211,0.6); text-decoration: none; }
+  .nav-a-drop a:hover { color: #CCFF33; background: rgba(238,235,211,0.04); }
+  .nav-a-mega { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; min-width: 600px; }
+  .nav-a-mega-col { padding: 20px; border-right: 1px solid rgba(238,235,211,0.06); }
+  .nav-a-mega-col:last-child { border-right: none; }
+  .nav-a-mega-col strong { font: 700 12px/1 'DM Sans'; color: #CCFF33; text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 12px; }
+  .nav-a-mega-col a { padding: 6px 0; font-size: 13px; display: block; }
+  .nav-a-ctas { display: flex; gap: 8px; }
+  .nav-a-btn { font: 700 11px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 18px; text-decoration: none; }
+  .nav-a-btn--outline { border: 1.5px solid rgba(238,235,211,0.3); color: #EEEBD3; }
+  .nav-a-btn--outline:hover { border-color: #CCFF33; color: #CCFF33; }
+  .nav-a-btn--fill { background: #CCFF33; color: #0C0A3E; border: 1.5px solid #CCFF33; }
+  .nav-a-btn--fill:hover { background: #fff; }
+
+  /* ═══ OPTION B ═══ */
+  .nav-b { background: #0C0A3E; position: sticky; top: 0; z-index: 100; }
+  .nav-b-top { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px 0; }
+  .nav-b-logo { display: flex; align-items: center; gap: 16px; text-decoration: none; }
+  .nav-b-logo img { height: 36px; }
+  .nav-b-logo span { font: 400 12px/1.4 'DM Sans'; color: rgba(238,235,211,0.45); max-width: 200px; }
+  .nav-b-ctas { display: flex; gap: 8px; }
+  .nav-b-btn { font: 700 12px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.06em; padding: 12px 24px; text-decoration: none; }
+  .nav-b-btn--primary { background: #CCFF33; color: #0C0A3E; }
+  .nav-b-btn--primary:hover { background: #fff; }
+  .nav-b-btn--outline { border: 1.5px solid rgba(238,235,211,0.3); color: #EEEBD3; }
+  .nav-b-btn--outline:hover { border-color: #CCFF33; color: #CCFF33; }
+  .nav-b-bar { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; gap: 4px; padding: 12px 24px; border-top: 1px solid rgba(238,235,211,0.06); margin-top: 12px; }
+  .nav-b-bar > a, .nav-b-bar span { font: 600 13px/1 'DM Sans'; color: rgba(238,235,211,0.55); text-decoration: none; padding: 8px 12px; text-transform: uppercase; letter-spacing: 0.03em; cursor: pointer; }
+  .nav-b-bar > a:hover, .nav-b-bar span:hover { color: #CCFF33; }
+  .nav-b-group { position: relative; }
+  .nav-b-drop { display: none; position: absolute; top: 100%; left: 0; background: #0C0A3E; border: 1px solid rgba(238,235,211,0.1); min-width: 220px; padding: 8px 0; z-index: 200; }
+  .nav-b-group:hover .nav-b-drop { display: block; }
+  .nav-b-drop a { display: block; padding: 8px 16px; font: 400 13px/1.3 'DM Sans'; color: rgba(238,235,211,0.6); text-decoration: none; }
+  .nav-b-drop a:hover { color: #CCFF33; background: rgba(238,235,211,0.04); }
+  .nav-b-drop--mega { min-width: 600px; left: -50px; }
+  .nav-b-mega { display: grid; grid-template-columns: repeat(3, 1fr); padding: 8px; }
+  .nav-b-mega > div { padding: 16px; }
+  .nav-b-mega strong { font: 700 11px/1 'DM Sans'; color: #CCFF33; text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 10px; }
+  .nav-b-mega a { padding: 4px 0; font-size: 12px; }
+
+  /* ═══ OPTION C ═══ */
+  .nav-c { background: #0C0A3E; position: sticky; top: 0; z-index: 100; }
+  .nav-c-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
+  .nav-c-left, .nav-c-right { display: flex; align-items: center; gap: 4px; flex: 1; }
+  .nav-c-right { justify-content: flex-end; }
+  .nav-c-logo { flex-shrink: 0; margin: 0 32px; }
+  .nav-c-logo img { height: 38px; }
+  .nav-c-left > a, .nav-c-left span, .nav-c-right > a { font: 600 12px/1 'DM Sans'; color: rgba(238,235,211,0.6); text-decoration: none; padding: 10px 12px; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; }
+  .nav-c-left > a:hover, .nav-c-left span:hover, .nav-c-right > a:hover { color: #CCFF33; }
+  .nav-c-btn { background: #CCFF33 !important; color: #0C0A3E !important; padding: 10px 24px !important; font-weight: 700 !important; margin-left: 8px; }
+  .nav-c-btn:hover { background: #fff !important; }
+  .nav-c-group { position: relative; }
+  .nav-c-drop { display: none; position: absolute; top: 100%; left: 0; background: #0C0A3E; border: 1px solid rgba(238,235,211,0.1); min-width: 200px; padding: 8px 0; z-index: 200; }
+  .nav-c-group:hover .nav-c-drop { display: block; }
+  .nav-c-drop a { display: block; padding: 8px 16px; font: 400 13px/1.3 'DM Sans'; color: rgba(238,235,211,0.6); text-decoration: none; }
+  .nav-c-drop a:hover { color: #CCFF33; background: rgba(238,235,211,0.04); }
+  .nav-c-drop--mega { min-width: 500px; left: -100px; }
+  .nav-c-mega { display: grid; grid-template-columns: repeat(3, 1fr); padding: 8px; }
+  .nav-c-mega > div { padding: 12px; }
+  .nav-c-mega strong { font: 700 11px/1 'DM Sans'; color: #CCFF33; text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 8px; }
+  .nav-c-mega a { padding: 4px 0; font-size: 12px; }
+</style>
+</Layout>

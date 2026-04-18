@@ -1,0 +1,767 @@
+---
+/**
+ * Campaign: #NoMoreLyes
+ * Editorial hero with video background + Timeline for "The journey so far"
+ * Real content from the campaign.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HERO WITH VIDEO BACKGROUND -->
+  <section class="dp-hero">
+    <div class="dp-hero-video-bg">
+      <iframe
+        src="https://www.youtube.com/embed/pR4LGavyeUc?autoplay=1&mute=1&loop=1&playlist=pR4LGavyeUc&controls=0&showinfo=0&modestbranding=1&playsinline=1"
+        title="Background video"
+        frameborder="0"
+        allow="autoplay"
+        loading="eager"
+      ></iframe>
+    </div>
+    <div class="dp-hero-overlay"></div>
+    <div class="dp-hero-inner">
+      <span class="dp-label">Health &amp; Racial Justice</span>
+      <h1 class="dp-title">#NoMoreLyes<br/>Campaign</h1>
+      <p class="dp-tagline">The #NoMoreLyes campaign is a feminist campaign led by Level Up challenging beauty brands to remove toxic chemicals from hair products used by Black women.</p>
+      <div class="dp-hero-cta">
+        <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="dp-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AIM -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Aim</h2>
+      <p>Force big beauty brands to remove cancerous chemicals from Black women's hair products</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <p>The <strong>#NoMoreLyes</strong> campaign is a feminist campaign led by Level Up challenging beauty brands to remove toxic chemicals from hair products used by Black women.</p>
+      <p>Research has linked chemical hair relaxers to increased risks of breast cancer, uterine cancer, fibroids and other serious health conditions. Yet major beauty corporations continue to deny responsibility.</p>
+      <p>Level Up's No More Lyes campaign demands accountability, transparency and an end to products that put Black women's health at risk.</p>
+    </div>
+  </section>
+
+  <!-- WHY? -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Why?</h2>
+      <p>Millions of Black women around the world use hair relaxers, chemical hair straightening creams, for several reasons: some find it makes their hair easier to manage; some do it to avoid hair discrimination at school or work; some of us just prefer it that way. However, recent studies have shown that use of hair relaxers is linked to increased risk in breast cancer, fibroids, uterine cancer and other serious illnesses.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT BEGAN -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <h2>How the #NoMoreLyes Campaign began</h2>
+      <p>In July 2021, Oxford University published research which found that <a href="https://academic.oup.com/carcin/article-abstract/42/7/924/6278856?redirectedFrom=fulltext" target="_blank" rel="noopener"><strong>long-term use of lye-based relaxers is linked to a 30% increased breast cancer risk for Black women</strong></a><strong>.</strong> Lye (sodium hydroxide) is the chemical used to unblock drains. Many Black women understand the risk of scalp burns but most have no idea that hair relaxers could be detrimental to our health.</p>
+      <p>L'Oréal is one of the biggest manufacturers of hair relaxers in the world through its ownership of Dark &amp; Lovely and SoftSheen Carson. Level Up found that lye is present even in their products labelled "no lye" – including those designed for children. So even when Black women think they are making a healthier, more conscious decision, they're being lied to.</p>
+      <p>We don't accept this. Big beauty brands like L'Oréal must take responsibility for the harm caused by their products, and remove toxic chemicals from hair relaxers.</p>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <span class="dp-label">The Journey So Far</span>
+      <h2>The journey so far</h2>
+
+      <div class="dp-timeline">
+
+        <!-- 2021 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot"></div>
+          <div class="dp-tl-year">2021</div>
+          <div class="dp-tl-body">
+            <p>In response to a growing body of research linking the use of hair relaxers to a higher risk of serious illnesses, Level Up launched the #NoMoreLyes campaign demanding that beauty brands like L'Oréal commit to removing lye (sodium hydroxide) and other dangerous ingredients from Black women and children's hair relaxers. Sodium hydroxide is the stuff used to unblock drains. The UK Health Security Agency categorises sodium hydroxide as a <em>"highly corrosive alkali. Toxic and corrosive by ingestion, inhalation, dermal and ocular exposure"</em>, and the Health and Safety Executive classifies sodium hydroxide as a category 1A skin corrosive.</p>
+            <p>Within a week, the petition had 4,000 signatures and received news coverage in The Independent, gal-dem, Loose Women and cosmetic beauty news.</p>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.07.19-127x300.png" alt="#NoMoreLyes campaign launch 2021" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.07.28-283x300.png" alt="#NoMoreLyes campaign 2021" loading="lazy" />
+            </div>
+            <div class="dp-tl-image">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.07.33-768x470.png" alt="#NoMoreLyes campaign press coverage 2021" loading="lazy" />
+            </div>
+            <p>In August, more than 3,000 Level Up supporters sent emails directly to the Managing Director of L'Oréal urging him to make hair relaxers safe to use or remove them from the shelves.</p>
+          </div>
+        </div>
+
+        <!-- 2022 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--purple"></div>
+          <div class="dp-tl-year">2022</div>
+          <div class="dp-tl-body">
+            <p>In March 2022, 700 #NoMoreLyes supporters sent L'Oréal a request for the chemical data safety sheets of two hair relaxers manufactured by Dark &amp; Lovely, a subsidiary of L'Oréal. Chemical data safety sheets are documents that show a manufacturer has done the required testing on the product and under UK regulations, consumers have a right to access the product safety information for anything they purchase. Also, both of the hair relaxers we purchased were "No-Lye" on the packaging while listing sodium hydroxide in the small print. So even when Black women think they're making a safer choice, that's not what they're buying.</p>
+            <p>So, we wanted to know if L'Oréal was aware that lye-based hair relaxers were linked to fibroids and increased risk of breast cancer. In response, they told us that they do not import hair relaxers into the UK. While L'Oréal may not directly import hair relaxers into the UK, it does manufacture them in countries like South Africa, where there is little to no regulation, and makes them available to UK consumers via third-party resellers, including Amazon and independent high-street shops like Pak's.</p>
+            <p>In May, we commissioned landmark research on Black British Women's experiences with hair relaxers. The research, carried out by Treasure Tress and published by <a href="https://www.independent.co.uk/life-style/black-hair-relaxers-side-effects-b2085554.html" target="_blank" rel="noopener">The Independent</a>, found that:</p>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-19.04.44-e1771121931635-768x766.png" alt="Research findings on Black British women and hair relaxers 2022" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2025/08/NML11-2.webp" alt="Black woman's hands during a hair treatment, highlighting research showing that most Black British women do not trust lye-based hair relaxer products." loading="lazy" />
+            </div>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.12.11-e1771122072752-768x759.png" alt="#NoMoreLyes research statistics 2022" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.12.21-e1771970138507-768x752.png" alt="#NoMoreLyes research statistics 2022" loading="lazy" />
+            </div>
+            <p>The findings from this piece of research received press coverage in The Guardian, Metro and Stylist Magazine.</p>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.12.48-198x300.png" alt="#NoMoreLyes press coverage 2022" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.13.01-300x290.png" alt="#NoMoreLyes media 2022" loading="lazy" />
+            </div>
+            <div class="dp-tl-image">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-09-a-las-23.12.54-300x233.png" alt="#NoMoreLyes coverage 2022" loading="lazy" />
+            </div>
+            <p>In October, <a href="https://edition.cnn.com/2022/10/24/health/hair-straightening-products-lawsuit" target="_blank" rel="noopener">a lawsuit against L'Oréal USA and several other companies on behalf of Jenny Mitchell</a> – linking her uterine cancer and subsequent hysterectomy to the long-term use of hair relaxers. This case appears to be the first of its kind, as previous legal claims regarding hair relaxers have focussed on hair loss/damage and chemical burns. This quickly grew into a class action case.</p>
+            <p>At the end of the year, Level Up wrote to the Office for Product Safety and Standards to notify them that we did not believe the hair relaxers we purchased met UK regulations. In their response, the OPSS told us that this wasn't their responsibility.</p>
+          </div>
+        </div>
+
+        <!-- 2023 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--purple"></div>
+          <div class="dp-tl-year">2023</div>
+          <div class="dp-tl-body">
+            <p>In April, Level Up published an open letter to L'Oréal calling on the beauty company to:</p>
+            <ul style="padding-left: 24px; margin-bottom: 16px;">
+              <li style="font: 400 16px/1.55 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); margin-bottom: 12px;"><strong>Make hair relaxers safe to use or take them off the shelves.</strong> You have a duty of care to provide safe products to your paying customers. If you are not able to do that, the products should be removed from the shelves. No one should risk losing their life, their fertility or have their quality of life negatively impacted from using hair products. People will straighten their hair – make it a safe choice.</li>
+              <li style="font: 400 16px/1.55 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); margin-bottom: 12px;"><strong>Make the nature of the ingredients and possible harms clear on the product label/packaging.</strong> The correlation with cancer does not come from the misuse of the product, it's a risk consumers are exposed to from using the products as intended. If products are to remain on the shelves, with the current ingredients, they should clearly state that chemical hair straighteners have been linked to an increased risk of cancer and fibroids. This should be clearly visible, easy-to-read labelling – you shouldn't have to be a chemist to be able to make a transparent choice.</li>
+              <li style="font: 400 16px/1.55 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); margin-bottom: 12px;"><strong>Invest in research about the long-term impact of these ingredients and products on Black women.</strong> While "all of [y]our ingredients and products undergo rigorous safety evaluations before they are placed on the market", they may not be showing the impact of long-term use.</li>
+            </ul>
+            <p>The letter was signed by more than 700 campaign supporters and a coalition of MPs, campaigners, and professionals, including Dawn Butler MP; Baroness Lola Young; Andrea Simon, the director of EVAW; author Reni Eddo-Lodge; actor Lolly Adefope; <a href="https://www.projectembrace.org.uk/" target="_blank" rel="noopener">Project Embrace</a> and <a href="https://blackwomenrisinguk.org/" target="_blank" rel="noopener">Black Women Rising</a></p>
+            <p>The open letter received global press coverage which helped to raise awareness of the harms linked to hair relaxers.</p>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.10.41.png" alt="#NoMoreLyes open letter press coverage 2023" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.10.31.png" alt="#NoMoreLyes open letter coverage 2023" loading="lazy" />
+            </div>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.10.17-768x580.png" alt="#NoMoreLyes 2023 coverage" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.11.03.png" alt="#NoMoreLyes 2023" loading="lazy" />
+            </div>
+            <div class="dp-tl-image">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.10.53-768x703.png" alt="#NoMoreLyes 2023 campaign" loading="lazy" />
+            </div>
+            <p>L'Oréal's response to the open letter was the usual corporate key messages that were not specific enough to even mention hair relaxers beyond quoting our letter.</p>
+            <p>Also, Chi Onwurah MP tabled questions to the Department for Business and Trade regarding lye-based hair relaxers and the health risks related to Black women. She asked if the Department had <em>"made an assessment of the impact of hair relaxers containing lye on (a) the health of black women and (b) associated health outcomes and inequalities experienced by black women."</em> In the response from Kevin Hollinrake MP, a previous minister the Department for Business and Trade, he confirmed that no safety assessments had been carried out on hair relaxers and that the Office for Product Safety and Standards were responsible for regulating cosmetic products.</p>
+          </div>
+        </div>
+
+        <!-- 2024 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--yellow"></div>
+          <div class="dp-tl-year">2024</div>
+          <div class="dp-tl-body">
+            <p>January began unexpectedly when one of the #NoMoreLyes campaign images, shot by <a href="https://www.yvonne-maxwell.com/#0" target="_blank" rel="noopener">Yvonne E. Maxwell</a>, won the 2023 Portrait of Britain Award. The photo, entitled #NoMoreLyes II, was published in the Portrait of Britain book and displayed on digital billboards across the UK.</p>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.17.48-768x958.png" alt="#NoMoreLyes II Portrait of Britain Award 2024" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.18.01-768x958.png" alt="#NoMoreLyes Portrait of Britain 2024" loading="lazy" />
+            </div>
+            <div class="dp-tl-image">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.18.13-768x865.png" alt="#NoMoreLyes billboard display 2024" loading="lazy" />
+            </div>
+            <p>In April, The Guardian and <a href="https://www.theexamination.org/articles/while-many-black-women-in-us-abandon-hair-relaxers-linked-to-cancer-sales-climb-in-african-countries" target="_blank" rel="noopener">The Examination</a> published a deep dive into the harms associated with hair relaxers. The investigation highlighted the product's link to cancer and its increasing popularity in African countries.</p>
+            <p>We realised that the body of research about the harms of hair relaxer was growing, so Level Up launched the #NoMoreLyes Relaxer Info Kit – a collection of research, lawsuits and articles about hair relaxers in one place.</p>
+          </div>
+        </div>
+
+        <!-- 2025 -->
+        <div class="dp-tl-node dp-tl-node--highlight">
+          <div class="dp-tl-dot dp-tl-dot--yellow"></div>
+          <div class="dp-tl-year">2025</div>
+          <div class="dp-tl-body">
+            <p>Throughout this campaign, we've worked to try and understand who was responsible for overseeing the safety of hair relaxers. So, in 2025, we shifted our focus to regulators. With the help of Systemic Justice and Leigh Day, we contacted the Office for Product Safety Standards, the UK Health Security Agency and London Trading Standards to inform them that we did not believe the hair relaxers we purchased met UK regulations. They all told us that the regulation of hair relaxers was not their responsibility.</p>
+            <p>We also wrote to the Advertising Standards Authority, notifying them of online sponsored adverts promoting "No-lye" hair relaxers that listed sodium hydroxide in the ingredients. We were particularly focused on adverts of children's hair relaxers promoting a healthy image of the use of hair relaxers, despite the active ingredient in the product being a category 1A skin corrosive.</p>
+            <p>This has highlighted how gaps in the UK's regulatory infrastructure leave Black women and children overexposed to toxic endocrine-disrupting chemicals.</p>
+            <p>In May, the #NoMoreLyes campaign was on the cover of <a href="https://www.voice-online.co.uk/news/uk-news/2023/04/27/campaigners-call-on-loreal-to-remove-lye-from-hair-relaxers-due-to-cancer-risk/" target="_blank" rel="noopener">The Voice Newspaper</a> with the support of Dawn Butler MP.</p>
+            <div class="dp-tl-image">
+              <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-10-a-las-14.33.44-247x300.png" alt="#NoMoreLyes on the cover of The Voice Newspaper 2025" loading="lazy" />
+            </div>
+            <p>After 4 years of campaigning, in December, the government announced the landmark Parliamentary inquiry into the <a href="https://committees.parliament.uk/work/9435/the-science-and-regulation-of-hair-and-beauty-products-and-treatments/" target="_blank" rel="noopener">science and regulation of hair and beauty products and treatments in the UK</a>. Level Up was invited to submit written evidence about the harms of hair relaxers.</p>
+          </div>
+        </div>
+
+        <!-- 2026 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--green"></div>
+          <div class="dp-tl-year">2026</div>
+          <div class="dp-tl-body">
+            <p>In January, Level Up presented oral evidence to the Committee leading the hair and beauty inquiry. Level Up's submission focused on how the toxic chemicals in hair relaxers, a lack of corporate accountability and gaps within the existing regulatory infrastructure leave Black women and children vulnerable to harms ranging from scalp burns and hair loss to life-threatening illnesses. It is informed by the direct experiences of Black women, legal and cosmetic experts, and scientific research.</p>
+            <div style="margin: 32px 0; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+              <iframe
+                src="https://www.youtube.com/embed/KBBRQgdpSP4"
+                title="#NoMoreLyes Parliamentary evidence 2026"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- What's Next? -->
+        <div class="dp-tl-node dp-tl-node--highlight">
+          <div class="dp-tl-dot dp-tl-dot--green"></div>
+          <div class="dp-tl-year-alt">What's<br/>Next?</div>
+          <div class="dp-tl-body">
+            <h3>What's Next?</h3>
+            <p>While we wait to hear the recommendations from the hair and beauty inquiry, we will continue to demand a higher standard of product safety and corporate transparency.</p>
+            <p>At the time of writing, the class action case in the USA against multiple hair relaxer manufacturers has over 10,000 claimants. We are monitoring the progress, knowing that this may have implications internationally, including over here in the U.K.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW YOU CAN HELP -->
+  <section class="dp-section dp-section--neutral">
+    <div class="dp-content">
+      <span class="dp-label">Take Action</span>
+      <h2>How you can help</h2>
+      <div class="dp-actions">
+        <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="dp-action" target="_blank" rel="noopener">
+          <strong>Sign the petition</strong>
+          <p>Demand L'Oréal remove toxic chemicals from hair relaxers</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="/donate" class="dp-action">
+          <strong>Donate</strong>
+          <p>Support this ongoing work</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="dp-action" target="_blank" rel="noopener">
+          <strong>Join the Level Up Community</strong>
+          <p>Stay updated and take action with us</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="dp-final-cta">
+    <div class="dp-content">
+      <h2 class="dp-h2--light">Support this campaign</h2>
+      <div class="dp-final-cta-buttons">
+        <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="dp-btn-primary dp-btn-large" target="_blank" rel="noopener">Sign the petition</a>
+        <a href="/donate" class="dp-btn-secondary-light dp-btn-large">Donate</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA: JOIN -->
+  <section class="dp-cta">
+    <div class="dp-content" style="text-align:center">
+      <h2 class="dp-h2--light">Join the Level Up community</h2>
+      <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="dp-btn-primary" target="_blank" rel="noopener">Join us</a>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style is:global>
+    /* ── NOMORELYES CAMPAIGN ───────────────────────────── */
+
+    .dp-hero {
+      background: #0C0A3E;
+      padding: 100px 24px 80px;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+    }
+    .dp-hero-video-bg {
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      right: -60px;
+      bottom: -60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .dp-hero-video-bg iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.2);
+    }
+    .dp-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 10, 62, 0.75);
+      z-index: 1;
+    }
+    .dp-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+    .dp-label {
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .dp-label--light { color: rgba(238,235,211,0.45); }
+    .dp-title {
+      font: 800 clamp(48px,10vw,88px)/0.88 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.045em !important;
+      margin: 0 0 24px;
+    }
+    .dp-tagline {
+      font: 400 20px/1.4 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.65) !important;
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+    .dp-hero-cta { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .dp-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .dp-btn-primary:hover { background: #fff; }
+    .dp-supporters {
+      font: 700 14px/1 'DM Sans', sans-serif;
+      color: rgba(238,235,211,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Stats */
+    .dp-stats { background: #CCFF33; }
+    .dp-stats-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .dp-stat {
+      padding: 36px 20px;
+      text-align: center;
+      border-right: 1px solid rgba(12,10,62,0.1);
+    }
+    .dp-stat:last-child { border-right: none; }
+    .dp-stat-num {
+      display: block;
+      font: 800 44px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.04em;
+    }
+    .dp-stat-label {
+      display: block;
+      font: 500 11px/1.3 'DM Sans', sans-serif;
+      color: rgba(12,10,62,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 8px;
+    }
+
+    /* Sections */
+    .dp-section { padding: 80px 24px; }
+    .dp-section--cream { background: #EEEBD3; }
+    .dp-section--navy { background: #0C0A3E; }
+    .dp-section--neutral { background: #fff; }
+    .dp-section--white { background: #fff; }
+    .dp-content { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .dp-content h2 {
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.045em !important;
+      margin: 8px 0 24px;
+    }
+    .dp-h2--light { color: #CCFF33 !important; }
+    .dp-content p {
+      font: 400 18px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.8) !important;
+      margin: 0 0 16px;
+    }
+    .dp-p--light { color: rgba(238,235,211,0.7) !important; }
+    .dp-section--navy .dp-content p { color: rgba(238,235,211,0.7) !important; }
+    .dp-content a { color: #0C0A3E; }
+    .dp-section--navy .dp-content a { color: #CCFF33; }
+
+    /* Demands */
+    .dp-demands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+    .dp-demand {
+      border-left: 3px solid #CCFF33;
+      padding-left: 20px;
+    }
+    .dp-demand-num {
+      font: 800 32px/1 'DM Sans', sans-serif;
+      color: #CCFF33;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .dp-demand h3 {
+      font: 700 20px/1.1 'DM Sans', sans-serif !important;
+      color: #EEEBD3 !important;
+      margin: 0 0 8px;
+    }
+    .dp-demand p { color: rgba(238,235,211,0.6) !important; font-size: 16px !important; }
+
+    /* ── TIMELINE ───────────────────────────────────────── */
+    .dp-timeline {
+      position: relative;
+      padding-left: 56px;
+      margin-top: 48px;
+    }
+    .dp-timeline::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        rgba(12,10,62,0.1) 0%,
+        #A89CED 30%,
+        #CCFF33 70%,
+        #4CAF50 100%
+      );
+    }
+
+    .dp-tl-node {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 0 16px;
+      margin-bottom: 64px;
+    }
+    .dp-tl-node:last-child { margin-bottom: 0; }
+
+    .dp-tl-dot {
+      position: absolute;
+      left: -56px;
+      top: 4px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #0C0A3E;
+      border: 4px solid #EEEBD3;
+      z-index: 1;
+    }
+    .dp-tl-dot--purple { background: #A89CED; }
+    .dp-tl-dot--yellow { background: #CCFF33; }
+    .dp-tl-dot--green { background: #4CAF50; }
+
+    .dp-tl-year {
+      font: 800 28px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.03em;
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .dp-tl-year-alt {
+      font: 800 20px/1.1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.03em;
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .dp-tl-body {
+      grid-column: 2;
+    }
+    .dp-tl-body h3 {
+      font: 700 22px/1.05 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em !important;
+      margin: 0 0 10px;
+    }
+    .dp-tl-body p {
+      font: 400 16px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.7) !important;
+      margin: 0 0 12px;
+    }
+    .dp-tl-body strong { color: #0C0A3E; }
+    .dp-tl-body a { color: #0C0A3E; text-decoration: underline; }
+
+    /* Timeline images */
+    .dp-tl-image {
+      margin: 32px 0;
+      clear: both;
+      overflow: hidden;
+    }
+    .dp-tl-image img {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block !important;
+      float: none !important;
+      position: relative;
+    }
+    .dp-tl-images {
+      margin: 32px 0;
+      clear: both;
+      overflow: hidden;
+    }
+    .dp-tl-images--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .dp-tl-images--grid img {
+      width: 100%;
+      height: auto;
+      display: block !important;
+      object-fit: cover;
+      aspect-ratio: 3/2;
+    }
+
+    /* Footer fix */
+    footer[data-elementor-type="footer"],
+    .elementor-location-footer {
+      background: #0C0A3E !important;
+      color: #EEEBD3 !important;
+    }
+    footer[data-elementor-type="footer"] p,
+    footer[data-elementor-type="footer"] a,
+    footer[data-elementor-type="footer"] span,
+    footer[data-elementor-type="footer"] div {
+      color: rgba(238, 235, 211, 0.7) !important;
+    }
+    footer[data-elementor-type="footer"] a:hover {
+      color: #CCFF33 !important;
+    }
+    footer[data-elementor-type="footer"] img[data-src] {
+      content: attr(data-src);
+    }
+
+    /* Highlight node */
+    .dp-tl-node--highlight .dp-tl-body {
+      background: rgba(204,255,51,0.12);
+      padding: 20px;
+      margin: -8px -20px;
+      border-left: 3px solid #CCFF33;
+    }
+    .dp-tl-highlight-box {
+      background: #0C0A3E;
+      color: #CCFF33;
+      padding: 16px 20px;
+      margin: 12px 0 16px;
+      font: 600 15px/1.4 'DM Sans', sans-serif;
+    }
+    .dp-tl-highlight-box span { color: #CCFF33 !important; }
+
+    /* Actions */
+    .dp-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .dp-action {
+      background: #EEEBD3;
+      padding: 32px 24px;
+      text-decoration: none;
+      color: #0C0A3E;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .dp-action:hover { border-color: #CCFF33; }
+    .dp-action strong { font: 700 20px/1.1 'DM Sans', sans-serif !important; }
+    .dp-action p { font-size: 15px !important; color: rgba(12,10,62,0.6) !important; margin: 0 !important; }
+    .dp-arrow { font-size: 20px; color: #CCFF33; margin-top: auto; padding-top: 8px; }
+
+    /* ── IMAGES ──── */
+    .dp-tl-image,
+    .dp-tl-images--grid img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      margin: 16px 0;
+      max-height: 420px;
+    }
+    .dp-tl-images--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .dp-tl-images--grid img {
+      aspect-ratio: 4/3;
+      height: 100%;
+    }
+
+    /* ── RELATED BLOG CARDS ─────────────────────────────── */
+    .dp-related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .dp-related-card {
+      background: rgba(238,235,211,0.06);
+      padding: 28px 24px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid rgba(238,235,211,0.1);
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    .dp-related-card:hover { border-color: #CCFF33; }
+    .dp-related-tag {
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+    }
+    .dp-related-card h3 { font: 700 18px/1.2 'DM Sans', sans-serif !important; color: #EEEBD3 !important; margin: 0; }
+    .dp-related-read { font: 600 13px/1 'DM Sans', sans-serif; color: #CCFF33; margin-top: auto; }
+
+    /* ── PRESS LIST ─────────────────────────────────────── */
+    .dp-press-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 24px;
+    }
+    .dp-press-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      background: #fff;
+      text-decoration: none;
+      color: #0C0A3E;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+    .dp-press-item:hover {
+      border-left-color: #CCFF33;
+      background: rgba(204,255,51,0.06);
+    }
+    .dp-press-outlet {
+      font: 700 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: #0C0A3E;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .dp-press-title {
+      font: 500 16px/1.3 'DM Sans', sans-serif;
+      flex: 1;
+    }
+    .dp-press-arrow {
+      font-size: 18px;
+      color: #CCFF33;
+      flex-shrink: 0;
+    }
+    .dp-press-more {
+      display: inline-block;
+      margin-top: 20px;
+      font: 600 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0C0A3E;
+      text-decoration: none;
+    }
+    .dp-press-more:hover { color: #A89CED; }
+
+    /* ── FINAL CTA ──────────────────── */
+    .dp-final-cta {
+      background: #A89CED;
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .dp-final-cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .dp-btn-large {
+      padding: 22px 48px !important;
+      font-size: 16px !important;
+    }
+    .dp-btn-secondary-light {
+      display: inline-block;
+      background: transparent;
+      color: #0C0A3E;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none;
+      border: 2px solid #0C0A3E;
+      transition: all 0.2s;
+    }
+    .dp-btn-secondary-light:hover { background: #0C0A3E; color: #CCFF33; }
+
+    /* CTA */
+    .dp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; }
+    .dp-cta h2 {
+      margin: 0 0 16px;
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+    }
+    .dp-cta p {
+      color: rgba(238, 235, 211, 0.6) !important;
+      font: 400 17px/1.5 'DM Sans', sans-serif !important;
+      max-width: 440px;
+      margin: 0 auto 32px !important;
+    }
+
+    @media (max-width: 768px) {
+      .dp-hero { padding: 80px 24px 60px; }
+      .dp-stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .dp-stat { border-bottom: 1px solid rgba(12,10,62,0.1); }
+      .dp-demands { grid-template-columns: 1fr; }
+      .dp-tl-node { grid-template-columns: 1fr; }
+      .dp-tl-year { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+      .dp-tl-year-alt { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+      .dp-tl-body { grid-column: 1; }
+      .dp-timeline { padding-left: 48px; }
+      .dp-tl-dot { left: -48px; width: 36px; height: 36px; }
+      .dp-tl-images--grid { grid-template-columns: 1fr; }
+      .dp-press-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .dp-final-cta-buttons { flex-direction: column; align-items: center; }
+      .dp-related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</Layout>

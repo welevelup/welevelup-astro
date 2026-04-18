@@ -1,0 +1,661 @@
+---
+/**
+ * Campaign: Sexual Violence in Football
+ * Editorial hero + Timeline for "The journey so far"
+ * Real content from the campaign.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HERO — plain navy with background image -->
+  <section class="dp-hero" style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/1553e305-ff32-46ed-a997-a255d801a668_tfywcj-1-e1769823018750.webp'); background-size: cover; background-position: center;">
+    <div class="dp-hero-overlay"></div>
+    <div class="dp-hero-inner">
+      <span class="dp-label">Gender Justice &amp; Sport</span>
+      <h1 class="dp-title">Sexual violence<br/>in football</h1>
+      <p class="dp-tagline">Sexual violence in football is a campaign led by Level Up to challenge the culture of impunity around gender-based violence in professional football.</p>
+      <div class="dp-hero-cta">
+        <a href="https://welevelup.org/petition/petition-premier-league-violence/" class="dp-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AIM -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Aim</h2>
+      <p>End the culture of gender-based violence in football.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <p><strong>Sexual violence in football</strong> is a campaign led by Level Up to challenge the culture of impunity around gender-based violence in professional football.</p>
+      <p>Football is the most popular and influential sport in the UK, yet players accused of sexual violence are repeatedly protected by clubs and governing bodies while survivors are silenced. This culture enables abuse and sends a dangerous message about accountability.</p>
+      <p>Level Up's Sexual Violence in Football campaign calls on the Premier League and The FA to take action, end impunity, and ensure that gender-based violence has consequences on and off the pitch.</p>
+    </div>
+  </section>
+
+  <!-- WHY? -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Why?</h2>
+      <p>Football is the most popular and influential sport in the UK but there's a culture of impunity around players who commit gender-based violence. As more women speak out about the abuse they've experienced at the hands of footballers, we're challenging the Premier League to take action by kicking rapists off the pitch.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT BEGAN -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <h2>How it began</h2>
+      <p>In September 2021, world famous footballer Cristiano Ronaldo was due to return to the pitch with Manchester United. Kathryn Mayorga says she was raped by Cristiano Ronaldo in 2009, and we believe her. There are legal documents where he admitted his actions, and a civil case is still open. Despite this, the club had created a wall of silence, and gave him a hero's welcome on his return. This was symbolic of Premier League football's treatment of sexual violence: silence survivors, protect players. We knew we had to send a message that, no matter how good an athlete you are, you must face accountability if you harm women.</p>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <span class="dp-label">The Journey So Far</span>
+      <h2>The journey so far</h2>
+
+      <div class="dp-timeline">
+
+        <!-- 2021 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot"></div>
+          <div class="dp-tl-year">2021</div>
+          <div class="dp-tl-body">
+            <p>In September, we created a solidarity pledge for football fans to show their support for Kathryn Mayorga, and overnight over 4,000 people signed it and sent messages to her.</p>
+            <p>Then we flew a #BelieveKathrynMayorga banner over Ronaldo's return match and made world news. The story received global news coverage – especially in sports news – including <strong>The Mirror</strong>, The Sunday Times, <strong>ESPN</strong> and <strong>the BBC</strong>.</p>
+            <div class="dp-tl-images dp-tl-images--grid">
+              <img src="https://welevelup.org/wp-content/uploads/2025/09/we-protect-us-3-e1769823404536.webp" alt="Level Up campaign 2021 - banner over Ronaldo's return match" loading="lazy" />
+              <img src="https://welevelup.org/wp-content/uploads/2025/08/1553e305-ff32-46ed-a997-a255d801a668_tfywcj-1-e1769823018750-1024x488.webp" alt="Level Up campaign 2021" loading="lazy" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 2022 -->
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--purple"></div>
+          <div class="dp-tl-year">2022</div>
+          <div class="dp-tl-body">
+            <p>In January 2022, another player was arrested for gender-based violence. It's clear that this is a systemic problem within football. So we teamed up with <a href="https://www.threehijabis.com/" target="_blank" rel="noreferrer noopener"><strong>The Three Hijabis</strong></a> and <a href="https://www.endviolenceagainstwomen.org.uk/" target="_blank" rel="noreferrer noopener"><strong>End Violence Against Women and Girls Coalition (EVAW)</strong></a> to send an <strong><a href="https://www.theguardian.com/society/2022/feb/05/fa-and-premier-league-urged-to-help-tackle-gender-based-violence" target="_blank" rel="noreferrer noopener">open letter</a></strong> to the Premier League and The FA asking: Whose side are you on?</p>
+            <p>Our four demands to The FA and Premier League were to:</p>
+            <p>– Introduce mandatory training for all players, managers, coaches and owners on gender-based violence.</p>
+            <p>– Introduce a Tackling Gender-Based Violence Charter for clubs to sign up to that sets out minimum standards for policies and action to tackle unacceptable behaviour.</p>
+            <p>– To adopt clear sexual misconduct policies and protocols with the power to impose appropriate consequences and disciplinary action on players, from suspension without pay to lifetime bans.</p>
+            <p>– For Academies to introduce prevention programmes for young people that take a "Whole Club Approach" to eliminating gender-based violence in football.</p>
+            <p>In February, Level Up, The Three Hijabis and EVAW had our first meeting with the Premier League to talk through the demands of our open letter, and the actions that needed to follow.</p>
+            <div class="dp-tl-image">
+              <img src="https://welevelup.org/wp-content/uploads/2026/01/football2.webp" alt="Level Up meeting with Premier League 2022" loading="lazy" />
+            </div>
+            <p>As a result of our previous meeting, in June, the Premier League invited us and 20 other women's rights and gender justice groups to a "Listening Day", where we shared our expertise and knowledge with members of the Premier League on how to most effectively tackle gender-based violence in football.</p>
+            <p>In August, news broke that the Premier League would be implementing mandatory consent training for all players and staff, which was the first ask in our open letter – WIN!</p>
+            <p>And when another story came out about another footballer being charged with violence against women, Arsenal fans helped us to fly a banner over the season's opening game that read "kick rapists off the pitch".</p>
+          </div>
+        </div>
+
+        <!-- 2023 -->
+        <div class="dp-tl-node dp-tl-node--highlight">
+          <div class="dp-tl-dot dp-tl-dot--yellow"></div>
+          <div class="dp-tl-year">2023</div>
+          <div class="dp-tl-body">
+            <p>The campaign continues.</p>
+            <p>Sign up <strong><a href="https://welevelup.org/petition/petition-premier-league-violence/" target="_blank" rel="noreferrer noopener">here</a></strong> to find out more about #WhoseSideAreYouOn, or <strong><a href="/donate" rel="noreferrer noopener">make a donation</a></strong> to support our work.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW YOU CAN HELP -->
+  <section class="dp-section dp-section--neutral">
+    <div class="dp-content">
+      <span class="dp-label">Take Action</span>
+      <h2>How you can help</h2>
+      <div class="dp-actions">
+        <a href="https://welevelup.org/petition/petition-premier-league-violence/" class="dp-action" target="_blank" rel="noopener">
+          <strong>Sign the petition</strong>
+          <p>Tell the Premier League and The FA: whose side are you on?</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="https://levelup.yourmovement.org/p/share-your-story" class="dp-action" target="_blank" rel="noopener">
+          <strong>Share your story</strong>
+          <p>Help us build the movement</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="dp-action" target="_blank" rel="noopener">
+          <strong>Join the Level Up Community</strong>
+          <p>Stay updated and take action with us</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="dp-final-cta">
+    <div class="dp-content">
+      <h2 class="dp-h2--light">Support this campaign</h2>
+      <div class="dp-final-cta-buttons">
+        <a href="https://welevelup.org/petition/petition-premier-league-violence/" class="dp-btn-primary dp-btn-large" target="_blank" rel="noopener">Sign the petition</a>
+        <a href="/donate" class="dp-btn-secondary-light dp-btn-large">Donate</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA: JOIN -->
+  <section class="dp-cta">
+    <div class="dp-content" style="text-align:center">
+      <h2 class="dp-h2--light">Join the Level Up community</h2>
+      <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="dp-btn-primary" target="_blank" rel="noopener">Join us</a>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style is:global>
+    /* ── CAMPAIGN DEMO ───────────────────────────── */
+
+    .dp-hero {
+      background: #0C0A3E;
+      padding: 100px 24px 80px;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+    }
+    .dp-hero-video-bg {
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      right: -60px;
+      bottom: -60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .dp-hero-video-bg iframe {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.2);
+    }
+    .dp-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 10, 62, 0.75);
+      z-index: 1;
+    }
+    .dp-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+    .dp-label {
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .dp-label--light { color: rgba(238,235,211,0.45); }
+    .dp-title {
+      font: 800 clamp(48px,10vw,88px)/0.88 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.045em !important;
+      margin: 0 0 24px;
+    }
+    .dp-tagline {
+      font: 400 20px/1.4 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.65) !important;
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+    .dp-hero-cta { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .dp-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .dp-btn-primary:hover { background: #fff; }
+    .dp-supporters {
+      font: 700 14px/1 'DM Sans', sans-serif;
+      color: rgba(238,235,211,0.45);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Stats */
+    .dp-stats { background: #CCFF33; }
+    .dp-stats-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .dp-stat {
+      padding: 36px 20px;
+      text-align: center;
+      border-right: 1px solid rgba(12,10,62,0.1);
+    }
+    .dp-stat:last-child { border-right: none; }
+    .dp-stat-num {
+      display: block;
+      font: 800 44px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.04em;
+    }
+    .dp-stat-label {
+      display: block;
+      font: 500 11px/1.3 'DM Sans', sans-serif;
+      color: rgba(12,10,62,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 8px;
+    }
+
+    /* Sections */
+    .dp-section { padding: 80px 24px; }
+    .dp-section--cream { background: #EEEBD3; }
+    .dp-section--navy { background: #0C0A3E; }
+    .dp-section--neutral { background: #fff; }
+    .dp-section--white { background: #fff; }
+    .dp-content { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .dp-content h2 {
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.045em !important;
+      margin: 8px 0 24px;
+    }
+    .dp-h2--light { color: #CCFF33 !important; }
+    .dp-content p {
+      font: 400 18px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.8) !important;
+      margin: 0 0 16px;
+    }
+    .dp-p--light { color: rgba(238,235,211,0.7) !important; }
+    .dp-section--navy .dp-content p { color: rgba(238,235,211,0.7) !important; }
+    .dp-content a { color: #0C0A3E; }
+    .dp-section--navy .dp-content a { color: #CCFF33; }
+
+    /* Demands */
+    .dp-demands {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 32px;
+      margin-top: 40px;
+    }
+    .dp-demand {
+      border-left: 3px solid #CCFF33;
+      padding-left: 20px;
+    }
+    .dp-demand-num {
+      font: 800 32px/1 'DM Sans', sans-serif;
+      color: #CCFF33;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .dp-demand h3 {
+      font: 700 20px/1.1 'DM Sans', sans-serif !important;
+      color: #EEEBD3 !important;
+      margin: 0 0 8px;
+    }
+    .dp-demand p { color: rgba(238,235,211,0.6) !important; font-size: 16px !important; }
+
+    /* ── TIMELINE ───────────────────────────────────────── */
+    .dp-timeline {
+      position: relative;
+      padding-left: 56px;
+      margin-top: 48px;
+    }
+    .dp-timeline::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(
+        to bottom,
+        rgba(12,10,62,0.1) 0%,
+        #A89CED 30%,
+        #CCFF33 70%,
+        #4CAF50 100%
+      );
+    }
+
+    .dp-tl-node {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 0 16px;
+      margin-bottom: 64px;
+    }
+    .dp-tl-node:last-child { margin-bottom: 0; }
+
+    .dp-tl-dot {
+      position: absolute;
+      left: -56px;
+      top: 4px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #0C0A3E;
+      border: 4px solid #EEEBD3;
+      z-index: 1;
+    }
+    .dp-tl-dot--purple { background: #A89CED; }
+    .dp-tl-dot--yellow { background: #CCFF33; }
+    .dp-tl-dot--green { background: #4CAF50; }
+
+    .dp-tl-year {
+      font: 800 28px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.03em;
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .dp-tl-year-alt {
+      font: 800 20px/1.1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.03em;
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+
+    .dp-tl-body {
+      grid-column: 2;
+    }
+    .dp-tl-body h3 {
+      font: 700 22px/1.05 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em !important;
+      margin: 0 0 10px;
+    }
+    .dp-tl-body p {
+      font: 400 16px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.7) !important;
+      margin: 0 0 12px;
+    }
+    .dp-tl-body strong { color: #0C0A3E; }
+    .dp-tl-body a { color: #0C0A3E; text-decoration: underline; }
+
+    /* Timeline images */
+    .dp-tl-image {
+      margin: 32px 0;
+      clear: both;
+      overflow: hidden;
+    }
+    .dp-tl-image img {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block !important;
+      float: none !important;
+      position: relative;
+    }
+    .dp-tl-images {
+      margin: 32px 0;
+      clear: both;
+      overflow: hidden;
+    }
+    .dp-tl-images--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .dp-tl-images--grid img {
+      width: 100%;
+      height: auto;
+      display: block !important;
+      object-fit: cover;
+      aspect-ratio: 3/2;
+    }
+
+    /* Footer fix */
+    footer[data-elementor-type="footer"],
+    .elementor-location-footer {
+      background: #0C0A3E !important;
+      color: #EEEBD3 !important;
+    }
+    footer[data-elementor-type="footer"] p,
+    footer[data-elementor-type="footer"] a,
+    footer[data-elementor-type="footer"] span,
+    footer[data-elementor-type="footer"] div {
+      color: rgba(238, 235, 211, 0.7) !important;
+    }
+    footer[data-elementor-type="footer"] a:hover {
+      color: #CCFF33 !important;
+    }
+    footer[data-elementor-type="footer"] img[data-src] {
+      content: attr(data-src);
+    }
+
+    /* Highlight node */
+    .dp-tl-node--highlight .dp-tl-body {
+      background: rgba(204,255,51,0.12);
+      padding: 20px;
+      margin: -8px -20px;
+      border-left: 3px solid #CCFF33;
+    }
+    .dp-tl-highlight-box {
+      background: #0C0A3E;
+      color: #CCFF33;
+      padding: 16px 20px;
+      margin: 12px 0 16px;
+      font: 600 15px/1.4 'DM Sans', sans-serif;
+    }
+    .dp-tl-highlight-box span { color: #CCFF33 !important; }
+
+    /* Actions */
+    .dp-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .dp-action {
+      background: #EEEBD3;
+      padding: 32px 24px;
+      text-decoration: none;
+      color: #0C0A3E;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .dp-action:hover { border-color: #CCFF33; }
+    .dp-action strong { font: 700 20px/1.1 'DM Sans', sans-serif !important; }
+    .dp-action p { font-size: 15px !important; color: rgba(12,10,62,0.6) !important; margin: 0 !important; }
+    .dp-arrow { font-size: 20px; color: #CCFF33; margin-top: auto; padding-top: 8px; }
+
+    /* ── IMAGES ──── */
+    .dp-tl-image,
+    .dp-tl-images--grid img {
+      width: 100%;
+      border-radius: 8px;
+      object-fit: cover;
+      margin: 16px 0;
+      max-height: 420px;
+    }
+    .dp-tl-images--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .dp-tl-images--grid img {
+      aspect-ratio: 4/3;
+      height: 100%;
+    }
+
+    /* ── RELATED BLOG CARDS ─────────────────────────────── */
+    .dp-related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .dp-related-card {
+      background: rgba(238,235,211,0.06);
+      padding: 28px 24px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border: 1px solid rgba(238,235,211,0.1);
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    .dp-related-card:hover { border-color: #CCFF33; }
+    .dp-related-tag {
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+    }
+    .dp-related-card h3 { font: 700 18px/1.2 'DM Sans', sans-serif !important; color: #EEEBD3 !important; margin: 0; }
+    .dp-related-read { font: 600 13px/1 'DM Sans', sans-serif; color: #CCFF33; margin-top: auto; }
+
+    /* ── PRESS LIST ─────────────────────────────────────── */
+    .dp-press-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 24px;
+    }
+    .dp-press-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px 24px;
+      background: #fff;
+      text-decoration: none;
+      color: #0C0A3E;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      border-radius: 4px;
+    }
+    .dp-press-item:hover {
+      border-left-color: #CCFF33;
+      background: rgba(204,255,51,0.06);
+    }
+    .dp-press-outlet {
+      font: 700 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: #0C0A3E;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 3px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .dp-press-title {
+      font: 500 16px/1.3 'DM Sans', sans-serif;
+      flex: 1;
+    }
+    .dp-press-arrow {
+      font-size: 18px;
+      color: #CCFF33;
+      flex-shrink: 0;
+    }
+    .dp-press-more {
+      display: inline-block;
+      margin-top: 20px;
+      font: 600 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #0C0A3E;
+      text-decoration: none;
+    }
+    .dp-press-more:hover { color: #A89CED; }
+
+    /* ── FINAL CTA ──────────────────── */
+    .dp-final-cta {
+      background: #A89CED;
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .dp-final-cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+    .dp-btn-large {
+      padding: 22px 48px !important;
+      font-size: 16px !important;
+    }
+    .dp-btn-secondary-light {
+      display: inline-block;
+      background: transparent;
+      color: #0C0A3E;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none;
+      border: 2px solid #0C0A3E;
+      transition: all 0.2s;
+    }
+    .dp-btn-secondary-light:hover { background: #0C0A3E; color: #CCFF33; }
+
+    /* CTA */
+    .dp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; }
+    .dp-cta h2 {
+      margin: 0 0 16px;
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+    }
+    .dp-cta p {
+      color: rgba(238, 235, 211, 0.6) !important;
+      font: 400 17px/1.5 'DM Sans', sans-serif !important;
+      max-width: 440px;
+      margin: 0 auto 32px !important;
+    }
+
+    @media (max-width: 768px) {
+      .dp-hero { padding: 80px 24px 60px; }
+      .dp-stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .dp-stat { border-bottom: 1px solid rgba(12,10,62,0.1); }
+      .dp-demands { grid-template-columns: 1fr; }
+      .dp-tl-node { grid-template-columns: 1fr; }
+      .dp-tl-year { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+      .dp-tl-year-alt { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+      .dp-tl-body { grid-column: 1; }
+      .dp-timeline { padding-left: 48px; }
+      .dp-tl-dot { left: -48px; width: 36px; height: 36px; }
+      .dp-tl-images--grid { grid-template-columns: 1fr; }
+      .dp-press-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .dp-final-cta-buttons { flex-direction: column; align-items: center; }
+      .dp-related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</Layout>

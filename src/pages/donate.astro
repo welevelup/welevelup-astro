@@ -11,14 +11,15 @@
  * with the same chrome (nav, footer) as the rest of the site.
  */
 import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 
-// We borrow the home's head + body shell so the nav and footer come for free,
-// then drop our own donation form into the main slot.
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 <Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
   <main class="lu-donate">
     <section class="lu-donate__hero">
       <h1>Support Level Up</h1>
@@ -80,6 +81,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       </p>
     </form>
   </main>
+  <Footer />
 
   <style is:global>
     .lu-donate {
@@ -88,6 +90,14 @@ const { headInner, bodyClass } = extract(homeRaw);
       padding: 64px 24px 96px;
       font-family: 'DM Sans', system-ui, sans-serif;
       color: #0d0a3e;
+    }
+    .lu-donate__logo {
+      display: block;
+      margin-bottom: 32px;
+    }
+    .lu-donate__logo img {
+      height: 46px;
+      width: auto;
     }
     .lu-donate__hero h1 {
       font-size: 48px;

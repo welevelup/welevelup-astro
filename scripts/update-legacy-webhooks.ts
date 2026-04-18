@@ -87,7 +87,7 @@ async function main() {
     customerCount++;
     let subs;
     try {
-      subs = await mollie.customerSubscriptions.list({
+      subs = await mollie.customerSubscriptions.page({
         customerId: customer.id,
       });
     } catch (err) {

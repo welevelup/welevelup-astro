@@ -59,8 +59,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const customerId = payment.customerId;
 
     // Idempotency: skip if subscription already exists
-    const existing = await mollie.customerSubscriptions.list({ customerId });
-    const duplicate = existing.find(
+    const existing = await mollie.customerSubscriptions.page({ customerId });
+    const duplicate = Array.from(existing).find(
       (sub) =>
         sub.status === SubscriptionStatus.active &&
         sub.amount.value === amount &&

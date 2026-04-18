@@ -63,16 +63,16 @@
 
       <div class="lu-nav-group">
         <span>Community Campaigns ▾</span>
-        <div class="lu-nav-drop lu-nav-drop--wide">
-          <div class="lu-nav-drop-cols">
-            <div>
-              <a href="/active-campaigns/islington-council-finish-holloway-womens-centre">Islington Council: Finish Holloway Women's Centre</a>
+        <div class="lu-nav-drop lu-nav-mega">
+          <div class="lu-nav-mega-grid" style="grid-template-columns: repeat(2, 1fr);">
+            <div class="lu-nav-mega-col">
+              <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="lu-nav-mega-title">Islington Council</a>
               <a href="/petition/islington-council-fund-holloway-womens-centre">Sign the petition</a>
             </div>
-            <div>
+            <div class="lu-nav-mega-col">
+              <a href="/stories-of-the-community" class="lu-nav-mega-title">Space for Memory</a>
               <a href="/news-and-events">Events</a>
-              <a href="/stories-of-the-community">Space for Memory</a>
-              <a href="/solidarity-with-katie">Messages of solidarity with Katie</a>
+              <a href="/solidarity-with-katie">Solidarity with Katie</a>
             </div>
           </div>
         </div>
@@ -115,9 +115,9 @@
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: space-between;
-    padding: 12px 24px;
+    padding: 0 24px;
   }
   .lu-nav-logo {
     display: flex;
@@ -125,7 +125,7 @@
     gap: 14px;
     text-decoration: none;
   }
-  .lu-nav-logo img { height: 38px; width: auto; }
+  .lu-nav-logo img { height: 30px; width: auto; }
   .lu-nav-tagline {
     font: 400 11px/1.35 'DM Sans', sans-serif;
     color: #0C0A3E;
@@ -133,36 +133,35 @@
   .lu-nav-ctas {
     display: flex;
     gap: 0;
+    align-items: stretch;
+  }
+  .lu-nav-donate,
+  .lu-nav-join {
+    font: 900 18px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 16px 48px;
+    text-decoration: none;
+    transition: all 0.15s;
+    display: flex;
     align-items: center;
   }
   .lu-nav-donate {
-    font: 900 15px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
     background: #CCFF33;
     color: #0C0A3E;
-    padding: 14px 32px;
-    text-decoration: none;
-    transition: all 0.15s;
   }
   .lu-nav-donate:hover { background: #0C0A3E; color: #FFFFFF; }
   .lu-nav-join {
-    font: 900 15px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
     background: #0C0A3E;
     color: #FFFFFF !important;
-    border: 1.5px solid #0C0A3E;
-    padding: 14px 28px;
-    text-decoration: none;
-    transition: all 0.15s;
   }
-  .lu-nav-join:hover { background: #CCFF33; color: #0C0A3E !important; border-color: #CCFF33; }
+  .lu-nav-join:hover { background: #CCFF33; color: #0C0A3E !important; }
 
   /* ── Row 2: Navigation bar ───────────────────────────── */
   .lu-nav-bar {
     border-top: none;
-    margin-top: 0;
+    margin-top: 8px;
+    padding-bottom: 4px;
   }
   .lu-nav-bar-inner {
     max-width: 1200px;
@@ -263,12 +262,12 @@
     margin-bottom: 12px;
   }
   .lu-nav-mega-title {
-    font: 700 12px/1 'DM Sans', sans-serif !important;
+    font: 700 14px/1 'DM Sans', sans-serif !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
+    letter-spacing: 0.04em !important;
     color: #FFFFFF !important;
     display: block !important;
-    margin-bottom: 12px !important;
+    margin-bottom: 14px !important;
     padding: 0 !important;
   }
   .lu-nav-mega-title:hover { color: #CCFF33 !important; }

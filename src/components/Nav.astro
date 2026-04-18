@@ -63,10 +63,18 @@
 
       <div class="lu-nav-group">
         <span>Community Campaigns ▾</span>
-        <div class="lu-nav-drop">
-          <a href="/active-campaigns/premier-league-and-fa">Premier League and FA</a>
-          <a href="/active-campaigns/islington-council-finish-holloway-womens-centre">Islington Council</a>
-          <a href="/solidarity-with-katie">Solidarity with Katie</a>
+        <div class="lu-nav-drop lu-nav-drop--wide">
+          <div class="lu-nav-drop-cols">
+            <div>
+              <a href="/active-campaigns/islington-council-finish-holloway-womens-centre">Islington Council: Finish Holloway Women's Centre</a>
+              <a href="/petition/islington-council-fund-holloway-womens-centre">Sign the petition</a>
+            </div>
+            <div>
+              <a href="/news-and-events">Events</a>
+              <a href="/stories-of-the-community">Space for Memory</a>
+              <a href="/solidarity-with-katie">Messages of solidarity with Katie</a>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -109,7 +117,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 24px 0;
+    padding: 0 24px;
   }
   .lu-nav-logo {
     display: flex;
@@ -173,7 +181,7 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    padding: 14px 14px;
+    padding: 16px 20px;
     cursor: pointer;
     transition: color 0.15s;
     white-space: nowrap;
@@ -233,6 +241,19 @@
   }
   .lu-nav-mega-col:nth-child(3n) { border-right: none; }
   .lu-nav-mega-col:nth-child(n+4) { border-bottom: none; }
+  /* Wide dropdown for Community Campaigns */
+  .lu-nav-drop--wide { min-width: 420px; }
+  .lu-nav-drop-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .lu-nav-drop-cols > div {
+    padding: 16px 20px;
+    border-right: 1px solid rgba(238,235,211,0.06);
+  }
+  .lu-nav-drop-cols > div:last-child { border-right: none; }
+
   .lu-nav-mega-col strong {
     font: 700 11px/1 'DM Sans', sans-serif;
     text-transform: uppercase;

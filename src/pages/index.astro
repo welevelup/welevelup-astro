@@ -10,6 +10,47 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
   <Fragment set:html={mainContent} />
+  <!-- BLOG SECTION -->
+  <section class="home-blog">
+    <div class="home-blog-inner">
+      <span class="home-blog-label">From the Blog</span>
+      <h2 class="home-blog-title">Feminist Thinking</h2>
+      <div class="home-blog-grid">
+        <a href="/blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers" class="home-blog-card home-blog-card--featured">
+          <span class="home-blog-tag">Reproductive Rights</span>
+          <h3>Abortion Is Healthcare: Why Decriminalisation Must Include Health Workers</h3>
+          <span class="home-blog-read">Read →</span>
+        </a>
+        <a href="/blog/ending-prison-for-pregnant-women-a-non-reformist-reform" class="home-blog-card">
+          <span class="home-blog-tag">Criminalisation &amp; Justice</span>
+          <h3>Ending Prison for Pregnant Women: A Non-Reformist Reform</h3>
+          <span class="home-blog-read">Read →</span>
+        </a>
+        <a href="/blog/gender-critical-feminism-isnt-feminist" class="home-blog-card">
+          <span class="home-blog-tag">Trans-Inclusive Feminism</span>
+          <h3>"Gender-Critical" Feminism Isn't Feminist — It's Anti-Trans Politics</h3>
+          <span class="home-blog-read">Read →</span>
+        </a>
+        <a href="/blog/why-the-media-should-focus-on-diddys-violence-not-his-kinks" class="home-blog-card">
+          <span class="home-blog-tag">Media &amp; Violence</span>
+          <h3>Why the Media Should Focus on Diddy's Violence, Not His Kinks</h3>
+          <span class="home-blog-read">Read →</span>
+        </a>
+        <a href="/blog/why-we-need-to-start-moving-offline" class="home-blog-card">
+          <span class="home-blog-tag">Solidarity &amp; Movement</span>
+          <h3>Why We Need to Start Moving Offline</h3>
+          <span class="home-blog-read">Read →</span>
+        </a>
+        <a href="/blog/how-we-choose-our-campaigns" class="home-blog-card">
+          <span class="home-blog-tag">Solidarity &amp; Movement</span>
+          <h3>How We Choose Our Campaigns</h3>
+          <span class="home-blog-read">Read →</span>
+        </a>
+      </div>
+      <a href="/blog" class="home-blog-all">View all posts →</a>
+    </div>
+  </section>
+
   <section class="home-cta">
     <h2>Join the Level Up community</h2>
     <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
@@ -57,6 +98,98 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   /* Hide duplicate "Join the Level Up Community" from clone */
   .elementor-element-166bf52d {
     display: none !important;
+  }
+  /* Hide clone's broken blog section */
+  .elementor-element-0362161 {
+    display: none !important;
+  }
+
+  /* ── Blog section ────────────────────────────────────── */
+  .home-blog {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .home-blog-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .home-blog-label {
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .home-blog-title {
+    font: 800 48px/0.9 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 40px;
+  }
+  .home-blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .home-blog-card {
+    background: rgba(238, 235, 211, 0.04);
+    padding: 32px 28px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid rgba(238, 235, 211, 0.06);
+    transition: all 0.2s;
+    min-height: 180px;
+  }
+  .home-blog-card:hover {
+    background: rgba(238, 235, 211, 0.08);
+    border-color: #CCFF33;
+  }
+  .home-blog-card--featured {
+    grid-column: 1 / -1;
+    background: rgba(204, 255, 51, 0.08);
+    border-color: rgba(204, 255, 51, 0.15);
+    min-height: auto;
+    padding: 40px 32px;
+  }
+  .home-blog-card--featured h3 {
+    font-size: 28px !important;
+  }
+  .home-blog-tag {
+    font: 600 10px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+  }
+  .home-blog-card h3 {
+    font: 700 18px/1.2 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    margin: 0;
+    flex: 1;
+  }
+  .home-blog-read {
+    font: 600 13px/1 'DM Sans', sans-serif;
+    color: #CCFF33;
+    margin-top: auto;
+  }
+  .home-blog-all {
+    display: inline-block;
+    margin-top: 32px;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #CCFF33;
+    text-decoration: none;
+  }
+  .home-blog-all:hover { color: #FFFFFF; }
+
+  @media (max-width: 768px) {
+    .home-blog-grid { grid-template-columns: 1fr; }
+    .home-blog-card--featured { grid-column: 1; }
+    .home-blog-title { font-size: 36px; }
   }
 </style>
 

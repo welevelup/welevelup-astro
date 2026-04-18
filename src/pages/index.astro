@@ -92,15 +92,20 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 
   /* Hide empty "Next Event" section */
   .elementor-element-684b07bb,
-  .elementor-element-484edde0 {
+  .elementor-element-484edde0,
+  [data-id="684b07bb"],
+  [data-id="484edde0"] {
     display: none !important;
   }
   /* Hide duplicate "Join the Level Up Community" from clone */
-  .elementor-element-166bf52d {
+  .elementor-element-166bf52d,
+  [data-id="166bf52d"] {
     display: none !important;
   }
-  /* Hide clone's broken blog section */
-  .elementor-element-0362161 {
+  /* Hide clone's broken blog section + purple CTA */
+  .elementor-element-0362161,
+  [data-id="0362161"],
+  [data-id="1ed33fe"] {
     display: none !important;
   }
 
@@ -194,9 +199,49 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 </style>
 
 <script>
-  // Force lazy-loaded images to load (WP Smush uses data-src)
+  // Force lazy-loaded images (WP Smush uses data-src)
   document.querySelectorAll('img[data-src]').forEach((img) => {
     const dataSrc = img.getAttribute('data-src');
     if (dataSrc) img.setAttribute('src', dataSrc);
+  });
+
+  // Force lazy iframes (videos, embeds)
+  document.querySelectorAll('iframe[data-src]').forEach((iframe) => {
+    const dataSrc = iframe.getAttribute('data-src');
+    if (dataSrc) iframe.setAttribute('src', dataSrc);
+  });
+
+  // Force background images from data-bg
+  document.querySelectorAll('[data-bg]').forEach((el) => {
+    const bg = el.getAttribute('data-bg');
+    if (bg) (el as HTMLElement).style.backgroundImage = `url(${bg})`;
+  });
+
+  // Load srcset images
+  document.querySelectorAll('img[data-srcset]').forEach((img) => {
+    const srcset = img.getAttribute('data-srcset');
+    if (srcset) img.setAttribute('srcset', srcset);
+  });
+
+  // Load Elementor video widgets (youtube embeds stored in data-settings)
+  document.querySelectorAll('.elementor-widget-video').forEach((widget) => {
+    const settings = widget.querySelector('[data-settings]')?.getAttribute('data-settings');
+    if (!settings) return;
+    try {
+      const parsed = JSON.parse(settings);
+      const url = parsed.youtube_url;
+      if (!url) return;
+      const videoId = url.match(/(?:youtu\.be\/|v=)([^&?/]+)/)?.[1];
+      if (!videoId) return;
+      const container = widget.querySelector('.elementor-video') || widget.querySelector('.elementor-wrapper') || widget;
+      if (!container.querySelector('iframe')) {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?controls=1`;
+        iframe.style.cssText = 'width:100%;aspect-ratio:16/9;border:none;';
+        iframe.allow = 'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
+        iframe.allowFullscreen = true;
+        container.appendChild(iframe);
+      }
+    } catch {}
   });
 </script>

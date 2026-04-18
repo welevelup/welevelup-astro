@@ -26,6 +26,8 @@
 
 9. **Blog post títulos** — cambiar color y estilo de letra al verde claro/mint como la propuesta "Feminist Thinking" (ver screenshot de referencia)
 
+10. **Footer logo** — el logo footer-logo.webp tiene colores navy que no se ven sobre fondo navy. Necesita versión blanca o lime del logo, o usar CSS filter para hacerlo visible
+
 ## Lo que está HECHO
 
 - 9 campañas con diseño editorial (pregnancy-in-prison manualmente, resto via agentes)

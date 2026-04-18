@@ -8,7 +8,9 @@ const { headHtml, bodyClass = '' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">
-  <head set:html={headHtml}></head>
+  <head>
+    <Fragment set:html={headHtml} />
+  </head>
   <body class={bodyClass}>
     <slot />
   </body>

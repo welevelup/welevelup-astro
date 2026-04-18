@@ -1,0 +1,219 @@
+<!--
+  Clean nav component that replaces the broken Elementor MegaMenu.
+  Same links, styled with the Level Up design system.
+-->
+<header class="lu-nav">
+  <div class="lu-nav-inner">
+    <a href="/" class="lu-nav-logo">
+      <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" width="100" height="34" />
+    </a>
+
+    <button class="lu-nav-toggle" aria-label="Menu" id="nav-toggle">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="lu-nav-links" id="nav-links">
+      <div class="lu-nav-group">
+        <span class="lu-nav-label">About Us</span>
+        <div class="lu-nav-dropdown">
+          <a href="/about-us">What we do</a>
+          <a href="/what-we-are-proud-of">What we are proud of</a>
+        </div>
+      </div>
+      <div class="lu-nav-group">
+        <span class="lu-nav-label">Campaigns</span>
+        <div class="lu-nav-dropdown">
+          <a href="/active-campaigns/nomorelyes-2">#NoMoreLyes</a>
+          <a href="/active-campaigns/pregnancy-in-prison">Pregnancy in Prison</a>
+          <a href="/active-campaigns/sexual-violence-in-football">Sexual Violence in Football</a>
+          <a href="/active-campaigns/abortion-is-healthcare">Abortion is Healthcare</a>
+          <a href="/media-guidelines">Media Guidelines</a>
+          <a href="/active-campaigns/we-protect-us">We Protect Us</a>
+        </div>
+      </div>
+      <div class="lu-nav-group">
+        <span class="lu-nav-label">Community Campaigns</span>
+        <div class="lu-nav-dropdown">
+          <a href="/active-campaigns/premier-league-and-fa">Premier League and FA</a>
+          <a href="/active-campaigns/islington-council-finish-holloway-womens-centre">Islington Council</a>
+          <a href="/solidarity-with-katie">Solidarity with Katie</a>
+        </div>
+      </div>
+      <a href="/all-resources" class="lu-nav-item">Resources</a>
+      <div class="lu-nav-group">
+        <span class="lu-nav-label">Blog</span>
+        <div class="lu-nav-dropdown">
+          <a href="/blog">All posts</a>
+          <a href="/blog/how-we-choose-our-campaigns">How we choose our campaigns</a>
+        </div>
+      </div>
+      <a href="/press" class="lu-nav-item">Press Coverage</a>
+      <a href="/contact" class="lu-nav-item">Contact</a>
+    </nav>
+
+    <div class="lu-nav-ctas">
+      <a href="/donate" class="lu-nav-btn lu-nav-btn--outline">Donate</a>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="lu-nav-btn lu-nav-btn--fill" target="_blank" rel="noopener">Join Us</a>
+    </div>
+  </div>
+</header>
+
+<style is:global>
+  .lu-nav {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: var(--lu-navy, #0C0A3E);
+    border-bottom: 1px solid rgba(238,235,211,0.08);
+  }
+  .lu-nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    gap: 24px;
+  }
+  .lu-nav-logo {
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .lu-nav-logo img {
+    height: 34px;
+    width: auto;
+    display: block;
+  }
+  .lu-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex: 1;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: visible;
+  }
+  .lu-nav-item,
+  .lu-nav-label {
+    font: 600 12px/1 var(--lu-font, 'DM Sans', sans-serif);
+    color: rgba(238,235,211,0.6);
+    text-decoration: none;
+    padding: 10px 10px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.15s;
+    white-space: nowrap;
+  }
+  .lu-nav-item:hover,
+  .lu-nav-label:hover { color: var(--lu-yellow, #CCFF33); }
+
+  /* Dropdown */
+  .lu-nav-group { position: relative; }
+  .lu-nav-label::after {
+    content: ' ▾';
+    font-size: 10px;
+    opacity: 0.5;
+  }
+  .lu-nav-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--lu-navy, #0C0A3E);
+    border: 1px solid rgba(238,235,211,0.1);
+    min-width: 240px;
+    padding: 8px 0;
+    z-index: 100;
+  }
+  .lu-nav-group:hover .lu-nav-dropdown { display: block; }
+  .lu-nav-dropdown a {
+    display: block;
+    padding: 10px 20px;
+    font: 500 13px/1.3 var(--lu-font, 'DM Sans', sans-serif);
+    color: rgba(238,235,211,0.6);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+    transition: all 0.15s;
+  }
+  .lu-nav-dropdown a:hover {
+    color: var(--lu-yellow, #CCFF33);
+    background: rgba(238,235,211,0.04);
+  }
+
+  /* CTAs */
+  .lu-nav-ctas {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .lu-nav-btn {
+    font: 700 12px/1 var(--lu-font, 'DM Sans', sans-serif);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .lu-nav-btn--outline {
+    border: 1.5px solid rgba(238,235,211,0.3) !important;
+    color: var(--lu-neutral, #EEEBD3) !important;
+    background: transparent !important;
+  }
+  .lu-nav-btn--outline:hover { border-color: var(--lu-yellow, #CCFF33); color: var(--lu-yellow, #CCFF33); }
+  .lu-nav-btn--fill {
+    background: var(--lu-yellow, #CCFF33);
+    color: var(--lu-navy, #0C0A3E);
+    border: 1.5px solid var(--lu-yellow, #CCFF33);
+  }
+  .lu-nav-btn--fill:hover { background: #fff; }
+
+  /* Mobile toggle */
+  .lu-nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .lu-nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--lu-neutral, #EEEBD3);
+  }
+
+  @media (max-width: 900px) {
+    .lu-nav-toggle { display: flex; }
+    .lu-nav-links {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--lu-navy, #0C0A3E);
+      flex-direction: column;
+      padding: 16px 24px 24px;
+      border-top: 1px solid rgba(238,235,211,0.08);
+      align-items: flex-start;
+    }
+    .lu-nav-links.open { display: flex; }
+    .lu-nav-dropdown {
+      position: static;
+      border: none;
+      padding: 0 0 0 16px;
+      display: block;
+    }
+    .lu-nav-ctas { display: none; }
+    .lu-nav-links.open ~ .lu-nav-ctas { display: flex; position: absolute; top: 100%; right: 24px; }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.getElementById('nav-links');
+  toggle?.addEventListener('click', () => links?.classList.toggle('open'));
+</script>

@@ -17,6 +17,12 @@ export interface ExtractedHtml {
   headInner: string;
   bodyClass: string;
   bodyInner: string;
+  navHtml: string;
+  footerHtml: string;
+  preHeaderHtml: string;
+  chromeBeforeMain: string;
+  chromeAfterMain: string;
+  mainContent: string;
 }
 
 const VER_QS = /%3Fver=[^"' >]*/g;
@@ -26,7 +32,8 @@ const BODY_RE = /<body([^>]*)>([\s\S]*)<\/body>/i;
 const CLASS_RE = /class="([^"]*)"/;
 const HREF_RE = /href="([^"]+)"/g;
 
-const SKIP_SCHEME = /^(https?:|mailto:|tel:|#|data:|javascript:|\?)/;
+const SKIP_SCHEME = /^(mailto:|tel:|#|data:|javascript:|\?)/;
+const WELEVELUP_ABS = /^https?:\/\/(www\.)?welevelup\.org\//;
 const ASSET_PATH = /wp-content|wp-includes|wp-json/;
 const ASSET_EXT = /\.(css|js|xml|json|webp|jpe?g|png|svg|gif|ico|pdf|zip|woff2?|ttf|eot)(\?|$)/i;
 
@@ -44,6 +51,24 @@ const WP_ID_RE = /^(?:.*\/)?index\.html%3F(?:p|page_id)=(\d+)\.html$/i;
  */
 function rewriteLink(url: string): string {
   if (SKIP_SCHEME.test(url)) return url;
+
+  // Rewrite absolute welevelup.org URLs to relative paths
+  // e.g. https://welevelup.org/our-team/ → /our-team
+  if (WELEVELUP_ABS.test(url)) {
+    const path = url.replace(WELEVELUP_ABS, '/');
+    // Skip external-looking assets
+    if (ASSET_PATH.test(path)) return url;
+    if (ASSET_EXT.test(path)) return url;
+    // Clean trailing slash and .html
+    let clean = path.replace(/\/index\.html$/, '').replace(/\.html$/, '');
+    if (clean.length > 1) clean = clean.replace(/\/+$/, '');
+    if (clean === '') clean = '/';
+    return clean;
+  }
+
+  // Skip non-welevelup external URLs
+  if (/^https?:\/\//.test(url)) return url;
+
   if (ASSET_PATH.test(url)) return url;
   if (ASSET_EXT.test(url)) return url;
 
@@ -85,7 +110,7 @@ export function extract(rawHtml: string): ExtractedHtml {
 
   const bodyMatch = html.match(BODY_RE);
   if (!bodyMatch) {
-    return { headInner, bodyClass: '', bodyInner: '' };
+    return { headInner, bodyClass: '', bodyInner: '', navHtml: '', footerHtml: '', preHeaderHtml: '' };
   }
 
   const bodyAttrs = bodyMatch[1];
@@ -93,5 +118,34 @@ export function extract(rawHtml: string): ExtractedHtml {
   const classMatch = bodyAttrs.match(CLASS_RE);
   const bodyClass = classMatch ? classMatch[1] : '';
 
-  return { headInner, bodyClass, bodyInner };
+  // Extract nav (Elementor header) and footer separately
+  const navMatch = bodyInner.match(/<header[^>]*data-elementor-type="header"[\s\S]*?<\/header>/i);
+  const navHtml = navMatch ? navMatch[0] : '';
+
+  const footerMatch = bodyInner.match(/<footer[^>]*data-elementor-type="footer"[\s\S]*?<\/footer>/i);
+  const footerHtml = footerMatch ? footerMatch[0] : '';
+
+  // Pre-header content (GTM noscript, skip-link)
+  const preHeaderMatch = bodyInner.match(/^([\s\S]*?)(?=<header)/i);
+  const preHeaderHtml = preHeaderMatch ? preHeaderMatch[1] : '';
+
+  // Chrome splits: everything before main content, everything after
+  // chromeBeforeMain = preHeader + header (up to </header>)
+  const headerEndIdx = bodyInner.indexOf('</header>');
+  const chromeBeforeMain = headerEndIdx >= 0
+    ? bodyInner.slice(0, headerEndIdx + '</header>'.length)
+    : preHeaderHtml + navHtml;
+
+  // chromeAfterMain = footer + everything after (scripts, etc.)
+  const footerStartIdx = bodyInner.indexOf('<footer');
+  const chromeAfterMain = footerStartIdx >= 0
+    ? bodyInner.slice(footerStartIdx)
+    : footerHtml;
+
+  // mainContent = everything between </header> and <footer (the actual page content)
+  const mainContent = (headerEndIdx >= 0 && footerStartIdx >= 0)
+    ? bodyInner.slice(headerEndIdx + '</header>'.length, footerStartIdx)
+    : bodyInner;
+
+  return { headInner, bodyClass, bodyInner, navHtml, footerHtml, preHeaderHtml, chromeBeforeMain, chromeAfterMain, mainContent };
 }

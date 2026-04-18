@@ -10,6 +10,56 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
   <Fragment set:html={mainContent} />
+  <!-- PETITIONS SECTION -->
+  <section class="home-petitions">
+    <div class="home-petitions-inner">
+      <h2 class="home-petitions-title">Sign Our Petitions</h2>
+      <div class="home-petitions-grid">
+        <a href="/active-campaigns/abortion-is-healthcare" class="home-petition-card">
+          <img src="https://welevelup.org/wp-content/uploads/2025/10/Screenshot-2024-06-14-at-12-1.webp" alt="Abortion is Healthcare" loading="lazy" />
+          <div class="home-petition-body">
+            <h3>Abortion is Healthcare</h3>
+            <span class="home-petition-supporters">6.1K supporters</span>
+          </div>
+        </a>
+        <a href="/active-campaigns/pregnancy-in-prison" class="home-petition-card">
+          <img src="https://welevelup.org/wp-content/uploads/2025/10/FREEBABIES3-1-scaled-1.webp" alt="Pregnancy in Prison" loading="lazy" />
+          <div class="home-petition-body">
+            <h3>Stop sending pregnant women to prison</h3>
+            <span class="home-petition-supporters">13.1K supporters</span>
+          </div>
+        </a>
+        <a href="/active-campaigns/nomorelyes-2" class="home-petition-card">
+          <img src="https://welevelup.org/wp-content/uploads/2025/08/NML11-2.webp" alt="#NoMoreLyes" loading="lazy" />
+          <div class="home-petition-body">
+            <h3>#NoMoreLyes: Take toxic hair relaxers off the shelves</h3>
+            <span class="home-petition-supporters">6.4K supporters</span>
+          </div>
+        </a>
+        <a href="/active-campaigns/media-guidelines-domestic-abuse" class="home-petition-card">
+          <img src="https://welevelup.org/wp-content/uploads/2025/08/image-5.webp" alt="Dignity for Dead Women" loading="lazy" />
+          <div class="home-petition-body">
+            <h3>IPSO: Dignity for Dead Women</h3>
+            <span class="home-petition-supporters">29.2K supporters</span>
+          </div>
+        </a>
+        <a href="/active-campaigns/sexual-violence-in-football" class="home-petition-card">
+          <img src="https://welevelup.org/wp-content/uploads/2025/08/image-4.webp" alt="Sexual Violence in Football" loading="lazy" />
+          <div class="home-petition-body">
+            <h3>Premier League and FA</h3>
+            <span class="home-petition-supporters">4.3K supporters</span>
+          </div>
+        </a>
+        <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="home-petition-card">
+          <img src="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png" alt="Islington Council" loading="lazy" />
+          <div class="home-petition-body">
+            <h3>Islington Council: Fund Holloway Women's Centre</h3>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- BLOG SECTION -->
   <section class="home-blog">
     <div class="home-blog-inner">
@@ -90,6 +140,61 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   }
   .home-cta-btn:hover { background: #fff; }
 
+  /* ── Petitions section ───────────────────────────────── */
+  .home-petitions {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .home-petitions-inner { max-width: 1100px; margin: 0 auto; }
+  .home-petitions-title {
+    font: 800 48px/0.9 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 40px;
+    text-align: center;
+  }
+  .home-petitions-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .home-petition-card {
+    background: rgba(238,235,211,0.04);
+    border: 1px solid rgba(238,235,211,0.08);
+    text-decoration: none;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .home-petition-card:hover {
+    border-color: #CCFF33;
+    transform: translateY(-4px);
+  }
+  .home-petition-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+  }
+  .home-petition-body {
+    padding: 20px;
+  }
+  .home-petition-body h3 {
+    font: 700 17px/1.2 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    margin: 0 0 8px;
+  }
+  .home-petition-supporters {
+    font: 600 12px/1 'DM Sans', sans-serif;
+    color: #CCFF33;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  @media (max-width: 768px) {
+    .home-petitions-grid { grid-template-columns: 1fr; }
+    .home-petitions-title { font-size: 36px; }
+  }
+
   /* Hide empty "Next Event" section */
   .elementor-element-684b07bb,
   .elementor-element-484edde0,
@@ -103,6 +208,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   }
   /* Hide clone's broken blog section */
   [data-id="0362161"] {
+    display: none !important;
+  }
+  /* Hide clone's broken petitions section */
+  [data-id="9f5db00"] {
     display: none !important;
   }
 
@@ -168,7 +277,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   }
   .home-blog-card h3 {
     font: 700 18px/1.2 'DM Sans', sans-serif;
-    color: #EEEBD3;
+    color: #CCFF33;
     margin: 0;
     flex: 1;
   }

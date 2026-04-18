@@ -310,11 +310,17 @@
     .lu-nav-ctas {
       margin-right: 48px;
     }
-    .lu-nav-donate,
-    .lu-nav-join {
+    .lu-nav-donate {
       font-size: 11px !important;
       padding: 10px 14px !important;
       white-space: nowrap;
+      position: fixed;
+      top: 8px;
+      right: 56px;
+      z-index: 10000;
+    }
+    .lu-nav-join {
+      display: none !important;
     }
     .lu-nav-bar { display: none; }
     .lu-nav-bar.open {

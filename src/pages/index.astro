@@ -1,10 +1,106 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import rawHtml from '../_clone/index.html?raw';
 
-const { headInner, bodyClass, bodyInner } = extract(rawHtml);
+const { headInner, bodyClass, mainContent } = extract(rawHtml);
 ---
 <Layout headHtml={headInner} bodyClass={bodyClass}>
-  <Fragment set:html={bodyInner} />
+  <Nav />
+  <div class="home-content">
+    <Fragment set:html={mainContent} />
+  </div>
+  <section class="home-cta">
+    <h2>Join the Level Up community</h2>
+    <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join us</a>
+  </section>
+  <Footer />
 </Layout>
+
+<style is:global>
+  .home-content {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* ── Typography ──────────────────────────────────────── */
+  .home-content h1,
+  .home-content h2,
+  .home-content h3,
+  .home-content h4,
+  .home-content .elementor-heading-title {
+    font-family: 'DM Sans', sans-serif !important;
+    letter-spacing: -0.045em !important;
+    line-height: 0.9 !important;
+  }
+
+  .home-content p,
+  .home-content li,
+  .home-content .elementor-text-editor {
+    font-family: 'DM Sans', sans-serif !important;
+    line-height: 0.96 !important;
+    letter-spacing: -0.045em !important;
+  }
+
+  /* ── Constrain content width ─────────────────────────── */
+  .home-content .e-con-inner,
+  .home-content .e-con-boxed > .e-con-inner {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────── */
+  .home-content .elementor-button {
+    font-family: 'DM Sans', sans-serif !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.06em !important;
+    border-radius: 0 !important;
+    transition: all 0.2s !important;
+  }
+
+  /* ── Images ──────────────────────────────────────────── */
+  .home-content .elementor-widget-image img,
+  .home-content .elementor-image img {
+    border-radius: 0 !important;
+  }
+
+  /* ── Links ───────────────────────────────────────────── */
+  .home-content a {
+    transition: color 0.15s;
+  }
+
+  /* ── CTA section ─────────────────────────────────────── */
+  .home-cta {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .home-cta h2 {
+    font: 800 40px/0.9 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 16px;
+  }
+  .home-cta p {
+    font: 400 17px/1.5 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.6);
+    max-width: 440px;
+    margin: 0 auto 32px;
+  }
+  .home-cta-btn {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 18px 40px;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .home-cta-btn:hover { background: #fff; }
+</style>

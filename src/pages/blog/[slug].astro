@@ -1,14 +1,13 @@
 ---
 /**
- * Individual blog post page — editorial design.
- * Reads content from Astro content collection (markdown).
- * Includes related posts at the bottom.
+ * Individual blog post — editorial design from blog-post-proposal.
+ * Includes campaign callout, share buttons, related posts.
  */
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import homeRaw from '../../_clone/index.html?raw';
 
 const { headInner, bodyClass } = extract(homeRaw);
@@ -22,23 +21,27 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await import('astro:content').then(m => m.render(post));
+const { Content } = await render(post);
 
-// Get related posts (same cluster or random others)
 const allPosts = await getCollection('blog');
-const otherPosts = allPosts
-  .filter((p) => p.id !== post.id)
-  .slice(0, 3);
+const otherPosts = allPosts.filter((p) => p.id !== post.id).slice(0, 3);
 
-// Reading time estimate
 const wordCount = post.body?.split(/\s+/).length ?? 0;
 const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
 const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
+  day: 'numeric', month: 'long', year: 'numeric',
 });
+
+// Map posts to campaigns
+const campaignMap: Record<string, { title: string; url: string }> = {
+  'abortion-is-healthcare-why-decriminalisation-must-include-health-workers': { title: 'Abortion is Healthcare', url: '/active-campaigns/abortion-is-healthcare' },
+  'ending-prison-for-pregnant-women-a-non-reformist-reform': { title: 'Pregnancy in Prison', url: '/active-campaigns/pregnancy-in-prison' },
+  'why-expanding-criminalisation-is-a-feminist-issue': { title: 'Pregnancy in Prison', url: '/active-campaigns/pregnancy-in-prison' },
+  'gender-critical-feminism-isnt-feminist': { title: '#NoMoreLyes', url: '/active-campaigns/nomorelyes-2' },
+  'why-the-media-should-focus-on-diddys-violence-not-his-kinks': { title: 'Media Guidelines', url: '/active-campaigns/media-guidelines-domestic-abuse' },
+};
+const relatedCampaign = campaignMap[post.id];
 ---
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
@@ -47,6 +50,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
   <header class="bp-header">
     <div class="bp-header-inner">
       <a href="/blog" class="bp-back">← Back to blog</a>
+      <span class="bp-post-tag">{post.data.excerpt ? 'From the blog' : 'Analysis'}</span>
       <h1 class="bp-post-title">{post.data.title}</h1>
       <div class="bp-post-meta">
         <span>By <strong>{post.data.author}</strong></span>
@@ -62,6 +66,16 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
   <article class="bp-article">
     <div class="bp-article-inner">
       <Content />
+
+      <!-- CAMPAIGN CALLOUT -->
+      {relatedCampaign && (
+        <aside class="bp-callout">
+          <span class="bp-callout-label">Related Campaign</span>
+          <h3>{relatedCampaign.title}</h3>
+          <p>Join Level Up's campaign — take action now.</p>
+          <a href={relatedCampaign.url} class="bp-callout-btn">View campaign →</a>
+        </aside>
+      )}
     </div>
 
     <!-- SHARE -->
@@ -84,6 +98,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
         <div class="bp-related-grid">
           {otherPosts.map((p) => (
             <a href={`/blog/${p.id}`} class="bp-related-card">
+              <span class="bp-post-tag">{p.data.author}</span>
               <h3>{p.data.title}</h3>
               <span class="bp-related-date">{new Date(p.data.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
               <span class="bp-related-read">Read →</span>
@@ -105,6 +120,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
 </Layout>
 
 <style is:global>
+  /* ── ARTICLE HEADER ──────────────────────────────────── */
   .bp-header {
     background: #0C0A3E;
     padding: 48px 24px 64px;
@@ -119,6 +135,14 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
     margin-bottom: 32px;
   }
   .bp-back:hover { color: #CCFF33; }
+  .bp-post-tag {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    display: block;
+    margin-bottom: 16px;
+  }
   .bp-post-title {
     font: 800 clamp(32px, 6vw, 48px)/1.05 'DM Sans';
     color: #CCFF33;
@@ -135,6 +159,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
   }
   .bp-post-meta strong { color: #EEEBD3; }
 
+  /* ── ARTICLE BODY ────────────────────────────────────── */
   .bp-article {
     background: #EEEBD3;
     padding: 64px 24px 0;
@@ -184,13 +209,42 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
     color: rgba(12,10,62,0.85);
     margin-bottom: 8px;
   }
-  .bp-article-inner img {
-    width: 100%;
-    height: auto;
-    margin: 32px 0;
-  }
   .bp-article-inner strong { color: #0C0A3E; }
 
+  /* Campaign callout */
+  .bp-callout {
+    background: #0C0A3E;
+    padding: 32px;
+    margin: 40px 0;
+  }
+  .bp-callout-label {
+    font: 600 10px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .bp-callout h3 {
+    font: 800 24px/1.1 'DM Sans';
+    color: #CCFF33;
+    margin: 0 0 8px;
+  }
+  .bp-callout p {
+    font: 400 15px/1.5 'DM Sans' !important;
+    color: rgba(238,235,211,0.7) !important;
+    margin: 0 0 16px !important;
+  }
+  .bp-callout-btn {
+    font: 700 13px/1 'DM Sans';
+    color: #CCFF33 !important;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .bp-callout-btn:hover { color: #fff !important; }
+
+  /* Share */
   .bp-share-wrap {
     max-width: 680px;
     margin: 0 auto;
@@ -225,6 +279,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
     background: rgba(204,255,51,0.1);
   }
 
+  /* ── RELATED POSTS ───────────────────────────────────── */
   .bp-related {
     background: #0C0A3E;
     padding: 64px 24px;
@@ -269,6 +324,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
     margin-top: auto;
   }
 
+  /* ── CTA ──────────────────────────────────────────────── */
   .bp-cta {
     background: #0C0A3E;
     padding: 80px 24px;
@@ -284,6 +340,7 @@ const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
   @media (max-width: 768px) {
     .bp-related-grid { grid-template-columns: 1fr; }
     .bp-share { flex-direction: column; align-items: flex-start; }
+    .bp-callout { padding: 24px; }
   }
 </style>
 

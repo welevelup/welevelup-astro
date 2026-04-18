@@ -1,0 +1,325 @@
+---
+/**
+ * Blog post design proposal.
+ * Shows how an individual blog article would look.
+ */
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- ARTICLE HEADER -->
+  <header class="bp-header">
+    <div class="bp-header-inner">
+      <a href="/blog" class="bp-back">← Back to blog</a>
+      <span class="bp-post-tag">Reproductive Rights</span>
+      <h1 class="bp-post-title">Abortion Is Healthcare: Why Decriminalisation Must Include Health Workers</h1>
+      <div class="bp-post-meta">
+        <span>By <strong>Level Up</strong></span>
+        <span>·</span>
+        <time>30 May 2025</time>
+        <span>·</span>
+        <span>8 min read</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ARTICLE BODY -->
+  <article class="bp-article">
+    <div class="bp-article-inner">
+
+      <p>Since its introduction in 1861, three women had been prosecuted under the law. That was until 2022. Since November 2022, six women have appeared in court charged with ending or attempting to end their own pregnancy outside of the terms of the 1967 Abortion Act, which made abortion legal in certain, fixed circumstances.</p>
+
+      <p>Prosecutions for ending a pregnancy are rising because a well-funded international anti-abortion lobby is taking advantage of our current political moment. Funding and strategies flow freely between anti-abortion groups in Britain and the US. They're emboldened by Donald Trump's presidency in the US and the growing popularity of Nigel Farage, the Reform party leader who's already talking about rolling back abortion laws in Britain.</p>
+
+      <blockquote>
+        The power of the anti-abortion movement relies on the fact that, culturally, we don't publicly talk abortion as healthcare. Instead, it's still understood as a moral debate between two opposing 'sides'.
+      </blockquote>
+
+      <p>This won't change until we shift our cultural norms around abortion, to treat it as an essential healthcare intervention. We also need to address the real, tangible ways that people may be blocked from accessing an abortion, even if it were fully decriminalised.</p>
+
+      <h2>Why health workers must be included</h2>
+
+      <p>Treating abortion as healthcare, by decriminalising it, means that both the person having the abortion and the person providing it are protected. There are two recent cases which prove why this is important:</p>
+
+      <p>There's no legal duty for medics to report suspected crimes, and the midwife was in breach of patient confidentiality for reporting Nicola. A senior Metropolitan police officer even expressed concern about whether the developing investigation was best for Nicola. The CPS proceeded. She endured four years of investigation and trial while the media dissected her life – and was found not guilty in April 2025.</p>
+
+      <!-- CAMPAIGN CALLOUT -->
+      <aside class="bp-callout">
+        <span class="bp-callout-label">Related Campaign</span>
+        <h3>Abortion is Healthcare</h3>
+        <p>Join Level Up's campaign for full decriminalisation of abortion in the UK.</p>
+        <a href="/active-campaigns/abortion-is-healthcare" class="bp-callout-btn">View campaign →</a>
+      </aside>
+
+      <h2>The path forward</h2>
+
+      <p>Full decriminalisation is the only path that truly treats abortion as healthcare. Half-measures — decriminalising patients but not providers — leave a chilling effect intact. Health workers must know they can provide care without fear of prosecution.</p>
+
+      <p>Level Up is campaigning for legislation that removes abortion from criminal law entirely, and instead regulates it through existing healthcare frameworks. This is not radical — it is the standard in countries like Canada and Australia.</p>
+
+      <!-- SHARE -->
+      <div class="bp-share">
+        <span>Share this article</span>
+        <div class="bp-share-links">
+          <a href="https://twitter.com/intent/tweet?url=https://welevelup.org/blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers&text=Abortion%20Is%20Healthcare" target="_blank" rel="noopener">Twitter/X</a>
+          <button class="bp-copy-link" data-url="https://welevelup.org/blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers">Copy link</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- RELATED POSTS -->
+  <section class="bp-related">
+    <div class="bp-related-inner">
+      <h2>Keep reading</h2>
+      <div class="bp-related-grid">
+        <a href="/blog/why-expanding-criminalisation-is-a-feminist-issue" class="bp-related-card">
+          <span class="bp-post-tag">Criminalisation & Justice</span>
+          <h3>Why Expanding Criminalisation Is a Feminist Issue</h3>
+          <span class="bp-related-date">5 Jan 2025</span>
+          <span class="bp-related-read">Read →</span>
+        </a>
+        <a href="/blog/ending-prison-for-pregnant-women-a-non-reformist-reform" class="bp-related-card">
+          <span class="bp-post-tag">Criminalisation & Justice</span>
+          <h3>Ending Prison for Pregnant Women: A Non-Reformist Reform</h3>
+          <span class="bp-related-date">28 Aug 2025</span>
+          <span class="bp-related-read">Read →</span>
+        </a>
+        <a href="/blog/gender-critical-feminism-isnt-feminist" class="bp-related-card">
+          <span class="bp-post-tag">Trans-Inclusive Feminism</span>
+          <h3>"Gender-Critical" Feminism Isn't Feminist — It's Anti-Trans Politics</h3>
+          <span class="bp-related-date">15 Jul 2025</span>
+          <span class="bp-related-read">Read →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bp-cta">
+    <h2>Join the Level Up community</h2>
+    <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="bp-cta-btn" target="_blank" rel="noopener">Join us</a>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* ── ARTICLE HEADER ──────────────────────────────────── */
+  .bp-header {
+    background: #0C0A3E;
+    padding: 48px 24px 64px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .bp-header-inner { max-width: 720px; margin: 0 auto; }
+  .bp-back {
+    font: 500 13px/1 'DM Sans';
+    color: rgba(238,235,211,0.5);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 32px;
+  }
+  .bp-back:hover { color: #CCFF33; }
+  .bp-post-tag {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .bp-post-title {
+    font: 800 clamp(32px, 6vw, 48px)/1.05 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+  }
+  .bp-post-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font: 400 14px/1 'DM Sans';
+    color: rgba(238,235,211,0.5);
+    flex-wrap: wrap;
+  }
+  .bp-post-meta strong { color: #EEEBD3; }
+
+  /* ── ARTICLE BODY ────────────────────────────────────── */
+  .bp-article {
+    background: #EEEBD3;
+    padding: 64px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .bp-article-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .bp-article-inner p {
+    font: 400 18px/1.75 'DM Sans';
+    color: rgba(12,10,62,0.85);
+    margin: 0 0 24px;
+  }
+  .bp-article-inner h2 {
+    font: 800 28px/1.1 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 48px 0 20px;
+  }
+  .bp-article-inner blockquote {
+    border-left: 4px solid #CCFF33;
+    padding: 4px 0 4px 24px;
+    margin: 32px 0;
+    font: 500 20px/1.5 'DM Sans';
+    color: #0C0A3E;
+    font-style: normal;
+  }
+  .bp-article-inner a {
+    color: #0C0A3E;
+    text-decoration: underline;
+    text-decoration-color: #A89CED;
+    text-underline-offset: 3px;
+  }
+  .bp-article-inner a:hover { text-decoration-color: #CCFF33; }
+
+  /* Campaign callout */
+  .bp-callout {
+    background: #0C0A3E;
+    padding: 32px;
+    margin: 40px 0;
+  }
+  .bp-callout-label {
+    font: 600 10px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .bp-callout h3 {
+    font: 800 24px/1.1 'DM Sans';
+    color: #CCFF33;
+    margin: 0 0 8px;
+  }
+  .bp-callout p {
+    font: 400 15px/1.5 'DM Sans' !important;
+    color: rgba(238,235,211,0.7) !important;
+    margin: 0 0 16px !important;
+  }
+  .bp-callout-btn {
+    font: 700 13px/1 'DM Sans';
+    color: #CCFF33 !important;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .bp-callout-btn:hover { color: #fff !important; }
+
+  /* Share */
+  .bp-share {
+    border-top: 1px solid rgba(12,10,62,0.1);
+    padding-top: 24px;
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .bp-share > span {
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(12,10,62,0.4);
+  }
+  .bp-share-links {
+    display: flex;
+    gap: 12px;
+  }
+  .bp-share-links a,
+  .bp-share-links button {
+    font: 600 13px/1 'DM Sans';
+    color: #0C0A3E;
+    text-decoration: none;
+    background: none;
+    border: 1px solid rgba(12,10,62,0.15);
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .bp-share-links a:hover,
+  .bp-share-links button:hover {
+    border-color: #CCFF33;
+    background: rgba(204,255,51,0.1);
+  }
+
+  /* ── RELATED POSTS ───────────────────────────────────── */
+  .bp-related {
+    background: #0C0A3E;
+    padding: 64px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .bp-related-inner { max-width: 1000px; margin: 0 auto; }
+  .bp-related h2 {
+    font: 800 36px/0.9 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 32px;
+  }
+  .bp-related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .bp-related-card {
+    background: rgba(238,235,211,0.04);
+    padding: 28px 24px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid rgba(238,235,211,0.06);
+    transition: all 0.2s;
+  }
+  .bp-related-card:hover { border-color: #CCFF33; }
+  .bp-related-card h3 {
+    font: 700 17px/1.2 'DM Sans';
+    color: #EEEBD3;
+    margin: 0;
+    flex: 1;
+  }
+  .bp-related-date {
+    font: 400 12px/1 'DM Sans';
+    color: rgba(238,235,211,0.4);
+  }
+  .bp-related-read {
+    font: 600 13px/1 'DM Sans';
+    color: #CCFF33;
+    margin-top: auto;
+  }
+
+  /* ── CTA ──────────────────────────────────────────────── */
+  .bp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; font-family: 'DM Sans'; border-top: 1px solid rgba(238,235,211,0.06); }
+  .bp-cta h2 { font: 800 40px/0.9 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 16px; }
+  .bp-cta p { font: 400 17px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 440px; margin: 0 auto 32px; }
+  .bp-cta-btn { display: inline-block; background: #CCFF33; color: #0C0A3E; font: 700 14px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 18px 40px; text-decoration: none; }
+  .bp-cta-btn:hover { background: #fff; }
+
+  @media (max-width: 768px) {
+    .bp-related-grid { grid-template-columns: 1fr; }
+    .bp-share { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<script>
+  document.querySelector('.bp-copy-link')?.addEventListener('click', (e) => {
+    const url = (e.currentTarget as HTMLElement).dataset.url;
+    if (url) navigator.clipboard.writeText(url);
+    (e.currentTarget as HTMLElement).textContent = 'Copied!';
+    setTimeout(() => { (e.currentTarget as HTMLElement).textContent = 'Copy link'; }, 2000);
+  });
+</script>

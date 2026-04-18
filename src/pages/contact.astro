@@ -1,0 +1,204 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <section class="ct-hero">
+    <div class="ct-hero-inner">
+      <h1 class="ct-title">Contact Level Up</h1>
+      <p class="ct-subtitle">Get in touch with us. We'd love to hear from you.</p>
+    </div>
+  </section>
+
+  <section class="ct-content">
+    <div class="ct-grid">
+      <!-- FORM -->
+      <div class="ct-form-wrap">
+        <h2>Send us a message</h2>
+        <form class="ct-form" action="mailto:hello@welevelup.org" method="POST" enctype="text/plain">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" required autocomplete="name" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" required autocomplete="email" />
+          </label>
+          <label>
+            <span>Subject</span>
+            <input type="text" name="subject" />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="6" required></textarea>
+          </label>
+          <button type="submit">Send message</button>
+        </form>
+      </div>
+
+      <!-- INFO -->
+      <div class="ct-info">
+        <div class="ct-info-block">
+          <h3>General enquiries</h3>
+          <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
+        </div>
+        <div class="ct-info-block">
+          <h3>Media enquiries</h3>
+          <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
+        </div>
+        <div class="ct-info-block">
+          <h3>Address</h3>
+          <p>New Derwent House<br/>69 – 73 Theobalds Road<br/>London<br/>WC1X 8TA</p>
+        </div>
+        <div class="ct-info-block">
+          <h3>Follow us</h3>
+          <div class="ct-social">
+            <a href="https://www.facebook.com/levelupaction" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://twitter.com/we_level_up" target="_blank" rel="noopener">Twitter/X</a>
+            <a href="https://www.instagram.com/welevelup" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ct-cta">
+    <h2>Join the Level Up community</h2>
+    <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="ct-cta-btn" target="_blank" rel="noopener">Join us</a>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .ct-hero {
+    background: #0C0A3E;
+    padding: 80px 24px 64px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ct-hero-inner { max-width: 900px; margin: 0 auto; }
+  .ct-title {
+    font: 800 clamp(40px, 8vw, 64px)/0.9 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 16px;
+  }
+  .ct-subtitle {
+    font: 400 18px/1.5 'DM Sans';
+    color: rgba(238,235,211,0.6);
+  }
+
+  .ct-content {
+    background: #EEEBD3;
+    padding: 64px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ct-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 64px;
+  }
+
+  .ct-form-wrap h2 {
+    font: 800 28px/1.1 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 0 0 32px;
+  }
+  .ct-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .ct-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ct-form label span {
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(12,10,62,0.5);
+  }
+  .ct-form input, .ct-form textarea {
+    font: 400 16px/1.4 'DM Sans';
+    padding: 14px 16px;
+    border: 2px solid rgba(12,10,62,0.12);
+    background: #fff;
+    color: #0C0A3E;
+    transition: border-color 0.15s;
+  }
+  .ct-form input:focus, .ct-form textarea:focus {
+    outline: none;
+    border-color: #CCFF33;
+  }
+  .ct-form button {
+    font: 700 14px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    background: #0C0A3E;
+    color: #CCFF33;
+    border: none;
+    padding: 18px 36px;
+    cursor: pointer;
+    transition: all 0.15s;
+    align-self: flex-start;
+  }
+  .ct-form button:hover { background: #CCFF33; color: #0C0A3E; }
+
+  .ct-info { display: flex; flex-direction: column; gap: 32px; }
+  .ct-info-block h3 {
+    font: 700 14px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #0C0A3E;
+    margin: 0 0 10px;
+  }
+  .ct-info-block a {
+    font: 500 16px/1.4 'DM Sans';
+    color: #0C0A3E;
+    text-decoration: underline;
+    text-decoration-color: #A89CED;
+    text-underline-offset: 3px;
+  }
+  .ct-info-block a:hover { text-decoration-color: #CCFF33; }
+  .ct-info-block p {
+    font: 400 16px/1.6 'DM Sans';
+    color: rgba(12,10,62,0.7);
+    margin: 0;
+  }
+  .ct-social { display: flex; gap: 16px; }
+  .ct-social a {
+    font: 600 13px/1 'DM Sans';
+    color: #0C0A3E;
+    text-decoration: none;
+    border-bottom: 2px solid #A89CED;
+    padding-bottom: 2px;
+  }
+  .ct-social a:hover { border-bottom-color: #CCFF33; }
+
+  .ct-cta {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    text-align: center;
+    font-family: 'DM Sans';
+  }
+  .ct-cta h2 { font: 800 40px/0.9 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 16px; }
+  .ct-cta p { font: 400 17px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 440px; margin: 0 auto 32px; }
+  .ct-cta-btn { display: inline-block; background: #CCFF33; color: #0C0A3E; font: 700 14px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 18px 40px; text-decoration: none; }
+  .ct-cta-btn:hover { background: #fff; }
+
+  @media (max-width: 768px) {
+    .ct-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+</style>

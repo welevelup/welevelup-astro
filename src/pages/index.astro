@@ -24,7 +24,8 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
       <span class="ic-banner-label">Featured Campaign</span>
       <h2>Finish Holloway Women's Centre</h2>
       <p>The centre is built but standing empty. Tell Islington Council: keep your promise.</p>
-      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-banner-btn">Sign the petition →</a>
+      <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="ic-banner-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-banner-btn">Learn more →</a>
     </div>
   </section>
 
@@ -219,13 +220,27 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     color: rgba(238,235,211,0.7);
     margin: 0;
   }
+  .ic-banner-btn-primary {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E;
+    font: 900 14px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin-top: 12px;
+    transition: all 0.15s;
+  }
+  .ic-banner-btn-primary:hover { background: #fff; }
   .ic-banner-btn {
-    font: 700 13px/1 'DM Sans';
+    font: 600 13px/1 'DM Sans';
     color: #CCFF33;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin-top: 8px;
+    margin-top: 12px;
+    margin-left: 16px;
   }
   .ic-banner-btn:hover { color: #fff; }
 
@@ -293,35 +308,42 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     gap: 16px;
   }
   .home-petition-card {
-    background: rgba(238,235,211,0.04);
-    border: 1px solid rgba(238,235,211,0.08);
+    background: #CCFF33;
     text-decoration: none;
     overflow: hidden;
     transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
   }
   .home-petition-card:hover {
-    border-color: #CCFF33;
     transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(12,10,62,0.2);
   }
   .home-petition-card img {
     width: 100%;
-    height: 180px;
+    height: 200px;
     object-fit: cover;
     display: block;
   }
   .home-petition-body {
     padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
   .home-petition-body h3 {
-    font: 700 17px/1.2 'DM Sans', sans-serif;
-    color: #EEEBD3;
-    margin: 0 0 8px;
+    font: 700 17px/1.15 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 12px;
+    flex: 1;
   }
   .home-petition-supporters {
-    font: 600 12px/1 'DM Sans', sans-serif;
-    color: #CCFF33;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font: 600 11px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    background: rgba(12,10,62,0.1);
+    padding: 6px 10px;
+    display: inline-block;
+    align-self: flex-start;
   }
   @media (max-width: 768px) {
     .home-petitions-grid { grid-template-columns: 1fr; }

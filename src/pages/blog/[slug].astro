@@ -125,7 +125,7 @@ const relatedCampaign = campaignMap[post.id];
     padding: 48px 24px 64px;
     font-family: 'DM Sans', sans-serif;
   }
-  .bp-header-inner { max-width: 720px; margin: 0 auto; }
+  .bp-header-inner { max-width: 680px; margin: 0 auto; }
   .bp-back {
     font: 500 13px/1 'DM Sans';
     color: rgba(238,235,211,0.5);
@@ -209,6 +209,11 @@ const relatedCampaign = campaignMap[post.id];
     margin-bottom: 8px;
   }
   .bp-article-inner strong { color: #0C0A3E; }
+
+  /* Hide duplicate "Written by" line from markdown body */
+  .bp-article-inner p:first-child:has(em:only-child) {
+    display: none;
+  }
 
   /* Campaign callout */
   .bp-callout {

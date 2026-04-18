@@ -7,7 +7,6 @@
   <div class="lu-nav-top">
     <a href="/" class="lu-nav-logo">
       <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="38" />
-      <span class="lu-nav-tagline">We're working together for<br/>gender justice in the UK.<br/>Will you join us?</span>
     </a>
     <div class="lu-nav-ctas">
       <a href="/donate" class="lu-nav-donate">Donate</a>
@@ -96,11 +95,12 @@
 
 <style is:global>
   .lu-nav {
-    background: #0C0A3E;
+    background: #FFFFFF;
     position: sticky;
     top: 0;
     z-index: 9999;
     font-family: 'DM Sans', system-ui, sans-serif;
+    border-bottom: 1px solid rgba(12, 10, 62, 0.08);
   }
 
   /* ── Row 1: Logo + CTAs ──────────────────────────────── */
@@ -121,7 +121,7 @@
   .lu-nav-logo img { height: 38px; width: auto; }
   .lu-nav-tagline {
     font: 400 11px/1.35 'DM Sans', sans-serif;
-    color: rgba(238, 235, 211, 0.4);
+    color: #0C0A3E;
   }
   .lu-nav-ctas {
     display: flex;
@@ -143,17 +143,17 @@
     font: 700 13px/1 'DM Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    border: 1.5px solid rgba(238,235,211,0.3);
-    color: #EEEBD3;
+    border: 1.5px solid #0C0A3E;
+    color: #0C0A3E;
     padding: 13px 28px;
     text-decoration: none;
     transition: all 0.15s;
   }
-  .lu-nav-join:hover { border-color: #CCFF33; color: #CCFF33; }
+  .lu-nav-join:hover { background: #0C0A3E; color: #CCFF33; }
 
   /* ── Row 2: Navigation bar ───────────────────────────── */
   .lu-nav-bar {
-    border-top: 1px solid rgba(238,235,211,0.06);
+    border-top: 1px solid rgba(12,10,62,0.06);
     margin-top: 14px;
   }
   .lu-nav-bar-inner {
@@ -167,7 +167,7 @@
   .lu-nav-bar-inner > a,
   .lu-nav-group > span {
     font: 600 12px/1 'DM Sans', sans-serif;
-    color: rgba(238, 235, 211, 0.55);
+    color: #0C0A3E;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -178,7 +178,7 @@
   }
   .lu-nav-bar-inner > a:hover,
   .lu-nav-group:hover > span {
-    color: #CCFF33;
+    color: #A89CED;
   }
 
   /* ── Simple dropdown ─────────────────────────────────── */
@@ -262,7 +262,7 @@
     display: block;
     width: 24px;
     height: 2px;
-    background: #EEEBD3;
+    background: #0C0A3E;
   }
 
   @media (max-width: 900px) {

@@ -1,0 +1,297 @@
+---
+/**
+ * Individual blog post page — editorial design.
+ * Reads content from Astro content collection (markdown).
+ * Includes related posts at the bottom.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import { getCollection } from 'astro:content';
+import homeRaw from '../../_clone/index.html?raw';
+
+const { headInner, bodyClass } = extract(homeRaw);
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await import('astro:content').then(m => m.render(post));
+
+// Get related posts (same cluster or random others)
+const allPosts = await getCollection('blog');
+const otherPosts = allPosts
+  .filter((p) => p.id !== post.id)
+  .slice(0, 3);
+
+// Reading time estimate
+const wordCount = post.body?.split(/\s+/).length ?? 0;
+const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+const dateFormatted = new Date(post.data.date).toLocaleDateString('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HEADER -->
+  <header class="bp-header">
+    <div class="bp-header-inner">
+      <a href="/blog" class="bp-back">← Back to blog</a>
+      <h1 class="bp-post-title">{post.data.title}</h1>
+      <div class="bp-post-meta">
+        <span>By <strong>{post.data.author}</strong></span>
+        <span>·</span>
+        <time>{dateFormatted}</time>
+        <span>·</span>
+        <span>{readingTime} min read</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ARTICLE -->
+  <article class="bp-article">
+    <div class="bp-article-inner">
+      <Content />
+    </div>
+
+    <!-- SHARE -->
+    <div class="bp-share-wrap">
+      <div class="bp-share">
+        <span>Share this article</span>
+        <div class="bp-share-links">
+          <a href={`https://twitter.com/intent/tweet?url=https://welevelup.org/blog/${post.id}&text=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener">Twitter/X</a>
+          <button class="bp-copy-link" data-url={`https://welevelup.org/blog/${post.id}`}>Copy link</button>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- RELATED POSTS -->
+  {otherPosts.length > 0 && (
+    <section class="bp-related">
+      <div class="bp-related-inner">
+        <h2>Keep reading</h2>
+        <div class="bp-related-grid">
+          {otherPosts.map((p) => (
+            <a href={`/blog/${p.id}`} class="bp-related-card">
+              <h3>{p.data.title}</h3>
+              <span class="bp-related-date">{new Date(p.data.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+              <span class="bp-related-read">Read →</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- CTA -->
+  <section class="bp-cta">
+    <h2>Join the Level Up community</h2>
+    <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="bp-cta-btn" target="_blank" rel="noopener">Join us</a>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .bp-header {
+    background: #0C0A3E;
+    padding: 48px 24px 64px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .bp-header-inner { max-width: 720px; margin: 0 auto; }
+  .bp-back {
+    font: 500 13px/1 'DM Sans';
+    color: rgba(238,235,211,0.5);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 32px;
+  }
+  .bp-back:hover { color: #CCFF33; }
+  .bp-post-title {
+    font: 800 clamp(32px, 6vw, 48px)/1.05 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+  }
+  .bp-post-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font: 400 14px/1 'DM Sans';
+    color: rgba(238,235,211,0.5);
+    flex-wrap: wrap;
+  }
+  .bp-post-meta strong { color: #EEEBD3; }
+
+  .bp-article {
+    background: #EEEBD3;
+    padding: 64px 24px 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .bp-article-inner {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .bp-article-inner p {
+    font: 400 18px/1.75 'DM Sans';
+    color: rgba(12,10,62,0.85);
+    margin: 0 0 24px;
+  }
+  .bp-article-inner h2 {
+    font: 800 28px/1.1 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 48px 0 20px;
+  }
+  .bp-article-inner h3 {
+    font: 700 22px/1.15 'DM Sans';
+    color: #0C0A3E;
+    margin: 36px 0 16px;
+  }
+  .bp-article-inner blockquote {
+    border-left: 4px solid #CCFF33;
+    padding: 4px 0 4px 24px;
+    margin: 32px 0;
+    font: 500 20px/1.5 'DM Sans';
+    color: #0C0A3E;
+    font-style: normal;
+  }
+  .bp-article-inner a {
+    color: #0C0A3E;
+    text-decoration: underline;
+    text-decoration-color: #A89CED;
+    text-underline-offset: 3px;
+  }
+  .bp-article-inner a:hover { text-decoration-color: #CCFF33; }
+  .bp-article-inner ul, .bp-article-inner ol {
+    padding-left: 24px;
+    margin: 0 0 24px;
+  }
+  .bp-article-inner li {
+    font: 400 18px/1.75 'DM Sans';
+    color: rgba(12,10,62,0.85);
+    margin-bottom: 8px;
+  }
+  .bp-article-inner img {
+    width: 100%;
+    height: auto;
+    margin: 32px 0;
+  }
+  .bp-article-inner strong { color: #0C0A3E; }
+
+  .bp-share-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 0 64px;
+  }
+  .bp-share {
+    border-top: 1px solid rgba(12,10,62,0.1);
+    padding-top: 24px;
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .bp-share > span {
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(12,10,62,0.4);
+  }
+  .bp-share-links { display: flex; gap: 12px; }
+  .bp-share-links a, .bp-share-links button {
+    font: 600 13px/1 'DM Sans';
+    color: #0C0A3E;
+    text-decoration: none;
+    background: none;
+    border: 1px solid rgba(12,10,62,0.15);
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  .bp-share-links a:hover, .bp-share-links button:hover {
+    border-color: #CCFF33;
+    background: rgba(204,255,51,0.1);
+  }
+
+  .bp-related {
+    background: #0C0A3E;
+    padding: 64px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .bp-related-inner { max-width: 1000px; margin: 0 auto; }
+  .bp-related h2 {
+    font: 800 36px/0.9 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 32px;
+  }
+  .bp-related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .bp-related-card {
+    background: rgba(238,235,211,0.04);
+    padding: 28px 24px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid rgba(238,235,211,0.06);
+    transition: all 0.2s;
+  }
+  .bp-related-card:hover { border-color: #CCFF33; }
+  .bp-related-card h3 {
+    font: 700 17px/1.2 'DM Sans';
+    color: #EEEBD3;
+    margin: 0;
+    flex: 1;
+  }
+  .bp-related-date {
+    font: 400 12px/1 'DM Sans';
+    color: rgba(238,235,211,0.4);
+  }
+  .bp-related-read {
+    font: 600 13px/1 'DM Sans';
+    color: #CCFF33;
+    margin-top: auto;
+  }
+
+  .bp-cta {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    text-align: center;
+    font-family: 'DM Sans';
+    border-top: 1px solid rgba(238,235,211,0.06);
+  }
+  .bp-cta h2 { font: 800 40px/0.9 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 16px; }
+  .bp-cta p { font: 400 17px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 440px; margin: 0 auto 32px; }
+  .bp-cta-btn { display: inline-block; background: #CCFF33; color: #0C0A3E; font: 700 14px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 18px 40px; text-decoration: none; }
+  .bp-cta-btn:hover { background: #fff; }
+
+  @media (max-width: 768px) {
+    .bp-related-grid { grid-template-columns: 1fr; }
+    .bp-share { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<script>
+  document.querySelector('.bp-copy-link')?.addEventListener('click', (e) => {
+    const url = (e.currentTarget as HTMLElement).dataset.url;
+    if (url) navigator.clipboard.writeText(url);
+    (e.currentTarget as HTMLElement).textContent = 'Copied!';
+    setTimeout(() => { (e.currentTarget as HTMLElement).textContent = 'Copy link'; }, 2000);
+  });
+</script>

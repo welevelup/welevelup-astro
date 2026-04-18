@@ -9,7 +9,25 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 ---
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
+
+  <!-- PROPOSAL A: Announcement bar -->
+  <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar">
+    <span class="ic-bar-badge">NEW</span>
+    <span>Islington Council must finish Holloway Women's Centre →</span>
+  </a>
+
   <Fragment set:html={mainContent} />
+  <!-- ISLINGTON COUNCIL BANNER -->
+  <section class="ic-banner">
+    <img src="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png" alt="" class="ic-banner-img" loading="lazy" />
+    <div class="ic-banner-content">
+      <span class="ic-banner-label">Featured Campaign</span>
+      <h2>Finish Holloway Women's Centre</h2>
+      <p>The centre is built but standing empty. Tell Islington Council: keep your promise.</p>
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-banner-btn">Sign the petition →</a>
+    </div>
+  </section>
+
   <!-- PETITIONS SECTION -->
   <section class="home-petitions">
     <div class="home-petitions-inner">
@@ -140,6 +158,121 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   }
   .home-cta-btn:hover { background: #fff; }
 
+  /* ═══ PROPOSAL A: Announcement bar ═══ */
+  .ic-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #A89CED;
+    padding: 12px 24px;
+    font: 600 13px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.15s;
+  }
+  .ic-bar:hover { background: #CCFF33; }
+  .ic-bar-badge {
+    background: #0C0A3E;
+    color: #CCFF33;
+    font: 700 10px/1 'DM Sans';
+    padding: 4px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ═══ PROPOSAL B: Featured banner ═══ */
+  .ic-banner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #0C0A3E;
+    min-height: 300px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ic-banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ic-banner-content {
+    padding: 48px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+  .ic-banner-label {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+  }
+  .ic-banner-content h2 {
+    font: 800 32px/0.95 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  .ic-banner-content p {
+    font: 400 16px/1.5 'DM Sans';
+    color: rgba(238,235,211,0.7);
+    margin: 0;
+  }
+  .ic-banner-btn {
+    font: 700 13px/1 'DM Sans';
+    color: #CCFF33;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 8px;
+  }
+  .ic-banner-btn:hover { color: #fff; }
+
+  /* ═══ PROPOSAL C: Full hero ═══ */
+  .ic-hero-full {
+    background: #A89CED;
+    padding: 64px 24px;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ic-hero-full-inner { max-width: 700px; margin: 0 auto; }
+  .ic-hero-full-label {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #0C0A3E;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .ic-hero-full-title {
+    font: 800 clamp(32px, 7vw, 48px)/0.95 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 0 0 16px;
+  }
+  .ic-hero-full p {
+    font: 400 17px/1.5 'DM Sans';
+    color: rgba(12,10,62,0.7);
+    margin: 0 0 24px;
+  }
+  .ic-hero-full-btn {
+    display: inline-block;
+    background: #0C0A3E;
+    color: #CCFF33;
+    font: 700 14px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 16px 36px;
+    text-decoration: none;
+  }
+  .ic-hero-full-btn:hover { background: #CCFF33; color: #0C0A3E; }
+
+  @media (max-width: 768px) {
+    .ic-banner { grid-template-columns: 1fr; }
+    .ic-banner-img { height: 200px; }
+  }
+
   /* ── Petitions section ───────────────────────────────── */
   .home-petitions {
     background: #0C0A3E;
@@ -196,8 +329,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   }
 
   /* Hide empty "Next Event" section */
-  .elementor-element-684b07bb,
-  .elementor-element-484edde0,
+  [data-id="65e0e558"],
   [data-id="684b07bb"],
   [data-id="484edde0"] {
     display: none !important;

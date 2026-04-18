@@ -1,0 +1,123 @@
+---
+/**
+ * Blog listing page — Magazine editorial design (Proposal A).
+ * Replaces the clone's /blog page.
+ */
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+
+const posts = [
+  { slug: 'abortion-is-healthcare-why-decriminalisation-must-include-health-workers', title: 'Abortion Is Healthcare: Why Decriminalisation Must Include Health Workers', tag: 'Reproductive Rights', date: '12 Sep 2025', img: 'https://welevelup.org/wp-content/uploads/2025/08/image-5.webp' },
+  { slug: 'ending-prison-for-pregnant-women-a-non-reformist-reform', title: 'Ending Prison for Pregnant Women: A Non-Reformist Reform', tag: 'Criminalisation & Justice', date: '28 Aug 2025' },
+  { slug: 'gender-critical-feminism-isnt-feminist', title: '"Gender-Critical" Feminism Isn\'t Feminist — It\'s Anti-Trans Politics', tag: 'Trans-Inclusive Feminism', date: '15 Jul 2025' },
+  { slug: 'why-the-media-should-focus-on-diddys-violence-not-his-kinks', title: 'Why the Media Should Focus on Diddy\'s Violence, Not His Kinks', tag: 'Media & Violence', date: '3 Jun 2025' },
+  { slug: 'why-we-need-to-start-moving-offline', title: 'Why We Need to Start Moving Offline', tag: 'Solidarity & Movement', date: '20 May 2025' },
+  { slug: 'how-we-choose-our-campaigns', title: 'How We Choose Our Campaigns', tag: 'Solidarity & Movement', date: '8 Apr 2025' },
+  { slug: 'beyond-sympathy-feminist-solidarity-without-deservingness', title: 'Beyond Sympathy: Feminist Solidarity Without Deservingness', tag: 'Solidarity & Movement', date: '22 Mar 2025' },
+  { slug: 'the-griefs-left-unattended', title: 'The Griefs Left Unattended', tag: 'Solidarity & Movement', date: '10 Feb 2025' },
+  { slug: 'why-expanding-criminalisation-is-a-feminist-issue', title: 'Why Expanding Criminalisation Is a Feminist Issue', tag: 'Criminalisation & Justice', date: '5 Jan 2025' },
+  { slug: 'its-time-to-reclaim-the-socialist-roots-of-international-womens-day', title: "It's Time to Reclaim the Socialist Roots of International Women's Day", tag: 'Solidarity & Movement', date: '8 Mar 2024' },
+];
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <section class="bl-hero">
+    <div class="bl-inner">
+      <span class="bl-label">From the Blog</span>
+      <h1 class="bl-title">Feminist Thinking</h1>
+      <p class="bl-subtitle">Analysis, perspectives, and feminist thinking from Level Up on campaigns, policy, and gender justice in the UK.</p>
+    </div>
+  </section>
+
+  <section class="bl-content">
+    <div class="bl-grid">
+      <a href={`/blog/${posts[0].slug}`} class="bl-featured">
+        <div class="bl-featured-img" style={`background-image:url('${posts[0].img}')`}></div>
+        <div class="bl-featured-body">
+          <span class="bl-tag">{posts[0].tag}</span>
+          <h2>{posts[0].title}</h2>
+          <span class="bl-date">{posts[0].date}</span>
+          <span class="bl-read">Read article →</span>
+        </div>
+      </a>
+      <div class="bl-stack">
+        {posts.slice(1, 5).map(post => (
+          <a href={`/blog/${post.slug}`} class="bl-card">
+            <span class="bl-tag">{post.tag}</span>
+            <h3>{post.title}</h3>
+            <span class="bl-date">{post.date}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <div class="bl-rest">
+      {posts.slice(5).map(post => (
+        <a href={`/blog/${post.slug}`} class="bl-rest-card">
+          <span class="bl-tag">{post.tag}</span>
+          <h3>{post.title}</h3>
+          <div class="bl-rest-meta">
+            <span class="bl-date">{post.date}</span>
+            <span class="bl-read">Read →</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="bl-cta">
+    <h2>Join the Level Up community</h2>
+    <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="bl-cta-btn" target="_blank" rel="noopener">Join us</a>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .bl-hero { background: #0C0A3E; padding: 80px 24px 60px; font-family: 'DM Sans', sans-serif; }
+  .bl-inner { max-width: 1100px; margin: 0 auto; }
+  .bl-label { font: 600 12px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; display: block; margin-bottom: 12px; }
+  .bl-title { font: 800 64px/0.9 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 16px; }
+  .bl-subtitle { font: 400 18px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 500px; }
+
+  .bl-content { background: #EEEBD3; padding: 40px 24px 64px; font-family: 'DM Sans', sans-serif; }
+  .bl-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 2px; }
+
+  .bl-featured { text-decoration: none; color: #0C0A3E; background: #fff; display: flex; flex-direction: column; transition: all 0.2s; }
+  .bl-featured:hover { box-shadow: 0 4px 24px rgba(12,10,62,0.1); }
+  .bl-featured-img { height: 280px; background-size: cover; background-position: center; }
+  .bl-featured-body { padding: 32px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .bl-featured-body h2 { font: 800 28px/1.05 'DM Sans'; color: #0C0A3E; letter-spacing: -0.03em; margin: 0; }
+  .bl-tag { font: 600 10px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; }
+  .bl-date { font: 400 13px/1 'DM Sans'; color: rgba(12,10,62,0.4); }
+  .bl-read { font: 600 13px/1 'DM Sans'; color: #0C0A3E; margin-top: auto; }
+
+  .bl-stack { display: flex; flex-direction: column; gap: 2px; }
+  .bl-card { background: #fff; padding: 24px 28px; text-decoration: none; color: #0C0A3E; display: flex; flex-direction: column; gap: 8px; flex: 1; border-left: 3px solid transparent; transition: all 0.2s; }
+  .bl-card:hover { border-left-color: #CCFF33; }
+  .bl-card h3 { font: 700 16px/1.2 'DM Sans'; color: #0C0A3E; margin: 0; letter-spacing: -0.02em; }
+
+  .bl-rest { max-width: 1100px; margin: 40px auto 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .bl-rest-card { background: #fff; padding: 28px 24px; text-decoration: none; color: #0C0A3E; display: flex; flex-direction: column; gap: 10px; border-top: 3px solid transparent; transition: all 0.2s; }
+  .bl-rest-card:hover { border-top-color: #CCFF33; }
+  .bl-rest-card h3 { font: 700 17px/1.2 'DM Sans'; color: #0C0A3E; margin: 0; flex: 1; }
+  .bl-rest-meta { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+
+  .bl-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; font-family: 'DM Sans'; }
+  .bl-cta h2 { font: 800 40px/0.9 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 16px; }
+  .bl-cta p { font: 400 17px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 440px; margin: 0 auto 32px; }
+  .bl-cta-btn { display: inline-block; background: #CCFF33; color: #0C0A3E; font: 700 14px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 18px 40px; text-decoration: none; }
+  .bl-cta-btn:hover { background: #fff; }
+
+  @media (max-width: 768px) {
+    .bl-grid { grid-template-columns: 1fr; }
+    .bl-rest { grid-template-columns: 1fr; }
+    .bl-title { font-size: 40px; }
+  }
+</style>

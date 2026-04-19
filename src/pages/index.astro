@@ -255,7 +255,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 
   /* ═══ Animated announcement bar (marquee) ═══ */
   .ic-bar {
-    background: #A89CED;
+    background: #CCFF33;
     overflow: hidden;
     white-space: nowrap;
     position: relative;
@@ -275,12 +275,12 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     text-decoration: none;
     white-space: nowrap;
   }
-  .ic-bar:hover { background: #CCFF33; }
-  .ic-bar:hover .ic-bar-item { color: #0C0A3E; }
+  .ic-bar:hover { background: #0C0A3E; }
+  .ic-bar:hover .ic-bar-item { color: #CCFF33; }
   .ic-bar:hover .ic-bar-track { animation-play-state: paused; }
   .ic-bar-badge {
     background: #0C0A3E;
-    color: #CCFF33;
+    color: #CCFF33 !important;
     font: 700 10px/1 'DM Sans';
     padding: 4px 8px;
     text-transform: uppercase;

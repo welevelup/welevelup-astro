@@ -24,6 +24,13 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">
   <head>
     <Fragment set:html={headHtml} />
+    <style>
+      /* Must come after WP CSS to win cascade — hides Elementor header/footer */
+      header[data-elementor-type="header"],
+      .elementor-location-header,
+      footer[data-elementor-type="footer"],
+      .elementor-location-footer { display: none !important; }
+    </style>
     {title && <title>{title}</title>}
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonicalUrl} />

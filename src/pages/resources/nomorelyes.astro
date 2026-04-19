@@ -10,6 +10,53 @@ const { headInner, bodyClass } = extract(homeRaw);
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
 
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "#NoMoreLyes Relaxer Info Kit",
+    "description": "A curated collection of 45 academic studies, articles, and resources on the health effects of chemical hair relaxers, compiled by Level Up's #NoMoreLyes campaign.",
+    "url": "https://welevelup.org/resources/nomorelyes",
+    "publisher": { "@type": "Organization", "name": "Level Up", "url": "https://welevelup.org" },
+    "about": { "@type": "Thing", "name": "Chemical hair relaxers and health risks" }
+  })}</script>
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Are hair relaxers linked to cancer?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Multiple studies have found associations between chemical hair relaxer use and increased risk of certain cancers. A 2022 study published in the Journal of the National Cancer Institute found that women who frequently used chemical hair straightening products had a higher risk of uterine cancer. Research from Boston University's Black Women's Health Study also links relaxer use to uterine fibroids. The chemicals implicated include formaldehyde, lye (sodium hydroxide), and other endocrine-disrupting compounds." }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the #NoMoreLyes campaign?",
+        "acceptedAnswer": { "@type": "Answer", "text": "#NoMoreLyes is a campaign by feminist organisation Level Up calling on L'Oréal — the world's largest manufacturer of hair relaxers — to reformulate or withdraw lye-based products. Launched in 2021, the campaign has gathered tens of thousands of signatures and secured coverage in the BBC, Reuters, The Guardian, CNN, and many other outlets. It calls for greater transparency, reformulation, and accountability from cosmetics manufacturers whose products disproportionately affect Black women." }
+      },
+      {
+        "@type": "Question",
+        "name": "What chemicals in hair relaxers are harmful?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Hair relaxers commonly contain lye (sodium hydroxide), which can cause chemical burns, and a range of endocrine-disrupting chemicals including phthalates, parabens, and formaldehyde-releasing compounds. More recently, glyoxylic acid — used in some 'formaldehyde-free' straightening products — has been linked to acute kidney failure. These chemicals have been found at higher levels in the blood and urine of women who regularly use relaxers." }
+      },
+      {
+        "@type": "Question",
+        "name": "Has L'Oréal responded to concerns about hair relaxers?",
+        "acceptedAnswer": { "@type": "Answer", "text": "L'Oréal has denied that its hair relaxer products are unsafe and has stated that it complies with all applicable regulations. The company has faced significant legal action in the United States, with thousands of lawsuits from women alleging their products caused cancer. Despite this, L'Oréal continues to sell lye-based relaxers in markets including the UK, where Black women are a primary consumer group." }
+      },
+      {
+        "@type": "Question",
+        "name": "Are hair relaxers banned anywhere?",
+        "acceptedAnswer": { "@type": "Answer", "text": "As of 2025, hair relaxers have not been banned in the UK or EU, though regulatory bodies including CTPA and the Office for Product Safety & Standards have been monitoring the evidence. In the United States, the FDA has proposed new rules restricting formaldehyde in hair straightening products. Level Up's #NoMoreLyes campaign is actively lobbying for regulatory action in the UK." }
+      },
+      {
+        "@type": "Question",
+        "name": "How does hair relaxer use affect Black women specifically?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Black women are disproportionately exposed to chemical hair relaxers due to Eurocentric beauty standards and social pressures around natural hair in professional and social settings — a form of racial trauma researchers have documented extensively. Studies show Black women in the UK and US use relaxers at significantly higher rates and from a younger age than other groups, resulting in greater cumulative chemical exposure. The #NoMoreLyes campaign frames this as both a health justice and racial justice issue." }
+      }
+    ]
+  })}</script>
+
   <section class="nr-hero" aria-labelledby="nr-hero-heading">
     <div class="nr-hero-inner">
       <div class="nr-hero-text">
@@ -32,19 +79,62 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <section class="nr-filters" aria-label="Filter resources by category">
+  <section class="nr-faq" aria-labelledby="nr-faq-heading">
+    <div class="nr-faq-inner">
+      <h2 id="nr-faq-heading" class="nr-faq-title">Common Questions</h2>
+      <dl class="nr-faq-list">
+        <div class="nr-faq-item">
+          <dt>Are hair relaxers linked to cancer?</dt>
+          <dd>Yes. A 2022 study in the Journal of the National Cancer Institute found women who frequently used chemical hair straighteners had a higher risk of uterine cancer. Research from Boston University also links relaxer use to uterine fibroids. The chemicals implicated include formaldehyde, lye (sodium hydroxide), and endocrine-disrupting compounds.</dd>
+        </div>
+        <div class="nr-faq-item">
+          <dt>What is the #NoMoreLyes campaign?</dt>
+          <dd>#NoMoreLyes is Level Up's campaign calling on L'Oréal — the world's largest hair relaxer manufacturer — to reformulate or withdraw lye-based products. Launched in 2021, it has tens of thousands of signatures and coverage from the BBC, Reuters, The Guardian, and CNN.</dd>
+        </div>
+        <div class="nr-faq-item">
+          <dt>What chemicals in hair relaxers are harmful?</dt>
+          <dd>Hair relaxers contain lye (sodium hydroxide), which causes chemical burns, plus endocrine-disrupting chemicals including phthalates, parabens, and formaldehyde-releasing compounds. Glyoxylic acid — used in some "formaldehyde-free" products — has been linked to acute kidney failure.</dd>
+        </div>
+        <div class="nr-faq-item">
+          <dt>Has L'Oréal responded to these concerns?</dt>
+          <dd>L'Oréal denies its relaxers are unsafe and states it complies with all regulations. The company faces thousands of US lawsuits from women alleging its products caused cancer. It continues to sell lye-based relaxers in the UK and globally.</dd>
+        </div>
+        <div class="nr-faq-item">
+          <dt>Are hair relaxers banned anywhere?</dt>
+          <dd>As of 2025, hair relaxers are not banned in the UK or EU. The FDA has proposed new US rules restricting formaldehyde in hair products. Level Up's campaign is actively lobbying for UK regulatory action.</dd>
+        </div>
+        <div class="nr-faq-item">
+          <dt>Why does this disproportionately affect Black women?</dt>
+          <dd>Black women use relaxers at higher rates and from a younger age due to Eurocentric beauty standards and social pressure around natural hair — resulting in greater cumulative chemical exposure. The #NoMoreLyes campaign frames this as both a health justice and racial justice issue.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="nr-filters" aria-label="Filter resources">
     <div class="nr-filters-inner">
-      <button class="nr-pill nr-pill--active" data-filter="all" aria-pressed="true">All</button>
-      <button class="nr-pill" data-filter="academic" aria-pressed="false">Academic Research</button>
-      <button class="nr-pill" data-filter="focused" aria-pressed="false">Focused on Our Campaign</button>
-      <button class="nr-pill" data-filter="mentions" aria-pressed="false">Mentions Our Campaign</button>
-      <button class="nr-pill" data-filter="other-articles" aria-pressed="false">Other Relevant Articles</button>
-      <button class="nr-pill" data-filter="other-campaigns" aria-pressed="false">Other Relevant Campaigns</button>
-      <button class="nr-pill" data-filter="regulation" aria-pressed="false">Regulation Information</button>
-      <button class="nr-pill" data-filter="video" aria-pressed="false">Video</button>
-      <button class="nr-pill" data-filter="organisation" aria-pressed="false">Organisations</button>
-      <select class="nr-platform-select" id="nr-platform" aria-label="Filter by platform">
-        <option value="all">All Platforms</option>
+      <select class="nr-filter-select" id="nr-cat" aria-label="Filter by category">
+        <option value="all">All Resource Categories</option>
+        <option value="academic">Academic Research</option>
+        <option value="focused">Focused on Our Campaign</option>
+        <option value="mentions">Mentions Our Campaign</option>
+        <option value="other-articles">Other Relevant Articles</option>
+        <option value="other-campaigns">Other Relevant Campaigns</option>
+        <option value="regulation">Regulation Information</option>
+        <option value="video">Video</option>
+        <option value="organisation">Organisations</option>
+      </select>
+      <select class="nr-filter-select" id="nr-type" aria-label="Filter by media type">
+        <option value="all">All Media Types</option>
+        <option value="academic">Academic Paper</option>
+        <option value="article">Article</option>
+        <option value="campaign">Our Campaign</option>
+        <option value="organisation">Organisation</option>
+        <option value="regulation">Regulation</option>
+        <option value="video">Video</option>
+      </select>
+      <select class="nr-filter-select" id="nr-platform" aria-label="Filter by platform">
+        <option value="all">Platform</option>
         <option value="about-lawsuits">About Lawsuits</option>
         <option value="american-journal-epidemiology">American Journal of Epidemiology</option>
         <option value="annals-otology">Annals of Otology Rhinology &amp; Laryngology</option>
@@ -79,6 +169,36 @@ const { headInner, bodyClass } = extract(homeRaw);
         <option value="time-news">Time News</option>
         <option value="uk-parliament">UK Parliament</option>
       </select>
+      <select class="nr-filter-select" id="nr-topic" aria-label="Filter by topic">
+        <option value="all">Topic(s)</option>
+        <option value="nomorelyes">#NoMoreLyes</option>
+        <option value="allergies">Allergies</option>
+        <option value="beauty">Beauty</option>
+        <option value="black-women-beauty">Black Women &amp; Beauty</option>
+        <option value="breast-cancer">Breast Cancer</option>
+        <option value="burns">Burns</option>
+        <option value="cancer">Cancer</option>
+        <option value="children">Children</option>
+        <option value="ctpa">CTPA</option>
+        <option value="dark-lovely">Dark &amp; Lovely</option>
+        <option value="endocrine-disruption">Endocrine Disruption</option>
+        <option value="fibroids">Fibroids</option>
+        <option value="free-to-read">Free To Read</option>
+        <option value="glyoxylic-acid">Glyoxylic Acid</option>
+        <option value="hair-discrimination">Hair Discrimination</option>
+        <option value="ingestion">Ingestion</option>
+        <option value="kidney-failure">Kidney Failure</option>
+        <option value="lawsuits">Lawsuits</option>
+        <option value="loreal">L'Oréal</option>
+        <option value="lye">Lye</option>
+        <option value="racial-trauma">Racial Trauma</option>
+        <option value="regulation">Regulation</option>
+        <option value="relaxer-boxes">Relaxer Boxes</option>
+        <option value="revlon">Revlon</option>
+        <option value="sodium-hydroxide">Sodium Hydroxide</option>
+        <option value="uterine-cancer">Uterine Cancer</option>
+        <option value="wellness">Wellness</option>
+      </select>
     </div>
   </section>
 
@@ -111,7 +231,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 
         <ol class="nr-list" aria-label="All campaign resources">
 
-          <li class="nr-resource-item" data-tags="academic focused regulation" data-source="uk-parliament">
+          <li class="nr-resource-item" data-tags="academic focused regulation" data-source="uk-parliament" data-type="regulation" data-topic="nomorelyes endocrine-disruption uterine-cancer fibroids loreal regulation racial-trauma">
             <span class="nr-item-num">01</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Endocrine Disruption</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Fibroids</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Regulation</span><span class="nr-topic">Racial Trauma</span></div>
@@ -122,7 +242,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Parliament</span><a href="https://committees.parliament.uk/writtenevidence/160638/pdf/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="about-lawsuits">
+          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="about-lawsuits" data-type="organisation" data-topic="beauty black-women-beauty">
             <span class="nr-item-num">02</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Beauty</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -133,7 +253,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.treasuretress.co.uk/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="refinery29">
+          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="refinery29" data-type="organisation" data-topic="black-women-beauty">
             <span class="nr-item-num">03</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Black Women And Beauty</span></div>
@@ -144,7 +264,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.refinery29.com/en-gb/unbothered-uk" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="organisation">
+          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="organisation" data-type="organisation" data-topic="hair-discrimination black-women-beauty">
             <span class="nr-item-num">04</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Hair Discrimination</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -155,7 +275,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.projectembrace.org.uk/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="ctpa">
+          <li class="nr-resource-item" data-tags="organisation other-campaigns" data-source="ctpa" data-type="organisation" data-topic="beauty black-women-beauty">
             <span class="nr-item-num">05</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Beauty</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -166,7 +286,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.instagram.com/curltureuk/?hl=en" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="the-examination">
+          <li class="nr-resource-item" data-tags="mentions" data-source="the-examination" data-type="article" data-topic="nomorelyes uterine-cancer loreal revlon lawsuits black-women-beauty">
             <span class="nr-item-num">06</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Revlon</span><span class="nr-topic">Lawsuits</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -177,7 +297,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.theexamination.org/articles/while-many-black-women-in-us-abandon-hair-relaxers-linked-to-cancer-sales-climb-in-african-countries" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="medscape">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="medscape" data-type="article" data-topic="glyoxylic-acid kidney-failure lawsuits">
             <span class="nr-item-num">07</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Glyoxylic Acid</span><span class="nr-topic">Kidney Failure</span><span class="nr-topic">Lawsuits</span></div>
@@ -188,7 +308,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.medscape.com/viewarticle/hair-straightening-products-entail-acute-kidney-failure-risk-2024a10005oz?form=fpf" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="independent">
+          <li class="nr-resource-item" data-tags="mentions" data-source="independent" data-type="article" data-topic="nomorelyes lye burns black-women-beauty">
             <span class="nr-item-num">08</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Lye</span><span class="nr-topic">Burns</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -199,7 +319,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.independent.co.uk/life-style/black-hair-relaxers-side-effects-b2085554.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="news-watch-tv">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="news-watch-tv" data-type="article" data-topic="burns allergies">
             <span class="nr-item-num">09</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Burns</span><span class="nr-topic">Allergies</span></div>
@@ -210,7 +330,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://newswatchtv.com/2023/02/23/injuries-that-can-be-caused-by-hair-relaxers/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="glamour-magazine">
+          <li class="nr-resource-item" data-tags="mentions" data-source="glamour-magazine" data-type="article" data-topic="nomorelyes uterine-cancer black-women-beauty">
             <span class="nr-item-num">10</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -221,7 +341,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/chemical-straighteners-cancer" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="the-voice">
+          <li class="nr-resource-item" data-tags="focused" data-source="the-voice" data-type="campaign" data-topic="nomorelyes lye loreal cancer">
             <span class="nr-item-num">11</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Lye</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Cancer</span></div>
@@ -232,7 +352,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.voice-online.co.uk/news/uk-news/2023/04/27/campaigners-call-on-loreal-to-remove-lye-from-hair-relaxers-due-to-cancer-risk/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="cosmetics-design-europe">
+          <li class="nr-resource-item" data-tags="focused" data-source="cosmetics-design-europe" data-type="campaign" data-topic="nomorelyes loreal regulation">
             <span class="nr-item-num">12</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Regulation</span></div>
@@ -243,7 +363,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.cosmeticsdesign-europe.com/Article/2023/04/26/Beyond-our-business-L-Oreal-ramps-up-eco-investments-but-faces-further-backlash-over-chemicals-in-hair-products" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="retail-bum">
+          <li class="nr-resource-item" data-tags="focused" data-source="retail-bum" data-type="campaign" data-topic="nomorelyes loreal lawsuits">
             <span class="nr-item-num">13</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Lawsuits</span></div>
@@ -254,7 +374,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://retailbum.com/2023/beauty/health-wellness/activists-ask-loreal-to-remove-hair-relaxing-products-after-studies-indicate-cancer-risk/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="time-news">
+          <li class="nr-resource-item" data-tags="focused" data-source="time-news" data-type="campaign" data-topic="nomorelyes breast-cancer sodium-hydroxide loreal">
             <span class="nr-item-num">14</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Breast Cancer</span><span class="nr-topic">Sodium Hydroxide</span><span class="nr-topic">L'Oréal</span></div>
@@ -265,7 +385,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://time.news/uk-feminist-group-calls-for-loreal-to-withdraw-hair-straightening-products-linked-to-increased-cancer-risk-level-ups-campaign-raises-concerns-over-chemical-hair-straighteners-containing-sodium-hyd/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="portugal-posts-english">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="portugal-posts-english" data-type="article" data-topic="lawsuits">
             <span class="nr-item-num">15</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Lawsuits</span></div>
@@ -276,7 +396,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://portugal.postsen.com/health/338291/Hair-straighteners-drive-consumers-to-sue-companies.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="lawsuit-information-center">
+          <li class="nr-resource-item" data-tags="focused" data-source="lawsuit-information-center" data-type="campaign" data-topic="nomorelyes loreal lawsuits dark-lovely">
             <span class="nr-item-num">16</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Lawsuits</span><span class="nr-topic">Dark &amp; Lovely</span></div>
@@ -287,7 +407,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.aboutlawsuits.com/hair-relaxer-lawsuit/loreal-hair-relaxer-recall-urged/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="beauty-packaging">
+          <li class="nr-resource-item" data-tags="focused" data-source="beauty-packaging" data-type="campaign" data-topic="nomorelyes loreal lawsuits">
             <span class="nr-item-num">17</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Lawsuits</span></div>
@@ -298,7 +418,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.beautypackaging.com/contents/view_breaking-news/2023-04-24/open-letter-calls-for-loreal-to-withdraw-hair-straightening-products/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="bbc-newsbeat">
+          <li class="nr-resource-item" data-tags="mentions" data-source="bbc-newsbeat" data-type="article" data-topic="nomorelyes loreal lawsuits">
             <span class="nr-item-num">18</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Lawsuits</span></div>
@@ -309,7 +429,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.bbc.co.uk/news/newsbeat-65189531" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="video focused" data-source="fox-soul">
+          <li class="nr-resource-item" data-tags="video focused" data-source="fox-soul" data-type="video" data-topic="nomorelyes cancer loreal">
             <span class="nr-item-num">19</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Cancer</span><span class="nr-topic">L'Oréal</span></div>
@@ -320,7 +440,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--video">Video</span><a href="https://www.youtube.com/watch?v=ZuD2IWFgPLA&ab_channel=FOXSoul" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="headline-global-news">
+          <li class="nr-resource-item" data-tags="focused" data-source="headline-global-news" data-type="campaign" data-topic="nomorelyes loreal">
             <span class="nr-item-num">20</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span></div>
@@ -331,7 +451,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.hngn.com/articles/247975/20230421/advocates-demand-lor%C3%A9al-stop-distributing%C2%A0hair-relaxers-why.htm" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="evening-standard">
+          <li class="nr-resource-item" data-tags="focused" data-source="evening-standard" data-type="campaign" data-topic="nomorelyes loreal breast-cancer sodium-hydroxide">
             <span class="nr-item-num">21</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Breast Cancer</span><span class="nr-topic">Sodium Hydroxide</span></div>
@@ -342,7 +462,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.standard.co.uk/news/world/loreal-hair-relaxers-cancer-risk-study-open-letter-b1075881.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="lawsuit-information-center">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="lawsuit-information-center" data-type="article" data-topic="lawsuits loreal">
             <span class="nr-item-num">22</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Lawsuits</span><span class="nr-topic">L'Oréal</span></div>
@@ -353,7 +473,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.lawsuit-information-center.com/hair-relaxer-lawsuit.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="business-telegraph">
+          <li class="nr-resource-item" data-tags="focused" data-source="business-telegraph" data-type="campaign" data-topic="nomorelyes loreal cancer">
             <span class="nr-item-num">23</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Cancer</span></div>
@@ -364,7 +484,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.businesstelegraph.co.uk/loreal-urged-to-withdraw-hair-relaxers-after-studies-find-cancer-risk/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="reuters">
+          <li class="nr-resource-item" data-tags="mentions" data-source="reuters" data-type="article" data-topic="nomorelyes loreal lawsuits black-women-beauty">
             <span class="nr-item-num">24</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Lawsuits</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -375,7 +495,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.reuters.com/investigates/special-report/loreal-hair-relaxers-litigation/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="regulation" data-source="gov-uk">
+          <li class="nr-resource-item" data-tags="regulation" data-source="gov-uk" data-type="regulation" data-topic="regulation ctpa">
             <span class="nr-item-num">25</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Regulation</span><span class="nr-topic">CTPA</span></div>
@@ -386,7 +506,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="https://www.gov.uk/government/publications/cosmetic-products-enforcement-regulations-2013/regulation-20091223-and-the-cosmetic-products-enforcement-regulations-2013-great-britain" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="regulation" data-source="ctpa">
+          <li class="nr-resource-item" data-tags="regulation" data-source="ctpa" data-type="regulation" data-topic="ctpa regulation">
             <span class="nr-item-num">26</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">CTPA</span><span class="nr-topic">Regulation</span></div>
@@ -397,7 +517,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="https://www.ctpa.org.uk/news/ctpa-welcomes-new-chair-and-vice-chair-6850" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="the-guardian">
+          <li class="nr-resource-item" data-tags="mentions" data-source="the-guardian" data-type="article" data-topic="nomorelyes uterine-cancer black-women-beauty racial-trauma">
             <span class="nr-item-num">27</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Black Women And Beauty</span><span class="nr-topic">Racial Trauma</span></div>
@@ -408,7 +528,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.theguardian.com/world/2022/dec/12/black-women-hair-relaxers-chemicals-cancer-risk" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine" data-type="article" data-topic="racial-trauma wellness black-women-beauty">
             <span class="nr-item-num">28</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Racial Trauma</span><span class="nr-topic">Wellness</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -419,7 +539,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/black-women-wellness-trauma-racism" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="newsweek">
+          <li class="nr-resource-item" data-tags="mentions" data-source="newsweek" data-type="article" data-topic="nomorelyes cancer">
             <span class="nr-item-num">29</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Cancer</span></div>
@@ -430,7 +550,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.newsweek.com/newsweek-com-hair-giving-you-cancer-1761089" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29" data-type="article" data-topic="cancer">
             <span class="nr-item-num">30</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Cancer</span></div>
@@ -441,7 +561,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/2022/11/11194728/hair-relaxers-chemical-straightener-cancer-risk" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="cnn">
+          <li class="nr-resource-item" data-tags="mentions" data-source="cnn" data-type="article" data-topic="nomorelyes loreal lawsuits cancer">
             <span class="nr-item-num">31</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Lawsuits</span><span class="nr-topic">Cancer</span></div>
@@ -452,7 +572,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://edition.cnn.com/2022/10/24/health/hair-straightening-products-lawsuit/index.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions" data-source="cnn">
+          <li class="nr-resource-item" data-tags="mentions" data-source="cnn" data-type="article" data-topic="nomorelyes uterine-cancer black-women-beauty">
             <span class="nr-item-num">32</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -463,7 +583,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://edition.cnn.com/2022/10/18/health/hair-straightening-products-uterine-cancer-study/index.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic focused" data-source="journal-national-cancer-institute">
+          <li class="nr-resource-item" data-tags="academic focused" data-source="journal-national-cancer-institute" data-type="academic" data-topic="nomorelyes uterine-cancer free-to-read">
             <span class="nr-item-num">33</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Free To Read</span></div>
@@ -474,7 +594,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093/jnci/djac165" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine" data-type="article" data-topic="relaxer-boxes beauty black-women-beauty">
             <span class="nr-item-num">34</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Relaxer Boxes</span><span class="nr-topic">Beauty</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -485,7 +605,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/relaxer-box-twitter-thread-black-beauty-standards" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29" data-type="article" data-topic="relaxer-boxes">
             <span class="nr-item-num">35</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Relaxer Boxes</span></div>
@@ -496,7 +616,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/black-models-hair-relaxer-box-natural-hair" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29" data-type="article" data-topic="wellness black-women-beauty">
             <span class="nr-item-num">36</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Wellness</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -507,7 +627,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/hair-relaxer-healthy-black-women-2" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="gal-dem">
+          <li class="nr-resource-item" data-tags="focused" data-source="gal-dem" data-type="campaign" data-topic="nomorelyes lye breast-cancer black-women-beauty">
             <span class="nr-item-num">37</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Lye</span><span class="nr-topic">Breast Cancer</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -518,7 +638,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://gal-dem.com/nomorelyes-campaign-to-end-toxic-hair-products-marketed-towards-black-women/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine" data-type="article" data-topic="hair-discrimination">
             <span class="nr-item-num">38</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Hair Discrimination</span></div>
@@ -529,7 +649,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/afro-hair-bias-hair-discrimination" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic focused" data-source="carcinogenesis">
+          <li class="nr-resource-item" data-tags="academic focused" data-source="carcinogenesis" data-type="academic" data-topic="nomorelyes breast-cancer black-women-beauty">
             <span class="nr-item-num">39</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Breast Cancer</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -540,7 +660,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093/carcin/bgab041" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-campaigns" data-source="gal-dem">
+          <li class="nr-resource-item" data-tags="other-campaigns" data-source="gal-dem" data-type="article" data-topic="hair-discrimination">
             <span class="nr-item-num">40</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Hair Discrimination</span></div>
@@ -551,7 +671,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://gal-dem.com/the-halo-code-hair-discrimination/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles" data-source="gal-dem">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="gal-dem" data-type="article" data-topic="black-women-beauty beauty">
             <span class="nr-item-num">41</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Black Women And Beauty</span><span class="nr-topic">Beauty</span></div>
@@ -562,7 +682,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://gal-dem.com/hair-relaxers-cosmetic-products-harming-black-women/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused" data-source="breast-cancer-prevention-partners">
+          <li class="nr-resource-item" data-tags="focused" data-source="breast-cancer-prevention-partners" data-type="campaign" data-topic="nomorelyes loreal cancer">
             <span class="nr-item-num">42</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Cancer</span></div>
@@ -573,7 +693,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.bcpp.org/resource/loreal-no-cancer-chemicals-cosmetics/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic focused" data-source="american-journal-epidemiology">
+          <li class="nr-resource-item" data-tags="academic focused" data-source="american-journal-epidemiology" data-type="academic" data-topic="nomorelyes fibroids black-women-beauty">
             <span class="nr-item-num">43</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Fibroids</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -584,7 +704,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093%2Faje%2Fkwr351" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic other-articles" data-source="journal-pediatric-gastroenterology">
+          <li class="nr-resource-item" data-tags="academic other-articles" data-source="journal-pediatric-gastroenterology" data-type="academic" data-topic="ingestion children">
             <span class="nr-item-num">44</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Ingestion</span><span class="nr-topic">Children</span></div>
@@ -595,7 +715,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1097/00005176-200301000-00023" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic other-articles" data-source="annals-otology">
+          <li class="nr-resource-item" data-tags="academic other-articles" data-source="annals-otology" data-type="academic" data-topic="ingestion">
             <span class="nr-item-num">45</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Ingestion</span></div>
@@ -640,29 +760,37 @@ const { headInner, bodyClass } = extract(homeRaw);
   .nr-intro-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; background: #0C0A3E; color: #CCFF33; text-decoration: none; padding: 16px 32px; margin-top: 8px; transition: background 0.15s; }
   .nr-intro-btn:hover { background: #A89CED; color: #0C0A3E; }
 
-  .nr-filters { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.1); padding: 20px 24px; }
-  .nr-filters-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; }
-  .nr-pill { font: 700 11px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.07em; color: #0C0A3E; background: transparent; border: 1.5px solid #0C0A3E; border-radius: 100px; padding: 9px 16px; cursor: pointer; transition: background 0.15s, color 0.15s; }
-  .nr-pill:hover { background: rgba(12,10,62,0.07); }
-  .nr-pill--active { background: #0C0A3E; color: #CCFF33; border-color: #0C0A3E; }
-  .nr-platform-select {
-    font: 700 11px/1 'DM Sans', sans-serif;
+  .nr-faq { background: #FFFFFF; padding: 60px 24px; border-top: 1px solid rgba(12,10,62,0.08); }
+  .nr-faq-inner { max-width: 860px; margin: 0 auto; }
+  .nr-faq-title { font: 900 28px/1 'DM Sans', sans-serif; color: #0C0A3E; text-transform: uppercase; letter-spacing: -0.02em; margin: 0 0 40px; }
+  .nr-faq-list { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+  .nr-faq-item { border-top: 1px solid rgba(12,10,62,0.1); padding: 24px 0; }
+  .nr-faq-item:last-child { border-bottom: 1px solid rgba(12,10,62,0.1); }
+  .nr-faq-item dt { font: 700 16px/1.3 'DM Sans', sans-serif; color: #0C0A3E; margin: 0 0 12px; }
+  .nr-faq-item dd { font: 400 15px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); margin: 0; }
+
+  .nr-filters { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.1); padding: 20px 24px; overflow-x: auto; }
+  .nr-filters-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: nowrap; gap: 12px; min-width: 0; }
+  .nr-filter-select {
+    font: 700 12px/1 'DM Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.07em;
-    color: #0C0A3E;
-    background: transparent;
-    border: 1.5px solid #0C0A3E;
-    border-radius: 100px;
-    padding: 9px 20px 9px 16px;
+    color: #FFFFFF;
+    background: #0C0A3E;
+    border: none;
+    padding: 16px 40px 16px 20px;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230C0A3E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 12px center;
-    padding-right: 32px;
+    background-position: right 16px center;
+    background-size: 12px 8px;
+    width: 100%;
+    flex: 1;
+    min-width: 0;
   }
-  .nr-platform-select:focus { outline: 2px solid #A89CED; outline-offset: 2px; }
+  .nr-filter-select:focus { outline: 2px solid #A89CED; outline-offset: 2px; }
 
   .nr-body { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.08); padding: 72px 24px 96px; }
   .nr-body-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 260px 1fr; gap: 64px; align-items: start; }
@@ -721,6 +849,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     .nr-body-inner { grid-template-columns: 1fr; gap: 40px; }
     .nr-sidebar { position: static; }
     .nr-sidebar-stats { flex-direction: row; gap: 32px; }
+    .nr-filter-select { min-width: 160px; }
   }
   @media (max-width: 640px) {
     .nr-hero { padding: 72px 20px 56px; }
@@ -732,35 +861,36 @@ const { headInner, bodyClass } = extract(homeRaw);
 
 <script>
   (() => {
-    const pills = document.querySelectorAll<HTMLButtonElement>('.nr-pill');
     const items = document.querySelectorAll<HTMLElement>('.nr-resource-item');
-    const platformSelect = document.getElementById('nr-platform') as HTMLSelectElement;
-    let activeTag = 'all';
-    let activePlatform = 'all';
+    const catSel = document.getElementById('nr-cat') as HTMLSelectElement;
+    const typeSel = document.getElementById('nr-type') as HTMLSelectElement;
+    const platformSel = document.getElementById('nr-platform') as HTMLSelectElement;
+    const topicSel = document.getElementById('nr-topic') as HTMLSelectElement;
 
     function applyFilters() {
+      const cat = catSel?.value || 'all';
+      const type = typeSel?.value || 'all';
+      const platform = platformSel?.value || 'all';
+      const topic = topicSel?.value || 'all';
+
       items.forEach(item => {
         const tags = (item.dataset.tags || '').split(' ');
+        const itemType = item.dataset.type || '';
         const source = item.dataset.source || '';
-        const tagMatch = activeTag === 'all' || tags.includes(activeTag);
-        const platformMatch = activePlatform === 'all' || source === activePlatform;
-        item.style.display = tagMatch && platformMatch ? '' : 'none';
+        const topics = (item.dataset.topic || '').split(' ');
+
+        const catMatch = cat === 'all' || tags.includes(cat);
+        const typeMatch = type === 'all' || itemType === type;
+        const platformMatch = platform === 'all' || source === platform;
+        const topicMatch = topic === 'all' || topics.includes(topic);
+
+        item.style.display = catMatch && typeMatch && platformMatch && topicMatch ? '' : 'none';
       });
     }
 
-    pills.forEach(p => {
-      p.addEventListener('click', () => {
-        pills.forEach(x => { x.classList.remove('nr-pill--active'); x.setAttribute('aria-pressed', 'false'); });
-        p.classList.add('nr-pill--active');
-        p.setAttribute('aria-pressed', 'true');
-        activeTag = p.dataset.filter || 'all';
-        applyFilters();
-      });
-    });
-
-    platformSelect?.addEventListener('change', () => {
-      activePlatform = platformSelect.value;
-      applyFilters();
-    });
+    catSel?.addEventListener('change', applyFilters);
+    typeSel?.addEventListener('change', applyFilters);
+    platformSel?.addEventListener('change', applyFilters);
+    topicSel?.addEventListener('change', applyFilters);
   })();
 </script>

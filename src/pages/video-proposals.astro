@@ -1,0 +1,101 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+  <div class="vp-page">
+    <h1 class="vp-main-title">Video Section — 3 Proposals</h1>
+
+    <!-- ═══ PROPOSAL A: Side by side ═══ -->
+    <div class="vp-label">Proposal A — Side by Side</div>
+    <section class="vp-a">
+      <div class="vp-a-inner">
+        <div class="vp-a-video">
+          <iframe src="https://www.youtube.com/embed/xj-alDQD2fg?controls=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="vp-a-text">
+          <span class="vp-a-tag">TedxLondon 2023</span>
+          <h2>How Collective Care Can Change Society</h2>
+          <p>Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world. Level Up co-directors Seyi and Janey explained what this means in a TedxLondon talk in March 2023.</p>
+          <a href="https://www.youtube.com/watch?v=xj-alDQD2fg" target="_blank" rel="noopener" class="vp-a-link">Watch on YouTube →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PROPOSAL B: Cinematic full-width ═══ -->
+    <div class="vp-label">Proposal B — Cinematic Full-Width</div>
+    <section class="vp-b">
+      <div class="vp-b-header">
+        <span class="vp-b-tag">TedxLondon · March 2023</span>
+        <h2>How Collective Care<br/>Can Change Society</h2>
+        <p>Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world.</p>
+      </div>
+      <div class="vp-b-video">
+        <iframe src="https://www.youtube.com/embed/xj-alDQD2fg?controls=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
+      </div>
+    </section>
+
+    <!-- ═══ PROPOSAL C: Card style ═══ -->
+    <div class="vp-label">Proposal C — Card with Quote</div>
+    <section class="vp-c">
+      <div class="vp-c-inner">
+        <div class="vp-c-card">
+          <div class="vp-c-video">
+            <iframe src="https://www.youtube.com/embed/xj-alDQD2fg?controls=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+          <div class="vp-c-body">
+            <h2>How Collective Care Can Change Society</h2>
+            <blockquote>"We believe that collective care is the route to building a world where everyone is loved and liberated."</blockquote>
+            <p class="vp-c-credit">— Seyi & Janey, Level Up co-directors · TedxLondon, March 2023</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <Footer />
+</Layout>
+
+<style is:global>
+  .vp-page { font-family: 'DM Sans', sans-serif; }
+  .vp-main-title { font: 800 48px/1 'DM Sans'; color: #0C0A3E; text-align: center; padding: 64px 24px 16px; letter-spacing: -0.04em; }
+  .vp-label { background: #A89CED; color: #0C0A3E; font: 900 13px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; padding: 12px; }
+
+  /* ═══ A: Side by side ═══ */
+  .vp-a { background: #EEEBD3; padding: 80px 24px; }
+  .vp-a-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: center; }
+  .vp-a-video iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+  .vp-a-tag { font: 600 11px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; display: block; margin-bottom: 12px; }
+  .vp-a-text h2 { font: 800 32px/0.95 'DM Sans'; color: #0C0A3E; letter-spacing: -0.03em; margin: 0 0 16px; }
+  .vp-a-text p { font: 400 17px/1.6 'DM Sans'; color: rgba(12,10,62,0.75); margin: 0 0 20px; }
+  .vp-a-link { font: 700 13px/1 'DM Sans'; color: #0C0A3E; text-decoration: none; text-transform: uppercase; letter-spacing: 0.06em; }
+  .vp-a-link:hover { color: #A89CED; }
+
+  /* ═══ B: Cinematic ═══ */
+  .vp-b { background: #0C0A3E; padding: 80px 24px 0; }
+  .vp-b-header { max-width: 800px; margin: 0 auto; text-align: center; padding-bottom: 48px; }
+  .vp-b-tag { font: 600 11px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; display: block; margin-bottom: 20px; }
+  .vp-b-header h2 { font: 800 clamp(36px, 7vw, 56px)/0.92 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 20px; }
+  .vp-b-header p { font: 400 18px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 550px; margin: 0 auto; }
+  .vp-b-video { max-width: 900px; margin: 0 auto; }
+  .vp-b-video iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+
+  /* ═══ C: Card with quote ═══ */
+  .vp-c { background: #A89CED; padding: 80px 24px; }
+  .vp-c-inner { max-width: 900px; margin: 0 auto; }
+  .vp-c-card { background: #0C0A3E; overflow: hidden; }
+  .vp-c-video iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+  .vp-c-body { padding: 40px; }
+  .vp-c-body h2 { font: 800 28px/0.95 'DM Sans'; color: #CCFF33; letter-spacing: -0.03em; margin: 0 0 24px; }
+  .vp-c-body blockquote { font: 500 20px/1.45 'DM Sans'; color: #EEEBD3; border-left: 4px solid #CCFF33; padding: 0 0 0 20px; margin: 0 0 20px; font-style: italic; }
+  .vp-c-credit { font: 400 13px/1.4 'DM Sans'; color: rgba(238,235,211,0.5); margin: 0; }
+
+  @media (max-width: 768px) {
+    .vp-a-inner { grid-template-columns: 1fr; gap: 32px; }
+    .vp-a-text h2 { font-size: 28px; }
+  }
+</style>

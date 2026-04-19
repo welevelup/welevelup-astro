@@ -1,0 +1,108 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+  <div class="wp-page">
+    <h1 class="wp-main-title">"Who We Are" — 3 Proposals</h1>
+
+    <!-- ═══ PROPOSAL A: Big title left + text right ═══ -->
+    <div class="wp-label">Proposal A — Split Layout (title left, text right)</div>
+    <section class="wp-a">
+      <div class="wp-a-inner">
+        <div class="wp-a-left">
+          <h2>WHO<br/>WE<br/>ARE</h2>
+        </div>
+        <div class="wp-a-right">
+          <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – <a href="/what-we-are-proud-of">like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths</a>.</p>
+          <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through gathering with community like our <a href="/active-campaigns/we-protect-us">monthly workshops on bystander intervention and intervening in police violence.</a></p>
+          <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ PROPOSAL B: Cinematic centered (matching video section) ═══ -->
+    <div class="wp-label">Proposal B — Cinematic Centered (matches video section)</div>
+    <section class="wp-b">
+      <div class="wp-b-inner">
+        <span class="wp-b-tag">About Level Up</span>
+        <h2>Who We Are</h2>
+        <div class="wp-b-text">
+          <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – <a href="/what-we-are-proud-of">like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths</a>.</p>
+          <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through gathering with community like our <a href="/active-campaigns/we-protect-us">monthly workshops on bystander intervention and intervening in police violence.</a></p>
+          <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+        </div>
+        <a href="/about-us" class="wp-b-btn">Learn more about us →</a>
+      </div>
+    </section>
+
+    <!-- ═══ PROPOSAL C: Image + text card ═══ -->
+    <div class="wp-label">Proposal C — Photo + Text (with team image)</div>
+    <section class="wp-c">
+      <div class="wp-c-inner">
+        <div class="wp-c-image">
+          <img src="https://welevelup.org/wp-content/uploads/2025/07/Copia-de-website-images.jpg" alt="Level Up team" loading="lazy" />
+        </div>
+        <div class="wp-c-text">
+          <span class="wp-c-tag">Who We Are</span>
+          <h2>Fighting for gender justice in the UK</h2>
+          <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – <a href="/what-we-are-proud-of">like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths</a>.</p>
+          <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through gathering with community like our <a href="/active-campaigns/we-protect-us">monthly workshops on bystander intervention and intervening in police violence.</a></p>
+          <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+          <a href="/about-us" class="wp-c-btn">About us →</a>
+        </div>
+      </div>
+    </section>
+  </div>
+  <Footer />
+</Layout>
+
+<style is:global>
+  .wp-page { font-family: 'DM Sans', sans-serif; }
+  .wp-main-title { font: 800 48px/1 'DM Sans'; color: #0C0A3E; text-align: center; padding: 64px 24px 16px; letter-spacing: -0.04em; }
+  .wp-label { background: #A89CED; color: #0C0A3E; font: 900 13px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; padding: 12px; }
+
+  /* ═══ A: Split layout ═══ */
+  .wp-a { background: #EEEBD3; padding: 80px 24px; }
+  .wp-a-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start; }
+  .wp-a-left h2 { font: 800 clamp(56px, 10vw, 96px)/0.85 'DM Sans'; color: #0C0A3E; letter-spacing: -0.05em; margin: 0; }
+  .wp-a-right p { font: 400 18px/1.7 'DM Sans'; color: rgba(12,10,62,0.8); margin: 0 0 20px; }
+  .wp-a-right a { color: #A89CED; text-decoration: none; }
+  .wp-a-right a:hover { color: #0C0A3E; text-decoration: underline; }
+
+  /* ═══ B: Cinematic centered ═══ */
+  .wp-b { background: #0C0A3E; padding: 80px 24px; }
+  .wp-b-inner { max-width: 750px; margin: 0 auto; text-align: center; }
+  .wp-b-tag { font: 600 11px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; display: block; margin-bottom: 20px; }
+  .wp-b-inner h2 { font: 800 clamp(40px, 8vw, 64px)/0.9 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 32px; }
+  .wp-b-text { text-align: left; }
+  .wp-b-text p { font: 400 17px/1.7 'DM Sans'; color: rgba(238,235,211,0.75); margin: 0 0 20px; }
+  .wp-b-text a { color: #CCFF33; text-decoration: none; }
+  .wp-b-text a:hover { text-decoration: underline; }
+  .wp-b-btn { display: inline-block; font: 700 13px/1 'DM Sans'; color: #CCFF33; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: none; margin-top: 16px; }
+  .wp-b-btn:hover { color: #fff; }
+
+  /* ═══ C: Photo + text ═══ */
+  .wp-c { background: #EEEBD3; padding: 80px 24px; }
+  .wp-c-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; align-items: center; }
+  .wp-c-image img { width: 100%; height: 100%; object-fit: cover; min-height: 400px; display: block; }
+  .wp-c-tag { font: 600 11px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; display: block; margin-bottom: 12px; }
+  .wp-c-text h2 { font: 800 32px/0.95 'DM Sans'; color: #0C0A3E; letter-spacing: -0.03em; margin: 0 0 20px; }
+  .wp-c-text p { font: 400 16px/1.65 'DM Sans'; color: rgba(12,10,62,0.75); margin: 0 0 16px; }
+  .wp-c-text a { color: #A89CED; text-decoration: none; }
+  .wp-c-text a:hover { color: #0C0A3E; }
+  .wp-c-btn { display: inline-block; font: 700 13px/1 'DM Sans'; color: #0C0A3E; text-transform: uppercase; letter-spacing: 0.06em; text-decoration: none; margin-top: 12px; background: #CCFF33; padding: 14px 28px; }
+  .wp-c-btn:hover { background: #0C0A3E; color: #CCFF33; }
+
+  @media (max-width: 768px) {
+    .wp-a-inner { grid-template-columns: 1fr; gap: 24px; }
+    .wp-a-left h2 { font-size: 56px; }
+    .wp-c-inner { grid-template-columns: 1fr; }
+    .wp-c-image img { min-height: 250px; }
+  }
+</style>

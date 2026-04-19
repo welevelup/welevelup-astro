@@ -15,6 +15,11 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 >
   <Nav />
 
+  <!-- Hide all WP Elementor sections except the hero (elementor-element-c89219b) -->
+  <style is:global>
+    .elementor-1818 > .elementor-element:not(.elementor-element-c89219b) { display: none !important; }
+  </style>
+
   <Fragment set:html={mainContent} />
 
   <!-- Animated announcement bar -->

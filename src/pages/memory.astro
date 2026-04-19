@@ -201,21 +201,11 @@ const { headInner, bodyClass } = extract(homeRaw);
   </section>
 
   <!-- ── CTA ───────────────────────────────────────────────── -->
-  <section class="ms-cta" aria-labelledby="ms-cta-heading">
-    <div class="ms-cta-inner">
-      <span class="ms-cta-eyebrow">Join the movement</span>
-      <h2 class="ms-cta-heading" id="ms-cta-heading">Your story<br/>matters here</h2>
-      <p class="ms-cta-body">
-        Join the Level Up community — campaign updates, event invitations, and feminist thinking, straight to your inbox.
-      </p>
-      <div class="ms-cta-actions">
-        <a href="https://levelup.yourmovement.org/p/join-us" class="ms-cta-btn ms-cta-btn--primary" target="_blank" rel="noopener">
-          Join us
-        </a>
-        <a href="/memory/abortion-stories" class="ms-cta-btn ms-cta-btn--ghost">
-          Read stories
-        </a>
-      </div>
+  <section class="dp-cta">
+    <div class="dp-content" style="text-align:center">
+      <h2 class="dp-h2--light">Join the Level Up community</h2>
+      <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="dp-btn-primary" target="_blank" rel="noopener">Join us</a>
     </div>
   </section>
 
@@ -766,4 +756,11 @@ const { headInner, bodyClass } = extract(homeRaw);
     .ms-cta { padding: 80px 20px; }
     .ms-cta-btn { padding: 16px 28px; }
   }
+
+  .dp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; }
+  .dp-cta h2 { font: 800 40px/0.9 'DM Sans',sans-serif !important; letter-spacing: -0.04em !important; margin: 0 0 16px; }
+  .dp-h2--light { color: #CCFF33 !important; }
+  .dp-content { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  .dp-btn-primary { display:inline-block; background:#CCFF33; color:#0C0A3E !important; font:700 14px/1 'DM Sans',sans-serif; text-transform:uppercase; letter-spacing:0.08em; padding:18px 36px; text-decoration:none !important; transition:all 0.2s; }
+  .dp-btn-primary:hover { background:#fff; }
 </style>

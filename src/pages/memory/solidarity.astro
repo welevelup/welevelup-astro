@@ -328,29 +328,11 @@ const { headInner, bodyClass } = extract(homeRaw);
   </section>
 
   <!-- ── CTA ─────────────────────────────────────────────────── -->
-  <section class="sl-cta" aria-labelledby="sl-cta-heading">
-    <div class="sl-content sl-cta-inner">
-      <div class="sl-cta-text">
-        <span class="sl-label sl-label--muted">Take Action</span>
-        <h2 id="sl-cta-heading" class="sl-h2--light">
-          Be part of the next solidarity action
-        </h2>
-        <p class="sl-p--light">
-          When Level Up launches the next campaign tool — to support a
-          woman facing prosecution, to pressure an institution, to mark a
-          moment that should not be forgotten — you will be first to know.
-          Join the community.
-        </p>
-      </div>
-      <div class="sl-cta-buttons">
-        <a
-          href="https://levelup.yourmovement.org/p/join-us"
-          class="sl-btn-primary"
-          target="_blank"
-          rel="noopener"
-        >Join the community</a>
-        <a href="/memory" class="sl-btn-ghost">← Back to Memory</a>
-      </div>
+  <section class="std-cta">
+    <div class="std-cta-inner" style="text-align:center">
+      <h2 style="font:800 40px/0.9 'DM Sans',sans-serif;color:#CCFF33;letter-spacing:-0.04em;margin:0 0 16px;">Join the Level Up community</h2>
+      <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px;font:400 17px/1.5 'DM Sans',sans-serif;">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="sl-btn-primary" target="_blank" rel="noopener">Join us</a>
     </div>
   </section>
 
@@ -745,6 +727,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     /* ── CTA ────────────────────────────────────────────────── */
+    .std-cta { background: #0C0A3E; padding: 80px 24px; }
+    .std-cta-inner { max-width: 900px; margin: 0 auto; padding: 0 24px; }
     .sl-cta {
       background: #0C0A3E;
       padding: 96px 24px;

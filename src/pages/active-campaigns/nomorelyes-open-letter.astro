@@ -111,7 +111,16 @@ const { headInner, bodyClass } = extract(homeRaw);
     <div class="ol-cta-inner">
       <h2>Add your name</h2>
       <p>Over 5,000 people have already signed. Add your voice to the open letter demanding L'Oréal make hair relaxers safe — or remove them.</p>
-      <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="ol-btn-primary" target="_blank" rel="noopener">Sign the open letter to L'Oréal</a>
+      <div class="ol-form-wrap">
+        <iframe
+          src="https://levelup.movement-action.org/p/no-more-lyes"
+          title="Sign the open letter to L'Oréal"
+          class="ol-form-iframe"
+          loading="lazy"
+          sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+        ></iframe>
+      </div>
+      <p class="ol-form-fallback">Having trouble with the form? <a href="https://levelup.movement-action.org/p/no-more-lyes" target="_blank" rel="noopener">Sign directly on our petition page →</a></p>
     </div>
   </section>
 
@@ -285,6 +294,25 @@ const { headInner, bodyClass } = extract(homeRaw);
     color: rgba(12,10,62,0.75) !important;
     margin: 0 0 36px !important;
   }
+  .ol-form-wrap {
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0 auto 24px;
+    max-width: 560px;
+  }
+  .ol-form-iframe {
+    width: 100%;
+    min-height: 480px;
+    border: none;
+    display: block;
+  }
+  .ol-form-fallback {
+    font: 400 14px/1.5 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.55) !important;
+    margin: 0 !important;
+  }
+  .ol-form-fallback a { color: #0C0A3E !important; font-weight: 700; }
 
   @media (max-width: 768px) {
     .ol-stats-inner { grid-template-columns: 1fr 1fr; }

@@ -414,6 +414,15 @@
 </style>
 
 <script>
+  // Remove WP Elementor headers dynamically injected by Elementor's frontend JS
+  const killWpHeaders = () => {
+    document.querySelectorAll(
+      'header[data-elementor-type="header"], .elementor-location-header'
+    ).forEach(el => el.remove());
+  };
+  killWpHeaders();
+  new MutationObserver(killWpHeaders).observe(document.documentElement, { childList: true, subtree: true });
+
   const toggle = document.getElementById('nav-toggle');
   const bar = document.querySelector('.lu-nav-bar');
   const nav = toggle?.closest('.lu-nav');

@@ -313,21 +313,24 @@
   .lu-nav-toggle {
     display: none;
     position: fixed;
-    top: 12px;
-    right: 16px;
-    z-index: 9999;
-    background: none;
-    border: none;
+    top: 10px;
+    right: 12px;
+    z-index: 10000;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(12,10,62,0.15);
+    border-radius: 4px;
     cursor: pointer;
-    padding: 8px;
+    padding: 10px 10px;
     flex-direction: column;
     gap: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   }
   .lu-nav-toggle span {
     display: block;
-    width: 30px;
-    height: 3px;
+    width: 24px;
+    height: 2.5px;
     background: #0C0A3E;
+    border-radius: 2px;
     transition: background 0.15s;
   }
   .lu-nav.menu-open .lu-nav-toggle span { background: #0C0A3E; }

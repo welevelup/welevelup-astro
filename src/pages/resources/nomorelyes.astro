@@ -10,295 +10,351 @@ const { headInner, bodyClass } = extract(homeRaw);
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
 
-  <!-- ═══════════════════════════════════════════════════════════
-       HERO — cream background, editorial oversized type
-  ════════════════════════════════════════════════════════════ -->
   <section class="nr-hero" aria-labelledby="nr-hero-heading">
     <div class="nr-hero-inner">
-      <span class="nr-eyebrow">#NoMoreLyes</span>
-      <h1 id="nr-hero-heading" class="nr-hero-title">
-        Relaxer<br/>Info Kit
-      </h1>
-      <p class="nr-hero-subtitle">
-        A growing body of research links chemical hair relaxers to serious health
-        conditions. These are the studies, the coverage, and the organisations
-        leading the conversation.
-      </p>
+      <div class="nr-hero-text">
+        <span class="nr-eyebrow">#NoMoreLyes</span>
+        <h1 id="nr-hero-heading" class="nr-hero-title">Relaxer<br/>Info Kit</h1>
+        <p class="nr-hero-subtitle">A growing body of research links chemical hair relaxers to serious health conditions. These are the studies, the coverage, and the organisations leading the conversation.</p>
+      </div>
+      <div class="nr-hero-image" aria-hidden="true">
+        <img src="https://welevelup.org/wp-content/uploads/2025/08/NML11-2.webp" alt="Black woman's hands during a hair treatment" loading="eager" />
+      </div>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FILTER TAG ROW
-  ════════════════════════════════════════════════════════════ -->
+  <section class="nr-intro" aria-label="About this resource collection">
+    <div class="nr-intro-inner">
+      <p class="nr-intro-body">Since the launch of Level Up's #NoMoreLyes campaign in 2021, L'Oréal – the largest global manufacturer of hair relaxers – has denied links between their products and various illnesses including uterine cancer, fibroids and respiratory disease. L'Oréal, and other manufacturers including Revlon, have argued that there isn't enough scientific evidence to prove that their hair relaxers could be harming Black women – a growing body of research from institutions like Oxford University and Boston University would suggest otherwise.</p>
+      <p class="nr-intro-body">We know it can be overwhelming to keep up with the emerging studies, articles, lawsuits and news on this issue, so we've compiled a list of resources in one place. We'll update the collection as we gather more information but we need your help. If you come across any research, videos, articles, podcasts or anything else about the harmful effects of hair relaxers please share them with us and we'll add them to the list!</p>
+      <p class="nr-intro-body">The more information we gather the harder it becomes for corporates like L'Oréal to evade accountability for the risks posed by their products.</p>
+      <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="nr-intro-btn">Sign the petition →</a>
+    </div>
+  </section>
+
   <section class="nr-filters" aria-label="Filter resources by category">
     <div class="nr-filters-inner">
       <button class="nr-pill nr-pill--active" data-filter="all" aria-pressed="true">All</button>
       <button class="nr-pill" data-filter="academic" aria-pressed="false">Academic</button>
-      <button class="nr-pill" data-filter="media" aria-pressed="false">Media</button>
-      <button class="nr-pill" data-filter="parliament" aria-pressed="false">Parliament</button>
-      <button class="nr-pill" data-filter="organisations" aria-pressed="false">Organisations</button>
+      <button class="nr-pill" data-filter="focused" aria-pressed="false">Our Campaign</button>
+      <button class="nr-pill" data-filter="mentions" aria-pressed="false">Mentions Us</button>
+      <button class="nr-pill" data-filter="other-articles" aria-pressed="false">Press</button>
+      <button class="nr-pill" data-filter="other-campaigns" aria-pressed="false">Other Campaigns</button>
+      <button class="nr-pill" data-filter="regulation" aria-pressed="false">Regulation</button>
+      <button class="nr-pill" data-filter="video" aria-pressed="false">Video</button>
+      <button class="nr-pill" data-filter="organisation" aria-pressed="false">Organisations</button>
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       TWO-COLUMN BODY — sticky sidebar + resource list
-  ════════════════════════════════════════════════════════════ -->
   <section class="nr-body">
     <div class="nr-body-inner">
 
-      <!-- LEFT SIDEBAR -->
       <aside class="nr-sidebar" aria-label="Campaign info and actions">
-        <p class="nr-sidebar-campaign">&#35;NoMoreLyes</p>
-        <p class="nr-sidebar-desc">
-          Level Up launched #NoMoreLyes in 2021 targeting L'Oréal, the world's
-          largest manufacturer of hair relaxers, over the links between their
-          products and serious illness in Black women.
-        </p>
-
+        <p class="nr-sidebar-campaign">#NoMoreLyes</p>
+        <p class="nr-sidebar-desc">Level Up launched #NoMoreLyes in 2021 targeting L'Oréal, the world's largest manufacturer of hair relaxers, over the links between their products and serious illness in Black women.</p>
         <div class="nr-sidebar-stats">
-          <div class="nr-stat">
-            <span class="nr-stat-num">9+</span>
-            <span class="nr-stat-label">Studies</span>
-          </div>
-          <div class="nr-stat">
-            <span class="nr-stat-num">2025</span>
-            <span class="nr-stat-label">Parliamentary submission</span>
-          </div>
+          <div class="nr-stat"><span class="nr-stat-num">45</span><span class="nr-stat-label">Resources</span></div>
+          <div class="nr-stat"><span class="nr-stat-num">2025</span><span class="nr-stat-label">Parliamentary submission</span></div>
         </div>
-
         <hr class="nr-divider" />
-
         <nav class="nr-sidebar-actions" aria-label="Campaign actions">
-          <a
-            href="https://levelup.yourmovement.org/p/no-more-lyes"
-            target="_blank"
-            rel="noopener"
-            class="nr-action-link"
-          >Sign the petition →</a>
-          <a
-            href="https://levelup.movement-action.org/p/share-your-hair-story"
-            target="_blank"
-            rel="noopener"
-            class="nr-action-link"
-          >Share your hair story →</a>
-          <a
-            href="https://levelup.yourmovement.org/p/no-more-lyes"
-            target="_blank"
-            rel="noopener"
-            class="nr-action-link"
-          >Open letter to L'Oréal →</a>
+          <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="nr-action-link">Sign the petition →</a>
+          <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="nr-action-link">Open letter to L'Oréal →</a>
+          <a href="https://levelup.movement-action.org/p/share-your-hair-story" target="_blank" rel="noopener" class="nr-action-link">Share your hair story →</a>
         </nav>
       </aside>
 
-      <!-- RIGHT CONTENT -->
       <div class="nr-content">
 
-        <!-- Featured document -->
         <article class="nr-featured" aria-label="Featured resource">
-          <span class="nr-featured-badge">KEY DOCUMENT</span>
-          <h2 class="nr-featured-title">
-            Level Up's Parliamentary Submission 2025
-          </h2>
-          <p class="nr-featured-desc">
-            Submitted to the UK Parliament's inquiry — the most comprehensive
-            public record of Level Up's evidence on hair relaxer harm.
-          </p>
-          <a
-            href="https://committees.parliament.uk/writtenevidence/160638/pdf/"
-            target="_blank"
-            rel="noopener"
-            class="nr-featured-btn"
-          >Download PDF →</a>
+          <span class="nr-featured-badge">Key Document</span>
+          <h2 class="nr-featured-title">Level Up's Submission to the Science and Regulation of Hair and Beauty Products</h2>
+          <p class="nr-featured-desc">Submitted to the UK Parliament's inquiry — the most comprehensive public record of Level Up's evidence on hair relaxer harm, endocrine disruption, uterine cancer and racial trauma.</p>
+          <a href="https://committees.parliament.uk/writtenevidence/160638/pdf/" target="_blank" rel="noopener" class="nr-featured-btn">Download PDF →</a>
         </article>
 
-        <!-- Numbered resource list -->
         <ol class="nr-list" aria-label="All campaign resources">
 
-          <li class="nr-resource-item" data-tag="academic">
-            <span class="nr-item-num" aria-hidden="true">01</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Use of Straighteners and Incident Uterine Cancer</h3>
-              <p class="nr-item-meta">Oxford / NIH · 2022</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge">Academic</span>
-              <a
-                href="https://doi.org/10.1093/jnci/djac165"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Read Use of Straighteners and Incident Uterine Cancer"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="academic focused regulation">
+            <span class="nr-item-num">01</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Level Up's Submission to The Science and Regulation of Hair and Beauty Products</h3><p class="nr-item-meta">UK Parliament · December 2025</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Parliament</span><a href="https://committees.parliament.uk/writtenevidence/160638/pdf/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="academic">
-            <span class="nr-item-num" aria-hidden="true">02</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Hair Product Use and Breast Cancer Incidence</h3>
-              <p class="nr-item-meta">Academic · 2021</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge">Academic</span>
-              <a
-                href="https://doi.org/10.1093/carcin/bgab041"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Read Hair Product Use and Breast Cancer Incidence"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="organisation other-campaigns">
+            <span class="nr-item-num">02</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Treasure Tress</h3><p class="nr-item-meta">Organisation · Natural hair product discovery</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.treasuretress.co.uk/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="academic">
-            <span class="nr-item-num" aria-hidden="true">03</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Hair-Straightening Products and Acute Kidney Failure Risk</h3>
-              <p class="nr-item-meta">Medscape · 2024</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge">Academic</span>
-              <a
-                href="https://medscape.com"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Read Hair-Straightening Products and Acute Kidney Failure Risk"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="organisation other-campaigns">
+            <span class="nr-item-num">03</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Unbothered UK</h3><p class="nr-item-meta">Refinery29 · Organisation</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.refinery29.com/en-gb/unbothered-uk" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="parliament">
-            <span class="nr-item-num" aria-hidden="true">04</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Level Up's Parliamentary Submission</h3>
-              <p class="nr-item-meta">Parliament · Dec 2025</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge nr-type-badge--parliament">Parliament</span>
-              <a
-                href="https://committees.parliament.uk/writtenevidence/160638/pdf/"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Read Level Up's Parliamentary Submission"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="organisation other-campaigns">
+            <span class="nr-item-num">04</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Project Embrace</h3><p class="nr-item-meta">Organisation · Afro-textured hair representation</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.projectembrace.org.uk/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="media">
-            <span class="nr-item-num" aria-hidden="true">05</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">While Black Women Abandon Relaxers, Sales Climb in African Countries</h3>
-              <p class="nr-item-meta">The Examination · April 2024</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge nr-type-badge--media">Media</span>
-              <a
-                href="https://theexamination.org"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Read While Black Women Abandon Relaxers, Sales Climb in African Countries"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="organisation other-campaigns">
+            <span class="nr-item-num">05</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Curlture UK</h3><p class="nr-item-meta">Organisation · Culture and curls</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.instagram.com/curltureuk/?hl=en" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="media">
-            <span class="nr-item-num" aria-hidden="true">06</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Majority of Black British Women Suffer Side Effects</h3>
-              <p class="nr-item-meta">The Independent · May 2023</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge nr-type-badge--media">Media</span>
-              <a
-                href="https://independent.co.uk"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Read Majority of Black British Women Suffer Side Effects"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">06</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">While Many Black Women Abandon Hair Relaxers, Sales Climb in African Countries</h3><p class="nr-item-meta">The Examination · April 2024</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.theexamination.org/articles/while-many-black-women-in-us-abandon-hair-relaxers-linked-to-cancer-sales-climb-in-african-countries" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="organisations">
-            <span class="nr-item-num" aria-hidden="true">07</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Treasure Tress — Natural hair product discovery platform</h3>
-              <p class="nr-item-meta">Organisation</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge nr-type-badge--org">Organisation</span>
-              <a
-                href="https://treasuretress.com"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Visit Treasure Tress"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">07</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair-Straightening Products Entail Acute Kidney Failure Risk</h3><p class="nr-item-meta">Medscape · March 2024</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.medscape.com/viewarticle/hair-straightening-products-entail-acute-kidney-failure-risk-2024a10005oz?form=fpf" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="organisations">
-            <span class="nr-item-num" aria-hidden="true">08</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Project Embrace — Afro-textured hair representation</h3>
-              <p class="nr-item-meta">Organisation</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge nr-type-badge--org">Organisation</span>
-              <a
-                href="https://projectembrace.org"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Visit Project Embrace"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">08</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Majority of Black British Women Suffer Side Effects from Hair Relaxers</h3><p class="nr-item-meta">The Independent · May 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.independent.co.uk/life-style/black-hair-relaxers-side-effects-b2085554.html" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tag="organisations">
-            <span class="nr-item-num" aria-hidden="true">09</span>
-            <div class="nr-item-body">
-              <h3 class="nr-item-title">Curlture UK — Culture and curls</h3>
-              <p class="nr-item-meta">Organisation</p>
-            </div>
-            <div class="nr-item-end">
-              <span class="nr-type-badge nr-type-badge--org">Organisation</span>
-              <a
-                href="https://curlture.co.uk"
-                target="_blank"
-                rel="noopener"
-                class="nr-item-link"
-                aria-label="Visit Curlture UK"
-              >↗</a>
-            </div>
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">09</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Injuries That Can be Caused by Hair Relaxers</h3><p class="nr-item-meta">News Watch TV · May 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://newswatchtv.com/2023/02/23/injuries-that-can-be-caused-by-hair-relaxers/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">10</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Relaxer May Double the Risk of Womb Cancer, Should We Be Worried?</h3><p class="nr-item-meta">Glamour Magazine · May 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/chemical-straighteners-cancer" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">11</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Campaigners Call on L'Oréal to Remove Lye from Hair Relaxers Due to Cancer Risk</h3><p class="nr-item-meta">The Voice · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.voice-online.co.uk/news/uk-news/2023/04/27/campaigners-call-on-loreal-to-remove-lye-from-hair-relaxers-due-to-cancer-risk/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">12</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Beyond Our Business: L'Oréal Faces Backlash over Chemicals in Hair Products</h3><p class="nr-item-meta">Cosmetics Design Europe · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.cosmeticsdesign-europe.com/Article/2023/04/26/Beyond-our-business-L-Oreal-ramps-up-eco-investments-but-faces-further-backlash-over-chemicals-in-hair-products" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">13</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Activists Demand L'Oréal To Recall Hair Relaxing Products Following Cancer Risk Findings</h3><p class="nr-item-meta">Retail Bum · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://retailbum.com/2023/beauty/health-wellness/activists-ask-loreal-to-remove-hair-relaxing-products-after-studies-indicate-cancer-risk/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">14</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">UK Feminist Group Calls for L'Oréal to Withdraw Hair Straightening Products Linked to Cancer</h3><p class="nr-item-meta">Time News · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://time.news/uk-feminist-group-calls-for-loreal-to-withdraw-hair-straightening-products-linked-to-increased-cancer-risk-level-ups-campaign-raises-concerns-over-chemical-hair-straighteners-containing-sodium-hyd/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">15</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Straighteners Drive Consumers to Sue Companies</h3><p class="nr-item-meta">Portugal Posts · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://portugal.postsen.com/health/338291/Hair-straighteners-drive-consumers-to-sue-companies.html" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">16</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">L'Oreal Urged To Recall Hair Relaxers Due to Cancer Risks</h3><p class="nr-item-meta">Lawsuit Information Center · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.aboutlawsuits.com/hair-relaxer-lawsuit/loreal-hair-relaxer-recall-urged/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">17</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Open Letter Calls for L'Oréal to Withdraw Hair Straightening Products</h3><p class="nr-item-meta">Beauty Packaging · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.beautypackaging.com/contents/view_breaking-news/2023-04-24/open-letter-calls-for-loreal-to-withdraw-hair-straightening-products/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">18</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Why People Are Suing L'Oréal over Hair Relaxers</h3><p class="nr-item-meta">BBC Newsbeat · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.bbc.co.uk/news/newsbeat-65189531" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="video focused">
+            <span class="nr-item-num">19</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">L'Oréal Urged To Withdraw Hair Relaxers from Possible Link To Cancer</h3><p class="nr-item-meta">Fox Soul · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--video">Video</span><a href="https://www.youtube.com/watch?v=ZuD2IWFgPLA&ab_channel=FOXSoul" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">20</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Advocates Demand L'Oréal Stop Selling Hair Relaxers — Why?</h3><p class="nr-item-meta">Headline & Global News · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.hngn.com/articles/247975/20230421/advocates-demand-lor%C3%A9al-stop-distributing%C2%A0hair-relaxers-why.htm" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">21</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Campaigners Urge L'Oreal to Stop Selling Hair Relaxers after Studies Find Cancer Link</h3><p class="nr-item-meta">Evening Standard · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.standard.co.uk/news/world/loreal-hair-relaxers-cancer-risk-study-open-letter-b1075881.html" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">22</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Relaxer Cancer Lawsuit</h3><p class="nr-item-meta">Lawsuit Information Center · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.lawsuit-information-center.com/hair-relaxer-lawsuit.html" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">23</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">L'Oréal Urged to Withdraw Hair Relaxers after Studies Find Cancer Risk</h3><p class="nr-item-meta">Business Telegraph · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.businesstelegraph.co.uk/loreal-urged-to-withdraw-hair-relaxers-after-studies-find-cancer-risk/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">24</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Thousands of Black Women Claim Hair Relaxers Gave Them Cancer</h3><p class="nr-item-meta">Reuters · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.reuters.com/investigates/special-report/loreal-hair-relaxers-litigation/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="regulation">
+            <span class="nr-item-num">25</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Regulation 2009/1223 and the Cosmetic Products Enforcement Regulations 2013: Great Britain</h3><p class="nr-item-meta">Gov UK · April 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="https://www.gov.uk/government/publications/cosmetic-products-enforcement-regulations-2013/regulation-20091223-and-the-cosmetic-products-enforcement-regulations-2013-great-britain" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="regulation">
+            <span class="nr-item-num">26</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">CTPA Welcomes New Chair and Vice-chair</h3><p class="nr-item-meta">CTPA · March 2023</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="https://www.ctpa.org.uk/news/ctpa-welcomes-new-chair-and-vice-chair-6850" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">27</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Why Some Black Women Won't or Can't Quit Hair Relaxers – Even as the Dangers Become Clearer</h3><p class="nr-item-meta">The Guardian · December 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.theguardian.com/world/2022/dec/12/black-women-hair-relaxers-chemicals-cancer-risk" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">28</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">How Black Women Are Redefining Wellness in the Face of Racial Trauma and Injustice</h3><p class="nr-item-meta">Glamour Magazine · December 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/black-women-wellness-trauma-racism" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">29</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Is Your Hair Giving You Cancer?</h3><p class="nr-item-meta">Newsweek · November 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.newsweek.com/newsweek-com-hair-giving-you-cancer-1761089" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">30</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Are Hair Relaxers Really Causing Cancer? Everything You Need to Know</h3><p class="nr-item-meta">Refinery29 · November 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/2022/11/11194728/hair-relaxers-chemical-straightener-cancer-risk" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">31</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">US Woman Files Lawsuit against L'Oréal over Chemical Hair Straightening Products</h3><p class="nr-item-meta">CNN · October 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://edition.cnn.com/2022/10/24/health/hair-straightening-products-lawsuit/index.html" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="mentions">
+            <span class="nr-item-num">32</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair-Straightening Chemical Products Linked to Increased Uterine Cancer Risk in New Study</h3><p class="nr-item-meta">CNN · October 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://edition.cnn.com/2022/10/18/health/hair-straightening-products-uterine-cancer-study/index.html" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="academic focused">
+            <span class="nr-item-num">33</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Use of Straighteners and Other Hair Products and Incident Uterine Cancer</h3><p class="nr-item-meta">Journal of the National Cancer Institute · October 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093/jnci/djac165" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">34</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">These Old-School Relaxer Boxes Are Reminding Black '90s Babies Just How Far We Went to Straighten Our Curls</h3><p class="nr-item-meta">Glamour Magazine · October 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/relaxer-box-twitter-thread-black-beauty-standards" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">35</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Wait, Were the 90s Hair Relaxer Girls Natural All Along?</h3><p class="nr-item-meta">Refinery29 · October 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/black-models-hair-relaxer-box-natural-hair" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">36</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Is a Healthy Hair Relaxer Ever Possible?</h3><p class="nr-item-meta">Refinery29 · June 2022</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/hair-relaxer-healthy-black-women-2" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">37</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">#NoMoreLyes: The Campaign That Wants to Put an End to Toxic Hair Products Marketed towards Black Women</h3><p class="nr-item-meta">Gal-dem · August 2021</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://gal-dem.com/nomorelyes-campaign-to-end-toxic-hair-products-marketed-towards-black-women/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">38</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Afro Hair Bias Is Not a Vanity Issue, It's a Human Rights Issue</h3><p class="nr-item-meta">Glamour Magazine · May 2021</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/afro-hair-bias-hair-discrimination" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="academic focused">
+            <span class="nr-item-num">39</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Product Use and Breast Cancer Incidence in the Black Women's Health Study</h3><p class="nr-item-meta">Carcinogenesis Volume 42 · May 2021</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093/carcin/bgab041" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-campaigns">
+            <span class="nr-item-num">40</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Halo Collective: It's Time to End Hair Discrimination in British Schools</h3><p class="nr-item-meta">Gal-dem · December 2020</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://gal-dem.com/the-halo-code-hair-discrimination/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="other-articles">
+            <span class="nr-item-num">41</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Relaxers and Dyes Aren't the Only Cosmetic Products Disproportionately Harming Black Women</h3><p class="nr-item-meta">Gal-dem · January 2020</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://gal-dem.com/hair-relaxers-cosmetic-products-harming-black-women/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="focused">
+            <span class="nr-item-num">42</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">L'Oreal: No More Cancer Chemicals in Cosmetics</h3><p class="nr-item-meta">Breast Cancer Prevention Partners · June 2017</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.bcpp.org/resource/loreal-no-cancer-chemicals-cosmetics/" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="academic focused">
+            <span class="nr-item-num">43</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Relaxer Use and Risk of Uterine Leiomyomata in African-American Women</h3><p class="nr-item-meta">American Journal of Epidemiology · January 2012</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093%2Faje%2Fkwr351" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="academic other-articles">
+            <span class="nr-item-num">44</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Relaxers: A Benign Caustic Ingestion?</h3><p class="nr-item-meta">Journal of Pediatric Gastroenterology and Nutrition · January 2003</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1097/00005176-200301000-00023" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
+          </li>
+
+          <li class="nr-resource-item" data-tags="academic other-articles">
+            <span class="nr-item-num">45</span>
+            <div class="nr-item-body"><h3 class="nr-item-title">Hair Relaxer Ingestion: A New Trend</h3><p class="nr-item-meta">Annals of Otology Rhinology & Laryngology · January 1993</p></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1177/000348949310201008" target="_blank" rel="noopener" class="nr-item-link">↗</a></div>
           </li>
 
         </ol>
-      </div><!-- /nr-content -->
-    </div><!-- /nr-body-inner -->
+      </div>
+    </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       NAVY CTA
-  ════════════════════════════════════════════════════════════ -->
-  <section class="nr-cta" aria-labelledby="nr-cta-heading">
-    <div class="nr-cta-inner">
-      <h2 id="nr-cta-heading" class="nr-cta-title">
-        Join the Level Up community
-      </h2>
-      <p class="nr-cta-body">
-        Receive campaign updates, research summaries, and actions you can
-        take — straight to your inbox.
-      </p>
-      <a
-        href="https://levelup.yourmovement.org/p/join-us"
-        target="_blank"
-        rel="noopener"
-        class="nr-cta-btn"
-      >JOIN US →</a>
+  <section class="dp-cta" aria-labelledby="nr-cta-h">
+    <div class="dp-content" style="text-align:center">
+      <h2 id="nr-cta-h" class="dp-h2--light">Join the Level Up community</h2>
+      <p class="dp-p--light">Receive campaign updates, research summaries, and actions you can take — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="dp-btn">JOIN US →</a>
     </div>
   </section>
 
@@ -306,448 +362,99 @@ const { headInner, bodyClass } = extract(homeRaw);
 </Layout>
 
 <style is:global>
-  /* ── Font scope ──────────────────────────────────────────── */
-  .nr-hero,
-  .nr-filters,
-  .nr-body,
-  .nr-cta {
-    font-family: 'DM Sans', system-ui, sans-serif;
-  }
+  .nr-hero, .nr-filters, .nr-body { font-family: 'DM Sans', system-ui, sans-serif; }
 
-  /* ════════════════════════════════════════════════════════════
-     HERO
-  ═══════════════════════════════════════════════════════════ */
-  .nr-hero {
-    background: #EEEBD3;
-    padding: 100px 24px 80px;
-  }
+  /* HERO */
+  .nr-hero { background: #EEEBD3; padding: 100px 24px 80px; overflow: hidden; }
+  .nr-hero-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 420px; gap: 48px; align-items: center; }
+  .nr-hero-text { min-width: 0; }
+  .nr-hero-image { position: relative; height: 480px; }
+  .nr-hero-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nr-eyebrow { display: inline-block; font: 700 11px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.14em; color: #A89CED; margin-bottom: 24px; }
+  .nr-hero-title { font: 900 clamp(48px, 9vw, 110px)/0.88 'DM Sans', sans-serif; color: #0C0A3E; letter-spacing: -0.05em; margin: 0 0 32px; }
+  .nr-hero-subtitle { font: 400 18px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.6); max-width: 480px; margin: 0; }
 
-  .nr-hero-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+  /* INTRO */
+  .nr-intro { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.1); padding: 48px 24px 56px; }
+  .nr-intro-inner { max-width: 1100px; margin: 0 auto; max-width: 760px; }
+  .nr-intro-body { font: 400 17px/1.75 'DM Sans', sans-serif; color: rgba(12,10,62,0.75); margin: 0 0 20px; }
+  .nr-intro-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; background: #0C0A3E; color: #CCFF33; text-decoration: none; padding: 16px 32px; margin-top: 8px; transition: background 0.15s; }
+  .nr-intro-btn:hover { background: #A89CED; color: #0C0A3E; }
 
-  .nr-eyebrow {
-    display: inline-block;
-    font: 700 11px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: #A89CED;
-    margin-bottom: 24px;
-  }
+  /* FILTER PILLS */
+  .nr-filters { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.1); padding: 20px 24px; }
+  .nr-filters-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; }
+  .nr-pill { font: 700 12px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; color: #0C0A3E; background: transparent; border: 1.5px solid #0C0A3E; border-radius: 100px; padding: 9px 18px; cursor: pointer; transition: background 0.15s, color 0.15s; }
+  .nr-pill:hover { background: rgba(12,10,62,0.07); }
+  .nr-pill--active { background: #0C0A3E; color: #CCFF33; border-color: #0C0A3E; }
+  .nr-pill--active:hover { background: #1a185a; }
 
-  .nr-hero-title {
-    font: 900 clamp(56px, 11vw, 120px)/0.88 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    letter-spacing: -0.05em;
-    margin: 0 0 32px;
-  }
+  /* BODY LAYOUT */
+  .nr-body { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.08); padding: 72px 24px 96px; }
+  .nr-body-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 280px 1fr; gap: 64px; align-items: start; }
 
-  .nr-hero-subtitle {
-    font: 400 18px/1.65 'DM Sans', sans-serif;
-    color: rgba(12, 10, 62, 0.6);
-    max-width: 560px;
-    margin: 0;
-  }
+  /* SIDEBAR */
+  .nr-sidebar { position: sticky; top: 100px; }
+  .nr-sidebar-campaign { font: 700 10px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.16em; color: #0C0A3E; margin: 0 0 16px; }
+  .nr-sidebar-desc { font: 400 14px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.65); margin: 0 0 28px; }
+  .nr-sidebar-stats { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
+  .nr-stat-num { display: block; font: 800 32px/1 'DM Sans', sans-serif; color: #0C0A3E; letter-spacing: -0.03em; }
+  .nr-stat-label { display: block; font: 400 12px/1.4 'DM Sans', sans-serif; color: rgba(12,10,62,0.55); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .nr-divider { border: none; border-top: 1px solid rgba(12,10,62,0.14); margin: 0 0 24px; }
+  .nr-sidebar-actions { display: flex; flex-direction: column; gap: 0; }
+  .nr-action-link { display: block; font: 700 13px/1 'DM Sans', sans-serif; color: #0C0A3E; text-decoration: none; text-transform: uppercase; letter-spacing: 0.06em; padding: 14px 0; border-bottom: 1px solid rgba(12,10,62,0.1); transition: color 0.15s, padding-left 0.15s; }
+  .nr-action-link:hover { color: #A89CED; padding-left: 6px; }
 
-  /* ════════════════════════════════════════════════════════════
-     FILTER PILLS
-  ═══════════════════════════════════════════════════════════ */
-  .nr-filters {
-    background: #EEEBD3;
-    border-top: 1px solid rgba(12, 10, 62, 0.1);
-    padding: 20px 24px;
-  }
+  /* FEATURED CARD */
+  .nr-featured { background: #0C0A3E; padding: 40px 44px; margin-bottom: 48px; }
+  .nr-featured-badge { display: inline-block; font: 700 10px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.14em; color: #0C0A3E; background: #A89CED; padding: 5px 10px; margin-bottom: 20px; }
+  .nr-featured-title { font: 800 clamp(20px, 3vw, 28px)/1.1 'DM Sans', sans-serif; color: #EEEBD3; letter-spacing: -0.02em; margin: 0 0 16px; }
+  .nr-featured-desc { font: 400 15px/1.65 'DM Sans', sans-serif; color: rgba(238,235,211,0.65); margin: 0 0 28px; max-width: 580px; }
+  .nr-featured-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; background: #CCFF33; color: #0C0A3E; text-decoration: none; padding: 14px 28px; transition: background 0.15s; }
+  .nr-featured-btn:hover { background: #EEEBD3; }
 
-  .nr-filters-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
+  /* RESOURCE LIST */
+  .nr-list { list-style: none; margin: 0; padding: 0; }
+  .nr-resource-item { display: grid; grid-template-columns: 40px 1fr auto; gap: 20px; align-items: center; padding: 22px 0; border-bottom: 1px solid rgba(12,10,62,0.1); transition: background 0.15s, margin 0.15s, padding 0.15s; }
+  .nr-resource-item:first-child { border-top: 1px solid rgba(12,10,62,0.1); }
+  .nr-resource-item:hover { background: rgba(12,10,62,0.03); margin: 0 -12px; padding-left: 12px; padding-right: 12px; }
+  .nr-resource-item[hidden] { display: none; }
+  .nr-item-num { font: 800 13px/1 'DM Sans', sans-serif; color: #0C0A3E; letter-spacing: 0.04em; align-self: center; }
+  .nr-item-title { font: 700 15px/1.3 'DM Sans', sans-serif; color: #0C0A3E; margin: 0 0 4px; }
+  .nr-item-meta { font: 400 12px/1 'DM Sans', sans-serif; color: rgba(12,10,62,0.45); margin: 0; text-transform: uppercase; letter-spacing: 0.06em; }
+  .nr-item-end { display: flex; align-items: center; gap: 12px; }
+  .nr-type-badge { font: 700 10px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; color: #0C0A3E; background: rgba(12,10,62,0.08); padding: 5px 10px; white-space: nowrap; }
+  .nr-type-badge--academic { background: rgba(168,156,237,0.3); }
+  .nr-type-badge--parliament { background: rgba(168,156,237,0.2); }
+  .nr-type-badge--media { background: rgba(12,10,62,0.07); }
+  .nr-type-badge--org { background: rgba(204,255,51,0.3); }
+  .nr-type-badge--video { background: rgba(204,255,51,0.4); }
+  .nr-type-badge--focused { background: #CCFF33; }
+  .nr-item-link { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; font: 700 16px/1 'DM Sans', sans-serif; color: #0C0A3E; text-decoration: none; border: 1.5px solid rgba(12,10,62,0.2); transition: background 0.15s, color 0.15s, border-color 0.15s; flex-shrink: 0; }
+  .nr-item-link:hover { background: #0C0A3E; color: #CCFF33; border-color: #0C0A3E; }
 
-  .nr-pill {
-    font: 700 12px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #0C0A3E;
-    background: transparent;
-    border: 1.5px solid #0C0A3E;
-    border-radius: 100px;
-    padding: 9px 18px;
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
-  }
+  /* CTA — reuse dp-cta if defined; fallback below */
+  .dp-cta { background: #0C0A3E; padding: 96px 24px; text-align: center; font-family: 'DM Sans', system-ui, sans-serif; }
+  .dp-content { max-width: 640px; margin: 0 auto; }
+  .dp-h2--light { font: 900 clamp(32px,5vw,52px)/1.05 'DM Sans', sans-serif; color: #EEEBD3; letter-spacing: -0.04em; margin: 0 0 20px; }
+  .dp-p--light { font: 400 17px/1.65 'DM Sans', sans-serif; color: rgba(238,235,211,0.65); margin: 0 0 36px; }
+  .dp-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.12em; background: #CCFF33; color: #0C0A3E; text-decoration: none; padding: 18px 40px; transition: background 0.15s; }
+  .dp-btn:hover { background: #EEEBD3; }
 
-  .nr-pill:hover {
-    background: rgba(12, 10, 62, 0.07);
-  }
-
-  .nr-pill--active {
-    background: #0C0A3E;
-    color: #CCFF33;
-    border-color: #0C0A3E;
-  }
-
-  .nr-pill--active:hover {
-    background: #1a185a;
-  }
-
-  /* ════════════════════════════════════════════════════════════
-     TWO-COLUMN BODY
-  ═══════════════════════════════════════════════════════════ */
-  .nr-body {
-    background: #EEEBD3;
-    border-top: 1px solid rgba(12, 10, 62, 0.08);
-    padding: 72px 24px 96px;
-  }
-
-  .nr-body-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 64px;
-    align-items: start;
-  }
-
-  /* ── Sidebar ─────────────────────────────────────────────── */
-  .nr-sidebar {
-    position: sticky;
-    top: 100px;
-  }
-
-  .nr-sidebar-campaign {
-    font: 700 10px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: #0C0A3E;
-    margin: 0 0 16px;
-  }
-
-  .nr-sidebar-desc {
-    font: 400 14px/1.65 'DM Sans', sans-serif;
-    color: rgba(12, 10, 62, 0.65);
-    margin: 0 0 28px;
-  }
-
-  .nr-sidebar-stats {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    margin-bottom: 28px;
-  }
-
-  .nr-stat-num {
-    display: block;
-    font: 800 32px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    letter-spacing: -0.03em;
-  }
-
-  .nr-stat-label {
-    display: block;
-    font: 400 12px/1.4 'DM Sans', sans-serif;
-    color: rgba(12, 10, 62, 0.55);
-    margin-top: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .nr-divider {
-    border: none;
-    border-top: 1px solid rgba(12, 10, 62, 0.14);
-    margin: 0 0 24px;
-  }
-
-  .nr-sidebar-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .nr-action-link {
-    display: block;
-    font: 700 13px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 14px 0;
-    border-bottom: 1px solid rgba(12, 10, 62, 0.1);
-    transition: color 0.15s, padding-left 0.15s;
-  }
-
-  .nr-action-link:hover {
-    color: #A89CED;
-    padding-left: 6px;
-  }
-
-  /* ── Featured card ───────────────────────────────────────── */
-  .nr-featured {
-    background: #0C0A3E;
-    padding: 40px 44px;
-    margin-bottom: 48px;
-  }
-
-  .nr-featured-badge {
-    display: inline-block;
-    font: 700 10px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: #0C0A3E;
-    background: #A89CED;
-    padding: 5px 10px;
-    margin-bottom: 20px;
-  }
-
-  .nr-featured-title {
-    font: 800 clamp(22px, 3vw, 30px)/1.1 'DM Sans', sans-serif;
-    color: #EEEBD3;
-    letter-spacing: -0.02em;
-    margin: 0 0 16px;
-  }
-
-  .nr-featured-desc {
-    font: 400 15px/1.65 'DM Sans', sans-serif;
-    color: rgba(238, 235, 211, 0.65);
-    margin: 0 0 28px;
-    max-width: 580px;
-  }
-
-  .nr-featured-btn {
-    display: inline-block;
-    font: 800 13px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    background: #CCFF33;
-    color: #0C0A3E;
-    text-decoration: none;
-    padding: 14px 28px;
-    transition: background 0.15s;
-  }
-
-  .nr-featured-btn:hover {
-    background: #EEEBD3;
-  }
-
-  /* ── Resource list ───────────────────────────────────────── */
-  .nr-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .nr-resource-item {
-    display: grid;
-    grid-template-columns: 40px 1fr auto;
-    gap: 20px;
-    align-items: center;
-    padding: 22px 0;
-    border-bottom: 1px solid rgba(12, 10, 62, 0.1);
-    transition: background 0.15s, margin 0.15s, padding 0.15s;
-  }
-
-  .nr-resource-item:first-child {
-    border-top: 1px solid rgba(12, 10, 62, 0.1);
-  }
-
-  .nr-resource-item:hover {
-    background: rgba(12, 10, 62, 0.03);
-    margin: 0 -12px;
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  .nr-resource-item[hidden] {
-    display: none;
-  }
-
-  .nr-item-num {
-    font: 800 13px/1 'DM Sans', sans-serif;
-    color: #CCFF33;
-    letter-spacing: 0.04em;
-    align-self: center;
-  }
-
-  .nr-item-title {
-    font: 700 15px/1.3 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    margin: 0 0 4px;
-  }
-
-  .nr-item-meta {
-    font: 400 12px/1 'DM Sans', sans-serif;
-    color: rgba(12, 10, 62, 0.45);
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-
-  .nr-item-end {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .nr-type-badge {
-    font: 700 10px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #0C0A3E;
-    background: rgba(12, 10, 62, 0.08);
-    padding: 5px 10px;
-    white-space: nowrap;
-  }
-
-  .nr-type-badge--parliament {
-    background: rgba(168, 156, 237, 0.25);
-    color: #0C0A3E;
-  }
-
-  .nr-type-badge--media {
-    background: rgba(204, 255, 51, 0.35);
-    color: #0C0A3E;
-  }
-
-  .nr-type-badge--org {
-    background: rgba(12, 10, 62, 0.06);
-    color: rgba(12, 10, 62, 0.7);
-  }
-
-  .nr-item-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    font: 700 16px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    text-decoration: none;
-    border: 1.5px solid rgba(12, 10, 62, 0.2);
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
-    flex-shrink: 0;
-  }
-
-  .nr-item-link:hover {
-    background: #0C0A3E;
-    color: #CCFF33;
-    border-color: #0C0A3E;
-  }
-
-  /* ════════════════════════════════════════════════════════════
-     NAVY CTA
-  ═══════════════════════════════════════════════════════════ */
-  .nr-cta {
-    background: #0C0A3E;
-    padding: 96px 24px;
-    text-align: center;
-  }
-
-  .nr-cta-inner {
-    max-width: 600px;
-    margin: 0 auto;
-  }
-
-  .nr-cta-title {
-    font: 900 clamp(32px, 5vw, 52px)/1.05 'DM Sans', sans-serif;
-    color: #EEEBD3;
-    letter-spacing: -0.04em;
-    margin: 0 0 20px;
-  }
-
-  .nr-cta-body {
-    font: 400 17px/1.65 'DM Sans', sans-serif;
-    color: rgba(238, 235, 211, 0.65);
-    margin: 0 0 36px;
-  }
-
-  .nr-cta-btn {
-    display: inline-block;
-    font: 800 13px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    background: #CCFF33;
-    color: #0C0A3E;
-    text-decoration: none;
-    padding: 18px 40px;
-    transition: background 0.15s;
-  }
-
-  .nr-cta-btn:hover {
-    background: #EEEBD3;
-  }
-
-  /* ════════════════════════════════════════════════════════════
-     RESPONSIVE — sidebar stacks at 900px, list reflows at 640px
-  ═══════════════════════════════════════════════════════════ */
+  /* RESPONSIVE */
   @media (max-width: 900px) {
-    .nr-body-inner {
-      grid-template-columns: 1fr;
-      gap: 40px;
-    }
-
-    .nr-sidebar {
-      position: static;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .nr-sidebar-campaign,
-    .nr-sidebar-desc {
-      grid-column: 1 / -1;
-    }
-
-    .nr-sidebar-stats {
-      flex-direction: row;
-      gap: 32px;
-    }
-
-    .nr-divider {
-      grid-column: 1 / -1;
-      margin: 0;
-    }
-
-    .nr-sidebar-actions {
-      grid-column: 1 / -1;
-    }
+    .nr-hero-inner { grid-template-columns: 1fr; }
+    .nr-hero-image { height: 300px; }
+    .nr-body-inner { grid-template-columns: 1fr; gap: 40px; }
+    .nr-sidebar { position: static; }
+    .nr-sidebar-stats { flex-direction: row; gap: 32px; }
   }
-
   @media (max-width: 640px) {
-    .nr-hero {
-      padding: 72px 20px 56px;
-    }
-
-    .nr-featured {
-      padding: 28px 24px;
-    }
-
-    .nr-resource-item {
-      grid-template-columns: 32px 1fr;
-      grid-template-rows: auto auto;
-    }
-
-    .nr-item-end {
-      grid-column: 2;
-      margin-top: 8px;
-    }
-
-    .nr-resource-item:hover {
-      margin: 0 -8px;
-      padding-left: 8px;
-      padding-right: 8px;
-    }
-
-    .nr-sidebar {
-      grid-template-columns: 1fr;
-    }
-
-    .nr-cta {
-      padding: 64px 20px;
-    }
+    .nr-hero { padding: 72px 20px 56px; }
+    .nr-featured { padding: 28px 24px; }
+    .nr-resource-item { grid-template-columns: 32px 1fr; grid-template-rows: auto auto; }
+    .nr-item-end { grid-column: 2; margin-top: 8px; }
+    .nr-resource-item:hover { margin: 0 -8px; padding-left: 8px; padding-right: 8px; }
   }
 </style>
 
@@ -762,21 +469,15 @@ const { headInner, bodyClass } = extract(homeRaw);
         pill.classList.toggle('nr-pill--active', isActive);
         pill.setAttribute('aria-pressed', String(isActive));
       });
-
       items.forEach((item) => {
-        const matches = tag === 'all' || item.dataset.tag === tag;
-        if (matches) {
-          item.removeAttribute('hidden');
-        } else {
-          item.setAttribute('hidden', '');
-        }
+        const tags = (item.dataset.tags || '').split(' ');
+        const matches = tag === 'all' || tags.includes(tag);
+        matches ? item.removeAttribute('hidden') : item.setAttribute('hidden', '');
       });
     }
 
     pills.forEach((pill) => {
-      pill.addEventListener('click', () => {
-        setFilter(pill.dataset.filter ?? 'all');
-      });
+      pill.addEventListener('click', () => setFilter(pill.dataset.filter ?? 'all'));
     });
   })();
 </script>

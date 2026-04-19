@@ -10,11 +10,23 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
 
-  <!-- PROPOSAL A: Announcement bar -->
-  <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar">
-    <span class="ic-bar-badge">NEW</span>
-    <span>Islington Council must finish Holloway Women's Centre →</span>
-  </a>
+  <!-- Animated announcement bar -->
+  <div class="ic-bar">
+    <div class="ic-bar-track">
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
+        <span class="ic-bar-badge">NEW</span>
+        <span>Islington Council must finish Holloway Women's Centre — Sign the petition →</span>
+      </a>
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
+        <span class="ic-bar-badge">NEW</span>
+        <span>Islington Council must finish Holloway Women's Centre — Sign the petition →</span>
+      </a>
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
+        <span class="ic-bar-badge">NEW</span>
+        <span>Islington Council must finish Holloway Women's Centre — Sign the petition →</span>
+      </a>
+    </div>
+  </div>
 
   <Fragment set:html={mainContent} />
 
@@ -215,21 +227,28 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     .home-who-left h2 { font-size: 56px; }
   }
 
-  /* ═══ PROPOSAL A: Announcement bar ═══ */
+  /* ═══ Animated announcement bar (marquee) ═══ */
   .ic-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
     background: #A89CED;
-    padding: 12px 24px;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .ic-bar-track {
+    display: inline-flex;
+    animation: marquee 20s linear infinite;
+  }
+  .ic-bar-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 48px;
     font: 600 13px/1 'DM Sans', sans-serif;
     color: #0C0A3E;
     text-decoration: none;
-    text-align: center;
-    transition: background 0.15s;
+    white-space: nowrap;
   }
-  .ic-bar:hover { background: #CCFF33; }
+  .ic-bar-item:hover { color: #CCFF33; }
   .ic-bar-badge {
     background: #0C0A3E;
     color: #CCFF33;
@@ -237,6 +256,11 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     padding: 4px 8px;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
   }
 
   /* ═══ PROPOSAL B: Featured banner ═══ */

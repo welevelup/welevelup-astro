@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Resources — Level Up",
+    "description": "All campaign resources, media guidelines, legal toolkits, and research from Level Up feminist campaigns.",
+    "url": "https://welevelup.org/resources",
+    "publisher": { "@type": "Organization", "name": "Level Up", "url": "https://welevelup.org" }
+  })}</script>
+
+  <section class="ar-hero">
+    <div class="ar-hero-inner">
+      <span class="ar-eyebrow">Level Up</span>
+      <h1 class="ar-title">Resources</h1>
+      <p class="ar-subtitle">Media guidelines, legal toolkits, research, and campaign materials from all Level Up campaigns — in one place.</p>
+    </div>
+  </section>
+
+  <section class="ar-body">
+    <div class="ar-inner">
+
+      <a href="/resources/nomorelyes" class="ar-card">
+        <div class="ar-card-meta">
+          <span class="ar-card-tag">#NoMoreLyes</span>
+          <span class="ar-card-count">45 resources</span>
+        </div>
+        <h2 class="ar-card-title">#NoMoreLyes Relaxer Info Kit</h2>
+        <p class="ar-card-desc">Research, journalism, science, and advocacy on toxic hair relaxers and L'Oréal's responsibility to Black women.</p>
+        <span class="ar-card-cta">Browse resources →</span>
+      </a>
+
+      <a href="/resources/ddw" class="ar-card">
+        <div class="ar-card-meta">
+          <span class="ar-card-tag">Dignity for Dead Women</span>
+          <span class="ar-card-count">4 resources</span>
+        </div>
+        <h2 class="ar-card-title">Media Guidelines &amp; Resources</h2>
+        <p class="ar-card-desc">The UK's first media guidelines on reporting fatal domestic abuse, endorsed by IPSO and IMPRESS, with supporting research and IPSO submissions.</p>
+        <span class="ar-card-cta">Browse resources →</span>
+      </a>
+
+      <a href="/resources/abortion-is-healthcare" class="ar-card">
+        <div class="ar-card-meta">
+          <span class="ar-card-tag">Abortion Is Healthcare</span>
+          <span class="ar-card-count">1 resource</span>
+        </div>
+        <h2 class="ar-card-title">Abortion Media Guidelines</h2>
+        <p class="ar-card-desc">Guidelines for journalists on how to report abortion in Britain with accuracy, compassion, and sensitivity — treating it as a public health issue, not a debate.</p>
+        <span class="ar-card-cta">Browse resources →</span>
+      </a>
+
+      <a href="/resources/pregnancy-in-prison" class="ar-card">
+        <div class="ar-card-meta">
+          <span class="ar-card-tag">Pregnancy in Prison</span>
+          <span class="ar-card-count">4 resources</span>
+        </div>
+        <h2 class="ar-card-title">Resources &amp; Legal Toolkit</h2>
+        <p class="ar-card-desc">Legal toolkit for barristers representing pregnant women in the criminal justice system, plus campaign materials and press coverage.</p>
+        <span class="ar-card-cta">Browse resources →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="ar-cta">
+    <div class="ar-cta-inner">
+      <h2 class="ar-cta-title">Join the Level Up community</h2>
+      <p class="ar-cta-sub">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="ar-cta-btn">JOIN US</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .ar-hero {
+    background: #0C0A3E;
+    padding: 100px 24px 80px;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  .ar-hero-inner { max-width: 800px; margin: 0 auto; }
+  .ar-eyebrow { display: inline-block; font: 700 11px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.14em; color: #A89CED; margin-bottom: 24px; }
+  .ar-title { font: 900 clamp(56px,10vw,120px)/0.88 'DM Sans', sans-serif; color: #CCFF33; letter-spacing: -0.05em; margin: 0 0 32px; }
+  .ar-subtitle { font: 400 20px/1.6 'DM Sans', sans-serif; color: rgba(238,235,211,0.7); max-width: 560px; margin: 0; }
+
+  .ar-body { background: #EEEBD3; padding: 80px 24px 96px; font-family: 'DM Sans', system-ui, sans-serif; }
+  .ar-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+
+  .ar-card {
+    display: flex;
+    flex-direction: column;
+    background: #EEEBD3;
+    border: 1px solid rgba(12,10,62,0.1);
+    padding: 40px 44px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .ar-card:hover { background: #0C0A3E; }
+  .ar-card:hover .ar-card-tag { background: rgba(204,255,51,0.15); color: #CCFF33; }
+  .ar-card:hover .ar-card-count { color: rgba(238,235,211,0.5); }
+  .ar-card:hover .ar-card-title { color: #CCFF33; }
+  .ar-card:hover .ar-card-desc { color: rgba(238,235,211,0.65); }
+  .ar-card:hover .ar-card-cta { color: #CCFF33; }
+
+  .ar-card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .ar-card-tag { font: 700 10px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; background: #CCFF33; color: #0C0A3E; padding: 5px 12px; transition: all 0.15s; }
+  .ar-card-count { font: 400 12px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(12,10,62,0.45); transition: color 0.15s; }
+  .ar-card-title { font: 800 clamp(20px,2.5vw,28px)/1.1 'DM Sans', sans-serif; color: #0C0A3E; letter-spacing: -0.03em; margin: 0 0 16px; transition: color 0.15s; }
+  .ar-card-desc { font: 400 15px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.65); margin: 0 0 32px; flex: 1; transition: color 0.15s; }
+  .ar-card-cta { font: 700 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; color: #0C0A3E; transition: color 0.15s; }
+
+  .ar-cta { background: #0C0A3E; padding: 96px 24px; text-align: center; font-family: 'DM Sans', system-ui, sans-serif; }
+  .ar-cta-inner { max-width: 640px; margin: 0 auto; }
+  .ar-cta-title { font: 900 clamp(32px,5vw,52px)/1.05 'DM Sans', sans-serif; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 20px; }
+  .ar-cta-sub { font: 400 17px/1.65 'DM Sans', sans-serif; color: rgba(238,235,211,0.65); margin: 0 0 36px; }
+  .ar-cta-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.12em; background: #CCFF33; color: #0C0A3E; text-decoration: none; padding: 18px 40px; transition: background 0.15s; }
+  .ar-cta-btn:hover { background: #EEEBD3; }
+
+  @media (max-width: 768px) {
+    .ar-inner { grid-template-columns: 1fr; }
+    .ar-card { padding: 32px 28px; }
+  }
+</style>

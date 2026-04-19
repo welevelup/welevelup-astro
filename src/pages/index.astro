@@ -556,6 +556,21 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   @media (max-width: 480px) {
     .home-petitions-grid { grid-template-columns: 1fr; }
   }
+
+  /* Mobile: each section = full screen */
+  @media (max-width: 900px) {
+    .home-who { min-height: 100vh; display: flex; align-items: center; padding: 48px 20px; }
+    .home-who-inner { grid-template-columns: 1fr; gap: 24px; }
+    .home-who-left h2 { font-size: 56px; }
+    .home-video { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 48px 20px; }
+    .home-video-header { padding-bottom: 32px; }
+    .home-video-header h2 { font-size: 32px; }
+    .ic-banner { min-height: 80vh; display: flex; align-items: center; padding: 48px 20px; }
+    .home-petitions { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+    .home-blog { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+    .home-blog-grid { grid-template-columns: 1fr; }
+    .home-blog-card--featured { grid-column: 1; }
+  }
 </style>
 
 <script>

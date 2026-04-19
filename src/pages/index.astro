@@ -75,42 +75,54 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
       <h2 class="home-petitions-title">Sign Our Petitions</h2>
       <div class="home-petitions-grid">
         <a href="/active-campaigns/abortion-is-healthcare" class="home-petition-card">
-          <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.20.png" alt="Abortion is Healthcare" loading="lazy" />
+          <div class="home-petition-img-wrap">
+            <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.20.png" alt="Abortion is Healthcare" loading="lazy" />
+          </div>
           <div class="home-petition-body">
             <h3>Abortion is Healthcare</h3>
             <span class="home-petition-supporters">6.1K supporters</span>
           </div>
         </a>
         <a href="/active-campaigns/pregnancy-in-prison" class="home-petition-card">
-          <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.40-e1771105055980.png" alt="Pregnancy in Prison" loading="lazy" />
+          <div class="home-petition-img-wrap">
+            <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.40-e1771105055980.png" alt="Pregnancy in Prison" loading="lazy" />
+          </div>
           <div class="home-petition-body">
             <h3>Stop sending pregnant women to prison</h3>
             <span class="home-petition-supporters">13.1K supporters</span>
           </div>
         </a>
         <a href="/active-campaigns/nomorelyes-2" class="home-petition-card">
-          <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.10-e1771105231897.png" alt="#NoMoreLyes" loading="lazy" />
+          <div class="home-petition-img-wrap">
+            <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.10-e1771105231897.png" alt="#NoMoreLyes" loading="lazy" />
+          </div>
           <div class="home-petition-body">
             <h3>#NoMoreLyes: Take toxic hair relaxers off the shelves</h3>
             <span class="home-petition-supporters">6.4K supporters</span>
           </div>
         </a>
         <a href="/active-campaigns/media-guidelines-domestic-abuse" class="home-petition-card">
-          <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.28-e1771105118340.png" alt="Dignity for Dead Women" loading="lazy" />
+          <div class="home-petition-img-wrap">
+            <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.28-e1771105118340.png" alt="Dignity for Dead Women" loading="lazy" />
+          </div>
           <div class="home-petition-body">
             <h3>IPSO: Dignity for Dead Women</h3>
             <span class="home-petition-supporters">29.2K supporters</span>
           </div>
         </a>
         <a href="/active-campaigns/sexual-violence-in-football" class="home-petition-card">
-          <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.34.png" alt="Sexual Violence in Football" loading="lazy" />
+          <div class="home-petition-img-wrap">
+            <img src="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.34.png" alt="Sexual Violence in Football" loading="lazy" />
+          </div>
           <div class="home-petition-body">
             <h3>Premier League and FA</h3>
             <span class="home-petition-supporters">4.3K supporters</span>
           </div>
         </a>
         <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="home-petition-card">
-          <img src="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png" alt="Islington Council" loading="lazy" />
+          <div class="home-petition-img-wrap">
+            <img src="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png" alt="Islington Council" loading="lazy" />
+          </div>
           <div class="home-petition-body">
             <h3>Islington Council: Fund Holloway Women's Centre</h3>
           </div>
@@ -377,14 +389,14 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 
   /* ── Petitions section ───────────────────────────────── */
   .home-petitions {
-    background: #0C0A3E;
+    background: #fff;
     padding: 80px 24px;
     font-family: 'DM Sans', sans-serif;
   }
   .home-petitions-inner { max-width: 1100px; margin: 0 auto; }
   .home-petitions-title {
     font: 800 48px/0.9 'DM Sans', sans-serif !important;
-    color: #CCFF33 !important;
+    color: #0C0A3E !important;
     letter-spacing: -0.04em !important;
     margin: 0 0 40px !important;
     text-align: center;
@@ -392,54 +404,87 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   .home-petitions-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 20px;
   }
   .home-petition-card {
-    background: rgba(238,235,211,0.06);
+    background: #fff;
     text-decoration: none;
     overflow: hidden;
     transition: all 0.25s;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(238,235,211,0.08);
+    border: 1px solid rgba(12,10,62,0.1);
     position: relative;
   }
   .home-petition-card:hover {
     transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(12,10,62,0.12);
     border-color: #CCFF33;
+  }
+  .home-petition-card:hover .home-petition-img-wrap::after {
+    opacity: 1;
+  }
+  .home-petition-img-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+  .home-petition-img-wrap::after {
+    content: 'Sign petition →';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #CCFF33;
+    color: #0C0A3E;
+    font: 700 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 12px 16px;
+    opacity: 0;
+    transition: opacity 0.2s;
   }
   .home-petition-card img {
     width: 100%;
-    height: 200px;
+    height: 210px;
     object-fit: cover;
     display: block;
+    transition: transform 0.3s;
   }
+  .home-petition-card:hover img { transform: scale(1.04); }
   .home-petition-body {
-    padding: 20px 20px 24px;
+    padding: 20px 20px 22px;
     flex: 1;
     display: flex;
     flex-direction: column;
+    border-top: 3px solid #CCFF33;
   }
   .home-petition-body h3 {
-    font: 700 17px/1.2 'DM Sans', sans-serif;
-    color: #EEEBD3;
-    margin: 0 0 12px;
+    font: 700 16px/1.3 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 14px;
     flex: 1;
   }
   .home-petition-supporters {
     font: 600 11px/1 'DM Sans', sans-serif;
-    color: #CCFF33;
+    color: rgba(12,10,62,0.45);
     display: flex;
     align-items: center;
     gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
   }
   .home-petition-supporters::before {
-    content: '✦';
-    font-size: 8px;
+    content: '';
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #CCFF33;
+    flex-shrink: 0;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 900px) {
+    .home-petitions-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
     .home-petitions-grid { grid-template-columns: 1fr; }
-    .home-petitions-title { font-size: 36px; }
+    .home-petitions-title { font-size: 36px !important; }
   }
 
   /* Hide empty "Next Event" section */

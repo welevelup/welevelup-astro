@@ -15,6 +15,8 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 >
   <Nav />
 
+  <Fragment set:html={mainContent} />
+
   <!-- Animated announcement bar -->
   <div class="ic-bar">
     <div class="ic-bar-track">
@@ -32,8 +34,6 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
       </a>
     </div>
   </div>
-
-  <Fragment set:html={mainContent} />
 
   <!-- WHO WE ARE — Proposal A: Split layout -->
   <section class="home-who">
@@ -275,8 +275,8 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     text-decoration: none;
     white-space: nowrap;
   }
-  .ic-bar:hover { background: #0C0A3E; }
-  .ic-bar:hover .ic-bar-item { color: #CCFF33; }
+  .ic-bar:hover { background: #A89CED; }
+  .ic-bar:hover .ic-bar-item { color: #0C0A3E; }
   .ic-bar:hover .ic-bar-track { animation-play-state: paused; }
   .ic-bar-badge {
     background: #0C0A3E;

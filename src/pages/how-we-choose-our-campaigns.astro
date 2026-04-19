@@ -1,0 +1,251 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "About Us", "item": "https://welevelup.org/about-us" },
+      { "@type": "ListItem", "position": 3, "name": "How We Choose Our Campaigns", "item": "https://welevelup.org/how-we-choose-our-campaigns" }
+    ]
+  })}</script>
+
+  <title>How We Choose Our Campaigns — Level Up</title>
+
+  <section class="hc-hero" aria-labelledby="hc-hero-heading">
+    <div class="hc-hero-inner">
+      <span class="hc-eyebrow">About Level Up</span>
+      <h1 id="hc-hero-heading" class="hc-hero-title">How We Choose Our Campaigns</h1>
+    </div>
+  </section>
+
+  <section class="hc-intro">
+    <div class="hc-intro-inner">
+      <p class="hc-lead">Ending the imprisonment of pregnant women. Demanding beauty companies remove toxic chemicals from hair relaxers. Stopping the media blaming women for their own deaths. Although Level Up's campaigns might seem disconnected, they are all underpinned by core values of bodily autonomy and reproductive justice.</p>
+    </div>
+  </section>
+
+  <section class="hc-body">
+    <div class="hc-body-inner">
+
+      <article class="hc-section">
+        <h2 class="hc-section-title">Bodily Autonomy</h2>
+        <div class="hc-section-body">
+          <p>We believe in a world where people of all genders are loved and liberated from bodily and systemic violence. The 'loved' part is essential. We don't just want to survive, we want to thrive.</p>
+          <p>The violence that many of us experience on a bodily level is a demonstration of how systems of power operate, which is why we are fierce advocates for bodily autonomy.</p>
+          <p>Bodily autonomy is the opposite of bodily violence. Bodily autonomy means that your body is your own — not your abusive partner's, and not the state's. It means that you have the right to make decisions about your body and the resources to carry out those decisions.</p>
+          <p>When a man murders a woman, he violates her bodily autonomy. When the state puts a pregnant woman in prison, it violates her bodily autonomy. When companies sell cancerous products to women, it violates their bodily autonomy. When immigration officers forcibly remove someone from their home and detain them, it violates their bodily autonomy.</p>
+          <p>We take action against these specific, preventable, measurable forms of gender injustice because this is the foundation to building a loved and liberated life for all.</p>
+        </div>
+      </article>
+
+      <article class="hc-section">
+        <h2 class="hc-section-title">A short history of reproductive justice</h2>
+        <div class="hc-section-body">
+          <p>Reproductive justice is the right to maintain personal bodily autonomy, have children, not have children, and parent the children we have in safe and sustainable communities. It's a feminist framework that was created by a group of Black feminists: the Women of African Descent for Reproductive Justice.</p>
+          <p>They recognised the need for a holistic approach to liberation, and set out to address the needs of Black and working class women who were often ignored by white, middle-class feminism. In 1994, they wrote a statement addressed to the US Congress and published it in the Washington Post:</p>
+          <blockquote class="hc-quote">"Reproductive freedom is a life and death issue for many Black women and deserves as much recognition as any other freedom." — the Women of African Descent for Reproductive Justice</blockquote>
+          <p>Together, they demanded funding not just for abortion, but also for "the full range of reproductive services," without discrimination.</p>
+          <p>While reproductive rights focus on people's legal right to access reproductive healthcare, reproductive justice asks the question: what good is a right if you do not have the resources to access the services that the right has provided?</p>
+          <p>Reproductive justice is vital. It connects reproductive rights with the economic, social and political inequities that prevent people from accessing healthcare. For example, a woman might have the right to access an abortion in her country — but what happens if she's trapped in an abusive relationship, without the means to access it?</p>
+        </div>
+      </article>
+
+      <article class="hc-section">
+        <h2 class="hc-section-title">Gender justice and the importance of intersectionality</h2>
+        <div class="hc-section-body">
+          <p>Racism, misogyny, ableism, classism, transphobia, war, capitalist exploitation and other structures of oppression are in perpetual motion, moving together in service of systems that value profits over people's dignity. They feed off each other and keep each other alive. Where one exists, others are usually lurking.</p>
+          <p>Therefore, taking a holistic, intersectional approach to understanding and fighting for our liberation is the only way for all of us to be free from bodily and systemic violence.</p>
+        </div>
+      </article>
+
+      <article class="hc-section">
+        <h2 class="hc-section-title">Our pop culture approach to campaigning</h2>
+        <div class="hc-section-body">
+          <p>Level Up identifies specific interventions to interrupt injustice that will have a broader effect on wider systems of oppression. When it's interlocking systems of power that are producing violence, we have to build our own power to dismantle them.</p>
+          <p>That's why Level Up focuses on building people-power and cultural shifts to force the conditions for change. We don't beg for power: we build it with people by involving the public in actions they can take that make a difference.</p>
+          <p>Campaigning is not about asking nicely: it's about reframing the dominant narrative and strategically and persistently pushing until the systems change. That takes all of us.</p>
+        </div>
+      </article>
+
+      <article class="hc-section">
+        <h2 class="hc-section-title">How we frame our gender justice campaigns</h2>
+        <div class="hc-section-body">
+          <p>All of Level Up's campaigns use windows of opportunity in the media, pop culture, and politics to contextualise gender injustices within the structural oppressions and inequalities that facilitate them, and help shift the way we talk about them in order to shift public attitudes.</p>
+          <p>Our campaigns prioritise narrative shifts and changing culture as a first step, rather than immediately seeking change through political machinery. Culture changes faster than law — and culture has to change before the law can. We've found this strategy successful.</p>
+          <p>This is why the first step in all our campaigns involves reframing the dominant narrative around the injustice that we're working to dismantle. We do this to shift cultural attitudes on the issue that will set the stage for meaningful change. Culture change always precedes policy change.</p>
+          <ul class="hc-list">
+            <li>By reframing domestic homicide reporting as a matter of universal dignity for the dead, as opposed to an issue of sexist victim-blaming, we have introduced the UK's first guidelines and trainings on how to sensitively report fatal domestic abuse.</li>
+            <li>By reframing pregnancy in prison as a matter of keeping mothers and babies safe in the community, as opposed to improving their imprisonment, we have driven a sea change in sentencing policy. Prison will never be a safe place to be pregnant, which is why our campaign repeatedly called for an end to imprisonment of pregnant women.</li>
+            <li>Our campaign to decriminalise abortion in Britain reframes abortion as a healthcare issue, rather than a stigmatised moral debate. This shifts the narrative away from abortion as something that some people deserve and others don't, to a health procedure that everyone needs safe access to.</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="hc-section hc-section--conclusion">
+        <h2 class="hc-section-title">Together we push for change</h2>
+        <div class="hc-section-body">
+          <p>Together as a team of six and a wider community of over 25,000 supporters, we mobilise to reframe public and press narratives around critical gender justice issues, hold powerful people to account, and demand meaningful, tangible change.</p>
+          <p>We know that public pressure works. The louder we are, the harder it is for institutions and companies to ignore us. When thousands of people in the Level Up community emailed the directors at ITV calling on them to scrap the plastic surgery and diet pill adverts from Love Island, they listened. When hundreds of people complain about a newspaper publishing a victim-blaming article, the headline gets changed.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <section class="hc-cta" aria-labelledby="hc-cta-heading">
+    <div class="hc-cta-inner">
+      <h2 id="hc-cta-heading" class="hc-cta-heading">Join the Level Up community</h2>
+      <p class="hc-cta-sub">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="hc-cta-btn">JOIN US</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .hc-hero, .hc-intro, .hc-body, .hc-cta {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  .hc-hero {
+    background: #0C0A3E;
+    padding: 100px 24px 80px;
+  }
+  .hc-hero-inner { max-width: 900px; margin: 0 auto; }
+  .hc-eyebrow {
+    display: inline-block;
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    margin-bottom: 24px;
+  }
+  .hc-hero-title {
+    font: 900 clamp(48px, 9vw, 100px)/0.9 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.05em;
+    margin: 0;
+  }
+
+  .hc-intro {
+    background: #CCFF33;
+    padding: 64px 24px;
+  }
+  .hc-intro-inner { max-width: 800px; margin: 0 auto; }
+  .hc-lead {
+    font: 700 clamp(18px, 2.5vw, 24px)/1.5 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0;
+  }
+
+  .hc-body {
+    background: #EEEBD3;
+    padding: 80px 24px 96px;
+  }
+  .hc-body-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .hc-section {
+    padding: 48px 0;
+    border-top: 1px solid rgba(12,10,62,0.1);
+  }
+  .hc-section:first-child { border-top: none; padding-top: 0; }
+
+  .hc-section-title {
+    font: 800 clamp(20px,3vw,28px)/1.1 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+  }
+  .hc-section-body p {
+    font: 400 17px/1.75 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.75) !important;
+    margin: 0 0 16px;
+  }
+  .hc-section-body p:last-child { margin: 0; }
+
+  .hc-quote {
+    border-left: 4px solid #CCFF33;
+    margin: 24px 0;
+    padding: 16px 24px;
+    background: rgba(12,10,62,0.04);
+    font: 600 17px/1.65 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+  }
+
+  .hc-list {
+    margin: 16px 0 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .hc-list li {
+    font: 400 17px/1.75 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.75) !important;
+    padding-left: 20px;
+    border-left: 3px solid #A89CED;
+  }
+
+  .hc-section--conclusion {
+    background: #0C0A3E;
+    padding: 48px 40px;
+    margin-top: 48px;
+    border-top: none;
+  }
+  .hc-section--conclusion .hc-section-title { color: #CCFF33 !important; }
+  .hc-section--conclusion .hc-section-body p { color: rgba(238,235,211,0.8) !important; }
+
+  .hc-cta {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .hc-cta-inner { max-width: 640px; margin: 0 auto; }
+  .hc-cta-heading {
+    font: 800 40px/0.9 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 16px;
+  }
+  .hc-cta-sub {
+    font: 400 17px/1.65 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.65) !important;
+    margin: 0 0 36px;
+  }
+  .hc-cta-btn {
+    display: inline-block;
+    font: 800 13px/1 'DM Sans', sans-serif !important;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    background: #CCFF33 !important;
+    color: #0C0A3E !important;
+    text-decoration: none;
+    padding: 18px 40px;
+    transition: background 0.15s;
+  }
+  .hc-cta-btn:hover { background: #EEEBD3 !important; }
+
+  @media (max-width: 640px) {
+    .hc-hero { padding: 80px 20px 64px; }
+    .hc-section--conclusion { padding: 36px 24px; }
+  }
+</style>

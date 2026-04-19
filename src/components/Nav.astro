@@ -218,27 +218,27 @@
     position: absolute;
     top: 100%;
     left: 0;
-    background: #0C0A3E;
-    border: 1px solid rgba(238,235,211,0.08);
+    background: #FFFFFF;
+    border: 1px solid rgba(12,10,62,0.12);
     min-width: 240px;
     padding: 12px 0;
     z-index: 200;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.12);
   }
   .lu-nav-group:hover > .lu-nav-drop { display: block; }
   .lu-nav-drop > a {
     display: block;
     padding: 12px 20px;
     font: 700 14px/1.3 'DM Sans', sans-serif;
-    color: #CCFF33;
+    color: #A89CED;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     transition: all 0.15s;
   }
   .lu-nav-drop > a:hover {
-    color: #FFFFFF;
-    background: rgba(255,255,255,0.06);
+    color: #0C0A3E;
+    background: rgba(12,10,62,0.04);
     padding-left: 24px;
   }
 
@@ -254,8 +254,8 @@
   }
   .lu-nav-mega-col {
     padding: 24px 20px;
-    border-right: 1px solid rgba(238,235,211,0.05);
-    border-bottom: 1px solid rgba(238,235,211,0.05);
+    border-right: 1px solid rgba(12,10,62,0.07);
+    border-bottom: 1px solid rgba(12,10,62,0.07);
   }
   .lu-nav-mega-col:nth-child(3n) { border-right: none; }
   .lu-nav-mega-col:nth-child(n+4) { border-bottom: none; }
@@ -275,7 +275,7 @@
   }
   .lu-nav-drop-cols > div {
     padding: 16px 20px;
-    border-right: 1px solid rgba(238,235,211,0.06);
+    border-right: 1px solid rgba(12,10,62,0.07);
   }
   .lu-nav-drop-cols > div:last-child { border-right: none; }
 
@@ -283,7 +283,7 @@
     font: 700 11px/1 'DM Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #CCFF33;
+    color: #0C0A3E;
     display: block;
     margin-bottom: 12px;
   }
@@ -291,30 +291,31 @@
     font: 700 14px/1 'DM Sans', sans-serif !important;
     text-transform: uppercase !important;
     letter-spacing: 0.04em !important;
-    color: #FFFFFF !important;
+    color: #0C0A3E !important;
     display: block !important;
     margin-bottom: 14px !important;
     padding: 0 !important;
   }
-  .lu-nav-mega-title:hover { color: #CCFF33 !important; }
+  .lu-nav-mega-title:hover { color: #A89CED !important; }
   .lu-nav-mega-col a {
     display: block;
     padding: 6px 0;
     font: 700 14px/1.3 'DM Sans', sans-serif;
-    color: #CCFF33;
+    color: #A89CED;
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     transition: color 0.15s;
   }
-  .lu-nav-mega-col a:hover { color: #FFFFFF; }
+  .lu-nav-mega-col a:hover { color: #0C0A3E; }
 
   /* ── Mobile toggle ───────────────────────────────────── */
   .lu-nav-toggle {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 12px;
     right: 16px;
+    z-index: 9999;
     background: none;
     border: none;
     cursor: pointer;
@@ -327,9 +328,9 @@
     width: 30px;
     height: 3px;
     background: #0C0A3E;
+    transition: background 0.15s;
   }
-  .lu-nav-bar.open ~ .lu-nav-toggle span,
-  .lu-nav.menu-open .lu-nav-toggle span { background: #EEEBD3; }
+  .lu-nav.menu-open .lu-nav-toggle span { background: #0C0A3E; }
 
   @media (max-width: 900px) {
     .lu-nav-toggle { display: flex; }
@@ -348,28 +349,36 @@
     .lu-nav-bar { display: none; }
     .lu-nav-bar.open {
       display: block;
-      background: #0C0A3E;
-      position: absolute;
-      top: 100%;
+      background: #FFFFFF;
+      position: fixed;
+      top: 0;
       left: 0;
       right: 0;
-      z-index: 100;
-      border-top: 1px solid rgba(238,235,211,0.1);
+      bottom: 0;
+      z-index: 9998;
+      overflow-y: auto;
+      border-top: none;
+      padding-top: 80px;
     }
     .lu-nav-bar-inner {
       flex-direction: column;
       align-items: flex-start;
-      padding: 16px 24px 24px;
+      padding: 16px 24px 48px;
       gap: 0;
     }
     .lu-nav-bar-inner > a,
     .lu-nav-bar-inner > .lu-nav-group > span {
-      color: #EEEBD3 !important;
-      padding: 12px 0 !important;
-      font-size: 14px !important;
+      color: #0C0A3E !important;
+      padding: 14px 0 !important;
+      font-size: 16px !important;
+      border-bottom: 1px solid rgba(12,10,62,0.08);
+      display: block;
+      width: 100%;
     }
-    .lu-nav-mega { min-width: auto; left: 0; position: static; box-shadow: none; }
+    .lu-nav-bar-inner > a { border-bottom: 1px solid rgba(12,10,62,0.08); }
+    .lu-nav-mega { min-width: auto; left: 0; position: static; box-shadow: none; border: none; }
     .lu-nav-mega-grid { grid-template-columns: 1fr !important; }
+    .lu-nav-mega-col { border-right: none !important; border-bottom: 1px solid rgba(12,10,62,0.06) !important; padding: 12px 0 !important; }
     .lu-nav-drop {
       position: static;
       box-shadow: none;
@@ -378,7 +387,11 @@
       padding-left: 16px;
       background: transparent;
     }
-    .lu-nav-group:hover .lu-nav-drop { display: block; }
+    .lu-nav-drop > a { color: #A89CED; padding: 10px 0; }
+    .lu-nav-drop > a:hover { color: #0C0A3E; background: transparent; padding-left: 4px; }
+    .lu-nav-mega-col a { color: #A89CED; }
+    .lu-nav-group.mob-open > .lu-nav-drop { display: block; }
+    .lu-nav-group:hover > .lu-nav-drop { display: block; }
     .lu-footer-inner { grid-template-columns: 1fr !important; gap: 32px; }
   }
 </style>
@@ -386,8 +399,23 @@
 <script>
   const toggle = document.getElementById('nav-toggle');
   const bar = document.querySelector('.lu-nav-bar');
+  const nav = toggle?.closest('.lu-nav');
+
   toggle?.addEventListener('click', () => {
     bar?.classList.toggle('open');
-    toggle.closest('.lu-nav')?.classList.toggle('menu-open');
+    nav?.classList.toggle('menu-open');
   });
+
+  // Mobile: click to toggle sub-dropdowns
+  if (window.innerWidth <= 900) {
+    document.querySelectorAll('.lu-nav-group > span').forEach(span => {
+      span.addEventListener('click', () => {
+        const group = span.closest('.lu-nav-group');
+        const isOpen = group?.classList.contains('mob-open');
+        // Close all
+        document.querySelectorAll('.lu-nav-group.mob-open').forEach(g => g.classList.remove('mob-open'));
+        if (!isOpen) group?.classList.add('mob-open');
+      });
+    });
+  }
 </script>

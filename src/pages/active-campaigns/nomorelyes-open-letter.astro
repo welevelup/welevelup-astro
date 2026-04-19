@@ -16,7 +16,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       <span class="ol-label">#NoMoreLyes</span>
       <h1 class="ol-title">Open letter<br/>to L'Oréal</h1>
       <p class="ol-tagline">Are your hair relaxers putting Black women's health at risk?</p>
-      <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="ol-btn-primary" target="_blank" rel="noopener">Sign the open letter</a>
+      <a href="#sign" class="ol-btn-primary">Sign the open letter</a>
     </div>
   </section>
 
@@ -107,7 +107,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   </section>
 
   <!-- SIGN CTA -->
-  <section class="ol-cta">
+  <section class="ol-cta" id="sign">
     <div class="ol-sign-inner">
       <div class="ol-sign-left">
         <h2>Add your name</h2>
@@ -128,9 +128,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       </div>
 
       <div class="ol-sign-right">
-        <form class="ol-form" action="https://formspree.io/f/xdayzrlz" method="POST">
-          <input type="hidden" name="_subject" value="New open letter signature — #NoMoreLyes" />
-          <input type="hidden" name="_next" value="https://welevelup.org/nomorelyes-open-letter-to-loreal/?signed=1" />
+        <form id="ol-sign-form" class="ol-form" action="https://formspree.io/f/xdayzrlz" method="POST">
           <div class="ol-form-row">
             <div class="ol-form-field">
               <label class="ol-form-label" for="ol-first-name">First name</label>
@@ -158,7 +156,38 @@ const { headInner, bodyClass } = extract(homeRaw);
           </button>
           <p class="ol-form-note">Your details are stored securely. We will never share your personal data with third parties.</p>
         </form>
+        <div id="ol-success" class="ol-success" style="display:none;">
+          <div class="ol-success-icon">✓</div>
+          <h3>Thank you for signing!</h3>
+          <p>Your name has been added to the open letter to L'Oréal. Together we're demanding they make hair relaxers safe for Black women.</p>
+        </div>
       </div>
+
+      <script>
+        const form = document.getElementById('ol-sign-form');
+        const success = document.getElementById('ol-success');
+        if (form) {
+          form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = new FormData(form);
+            try {
+              const res = await fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: { Accept: 'application/json' }
+              });
+              if (res.ok) {
+                form.style.display = 'none';
+                success.style.display = 'block';
+              } else {
+                form.querySelector('.ol-form-submit').textContent = 'Something went wrong — please try again';
+              }
+            } catch {
+              form.querySelector('.ol-form-submit').textContent = 'Something went wrong — please try again';
+            }
+          });
+        }
+      </script>
     </div>
   </section>
 
@@ -662,6 +691,36 @@ const { headInner, bodyClass } = extract(homeRaw);
     color: rgba(12,10,62,0.7);
   }
   .ol-refs-list em { font-style: italic; }
+
+  /* SUCCESS STATE */
+  .ol-success {
+    background: #fff;
+    padding: 48px 36px;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .ol-success-icon {
+    width: 56px;
+    height: 56px;
+    background: #CCFF33;
+    color: #0C0A3E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 700 24px/1 'DM Sans', sans-serif;
+    margin: 0 auto 24px;
+  }
+  .ol-success h3 {
+    font: 700 24px/1.2 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+    margin: 0 0 12px !important;
+  }
+  .ol-success p {
+    font: 400 16px/1.6 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.7) !important;
+    margin: 0 !important;
+  }
 
   /* HAIR STORIES */
   .ol-hs-inner { max-width: 1100px; margin: 0 auto; padding: 0; }

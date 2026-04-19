@@ -476,6 +476,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     @media (max-width: 768px) {
+      .dp-hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+      .dp-hero-inner { padding: 0 20px; }
       .dp-hero { padding: 80px 24px 60px; }
       .dp-tl-node { grid-template-columns: 1fr; }
       .dp-tl-year { color: #0C0A3E !important; grid-column: 1; grid-row: 1; margin-bottom: 8px; }

@@ -761,6 +761,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     @media (max-width: 768px) {
+      .dp-hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+      .dp-hero-inner { padding: 0 20px; }
       .dp-hero { padding: 80px 24px 60px; }
       .dp-stats-inner { grid-template-columns: repeat(2, 1fr); }
       .dp-stat { border-bottom: 1px solid rgba(12,10,62,0.1); }

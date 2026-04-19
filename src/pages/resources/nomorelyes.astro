@@ -43,6 +43,42 @@ const { headInner, bodyClass } = extract(homeRaw);
       <button class="nr-pill" data-filter="regulation" aria-pressed="false">Regulation Information</button>
       <button class="nr-pill" data-filter="video" aria-pressed="false">Video</button>
       <button class="nr-pill" data-filter="organisation" aria-pressed="false">Organisations</button>
+      <select class="nr-platform-select" id="nr-platform" aria-label="Filter by platform">
+        <option value="all">All Platforms</option>
+        <option value="about-lawsuits">About Lawsuits</option>
+        <option value="american-journal-epidemiology">American Journal of Epidemiology</option>
+        <option value="annals-otology">Annals of Otology Rhinology &amp; Laryngology</option>
+        <option value="bbc-newsbeat">BBC Newsbeat</option>
+        <option value="beauty-packaging">Beauty Packaging</option>
+        <option value="breast-cancer-prevention-partners">Breast Cancer Prevention Partners</option>
+        <option value="business-telegraph">Business Telegraph</option>
+        <option value="carcinogenesis">Carcinogenesis Volume 42</option>
+        <option value="cnn">CNN</option>
+        <option value="cosmetics-design-europe">Cosmetics Design Europe</option>
+        <option value="ctpa">CTPA</option>
+        <option value="evening-standard">Evening Standard</option>
+        <option value="fox-soul">Fox Soul</option>
+        <option value="gal-dem">Gal-dem</option>
+        <option value="glamour-magazine">Glamour Magazine</option>
+        <option value="gov-uk">Gov UK</option>
+        <option value="headline-global-news">Headline &amp; Global News</option>
+        <option value="independent">Independent</option>
+        <option value="journal-national-cancer-institute">Journal of the National Cancer Institute</option>
+        <option value="journal-pediatric-gastroenterology">Journal of Pediatric Gastroenterology and Nutrition</option>
+        <option value="lawsuit-information-center">Lawsuit Information Center</option>
+        <option value="medscape">Medscape</option>
+        <option value="news-watch-tv">News Watch TV</option>
+        <option value="newsweek">Newsweek</option>
+        <option value="portugal-posts-english">Portugal Posts English</option>
+        <option value="refinery29">Refinery29</option>
+        <option value="retail-bum">Retail Bum</option>
+        <option value="reuters">Reuters</option>
+        <option value="the-examination">The Examination</option>
+        <option value="the-guardian">The Guardian</option>
+        <option value="the-voice">The Voice</option>
+        <option value="time-news">Time News</option>
+        <option value="uk-parliament">UK Parliament</option>
+      </select>
     </div>
   </section>
 
@@ -339,7 +375,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.reuters.com/investigates/special-report/loreal-hair-relaxers-litigation/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="regulation">
+          <li class="nr-resource-item" data-tags="regulation" data-source="gov-uk">
             <span class="nr-item-num">25</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Regulation</span><span class="nr-topic">CTPA</span></div>
@@ -350,7 +386,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="https://www.gov.uk/government/publications/cosmetic-products-enforcement-regulations-2013/regulation-20091223-and-the-cosmetic-products-enforcement-regulations-2013-great-britain" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="regulation">
+          <li class="nr-resource-item" data-tags="regulation" data-source="ctpa">
             <span class="nr-item-num">26</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">CTPA</span><span class="nr-topic">Regulation</span></div>
@@ -361,7 +397,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="https://www.ctpa.org.uk/news/ctpa-welcomes-new-chair-and-vice-chair-6850" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions">
+          <li class="nr-resource-item" data-tags="mentions" data-source="the-guardian">
             <span class="nr-item-num">27</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Black Women And Beauty</span><span class="nr-topic">Racial Trauma</span></div>
@@ -372,7 +408,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.theguardian.com/world/2022/dec/12/black-women-hair-relaxers-chemicals-cancer-risk" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine">
             <span class="nr-item-num">28</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Racial Trauma</span><span class="nr-topic">Wellness</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -383,7 +419,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/black-women-wellness-trauma-racism" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions">
+          <li class="nr-resource-item" data-tags="mentions" data-source="newsweek">
             <span class="nr-item-num">29</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Cancer</span></div>
@@ -394,7 +430,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.newsweek.com/newsweek-com-hair-giving-you-cancer-1761089" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29">
             <span class="nr-item-num">30</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Cancer</span></div>
@@ -405,7 +441,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/2022/11/11194728/hair-relaxers-chemical-straightener-cancer-risk" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions">
+          <li class="nr-resource-item" data-tags="mentions" data-source="cnn">
             <span class="nr-item-num">31</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Lawsuits</span><span class="nr-topic">Cancer</span></div>
@@ -416,7 +452,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://edition.cnn.com/2022/10/24/health/hair-straightening-products-lawsuit/index.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="mentions">
+          <li class="nr-resource-item" data-tags="mentions" data-source="cnn">
             <span class="nr-item-num">32</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -427,7 +463,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://edition.cnn.com/2022/10/18/health/hair-straightening-products-uterine-cancer-study/index.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic focused">
+          <li class="nr-resource-item" data-tags="academic focused" data-source="journal-national-cancer-institute">
             <span class="nr-item-num">33</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Uterine Cancer</span><span class="nr-topic">Free To Read</span></div>
@@ -438,7 +474,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093/jnci/djac165" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine">
             <span class="nr-item-num">34</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Relaxer Boxes</span><span class="nr-topic">Beauty</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -449,7 +485,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/relaxer-box-twitter-thread-black-beauty-standards" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29">
             <span class="nr-item-num">35</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Relaxer Boxes</span></div>
@@ -460,7 +496,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/black-models-hair-relaxer-box-natural-hair" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="refinery29">
             <span class="nr-item-num">36</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Wellness</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -471,7 +507,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.refinery29.com/en-us/hair-relaxer-healthy-black-women-2" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused">
+          <li class="nr-resource-item" data-tags="focused" data-source="gal-dem">
             <span class="nr-item-num">37</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Lye</span><span class="nr-topic">Breast Cancer</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -482,7 +518,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://gal-dem.com/nomorelyes-campaign-to-end-toxic-hair-products-marketed-towards-black-women/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="glamour-magazine">
             <span class="nr-item-num">38</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Hair Discrimination</span></div>
@@ -493,7 +529,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.glamourmagazine.co.uk/article/afro-hair-bias-hair-discrimination" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic focused">
+          <li class="nr-resource-item" data-tags="academic focused" data-source="carcinogenesis">
             <span class="nr-item-num">39</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Breast Cancer</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -504,7 +540,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093/carcin/bgab041" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-campaigns">
+          <li class="nr-resource-item" data-tags="other-campaigns" data-source="gal-dem">
             <span class="nr-item-num">40</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Hair Discrimination</span></div>
@@ -515,7 +551,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://gal-dem.com/the-halo-code-hair-discrimination/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="other-articles">
+          <li class="nr-resource-item" data-tags="other-articles" data-source="gal-dem">
             <span class="nr-item-num">41</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Black Women And Beauty</span><span class="nr-topic">Beauty</span></div>
@@ -526,7 +562,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://gal-dem.com/hair-relaxers-cosmetic-products-harming-black-women/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="focused">
+          <li class="nr-resource-item" data-tags="focused" data-source="breast-cancer-prevention-partners">
             <span class="nr-item-num">42</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">L'Oréal</span><span class="nr-topic">Cancer</span></div>
@@ -537,7 +573,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://www.bcpp.org/resource/loreal-no-cancer-chemicals-cosmetics/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic focused">
+          <li class="nr-resource-item" data-tags="academic focused" data-source="american-journal-epidemiology">
             <span class="nr-item-num">43</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">#NoMoreLyes</span><span class="nr-topic">Fibroids</span><span class="nr-topic">Black Women And Beauty</span></div>
@@ -548,7 +584,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1093%2Faje%2Fkwr351" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic other-articles">
+          <li class="nr-resource-item" data-tags="academic other-articles" data-source="journal-pediatric-gastroenterology">
             <span class="nr-item-num">44</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Ingestion</span><span class="nr-topic">Children</span></div>
@@ -559,7 +595,7 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1097/00005176-200301000-00023" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="academic other-articles">
+          <li class="nr-resource-item" data-tags="academic other-articles" data-source="annals-otology">
             <span class="nr-item-num">45</span>
             <div class="nr-item-body">
               <div class="nr-item-tags"><span class="nr-topic">Ingestion</span></div>
@@ -609,6 +645,24 @@ const { headInner, bodyClass } = extract(homeRaw);
   .nr-pill { font: 700 11px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.07em; color: #0C0A3E; background: transparent; border: 1.5px solid #0C0A3E; border-radius: 100px; padding: 9px 16px; cursor: pointer; transition: background 0.15s, color 0.15s; }
   .nr-pill:hover { background: rgba(12,10,62,0.07); }
   .nr-pill--active { background: #0C0A3E; color: #CCFF33; border-color: #0C0A3E; }
+  .nr-platform-select {
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #0C0A3E;
+    background: transparent;
+    border: 1.5px solid #0C0A3E;
+    border-radius: 100px;
+    padding: 9px 20px 9px 16px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230C0A3E' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+  }
+  .nr-platform-select:focus { outline: 2px solid #A89CED; outline-offset: 2px; }
 
   .nr-body { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.08); padding: 72px 24px 96px; }
   .nr-body-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 260px 1fr; gap: 64px; align-items: start; }
@@ -677,20 +731,36 @@ const { headInner, bodyClass } = extract(homeRaw);
 </style>
 
 <script>
-  (function () {
+  (() => {
     const pills = document.querySelectorAll<HTMLButtonElement>('.nr-pill');
-    const items = document.querySelectorAll<HTMLLIElement>('.nr-resource-item');
-    function setFilter(tag: string) {
-      pills.forEach((p) => {
-        const active = p.dataset.filter === tag;
-        p.classList.toggle('nr-pill--active', active);
-        p.setAttribute('aria-pressed', String(active));
-      });
-      items.forEach((item) => {
+    const items = document.querySelectorAll<HTMLElement>('.nr-resource-item');
+    const platformSelect = document.getElementById('nr-platform') as HTMLSelectElement;
+    let activeTag = 'all';
+    let activePlatform = 'all';
+
+    function applyFilters() {
+      items.forEach(item => {
         const tags = (item.dataset.tags || '').split(' ');
-        tags.includes(tag) || tag === 'all' ? item.removeAttribute('hidden') : item.setAttribute('hidden', '');
+        const source = item.dataset.source || '';
+        const tagMatch = activeTag === 'all' || tags.includes(activeTag);
+        const platformMatch = activePlatform === 'all' || source === activePlatform;
+        item.style.display = tagMatch && platformMatch ? '' : 'none';
       });
     }
-    pills.forEach((p) => p.addEventListener('click', () => setFilter(p.dataset.filter ?? 'all')));
+
+    pills.forEach(p => {
+      p.addEventListener('click', () => {
+        pills.forEach(x => { x.classList.remove('nr-pill--active'); x.setAttribute('aria-pressed', 'false'); });
+        p.classList.add('nr-pill--active');
+        p.setAttribute('aria-pressed', 'true');
+        activeTag = p.dataset.filter || 'all';
+        applyFilters();
+      });
+    });
+
+    platformSelect?.addEventListener('change', () => {
+      activePlatform = platformSelect.value;
+      applyFilters();
+    });
   })();
 </script>

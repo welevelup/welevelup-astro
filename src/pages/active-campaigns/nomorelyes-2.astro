@@ -855,5 +855,14 @@ const { headInner, bodyClass } = extract(homeRaw);
     .dp-section--navy h2, .dp-section--navy h3 { color: #CCFF33 !important; }
     .dp-section--navy strong { color: #EEEBD3 !important; }
     .dp-section--navy a { color: #CCFF33 !important; text-decoration: none; }
+    @media (max-width: 480px) {
+      .dp-section { padding: 48px 16px !important; }
+      .dp-content h2 { font-size: 28px !important; }
+      .dp-stats-inner { grid-template-columns: 1fr 1fr !important; gap: 16px !important; }
+      .dp-hero { padding: 60px 16px 40px !important; }
+      .dp-timeline { padding-left: 32px !important; }
+      .dp-cta { padding: 48px 16px !important; }
+      .dp-cta h2 { font-size: 28px !important; }
+    }
   </style>
 </Layout>

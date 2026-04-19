@@ -6,7 +6,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Finish Holloway Women's Centre | Level Up"
+  description="Holloway Women's Centre is built but standing empty. Tell Islington Council to keep their promise and deliver vital support for women facing trauma, violence, poverty and homelessness."
+>
   <Nav />
 
   <!-- HERO -->

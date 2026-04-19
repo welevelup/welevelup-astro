@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What We Are Proud Of — 3 Proposals</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', system-ui, sans-serif; background: #f4f4f0; color: #0C0A3E; }
+
+  .page-header {
+    background: #0C0A3E;
+    padding: 36px 32px 28px;
+    text-align: center;
+  }
+  .page-header h1 {
+    font-size: 13px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.14em; color: #A89CED; margin-bottom: 10px;
+  }
+  .page-header h2 {
+    font-size: clamp(24px, 4vw, 40px); font-weight: 900;
+    color: #CCFF33; letter-spacing: -0.03em; line-height: 1;
+    margin-bottom: 10px;
+  }
+  .page-header p {
+    font-size: 14px; color: rgba(238,235,211,0.6);
+    max-width: 560px; margin: 0 auto;
+  }
+
+  .proposals {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .proposal {
+    border-right: 1px solid rgba(12,10,62,0.1);
+    cursor: pointer;
+    transition: transform 0.15s;
+    position: relative;
+  }
+  .proposal:last-child { border-right: none; }
+  .proposal:hover { z-index: 2; }
+  .proposal.selected::after {
+    content: '✓ SELECTED';
+    position: absolute; top: 12px; right: 12px;
+    background: #CCFF33; color: #0C0A3E;
+    font: 800 10px/1 'DM Sans'; letter-spacing: 0.1em;
+    padding: 6px 10px;
+    z-index: 10;
+  }
+
+  .proposal-label {
+    padding: 14px 24px;
+    font: 800 11px/1 'DM Sans';
+    text-transform: uppercase; letter-spacing: 0.14em;
+    color: #fff;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .prop-a .proposal-label { background: #0C0A3E; }
+  .prop-b .proposal-label { background: #A89CED; }
+  .prop-c .proposal-label { background: #2E1A6E; }
+
+  .proposal-label .badge {
+    background: #CCFF33; color: #0C0A3E;
+    font: 900 10px/1 'DM Sans'; letter-spacing: 0.1em;
+    padding: 4px 8px;
+  }
+
+  .proposal-name {
+    font-size: 13px; opacity: 0.8;
+  }
+
+  /* ── PROPOSAL A: Numbered impact cards ── */
+  .prop-a .preview {
+    background: #EEEBD3;
+    padding: 28px;
+  }
+
+  .pa-hero {
+    background: #0C0A3E;
+    padding: 28px;
+    margin: -28px -28px 24px -28px;
+  }
+  .pa-hero-title {
+    font: 900 clamp(20px, 4vw, 32px)/0.9 'DM Sans';
+    color: #CCFF33; letter-spacing: -0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .pa-hero-sub {
+    font: 400 12px/1.5 'DM Sans';
+    color: rgba(238,235,211,0.55);
+  }
+
+  .pa-card {
+    background: #fff;
+    padding: 18px;
+    margin-bottom: 10px;
+    display: flex; gap: 14px; align-items: flex-start;
+    border-left: 3px solid #CCFF33;
+  }
+  .pa-num {
+    font: 900 28px/1 'DM Sans'; color: rgba(12,10,62,0.12);
+    letter-spacing: -0.04em; flex-shrink: 0; min-width: 32px;
+  }
+  .pa-content {}
+  .pa-title {
+    font: 800 11px/1.3 'DM Sans'; color: #0C0A3E;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .pa-pills {
+    display: flex; gap: 4px; flex-wrap: wrap;
+  }
+  .pa-pill {
+    font: 700 9px/1 'DM Sans'; letter-spacing: 0.07em;
+    text-transform: uppercase; padding: 3px 7px;
+    background: rgba(12,10,62,0.07); color: rgba(12,10,62,0.5);
+  }
+  .pa-pill.impact { background: #CCFF33; color: #0C0A3E; }
+  .pa-more {
+    text-align: center; padding: 8px;
+    font: 700 11px/1 'DM Sans'; color: rgba(12,10,62,0.3);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── PROPOSAL B: Bento magazine grid ── */
+  .prop-b .preview {
+    background: #0C0A3E;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .pb-hero {
+    padding: 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .pb-tag {
+    font: 700 10px/1 'DM Sans'; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A89CED; margin-bottom: 10px;
+  }
+  .pb-title {
+    font: 900 clamp(18px,3vw,28px)/0.9 'DM Sans';
+    color: #CCFF33; text-transform: uppercase;
+    letter-spacing: -0.03em; margin-bottom: 8px;
+  }
+  .pb-sub {
+    font: 400 11px/1.55 'DM Sans';
+    color: rgba(238,235,211,0.5); max-width: 280px;
+  }
+
+  .pb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .pb-cell {
+    padding: 16px 18px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    position: relative; overflow: hidden;
+  }
+  .pb-cell:nth-child(even) { border-right: none; }
+  .pb-cell--featured {
+    grid-column: 1 / 3;
+    background: #1a1450;
+    display: flex; gap: 16px; align-items: center;
+  }
+  .pb-cell--featured img {
+    width: 80px; height: 80px; object-fit: cover; flex-shrink: 0;
+  }
+  .pb-cell-num {
+    font: 900 32px/1 'DM Sans';
+    color: rgba(204,255,51,0.12);
+    position: absolute; top: 10px; right: 12px;
+    letter-spacing: -0.04em;
+  }
+  .pb-cell-tag {
+    font: 700 9px/1 'DM Sans'; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #A89CED;
+    margin-bottom: 6px;
+  }
+  .pb-cell-title {
+    font: 800 11px/1.3 'DM Sans'; color: #EEEBD3;
+    text-transform: uppercase; letter-spacing: 0.02em;
+    margin-bottom: 8px;
+  }
+  .pb-cell-impact {
+    font: 700 10px/1.4 'DM Sans'; color: #CCFF33;
+  }
+
+  /* ── PROPOSAL C: Accordion / editorial list ── */
+  .prop-c .preview {
+    background: #fff;
+    padding: 0;
+  }
+
+  .pc-hero {
+    background: #2E1A6E;
+    padding: 28px;
+  }
+  .pc-hero-label {
+    font: 700 10px/1 'DM Sans'; letter-spacing: 0.14em;
+    text-transform: uppercase; color: #A89CED;
+    margin-bottom: 12px;
+  }
+  .pc-hero-title {
+    font: 900 clamp(20px, 4vw, 32px)/0.9 'DM Sans';
+    text-transform: uppercase; color: #EEEBD3;
+    letter-spacing: -0.03em; margin-bottom: 6px;
+  }
+  .pc-hero-title span { color: #CCFF33; }
+  .pc-hero-sub {
+    font: 400 11px/1.5 'DM Sans'; color: rgba(238,235,211,0.5);
+  }
+
+  .pc-list {}
+  .pc-item {
+    border-bottom: 1px solid rgba(12,10,62,0.08);
+    padding: 0;
+  }
+  .pc-item-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 20px;
+    cursor: pointer;
+  }
+  .pc-item-num {
+    font: 900 20px/1 'DM Sans'; color: rgba(12,10,62,0.1);
+    letter-spacing: -0.04em; min-width: 28px;
+  }
+  .pc-item-title {
+    font: 800 11px/1.3 'DM Sans'; color: #0C0A3E;
+    text-transform: uppercase; letter-spacing: 0.03em; flex: 1;
+  }
+  .pc-item-tag {
+    font: 700 9px/1 'DM Sans'; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 8px;
+    background: #CCFF33; color: #0C0A3E;
+    flex-shrink: 0;
+  }
+  .pc-item-tag.win { background: #CCFF33; }
+  .pc-item-tag.ongoing { background: #A89CED; color: #fff; }
+
+  .pc-item-body {
+    padding: 0 20px 16px 60px;
+    display: none;
+  }
+  .pc-item.open .pc-item-body { display: block; }
+  .pc-item.open { background: #EEEBD3; }
+  .pc-item-body-row {
+    font: 400 11px/1.55 'DM Sans'; color: rgba(12,10,62,0.7);
+    margin-bottom: 8px;
+  }
+  .pc-item-body-row strong { color: #0C0A3E; font-weight: 700; }
+  .pc-img {
+    width: 100%; max-height: 80px; object-fit: cover;
+    margin-bottom: 10px;
+  }
+
+  .proposals-footer {
+    background: #0C0A3E;
+    padding: 20px 32px;
+    text-align: center;
+  }
+  .proposals-footer p {
+    font: 400 13px/1.5 'DM Sans'; color: rgba(238,235,211,0.5);
+  }
+  .proposals-footer strong { color: #CCFF33; }
+
+  /* select overlay */
+  .proposal .select-btn {
+    display: block; width: 100%;
+    padding: 14px;
+    background: #0C0A3E; color: #CCFF33;
+    font: 800 11px/1 'DM Sans'; text-transform: uppercase;
+    letter-spacing: 0.1em; border: none; cursor: pointer;
+    text-align: center;
+    transition: background 0.15s;
+  }
+  .proposal .select-btn:hover { background: #CCFF33; color: #0C0A3E; }
+  .proposal.selected .select-btn { background: #CCFF33; color: #0C0A3E; }
+
+  @media (max-width: 900px) {
+    .proposals { grid-template-columns: 1fr; }
+    .proposal { border-right: none; border-bottom: 1px solid rgba(12,10,62,0.1); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Level Up — Design Proposals</h1>
+  <h2>What We Are Proud Of</h2>
+  <p>Three distinct directions for redesigning the campaign achievements page. Click a proposal to select it.</p>
+</div>
+
+<div class="proposals">
+
+  <!-- ══ PROPOSAL A ══ -->
+  <div class="proposal prop-a" onclick="selectProposal(this, 'A')" data-choice="A">
+    <div class="proposal-label">
+      <span class="badge">A</span>
+      <span class="proposal-name">Numbered Impact Cards</span>
+    </div>
+    <div class="preview">
+
+      <div class="pa-hero">
+        <div class="pa-hero-title">What We<br/>Are Proud Of</div>
+        <div class="pa-hero-sub">10 campaigns. Real change.</div>
+      </div>
+
+      <div class="pa-card">
+        <div class="pa-num">01</div>
+        <div class="pa-content">
+          <div class="pa-title">Premier League Consent Training</div>
+          <div class="pa-pills">
+            <span class="pa-pill">Issue</span>
+            <span class="pa-pill">Intervention</span>
+            <span class="pa-pill impact">✓ Won</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pa-card">
+        <div class="pa-num">02</div>
+        <div class="pa-content">
+          <div class="pa-title">ITV Love Island Plastic Surgery Ads</div>
+          <div class="pa-pills">
+            <span class="pa-pill">Issue</span>
+            <span class="pa-pill">Intervention</span>
+            <span class="pa-pill impact">✓ Won</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pa-card">
+        <div class="pa-num">03</div>
+        <div class="pa-content">
+          <div class="pa-title">Trans Rights Solidarity Portal</div>
+          <div class="pa-pills">
+            <span class="pa-pill">Issue</span>
+            <span class="pa-pill">Intervention</span>
+            <span class="pa-pill impact">✓ Won</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pa-more">+ 7 more campaigns ↓</div>
+    </div>
+    <button class="select-btn">Select Proposal A</button>
+  </div>
+
+  <!-- ══ PROPOSAL B ══ -->
+  <div class="proposal prop-b" onclick="selectProposal(this, 'B')" data-choice="B">
+    <div class="proposal-label" style="background:#A89CED; color:#0C0A3E;">
+      <span class="badge">B</span>
+      <span class="proposal-name">Bento Magazine Grid</span>
+    </div>
+    <div class="preview">
+
+      <div class="pb-hero">
+        <div class="pb-tag">Level Up — Impact</div>
+        <div class="pb-title">What We<br/>Are Proud Of</div>
+        <div class="pb-sub">Ten campaigns that moved the needle on gender justice in the UK.</div>
+      </div>
+
+      <div class="pb-grid">
+        <div class="pb-cell pb-cell--featured">
+          <img src="https://welevelup.org/wp-content/uploads/2025/07/Artboard-1-copy-10-1-1024x1024.webp" alt="" />
+          <div>
+            <div class="pb-cell-tag">Featured Campaign</div>
+            <div class="pb-cell-title">Premier League Consent Training</div>
+            <div class="pb-cell-impact">✓ Mandatory training across all clubs</div>
+          </div>
+          <div class="pb-cell-num">01</div>
+        </div>
+
+        <div class="pb-cell">
+          <div class="pb-cell-num">02</div>
+          <div class="pb-cell-tag">TV</div>
+          <div class="pb-cell-title">ITV Love Island Ads</div>
+          <div class="pb-cell-impact" style="color:#CCFF33; font-size:10px;">✓ CEO admitted fault</div>
+        </div>
+
+        <div class="pb-cell">
+          <div class="pb-cell-num">03</div>
+          <div class="pb-cell-tag">Policy</div>
+          <div class="pb-cell-title">Trans Rights Consultation</div>
+          <div class="pb-cell-impact" style="color:#CCFF33; font-size:10px;">✓ 7,000+ responses</div>
+        </div>
+
+        <div class="pb-cell">
+          <div class="pb-cell-num">04</div>
+          <div class="pb-cell-tag">Press</div>
+          <div class="pb-cell-title">Domestic Abuse Reporting</div>
+          <div class="pb-cell-impact" style="color:#CCFF33; font-size:10px;">✓ Both regulators agreed</div>
+        </div>
+
+        <div class="pb-cell">
+          <div class="pb-cell-num">05</div>
+          <div class="pb-cell-tag">Tech</div>
+          <div class="pb-cell-title">Facebook Harassment</div>
+          <div class="pb-cell-impact" style="color:#A89CED; font-size:10px;">→ Executive meetings secured</div>
+        </div>
+      </div>
+
+    </div>
+    <button class="select-btn">Select Proposal B</button>
+  </div>
+
+  <!-- ══ PROPOSAL C ══ -->
+  <div class="proposal prop-c" onclick="selectProposal(this, 'C')" data-choice="C">
+    <div class="proposal-label" style="background:#2E1A6E;">
+      <span class="badge">C</span>
+      <span class="proposal-name">Expandable Story Timeline</span>
+    </div>
+    <div class="preview">
+
+      <div class="pc-hero">
+        <div class="pc-hero-label">Our Impact</div>
+        <div class="pc-hero-title">What We Are <span>Proud Of</span></div>
+        <div class="pc-hero-sub">Tap any campaign to read the full story — issue, intervention, and impact.</div>
+      </div>
+
+      <div class="pc-list">
+
+        <div class="pc-item open">
+          <div class="pc-item-header">
+            <div class="pc-item-num">01</div>
+            <div class="pc-item-title">Premier League Consent Training</div>
+            <div class="pc-item-tag win">✓ Win</div>
+          </div>
+          <div class="pc-item-body">
+            <img src="https://welevelup.org/wp-content/uploads/2025/07/Artboard-1-copy-10-1-1024x1024.webp" alt="" class="pc-img" />
+            <div class="pc-item-body-row"><strong>Issue:</strong> Football clubs silent on gender-based violence despite charges against players.</div>
+            <div class="pc-item-body-row"><strong>Impact:</strong> Premier League committed to mandatory consent training for all players and staff.</div>
+          </div>
+        </div>
+
+        <div class="pc-item">
+          <div class="pc-item-header">
+            <div class="pc-item-num">02</div>
+            <div class="pc-item-title">ITV Love Island Plastic Surgery Ads</div>
+            <div class="pc-item-tag win">✓ Win</div>
+          </div>
+          <div class="pc-item-body"></div>
+        </div>
+
+        <div class="pc-item">
+          <div class="pc-item-header">
+            <div class="pc-item-num">03</div>
+            <div class="pc-item-title">Trans Rights Solidarity Portal</div>
+            <div class="pc-item-tag win">✓ Win</div>
+          </div>
+          <div class="pc-item-body"></div>
+        </div>
+
+        <div class="pc-item">
+          <div class="pc-item-header">
+            <div class="pc-item-num">04</div>
+            <div class="pc-item-title">Domestic Abuse Press Guidelines</div>
+            <div class="pc-item-tag win">✓ Win</div>
+          </div>
+          <div class="pc-item-body"></div>
+        </div>
+
+        <div class="pc-item">
+          <div class="pc-item-header">
+            <div class="pc-item-num">05</div>
+            <div class="pc-item-title">Facebook Harassment Campaign</div>
+            <div class="pc-item-tag ongoing">Ongoing</div>
+          </div>
+          <div class="pc-item-body"></div>
+        </div>
+
+        <div style="padding: 12px 20px; text-align:center; font: 700 11px/1 'DM Sans'; color: rgba(12,10,62,0.3); letter-spacing:0.05em; border-top: 1px solid rgba(12,10,62,0.08);">+ 5 more campaigns</div>
+      </div>
+
+    </div>
+    <button class="select-btn">Select Proposal C</button>
+  </div>
+
+</div>
+
+<div class="proposals-footer">
+  <p>All three use the Level Up design tokens: <strong>Navy #0C0A3E · Lime #CCFF33 · Purple #A89CED · Cream #EEEBD3</strong></p>
+</div>
+
+<script>
+  function selectProposal(el, choice) {
+    document.querySelectorAll('.proposal').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    // Record selection
+    if (window.__recordChoice) window.__recordChoice(choice, 'Proposal ' + choice);
+  }
+</script>
+
+</body>
+</html>

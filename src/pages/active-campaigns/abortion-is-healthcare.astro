@@ -11,7 +11,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Abortion is Healthcare | Level Up"
+  description="It's time the law treats abortion as healthcare. Level Up campaigns for full decriminalisation of abortion in England and Wales."
+>
   <Nav />
 
   <!-- HERO — plain navy (no video for this campaign) -->
@@ -714,7 +719,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     @media (max-width: 768px) {
-      .dp-hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
+      .dp-hero { min-height: auto; display: flex; flex-direction: column; justify-content: center; }
       .dp-hero-inner { padding: 0 20px; }
       .dp-hero { padding: 80px 24px 60px; }
       .dp-stats-inner { grid-template-columns: repeat(2, 1fr); }
@@ -730,6 +735,12 @@ const { headInner, bodyClass } = extract(homeRaw);
       .dp-press-item { text-decoration: none !important; flex-direction: column; align-items: flex-start; gap: 8px; }
       .dp-final-cta-buttons { flex-direction: column; align-items: center; }
       .dp-related-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .dp-stat-num { font-size: clamp(28px, 8vw, 40px); }
+    }
+    @media (max-width: 480px) {
+      .dp-stats-inner { grid-template-columns: 1fr; }
     }
       .dp-section--navy * { color: rgba(238,235,211,0.85) !important; }
     .dp-section--navy h2, .dp-section--navy h3 { color: #CCFF33 !important; }

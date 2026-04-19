@@ -12,7 +12,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Abortion Stories | Memory Space | Level Up"
+  description="Real abortion experiences told anonymously. These stories push back against shame and silence — because abortion is healthcare and your story belongs to you."
+>
   <Nav />
 
   <!-- ── HERO ─────────────────────────────────────────── -->

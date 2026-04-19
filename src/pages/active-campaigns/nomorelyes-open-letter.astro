@@ -6,7 +6,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Sign the Open Letter to L'Oréal | #NoMoreLyes | Level Up"
+  description="Add your name to the open letter calling on L'Oréal to make hair relaxers safe or remove them from shelves. Signed by MPs, campaigners and 5,000+ supporters."
+>
   <Nav />
 
   <!-- HERO -->
@@ -793,9 +798,15 @@ const { headInner, bodyClass } = extract(homeRaw);
     .ol-demand { grid-template-columns: 56px 1fr; }
     .ol-demand-num { font-size: 36px; }
   }
+  @media (max-width: 640px) {
+    .ol-stat-num { font-size: clamp(28px, 8vw, 40px); }
+  }
   @media (max-width: 480px) {
     .ol-stats-inner { grid-template-columns: 1fr; }
     .ol-demand { grid-template-columns: 1fr; }
     .ol-demand-num { font-size: 32px; }
+  }
+  @media (max-width: 360px) {
+    .ol-stats-inner { grid-template-columns: 1fr; }
   }
 </style>

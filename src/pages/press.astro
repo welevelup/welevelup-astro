@@ -6,7 +6,12 @@ import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Press | Level Up"
+  description="Level Up in the press. Media coverage of our feminist campaigns for gender justice, from #NoMoreLyes to pregnancy in prison and beyond."
+>
   <Nav />
 
   <script type="application/ld+json">
@@ -1730,7 +1735,7 @@ In an</p>
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
       gap: 1.5rem;
     }
     .pc-card {

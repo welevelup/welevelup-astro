@@ -1,0 +1,480 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1776592057768,
+  "projectRoot": "/Users/crojasu/Desktop/levelup/levelup-astro",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "astro",
+        "version": "5.7.0",
+        "category": "fullstack"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "astro dev",
+      "build": "astro build",
+      "preview": "astro preview",
+      "astro": "astro"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": "type-based"
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "public",
+      "scripts",
+      "src"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "_archive": {
+      "path": "_archive",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1776592057753,
+      "keyFiles": []
+    },
+    "api": {
+      "path": "api",
+      "purpose": "API routes",
+      "fileCount": 2,
+      "lastAccessed": 1776592057754,
+      "keyFiles": [
+        "create-donation.ts",
+        "mollie-webhook.ts"
+      ]
+    },
+    "designs": {
+      "path": "designs",
+      "purpose": null,
+      "fileCount": 12,
+      "lastAccessed": 1776592057756,
+      "keyFiles": [
+        "levelup-E-protest-zine.html",
+        "levelup-F-refined-dark.html",
+        "levelup-G-full-yellow (1).html",
+        "levelup-G-full-yellow.html",
+        "levelup-L-bold-stacks (1).html"
+      ]
+    },
+    "dist": {
+      "path": "dist",
+      "purpose": "Distribution/build output",
+      "fileCount": 5,
+      "lastAccessed": 1776592057757,
+      "keyFiles": [
+        "_redirects",
+        "index.html",
+        "robots.txt",
+        "sitemap-0.xml",
+        "sitemap-index.xml"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 2,
+      "lastAccessed": 1776592057757,
+      "keyFiles": [
+        "_redirects",
+        "robots.txt"
+      ]
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 1,
+      "lastAccessed": 1776592057758,
+      "keyFiles": [
+        "update-legacy-webhooks.ts"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 1,
+      "lastAccessed": 1776592057758,
+      "keyFiles": [
+        "content.config.ts"
+      ]
+    },
+    "public/public": {
+      "path": "public/public",
+      "purpose": "Public files",
+      "fileCount": 0,
+      "lastAccessed": 1776592057759,
+      "keyFiles": []
+    },
+    "src/components": {
+      "path": "src/components",
+      "purpose": "UI components",
+      "fileCount": 2,
+      "lastAccessed": 1776592057760,
+      "keyFiles": [
+        "Footer.astro",
+        "Nav.astro"
+      ]
+    },
+    "src/lib": {
+      "path": "src/lib",
+      "purpose": "Library code",
+      "fileCount": 2,
+      "lastAccessed": 1776592057761,
+      "keyFiles": [
+        "cloneManifest.ts",
+        "extractHtml.ts"
+      ]
+    },
+    "src/pages": {
+      "path": "src/pages",
+      "purpose": "Page components",
+      "fileCount": 7,
+      "lastAccessed": 1776592057761,
+      "keyFiles": [
+        "[...slug].astro",
+        "blog.astro",
+        "contact.astro"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "src/pages/resources/nomorelyes.astro",
+      "accessCount": 169,
+      "lastAccessed": 1776606383523,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Nav.astro",
+      "accessCount": 46,
+      "lastAccessed": 1776612865605,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/press.astro",
+      "accessCount": 34,
+      "lastAccessed": 1776614022183,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/memory.astro",
+      "accessCount": 32,
+      "lastAccessed": 1776613971820,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "accessCount": 29,
+      "lastAccessed": 1776613969189,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns/nomorelyes-2.astro",
+      "accessCount": 28,
+      "lastAccessed": 1776614023937,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns/pregnancy-in-prison.astro",
+      "accessCount": 27,
+      "lastAccessed": 1776614003552,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/memory/stories.astro",
+      "accessCount": 24,
+      "lastAccessed": 1776612857479,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/memory/abortion-stories.astro",
+      "accessCount": 24,
+      "lastAccessed": 1776614013955,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/resources/ddw.astro",
+      "accessCount": 23,
+      "lastAccessed": 1776607024533,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/memory/solidarity.astro",
+      "accessCount": 23,
+      "lastAccessed": 1776612767452,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns/media-guidelines-domestic-abuse.astro",
+      "accessCount": 21,
+      "lastAccessed": 1776614019726,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns/abortion-is-healthcare.astro",
+      "accessCount": 19,
+      "lastAccessed": 1776614035957,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/who-we-are.astro",
+      "accessCount": 18,
+      "lastAccessed": 1776612879964,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/blog/[slug].astro",
+      "accessCount": 16,
+      "lastAccessed": 1776594106572,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/resources/abortion-is-healthcare.astro",
+      "accessCount": 16,
+      "lastAccessed": 1776606462975,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns/we-protect-us.astro",
+      "accessCount": 16,
+      "lastAccessed": 1776613982492,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns/sexual-violence-in-football.astro",
+      "accessCount": 15,
+      "lastAccessed": 1776614001862,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns/islington-council-finish-holloway-womens-centre.astro",
+      "accessCount": 14,
+      "lastAccessed": 1776613991984,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages/our-impact.astro",
+      "accessCount": 9,
+      "lastAccessed": 1776609267068,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Footer.astro",
+      "accessCount": 8,
+      "lastAccessed": 1776597084069,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/about-us.astro",
+      "accessCount": 7,
+      "lastAccessed": 1776608802038,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/blog.astro",
+      "accessCount": 7,
+      "lastAccessed": 1776612879640,
+      "type": "file"
+    },
+    {
+      "path": "src/layouts/Layout.astro",
+      "accessCount": 7,
+      "lastAccessed": 1776613964560,
+      "type": "file"
+    },
+    {
+      "path": "src/_clone/abortion-is-healthcare-resources/index.html",
+      "accessCount": 6,
+      "lastAccessed": 1776606138638,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/resources/pregnancy-in-prison.astro",
+      "accessCount": 6,
+      "lastAccessed": 1776608450110,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 6,
+      "lastAccessed": 1776613950711,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages/resources/proposal-b.astro",
+      "accessCount": 5,
+      "lastAccessed": 1776597171895,
+      "type": "file"
+    },
+    {
+      "path": "src",
+      "accessCount": 5,
+      "lastAccessed": 1776605882453,
+      "type": "directory"
+    },
+    {
+      "path": "src/lib/extractHtml.ts",
+      "accessCount": 5,
+      "lastAccessed": 1776613953056,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/contact.astro",
+      "accessCount": 4,
+      "lastAccessed": 1776594301866,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages",
+      "accessCount": 4,
+      "lastAccessed": 1776606931530,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages/resources/proposal-c.astro",
+      "accessCount": 3,
+      "lastAccessed": 1776597482349,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/how-we-choose-our-campaigns.astro",
+      "accessCount": 3,
+      "lastAccessed": 1776608659973,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/resources/proposal-a.astro",
+      "accessCount": 2,
+      "lastAccessed": 1776597476430,
+      "type": "file"
+    },
+    {
+      "path": "src/_clone",
+      "accessCount": 2,
+      "lastAccessed": 1776606538019,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages/who-we-are-proposals.astro",
+      "accessCount": 2,
+      "lastAccessed": 1776606866912,
+      "type": "file"
+    },
+    {
+      "path": "src/_clone/about-us/index.html",
+      "accessCount": 2,
+      "lastAccessed": 1776606951253,
+      "type": "directory"
+    },
+    {
+      "path": "src/_clone/what-we-are-proud-of/index.html",
+      "accessCount": 2,
+      "lastAccessed": 1776606951587,
+      "type": "directory"
+    },
+    {
+      "path": "src/_clone/index.html",
+      "accessCount": 2,
+      "lastAccessed": 1776613025667,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/active-campaigns",
+      "accessCount": 2,
+      "lastAccessed": 1776613913233,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages/memory",
+      "accessCount": 1,
+      "lastAccessed": 1776594333267,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages/[...slug].astro",
+      "accessCount": 1,
+      "lastAccessed": 1776595233835,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/video-proposals.astro",
+      "accessCount": 1,
+      "lastAccessed": 1776597053795,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/resources",
+      "accessCount": 1,
+      "lastAccessed": 1776605835150,
+      "type": "directory"
+    },
+    {
+      "path": "src/_clone/abortion-is-healthcare-resources",
+      "accessCount": 1,
+      "lastAccessed": 1776606128472,
+      "type": "directory"
+    },
+    {
+      "path": "src/pages/resources/index.astro",
+      "accessCount": 1,
+      "lastAccessed": 1776606709228,
+      "type": "file"
+    },
+    {
+      "path": "src/_clone/about-us.html",
+      "accessCount": 1,
+      "lastAccessed": 1776606842012,
+      "type": "file"
+    },
+    {
+      "path": "src/_clone/about-us",
+      "accessCount": 1,
+      "lastAccessed": 1776606944332,
+      "type": "directory"
+    },
+    {
+      "path": "src/_clone/what-we-are-proud-of",
+      "accessCount": 1,
+      "lastAccessed": 1776606945232,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}

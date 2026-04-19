@@ -1,0 +1,7 @@
+{
+  "tool_name": "Read",
+  "tool_input_preview": "{\"file_path\":\"/Users/crojasu/Desktop/levelup/levelup-astro/src/pages/press.astro\"}",
+  "error": "File content (54546 tokens) exceeds maximum allowed tokens (25000). Use offset and limit parameters to read specific portions of the file, or search for specific content instead of reading the whole file.",
+  "timestamp": "2026-04-19T15:52:09.721Z",
+  "retry_count": 2
+}

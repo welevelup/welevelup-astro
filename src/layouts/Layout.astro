@@ -2,14 +2,37 @@
 interface Props {
   headHtml: string;
   bodyClass?: string;
+  title?: string;
+  description?: string;
+  ogUrl?: string;
+  ogImage?: string;
 }
 
-const { headHtml, bodyClass = '' } = Astro.props;
+const {
+  headHtml,
+  bodyClass = '',
+  title,
+  description,
+  ogUrl,
+  ogImage = 'https://welevelup.org/wp-content/uploads/2023/05/Level-Up-OG.png',
+} = Astro.props;
+
+const siteBase = 'https://welevelup.org';
+const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
 ---
 <!doctype html>
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">
   <head>
     <Fragment set:html={headHtml} />
+    {title && <title>{title}</title>}
+    {description && <meta name="description" content={description} />}
+    <link rel="canonical" href={canonicalUrl} />
+    {title && <meta property="og:title" content={title} />}
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Level Up" />
   </head>
   <body class={bodyClass}>
     <slot />

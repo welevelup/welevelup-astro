@@ -7,7 +7,12 @@ import rawHtml from '../_clone/index.html?raw';
 
 const { headInner, bodyClass, mainContent } = extract(rawHtml);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Level Up | Feminist Campaigns for Gender Justice in the UK"
+  description="Level Up creates digital tools and campaigns fighting for gender justice in the UK — from reproductive rights to ending violence against women."
+>
   <Nav />
 
   <!-- Animated announcement bar -->

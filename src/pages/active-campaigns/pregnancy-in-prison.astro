@@ -11,7 +11,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Stop Sending Pregnant Women to Prison | Level Up"
+  description="Prison will never be a safe place to be pregnant. Level Up campaigns to end the imprisonment of pregnant women and new mothers in England."
+>
   <Nav />
 
   <!-- HERO WITH VIDEO BACKGROUND -->
@@ -890,7 +895,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     @media (max-width: 768px) {
-      .dp-hero { padding: 80px 24px 60px; }
+      .dp-hero { padding: 80px 24px 60px; min-height: auto; }
       .dp-stats-inner { grid-template-columns: repeat(2, 1fr); }
       .dp-stat { border-bottom: 1px solid rgba(12,10,62,0.1); }
       .dp-demands { grid-template-columns: 1fr; }
@@ -904,6 +909,15 @@ const { headInner, bodyClass } = extract(homeRaw);
       .dp-press-item { text-decoration: none !important; flex-direction: column; align-items: flex-start; gap: 8px; }
       .dp-final-cta-buttons { flex-direction: column; align-items: center; }
       .dp-related-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .dp-stat-num { font-size: clamp(28px, 8vw, 40px); }
+    }
+    @media (max-width: 480px) {
+      .dp-stats-inner { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 360px) {
+      .dp-stats-inner { grid-template-columns: 1fr; }
     }
   </style>
 </Layout>

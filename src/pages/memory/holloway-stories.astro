@@ -6,7 +6,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Holloway Voices | What the Women's Centre Would Mean | Level Up"
+  description="Women, allies, and professionals share what a Holloway Women's Centre would mean. A promise made — and not yet kept."
+>
   <Nav />
 
   <!-- HERO -->

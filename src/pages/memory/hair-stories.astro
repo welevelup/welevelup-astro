@@ -6,7 +6,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Hair Stories | #NoMoreLyes | Level Up"
+  description="Black women share what using hair relaxers has meant for their bodies, health and lives. Real voices demanding accountability from beauty brands."
+>
   <Nav />
 
   <!-- HERO -->

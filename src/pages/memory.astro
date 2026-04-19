@@ -10,7 +10,12 @@ import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Memory Space | Stories of Resistance | Level Up"
+  description="An archive of personal stories, solidarity messages, and voices of resistance. Abortion stories, hair stories, Holloway voices — told in their own words."
+>
   <Nav />
 
   <!-- ── HERO ─────────────────────────────────────────────── -->

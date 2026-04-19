@@ -30,6 +30,22 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
       .elementor-location-header,
       footer[data-elementor-type="footer"],
       .elementor-location-footer { display: none !important; }
+
+      /* Homepage hero: full-screen on mobile with readable text */
+      @media (max-width: 768px) {
+        .elementor-element-c89219b {
+          min-height: 100dvh !important;
+          height: auto !important;
+        }
+        .home-caption .elementor-widget-container p {
+          font-size: 15px !important;
+          line-height: 1.5 !important;
+        }
+        .home-caption .elementor-heading-title {
+          font-size: 28px !important;
+          line-height: 1.1 !important;
+        }
+      }
     </style>
     {title && <title>{title}</title>}
     {description && <meta name="description" content={description} />}

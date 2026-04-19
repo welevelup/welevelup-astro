@@ -46,13 +46,14 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 
   <!-- ISLINGTON COUNCIL BANNER -->
   <section class="ic-banner">
-    <img src="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png" alt="" class="ic-banner-img" loading="lazy" />
     <div class="ic-banner-content">
       <span class="ic-banner-label">Featured Campaign</span>
       <h2>Finish Holloway Women's Centre</h2>
-      <p>The centre is built but standing empty. Tell Islington Council: keep your promise.</p>
-      <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="ic-banner-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
-      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-banner-btn">Learn more →</a>
+      <p>The centre is built but standing empty. Tell Islington Council: keep your promise to deliver vital support for women facing trauma, violence, poverty and homelessness.</p>
+      <div class="ic-banner-actions">
+        <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="ic-banner-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
+        <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-banner-btn">Learn more →</a>
+      </div>
     </div>
   </section>
 
@@ -240,64 +241,65 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 
   /* ═══ PROPOSAL B: Featured banner ═══ */
   .ic-banner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background: #0C0A3E;
-    min-height: 300px;
+    background: #A89CED;
+    padding: 64px 24px;
     font-family: 'DM Sans', sans-serif;
-  }
-  .ic-banner-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    text-align: center;
   }
   .ic-banner-content {
-    padding: 48px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 12px;
+    max-width: 700px;
+    margin: 0 auto;
   }
   .ic-banner-label {
     font: 600 11px/1 'DM Sans';
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #A89CED;
+    color: #0C0A3E;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 16px;
   }
   .ic-banner-content h2 {
-    font: 800 32px/0.95 'DM Sans';
-    color: #CCFF33;
+    font: 800 36px/0.95 'DM Sans';
+    color: #0C0A3E;
     letter-spacing: -0.03em;
-    margin: 0;
+    margin: 0 0 16px;
   }
   .ic-banner-content p {
-    font: 400 16px/1.5 'DM Sans';
-    color: rgba(238,235,211,0.7);
+    font: 400 17px/1.5 'DM Sans';
+    color: rgba(12,10,62,0.7);
     margin: 0;
+    max-width: 550px;
+    margin: 0 auto;
+  }
+  .ic-banner-actions {
+    margin-top: 24px;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
   }
   .ic-banner-btn-primary {
     display: inline-block;
-    background: #CCFF33;
-    color: #0C0A3E;
+    background: #0C0A3E;
+    color: #CCFF33;
     font: 900 14px/1 'DM Sans';
     text-transform: uppercase;
     letter-spacing: 0.06em;
     padding: 16px 32px;
     text-decoration: none;
-    margin-top: 12px;
     transition: all 0.15s;
   }
-  .ic-banner-btn-primary:hover { background: #fff; }
+  .ic-banner-btn-primary:hover { background: #CCFF33; color: #0C0A3E; }
   .ic-banner-btn {
-    font: 600 13px/1 'DM Sans';
-    color: #CCFF33 !important;
+    font: 700 13px/1 'DM Sans';
+    color: #0C0A3E !important;
     text-decoration: none !important;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    margin-top: 12px;
-    margin-left: 16px;
   }
-  .ic-banner-btn:hover { color: #fff !important; }
+  .ic-banner-btn:hover { color: #CCFF33 !important; }
 
   /* ═══ PROPOSAL C: Full hero ═══ */
   .ic-hero-full {

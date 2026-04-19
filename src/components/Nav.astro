@@ -336,8 +336,10 @@
     transition: background 0.15s;
   }
   .lu-nav.menu-open .lu-nav-toggle span { background: #0C0A3E; }
-  .lu-nav-mobile-donate,
-  .lu-nav-mobile-join { display: none; }
+  @media (min-width: 901px) {
+    .lu-nav-mobile-donate,
+    .lu-nav-mobile-join { display: none !important; }
+  }
 
   @media (max-width: 900px) {
     .lu-nav-toggle { display: flex; }

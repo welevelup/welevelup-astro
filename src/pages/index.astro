@@ -17,11 +17,6 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 
   <h1 class="sr-only">Level Up — Feminist Campaigns for Gender Justice in the UK</h1>
 
-  <!-- Hide all WP Elementor sections except the hero (elementor-element-c89219b) -->
-  <style is:global>
-    .elementor-1818 > .elementor-element:not(.elementor-element-c89219b) { display: none !important; }
-  </style>
-
   <Fragment set:html={mainContent} />
 
   <!-- Animated announcement bar -->
@@ -232,7 +227,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   <section class="home-cta">
     <h2>Join the Level Up Community</h2>
     <p>Campaign alerts, event invites, and analysis — join 40,000+ people taking action.</p>
-    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join the Level Up Community</a>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join Us</a>
   </section>
   <Footer />
 </Layout>
@@ -768,6 +763,11 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
         if (parent) (parent as HTMLElement).style.display = 'none';
       }
     }
+  });
+
+  // Remove all WP Elementor homepage sections except the hero
+  document.querySelectorAll('.elementor-1818 > .elementor-element').forEach(el => {
+    if (!el.classList.contains('elementor-element-c89219b')) el.remove();
   });
 
   // On mobile: move announcement bar below the hero section

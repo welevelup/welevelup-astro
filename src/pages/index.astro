@@ -308,16 +308,18 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     gap: 16px;
   }
   .home-petition-card {
-    background: #CCFF33;
+    background: rgba(238,235,211,0.06);
     text-decoration: none;
     overflow: hidden;
-    transition: all 0.2s;
+    transition: all 0.25s;
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(238,235,211,0.08);
+    position: relative;
   }
   .home-petition-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(12,10,62,0.2);
+    border-color: #CCFF33;
   }
   .home-petition-card img {
     width: 100%;
@@ -326,24 +328,27 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     display: block;
   }
   .home-petition-body {
-    padding: 20px;
+    padding: 20px 20px 24px;
     flex: 1;
     display: flex;
     flex-direction: column;
   }
   .home-petition-body h3 {
-    font: 700 17px/1.15 'DM Sans', sans-serif;
-    color: #0C0A3E;
+    font: 700 17px/1.2 'DM Sans', sans-serif;
+    color: #EEEBD3;
     margin: 0 0 12px;
     flex: 1;
   }
   .home-petition-supporters {
     font: 600 11px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    background: rgba(12,10,62,0.1);
-    padding: 6px 10px;
-    display: inline-block;
-    align-self: flex-start;
+    color: #CCFF33;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .home-petition-supporters::before {
+    content: '✦';
+    font-size: 8px;
   }
   @media (max-width: 768px) {
     .home-petitions-grid { grid-template-columns: 1fr; }
@@ -503,5 +508,31 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
         container.appendChild(iframe);
       }
     } catch {}
+  });
+
+  // Hide "NEXT EVENT" section and empty events message
+  document.querySelectorAll('.elementor-heading-title').forEach((el) => {
+    if (el.textContent?.trim() === 'NEXT EVENT') {
+      // Hide the parent section
+      let parent = el.closest('.e-con.e-parent') || el.closest('.elementor-section');
+      if (parent) (parent as HTMLElement).style.display = 'none';
+    }
+  });
+  // Also hide the events empty message
+  document.querySelectorAll('.ue-no-posts-found').forEach((el) => {
+    let parent = el.closest('.e-con.e-parent') || el.closest('.elementor-section');
+    if (parent) (parent as HTMLElement).style.display = 'none';
+  });
+
+  // Hide duplicate "JOIN THE LEVEL UP COMMUNITY" from clone
+  let joinCount = 0;
+  document.querySelectorAll('.elementor-heading-title').forEach((el) => {
+    if (el.textContent?.trim() === 'JOIN THE LEVEL UP COMMUNITY') {
+      joinCount++;
+      if (joinCount === 1) {
+        let parent = el.closest('.e-con.e-parent') || el.closest('.elementor-section');
+        if (parent) (parent as HTMLElement).style.display = 'none';
+      }
+    }
   });
 </script>

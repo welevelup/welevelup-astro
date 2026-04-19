@@ -459,7 +459,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 
   /* ── Blog section ────────────────────────────────────── */
   .home-blog {
-    background: #A89CED;
+    background: #EEEBD3;
     padding: 80px 24px;
     font-family: 'DM Sans', sans-serif;
   }
@@ -471,13 +471,13 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     font: 600 12px/1 'DM Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: rgba(238,235,211,0.5);
+    color: #A89CED;
     display: block;
     margin-bottom: 12px;
   }
   .home-blog-title {
     font: 800 48px/0.9 'DM Sans', sans-serif;
-    color: #FFFFFF;
+    color: #0C0A3E;
     letter-spacing: -0.04em;
     margin: 0 0 40px;
   }
@@ -487,24 +487,24 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     gap: 2px;
   }
   .home-blog-card {
-    background: rgba(12, 10, 62, 0.25);
+    background: #FFFFFF;
     padding: 32px 28px;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    border: 1px solid rgba(12, 10, 62, 0.1);
+    border: 1px solid rgba(12, 10, 62, 0.06);
     transition: all 0.2s;
     min-height: 180px;
   }
   .home-blog-card:hover {
-    background: rgba(12, 10, 62, 0.4);
     border-color: #CCFF33;
+    box-shadow: 0 4px 16px rgba(12,10,62,0.08);
   }
   .home-blog-card--featured {
     grid-column: 1 / -1;
-    background: rgba(12, 10, 62, 0.35);
-    border-color: rgba(204,255,51,0.15);
+    background: #FFFFFF;
+    border-color: rgba(12,10,62,0.08);
     min-height: auto;
     padding: 40px 32px;
   }
@@ -515,17 +515,17 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     font: 600 10px/1 'DM Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: rgba(238,235,211,0.5);
+    color: #A89CED;
   }
   .home-blog-card h3 {
     font: 700 18px/1.2 'DM Sans', sans-serif;
-    color: #CCFF33;
+    color: #0C0A3E;
     margin: 0;
     flex: 1;
   }
   .home-blog-read {
     font: 600 13px/1 'DM Sans', sans-serif;
-    color: #CCFF33;
+    color: #0C0A3E;
     margin-top: auto;
   }
   .home-blog-all {
@@ -534,7 +534,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     font: 700 14px/1 'DM Sans', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: #EEEBD3;
+    color: #0C0A3E;
     text-decoration: none;
   }
   .home-blog-all:hover { color: #CCFF33; }

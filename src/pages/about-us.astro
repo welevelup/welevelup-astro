@@ -36,39 +36,40 @@ const { headInner, bodyClass } = extract(homeRaw);
     <div class="au-hero-inner">
       <span class="au-eyebrow">About Level Up</span>
       <h1 id="au-hero-heading" class="au-hero-title">What We Do</h1>
-      <p class="au-hero-subtitle">A feminist community campaigning for gender justice in the UK.</p>
+      <p class="au-hero-subtitle">Working together for gender justice in the UK</p>
     </div>
   </section>
 
-  <section class="au-pillars" aria-label="Our mission, approach, and values">
-    <div class="au-pillars-inner">
-      <article class="au-pillar">
-        <h2 class="au-pillar-heading">Our Mission</h2>
-        <p class="au-pillar-body">We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island, and producing the UK's first media guidelines on reporting domestic abuse deaths.</p>
-      </article>
-      <article class="au-pillar">
-        <h2 class="au-pillar-heading">Our Approach</h2>
-        <p class="au-pillar-body">We identify interventions where collective action can interrupt and dismantle systems of injustice. We believe in power-building, not power-begging, and we create tools, resources and campaign strategies that centre this principle.</p>
-      </article>
-      <article class="au-pillar">
-        <h2 class="au-pillar-heading">Our Values</h2>
-        <p class="au-pillar-body">Our focus is on gender whilst holding the ways that race, class, disability and other oppressions intersect. Our organising includes trans and gender nonconforming people, and we try to centre the experiences of the most marginalised people in our work.</p>
-      </article>
+  <section class="au-intro" aria-label="About Level Up">
+    <div class="au-intro-inner">
+      <p class="au-intro-p">We are a feminist community campaigning for gender justice in the UK. We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths.</p>
+      <p class="au-intro-p">We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through gathering with community like our monthly workshops on bystander intervention and intervening in police violence.</p>
+      <p class="au-intro-p">Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
     </div>
   </section>
 
   <section class="au-vision" aria-label="Our vision">
     <div class="au-vision-inner">
       <blockquote class="au-vision-quote">
-        "We envision a world where people of all genders are loved and liberated from bodily and systemic violence."
+        We envision a world where people of all genders are loved and liberated from bodily and systemic violence.
       </blockquote>
     </div>
   </section>
 
-  <section class="au-community" aria-label="Our community">
-    <div class="au-community-inner">
-      <h2 class="au-community-heading">Our Community</h2>
-      <p class="au-community-body">Our movement includes feminists from a range of backgrounds and all genders, centring the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+  <section class="au-pillars" aria-label="Our approach">
+    <div class="au-pillars-inner">
+      <article class="au-pillar">
+        <h2 class="au-pillar-heading">Pop culture</h2>
+        <p class="au-pillar-body">We identify interventions where collective action can interrupt and dismantle systems of injustice. We believe in power-building, not power-begging, and we create tools, resources and campaign strategies that centre this principle. This is why we tend to focus on cultural moments, rather than political machinery.</p>
+      </article>
+      <article class="au-pillar">
+        <h2 class="au-pillar-heading">Gender</h2>
+        <p class="au-pillar-body">Our focus is on gender whilst holding the ways that race, class, disability and other oppressions intersect, creating different experiences for different individuals and communities. Our organising includes trans and gender nonconforming people, and we try to centre the experiences of the most marginalised people in our work.</p>
+      </article>
+      <article class="au-pillar">
+        <h2 class="au-pillar-heading">Community</h2>
+        <p class="au-pillar-body">Building a loving, more liberated world means coming together across our differences to build power and solidarity. We have a diverse membership of all ages, from all social backgrounds, and we strive to make our movement accessible, relatable, easy to understand and easy to take part in.</p>
+      </article>
     </div>
   </section>
 
@@ -85,9 +86,9 @@ const { headInner, bodyClass } = extract(homeRaw);
 
 <style is:global>
   .au-hero,
-  .au-pillars,
+  .au-intro,
   .au-vision,
-  .au-community,
+  .au-pillars,
   .au-cta {
     font-family: 'DM Sans', system-ui, sans-serif;
   }
@@ -123,6 +124,40 @@ const { headInner, bodyClass } = extract(homeRaw);
     opacity: 0.85;
   }
 
+  /* Intro */
+  .au-intro {
+    background: #EEEBD3;
+    padding: 80px 24px;
+  }
+  .au-intro-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .au-intro-p {
+    font: 400 18px/1.75 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.75) !important;
+    margin: 0 0 24px;
+  }
+  .au-intro-p:last-child { margin: 0; }
+
+  /* Vision */
+  .au-vision {
+    background: #0C0A3E;
+    padding: 96px 24px;
+  }
+  .au-vision-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .au-vision-quote {
+    font: 700 clamp(22px, 4vw, 38px)/1.3 'DM Sans', sans-serif !important;
+    color: #EEEBD3 !important;
+    letter-spacing: -0.02em;
+    margin: 0;
+    quotes: none;
+  }
+
   /* Pillars */
   .au-pillars {
     background: #EEEBD3;
@@ -141,54 +176,14 @@ const { headInner, bodyClass } = extract(homeRaw);
     padding-top: 28px;
   }
   .au-pillar-heading {
-    font: 800 20px/1.1 'DM Sans', sans-serif;
-    color: #0C0A3E;
+    font: 800 20px/1.1 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
     letter-spacing: -0.02em;
     margin: 0 0 18px;
   }
   .au-pillar-body {
-    font: 400 16px/1.75 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.72);
-    margin: 0;
-  }
-
-  /* Vision */
-  .au-vision {
-    background: #0C0A3E;
-    padding: 96px 24px;
-  }
-  .au-vision-inner {
-    max-width: 860px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  .au-vision-quote {
-    font: 700 clamp(22px, 4vw, 38px)/1.3 'DM Sans', sans-serif;
-    color: #EEEBD3;
-    letter-spacing: -0.02em;
-    margin: 0;
-    quotes: none;
-  }
-
-  /* Community */
-  .au-community {
-    background: #EEEBD3;
-    padding: 80px 24px;
-    border-top: 1px solid rgba(12,10,62,0.08);
-  }
-  .au-community-inner {
-    max-width: 760px;
-    margin: 0 auto;
-  }
-  .au-community-heading {
-    font: 800 clamp(24px, 3vw, 32px)/1.1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    letter-spacing: -0.03em;
-    margin: 0 0 24px;
-  }
-  .au-community-body {
-    font: 400 18px/1.75 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.72);
+    font: 400 16px/1.75 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.72) !important;
     margin: 0;
   }
 
@@ -238,9 +233,9 @@ const { headInner, bodyClass } = extract(homeRaw);
     .au-hero {
       padding: 80px 20px 72px;
     }
-    .au-pillars,
+    .au-intro,
     .au-vision,
-    .au-community,
+    .au-pillars,
     .au-cta {
       padding-top: 64px;
       padding-bottom: 64px;

@@ -25,6 +25,8 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
   <head>
     <Fragment set:html={headHtml} />
     <style is:global>
+      .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
       /* Must come after WP CSS to win cascade — hides Elementor header/footer */
       header[data-elementor-type="header"],
       .elementor-location-header,

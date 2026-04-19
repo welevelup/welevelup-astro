@@ -1,0 +1,299 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HERO -->
+  <section class="ol-hero">
+    <div class="ol-hero-inner">
+      <a href="/active-campaigns/nomorelyes-2" class="ol-back">&larr; Back to #NoMoreLyes</a>
+      <span class="ol-label">#NoMoreLyes</span>
+      <h1 class="ol-title">Open letter<br/>to L'Oréal</h1>
+      <p class="ol-tagline">Are your hair relaxers putting Black women's health at risk?</p>
+      <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="ol-btn-primary" target="_blank" rel="noopener">Sign the open letter</a>
+    </div>
+  </section>
+
+  <!-- CONTEXT -->
+  <section class="ol-section ol-section--cream">
+    <div class="ol-content">
+      <p>In 2021, Oxford University published damning research that found a link between long-term use of hair relaxers containing lye and a <strong>30% increased risk of breast cancer</strong> for Black women. L'Oréal is one of the biggest manufacturers of lye-based hair relaxers, marketed specifically at Black women.</p>
+      <p>In August 2021, Level Up and more than 5,000 petition signers asked L'Oréal to remove cancerous chemicals from these products. <strong>To date, they have still not responded.</strong></p>
+      <p>Further studies have since linked frequent, long-term use of hair relaxers to <strong>more than double the risk of developing uterine cancer</strong> for Black women. Thousands of lawsuits have been filed against L'Oréal over the last decade — from scalp burns and permanent hair loss, to fibroids and uterine cancer.</p>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="ol-stats">
+    <div class="ol-stats-inner">
+      <div class="ol-stat">
+        <span class="ol-stat-num">30%</span>
+        <span class="ol-stat-label">increased breast cancer risk from long-term lye-based relaxer use (Oxford, 2021)</span>
+      </div>
+      <div class="ol-stat">
+        <span class="ol-stat-num">2×</span>
+        <span class="ol-stat-label">the risk of uterine cancer from frequent, long-term use</span>
+      </div>
+      <div class="ol-stat">
+        <span class="ol-stat-num">95%</span>
+        <span class="ol-stat-label">of Black British women don't trust beauty brands selling lye-based relaxers (Level Up, 2022)</span>
+      </div>
+      <div class="ol-stat">
+        <span class="ol-stat-num">9×</span>
+        <span class="ol-stat-label">more spending on hair care by Black women than any other group</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE LETTER -->
+  <section class="ol-section ol-section--white">
+    <div class="ol-content">
+      <span class="ol-label ol-label--dark">The Open Letter</span>
+      <h2>To: Nicolas Hieronimus, CEO of L'Oréal Group and Jean Paul Agon, Chairman of L'Oréal Group</h2>
+      <p>Black women should be able to trust that the products we use won't hurt us, but Level Up's 2022 survey found that <strong>95% of Black British women don't trust beauty brands that sell lye-based relaxers.</strong> This should come as no surprise since L'Oréal's hair relaxers continue to be sold — including those intended for children — labelled as "no-lye" whilst listing sodium hydroxide (lye) in the ingredients. How can we make informed decisions about products without transparency from manufacturers?</p>
+      <p>Now is the time for L'Oréal to lead the way in the beauty industry by taking responsibility for the harms caused by your products. We know that Black women's money matters to you, so we're calling on L'Oréal to demonstrate that Black women matter too.</p>
+    </div>
+  </section>
+
+  <!-- THREE DEMANDS -->
+  <section class="ol-section ol-section--navy">
+    <div class="ol-content">
+      <span class="ol-label">Our three demands</span>
+      <h2 class="ol-h2--light">Take action now to ensure:</h2>
+      <div class="ol-demands">
+
+        <div class="ol-demand">
+          <span class="ol-demand-num">01</span>
+          <div class="ol-demand-body">
+            <h3>A safe choice</h3>
+            <p>Make the products safe to use or take them off the shelves. Black women use hair relaxers to avoid discrimination at work and in schools, because they find their hair easier to manage, or simply because they want to. You have a duty of care. If you are not able to provide safe products, they should be removed. No one should risk losing their life, their fertility or have their quality of life negatively impacted from using hair products.</p>
+          </div>
+        </div>
+
+        <div class="ol-demand">
+          <span class="ol-demand-num">02</span>
+          <div class="ol-demand-body">
+            <h3>A transparent choice</h3>
+            <p>Make the nature of the ingredients and possible harms clear on the product label. The correlation with cancer does not come from misuse — it's a risk consumers are exposed to from using the products as intended. If products remain on shelves, they should clearly state that <em>"chemical hair straighteners have been linked to an increased risk of cancer and fibroids."</em> Easy-to-read labelling. You shouldn't have to be a chemist to make a transparent choice.</p>
+          </div>
+        </div>
+
+        <div class="ol-demand">
+          <span class="ol-demand-num">03</span>
+          <div class="ol-demand-body">
+            <h3>An informed choice</h3>
+            <p>Invest in independent research about the long-term impact of these ingredients on Black women. Level Up requested safety sheets on 14th March 2022 for just two of your hair relaxers. Once again, we have yet to receive a direct reply from L'Oréal. Help customers make an informed choice.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="ol-section ol-section--cream">
+    <div class="ol-content ol-closing">
+      <blockquote class="ol-pullquote">
+        The price of beauty should never be our health.
+      </blockquote>
+      <p>We know you have a commitment to being "number one in the world" regarding ethics — but the harm caused to Black women by frequent and long-term use of chemical straighteners doesn't align with that. Black women already spend up to nine times more than any other group on hair care. We shouldn't be paying with our health too.</p>
+    </div>
+  </section>
+
+  <!-- SIGN CTA -->
+  <section class="ol-cta">
+    <div class="ol-cta-inner">
+      <h2>Add your name</h2>
+      <p>Over 5,000 people have already signed. Add your voice to the open letter demanding L'Oréal make hair relaxers safe — or remove them.</p>
+      <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="ol-btn-primary" target="_blank" rel="noopener">Sign the open letter to L'Oréal</a>
+    </div>
+  </section>
+
+  <!-- HAIR STORIES -->
+  <section class="ol-section ol-section--white">
+    <div class="ol-content">
+      <span class="ol-label ol-label--dark">Community voices</span>
+      <h2>Real experiences</h2>
+      <p>Black women across the UK have shared what using hair relaxers has meant for their health. <a href="/memory/hair-stories" class="ol-inline-link">Read their stories →</a></p>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .ol-hero {
+    background: #0C0A3E;
+    padding: 120px 24px 80px;
+  }
+  .ol-hero-inner { max-width: 800px; margin: 0 auto; }
+  .ol-back {
+    display: inline-block;
+    font: 600 13px/1 'DM Sans', sans-serif;
+    color: #A89CED !important;
+    text-decoration: none !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .ol-back:hover { color: #CCFF33 !important; }
+  .ol-label {
+    display: block;
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    margin-bottom: 20px;
+  }
+  .ol-label--dark { color: rgba(12,10,62,0.4); }
+  .ol-title {
+    font: 800 clamp(48px,10vw,80px)/0.9 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    letter-spacing: -0.045em !important;
+    margin: 0 0 28px !important;
+  }
+  .ol-tagline {
+    font: 400 20px/1.5 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.75) !important;
+    max-width: 560px;
+    margin: 0 0 36px !important;
+  }
+  .ol-btn-primary {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E !important;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 20px 40px;
+    text-decoration: none !important;
+    transition: background 0.2s;
+  }
+  .ol-btn-primary:hover { background: #fff; }
+
+  /* STATS */
+  .ol-stats { background: #CCFF33; }
+  .ol-stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+  }
+  .ol-stat {
+    padding: 40px 24px;
+    text-align: center;
+    border-right: 1px solid rgba(12,10,62,0.12);
+  }
+  .ol-stat:last-child { border-right: none; }
+  .ol-stat-num {
+    display: block;
+    font: 800 52px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.04em;
+    margin-bottom: 10px;
+  }
+  .ol-stat-label {
+    display: block;
+    font: 500 12px/1.4 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* SECTIONS */
+  .ol-section { padding: 72px 24px; }
+  .ol-section--cream { background: #EEEBD3; }
+  .ol-section--white { background: #fff; }
+  .ol-section--navy { background: #0C0A3E; }
+  .ol-content { max-width: 800px; margin: 0 auto; }
+  .ol-content h2 {
+    font: 800 36px/1 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+    letter-spacing: -0.04em !important;
+    margin: 8px 0 24px !important;
+  }
+  .ol-h2--light { color: #CCFF33 !important; }
+  .ol-content p {
+    font: 400 18px/1.65 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.8) !important;
+    margin: 0 0 16px !important;
+  }
+  .ol-section--navy .ol-content p { color: rgba(238,235,211,0.75) !important; }
+  .ol-section--navy h2 { color: #CCFF33 !important; }
+  .ol-content strong { color: #0C0A3E !important; }
+  .ol-section--navy .ol-content strong { color: #CCFF33 !important; }
+  .ol-content em { font-style: italic; }
+  .ol-inline-link { color: #0C0A3E !important; font-weight: 700; text-decoration: underline; }
+
+  /* DEMANDS */
+  .ol-demands { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
+  .ol-demand {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    align-items: start;
+    border-top: 1px solid rgba(204,255,51,0.2);
+    padding-top: 32px;
+  }
+  .ol-demand-num {
+    font: 800 48px/1 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+  }
+  .ol-demand-body h3 {
+    font: 700 22px/1.2 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    margin: 0 0 12px !important;
+  }
+  .ol-demand-body p {
+    font: 400 17px/1.65 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.75) !important;
+    margin: 0 !important;
+  }
+
+  /* PULLQUOTE */
+  .ol-closing { text-align: center; }
+  .ol-pullquote {
+    font: 800 clamp(28px,5vw,44px)/1.15 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+    letter-spacing: -0.03em !important;
+    margin: 0 auto 32px !important;
+    max-width: 640px;
+    border: none !important;
+    padding: 0 !important;
+    quotes: none !important;
+  }
+  .ol-closing p { text-align: left; }
+
+  /* CTA */
+  .ol-cta { background: #A89CED; padding: 80px 24px; text-align: center; }
+  .ol-cta-inner { max-width: 560px; margin: 0 auto; }
+  .ol-cta h2 {
+    font: 800 clamp(32px,6vw,52px)/1 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 20px !important;
+  }
+  .ol-cta p {
+    font: 400 18px/1.55 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.75) !important;
+    margin: 0 0 36px !important;
+  }
+
+  @media (max-width: 768px) {
+    .ol-stats-inner { grid-template-columns: 1fr 1fr; }
+    .ol-demand { grid-template-columns: 56px 1fr; }
+    .ol-demand-num { font-size: 36px; }
+  }
+  @media (max-width: 480px) {
+    .ol-stats-inner { grid-template-columns: 1fr; }
+    .ol-demand { grid-template-columns: 1fr; }
+    .ol-demand-num { font-size: 32px; }
+  }
+</style>

@@ -68,41 +68,64 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     </div>
   </section>
 
-  <!-- Stories empty state -->
+  <!-- Hair Stories -->
   <section class="st-grid-section" aria-label="Community stories">
     <div class="st-grid-inner">
       <div class="st-grid-header">
-        <h2 class="st-grid-title">Community Stories</h2>
-        <span class="st-grid-showing">Coming soon</span>
+        <h2 class="st-grid-title">Hair Stories</h2>
+        <span class="st-grid-showing">#NoMoreLyes — 4 stories</span>
       </div>
 
-      <div class="st-empty-state">
-        <div class="st-empty-icon" aria-hidden="true">✦</div>
-        <p class="st-empty-heading">Stories from our community are coming soon.</p>
-        <p class="st-empty-body">
-          Level Up campaigns on sexist and racist harassment, domestic abuse, LGBTQ+ and Islamophobic hate crime,
-          pregnancy in prison, media coverage of gender-based violence, and more.
-          The community behind these campaigns has thousands of stories.
-          Be among the first to share yours.
-        </p>
-        <a href="/contact" class="st-empty-link">Share your story →</a>
-      </div>
-    </div>
-  </section>
+      <article class="st-story-card">
+        <div class="st-story-meta">
+          <span class="st-story-name">DJ Mystikle Blue</span>
+          <span class="st-story-loc">Birmingham, UK</span>
+          <span class="st-story-tag">Fibroids · Miscarriage · Stillbirth</span>
+        </div>
+        <blockquote class="st-story-quote">
+          "My husband and I had been trying for a baby for a while, and it wasn't an easy journey. I suffered 4 consecutive miscarriages, followed by a stillbirth and then another miscarriage. Added to this I had an ovarian cyst and fibroids that were growing each time I went in for a scan. The doctors couldn't find what was causing all this, so I decided to do my own research — and stumbled upon the correlation between hair relaxers and the problems they cause.
+          <br/><br/>
+          In October 2016 I did the big chop and went natural. After going natural, the fibroids just stopped growing — and in 2018 I gave birth to our son."
+        </blockquote>
+      </article>
 
-  <!-- Hair Stories Feature -->
-  <section class="st-feature" aria-labelledby="st-hair-heading">
-    <div class="st-feature-inner">
-      <div class="st-feature-label">#NoMoreLyes</div>
-      <div class="st-feature-body">
-        <h2 class="st-feature-title" id="st-hair-heading">Share your hair story</h2>
-        <p class="st-feature-desc">
-          The #NoMoreLyes campaign asks: what has using hair relaxers meant for your body, your health, your identity?
-          Black women have been gaslit for decades about the risks. Your experience — whatever it is — belongs in this record.
-        </p>
-        <a href="https://levelup.movement-action.org/p/share-your-hair-story" class="st-feature-btn" target="_blank" rel="noopener">
-          Share your hair story →
-        </a>
+      <article class="st-story-card st-story-card--alt">
+        <div class="st-story-meta">
+          <span class="st-story-name">Emma</span>
+          <span class="st-story-loc">London, UK</span>
+          <span class="st-story-tag">Fibroids · Chemical burns · Hair loss</span>
+        </div>
+        <blockquote class="st-story-quote">
+          "I first had my hair relaxed when I was around 12. We had no real idea as tweens that we were administering seriously harmful chemicals to each other — and on many occasions we'd end up with serious, painful, weeping burns at our hairlines or on our scalps. Burns that would not heal for weeks or months, leaving permanent scarring or hair loss.
+          <br/><br/>
+          To this day, 25 years later, I have severe fibroids so bad that my entire bladder is displaced. I have to use the bathroom every 20 minutes. The fibroids are disabling. Had my mum or I been aware of what is now known through research, I would not have been allowed to use them."
+        </blockquote>
+      </article>
+
+      <article class="st-story-card">
+        <div class="st-story-meta">
+          <span class="st-story-name">Anonymous</span>
+          <span class="st-story-loc">West Midlands, UK</span>
+          <span class="st-story-tag">Fibroids · Hysterectomy</span>
+        </div>
+        <blockquote class="st-story-quote">
+          "I had to have a hysterectomy in my early 40s due to fibroids and I know a few other women who suffered the same fate. I have no doubt there is a link with the use of hair relaxers. I wish I had known earlier."
+        </blockquote>
+      </article>
+
+      <article class="st-story-card st-story-card--alt">
+        <div class="st-story-meta">
+          <span class="st-story-name">Anonymous</span>
+          <span class="st-story-loc">East London, UK</span>
+          <span class="st-story-tag">Cancer · Chemical burns</span>
+        </div>
+        <blockquote class="st-story-quote">
+          "I only relaxed my hair for about 5 years, from 15 to 19. It caused burning feelings, lots of scabs, as well as thinning of my hair. Years later I was diagnosed with breast cancer — which praise to God I came through in 2022. I would not want anyone to go through cancer like I did. We deserve choice and a healthier alternative."
+        </blockquote>
+      </article>
+
+      <div class="st-stories-more">
+        <a href="/memory/hair-stories" class="st-empty-link">Read all hair stories →</a>
       </div>
     </div>
   </section>
@@ -693,6 +716,52 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
   .st-empty-link:hover {
     color: #A89CED;
     border-color: #A89CED;
+  }
+
+  /* ── Story cards ────────────────────────── */
+  .st-stories-more { margin-top: 8px; }
+  .st-story-card {
+    border-left: 4px solid #CCFF33;
+    background: #F8F7F0;
+    padding: 36px 36px 28px;
+    margin-bottom: 32px;
+    border-radius: 0 4px 4px 0;
+  }
+  .st-story-card--alt {
+    border-left-color: #A89CED;
+    background: #F3F1FC;
+  }
+  .st-story-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .st-story-name {
+    font: 700 16px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+  }
+  .st-story-loc {
+    font: 400 12px/1 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .st-story-tag {
+    font: 600 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(12,10,62,0.35);
+    margin-left: auto;
+  }
+  .st-story-quote {
+    font: 400 17px/1.7 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.8);
+    margin: 0;
+    border: none !important;
+    padding: 0 !important;
+    quotes: none !important;
   }
 
   /* ── Responsive ─────────────────────────── */

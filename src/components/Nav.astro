@@ -248,10 +248,19 @@
   }
   .lu-nav-mega-col:nth-child(3n) { border-right: none; }
   .lu-nav-mega-col:nth-child(n+4) { border-bottom: none; }
-  /* Centered mega dropdown */
+  /* Centered mega dropdown (Community) */
   .lu-nav-mega--center {
     left: 50%;
     transform: translateX(-50%);
+    min-width: 560px;
+  }
+  .lu-nav-mega--center .lu-nav-mega-col {
+    text-align: center;
+    padding: 28px 32px;
+  }
+  .lu-nav-mega--center .lu-nav-mega-title,
+  .lu-nav-mega--center .lu-nav-mega-col a {
+    display: block;
   }
 
   /* Wide dropdown for Community Campaigns */

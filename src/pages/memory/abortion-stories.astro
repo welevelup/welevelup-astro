@@ -166,6 +166,76 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
+  <!-- ── MORE VOICES ────────────────────────────────────────── -->
+  <section class="as-section as-section--cream" aria-labelledby="more-voices-heading">
+    <div class="as-content as-content--wide">
+      <h2 id="more-voices-heading" class="as-section-heading">More voices</h2>
+      <div class="as-voices-grid">
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was 17. I drove myself to the hospital alone. They put me on a ward with newborns. I wanted to break my family's cycle of early parenthood. The system did not make it easy."</p>
+          <span class="as-voice-tag">Age 17</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"My partner said there was nothing I could do about it. I relied on strangers on Reddit for information. I told no one except my mother. The NHS gave me almost nothing."</p>
+          <span class="as-voice-tag">During lockdown</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I grew up in a religious household that was against abortion. Then I had two planned children. Now I am vehemently pro-choice — because I understand what it means to actually choose."</p>
+          <span class="as-voice-tag">Mother of two</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I had PCOS and believed I couldn't conceive. I was wrong. I crossed a border to access what I needed. The secrecy alone was its own kind of punishment."</p>
+          <span class="as-voice-tag">Age 34</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"Condom and morning-after pill both failed. There were religious protesters outside the clinic on both visits. I spent all my savings on a private clinic so I wouldn't be recognised. No regrets."</p>
+          <span class="as-voice-tag">Age 25, committed relationship</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I drove to another city and paid over a thousand pounds out of pocket. The home pill experience was difficult with no follow-up support. I am still glad I had the option."</p>
+          <span class="as-voice-tag">Australia, age 25</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was 38, happily married, with a stepdaughter I love. My parents were aging. The house was small. I thought carefully about my life. Nine years later — no regrets."</p>
+          <span class="as-voice-tag">Age 38</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I switched contraception and had bad luck. I never told my partner — I knew he'd want to continue and I didn't. We split a year later. I'm now 39 and still do not want children. Zero regrets."</p>
+          <span class="as-voice-tag">Age 24, now 39</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"My copper coil fell out without me knowing. I was pregnant, my relationship was breaking down, and at the ultrasound I saw a heartbeat. I still made the decision that was right for me. The grief and the rightness can both be true."</p>
+          <span class="as-voice-tag">Age 20, university student</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"My partner became aggressive the moment I told him. I had the abortion. The relationship ended anyway. I made the right call twice."</p>
+          <span class="as-voice-tag">Anonymous</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was in a relationship with an alcoholic. I made the decision. Later I did community work I could never have done as a parent. I have no doubt the life I chose was the right one."</p>
+          <span class="as-voice-tag">Anonymous</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was 18. I had my mother's support, I was seen the same day, and I went back to work the next morning. Zero regrets. I wish it were this straightforward for everyone."</p>
+          <span class="as-voice-tag">Age 18</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ── SOLIDARITY STATEMENT ──────────────────────────── -->
   <section class="as-solidarity">
     <div class="as-solidarity-inner">
@@ -899,6 +969,37 @@ const { headInner, bodyClass } = extract(homeRaw);
     .as-btn-primary:hover {
       background: #ffffff;
       color: #0C0A3E !important;
+    }
+
+    /* ── MORE VOICES GRID ─────────────────────────────── */
+    .as-voices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .as-voice {
+      background: #ffffff;
+      padding: 32px 28px;
+      border-left: 3px solid #A89CED;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .as-voice:nth-child(3n+2) { border-left-color: #CCFF33; }
+    .as-voice:nth-child(3n+3) { border-left-color: #0C0A3E; }
+    .as-voice-quote {
+      font: 400 16px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 !important;
+      font-style: italic;
+      flex: 1;
+    }
+    .as-voice-tag {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(12,10,62,0.35);
+      margin-top: auto;
     }
 
     /* ── RESPONSIVE ───────────────────────────────────── */

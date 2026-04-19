@@ -232,7 +232,9 @@ const { headInner, bodyClass } = extract(homeRaw);
       </div>
 
       <div class="ol-sign-right">
-        <form class="ol-form" action="https://levelup.movement-action.org/p/no-more-lyes" method="get" target="_blank">
+        <form class="ol-form" action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST">
+          <input type="hidden" name="_subject" value="New open letter signature — #NoMoreLyes" />
+          <input type="hidden" name="_next" value="https://welevelup.org/nomorelyes-open-letter-to-loreal/?signed=1" />
           <div class="ol-form-row">
             <div class="ol-form-field">
               <label class="ol-form-label" for="ol-first-name">First name</label>
@@ -252,13 +254,13 @@ const { headInner, bodyClass } = extract(homeRaw);
             <input id="ol-postcode" class="ol-form-input" type="text" name="postcode" placeholder="e.g. E1 6RF" />
           </div>
           <div class="ol-form-check">
-            <input type="checkbox" id="ol-updates" name="updates" class="ol-check-input" />
+            <input type="checkbox" id="ol-updates" name="keep_me_updated" class="ol-check-input" />
             <label for="ol-updates" class="ol-check-label">Keep me updated on this campaign and Level Up news</label>
           </div>
           <button type="submit" class="ol-form-submit">
             Sign the open letter <span aria-hidden="true">→</span>
           </button>
-          <p class="ol-form-note">Your details are sent securely to our petition platform. We will never share your personal data.</p>
+          <p class="ol-form-note">Your details are stored securely. We will never share your personal data with third parties.</p>
         </form>
       </div>
     </div>
@@ -608,6 +610,11 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin: 0 !important;
   }
   .ol-sig-individuals { border-top: 1px solid rgba(12,10,62,0.1); padding-top: 28px; }
+  .ol-sig-individuals .ol-sig-names-inline {
+    font-size: 12px !important;
+    line-height: 1.9 !important;
+    color: rgba(12,10,62,0.55) !important;
+  }
 
   /* REFERENCES */
   .ol-references-section { border-top: 1px solid rgba(12,10,62,0.08); }

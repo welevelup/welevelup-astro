@@ -111,98 +111,6 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <section class="nr-filters" aria-label="Filter resources">
-    <div class="nr-filters-inner">
-      <select class="nr-filter-select" id="nr-cat" aria-label="Filter by category">
-        <option value="all">All Resource Categories</option>
-        <option value="academic">Academic Research</option>
-        <option value="focused">Focused on Our Campaign</option>
-        <option value="mentions">Mentions Our Campaign</option>
-        <option value="other-articles">Other Relevant Articles</option>
-        <option value="other-campaigns">Other Relevant Campaigns</option>
-        <option value="regulation">Regulation Information</option>
-        <option value="video">Video</option>
-        <option value="organisation">Organisations</option>
-      </select>
-      <select class="nr-filter-select" id="nr-type" aria-label="Filter by media type">
-        <option value="all">All Media Types</option>
-        <option value="academic">Academic Paper</option>
-        <option value="article">Article</option>
-        <option value="campaign">Our Campaign</option>
-        <option value="organisation">Organisation</option>
-        <option value="regulation">Regulation</option>
-        <option value="video">Video</option>
-      </select>
-      <select class="nr-filter-select" id="nr-platform" aria-label="Filter by platform">
-        <option value="all">Platform</option>
-        <option value="about-lawsuits">About Lawsuits</option>
-        <option value="american-journal-epidemiology">American Journal of Epidemiology</option>
-        <option value="annals-otology">Annals of Otology Rhinology &amp; Laryngology</option>
-        <option value="bbc-newsbeat">BBC Newsbeat</option>
-        <option value="beauty-packaging">Beauty Packaging</option>
-        <option value="breast-cancer-prevention-partners">Breast Cancer Prevention Partners</option>
-        <option value="business-telegraph">Business Telegraph</option>
-        <option value="carcinogenesis">Carcinogenesis Volume 42</option>
-        <option value="cnn">CNN</option>
-        <option value="cosmetics-design-europe">Cosmetics Design Europe</option>
-        <option value="ctpa">CTPA</option>
-        <option value="evening-standard">Evening Standard</option>
-        <option value="fox-soul">Fox Soul</option>
-        <option value="gal-dem">Gal-dem</option>
-        <option value="glamour-magazine">Glamour Magazine</option>
-        <option value="gov-uk">Gov UK</option>
-        <option value="headline-global-news">Headline &amp; Global News</option>
-        <option value="independent">Independent</option>
-        <option value="journal-national-cancer-institute">Journal of the National Cancer Institute</option>
-        <option value="journal-pediatric-gastroenterology">Journal of Pediatric Gastroenterology and Nutrition</option>
-        <option value="lawsuit-information-center">Lawsuit Information Center</option>
-        <option value="medscape">Medscape</option>
-        <option value="news-watch-tv">News Watch TV</option>
-        <option value="newsweek">Newsweek</option>
-        <option value="portugal-posts-english">Portugal Posts English</option>
-        <option value="refinery29">Refinery29</option>
-        <option value="retail-bum">Retail Bum</option>
-        <option value="reuters">Reuters</option>
-        <option value="the-examination">The Examination</option>
-        <option value="the-guardian">The Guardian</option>
-        <option value="the-voice">The Voice</option>
-        <option value="time-news">Time News</option>
-        <option value="uk-parliament">UK Parliament</option>
-      </select>
-      <select class="nr-filter-select" id="nr-topic" aria-label="Filter by topic">
-        <option value="all">Topic(s)</option>
-        <option value="nomorelyes">#NoMoreLyes</option>
-        <option value="allergies">Allergies</option>
-        <option value="beauty">Beauty</option>
-        <option value="black-women-beauty">Black Women &amp; Beauty</option>
-        <option value="breast-cancer">Breast Cancer</option>
-        <option value="burns">Burns</option>
-        <option value="cancer">Cancer</option>
-        <option value="children">Children</option>
-        <option value="ctpa">CTPA</option>
-        <option value="dark-lovely">Dark &amp; Lovely</option>
-        <option value="endocrine-disruption">Endocrine Disruption</option>
-        <option value="fibroids">Fibroids</option>
-        <option value="free-to-read">Free To Read</option>
-        <option value="glyoxylic-acid">Glyoxylic Acid</option>
-        <option value="hair-discrimination">Hair Discrimination</option>
-        <option value="ingestion">Ingestion</option>
-        <option value="kidney-failure">Kidney Failure</option>
-        <option value="lawsuits">Lawsuits</option>
-        <option value="loreal">L'Oréal</option>
-        <option value="lye">Lye</option>
-        <option value="racial-trauma">Racial Trauma</option>
-        <option value="regulation">Regulation</option>
-        <option value="relaxer-boxes">Relaxer Boxes</option>
-        <option value="revlon">Revlon</option>
-        <option value="sodium-hydroxide">Sodium Hydroxide</option>
-        <option value="uterine-cancer">Uterine Cancer</option>
-        <option value="wellness">Wellness</option>
-      </select>
-      <button class="nr-filter-reset" id="nr-reset" aria-label="Clear all filters" style="display:none">Clear ×</button>
-    </div>
-  </section>
-
   <section class="nr-body">
     <div class="nr-body-inner">
 
@@ -219,6 +127,97 @@ const { headInner, bodyClass } = extract(homeRaw);
           <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="nr-action-link">Open letter to L'Oréal →</a>
           <a href="https://levelup.movement-action.org/p/share-your-hair-story" target="_blank" rel="noopener" class="nr-action-link">Share your hair story →</a>
         </nav>
+        <hr class="nr-divider" />
+        <div class="nr-sidebar-filters" aria-label="Filter resources">
+          <p class="nr-sidebar-filter-label">Filter resources</p>
+          <select class="nr-filter-select" id="nr-cat" aria-label="Filter by category">
+            <option value="all">All Categories</option>
+            <option value="academic">Academic Research</option>
+            <option value="focused">Focused on Our Campaign</option>
+            <option value="mentions">Mentions Our Campaign</option>
+            <option value="other-articles">Other Relevant Articles</option>
+            <option value="other-campaigns">Other Relevant Campaigns</option>
+            <option value="regulation">Regulation Information</option>
+            <option value="video">Video</option>
+            <option value="organisation">Organisations</option>
+          </select>
+          <select class="nr-filter-select" id="nr-type" aria-label="Filter by media type">
+            <option value="all">All Media Types</option>
+            <option value="academic">Academic Paper</option>
+            <option value="article">Article</option>
+            <option value="campaign">Our Campaign</option>
+            <option value="organisation">Organisation</option>
+            <option value="regulation">Regulation</option>
+            <option value="video">Video</option>
+          </select>
+          <select class="nr-filter-select" id="nr-platform" aria-label="Filter by platform">
+            <option value="all">Platform</option>
+            <option value="about-lawsuits">About Lawsuits</option>
+            <option value="american-journal-epidemiology">American Journal of Epidemiology</option>
+            <option value="annals-otology">Annals of Otology Rhinology &amp; Laryngology</option>
+            <option value="bbc-newsbeat">BBC Newsbeat</option>
+            <option value="beauty-packaging">Beauty Packaging</option>
+            <option value="breast-cancer-prevention-partners">Breast Cancer Prevention Partners</option>
+            <option value="business-telegraph">Business Telegraph</option>
+            <option value="carcinogenesis">Carcinogenesis Volume 42</option>
+            <option value="cnn">CNN</option>
+            <option value="cosmetics-design-europe">Cosmetics Design Europe</option>
+            <option value="ctpa">CTPA</option>
+            <option value="evening-standard">Evening Standard</option>
+            <option value="fox-soul">Fox Soul</option>
+            <option value="gal-dem">Gal-dem</option>
+            <option value="glamour-magazine">Glamour Magazine</option>
+            <option value="gov-uk">Gov UK</option>
+            <option value="headline-global-news">Headline &amp; Global News</option>
+            <option value="independent">Independent</option>
+            <option value="journal-national-cancer-institute">Journal of the National Cancer Institute</option>
+            <option value="journal-pediatric-gastroenterology">Journal of Pediatric Gastroenterology and Nutrition</option>
+            <option value="lawsuit-information-center">Lawsuit Information Center</option>
+            <option value="medscape">Medscape</option>
+            <option value="news-watch-tv">News Watch TV</option>
+            <option value="newsweek">Newsweek</option>
+            <option value="portugal-posts-english">Portugal Posts English</option>
+            <option value="refinery29">Refinery29</option>
+            <option value="retail-bum">Retail Bum</option>
+            <option value="reuters">Reuters</option>
+            <option value="the-examination">The Examination</option>
+            <option value="the-guardian">The Guardian</option>
+            <option value="the-voice">The Voice</option>
+            <option value="time-news">Time News</option>
+            <option value="uk-parliament">UK Parliament</option>
+          </select>
+          <select class="nr-filter-select" id="nr-topic" aria-label="Filter by topic">
+            <option value="all">Topic(s)</option>
+            <option value="nomorelyes">#NoMoreLyes</option>
+            <option value="allergies">Allergies</option>
+            <option value="beauty">Beauty</option>
+            <option value="black-women-beauty">Black Women &amp; Beauty</option>
+            <option value="breast-cancer">Breast Cancer</option>
+            <option value="burns">Burns</option>
+            <option value="cancer">Cancer</option>
+            <option value="children">Children</option>
+            <option value="ctpa">CTPA</option>
+            <option value="dark-lovely">Dark &amp; Lovely</option>
+            <option value="endocrine-disruption">Endocrine Disruption</option>
+            <option value="fibroids">Fibroids</option>
+            <option value="free-to-read">Free To Read</option>
+            <option value="glyoxylic-acid">Glyoxylic Acid</option>
+            <option value="hair-discrimination">Hair Discrimination</option>
+            <option value="ingestion">Ingestion</option>
+            <option value="kidney-failure">Kidney Failure</option>
+            <option value="lawsuits">Lawsuits</option>
+            <option value="loreal">L'Oréal</option>
+            <option value="lye">Lye</option>
+            <option value="racial-trauma">Racial Trauma</option>
+            <option value="regulation">Regulation</option>
+            <option value="relaxer-boxes">Relaxer Boxes</option>
+            <option value="revlon">Revlon</option>
+            <option value="sodium-hydroxide">Sodium Hydroxide</option>
+            <option value="uterine-cancer">Uterine Cancer</option>
+            <option value="wellness">Wellness</option>
+          </select>
+          <button class="nr-filter-reset" id="nr-reset" aria-label="Clear all filters" style="display:none">Clear filters ×</button>
+        </div>
       </aside>
 
       <div class="nr-content">
@@ -773,29 +772,27 @@ const { headInner, bodyClass } = extract(homeRaw);
   .nr-faq-item[open] summary::after { content: '−'; }
   .nr-faq-a { font: 400 15px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); padding: 0 0 22px; max-width: 720px; }
 
-  .nr-filters { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.1); padding: 20px 24px; overflow-x: auto; }
-  .nr-filters-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: nowrap; gap: 12px; min-width: 0; }
+  .nr-sidebar-filter-label { font: 700 10px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.16em; color: #0C0A3E; margin: 0 0 12px; }
+  .nr-sidebar-filters { display: flex; flex-direction: column; gap: 8px; }
   .nr-filter-select {
-    font: 700 12px/1 'DM Sans', sans-serif;
+    font: 700 11px/1 'DM Sans', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.06em;
     color: #FFFFFF;
     background: #0C0A3E;
     border: none;
-    padding: 16px 40px 16px 20px;
+    padding: 12px 32px 12px 14px;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 16px center;
-    background-size: 12px 8px;
+    background-position: right 12px center;
+    background-size: 10px 6px;
     width: 100%;
-    flex: 1;
-    min-width: 0;
   }
   .nr-filter-select:focus { outline: 2px solid #A89CED; outline-offset: 2px; }
-  .nr-filter-reset { font: 700 12px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.07em; color: #0C0A3E; background: transparent; border: 1.5px solid rgba(12,10,62,0.4); padding: 14px 18px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.15s; }
+  .nr-filter-reset { font: 700 11px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.06em; color: #0C0A3E; background: transparent; border: 1.5px solid rgba(12,10,62,0.3); padding: 10px 14px; cursor: pointer; width: 100%; margin-top: 4px; transition: all 0.15s; text-align: left; }
   .nr-filter-reset:hover { background: #0C0A3E; color: #CCFF33; border-color: #0C0A3E; }
 
   .nr-body { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.08); padding: 72px 24px 96px; }
@@ -855,7 +852,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     .nr-body-inner { grid-template-columns: 1fr; gap: 40px; }
     .nr-sidebar { position: static; }
     .nr-sidebar-stats { flex-direction: row; gap: 32px; }
-    .nr-filter-select { min-width: 160px; }
+    .nr-sidebar-filters { flex-direction: row; flex-wrap: wrap; }
   }
   @media (max-width: 640px) {
     .nr-hero { padding: 72px 20px 56px; }

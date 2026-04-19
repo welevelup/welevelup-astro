@@ -1,0 +1,477 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const cards = [
+  {
+    img: 'https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.20.png',
+    title: 'Abortion is Healthcare',
+    desc: "It's time the law treats it as such. Join the campaign.",
+    supporters: '6,1K',
+    signUrl: 'https://levelup.yourmovement.org/p/abortion-is-healthcare',
+    learnUrl: '/active-campaigns/abortion-is-healthcare',
+  },
+  {
+    img: 'https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.40-e1771105055980.png',
+    title: 'Stop sending pregnant women to prison',
+    desc: 'Prison will never be a safe place to be pregnant.',
+    supporters: '13,1K',
+    signUrl: 'https://levelup.yourmovement.org/p/pregnancy-in-prison',
+    learnUrl: '/active-campaigns/pregnancy-in-prison',
+  },
+  {
+    img: 'https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.10-e1771105231897.png',
+    title: '#NoMoreLyes — Take toxic hair relaxers off the shelves',
+    desc: 'Lye-based products cause serious harm. Stand up for Black women\'s health.',
+    supporters: '6,4K',
+    signUrl: 'https://levelup.yourmovement.org/p/no-more-lyes',
+    learnUrl: '/active-campaigns/nomorelyes-2',
+  },
+];
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Card Proposals — Level Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #0C0A3E; color: #fff; }
+
+    .proposals-wrap { max-width: 1200px; margin: 0 auto; padding: 80px 32px; }
+    .proposals-header { text-align: center; margin-bottom: 80px; }
+    .proposals-header h1 { font: 900 48px/1 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin-bottom: 12px; }
+    .proposals-header p { font: 400 16px/1.5 'DM Sans'; color: rgba(255,255,255,0.5); }
+
+    .proposal-section { margin-bottom: 80px; }
+    .proposal-label {
+      display: inline-block;
+      font: 800 11px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #0C0A3E;
+      background: #CCFF33;
+      padding: 6px 14px;
+      margin-bottom: 20px;
+    }
+    .proposal-name {
+      font: 800 28px/1 'DM Sans';
+      color: #fff;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .proposal-desc {
+      font: 400 14px/1.5 'DM Sans';
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 32px;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* ══════════════════════════════════════
+       PROPOSAL A — Dark Editorial
+    ══════════════════════════════════════ */
+    .card-a {
+      background: #12103A;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.2s;
+    }
+    .card-a:hover { transform: translateY(-6px); }
+    .card-a__img {
+      position: relative;
+      height: 220px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .card-a__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+      filter: brightness(0.7);
+    }
+    .card-a:hover .card-a__img img { transform: scale(1.05); }
+    .card-a__img-title {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 40px 20px 16px;
+      background: linear-gradient(to top, rgba(12,10,62,0.9) 0%, transparent 100%);
+    }
+    .card-a__img-title span {
+      font: 800 11px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #CCFF33;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .card-a__img-title h3 {
+      font: 800 18px/1.15 'DM Sans';
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .card-a__body {
+      padding: 16px 20px 0;
+      flex: 1;
+    }
+    .card-a__desc {
+      font: 400 13px/1.5 'DM Sans';
+      color: rgba(255,255,255,0.5);
+    }
+    .card-a__supporters {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font: 700 11px/1 'DM Sans';
+      color: rgba(204,255,51,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 12px;
+    }
+    .card-a__actions {
+      display: flex;
+      margin-top: 20px;
+    }
+    .card-a__sign {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #CCFF33;
+      color: #0C0A3E;
+      font: 800 12px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 16px;
+      text-decoration: none;
+      transition: background 0.15s;
+      position: relative;
+      z-index: 1;
+    }
+    .card-a__sign:hover { background: #fff; }
+    .card-a__learn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.4);
+      font: 600 11px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 16px 20px;
+      text-decoration: none;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .card-a__learn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+
+    /* ══════════════════════════════════════
+       PROPOSAL B — Clean White + Lime Accent
+    ══════════════════════════════════════ */
+    .card-b {
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-top: 4px solid #CCFF33;
+    }
+    .card-b:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.3); }
+    .card-b__img {
+      height: 180px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .card-b__img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s;
+    }
+    .card-b:hover .card-b__img img { transform: scale(1.05); }
+    .card-b__body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card-b__tag {
+      font: 700 10px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #CCFF33;
+      background: #0C0A3E;
+      padding: 4px 8px;
+      align-self: flex-start;
+    }
+    .card-b__body h3 {
+      font: 800 17px/1.2 'DM Sans';
+      color: #0C0A3E;
+      letter-spacing: -0.02em;
+    }
+    .card-b__desc {
+      font: 400 13px/1.5 'DM Sans';
+      color: rgba(12,10,62,0.6);
+      flex: 1;
+    }
+    .card-b__supporters {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font: 600 11px/1 'DM Sans';
+      color: rgba(12,10,62,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .card-b__actions {
+      display: flex;
+      gap: 1px;
+      border-top: 1px solid rgba(12,10,62,0.08);
+      margin-top: 16px;
+    }
+    .card-b__sign {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0C0A3E;
+      color: #CCFF33;
+      font: 800 11px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 14px;
+      text-decoration: none;
+      transition: background 0.15s;
+      position: relative;
+      z-index: 1;
+    }
+    .card-b__sign:hover { background: #CCFF33; color: #0C0A3E; }
+    .card-b__learn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(12,10,62,0.4);
+      font: 600 11px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 14px 18px;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .card-b__learn:hover { color: #0C0A3E; }
+
+    /* ══════════════════════════════════════
+       PROPOSAL C — Bold Typographic (no image)
+    ══════════════════════════════════════ */
+    .card-c {
+      background: #CCFF33;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      padding: 28px 24px 0;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+      min-height: 280px;
+    }
+    .card-c:hover { transform: translateY(-6px); }
+    .card-c__num {
+      font: 900 72px/1 'DM Sans';
+      color: rgba(12,10,62,0.1);
+      position: absolute;
+      top: 12px; right: 20px;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      user-select: none;
+    }
+    .card-c__tag {
+      font: 700 10px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(12,10,62,0.5);
+      margin-bottom: 16px;
+    }
+    .card-c__body h3 {
+      font: 900 22px/1.1 'DM Sans';
+      color: #0C0A3E;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+    }
+    .card-c__desc {
+      font: 400 13px/1.5 'DM Sans';
+      color: rgba(12,10,62,0.65);
+      flex: 1;
+      margin-bottom: 20px;
+    }
+    .card-c__supporters {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font: 700 11px/1 'DM Sans';
+      color: rgba(12,10,62,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+    }
+    .card-c__actions {
+      display: flex;
+      margin: 0 -24px;
+    }
+    .card-c__sign {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0C0A3E;
+      color: #CCFF33;
+      font: 800 12px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px;
+      text-decoration: none;
+      transition: background 0.15s;
+      position: relative;
+      z-index: 1;
+    }
+    .card-c__sign:hover { background: #1a1760; }
+    .card-c__learn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(12,10,62,0.12);
+      color: rgba(12,10,62,0.6);
+      font: 600 11px/1 'DM Sans';
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 18px 20px;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .card-c__learn:hover { background: rgba(12,10,62,0.2); color: #0C0A3E; }
+
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      margin: 0 0 80px;
+    }
+
+    svg.icon { width: 12px; height: 12px; fill: currentColor; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+  <div class="proposals-wrap">
+    <div class="proposals-header">
+      <h1>Card Proposals</h1>
+      <p>3 designs for the petition cards — pick one to implement</p>
+    </div>
+
+    <!-- PROPOSAL A -->
+    <div class="proposal-section">
+      <div class="proposal-label">Proposal A</div>
+      <div class="proposal-name">Dark Editorial</div>
+      <p class="proposal-desc">Navy cards, title overlaid on image, lime accent — dramatic and campaign-led</p>
+      <div class="cards-grid">
+        {cards.map(c => (
+          <div class="card-a">
+            <div class="card-a__img">
+              <img src={c.img} alt={c.title} />
+              <div class="card-a__img-title">
+                <span>Campaign</span>
+                <h3>{c.title}</h3>
+              </div>
+            </div>
+            <div class="card-a__body">
+              <p class="card-a__desc">{c.desc}</p>
+              <div class="card-a__supporters">
+                <svg class="icon" viewBox="0 0 448 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>
+                {c.supporters} supporters
+              </div>
+            </div>
+            <div class="card-a__actions">
+              <a href={c.signUrl} class="card-a__sign" target="_blank" rel="noopener">Sign →</a>
+              <a href={c.learnUrl} class="card-a__learn">Learn more</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- PROPOSAL B -->
+    <div class="proposal-section">
+      <div class="proposal-label">Proposal B</div>
+      <div class="proposal-name">Clean White</div>
+      <p class="proposal-desc">White cards with lime top border, navy Sign button — clean and accessible</p>
+      <div class="cards-grid">
+        {cards.map(c => (
+          <div class="card-b">
+            <div class="card-b__img">
+              <img src={c.img} alt={c.title} />
+            </div>
+            <div class="card-b__body">
+              <span class="card-b__tag">Campaign</span>
+              <h3>{c.title}</h3>
+              <p class="card-b__desc">{c.desc}</p>
+              <div class="card-b__supporters">
+                <svg class="icon" viewBox="0 0 448 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>
+                {c.supporters} supporters
+              </div>
+              <div class="card-b__actions">
+                <a href={c.signUrl} class="card-b__sign" target="_blank" rel="noopener">Sign →</a>
+                <a href={c.learnUrl} class="card-b__learn">Learn more →</a>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- PROPOSAL C -->
+    <div class="proposal-section">
+      <div class="proposal-label">Proposal C</div>
+      <div class="proposal-name">Bold Typographic</div>
+      <p class="proposal-desc">Lime cards, no image, large numbers — bold graphic identity, campaign-first</p>
+      <div class="cards-grid">
+        {cards.map((c, i) => (
+          <div class="card-c">
+            <div class="card-c__num">0{i+1}</div>
+            <div class="card-c__tag">Active Campaign</div>
+            <div class="card-c__body">
+              <h3>{c.title}</h3>
+              <p class="card-c__desc">{c.desc}</p>
+              <div class="card-c__supporters">
+                <svg class="icon" viewBox="0 0 448 512"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>
+                {c.supporters} supporters
+              </div>
+            </div>
+            <div class="card-c__actions">
+              <a href={c.signUrl} class="card-c__sign" target="_blank" rel="noopener">Sign →</a>
+              <a href={c.learnUrl} class="card-c__learn">Learn more →</a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

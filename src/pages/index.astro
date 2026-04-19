@@ -248,7 +248,9 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     text-decoration: none;
     white-space: nowrap;
   }
-  .ic-bar-item:hover { color: #CCFF33; }
+  .ic-bar:hover { background: #CCFF33; }
+  .ic-bar:hover .ic-bar-item { color: #0C0A3E; }
+  .ic-bar:hover .ic-bar-track { animation-play-state: paused; }
   .ic-bar-badge {
     background: #0C0A3E;
     color: #CCFF33;
@@ -475,7 +477,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   }
   .home-blog-title {
     font: 800 48px/0.9 'DM Sans', sans-serif;
-    color: #EEEBD3;
+    color: #FFFFFF;
     letter-spacing: -0.04em;
     margin: 0 0 40px;
   }

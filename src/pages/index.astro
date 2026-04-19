@@ -460,6 +460,18 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     .home-blog-grid { grid-template-columns: 1fr; }
     .home-blog-card--featured { grid-column: 1; }
     .home-blog-title { font-size: 36px; }
+    .ic-bar { font-size: 11px; padding: 10px 16px; }
+    .ic-banner { grid-template-columns: 1fr; }
+    .ic-banner-img { height: 200px; }
+    .ic-banner-content { padding: 32px 24px; }
+    .ic-banner-content h2 { font-size: 24px; }
+    .home-petitions-title { font-size: 32px !important; }
+    .home-petitions-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .home-petition-card img { height: 140px; }
+    .home-petition-body h3 { font-size: 14px; }
+  }
+  @media (max-width: 480px) {
+    .home-petitions-grid { grid-template-columns: 1fr; }
   }
 </style>
 

@@ -99,6 +99,17 @@ function rewriteLink(url: string): string {
   return path;
 }
 
+function stripDuplicateHeadTags(raw: string): string {
+  return raw
+    .replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, '')
+    .replace(/<meta\b[^>]*\bname="description"[^>]*>/gi, '')
+    .replace(/<meta\b[^>]*\bproperty="og:[^"]*"[^>]*>/gi, '')
+    .replace(/<meta\b[^>]*\bname="twitter:[^"]*"[^>]*>/gi, '')
+    .replace(/<link\b[^>]*\brel="canonical"[^>]*>/gi, '')
+    .replace(/<meta\b[^>]*\bcharset=[^>]*>/gi, '')
+    .replace(/<meta\b[^>]*\bname="viewport"[^>]*>/gi, '');
+}
+
 export function extract(rawHtml: string): ExtractedHtml {
   const html = rawHtml
     .replace(VER_QS, '')
@@ -106,7 +117,7 @@ export function extract(rawHtml: string): ExtractedHtml {
     .replace(HREF_RE, (_, url) => `href="${rewriteLink(url)}"`);
 
   const headMatch = html.match(HEAD_RE);
-  const headInner = headMatch ? headMatch[1] : '';
+  const headInner = headMatch ? stripDuplicateHeadTags(headMatch[1]) : '';
 
   const bodyMatch = html.match(BODY_RE);
   if (!bodyMatch) {

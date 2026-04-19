@@ -6,6 +6,7 @@ interface Props {
   description?: string;
   ogUrl?: string;
   ogImage?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -15,6 +16,7 @@ const {
   description,
   ogUrl,
   ogImage = 'https://welevelup.org/wp-content/uploads/2023/05/Level-Up-OG.png',
+  noindex = false,
 } = Astro.props;
 
 const siteBase = 'https://welevelup.org';
@@ -23,6 +25,9 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
 <!doctype html>
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <Fragment set:html={headHtml} />
     <style is:global>
       .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -69,10 +74,20 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
       "name": "Level Up",
       "alternateName": "welevelup.org",
       "url": "https://welevelup.org",
-      "logo": "https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp"
+      },
       "description": "Level Up is a UK-based feminist campaigning organisation working to advance reproductive justice, abortion decriminalisation and freedom from systemic violence.",
-      "foundingDate": "2018",
+      "foundingDate": "2018-01-01",
       "email": "hello@welevelup.org",
+      "areaServed": "GB",
+      "knowsAbout": ["reproductive justice", "abortion rights", "domestic violence", "gender justice", "feminist campaigns"],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "hello@welevelup.org",
+        "contactType": "general"
+      },
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "New Derwent House, 69–73 Theobalds Road",

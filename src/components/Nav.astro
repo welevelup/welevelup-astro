@@ -6,7 +6,10 @@
 <header class="lu-nav">
   <div class="lu-nav-top">
     <a href="/" class="lu-nav-logo">
-      <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="38" />
+      <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="38" class="lu-nav-logo-full" />
+      <span class="lu-nav-logo-icon-bg">
+        <img src="https://welevelup.org/wp-content/uploads/2025/07/cropped-cropped-square-shape-01.webp" alt="Level Up" height="36" class="lu-nav-logo-icon" />
+      </span>
     </a>
     <div class="lu-nav-ctas">
       <a href="/donate" class="lu-nav-donate">Donate</a>
@@ -147,6 +150,8 @@
     text-decoration: none;
   }
   .lu-nav-logo img { height: 30px; width: auto; }
+  .lu-nav-logo-icon-bg { display: none; }
+  .lu-nav-logo-icon { display: block; }
   .lu-nav-tagline {
     font: 400 11px/1.35 'DM Sans', sans-serif;
     color: #0C0A3E;
@@ -347,11 +352,24 @@
       padding: 16px 16px;
     }
     .lu-nav-logo img { height: 28px; }
-    .lu-nav-ctas {
-      margin-right: 56px;
+    .lu-nav-ctas { margin-right: 84px; }
+    .lu-nav-logo-full { display: none; }
+    .lu-nav-logo-icon-bg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0C0A3E;
+      border-radius: 6px;
+      padding: 4px;
     }
-    .lu-nav-donate { display: none !important; }
-    .lu-nav-ctas { margin-right: 48px; }
+    .lu-nav-logo-icon {
+      height: 36px;
+      filter: brightness(0) invert(1) sepia(1) saturate(5) hue-rotate(45deg);
+    }
+    .lu-nav-donate {
+      padding: 10px 14px;
+      font-size: 13px;
+    }
     .lu-nav-join {
       display: none !important;
     }

@@ -6,7 +6,7 @@ import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout headHtml={headInner} bodyClass={bodyClass} noindex={true}>
   <Nav />
   <div class="vp-page">
     <h1 class="vp-main-title">Video Section — 3 Proposals</h1>

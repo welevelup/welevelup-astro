@@ -6,7 +6,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="#NoMoreLyes — Take Toxic Hair Relaxers Off the Shelves | Level Up"
+  description="Lye-based hair relaxers cause serious harm to Black women. Join Level Up's #NoMoreLyes campaign and sign the petition to remove toxic products from UK shelves."
+>
   <Nav />
 
   <!-- HERO WITH VIDEO BACKGROUND -->

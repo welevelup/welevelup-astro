@@ -6,7 +6,7 @@ import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout headHtml={headInner} bodyClass={bodyClass} noindex={true}>
   <Nav />
   <div class="wp-page">
     <h1 class="wp-main-title">"Who We Are" — 3 Proposals</h1>

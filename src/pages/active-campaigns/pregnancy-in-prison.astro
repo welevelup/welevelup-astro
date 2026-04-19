@@ -458,7 +458,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       margin-bottom: 20px;
       display: block;
     }
-    .dp-label--light { color: rgba(238,235,211,0.45); }
+    .dp-label--light { color: rgba(238,235,211,0.8); }
     .dp-title {
       font: 800 clamp(48px,10vw,88px)/0.88 'DM Sans', sans-serif !important;
       color: #CCFF33 !important;
@@ -533,7 +533,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       letter-spacing: -0.045em !important;
       margin: 8px 0 24px;
     }
-    .dp-h2--light { color: #CCFF33 !important; }
+    .dp-content h2.dp-h2--light { color: #CCFF33 !important; }
     .dp-content p {
       font: 400 18px/1.55 'DM Sans', sans-serif !important;
       color: rgba(12,10,62,0.8) !important;
@@ -860,8 +860,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
     .dp-btn-secondary-light {
       display: inline-block;
-      background: transparent;
-      color: #0C0A3E;
+      background: #0C0A3E;
+      color: #CCFF33;
       font: 700 14px/1 'DM Sans', sans-serif;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -870,7 +870,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       border: 2px solid #0C0A3E;
       transition: all 0.2s;
     }
-    .dp-btn-secondary-light:hover { background: #0C0A3E; color: #CCFF33; }
+    .dp-btn-secondary-light:hover { background: #CCFF33; color: #0C0A3E; }
 
     /* CTA */
     .dp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; }

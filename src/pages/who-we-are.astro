@@ -7,7 +7,12 @@ import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Who We Are | Level Up"
+  description="Meet the Level Up community — feminists from a range of backgrounds centering the voices of women, gender-nonconforming and trans people fighting gender injustice."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({
@@ -19,7 +24,6 @@ const { headInner, bodyClass } = extract(homeRaw);
     ]
   })}</script>
 
-  <title>Who We Are — Level Up</title>
 
   <section class="wwa-hero" aria-labelledby="wwa-hero-heading">
     <div class="wwa-hero-inner">

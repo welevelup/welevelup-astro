@@ -11,7 +11,13 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Dignity for Dead Women — Media Campaign | Level Up"
+  description="Level Up's campaign for dignified, accurate media coverage of fatal domestic abuse. Join 29,000+ people demanding IPSO end victim-blaming headlines."
+  ogImage="https://welevelup.org/wp-content/uploads/2025/08/Level-Up-at-IPSO-e1680513085600-800x418-1-e1769804722383.jpg"
+>
   <Nav />
 
   <!-- HERO — plain navy with background image -->

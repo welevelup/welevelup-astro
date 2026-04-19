@@ -43,7 +43,13 @@ const campaignMap: Record<string, { title: string; url: string }> = {
 };
 const relatedCampaign = campaignMap[post.id];
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title={`${post.data.title} | Level Up`}
+  description={post.data.excerpt}
+  ogImage={post.data.image}
+>
   <Nav />
 
   <!-- HEADER -->

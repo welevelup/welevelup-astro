@@ -13,7 +13,12 @@ const { headInner, bodyClass } = extract(homeRaw);
 
 const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justice System', 'Online'];
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Voices from the Movement | Level Up"
+  description="Personal accounts of sexism, racism, harassment, gender-based violence, and resistance — shared by the Level Up community."
+>
   <Nav />
 
   <!-- Back nav -->

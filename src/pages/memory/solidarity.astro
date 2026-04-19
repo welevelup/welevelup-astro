@@ -12,7 +12,12 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Messages of Solidarity | Level Up"
+  description="Read messages of solidarity from the Level Up community. No one faces gender injustice alone — here, every voice is seen."
+>
   <Nav />
 
   <!-- ── HERO ────────────────────────────────────────────────── -->

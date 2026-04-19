@@ -6,7 +6,13 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="We Protect Us — Free Bystander Intervention Training | Level Up"
+  description="Join Level Up's free online bystander intervention training. Learn how to safely interrupt harassment in public, at work, or in your community. 413 people trained."
+  ogImage="https://welevelup.org/wp-content/uploads/2025/09/we-protect-us-2.webp"
+>
   <Nav />
 
   <!-- HERO (plain navy — no video) -->

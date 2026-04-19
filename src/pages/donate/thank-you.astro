@@ -10,7 +10,12 @@ import homeRaw from '../../_clone/index.html?raw';
 
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Thank You for Your Donation | Level Up"
+  description="Thank you for supporting Level Up's feminist campaigns. Your contribution helps us fight for gender justice in the UK."
+>
   <main class="lu-thanks">
     <h1>Thank you</h1>
     <p>

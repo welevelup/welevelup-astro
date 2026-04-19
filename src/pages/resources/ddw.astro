@@ -7,7 +7,12 @@ import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Dignity for Dead Women — Campaign Resources | Level Up"
+  description="Resources from Level Up's Dignity for Dead Women campaign — media guidelines for reporting on domestic homicide and victim-blaming coverage."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({

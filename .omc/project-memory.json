@@ -177,38 +177,44 @@
   "hotPaths": [
     {
       "path": "src/pages/resources/nomorelyes.astro",
-      "accessCount": 169,
-      "lastAccessed": 1776606383523,
+      "accessCount": 172,
+      "lastAccessed": 1776614170811,
       "type": "file"
     },
     {
       "path": "src/components/Nav.astro",
-      "accessCount": 46,
-      "lastAccessed": 1776612865605,
-      "type": "file"
-    },
-    {
-      "path": "src/pages/press.astro",
-      "accessCount": 34,
-      "lastAccessed": 1776614022183,
-      "type": "file"
-    },
-    {
-      "path": "src/pages/memory.astro",
-      "accessCount": 32,
-      "lastAccessed": 1776613971820,
+      "accessCount": 55,
+      "lastAccessed": 1776617706065,
       "type": "file"
     },
     {
       "path": "src/pages/index.astro",
-      "accessCount": 29,
-      "lastAccessed": 1776613969189,
+      "accessCount": 42,
+      "lastAccessed": 1776616888792,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/memory.astro",
+      "accessCount": 39,
+      "lastAccessed": 1776614853649,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/press.astro",
+      "accessCount": 35,
+      "lastAccessed": 1776614643070,
       "type": "file"
     },
     {
       "path": "src/pages/active-campaigns/nomorelyes-2.astro",
+      "accessCount": 29,
+      "lastAccessed": 1776614053528,
+      "type": "file"
+    },
+    {
+      "path": "src/components/Footer.astro",
       "accessCount": 28,
-      "lastAccessed": 1776614023937,
+      "lastAccessed": 1776621836890,
       "type": "file"
     },
     {
@@ -218,21 +224,21 @@
       "type": "file"
     },
     {
+      "path": "src/pages/memory/abortion-stories.astro",
+      "accessCount": 27,
+      "lastAccessed": 1776614876973,
+      "type": "file"
+    },
+    {
       "path": "src/pages/memory/stories.astro",
       "accessCount": 24,
       "lastAccessed": 1776612857479,
       "type": "file"
     },
     {
-      "path": "src/pages/memory/abortion-stories.astro",
-      "accessCount": 24,
-      "lastAccessed": 1776614013955,
-      "type": "file"
-    },
-    {
       "path": "src/pages/resources/ddw.astro",
-      "accessCount": 23,
-      "lastAccessed": 1776607024533,
+      "accessCount": 24,
+      "lastAccessed": 1776614192574,
       "type": "file"
     },
     {
@@ -248,27 +254,27 @@
       "type": "file"
     },
     {
+      "path": "src/pages/who-we-are.astro",
+      "accessCount": 20,
+      "lastAccessed": 1776614726758,
+      "type": "file"
+    },
+    {
       "path": "src/pages/active-campaigns/abortion-is-healthcare.astro",
       "accessCount": 19,
       "lastAccessed": 1776614035957,
       "type": "file"
     },
     {
-      "path": "src/pages/who-we-are.astro",
-      "accessCount": 18,
-      "lastAccessed": 1776612879964,
+      "path": "src/pages/resources/abortion-is-healthcare.astro",
+      "accessCount": 17,
+      "lastAccessed": 1776614183280,
       "type": "file"
     },
     {
       "path": "src/pages/blog/[slug].astro",
-      "accessCount": 16,
-      "lastAccessed": 1776594106572,
-      "type": "file"
-    },
-    {
-      "path": "src/pages/resources/abortion-is-healthcare.astro",
-      "accessCount": 16,
-      "lastAccessed": 1776606462975,
+      "accessCount": 17,
+      "lastAccessed": 1776614626477,
       "type": "file"
     },
     {
@@ -276,6 +282,12 @@
       "accessCount": 16,
       "lastAccessed": 1776613982492,
       "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 16,
+      "lastAccessed": 1776614743397,
+      "type": "directory"
     },
     {
       "path": "src/pages/active-campaigns/sexual-violence-in-football.astro",
@@ -291,32 +303,38 @@
     },
     {
       "path": "src/pages/our-impact.astro",
-      "accessCount": 9,
-      "lastAccessed": 1776609267068,
-      "type": "file"
-    },
-    {
-      "path": "src/components/Footer.astro",
-      "accessCount": 8,
-      "lastAccessed": 1776597084069,
-      "type": "file"
-    },
-    {
-      "path": "src/pages/about-us.astro",
-      "accessCount": 7,
-      "lastAccessed": 1776608802038,
-      "type": "file"
-    },
-    {
-      "path": "src/pages/blog.astro",
-      "accessCount": 7,
-      "lastAccessed": 1776612879640,
+      "accessCount": 11,
+      "lastAccessed": 1776614727460,
       "type": "file"
     },
     {
       "path": "src/layouts/Layout.astro",
+      "accessCount": 11,
+      "lastAccessed": 1776622063514,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/resources/pregnancy-in-prison.astro",
+      "accessCount": 9,
+      "lastAccessed": 1776614315838,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/about-us.astro",
+      "accessCount": 9,
+      "lastAccessed": 1776614726581,
+      "type": "file"
+    },
+    {
+      "path": "src/pages/blog.astro",
+      "accessCount": 9,
+      "lastAccessed": 1776614727611,
+      "type": "file"
+    },
+    {
+      "path": "src/lib/extractHtml.ts",
       "accessCount": 7,
-      "lastAccessed": 1776613964560,
+      "lastAccessed": 1776621955953,
       "type": "file"
     },
     {
@@ -326,15 +344,9 @@
       "type": "file"
     },
     {
-      "path": "src/pages/resources/pregnancy-in-prison.astro",
+      "path": "src/pages/contact.astro",
       "accessCount": 6,
-      "lastAccessed": 1776608450110,
-      "type": "file"
-    },
-    {
-      "path": "",
-      "accessCount": 6,
-      "lastAccessed": 1776613950711,
+      "lastAccessed": 1776614727827,
       "type": "directory"
     },
     {
@@ -350,16 +362,16 @@
       "type": "directory"
     },
     {
-      "path": "src/lib/extractHtml.ts",
+      "path": "src/pages/how-we-choose-our-campaigns.astro",
       "accessCount": 5,
-      "lastAccessed": 1776613953056,
+      "lastAccessed": 1776614727406,
       "type": "file"
     },
     {
-      "path": "src/pages/contact.astro",
-      "accessCount": 4,
-      "lastAccessed": 1776594301866,
-      "type": "directory"
+      "path": "src/pages/[...slug].astro",
+      "accessCount": 5,
+      "lastAccessed": 1776615144317,
+      "type": "file"
     },
     {
       "path": "src/pages",
@@ -368,15 +380,21 @@
       "type": "directory"
     },
     {
+      "path": "src/pages/who-we-are-proposals.astro",
+      "accessCount": 4,
+      "lastAccessed": 1776614728893,
+      "type": "file"
+    },
+    {
       "path": "src/pages/resources/proposal-c.astro",
       "accessCount": 3,
       "lastAccessed": 1776597482349,
       "type": "file"
     },
     {
-      "path": "src/pages/how-we-choose-our-campaigns.astro",
+      "path": "src/pages/video-proposals.astro",
       "accessCount": 3,
-      "lastAccessed": 1776608659973,
+      "lastAccessed": 1776614728643,
       "type": "file"
     },
     {
@@ -390,12 +408,6 @@
       "accessCount": 2,
       "lastAccessed": 1776606538019,
       "type": "directory"
-    },
-    {
-      "path": "src/pages/who-we-are-proposals.astro",
-      "accessCount": 2,
-      "lastAccessed": 1776606866912,
-      "type": "file"
     },
     {
       "path": "src/_clone/about-us/index.html",
@@ -426,18 +438,6 @@
       "accessCount": 1,
       "lastAccessed": 1776594333267,
       "type": "directory"
-    },
-    {
-      "path": "src/pages/[...slug].astro",
-      "accessCount": 1,
-      "lastAccessed": 1776595233835,
-      "type": "file"
-    },
-    {
-      "path": "src/pages/video-proposals.astro",
-      "accessCount": 1,
-      "lastAccessed": 1776597053795,
-      "type": "file"
     },
     {
       "path": "src/pages/resources",

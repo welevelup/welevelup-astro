@@ -104,7 +104,9 @@
       "agent_type": "oh-my-claudecode:executor",
       "started_at": "2026-04-19T15:51:28.254Z",
       "parent_mode": "none",
-      "status": "running"
+      "status": "completed",
+      "completed_at": "2026-04-19T15:54:36.269Z",
+      "duration_ms": 188015
     },
     {
       "agent_id": "aa965f63cae20e6b7",
@@ -114,10 +116,28 @@
       "status": "completed",
       "completed_at": "2026-04-19T15:54:06.484Z",
       "duration_ms": 124297
+    },
+    {
+      "agent_id": "aa5bdc811433524a6",
+      "agent_type": "Explore",
+      "started_at": "2026-04-19T16:03:38.177Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-19T16:04:13.294Z",
+      "duration_ms": 35117
+    },
+    {
+      "agent_id": "ac46e82ff40e6b607",
+      "agent_type": "Explore",
+      "started_at": "2026-04-19T16:05:20.419Z",
+      "parent_mode": "none",
+      "status": "completed",
+      "completed_at": "2026-04-19T16:05:38.679Z",
+      "duration_ms": 18260
     }
   ],
-  "total_spawned": 13,
-  "total_completed": 12,
+  "total_spawned": 15,
+  "total_completed": 15,
   "total_failed": 0,
-  "last_updated": "2026-04-19T15:54:06.587Z"
+  "last_updated": "2026-04-19T16:48:07.038Z"
 }

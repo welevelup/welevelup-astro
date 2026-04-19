@@ -7,7 +7,12 @@ import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="#NoMoreLyes — Hair Relaxer Info Kit | Level Up"
+  description="Level Up's #NoMoreLyes campaign resources: information about lye-based hair relaxers, health risks for Black women, and how to take action."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({

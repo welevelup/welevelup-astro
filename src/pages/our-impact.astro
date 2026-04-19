@@ -7,7 +7,12 @@ import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Our Impact | Level Up"
+  description="From changing sentencing policy for pregnant women to pushing the Premier League on consent training — see what Level Up's feminist campaigns have achieved."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({
@@ -19,7 +24,6 @@ const { headInner, bodyClass } = extract(homeRaw);
     ]
   })}</script>
 
-  <title>What We Are Proud Of — Level Up</title>
 
   <section class="oi-hero" aria-labelledby="oi-hero-heading">
     <div class="oi-hero-inner">

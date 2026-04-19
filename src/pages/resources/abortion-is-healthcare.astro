@@ -7,7 +7,12 @@ import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Abortion is Healthcare — Resources & Media Guidelines | Level Up"
+  description="Download Level Up's media guidelines and resources on abortion rights in the UK. Materials for journalists, activists, and supporters."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({

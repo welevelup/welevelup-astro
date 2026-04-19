@@ -7,7 +7,12 @@ import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Pregnancy in Prison — Resources & Legal Toolkit | Level Up"
+  description="Resources from Level Up's Pregnancy in Prison campaign — research, policy briefs, and the free legal toolkit for pregnant women in custody."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({

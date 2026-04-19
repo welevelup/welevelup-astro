@@ -1,15 +1,4 @@
 ---
-/**
- * Custom donate page that REPLACES the cloned WordPress /donate.
- *
- * Astro prefers static routes over the [...slug] catch-all, so simply having
- * this file at src/pages/donate.astro takes precedence — no need to touch
- * src/_clone/donate/.
- *
- * Visually we re-use the head (Elementor CSS, fonts, tracking) from the
- * cloned home page so the page sits inside the existing brand and renders
- * with the same chrome (nav, footer) as the rest of the site.
- */
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
@@ -18,345 +7,416 @@ import homeRaw from '../_clone/index.html?raw';
 
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Support Level Up | Donate to Feminist Campaigns in the UK"
+  description="Every campaign started with someone like you. Support Level Up's feminist campaigns for gender justice in the UK — from abortion rights to ending violence against women."
+  ogImage="https://welevelup.org/wp-content/uploads/2023/05/Level-Up-OG.png"
+>
   <Nav />
+
   <main class="lu-donate">
+
+    <!-- HERO -->
     <section class="lu-donate__hero">
-      <h1>Support Level Up</h1>
-      <p>
-        Level Up runs on small, regular donations from people like you. Your
-        contribution funds feminist campaigns for gender justice in the UK.
-      </p>
+      <div class="lu-donate__hero-inner">
+        <span class="lu-donate__hero-label">Support the work</span>
+        <h1 class="lu-donate__hero-title">Every campaign started<br/>with someone like you</h1>
+        <p class="lu-donate__hero-sub">Level Up is a UK-based feminist campaigning organisation building people-powered movements. We run on small, regular donations from people who believe in gender justice.</p>
+      </div>
     </section>
 
-    <form class="lu-donate__form" id="donate-form" novalidate>
-      <fieldset class="lu-donate__field lu-donate__field--type">
-        <legend>How would you like to give?</legend>
-        <label>
-          <input type="radio" name="frequency" value="monthly" checked />
-          <span>Monthly</span>
-        </label>
-        <label>
-          <input type="radio" name="frequency" value="one-time" />
-          <span>One-time</span>
-        </label>
-      </fieldset>
-
-      <fieldset class="lu-donate__field lu-donate__field--amount">
-        <legend>Choose an amount (GBP)</legend>
-        <div class="lu-donate__amounts">
-          <label><input type="radio" name="preset" value="5" /><span>£5</span></label>
-          <label><input type="radio" name="preset" value="10" checked /><span>£10</span></label>
-          <label><input type="radio" name="preset" value="15" /><span>£15</span></label>
-          <label><input type="radio" name="preset" value="custom" /><span>Other</span></label>
+    <!-- IMPACT STATS -->
+    <section class="lu-donate__impact">
+      <div class="lu-donate__impact-inner">
+        <h2 class="lu-donate__impact-title">Supported by people like you, Level Up has…</h2>
+        <div class="lu-donate__impact-grid">
+          <div class="lu-donate__impact-item">
+            <span class="lu-donate__impact-icon">⚖️</span>
+            <p>Changed sentencing policy to prevent pregnant women going to prison</p>
+          </div>
+          <div class="lu-donate__impact-item">
+            <span class="lu-donate__impact-icon">⚽</span>
+            <p>Pushed the Premier League to issue consent training for football clubs</p>
+          </div>
+          <div class="lu-donate__impact-item">
+            <span class="lu-donate__impact-icon">📰</span>
+            <p>Changed how the media reports on domestic homicide — ending victim-blaming headlines</p>
+          </div>
+          <div class="lu-donate__impact-item">
+            <span class="lu-donate__impact-icon">🤝</span>
+            <p>Trained 413 people in bystander intervention to interrupt harassment and violence</p>
+          </div>
         </div>
-        <label class="lu-donate__custom" hidden>
-          <span>Custom amount</span>
-          <input type="number" name="customAmount" min="1" step="1" placeholder="£" />
-        </label>
-      </fieldset>
+      </div>
+    </section>
 
-      <fieldset class="lu-donate__field lu-donate__field--details">
-        <legend>Your details</legend>
-        <label>
-          <span>Full name <em>(required for monthly)</em></span>
-          <input type="text" name="donorName" autocomplete="name" />
-        </label>
-        <label>
-          <span>Email <em>(required for monthly)</em></span>
-          <input type="email" name="donorEmail" autocomplete="email" />
-        </label>
-      </fieldset>
+    <!-- WHAT YOUR DONATION FUNDS -->
+    <section class="lu-donate__campaigns">
+      <div class="lu-donate__campaigns-inner">
+        <h2>Your donation helps us:</h2>
+        <ul class="lu-donate__campaign-list">
+          <li>Campaign to fully decriminalise abortion in Britain</li>
+          <li>End the imprisonment of pregnant women</li>
+          <li>Challenge media narratives that blame victims of domestic abuse</li>
+          <li>Challenge sexism and sexual violence in football</li>
+          <li>Hold beauty corporations accountable for selling harmful products to Black women</li>
+          <li>Train communities to safely intervene in violence and harassment</li>
+        </ul>
+      </div>
+    </section>
 
-      <p class="lu-donate__error" id="donate-error" role="alert" hidden></p>
+    <!-- DONATE FORM -->
+    <section class="lu-donate__form-section">
+      <div class="lu-donate__form-wrap">
+        <h2 class="lu-donate__form-title">Make a donation</h2>
 
-      <button type="submit" class="lu-donate__submit">
-        Continue to secure payment →
-      </button>
+        <form class="lu-donate__form" id="donate-form" novalidate>
 
-      <p class="lu-donate__legal">
-        Payments are processed by Mollie. We don't store your card details. You
-        can cancel a monthly donation at any time by emailing
-        <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>.
-      </p>
-    </form>
+          <fieldset class="lu-donate__field lu-donate__field--type">
+            <legend>How would you like to give?</legend>
+            <div class="lu-donate__toggle">
+              <label class="lu-donate__toggle-opt">
+                <input type="radio" name="frequency" value="monthly" checked />
+                <span>Monthly</span>
+              </label>
+              <label class="lu-donate__toggle-opt">
+                <input type="radio" name="frequency" value="one-time" />
+                <span>One-off</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="lu-donate__field lu-donate__field--amount">
+            <legend>Choose an amount (GBP)</legend>
+            <div class="lu-donate__amounts">
+              <label><input type="radio" name="preset" value="5" /><span>£5</span></label>
+              <label><input type="radio" name="preset" value="10" checked /><span>£10</span></label>
+              <label><input type="radio" name="preset" value="15" /><span>£15</span></label>
+              <label><input type="radio" name="preset" value="25" /><span>£25</span></label>
+              <label><input type="radio" name="preset" value="custom" /><span>Other</span></label>
+            </div>
+            <label class="lu-donate__custom" hidden>
+              <span>Enter amount</span>
+              <input type="number" name="customAmount" min="1" step="1" placeholder="£" />
+            </label>
+          </fieldset>
+
+          <fieldset class="lu-donate__field lu-donate__field--details">
+            <legend>Your details</legend>
+            <label>
+              <span>Full name</span>
+              <input type="text" name="donorName" autocomplete="name" />
+            </label>
+            <label>
+              <span>Email address</span>
+              <input type="email" name="donorEmail" autocomplete="email" required />
+            </label>
+          </fieldset>
+
+          <p class="lu-donate__error" id="donate-error" role="alert" hidden></p>
+
+          <button type="submit" class="lu-donate__submit">
+            Continue to secure payment →
+          </button>
+
+          <p class="lu-donate__legal">
+            Payments are processed securely by Mollie. We don't store your card details.
+            You can cancel a monthly donation at any time by emailing
+            <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>.
+          </p>
+        </form>
+      </div>
+    </section>
+
   </main>
+
   <Footer />
-
-  <style is:global>
-    .lu-donate {
-      max-width: 560px;
-      margin: 0 auto;
-      padding: 64px 24px 96px;
-      font-family: 'DM Sans', system-ui, sans-serif;
-      color: #0d0a3e;
-    }
-    .lu-donate__logo {
-      display: block;
-      margin-bottom: 32px;
-    }
-    .lu-donate__logo img {
-      height: 46px;
-      width: auto;
-    }
-    .lu-donate__hero h1 {
-      font-size: 48px;
-      line-height: 1.05;
-      margin: 0 0 16px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: #0d0a3e !important;
-    }
-    .lu-donate__hero p {
-      font-size: 18px;
-      line-height: 1.5;
-      margin: 0 0 40px;
-    }
-    .lu-donate__form fieldset {
-      border: none;
-      padding: 0;
-      margin: 0 0 32px;
-    }
-    .lu-donate__form legend {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 700;
-      margin-bottom: 12px;
-      color: #0d0a3e;
-    }
-    .lu-donate__field--type {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-    .lu-donate__field--type label {
-      flex: 1;
-      min-width: 140px;
-      cursor: pointer;
-    }
-    .lu-donate__field--type input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .lu-donate__field--type span,
-    .lu-donate__amounts span {
-      display: block;
-      padding: 14px 20px;
-      border: 2px solid #0d0a3e;
-      text-align: center;
-      font-weight: 600;
-      transition: all 0.15s;
-      background: transparent;
-    }
-    .lu-donate__field--type input:checked + span,
-    .lu-donate__amounts input:checked + span {
-      background: #cbff32;
-      color: #0d0a3e;
-    }
-    .lu-donate__amounts {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    .lu-donate__amounts label {
-      cursor: pointer;
-    }
-    .lu-donate__amounts input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-    .lu-donate__custom {
-      display: block;
-      margin-top: 16px;
-    }
-    .lu-donate__custom span {
-      display: block;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .lu-donate__custom input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #0d0a3e;
-      font-size: 16px;
-      font-family: inherit;
-    }
-    .lu-donate__field--details label {
-      display: block;
-      margin-bottom: 16px;
-    }
-    .lu-donate__field--details span {
-      display: block;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .lu-donate__field--details em {
-      text-transform: none;
-      letter-spacing: 0;
-      font-weight: 400;
-      font-style: normal;
-      color: #6b6b6b;
-    }
-    .lu-donate__field--details input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #0d0a3e;
-      font-size: 16px;
-      font-family: inherit;
-    }
-    .lu-donate__error {
-      background: #ffe5e5;
-      border-left: 4px solid #d40000;
-      padding: 12px 16px;
-      font-size: 14px;
-      margin: 0 0 16px;
-      color: #8a0000;
-    }
-    .lu-donate__submit {
-      display: block;
-      width: 100%;
-      padding: 18px 24px;
-      background: #0d0a3e;
-      color: #cbff32;
-      border: none;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: background 0.15s;
-      font-family: inherit;
-    }
-    .lu-donate__submit:hover {
-      background: #1a1660;
-    }
-    .lu-donate__submit:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    .lu-donate__legal {
-      font-size: 13px;
-      color: #6b6b6b;
-      margin: 24px 0 0;
-      text-align: center;
-      line-height: 1.5;
-    }
-    .lu-donate__legal a {
-      color: #0d0a3e;
-    }
-
-    /* ── Mobile ── */
-    @media (max-width: 640px) {
-      .lu-donate {
-        padding: 32px 16px 64px;
-      }
-      .lu-donate__hero h1 {
-        font-size: 32px;
-      }
-      .lu-donate__hero p {
-        font-size: 16px;
-        margin-bottom: 28px;
-      }
-      .lu-donate__field--type {
-        flex-direction: column;
-      }
-      .lu-donate__field--type label {
-        min-width: 0;
-        width: 100%;
-      }
-      .lu-donate__amounts {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .lu-donate__custom input,
-      .lu-donate__field--details input {
-        width: 100%;
-        box-sizing: border-box;
-      }
-      .lu-donate__submit {
-        width: 100%;
-        box-sizing: border-box;
-      }
-    }
-  </style>
-
-  <script>
-    const form = document.getElementById('donate-form') as HTMLFormElement;
-    const errorEl = document.getElementById('donate-error') as HTMLElement;
-    const customWrap = form.querySelector('.lu-donate__custom') as HTMLElement;
-    const customInput = form.querySelector('input[name="customAmount"]') as HTMLInputElement;
-    const presetInputs = form.querySelectorAll<HTMLInputElement>('input[name="preset"]');
-
-    function showError(msg: string) {
-      errorEl.textContent = msg;
-      errorEl.hidden = false;
-    }
-    function clearError() {
-      errorEl.hidden = true;
-      errorEl.textContent = '';
-    }
-
-    presetInputs.forEach((el) =>
-      el.addEventListener('change', () => {
-        if (el.value === 'custom' && el.checked) {
-          customWrap.hidden = false;
-          customInput.focus();
-        } else {
-          customWrap.hidden = true;
-        }
-      })
-    );
-
-    form.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      clearError();
-
-      const formData = new FormData(form);
-      const frequency = formData.get('frequency') as string;
-      const preset = formData.get('preset') as string;
-      const custom = formData.get('customAmount') as string;
-      const donorName = (formData.get('donorName') as string).trim();
-      const donorEmail = (formData.get('donorEmail') as string).trim();
-
-      const amount = preset === 'custom' ? custom : preset;
-      if (!amount || parseFloat(amount) < 1) {
-        showError('Please choose or enter an amount of at least £1.');
-        return;
-      }
-
-      const recurring = frequency === 'monthly';
-      if (recurring && (!donorName || !donorEmail)) {
-        showError('Name and email are required for monthly donations.');
-        return;
-      }
-
-      const submit = form.querySelector('button[type="submit"]') as HTMLButtonElement;
-      submit.disabled = true;
-      submit.textContent = 'Connecting to Mollie…';
-
-      try {
-        const res = await fetch('/api/create-donation', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ amount, recurring, donorName, donorEmail }),
-        });
-        const data = await res.json();
-        if (!res.ok || !data.checkoutUrl) {
-          throw new Error(data.error || 'Could not start payment');
-        }
-        window.location.href = data.checkoutUrl;
-      } catch (err) {
-        showError(err instanceof Error ? err.message : 'Unknown error');
-        submit.disabled = false;
-        submit.textContent = 'Continue to secure payment →';
-      }
-    });
-  </script>
 </Layout>
+
+<style is:global>
+  .lu-donate {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* HERO */
+  .lu-donate__hero {
+    background: #0C0A3E;
+    padding: 80px 24px 64px;
+    text-align: center;
+  }
+  .lu-donate__hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .lu-donate__hero-label {
+    display: block;
+    font: 600 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    margin-bottom: 24px;
+  }
+  .lu-donate__hero-title {
+    font: 800 clamp(36px, 7vw, 56px)/0.95 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 24px;
+  }
+  .lu-donate__hero-sub {
+    font: 400 18px/1.6 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.7);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* IMPACT */
+  .lu-donate__impact {
+    background: #EEEBD3;
+    padding: 64px 24px;
+  }
+  .lu-donate__impact-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .lu-donate__impact-title {
+    font: 700 22px/1.3 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 40px;
+    text-align: center;
+  }
+  .lu-donate__impact-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .lu-donate__impact-item {
+    background: #fff;
+    padding: 28px 24px;
+    border-left: 3px solid #A89CED;
+  }
+  .lu-donate__impact-icon {
+    display: block;
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+  .lu-donate__impact-item p {
+    font: 400 15px/1.6 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.8);
+    margin: 0;
+  }
+  @media (max-width: 600px) {
+    .lu-donate__impact-grid { grid-template-columns: 1fr; }
+  }
+
+  /* CAMPAIGNS LIST */
+  .lu-donate__campaigns {
+    background: #fff;
+    padding: 64px 24px;
+  }
+  .lu-donate__campaigns-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .lu-donate__campaigns-inner h2 {
+    font: 700 22px/1.3 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 24px;
+  }
+  .lu-donate__campaign-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .lu-donate__campaign-list li {
+    font: 400 16px/1.6 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.8);
+    padding: 12px 0 12px 20px;
+    border-bottom: 1px solid rgba(12, 10, 62, 0.08);
+    position: relative;
+  }
+  .lu-donate__campaign-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: #A89CED;
+    font-weight: 700;
+  }
+
+  /* FORM SECTION */
+  .lu-donate__form-section {
+    background: #F5F3E8;
+    padding: 64px 24px 80px;
+  }
+  .lu-donate__form-wrap {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .lu-donate__form-title {
+    font: 800 28px/1.1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 32px;
+    letter-spacing: -0.02em;
+  }
+  .lu-donate__field {
+    border: none;
+    padding: 0;
+    margin: 0 0 28px;
+  }
+  .lu-donate__field legend {
+    font: 600 13px/1 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .lu-donate__toggle {
+    display: flex;
+    border: 2px solid #0C0A3E;
+    width: fit-content;
+  }
+  .lu-donate__toggle-opt { cursor: pointer; }
+  .lu-donate__toggle-opt input { display: none; }
+  .lu-donate__toggle-opt span {
+    display: block;
+    padding: 12px 28px;
+    font: 600 14px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .lu-donate__toggle-opt input:checked + span {
+    background: #0C0A3E;
+    color: #CCFF33;
+  }
+  .lu-donate__amounts {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .lu-donate__amounts label { cursor: pointer; }
+  .lu-donate__amounts input { display: none; }
+  .lu-donate__amounts span {
+    display: block;
+    text-align: center;
+    padding: 14px 8px;
+    border: 2px solid rgba(12, 10, 62, 0.2);
+    font: 700 16px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .lu-donate__amounts input:checked + span {
+    border-color: #0C0A3E;
+    background: #0C0A3E;
+    color: #CCFF33;
+  }
+  .lu-donate__custom { display: block; margin-top: 8px; }
+  .lu-donate__custom span {
+    display: block;
+    font: 600 12px/1 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.6);
+    margin-bottom: 6px;
+  }
+  .lu-donate__custom input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(12, 10, 62, 0.2);
+    font: 400 16px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    background: #fff;
+    box-sizing: border-box;
+  }
+  .lu-donate__field--details label { display: block; margin-bottom: 16px; }
+  .lu-donate__field--details span {
+    display: block;
+    font: 600 12px/1 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+  .lu-donate__field--details input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid rgba(12, 10, 62, 0.15);
+    font: 400 16px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    background: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+  }
+  .lu-donate__field--details input:focus {
+    outline: none;
+    border-color: #A89CED;
+  }
+  .lu-donate__error {
+    color: #c0392b;
+    font: 400 14px/1.4 'DM Sans', sans-serif;
+    margin: 0 0 16px;
+  }
+  .lu-donate__submit {
+    display: block;
+    width: 100%;
+    background: #0C0A3E;
+    color: #CCFF33;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 20px 32px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-bottom: 20px;
+  }
+  .lu-donate__submit:hover { background: #A89CED; color: #0C0A3E; }
+  .lu-donate__legal {
+    font: 400 12px/1.6 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.5);
+    margin: 0;
+  }
+  .lu-donate__legal a { color: rgba(12, 10, 62, 0.7); }
+</style>
+
+<script>
+  const form = document.getElementById('donate-form') as HTMLFormElement;
+  const errorEl = document.getElementById('donate-error') as HTMLParagraphElement;
+  const customLabel = document.querySelector('.lu-donate__custom') as HTMLLabelElement;
+  const customInput = document.querySelector('input[name="customAmount"]') as HTMLInputElement;
+
+  document.querySelectorAll('input[name="preset"]').forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      const val = (e.target as HTMLInputElement).value;
+      customLabel.hidden = val !== 'custom';
+      if (val === 'custom') customInput.focus();
+    });
+  });
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    errorEl.hidden = true;
+
+    const freq = (form.querySelector('input[name="frequency"]:checked') as HTMLInputElement)?.value;
+    const preset = (form.querySelector('input[name="preset"]:checked') as HTMLInputElement)?.value;
+    const amount = preset === 'custom' ? customInput.value : preset;
+    const email = (form.querySelector('input[name="donorEmail"]') as HTMLInputElement)?.value;
+
+    if (!email) {
+      errorEl.textContent = 'Please enter your email address.';
+      errorEl.hidden = false;
+      return;
+    }
+    if (preset === 'custom' && (!amount || Number(amount) < 1)) {
+      errorEl.textContent = 'Please enter a valid amount.';
+      errorEl.hidden = false;
+      return;
+    }
+
+    const baseUrl = 'https://levelup.yourmovement.org/p/donate';
+    const params = new URLSearchParams({ frequency: freq, amount: String(amount), email });
+    window.location.href = `${baseUrl}?${params.toString()}`;
+  });
+</script>

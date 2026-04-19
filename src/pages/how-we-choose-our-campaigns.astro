@@ -7,7 +7,12 @@ import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="How We Choose Our Campaigns | Level Up"
+  description="Level Up campaigns are chosen by our community. Learn how we decide which feminist causes to take on and what it takes to win material change."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({
@@ -20,7 +25,6 @@ const { headInner, bodyClass } = extract(homeRaw);
     ]
   })}</script>
 
-  <title>How We Choose Our Campaigns — Level Up</title>
 
   <section class="hc-hero" aria-labelledby="hc-hero-heading">
     <div class="hc-hero-inner">

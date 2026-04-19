@@ -6,7 +6,13 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Premier League and FA — End Gender-Based Violence in Football | Level Up"
+  description="Level Up campaigns for the Premier League and FA to take a stand against gender-based violence in football. Take action now."
+  ogImage="https://welevelup.org/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.34.png"
+>
   <Nav />
 
   <!-- HERO (plain navy with image) -->

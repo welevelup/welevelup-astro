@@ -22,15 +22,15 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     <div class="ic-bar-track">
       <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
         <span class="ic-bar-badge">NEW</span>
-        <span>Islington Council must finish Holloway Women's Centre — Sign the petition →</span>
+        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
       </a>
       <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
         <span class="ic-bar-badge">NEW</span>
-        <span>Islington Council must finish Holloway Women's Centre — Sign the petition →</span>
+        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
       </a>
       <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
         <span class="ic-bar-badge">NEW</span>
-        <span>Islington Council must finish Holloway Women's Centre — Sign the petition →</span>
+        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
       </a>
     </div>
   </div>
@@ -49,7 +49,29 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     </div>
   </section>
 
+  <!-- EMAIL CAPTURE STRIP -->
+  <section class="home-join-strip">
+    <div class="home-join-strip-inner">
+      <p class="home-join-strip-text">Join 40,000+ people taking action for gender justice.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="home-join-strip-btn" target="_blank" rel="noopener">Join the movement →</a>
+    </div>
+  </section>
+
   <!-- HOW COLLECTIVE CARE — Proposal B: Cinematic -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "How Collective Care Can Change Society",
+    "description": "Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world. Talk from TEDxLondon, March 2023.",
+    "thumbnailUrl": "https://img.youtube.com/vi/xj-alDQD2fg/maxresdefault.jpg",
+    "uploadDate": "2023-03-01",
+    "embedUrl": "https://www.youtube.com/embed/xj-alDQD2fg",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Level Up",
+      "url": "https://welevelup.org"
+    }
+  })} />
   <section class="home-video">
     <div class="home-video-header">
       <span class="home-video-tag">TedxLondon · March 2023</span>
@@ -87,6 +109,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
             <h3>Abortion is Healthcare</h3>
             <p class="home-petition-desc">It's time the law treats it as such. Join the campaign.</p>
             <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>6,1K supporters</span>
+            <div class="home-petition-actions">
+              <a href="https://levelup.yourmovement.org/p/abortion-is-healthcare" class="home-petition-sign" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sign →</a>
+              <a href="/active-campaigns/abortion-is-healthcare" class="home-petition-learn">Learn more</a>
+            </div>
           </div>
         </a>
         <a href="/active-campaigns/pregnancy-in-prison" class="home-petition-card">
@@ -97,6 +123,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
             <h3>Stop sending pregnant women to prison</h3>
             <p class="home-petition-desc">Prison will never be a safe place to be pregnant.</p>
             <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>13,1K supporters</span>
+            <div class="home-petition-actions">
+              <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" class="home-petition-sign" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sign →</a>
+              <a href="/active-campaigns/pregnancy-in-prison" class="home-petition-learn">Learn more</a>
+            </div>
           </div>
         </a>
         <a href="/active-campaigns/nomorelyes-2" class="home-petition-card">
@@ -107,6 +137,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
             <h3>#NoMoreLyes Take toxic hair relaxers off the shelves</h3>
             <p class="home-petition-desc">Lye-based products cause serious harm. Stand up for Black women's health.</p>
             <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>6,4K supporters</span>
+            <div class="home-petition-actions">
+              <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="home-petition-sign" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sign →</a>
+              <a href="/active-campaigns/nomorelyes-2" class="home-petition-learn">Learn more</a>
+            </div>
           </div>
         </a>
         <a href="/active-campaigns/media-guidelines-domestic-abuse" class="home-petition-card">
@@ -117,6 +151,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
             <h3>IPSO: Dignity for Dead Women</h3>
             <p class="home-petition-desc">Women killed by partners deserve dignified coverage, not victim-blaming headlines.</p>
             <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>29,2K supporters</span>
+            <div class="home-petition-actions">
+              <a href="https://levelup.movement-action.org/p/dignity-for-dead-women" class="home-petition-sign" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sign →</a>
+              <a href="/active-campaigns/media-guidelines-domestic-abuse" class="home-petition-learn">Learn more</a>
+            </div>
           </div>
         </a>
         <a href="/active-campaigns/sexual-violence-in-football" class="home-petition-card">
@@ -127,6 +165,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
             <h3>Premier League and FA</h3>
             <p class="home-petition-desc">Hold football to account for sexual violence. No more silence from the top.</p>
             <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>4,3K supporters</span>
+            <div class="home-petition-actions">
+              <a href="https://levelup.movement-action.org/p/sexual-violence-in-football" class="home-petition-sign" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sign →</a>
+              <a href="/active-campaigns/sexual-violence-in-football" class="home-petition-learn">Learn more</a>
+            </div>
           </div>
         </a>
         <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="home-petition-card">
@@ -136,6 +178,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
           <div class="home-petition-body">
             <h3>Islington Council: Fund Holloway Women's Centre</h3>
             <p class="home-petition-desc">The centre is built but standing empty. Keep the promise made to women.</p>
+            <div class="home-petition-actions">
+              <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="home-petition-sign" target="_blank" rel="noopener" onclick="event.stopPropagation()">Sign →</a>
+              <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="home-petition-learn">Learn more</a>
+            </div>
           </div>
         </a>
       </div>
@@ -184,9 +230,9 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   </section>
 
   <section class="home-cta">
-    <h2>Join the Level Up community</h2>
-    <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
-    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join us</a>
+    <h2>Feminist thinking, straight to your inbox</h2>
+    <p>Campaign alerts, event invites, and analysis — join 40,000+ people taking action.</p>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join the movement</a>
   </section>
   <Footer />
 </Layout>
@@ -397,6 +443,82 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     .ic-banner { grid-template-columns: 1fr; }
     .ic-banner-img { height: 200px; }
   }
+
+  /* ═══ JOIN STRIP ═══ */
+  .home-join-strip {
+    background: #0C0A3E;
+    padding: 20px 24px;
+  }
+  .home-join-strip-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .home-join-strip-text {
+    font: 600 16px/1.3 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    margin: 0;
+  }
+  .home-join-strip-btn {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E;
+    font: 700 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 14px 28px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  .home-join-strip-btn:hover { background: #fff; }
+  @media (max-width: 600px) {
+    .home-join-strip-inner { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ═══ PETITION CARD ACTIONS ═══ */
+  .home-petition-card {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+  }
+  .home-petition-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  .home-petition-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+    flex-wrap: wrap;
+  }
+  .home-petition-sign {
+    display: inline-block;
+    background: #0C0A3E;
+    color: #CCFF33;
+    font: 700 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 10px 16px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .home-petition-sign:hover { background: #A89CED; color: #0C0A3E; }
+  .home-petition-learn {
+    display: inline-block;
+    font: 600 12px/1 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.55);
+    text-decoration: none;
+    padding: 10px 0;
+    transition: color 0.15s;
+  }
+  .home-petition-learn:hover { color: #0C0A3E; }
 
   /* ── Petitions section ───────────────────────────────── */
   .home-petitions {

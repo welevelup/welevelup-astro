@@ -7,7 +7,12 @@ import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Campaign Resources | Level Up"
+  description="Download resources, media guidelines, and toolkits from Level Up's feminist campaigns — on abortion, domestic abuse, pregnancy in prison, and #NoMoreLyes."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({

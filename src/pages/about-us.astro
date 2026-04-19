@@ -7,7 +7,12 @@ import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 ---
 
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="What We Do | Level Up — Feminist Campaigns for Gender Justice"
+  description="Level Up is a UK-based feminist campaigning organisation building people-powered movements that challenge institutions, shift culture and win material change."
+>
   <Nav />
 
   <script type="application/ld+json">{JSON.stringify({

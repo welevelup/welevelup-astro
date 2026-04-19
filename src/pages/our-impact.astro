@@ -1,0 +1,329 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Our Impact", "item": "https://welevelup.org/our-impact" }
+    ]
+  })}</script>
+
+  <title>Our Impact — Level Up</title>
+
+  <section class="oi-hero" aria-labelledby="oi-hero-heading">
+    <div class="oi-hero-inner">
+      <span class="oi-eyebrow">What we've won</span>
+      <h1 id="oi-hero-heading" class="oi-hero-title">Our Impact</h1>
+      <p class="oi-hero-subtitle">Real wins, real change. Here's what Level Up has achieved.</p>
+    </div>
+  </section>
+
+  <section class="oi-stats" aria-label="Campaign statistics">
+    <div class="oi-stats-inner">
+      <div class="oi-stat">
+        <span class="oi-stat-num">22,190</span>
+        <span class="oi-stat-label">Petition signatures for domestic abuse press guidelines</span>
+      </div>
+      <div class="oi-stat">
+        <span class="oi-stat-num">12,000+</span>
+        <span class="oi-stat-label">Signatures demanding end to pregnancy in prison</span>
+      </div>
+      <div class="oi-stat">
+        <span class="oi-stat-num">7,000</span>
+        <span class="oi-stat-label">Feminists mobilised for trans rights</span>
+      </div>
+      <div class="oi-stat">
+        <span class="oi-stat-num">500+</span>
+        <span class="oi-stat-label">Journalists trained on reporting domestic abuse</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="oi-wins" aria-labelledby="oi-wins-heading">
+    <div class="oi-wins-inner">
+      <h2 id="oi-wins-heading" class="oi-wins-title">Campaign Wins</h2>
+      <ol class="oi-wins-list">
+        <li class="oi-win-item">
+          <span class="oi-win-num">01</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">Love Island — Plastic Surgery Ads Removed</h3>
+            <p class="oi-win-desc">After 3,214 emails to ITV leaders, Level Up forced the broadcaster to drop plastic surgery adverts from Love Island — the UK's most-watched reality show.</p>
+          </div>
+        </li>
+        <li class="oi-win-item">
+          <span class="oi-win-num">02</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">Dignity for Dead Women — Press Guidelines</h3>
+            <p class="oi-win-desc">Level Up produced the UK's first media guidelines on reporting domestic abuse deaths, endorsed by IPSO and IMPRESS and distributed to every newsroom in the country.</p>
+          </div>
+        </li>
+        <li class="oi-win-item">
+          <span class="oi-win-num">03</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">Pregnancy in Prison — Legal Toolkit</h3>
+            <p class="oi-win-desc">In 2024, Level Up launched the first ever legal toolkit for barristers representing pregnant women in the criminal justice system, written with Doughty Street Chambers.</p>
+          </div>
+        </li>
+        <li class="oi-win-item">
+          <span class="oi-win-num">04</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">Premier League — Consent Training</h3>
+            <p class="oi-win-desc">Following Level Up's Sexual Violence in Football campaign, the Premier League committed to mandatory consent training for all players.</p>
+          </div>
+        </li>
+        <li class="oi-win-item">
+          <span class="oi-win-num">05</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">LGBT+ Education</h3>
+            <p class="oi-win-desc">Level Up's work contributed to all secondary schools being required to teach about sexual orientation and gender identity, and all primary schools required to teach about different families (from September 2020).</p>
+          </div>
+        </li>
+        <li class="oi-win-item">
+          <span class="oi-win-num">06</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">Stand With Muslim Women</h3>
+            <p class="oi-win-desc">8,761 members signed Level Up's pledge standing in solidarity with Muslim women.</p>
+          </div>
+        </li>
+        <li class="oi-win-item">
+          <span class="oi-win-num">07</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">Trans Rights Mobilisation</h3>
+            <p class="oi-win-desc">Level Up mobilised 7,000 feminists to support trans rights in the UK government's Gender Recognition Act consultation.</p>
+          </div>
+        </li>
+        <li class="oi-win-item">
+          <span class="oi-win-num">08</span>
+          <div class="oi-win-body">
+            <h3 class="oi-win-name">#NoMoreLyes</h3>
+            <p class="oi-win-desc">Level Up's campaign calling on L'Oréal to reformulate toxic hair relaxers reached tens of thousands of signatures, with coverage from the BBC, Reuters, The Guardian, and CNN.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="oi-cta" aria-labelledby="oi-cta-heading">
+    <div class="oi-cta-inner">
+      <h2 id="oi-cta-heading" class="oi-cta-heading">Join the Level Up community</h2>
+      <p class="oi-cta-sub">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="oi-cta-btn">JOIN US</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .oi-hero,
+  .oi-stats,
+  .oi-wins,
+  .oi-cta {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Hero */
+  .oi-hero {
+    background: #0C0A3E;
+    padding: 120px 24px 100px;
+  }
+  .oi-hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .oi-eyebrow {
+    display: inline-block;
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    margin-bottom: 28px;
+  }
+  .oi-hero-title {
+    font: 900 clamp(56px, 11vw, 130px)/0.88 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.05em;
+    margin: 0 0 36px;
+  }
+  .oi-hero-subtitle {
+    font: 400 20px/1.6 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    max-width: 480px;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  /* Stats bar */
+  .oi-stats {
+    background: #EEEBD3;
+    border-bottom: 3px solid #CCFF33;
+    padding: 64px 24px;
+  }
+  .oi-stats-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .oi-stat {
+    padding: 0 40px 0 0;
+    border-right: 1px solid rgba(12,10,62,0.12);
+  }
+  .oi-stat:last-child {
+    border-right: none;
+    padding-right: 0;
+    padding-left: 40px;
+  }
+  .oi-stat:not(:first-child):not(:last-child) {
+    padding-left: 40px;
+  }
+  .oi-stat-num {
+    display: block;
+    font: 900 clamp(28px, 4vw, 48px)/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.04em;
+    margin-bottom: 12px;
+  }
+  .oi-stat-label {
+    display: block;
+    font: 400 13px/1.5 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* Campaign wins */
+  .oi-wins {
+    background: #EEEBD3;
+    padding: 80px 24px 96px;
+  }
+  .oi-wins-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .oi-wins-title {
+    font: 900 clamp(28px, 4vw, 44px)/1.05 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.04em;
+    margin: 0 0 56px;
+  }
+  .oi-wins-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .oi-win-item {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 24px;
+    align-items: start;
+    padding: 32px 0;
+    border-top: 1px solid rgba(12,10,62,0.1);
+  }
+  .oi-win-item:last-child {
+    border-bottom: 1px solid rgba(12,10,62,0.1);
+  }
+  .oi-win-num {
+    font: 800 13px/1 'DM Sans', sans-serif;
+    color: #A89CED;
+    letter-spacing: 0.08em;
+    padding-top: 4px;
+  }
+  .oi-win-name {
+    font: 800 18px/1.2 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+  }
+  .oi-win-desc {
+    font: 400 15px/1.7 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.65);
+    margin: 0;
+  }
+
+  /* CTA */
+  .oi-cta {
+    background: #0C0A3E;
+    padding: 96px 24px;
+    text-align: center;
+  }
+  .oi-cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .oi-cta-heading {
+    font: 900 clamp(32px, 5vw, 52px)/1.05 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 20px;
+  }
+  .oi-cta-sub {
+    font: 400 17px/1.65 'DM Sans', sans-serif;
+    color: rgba(238,235,211,0.65);
+    margin: 0 0 36px;
+  }
+  .oi-cta-btn {
+    display: inline-block;
+    font: 800 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    background: #CCFF33;
+    color: #0C0A3E;
+    text-decoration: none;
+    padding: 18px 40px;
+    transition: background 0.15s;
+  }
+  .oi-cta-btn:hover {
+    background: #EEEBD3;
+  }
+
+  @media (max-width: 900px) {
+    .oi-stats-inner {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+    .oi-stat {
+      padding: 0;
+      border-right: none;
+    }
+    .oi-stat:last-child {
+      padding-left: 0;
+    }
+    .oi-stat:not(:first-child):not(:last-child) {
+      padding-left: 0;
+    }
+  }
+  @media (max-width: 640px) {
+    .oi-hero {
+      padding: 80px 20px 72px;
+    }
+    .oi-stats {
+      padding: 48px 20px;
+    }
+    .oi-stats-inner {
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .oi-wins,
+    .oi-cta {
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+    .oi-win-item {
+      grid-template-columns: 36px 1fr;
+      gap: 16px;
+    }
+  }
+</style>

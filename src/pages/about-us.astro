@@ -1,0 +1,249 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Level Up",
+    "url": "https://welevelup.org",
+    "description": "Level Up is a feminist community campaigning for gender justice in the UK.",
+    "foundingDate": "2016",
+    "knowsAbout": ["gender justice", "feminist campaigns", "domestic abuse", "reproductive rights"],
+    "sameAs": ["https://twitter.com/welevelupuk", "https://www.instagram.com/welevelupuk/"]
+  })}</script>
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "About Us", "item": "https://welevelup.org/about-us" }
+    ]
+  })}</script>
+
+  <title>About Us — Level Up</title>
+
+  <section class="au-hero" aria-labelledby="au-hero-heading">
+    <div class="au-hero-inner">
+      <span class="au-eyebrow">About Level Up</span>
+      <h1 id="au-hero-heading" class="au-hero-title">What We Do</h1>
+      <p class="au-hero-subtitle">A feminist community campaigning for gender justice in the UK.</p>
+    </div>
+  </section>
+
+  <section class="au-pillars" aria-label="Our mission, approach, and values">
+    <div class="au-pillars-inner">
+      <article class="au-pillar">
+        <h2 class="au-pillar-heading">Our Mission</h2>
+        <p class="au-pillar-body">We create digital tools and campaigns that interrupt cultural moments to fight for gender justice — like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island, and producing the UK's first media guidelines on reporting domestic abuse deaths.</p>
+      </article>
+      <article class="au-pillar">
+        <h2 class="au-pillar-heading">Our Approach</h2>
+        <p class="au-pillar-body">We identify interventions where collective action can interrupt and dismantle systems of injustice. We believe in power-building, not power-begging, and we create tools, resources and campaign strategies that centre this principle.</p>
+      </article>
+      <article class="au-pillar">
+        <h2 class="au-pillar-heading">Our Values</h2>
+        <p class="au-pillar-body">Our focus is on gender whilst holding the ways that race, class, disability and other oppressions intersect. Our organising includes trans and gender nonconforming people, and we try to centre the experiences of the most marginalised people in our work.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="au-vision" aria-label="Our vision">
+    <div class="au-vision-inner">
+      <blockquote class="au-vision-quote">
+        "We envision a world where people of all genders are loved and liberated from bodily and systemic violence."
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="au-community" aria-label="Our community">
+    <div class="au-community-inner">
+      <h2 class="au-community-heading">Our Community</h2>
+      <p class="au-community-body">Our movement includes feminists from a range of backgrounds and all genders, centring the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+    </div>
+  </section>
+
+  <section class="au-cta" aria-labelledby="au-cta-heading">
+    <div class="au-cta-inner">
+      <h2 id="au-cta-heading" class="au-cta-heading">Join the Level Up community</h2>
+      <p class="au-cta-sub">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="au-cta-btn">JOIN US</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .au-hero,
+  .au-pillars,
+  .au-vision,
+  .au-community,
+  .au-cta {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Hero */
+  .au-hero {
+    background: #0C0A3E;
+    padding: 120px 24px 100px;
+  }
+  .au-hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .au-eyebrow {
+    display: inline-block;
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    margin-bottom: 28px;
+  }
+  .au-hero-title {
+    font: 900 clamp(56px, 11vw, 130px)/0.88 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.05em;
+    margin: 0 0 36px;
+  }
+  .au-hero-subtitle {
+    font: 400 20px/1.6 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    max-width: 540px;
+    margin: 0;
+    opacity: 0.85;
+  }
+
+  /* Pillars */
+  .au-pillars {
+    background: #EEEBD3;
+    padding: 96px 24px;
+    border-top: 1px solid rgba(12,10,62,0.08);
+  }
+  .au-pillars-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+  }
+  .au-pillar {
+    border-top: 3px solid #CCFF33;
+    padding-top: 28px;
+  }
+  .au-pillar-heading {
+    font: 800 20px/1.1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.02em;
+    margin: 0 0 18px;
+  }
+  .au-pillar-body {
+    font: 400 16px/1.75 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.72);
+    margin: 0;
+  }
+
+  /* Vision */
+  .au-vision {
+    background: #0C0A3E;
+    padding: 96px 24px;
+  }
+  .au-vision-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .au-vision-quote {
+    font: 700 clamp(22px, 4vw, 38px)/1.3 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    letter-spacing: -0.02em;
+    margin: 0;
+    quotes: none;
+  }
+
+  /* Community */
+  .au-community {
+    background: #EEEBD3;
+    padding: 80px 24px;
+    border-top: 1px solid rgba(12,10,62,0.08);
+  }
+  .au-community-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .au-community-heading {
+    font: 800 clamp(24px, 3vw, 32px)/1.1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+  }
+  .au-community-body {
+    font: 400 18px/1.75 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.72);
+    margin: 0;
+  }
+
+  /* CTA */
+  .au-cta {
+    background: #0C0A3E;
+    padding: 96px 24px;
+    text-align: center;
+  }
+  .au-cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .au-cta-heading {
+    font: 900 clamp(32px, 5vw, 52px)/1.05 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 20px;
+  }
+  .au-cta-sub {
+    font: 400 17px/1.65 'DM Sans', sans-serif;
+    color: rgba(238,235,211,0.65);
+    margin: 0 0 36px;
+  }
+  .au-cta-btn {
+    display: inline-block;
+    font: 800 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    background: #CCFF33;
+    color: #0C0A3E;
+    text-decoration: none;
+    padding: 18px 40px;
+    transition: background 0.15s;
+  }
+  .au-cta-btn:hover {
+    background: #EEEBD3;
+  }
+
+  @media (max-width: 900px) {
+    .au-pillars-inner {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+  @media (max-width: 640px) {
+    .au-hero {
+      padding: 80px 20px 72px;
+    }
+    .au-pillars,
+    .au-vision,
+    .au-community,
+    .au-cta {
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+  }
+</style>

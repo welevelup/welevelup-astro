@@ -1,0 +1,311 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Who We Are", "item": "https://welevelup.org/who-we-are" }
+    ]
+  })}</script>
+
+  <script type="application/ld+json">{JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Janey Starling",
+    "jobTitle": "Co-Director",
+    "worksFor": { "@type": "Organization", "name": "Level Up" }
+  })}</script>
+
+  <title>Who We Are — Level Up</title>
+
+  <section class="wwa-hero" aria-labelledby="wwa-hero-heading">
+    <div class="wwa-hero-inner">
+      <span class="wwa-eyebrow">The Team</span>
+      <h1 id="wwa-hero-heading" class="wwa-hero-title">Who We Are</h1>
+      <p class="wwa-hero-subtitle">Level Up is led by feminist organisers with decades of experience in gender justice, media, and legal advocacy.</p>
+    </div>
+  </section>
+
+  <section class="wwa-intro" aria-label="About Level Up">
+    <div class="wwa-intro-inner">
+      <p class="wwa-intro-body">Level Up is a feminist community organisation founded to disrupt, challenge, and change the conditions that produce gender injustice. We are practitioners, not just advocates — our co-directors, campaigners, and community have won real change: from forcing ITV to drop plastic surgery ads, to producing the UK's first media guidelines on reporting domestic abuse deaths, to launching the first legal toolkit for lawyers representing pregnant women in prison.</p>
+    </div>
+  </section>
+
+  <section class="wwa-team" aria-labelledby="wwa-team-heading">
+    <div class="wwa-team-inner">
+      <h2 id="wwa-team-heading" class="wwa-team-label">Co-Director</h2>
+      <article class="wwa-card" aria-label="Janey Starling, Co-Director">
+        <div class="wwa-card-meta">
+          <p class="wwa-card-name">Janey Starling</p>
+          <p class="wwa-card-role">Co-Director</p>
+        </div>
+        <div class="wwa-card-bio">
+          <p>Janey Starling is co-director of Level Up and co-author of the Dignity for Dead Women media guidelines, the academic paper on DDW published in the New Statesman, and the Pregnancy in Prison Legal Toolkit. She has led Level Up campaigns since 2016.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="wwa-values" aria-labelledby="wwa-values-heading">
+    <div class="wwa-values-inner">
+      <h2 id="wwa-values-heading" class="wwa-values-title">How We Work</h2>
+      <div class="wwa-values-grid">
+        <article class="wwa-value">
+          <span class="wwa-value-num">01</span>
+          <h3 class="wwa-value-heading">Intersectional</h3>
+          <p class="wwa-value-body">We hold gender alongside race, class, disability and other axes of oppression. We try to centre the most marginalised.</p>
+        </article>
+        <article class="wwa-value">
+          <span class="wwa-value-num">02</span>
+          <h3 class="wwa-value-heading">Community-powered</h3>
+          <p class="wwa-value-body">Our campaigns are built with and for the communities most affected — not designed in isolation and delivered to them.</p>
+        </article>
+        <article class="wwa-value">
+          <span class="wwa-value-num">03</span>
+          <h3 class="wwa-value-heading">Strategic</h3>
+          <p class="wwa-value-body">We identify the moments and levers where feminist intervention can win real, lasting change.</p>
+        </article>
+        <article class="wwa-value">
+          <span class="wwa-value-num">04</span>
+          <h3 class="wwa-value-heading">Accountable</h3>
+          <p class="wwa-value-body">We are transparent about how we choose our campaigns and how we use community power.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="wwa-cta" aria-labelledby="wwa-cta-heading">
+    <div class="wwa-cta-inner">
+      <h2 id="wwa-cta-heading" class="wwa-cta-heading">Join the Level Up community</h2>
+      <p class="wwa-cta-sub">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="wwa-cta-btn">JOIN US</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .wwa-hero,
+  .wwa-intro,
+  .wwa-team,
+  .wwa-values,
+  .wwa-cta {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* Hero */
+  .wwa-hero {
+    background: #EEEBD3;
+    padding: 120px 24px 100px;
+  }
+  .wwa-hero-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .wwa-eyebrow {
+    display: inline-block;
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    margin-bottom: 28px;
+  }
+  .wwa-hero-title {
+    font: 900 clamp(56px, 11vw, 130px)/0.88 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.05em;
+    margin: 0 0 36px;
+  }
+  .wwa-hero-subtitle {
+    font: 400 20px/1.6 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.65);
+    max-width: 560px;
+    margin: 0;
+  }
+
+  /* Intro */
+  .wwa-intro {
+    background: #0C0A3E;
+    padding: 80px 24px;
+  }
+  .wwa-intro-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .wwa-intro-body {
+    font: 400 19px/1.75 'DM Sans', sans-serif;
+    color: rgba(238,235,211,0.8);
+    margin: 0;
+  }
+
+  /* Team */
+  .wwa-team {
+    background: #EEEBD3;
+    padding: 80px 24px;
+    border-top: 1px solid rgba(12,10,62,0.08);
+  }
+  .wwa-team-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .wwa-team-label {
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    margin: 0 0 32px;
+  }
+  .wwa-card {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 48px;
+    align-items: start;
+    border-top: 3px solid #CCFF33;
+    padding-top: 32px;
+  }
+  .wwa-card-name {
+    font: 800 24px/1.1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+  .wwa-card-role {
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #A89CED;
+    margin: 0;
+  }
+  .wwa-card-bio p {
+    font: 400 17px/1.75 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.72);
+    margin: 0;
+  }
+
+  /* Values */
+  .wwa-values {
+    background: #EEEBD3;
+    padding: 80px 24px 96px;
+    border-top: 1px solid rgba(12,10,62,0.08);
+  }
+  .wwa-values-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .wwa-values-title {
+    font: 900 clamp(28px, 4vw, 44px)/1.05 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.04em;
+    margin: 0 0 56px;
+  }
+  .wwa-values-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  .wwa-value {
+    padding: 36px 40px 36px 0;
+    border-top: 1px solid rgba(12,10,62,0.12);
+  }
+  .wwa-value:nth-child(even) {
+    padding-left: 40px;
+    padding-right: 0;
+    border-left: 1px solid rgba(12,10,62,0.12);
+  }
+  .wwa-value-num {
+    display: block;
+    font: 800 12px/1 'DM Sans', sans-serif;
+    color: #A89CED;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .wwa-value-heading {
+    font: 800 19px/1.1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+  }
+  .wwa-value-body {
+    font: 400 15px/1.7 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.65);
+    margin: 0;
+  }
+
+  /* CTA */
+  .wwa-cta {
+    background: #0C0A3E;
+    padding: 96px 24px;
+    text-align: center;
+  }
+  .wwa-cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .wwa-cta-heading {
+    font: 900 clamp(32px, 5vw, 52px)/1.05 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.04em;
+    margin: 0 0 20px;
+  }
+  .wwa-cta-sub {
+    font: 400 17px/1.65 'DM Sans', sans-serif;
+    color: rgba(238,235,211,0.65);
+    margin: 0 0 36px;
+  }
+  .wwa-cta-btn {
+    display: inline-block;
+    font: 800 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    background: #CCFF33;
+    color: #0C0A3E;
+    text-decoration: none;
+    padding: 18px 40px;
+    transition: background 0.15s;
+  }
+  .wwa-cta-btn:hover {
+    background: #EEEBD3;
+  }
+
+  @media (max-width: 900px) {
+    .wwa-card {
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    .wwa-values-grid {
+      grid-template-columns: 1fr;
+    }
+    .wwa-value:nth-child(even) {
+      padding-left: 0;
+      border-left: none;
+    }
+  }
+  @media (max-width: 640px) {
+    .wwa-hero {
+      padding: 80px 20px 72px;
+    }
+    .wwa-intro,
+    .wwa-team,
+    .wwa-values,
+    .wwa-cta {
+      padding-top: 64px;
+      padding-bottom: 64px;
+    }
+    .wwa-value {
+      padding-right: 0;
+    }
+  }
+</style>

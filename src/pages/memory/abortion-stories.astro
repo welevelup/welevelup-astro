@@ -265,6 +265,28 @@ const { headInner, bodyClass } = extract(homeRaw);
 
           <div class="as-form-prompt" role="group" aria-labelledby="form-legend">
             <p id="form-legend" class="as-form-legend">What would you like to share?</p>
+
+            <div class="as-form-row">
+              <div class="as-form-field">
+                <label class="as-form-label" for="story-name">Your name (optional)</label>
+                <input
+                  id="story-name"
+                  class="as-form-input"
+                  type="text"
+                  placeholder="First name, or leave blank"
+                />
+              </div>
+              <div class="as-form-field">
+                <label class="as-form-label" for="story-email">Email address</label>
+                <input
+                  id="story-email"
+                  class="as-form-input"
+                  type="email"
+                  placeholder="So we can follow up if needed"
+                />
+              </div>
+            </div>
+
             <div class="as-form-field">
               <label class="as-form-label" for="story-text">Your story</label>
               <textarea
@@ -274,8 +296,9 @@ const { headInner, bodyClass } = extract(homeRaw);
                 placeholder="Write as much or as little as feels right. There is no wrong way to do this."
                 aria-describedby="story-hint"
               ></textarea>
-              <p id="story-hint" class="as-form-hint">Your submission is anonymous. We will never publish your name or any identifying details without your explicit consent.</p>
+              <p id="story-hint" class="as-form-hint">Your submission is handled with care. We will never publish your name or any identifying details without your explicit consent.</p>
             </div>
+
             <div class="as-form-field">
               <label class="as-form-label" for="story-context">A brief context (optional)</label>
               <input
@@ -285,6 +308,20 @@ const { headInner, bodyClass } = extract(homeRaw);
                 placeholder="e.g. Mother of one, age 28 — or leave blank"
               />
             </div>
+
+            <div class="as-form-checks">
+              <label class="as-form-check">
+                <input type="checkbox" class="as-check-input" id="story-anonymous" checked />
+                <span class="as-check-box" aria-hidden="true"></span>
+                <span class="as-check-label">Keep my story anonymous — do not publish my name</span>
+              </label>
+              <label class="as-form-check">
+                <input type="checkbox" class="as-check-input" id="story-share" />
+                <span class="as-check-box" aria-hidden="true"></span>
+                <span class="as-check-label">You can share my story on the Level Up website</span>
+              </label>
+            </div>
+
             <button class="as-form-submit" type="button" aria-label="Submit your story">
               Send your story
               <span class="as-form-arrow" aria-hidden="true">→</span>
@@ -873,6 +910,65 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
     .as-form-submit:hover .as-form-arrow {
       transform: translateX(4px);
+    }
+
+    /* Two-column row for name + email */
+    .as-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .as-form-row { grid-template-columns: 1fr; }
+    }
+
+    /* Checkboxes */
+    .as-form-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .as-form-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .as-check-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .as-check-box {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid rgba(12,10,62,0.25);
+      background: #fff;
+      margin-top: 2px;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .as-check-input:checked + .as-check-box {
+      background: #0C0A3E;
+      border-color: #0C0A3E;
+    }
+    .as-check-input:checked + .as-check-box::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #CCFF33;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .as-check-label {
+      font: 400 14px/1.5 'DM Sans', sans-serif;
+      color: rgba(12,10,62,0.7);
     }
 
     .as-form-note {

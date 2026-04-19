@@ -58,6 +58,13 @@ const relatedCampaign = campaignMap[post.id];
         <span>·</span>
         <span>{readingTime} min read</span>
       </div>
+      <div class="bp-share bp-share--header">
+        <span>Share</span>
+        <div class="bp-share-links">
+          <a href={`https://twitter.com/intent/tweet?url=https://welevelup.org/blog/${post.id}&text=${encodeURIComponent(post.data.title)}`} target="_blank" rel="noopener">Twitter/X</a>
+          <button class="bp-copy-link" data-url={`https://welevelup.org/blog/${post.id}`}>Copy link</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -143,7 +150,7 @@ const relatedCampaign = campaignMap[post.id];
     margin-bottom: 16px;
   }
   .bp-post-title {
-    font: 800 clamp(48px, 9vw, 88px)/0.9 'DM Sans';
+    font: 800 clamp(36px, 5vw, 64px)/1 'DM Sans';
     color: #CCFF33;
     letter-spacing: -0.04em;
     margin: 0 0 24px;
@@ -249,6 +256,23 @@ const relatedCampaign = campaignMap[post.id];
   .bp-callout-btn:hover { color: #fff !important; }
 
   /* Share */
+  .bp-share--header {
+    border-top: 1px solid rgba(238,235,211,0.15) !important;
+    margin-top: 24px !important;
+    padding-top: 20px !important;
+  }
+  .bp-share--header > span { color: rgba(238,235,211,0.6) !important; }
+  .bp-share--header .bp-share-links a,
+  .bp-share--header .bp-share-links button {
+    color: #CCFF33;
+    border-color: rgba(238,235,211,0.2);
+    background: none;
+  }
+  .bp-share--header .bp-share-links a:hover,
+  .bp-share--header .bp-share-links button:hover {
+    border-color: #CCFF33;
+    background: rgba(204,255,51,0.1);
+  }
   .bp-share-wrap {
     max-width: 680px;
     margin: 0 auto;

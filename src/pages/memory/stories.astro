@@ -90,6 +90,23 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     </div>
   </section>
 
+  <!-- Hair Stories Feature -->
+  <section class="st-feature" aria-labelledby="st-hair-heading">
+    <div class="st-feature-inner">
+      <div class="st-feature-label">#NoMoreLyes</div>
+      <div class="st-feature-body">
+        <h2 class="st-feature-title" id="st-hair-heading">Share your hair story</h2>
+        <p class="st-feature-desc">
+          The #NoMoreLyes campaign asks: what has using hair relaxers meant for your body, your health, your identity?
+          Black women have been gaslit for decades about the risks. Your experience — whatever it is — belongs in this record.
+        </p>
+        <a href="https://levelup.movement-action.org/p/share-your-hair-story" class="st-feature-btn" target="_blank" rel="noopener">
+          Share your hair story →
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- Share your story CTA -->
   <section class="st-share" aria-labelledby="st-share-heading">
     <div class="st-share-inner">
@@ -510,6 +527,52 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
   }
 
   /* ── Share CTA ──────────────────────────── */
+  /* ── HAIR STORIES FEATURE ──────────────────────────── */
+  .st-feature {
+    background: #0C0A3E;
+    padding: 64px 24px;
+  }
+  .st-feature-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .st-feature-label {
+    font: 800 clamp(28px,4vw,40px)/0.9 'DM Sans', sans-serif;
+    color: #CCFF33;
+    letter-spacing: -0.03em;
+  }
+  .st-feature-title {
+    font: 800 clamp(28px,4vw,40px)/0.9 'DM Sans', sans-serif !important;
+    color: #EEEBD3 !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 16px !important;
+  }
+  .st-feature-desc {
+    font: 400 17px/1.6 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.65) !important;
+    margin: 0 0 28px !important;
+    max-width: 540px;
+  }
+  .st-feature-btn {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E !important;
+    font: 700 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 16px 32px;
+    text-decoration: none !important;
+    transition: background 0.2s;
+  }
+  .st-feature-btn:hover { background: #ffffff; }
+  @media (max-width: 700px) {
+    .st-feature-inner { grid-template-columns: 1fr; gap: 24px; }
+  }
+
   .st-share {
     background: #0C0A3E;
     padding: 80px 24px;

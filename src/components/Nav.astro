@@ -107,6 +107,7 @@
       </div>
       <a href="/press">Press Coverage</a>
       <a href="/contact">Contact</a>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="lu-nav-mobile-join" target="_blank" rel="noopener">Join Us</a>
       <a href="/donate" class="lu-nav-mobile-donate">Donate</a>
     </div>
   </nav>
@@ -398,6 +399,18 @@
     .lu-nav-group.mob-open > .lu-nav-drop { display: block; }
     .lu-nav-group:hover > .lu-nav-drop { display: block; }
     .lu-footer-inner { grid-template-columns: 1fr !important; gap: 32px; }
+    .lu-nav-bar-inner > a.lu-nav-mobile-join,
+    .lu-nav-mobile-join {
+      display: block !important;
+      margin: 8px 0 0;
+      background: #0C0A3E !important;
+      color: #CCFF33 !important;
+      text-align: center;
+      padding: 16px 24px !important;
+      font: 700 16px/1 'DM Sans', sans-serif !important;
+      border-bottom: none !important;
+      text-decoration: none;
+    }
     .lu-nav-bar-inner > a.lu-nav-mobile-donate,
     .lu-nav-mobile-donate {
       display: block !important;
@@ -411,7 +424,8 @@
       text-decoration: none;
     }
   }
-  .lu-nav-mobile-donate { display: none; }
+  .lu-nav-mobile-donate,
+  .lu-nav-mobile-join { display: none; }
 </style>
 
 <script>

@@ -79,38 +79,6 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <section class="nr-faq" aria-labelledby="nr-faq-heading">
-    <div class="nr-faq-inner">
-      <h2 id="nr-faq-heading" class="nr-faq-title">Common Questions</h2>
-      <div class="nr-faq-list">
-        <details class="nr-faq-item">
-          <summary class="nr-faq-q">Is abortion legal in England, Scotland and Wales?</summary>
-          <div class="nr-faq-a">Abortion is legal up to 24 weeks under the 1967 Abortion Act, but it remains in criminal law under the 1861 Offences Against the Person Act. People have been prosecuted for ending their own pregnancies. Decriminalisation campaigns argue abortion should be treated as healthcare, not a criminal matter.</div>
-        </details>
-        <details class="nr-faq-item">
-          <summary class="nr-faq-q">What is the Abortion Is Healthcare campaign?</summary>
-          <div class="nr-faq-a">Abortion Is Healthcare is Level Up's campaign calling for full decriminalisation of abortion in the UK and for media, policymakers, and the public to treat abortion as healthcare. The campaign produced media guidelines with medical experts and abortion providers to support accurate, compassionate journalism.</div>
-        </details>
-        <details class="nr-faq-item">
-          <summary class="nr-faq-q">Why are people being prosecuted for abortion in the UK?</summary>
-          <div class="nr-faq-a">The 1861 Offences Against the Person Act still criminalises self-managed abortion outside the legal framework. Prosecutions have increased, affecting people who ended pregnancies at home — often during the Covid-19 pandemic. Campaigners and medical bodies argue these prosecutions are unjust and harmful.</div>
-        </details>
-        <details class="nr-faq-item">
-          <summary class="nr-faq-q">How does media coverage affect abortion access?</summary>
-          <div class="nr-faq-a">Inaccurate or debate-framed media coverage increases stigma, affects people's decisions, and emboldens restrictive policy proposals. Level Up's Abortion Media Guidelines help journalists report with accuracy and compassion, treating abortion as the public health issue it is.</div>
-        </details>
-        <details class="nr-faq-item">
-          <summary class="nr-faq-q">What do the Level Up Abortion Media Guidelines recommend?</summary>
-          <div class="nr-faq-a">The guidelines recommend treating abortion as a public health issue rather than a moral debate, using person-centred language, avoiding false balance with anti-abortion voices, including medical expert perspectives, and being aware of legal risks faced by people who share their abortion stories publicly.</div>
-        </details>
-        <details class="nr-faq-item">
-          <summary class="nr-faq-q">What is decriminalisation and why does it matter?</summary>
-          <div class="nr-faq-a">Decriminalisation removes abortion from criminal law so it is treated as a healthcare decision rather than a potential crime. It does not remove gestational limits or medical safeguards — it means people cannot be jailed for decisions about their own pregnancies. The Royal College of Obstetricians and Gynaecologists supports decriminalisation.</div>
-        </details>
-      </div>
-    </div>
-  </section>
-
   <section class="nr-body">
     <div class="nr-body-inner">
 
@@ -118,7 +86,7 @@ const { headInner, bodyClass } = extract(homeRaw);
         <p class="nr-sidebar-campaign">Abortion Is Healthcare</p>
         <p class="nr-sidebar-desc">Level Up's Abortion Is Healthcare campaign calls for full decriminalisation of abortion in the UK and works with journalists, medical experts, and abortion providers to promote accurate, compassionate media coverage.</p>
         <div class="nr-sidebar-stats">
-          <div class="nr-stat"><span class="nr-stat-num">20</span><span class="nr-stat-label">Resources</span></div>
+          <div class="nr-stat"><span class="nr-stat-num">1</span><span class="nr-stat-label">Resource</span></div>
           <div class="nr-stat"><span class="nr-stat-num">2024</span><span class="nr-stat-label">Media guidelines published</span></div>
         </div>
         <hr class="nr-divider" />
@@ -127,61 +95,6 @@ const { headInner, bodyClass } = extract(homeRaw);
           <a href="https://welevelup.org/wp-content/uploads/2025/08/Abortion-Media-Guidelines.pdf" target="_blank" rel="noopener" class="nr-action-link">Download media guidelines →</a>
           <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="nr-action-link">Join Level Up →</a>
         </nav>
-        <hr class="nr-divider" />
-        <div class="nr-sidebar-filters" aria-label="Filter resources">
-          <p class="nr-sidebar-filter-label">Filter resources</p>
-          <select class="nr-filter-select" id="nr-cat" aria-label="Filter by category">
-            <option value="all">All Categories</option>
-            <option value="academic">Academic Research</option>
-            <option value="focused">Focused on Our Campaign</option>
-            <option value="mentions">Mentions Our Campaign</option>
-            <option value="other-articles">Other Relevant Articles</option>
-            <option value="other-campaigns">Other Relevant Campaigns</option>
-            <option value="regulation">Regulation &amp; Law</option>
-            <option value="guidelines">Media Guidelines</option>
-            <option value="organisation">Organisations</option>
-          </select>
-          <select class="nr-filter-select" id="nr-type" aria-label="Filter by media type">
-            <option value="all">All Media Types</option>
-            <option value="academic">Academic Paper</option>
-            <option value="article">Article</option>
-            <option value="campaign">Our Campaign</option>
-            <option value="guidelines">Guidelines</option>
-            <option value="organisation">Organisation</option>
-            <option value="regulation">Regulation</option>
-            <option value="report">Report</option>
-            <option value="video">Video</option>
-          </select>
-          <select class="nr-filter-select" id="nr-platform" aria-label="Filter by platform">
-            <option value="all">Platform</option>
-            <option value="bbc">BBC</option>
-            <option value="british-journal-obstetrics">British Journal of Obstetrics &amp; Gynaecology</option>
-            <option value="british-medical-journal">British Medical Journal</option>
-            <option value="channel-4">Channel 4 News</option>
-            <option value="guardian">The Guardian</option>
-            <option value="independent">The Independent</option>
-            <option value="level-up">Level Up</option>
-            <option value="msol">Marie Stopes / MSI</option>
-            <option value="rcog">RCOG</option>
-            <option value="reprieve">Reprieve</option>
-            <option value="telegraph">The Telegraph</option>
-            <option value="times">The Times</option>
-          </select>
-          <select class="nr-filter-select" id="nr-topic" aria-label="Filter by topic">
-            <option value="all">Topic(s)</option>
-            <option value="abortion-access">Abortion Access</option>
-            <option value="criminalisation">Criminalisation</option>
-            <option value="decriminalisation">Decriminalisation</option>
-            <option value="healthcare">Healthcare</option>
-            <option value="media-guidelines">Media Guidelines</option>
-            <option value="mental-health">Mental Health</option>
-            <option value="prosecutions">Prosecutions</option>
-            <option value="providers">Providers</option>
-            <option value="reproductive-rights">Reproductive Rights</option>
-            <option value="stigma">Stigma</option>
-          </select>
-          <button class="nr-filter-reset" id="nr-reset" aria-label="Clear all filters" style="display:none">Clear filters ×</button>
-        </div>
       </aside>
 
       <div class="nr-content">
@@ -206,215 +119,6 @@ const { headInner, bodyClass } = extract(homeRaw);
             <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://welevelup.org/wp-content/uploads/2025/08/Abortion-Media-Guidelines.pdf" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
 
-          <li class="nr-resource-item" data-tags="regulation" data-source="rcog" data-type="regulation" data-topic="decriminalisation healthcare reproductive-rights">
-            <span class="nr-item-num">02</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Decriminalisation</span><span class="nr-topic">Healthcare</span><span class="nr-topic">Reproductive Rights</span></div>
-              <h3 class="nr-item-title"><a href="https://www.rcog.org.uk/guidance/browse-all-guidance/best-practice-papers/decriminalisation-of-abortion-in-great-britain-best-practice-paper-no-14/" target="_blank" rel="noopener">Decriminalisation of Abortion in Great Britain — RCOG Best Practice Paper</a></h3>
-              <p class="nr-item-meta">Royal College of Obstetricians and Gynaecologists · 2022</p>
-              <p class="nr-item-abstract">The Royal College of Obstetricians and Gynaecologists' official position paper calling for the full decriminalisation of abortion in Great Britain, arguing that removing abortion from criminal law is necessary to treat it as the healthcare matter it is. The RCOG contends that the current legal framework causes harm to patients and clinicians, and that decriminalisation would improve outcomes without compromising safety. This is the definitive medical establishment statement supporting reform of abortion law in the UK.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="https://www.rcog.org.uk/guidance/browse-all-guidance/best-practice-papers/decriminalisation-of-abortion-in-great-britain-best-practice-paper-no-14/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-articles" data-source="guardian" data-type="article" data-topic="prosecutions criminalisation abortion-access">
-            <span class="nr-item-num">03</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Prosecutions</span><span class="nr-topic">Criminalisation</span><span class="nr-topic">Abortion Access</span></div>
-              <h3 class="nr-item-title"><a href="https://www.theguardian.com/world/2023/jun/12/carla-foster-prison-sentence-abortion-pills-too-late" target="_blank" rel="noopener">Carla Foster Jailed for Taking Abortion Pills — The UK's Abortion Law Crisis</a></h3>
-              <p class="nr-item-meta">The Guardian · June 2023</p>
-              <p class="nr-item-abstract">The Guardian's coverage of the jailing of Carla Foster, sentenced to over two years in prison for taking abortion pills after the 24-week legal limit — a case that galvanised the UK decriminalisation movement and exposed the human cost of the 1861 Offences Against the Person Act. The piece contextualises Foster's case within rising prosecutorial action against people who end their own pregnancies, and the campaign to remove abortion from criminal law altogether. Foster's sentence was later reduced on appeal, but her case remained a defining moment in the UK abortion rights debate.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.theguardian.com/world/2023/jun/12/carla-foster-prison-sentence-abortion-pills-too-late" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-articles" data-source="bbc" data-type="article" data-topic="criminalisation prosecutions abortion-access">
-            <span class="nr-item-num">04</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Criminalisation</span><span class="nr-topic">Prosecutions</span><span class="nr-topic">Abortion Access</span></div>
-              <h3 class="nr-item-title"><a href="https://www.bbc.co.uk/news/health-65880947" target="_blank" rel="noopener">Rising Prosecutions for Illegal Abortions in England and Wales</a></h3>
-              <p class="nr-item-meta">BBC News · 2023</p>
-              <p class="nr-item-abstract">BBC News reports on data showing that prosecutions and police investigations related to illegal abortions in England and Wales have risen significantly in recent years, with a particular increase following the Covid-19 pandemic period when home use of early medical abortion was temporarily permitted by the government. The report highlights the chilling effect on abortion access and raises questions about whether the criminal law is being used appropriately against people making healthcare decisions about their own bodies. Medical and legal experts cited in the piece call for decriminalisation as the only sustainable solution.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.bbc.co.uk/news/health-65880947" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="academic" data-source="british-journal-obstetrics" data-type="academic" data-topic="healthcare abortion-access mental-health">
-            <span class="nr-item-num">05</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Healthcare</span><span class="nr-topic">Abortion Access</span><span class="nr-topic">Mental Health</span></div>
-              <h3 class="nr-item-title"><a href="https://doi.org/10.1111/1471-0528.17946" target="_blank" rel="noopener">Abortion and Mental Health: Quantitative Synthesis and Analysis of Research Published 1995–2009</a></h3>
-              <p class="nr-item-meta">British Journal of Obstetrics and Gynaecology · 2011</p>
-              <p class="nr-item-abstract">A major systematic review published in the BJOG examining the relationship between abortion and mental health outcomes, finding that unwanted pregnancy — not abortion — is the primary risk factor for adverse mental health outcomes, and that the vast majority of people who have abortions do not experience long-term negative psychological effects. The research directly counters a common anti-abortion argument used in media coverage to frame abortion as psychologically harmful, and is an essential evidence base for journalists and policymakers seeking to report accurately on abortion's health impacts. This paper is foundational to the clinical consensus that abortion is safe healthcare.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1111/1471-0528.17946" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-campaigns organisation" data-source="msol" data-type="organisation" data-topic="providers abortion-access healthcare">
-            <span class="nr-item-num">06</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Providers</span><span class="nr-topic">Abortion Access</span><span class="nr-topic">Healthcare</span></div>
-              <h3 class="nr-item-title"><a href="https://www.msichoices.org.uk/" target="_blank" rel="noopener">MSI Reproductive Choices UK</a></h3>
-              <p class="nr-item-meta">MSI Reproductive Choices · Organisation</p>
-              <p class="nr-item-abstract">MSI Reproductive Choices (formerly Marie Stopes International) is one of the UK's leading providers of abortion and contraception services, operating clinics across England, Scotland and Wales. As a key advocacy voice alongside Level Up's campaign, MSI supports decriminalisation and has publicly called for abortion to be treated as a standard healthcare service. Their clinical evidence and service data are central to the public health case for reform of abortion law in Britain.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.msichoices.org.uk/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-campaigns organisation" data-source="reprieve" data-type="organisation" data-topic="criminalisation prosecutions reproductive-rights">
-            <span class="nr-item-num">07</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Criminalisation</span><span class="nr-topic">Prosecutions</span><span class="nr-topic">Reproductive Rights</span></div>
-              <h3 class="nr-item-title"><a href="https://reprieve.org/uk/issue/abortion-criminalisation/" target="_blank" rel="noopener">Reprieve — Abortion Criminalisation</a></h3>
-              <p class="nr-item-meta">Reprieve · Organisation</p>
-              <p class="nr-item-abstract">Reprieve, the human rights legal charity, has documented and challenged the criminalisation of abortion in England and Wales, providing legal support to people prosecuted under the 1861 Offences Against the Person Act. Their work has exposed how the criminal law disproportionately targets vulnerable people — including those fleeing domestic abuse and those who experience pregnancy loss — and provides essential legal analysis of why decriminalisation is a human rights imperative, not merely a policy preference. Reprieve's briefings are a key resource for journalists covering abortion law and prosecutions.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://reprieve.org/uk/issue/abortion-criminalisation/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-articles" data-source="independent" data-type="article" data-topic="media-guidelines stigma reproductive-rights">
-            <span class="nr-item-num">08</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Media Guidelines</span><span class="nr-topic">Stigma</span><span class="nr-topic">Reproductive Rights</span></div>
-              <h3 class="nr-item-title"><a href="https://www.independent.co.uk/voices/abortion-media-guidelines-journalism-stigma-b2591480.html" target="_blank" rel="noopener">How the Media Gets Abortion Coverage Wrong — and What Needs to Change</a></h3>
-              <p class="nr-item-meta">The Independent · 2024</p>
-              <p class="nr-item-abstract">The Independent examines how mainstream media coverage of abortion in the UK routinely frames the issue as a debate between two equal sides, despite there being strong medical and ethical consensus that abortion is healthcare. The piece analyses specific examples of harmful framing — including the platforming of anti-abortion groups as medical authorities — and argues that media guidelines like those produced by Level Up are urgently needed to improve the quality of public discourse. The article is an important resource for understanding how media narratives shape policy and stigma around abortion.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.independent.co.uk/voices/abortion-media-guidelines-journalism-stigma-b2591480.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="focused" data-source="level-up" data-type="campaign" data-topic="decriminalisation reproductive-rights abortion-access">
-            <span class="nr-item-num">09</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Decriminalisation</span><span class="nr-topic">Reproductive Rights</span><span class="nr-topic">Abortion Access</span></div>
-              <h3 class="nr-item-title"><a href="https://welevelup.org/petition/abortion-is-healthcare/" target="_blank" rel="noopener">Sign the Petition: Abortion Is Healthcare</a></h3>
-              <p class="nr-item-meta">Level Up · Campaign</p>
-              <p class="nr-item-abstract">Level Up's petition calling on the UK government to decriminalise abortion and treat it as the healthcare matter it is — removing abortion from the 1861 Offences Against the Person Act and ensuring no one is criminalised for ending a pregnancy. The petition is a central pillar of the Abortion Is Healthcare campaign and has gathered thousands of signatures from supporters across the UK who believe that reproductive healthcare should never be a crime. Signing the petition adds your voice to the growing movement demanding that parliament modernise abortion law in line with medical consensus and human rights standards.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="https://welevelup.org/petition/abortion-is-healthcare/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-articles" data-source="channel-4" data-type="video" data-topic="prosecutions criminalisation abortion-access">
-            <span class="nr-item-num">10</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Prosecutions</span><span class="nr-topic">Criminalisation</span><span class="nr-topic">Abortion Access</span></div>
-              <h3 class="nr-item-title"><a href="https://www.channel4.com/news/women-criminalised-for-abortion-in-england-and-wales" target="_blank" rel="noopener">Women Being Criminalised for Abortion in England and Wales</a></h3>
-              <p class="nr-item-meta">Channel 4 News · 2023</p>
-              <p class="nr-item-abstract">Channel 4 News investigates the pattern of women being criminalised for ending their own pregnancies in England and Wales, documenting individual cases and examining how the law is applied in practice. The report reveals that police investigations into abortion are more common than the public realises, and that the people targeted are often among the most vulnerable — those experiencing domestic violence, pregnancy loss, or extreme personal circumstances. Campaigners and legal experts featured call for urgent legislative reform to stop the prosecution of people for private healthcare decisions.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--video">Video</span><a href="https://www.channel4.com/news/women-criminalised-for-abortion-in-england-and-wales" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="academic" data-source="british-medical-journal" data-type="academic" data-topic="healthcare abortion-access decriminalisation">
-            <span class="nr-item-num">11</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Healthcare</span><span class="nr-topic">Abortion Access</span><span class="nr-topic">Decriminalisation</span></div>
-              <h3 class="nr-item-title"><a href="https://doi.org/10.1136/bmj.o1462" target="_blank" rel="noopener">Abortion Is Essential Healthcare — BMJ Editorial</a></h3>
-              <p class="nr-item-meta">British Medical Journal · 2022</p>
-              <p class="nr-item-abstract">A British Medical Journal editorial making the clinical and ethical case that abortion is essential healthcare and should be treated as such by governments, media, and the public — not as a moral question subject to political debate. The BMJ authors argue that the ongoing criminalisation of abortion in England and Wales is incompatible with modern healthcare ethics, international human rights standards, and the medical profession's commitment to patient autonomy. The editorial calls for decriminalisation and for healthcare providers to speak out in support of abortion access as a core component of reproductive healthcare.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1136/bmj.o1462" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-articles" data-source="times" data-type="article" data-topic="media-guidelines stigma abortion-access">
-            <span class="nr-item-num">12</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Media Guidelines</span><span class="nr-topic">Stigma</span><span class="nr-topic">Abortion Access</span></div>
-              <h3 class="nr-item-title"><a href="https://www.thetimes.co.uk/article/abortion-media-reporting-stigma-uk" target="_blank" rel="noopener">How Abortion Coverage in the UK Press Perpetuates Stigma</a></h3>
-              <p class="nr-item-meta">The Times · 2024</p>
-              <p class="nr-item-abstract">The Times examines how UK press coverage of abortion continues to rely on framing devices — images of protests, quotes from anti-abortion campaigners, and language of "controversy" — that perpetuate stigma around a common medical procedure experienced by one in three women in their lifetime. The piece draws on research into how media language shapes public perception of abortion and the social pressure people experience when considering or discussing their own experiences. The article contextualises Level Up's media guidelines as a practical intervention in an entrenched pattern of misleading coverage.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.thetimes.co.uk/article/abortion-media-reporting-stigma-uk" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-campaigns organisation" data-source="rcog" data-type="organisation" data-topic="healthcare providers reproductive-rights decriminalisation">
-            <span class="nr-item-num">13</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Healthcare</span><span class="nr-topic">Providers</span><span class="nr-topic">Reproductive Rights</span><span class="nr-topic">Decriminalisation</span></div>
-              <h3 class="nr-item-title"><a href="https://www.rcog.org.uk/about-us/campaigning-and-opinions/position-statements/abortion/" target="_blank" rel="noopener">RCOG Position on Abortion</a></h3>
-              <p class="nr-item-meta">Royal College of Obstetricians and Gynaecologists · Organisation</p>
-              <p class="nr-item-abstract">The Royal College of Obstetricians and Gynaecologists' comprehensive position on abortion in the UK, affirming that abortion is safe, essential healthcare that must be accessible to all who need it. The RCOG supports full decriminalisation, opposes buffer zones restrictions on medical premises access, and calls for abortion to be integrated into mainstream NHS services as a matter of clinical priority. As the professional body representing the specialist clinicians who provide abortion care, the RCOG's position is the authoritative medical statement on abortion in Britain.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.rcog.org.uk/about-us/campaigning-and-opinions/position-statements/abortion/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="regulation" data-source="level-up" data-type="report" data-topic="criminalisation prosecutions reproductive-rights decriminalisation">
-            <span class="nr-item-num">14</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Criminalisation</span><span class="nr-topic">Prosecutions</span><span class="nr-topic">Reproductive Rights</span><span class="nr-topic">Decriminalisation</span></div>
-              <h3 class="nr-item-title"><a href="https://welevelup.org/abortion-stories/" target="_blank" rel="noopener">Abortion Stories — Level Up Space for Memory</a></h3>
-              <p class="nr-item-meta">Level Up · Resource</p>
-              <p class="nr-item-abstract">Level Up's Space for Memory collects abortion stories from people across the UK — a vital archive of personal testimony that humanises the statistics around abortion access, criminalisation, and the need for decriminalisation. These stories document the real-world impact of UK abortion law, including experiences of shame, fear of prosecution, barriers to access, and the profound relief of being able to access safe healthcare. The collection serves both as a record and as a tool for journalists and policymakers to understand the human stakes of the debate around abortion law reform in Britain.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Resource</span><a href="https://welevelup.org/abortion-stories/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-articles" data-source="telegraph" data-type="article" data-topic="decriminalisation reproductive-rights abortion-access">
-            <span class="nr-item-num">15</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Decriminalisation</span><span class="nr-topic">Reproductive Rights</span><span class="nr-topic">Abortion Access</span></div>
-              <h3 class="nr-item-title"><a href="https://www.telegraph.co.uk/news/2023/06/13/abortion-criminalisation-uk-law-reform-debate/" target="_blank" rel="noopener">The Case for Decriminalising Abortion in the UK</a></h3>
-              <p class="nr-item-meta">The Telegraph · 2023</p>
-              <p class="nr-item-abstract">The Telegraph's coverage of the UK parliamentary debate around decriminalisation of abortion following the Carla Foster case, outlining the arguments made by medical bodies, legal experts, and campaign groups including Level Up for removing abortion from criminal law. The piece captures a significant moment in the UK political debate when decriminalisation moved from a fringe campaign demand to mainstream policy discussion, with cross-party support emerging in parliament for the first time. An important document for understanding the political landscape around abortion law reform in Britain.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.telegraph.co.uk/news/2023/06/13/abortion-criminalisation-uk-law-reform-debate/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="academic" data-source="british-journal-obstetrics" data-type="academic" data-topic="healthcare abortion-access providers">
-            <span class="nr-item-num">16</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Healthcare</span><span class="nr-topic">Abortion Access</span><span class="nr-topic">Providers</span></div>
-              <h3 class="nr-item-title"><a href="https://doi.org/10.1111/1471-0528.17070" target="_blank" rel="noopener">Safety and Effectiveness of First-Trimester Medical Abortion at Home</a></h3>
-              <p class="nr-item-meta">British Journal of Obstetrics and Gynaecology · 2021</p>
-              <p class="nr-item-abstract">A peer-reviewed study in the BJOG demonstrating the safety and effectiveness of self-managed early medical abortion at home using telemedicine, confirming that remote provision of abortion pills is clinically safe and acceptable to patients. The research provided the evidence base for the UK government's decision to make home early medical abortion permanent following its temporary approval during the Covid-19 pandemic. This study is essential reading for anyone seeking to understand the clinical evidence behind expanding abortion access through telemedicine and home provision.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1111/1471-0528.17070" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="mentions other-articles" data-source="guardian" data-type="article" data-topic="stigma media-guidelines abortion-access reproductive-rights">
-            <span class="nr-item-num">17</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Stigma</span><span class="nr-topic">Media Guidelines</span><span class="nr-topic">Abortion Access</span><span class="nr-topic">Reproductive Rights</span></div>
-              <h3 class="nr-item-title"><a href="https://www.theguardian.com/world/2024/jan/15/uk-abortion-media-guidelines-level-up" target="_blank" rel="noopener">Level Up Launches Abortion Media Guidelines to Combat Stigmatising Coverage</a></h3>
-              <p class="nr-item-meta">The Guardian · January 2024</p>
-              <p class="nr-item-abstract">The Guardian's coverage of Level Up's launch of the UK's first Abortion Media Guidelines, developed with journalists, medical experts, and abortion providers to address the systematic shortcomings in how British media covers abortion. The guidelines challenge the dominant "two sides" framing, offer concrete language recommendations, and call on editors to treat abortion as the public health issue it is rather than a culture war battleground. The Guardian's coverage reached a broad audience and helped spark wider industry discussion about standards in abortion journalism across UK newsrooms.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.theguardian.com/world/2024/jan/15/uk-abortion-media-guidelines-level-up" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-campaigns organisation" data-source="msol" data-type="organisation" data-topic="abortion-access healthcare stigma reproductive-rights">
-            <span class="nr-item-num">18</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Abortion Access</span><span class="nr-topic">Healthcare</span><span class="nr-topic">Stigma</span><span class="nr-topic">Reproductive Rights</span></div>
-              <h3 class="nr-item-title"><a href="https://www.bpas.org/" target="_blank" rel="noopener">British Pregnancy Advisory Service (BPAS)</a></h3>
-              <p class="nr-item-meta">BPAS · Organisation</p>
-              <p class="nr-item-abstract">The British Pregnancy Advisory Service is the UK's leading abortion provider and a key advocacy organisation for abortion rights and decriminalisation. BPAS provides abortion services to over 100,000 people annually across England, Scotland and Wales, and has been a vocal campaigner for removing abortion from criminal law, improving access to early medical abortion, and combating abortion stigma in public discourse. Their research, clinical data, and policy advocacy are essential resources for anyone seeking to understand abortion access and rights in the UK context.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--org">Organisation</span><a href="https://www.bpas.org/" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="other-articles" data-source="independent" data-type="article" data-topic="decriminalisation reproductive-rights criminalisation">
-            <span class="nr-item-num">19</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Decriminalisation</span><span class="nr-topic">Reproductive Rights</span><span class="nr-topic">Criminalisation</span></div>
-              <h3 class="nr-item-title"><a href="https://www.independent.co.uk/news/health/abortion-decriminalisation-uk-parliament-vote-b2371682.html" target="_blank" rel="noopener">Parliament Debates Decriminalisation of Abortion in England and Wales</a></h3>
-              <p class="nr-item-meta">The Independent · 2023</p>
-              <p class="nr-item-abstract">The Independent's reporting on parliamentary debate around decriminalising abortion in England and Wales, charting the political progress of cross-party proposals to remove abortion from the criminal law following growing public concern about prosecutions. The piece analyses the arguments made by MPs on both sides of the debate, the role of medical bodies and campaign groups including Level Up in lobbying for reform, and the prospects for legislative change in the current parliamentary session. An essential resource for understanding the political dynamics around abortion law reform in Britain.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--media">Article</span><a href="https://www.independent.co.uk/news/health/abortion-decriminalisation-uk-parliament-vote-b2371682.html" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="academic" data-source="british-medical-journal" data-type="academic" data-topic="abortion-access healthcare stigma">
-            <span class="nr-item-num">20</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Abortion Access</span><span class="nr-topic">Healthcare</span><span class="nr-topic">Stigma</span></div>
-              <h3 class="nr-item-title"><a href="https://doi.org/10.1136/bmjopen-2020-041322" target="_blank" rel="noopener">Stigma and Abortion: A Systematic Review of Quantitative Studies</a></h3>
-              <p class="nr-item-meta">BMJ Open · 2021</p>
-              <p class="nr-item-abstract">A systematic review published in BMJ Open examining the evidence on abortion stigma — how it is measured, what drives it, and what its consequences are for people who need abortions and for healthcare providers. The research finds that stigma is a significant barrier to abortion access, affects the quality of care received, and is fuelled by media framing, political discourse, and social norms — making media guidelines like those produced by Level Up a clinically as well as ethically important intervention. The review provides a comprehensive evidence base for understanding why reducing stigma is a public health priority, not merely a matter of social preference.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://doi.org/10.1136/bmjopen-2020-041322" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
         </ol>
       </div>
     </div>
@@ -423,8 +127,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   <section class="dp-cta" aria-labelledby="nr-cta-h">
     <div class="dp-content" style="text-align:center">
       <h2 id="nr-cta-h" class="dp-h2--light">Join the Level Up community</h2>
-      <p class="dp-p--light">Receive campaign updates, research summaries, and actions you can take — straight to your inbox.</p>
-      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="dp-btn">JOIN US →</a>
+      <p class="dp-p--light">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="dp-btn">JOIN US</a>
     </div>
   </section>
 
@@ -449,17 +153,6 @@ const { headInner, bodyClass } = extract(homeRaw);
   .nr-intro-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; background: #0C0A3E; color: #CCFF33; text-decoration: none; padding: 16px 32px; margin-top: 8px; transition: background 0.15s; }
   .nr-intro-btn:hover { background: #A89CED; color: #0C0A3E; }
 
-  .nr-faq { background: #EEEBD3; padding: 60px 24px; border-top: 1px solid rgba(12,10,62,0.08); }
-  .nr-faq-inner { max-width: 860px; margin: 0 auto; }
-  .nr-faq-title { font: 900 28px/1 'DM Sans', sans-serif; color: #0C0A3E; text-transform: uppercase; letter-spacing: -0.02em; margin: 0 0 40px; }
-  .nr-faq-list { display: flex; flex-direction: column; gap: 0; }
-  .nr-faq-item { border-top: 1px solid rgba(12,10,62,0.15); }
-  .nr-faq-item:last-child { border-bottom: 1px solid rgba(12,10,62,0.15); }
-  .nr-faq-item summary { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; font: 700 16px/1.3 'DM Sans', sans-serif; color: #0C0A3E; cursor: pointer; list-style: none; gap: 16px; }
-  .nr-faq-item summary::-webkit-details-marker { display: none; }
-  .nr-faq-item summary::after { content: '+'; font: 300 24px/1 'DM Sans', sans-serif; color: #0C0A3E; flex-shrink: 0; transition: transform 0.2s; }
-  .nr-faq-item[open] summary::after { content: '−'; }
-  .nr-faq-a { font: 400 15px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); padding: 0 0 22px; max-width: 720px; }
 
   .nr-sidebar-filter-label { font: 700 10px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.16em; color: #0C0A3E; margin: 0 0 12px; }
   .nr-sidebar-filters { display: flex; flex-direction: column; gap: 8px; }
@@ -530,7 +223,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   .dp-cta { background: #0C0A3E; padding: 96px 24px; text-align: center; font-family: 'DM Sans', system-ui, sans-serif; }
   .dp-content { max-width: 640px; margin: 0 auto; }
-  .dp-h2--light { font: 900 clamp(32px,5vw,52px)/1.05 'DM Sans', sans-serif; color: #EEEBD3; letter-spacing: -0.04em; margin: 0 0 20px; }
+  .dp-h2--light { font: 900 clamp(32px,5vw,52px)/1.05 'DM Sans', sans-serif; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 20px; }
   .dp-p--light { font: 400 17px/1.65 'DM Sans', sans-serif; color: rgba(238,235,211,0.65); margin: 0 0 36px; }
   .dp-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.12em; background: #CCFF33; color: #0C0A3E; text-decoration: none; padding: 18px 40px; transition: background 0.15s; }
   .dp-btn:hover { background: #EEEBD3; }

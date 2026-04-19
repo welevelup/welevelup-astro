@@ -235,9 +235,9 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   </section>
 
   <section class="home-cta">
-    <h2>Feminist thinking, straight to your inbox</h2>
+    <h2>Join the Level Up Community</h2>
     <p>Campaign alerts, event invites, and analysis — join 40,000+ people taking action.</p>
-    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join the movement</a>
+    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join the Level Up Community</a>
   </section>
   <Footer />
 </Layout>
@@ -546,14 +546,15 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     gap: 16px;
   }
   .home-petition-card {
-    background: #CCFF33;
+    background: #FFFFFF;
+    border: 1.5px solid rgba(12,10,62,0.1);
     text-decoration: none;
     display: flex;
     flex-direction: column;
     padding: 20px 20px 24px;
-    transition: transform 0.2s;
+    transition: transform 0.2s, border-color 0.2s;
   }
-  .home-petition-card:hover { transform: translateY(-4px); }
+  .home-petition-card:hover { transform: translateY(-4px); border-color: #CCFF33; }
   .home-petition-img-wrap {
     margin-bottom: 20px;
     overflow: hidden;

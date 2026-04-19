@@ -291,8 +291,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   }
   .wwa-cta-inner { max-width: 640px; margin: 0 auto; }
   .wwa-cta-heading {
-    font: 900 clamp(32px,5vw,52px)/1.05 'DM Sans', sans-serif;
-    color: #0C0A3E;
+    font: 900 clamp(32px,5vw,52px)/1.05 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
     letter-spacing: -0.04em;
     margin: 0 0 20px;
   }
@@ -303,16 +303,16 @@ const { headInner, bodyClass } = extract(homeRaw);
   }
   .wwa-cta-btn {
     display: inline-block;
-    font: 800 13px/1 'DM Sans', sans-serif;
+    font: 800 13px/1 'DM Sans', sans-serif !important;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    background: #0C0A3E;
-    color: #CCFF33;
+    background: #0C0A3E !important;
+    color: #CCFF33 !important;
     text-decoration: none;
     padding: 18px 40px;
     transition: background 0.15s;
   }
-  .wwa-cta-btn:hover { background: #EEEBD3; color: #0C0A3E; }
+  .wwa-cta-btn:hover { background: #EEEBD3 !important; color: #0C0A3E !important; }
 
   @media (max-width: 1024px) {
     .wwa-team-grid { grid-template-columns: repeat(3, 1fr); }

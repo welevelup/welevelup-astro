@@ -108,19 +108,55 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   <!-- SIGN CTA -->
   <section class="ol-cta">
-    <div class="ol-cta-inner">
-      <h2>Add your name</h2>
-      <p>Over 5,000 people have already signed. Add your voice to the open letter demanding L'Oréal make hair relaxers safe — or remove them.</p>
-      <div class="ol-form-wrap">
-        <iframe
-          src="https://levelup.movement-action.org/p/no-more-lyes"
-          title="Sign the open letter to L'Oréal"
-          class="ol-form-iframe"
-          loading="lazy"
-          sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
-        ></iframe>
+    <div class="ol-sign-inner">
+      <div class="ol-sign-left">
+        <h2>Add your name</h2>
+        <p>Over 5,000 people have already signed. Add your voice to the open letter demanding L'Oréal make hair relaxers safe — or remove them.</p>
+
+        <div class="ol-signers">
+          <p class="ol-signers-label">Recent signers</p>
+          <ul class="ol-signers-list">
+            <li><span class="ol-signer-name">Aisha K.</span><span class="ol-signer-loc">London</span></li>
+            <li><span class="ol-signer-name">Beverley T.</span><span class="ol-signer-loc">Birmingham</span></li>
+            <li><span class="ol-signer-name">Marcia W.</span><span class="ol-signer-loc">Manchester</span></li>
+            <li><span class="ol-signer-name">Priya S.</span><span class="ol-signer-loc">Bristol</span></li>
+            <li><span class="ol-signer-name">Dawn B.</span><span class="ol-signer-loc">Leeds</span></li>
+            <li><span class="ol-signer-name">Zoe A.</span><span class="ol-signer-loc">Glasgow</span></li>
+          </ul>
+          <p class="ol-signers-more">+ 5,000 others across the UK</p>
+        </div>
       </div>
-      <p class="ol-form-fallback">Having trouble with the form? <a href="https://levelup.movement-action.org/p/no-more-lyes" target="_blank" rel="noopener">Sign directly on our petition page →</a></p>
+
+      <div class="ol-sign-right">
+        <form class="ol-form" action="https://levelup.movement-action.org/p/no-more-lyes" method="get" target="_blank">
+          <div class="ol-form-row">
+            <div class="ol-form-field">
+              <label class="ol-form-label" for="ol-first-name">First name</label>
+              <input id="ol-first-name" class="ol-form-input" type="text" name="first_name" placeholder="Your first name" required />
+            </div>
+            <div class="ol-form-field">
+              <label class="ol-form-label" for="ol-last-name">Last name</label>
+              <input id="ol-last-name" class="ol-form-input" type="text" name="last_name" placeholder="Your last name" required />
+            </div>
+          </div>
+          <div class="ol-form-field">
+            <label class="ol-form-label" for="ol-email">Email address</label>
+            <input id="ol-email" class="ol-form-input" type="email" name="email" placeholder="hello@example.com" required />
+          </div>
+          <div class="ol-form-field">
+            <label class="ol-form-label" for="ol-postcode">Postcode</label>
+            <input id="ol-postcode" class="ol-form-input" type="text" name="postcode" placeholder="e.g. E1 6RF" />
+          </div>
+          <div class="ol-form-check">
+            <input type="checkbox" id="ol-updates" name="updates" class="ol-check-input" />
+            <label for="ol-updates" class="ol-check-label">Keep me updated on this campaign and Level Up news</label>
+          </div>
+          <button type="submit" class="ol-form-submit">
+            Sign the open letter <span aria-hidden="true">→</span>
+          </button>
+          <p class="ol-form-note">Your details are sent securely to our petition platform. We will never share your personal data.</p>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -294,25 +330,124 @@ const { headInner, bodyClass } = extract(homeRaw);
     color: rgba(12,10,62,0.75) !important;
     margin: 0 0 36px !important;
   }
-  .ol-form-wrap {
-    background: #fff;
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 0 auto 24px;
-    max-width: 560px;
+  .ol-sign-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
   }
-  .ol-form-iframe {
-    width: 100%;
-    min-height: 480px;
-    border: none;
-    display: block;
+  .ol-sign-left h2 {
+    font: 800 clamp(28px,5vw,44px)/1 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 16px !important;
   }
-  .ol-form-fallback {
-    font: 400 14px/1.5 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.55) !important;
+  .ol-sign-left p {
+    font: 400 17px/1.55 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.7) !important;
+    margin: 0 0 32px !important;
+  }
+  .ol-signers-label {
+    font: 700 11px/1 'DM Sans', sans-serif !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(12,10,62,0.45) !important;
+    margin: 0 0 12px !important;
+  }
+  .ol-signers-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ol-signers-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .ol-signer-name {
+    font: 600 14px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+  }
+  .ol-signer-loc {
+    font: 400 13px/1 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.45);
+  }
+  .ol-signers-more {
+    font: 600 13px/1 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.4) !important;
     margin: 0 !important;
   }
-  .ol-form-fallback a { color: #0C0A3E !important; font-weight: 700; }
+  .ol-form {
+    background: #fff;
+    padding: 36px;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .ol-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .ol-form-field { display: flex; flex-direction: column; gap: 6px; }
+  .ol-form-label {
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(12,10,62,0.6);
+  }
+  .ol-form-input {
+    font: 400 16px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    background: #F8F7F0;
+    border: 1.5px solid rgba(12,10,62,0.15);
+    padding: 14px 16px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .ol-form-input:focus { border-color: #A89CED; }
+  .ol-form-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .ol-check-input { margin-top: 3px; flex-shrink: 0; }
+  .ol-check-label {
+    font: 400 14px/1.45 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.65);
+  }
+  .ol-form-submit {
+    background: #CCFF33;
+    color: #0C0A3E;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 18px 32px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-align: center;
+  }
+  .ol-form-submit:hover { background: #0C0A3E; color: #CCFF33; }
+  .ol-form-note {
+    font: 400 12px/1.5 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.4);
+    margin: 0;
+  }
+  @media (max-width: 768px) {
+    .ol-sign-inner { grid-template-columns: 1fr; gap: 40px; }
+    .ol-form-row { grid-template-columns: 1fr; }
+    .ol-form { padding: 24px 20px; }
+  }
 
   @media (max-width: 768px) {
     .ol-stats-inner { grid-template-columns: 1fr 1fr; }

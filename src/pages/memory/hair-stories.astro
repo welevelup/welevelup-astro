@@ -1,0 +1,299 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HERO -->
+  <section class="hs-hero">
+    <div class="hs-hero-inner">
+      <a href="/active-campaigns/nomorelyes-2" class="hs-back">&larr; Back to #NoMoreLyes</a>
+      <span class="hs-label">#NoMoreLyes</span>
+      <h1 class="hs-title">Our hair,<br/>our health,<br/>our stories</h1>
+      <p class="hs-tagline">Black women share what using hair relaxers has meant for their bodies, their health, and their lives. These are their words.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="hs-intro">
+    <div class="hs-content">
+      <p>Hair relaxers have been sold to Black women and girls for generations — without adequate safety warnings, without transparency about ingredients, and without meaningful regulation. The #NoMoreLyes campaign asked: <strong>what has this meant for your health?</strong></p>
+      <p>These are real stories, shared by women who chose to speak out. Some have shared their names. Others have asked to remain anonymous. All of them deserve to be heard.</p>
+    </div>
+  </section>
+
+  <!-- STORIES -->
+  <section class="hs-stories">
+    <div class="hs-content">
+
+      <!-- DJ Mystikle Blue — consented to share with name -->
+      <article class="hs-story">
+        <div class="hs-story-header">
+          <span class="hs-quote-mark">"</span>
+          <div>
+            <span class="hs-name">DJ Mystikle Blue</span>
+            <span class="hs-location">Birmingham, UK</span>
+          </div>
+        </div>
+        <blockquote class="hs-quote">
+          My husband and I had been trying for a baby for a while, and it wasn't an easy journey. I suffered 4 consecutive miscarriages, followed by a stillbirth and then another miscarriage. Added to this I had an ovarian cyst and fibroids that were growing each time I went in for a scan. The doctors couldn't find what was causing all this, so I decided to do my own research — and stumbled upon the correlation between hair relaxers and the problems they cause.
+          <br/><br/>
+          In October 2016 I did the big chop and went natural. After going natural, the fibroids just stopped growing — and in 2018 I gave birth to our son.
+        </blockquote>
+        <div class="hs-story-footer">
+          <span class="hs-tag">Fibroids · Miscarriage · Stillbirth</span>
+        </div>
+      </article>
+
+      <!-- Emma — share with pseudonym -->
+      <article class="hs-story hs-story--alt">
+        <div class="hs-story-header">
+          <span class="hs-quote-mark">"</span>
+          <div>
+            <span class="hs-name">Emma</span>
+            <span class="hs-location">London, UK</span>
+          </div>
+        </div>
+        <blockquote class="hs-quote">
+          I first had my hair relaxed when I was around 12. First at a salon, then my sister and friends would do each other's. We had no real idea as tweens that we were administering seriously harmful chemicals to each other — and on many occasions we'd end up with serious, painful, weeping burns at our hairlines or on our scalps. Burns that would not heal for weeks or months, leaving permanent scarring or hair loss.
+          <br/><br/>
+          We could easily buy a huge variety of hair relaxers without ID or age verification from hair shops. The packaging was always pretty, with stunning young women whose hair we aspired to. Those boxes were where we saw who we wanted to be.
+          <br/><br/>
+          To this day, 25 years later, I have severe fibroids so bad that my entire bladder is displaced. I have to use the bathroom every 20 minutes, making sleeping, working, travelling, exercising — even drinking adequate water — really difficult. The fibroids are disabling. Had my mum or I been aware of what is now known through research, I would not have been allowed to use them. Our bodies, our hair and our health is sacred and deserving of safety.
+        </blockquote>
+        <div class="hs-story-footer">
+          <span class="hs-tag">Fibroids · Chemical burns · Hair loss</span>
+        </div>
+      </article>
+
+      <!-- Anonymous (Mercy) -->
+      <article class="hs-story">
+        <div class="hs-story-header">
+          <span class="hs-quote-mark">"</span>
+          <div>
+            <span class="hs-name">Anonymous</span>
+            <span class="hs-location">West Midlands, UK</span>
+          </div>
+        </div>
+        <blockquote class="hs-quote">
+          I had to have a hysterectomy in my early 40s due to fibroids and I know a few other women who suffered the same fate. I have no doubt there is a link with the use of hair relaxers. I wish I had known earlier.
+        </blockquote>
+        <div class="hs-story-footer">
+          <span class="hs-tag">Fibroids · Hysterectomy</span>
+        </div>
+      </article>
+
+      <!-- Anonymous (Jacqueline) -->
+      <article class="hs-story hs-story--alt">
+        <div class="hs-story-header">
+          <span class="hs-quote-mark">"</span>
+          <div>
+            <span class="hs-name">Anonymous</span>
+            <span class="hs-location">East London, UK</span>
+          </div>
+        </div>
+        <blockquote class="hs-quote">
+          I only relaxed my hair for about 5 years, from 15 to 19. It caused burning feelings, lots of scabs, as well as thinning of my hair. Years later I was diagnosed with breast cancer — which praise to God I came through in 2022.
+          <br/><br/>
+          I would not want anyone to go through cancer like I did. Having choices means we can have preventative alternatives for our health without compromising our style. We deserve better.
+        </blockquote>
+        <div class="hs-story-footer">
+          <span class="hs-tag">Cancer · Chemical burns</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- SHARE YOUR STORY CTA -->
+  <section class="hs-cta">
+    <div class="hs-cta-inner">
+      <h2>Share your story</h2>
+      <p>Have you been affected by hair relaxers? Your experience matters — and sharing it helps us build the evidence base for change.</p>
+      <a href="https://levelup.movement-action.org/p/share-your-hair-story" class="hs-btn-primary" target="_blank" rel="noopener">Share your hair story &rarr;</a>
+    </div>
+  </section>
+
+  <!-- BACK TO CAMPAIGN -->
+  <section class="hs-back-section">
+    <div class="hs-content hs-back-inner">
+      <a href="/active-campaigns/nomorelyes-2" class="hs-back-link">&larr; Back to the #NoMoreLyes campaign</a>
+      <a href="https://levelup.movement-action.org/p/no-more-lyes" class="hs-btn-outline" target="_blank" rel="noopener">Sign the open letter to L'Oréal</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .hs-hero {
+    background: #0C0A3E;
+    padding: 120px 24px 80px;
+  }
+  .hs-hero-inner { max-width: 800px; margin: 0 auto; }
+  .hs-back {
+    display: inline-block;
+    font: 600 13px/1 'DM Sans', sans-serif;
+    color: #A89CED !important;
+    text-decoration: none !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .hs-back:hover { color: #CCFF33 !important; }
+  .hs-label {
+    display: block;
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    margin-bottom: 20px;
+  }
+  .hs-title {
+    font: 800 clamp(48px,10vw,80px)/0.9 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    letter-spacing: -0.045em !important;
+    margin: 0 0 28px !important;
+  }
+  .hs-tagline {
+    font: 400 20px/1.5 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.75) !important;
+    max-width: 560px;
+  }
+  .hs-intro {
+    background: #EEEBD3;
+    padding: 64px 24px;
+  }
+  .hs-content { max-width: 800px; margin: 0 auto; }
+  .hs-intro p {
+    font: 400 18px/1.65 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.8) !important;
+    margin: 0 0 16px !important;
+  }
+  .hs-intro strong { color: #0C0A3E !important; }
+  .hs-stories {
+    background: #fff;
+    padding: 80px 24px;
+  }
+  .hs-story {
+    border-left: 4px solid #CCFF33;
+    background: #F8F7F0;
+    padding: 40px 40px 32px;
+    margin-bottom: 40px;
+    border-radius: 0 4px 4px 0;
+  }
+  .hs-story--alt {
+    border-left-color: #A89CED;
+    background: #F3F1FC;
+  }
+  .hs-story-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .hs-quote-mark {
+    font: 800 72px/0.6 'DM Sans', sans-serif;
+    color: #CCFF33;
+    flex-shrink: 0;
+  }
+  .hs-story--alt .hs-quote-mark { color: #A89CED; }
+  .hs-name {
+    display: block;
+    font: 700 18px/1.2 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+  }
+  .hs-location {
+    display: block;
+    font: 400 12px/1 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.45) !important;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .hs-quote {
+    font: 400 17px/1.7 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.8) !important;
+    margin: 0 0 24px !important;
+    border: none !important;
+    padding: 0 !important;
+    quotes: none !important;
+  }
+  .hs-story-footer { border-top: 1px solid rgba(12,10,62,0.08); padding-top: 16px; }
+  .hs-tag {
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(12,10,62,0.4);
+  }
+  .hs-cta {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .hs-cta-inner { max-width: 560px; margin: 0 auto; }
+  .hs-cta h2 {
+    font: 800 clamp(32px,6vw,52px)/1 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 20px !important;
+  }
+  .hs-cta p {
+    font: 400 18px/1.55 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.7) !important;
+    margin: 0 0 36px !important;
+  }
+  .hs-btn-primary {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E !important;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 20px 40px;
+    text-decoration: none !important;
+    transition: background 0.2s;
+  }
+  .hs-btn-primary:hover { background: #fff; }
+  .hs-back-section {
+    background: #EEEBD3;
+    padding: 40px 24px;
+  }
+  .hs-back-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hs-back-link {
+    font: 600 14px/1 'DM Sans', sans-serif;
+    color: #0C0A3E !important;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .hs-back-link:hover { color: #A89CED !important; }
+  .hs-btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: #0C0A3E !important;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 18px 36px;
+    text-decoration: none !important;
+    border: 2px solid #0C0A3E;
+    transition: all 0.2s;
+  }
+  .hs-btn-outline:hover { background: #0C0A3E; color: #CCFF33 !important; }
+  @media (max-width: 640px) {
+    .hs-story { padding: 28px 20px 24px; }
+    .hs-back-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>

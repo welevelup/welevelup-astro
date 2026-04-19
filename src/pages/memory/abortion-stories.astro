@@ -63,64 +63,29 @@ const { headInner, bodyClass } = extract(homeRaw);
   <section class="as-section as-section--white" aria-labelledby="stories-heading">
     <div class="as-content">
       <h2 id="stories-heading" class="as-section-heading">
-        Their words
+        Stories being collected
       </h2>
 
-      <div class="as-stories-grid">
-
-        <!-- Story 1 — large pull-quote, cream card, left accent -->
-        <article class="as-story as-story--one" aria-label="Anonymous story">
-          <div class="as-story-number" aria-hidden="true">01</div>
-          <div class="as-story-body">
-            <p class="as-story-quote">
-              "I was 19, in my first year of university. I had no money, no partner, and no way to raise a child. I made my decision within 24 hours and I have never once regretted it. What I do regret is that I felt I had to keep it a secret from almost everyone I loved. The shame wasn't mine to carry."
-            </p>
-          </div>
-          <footer class="as-story-footer">
-            <span class="as-story-tag">Age 19, Student</span>
-          </footer>
-        </article>
-
-        <!-- Story 2 — dark card, lime accent, typographic contrast -->
-        <article class="as-story as-story--two" aria-label="Anonymous story">
-          <div class="as-story-number" aria-hidden="true">02</div>
-          <div class="as-story-body">
-            <p class="as-story-overline">I already had two children.</p>
-            <p class="as-story-quote">
-              "My youngest was eight months old when I found out I was pregnant again. We were already stretched beyond our limits — emotionally, financially, every way. I knew immediately. My GP was kind. The clinic staff were kind. Everyone was kind except the laws that made me feel like a criminal for doing what was right for my family."
-            </p>
-          </div>
-          <footer class="as-story-footer">
-            <span class="as-story-tag">Mother of two, 34</span>
-          </footer>
-        </article>
-
-        <!-- Story 3 — cream background, large decorative first letter -->
-        <article class="as-story as-story--three" aria-label="Anonymous story">
-          <div class="as-story-number" aria-hidden="true">03</div>
-          <div class="as-story-body">
-            <p class="as-story-quote as-story-quote--dropcap">
-              "My pregnancy was very much wanted. When we found out at 22 weeks that our baby had a condition incompatible with life, the abortion we chose was the most loving thing I have ever done. I held her. I named her. And then I grieved her — without anyone ever suggesting I had done something wrong. That grace was everything."
-            </p>
-          </div>
-          <footer class="as-story-footer">
-            <span class="as-story-tag">Wanted pregnancy, late termination</span>
-          </footer>
-        </article>
-
-        <!-- Story 4 — horizontal layout, purple accent, different rhythm -->
-        <article class="as-story as-story--four" aria-label="Anonymous story">
-          <div class="as-story-number" aria-hidden="true">04</div>
-          <div class="as-story-body">
-            <p class="as-story-quote">
-              "I was in a relationship that had become dangerous. I did not tell him. I arranged everything alone. It took three weeks I barely remember. The hardest part was not the procedure — it was sitting in a waiting room and wondering if he would find out where I was. Abortion access is a safety issue. It always has been."
-            </p>
-          </div>
-          <footer class="as-story-footer">
-            <span class="as-story-tag">Domestic abuse survivor</span>
-          </footer>
-        </article>
-
+      <div class="as-stories-collecting">
+        <div class="as-collecting-context">
+          <p class="as-collecting-body">
+            In June 2023, following Carla Foster's prosecution, Level Up opened anonymous abortion story submissions. The goal: move the national conversation away from abstract "debate" and towards the lived reality of the 1 in 3 women in the UK who will have an abortion in their lifetime.
+          </p>
+          <p class="as-collecting-body">
+            Over 6,100 people have signed the Abortion is Healthcare petition. Thousands more have their own stories. This space is being built to hold them — with care, and without judgement.
+          </p>
+        </div>
+        <div class="as-collecting-empty">
+          <div class="as-empty-icon" aria-hidden="true">✦</div>
+          <p class="as-empty-heading">Be among the first to share</p>
+          <p class="as-empty-body">
+            Stories submitted anonymously are reviewed by our team. Your words will appear here — read by others who may be carrying the same weight, unseen.
+          </p>
+          <a href="/contact" class="as-empty-link">
+            Share your story
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -544,6 +509,76 @@ const { headInner, bodyClass } = extract(homeRaw);
       font-size: clamp(18px, 2.5vw, 22px) !important;
       font-weight: 400 !important;
       font-style: italic;
+    }
+
+    /* ── STORIES COLLECTING EMPTY STATE ──────────────── */
+    .as-stories-collecting {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .as-collecting-body {
+      font: 400 18px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 20px !important;
+    }
+    .as-collecting-body:last-child { margin-bottom: 0 !important; }
+
+    .as-collecting-empty {
+      background: #EEEBD3;
+      border: 1.5px dashed rgba(12,10,62,0.18);
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .as-empty-icon {
+      font-size: 28px;
+      color: #A89CED;
+      line-height: 1;
+    }
+
+    .as-empty-heading {
+      font: 700 22px/1.1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.02em;
+      margin: 0 !important;
+    }
+
+    .as-empty-body {
+      font: 400 16px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.6) !important;
+      margin: 0 !important;
+    }
+
+    .as-empty-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      align-self: flex-start;
+      margin-top: 8px;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #0C0A3E !important;
+      text-decoration: none !important;
+      border-bottom: 2px solid #CCFF33;
+      padding-bottom: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .as-empty-link:hover {
+      color: #A89CED !important;
+      border-color: #A89CED;
+    }
+
+    @media (max-width: 900px) {
+      .as-stories-collecting {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
     }
 
     /* ── SOLIDARITY STATEMENT ─────────────────────────── */

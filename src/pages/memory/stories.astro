@@ -12,52 +12,6 @@ import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 
 const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justice System', 'Online'];
-
-const featured = {
-  category: 'Workplace',
-  name: 'Amara, Birmingham',
-  date: 'March 2025',
-  title: 'They asked me to smile more. Then they gave my promotion to a man who shouted.',
-  excerpt: 'For three years I was told I was "too intense" in meetings. My ideas were picked up by male colleagues and credited to them in front of clients. When I raised it with HR they suggested I try a "communication style workshop." I started recording everything after that. This is what I found.',
-};
-
-const stories = [
-  {
-    category: 'Public Spaces',
-    name: 'Priya, London',
-    date: 'Feb 2025',
-    title: 'The police told me I should have taken a different route home.',
-    excerpt: 'I was followed for twenty minutes from the tube. When I finally got inside and called 999, the first question was what I was wearing.',
-  },
-  {
-    category: 'Justice System',
-    name: 'Anonymous',
-    date: 'Jan 2025',
-    title: 'My barrister told me to expect the defence to bring up my mental health history.',
-    excerpt: 'The CPS dropped the case four days before trial. Nobody called me. I found out by checking the court portal.',
-  },
-  {
-    category: 'Online',
-    name: 'Kezia, Manchester',
-    date: 'Dec 2024',
-    title: 'Two thousand messages in one week. The platform said it didn\'t violate community guidelines.',
-    excerpt: 'I had written one article about equal pay. They found my home address within 48 hours. I had to move.',
-  },
-  {
-    category: 'Relationships',
-    name: 'Sofia, Bristol',
-    date: 'Nov 2024',
-    title: 'He said no one would believe me because I had stayed.',
-    excerpt: 'I did stay. For seven years. Leaving is the most dangerous moment — the statistics told me that, but nobody around me understood it.',
-  },
-  {
-    category: 'Workplace',
-    name: 'Ngozi, Leeds',
-    date: 'Oct 2024',
-    title: 'When I named it as racism the conversation became about my tone.',
-    excerpt: 'I had documented eighteen months of being passed over, spoken over, and excluded from key meetings. HR\'s response was a diversity training afternoon for the team.',
-  },
-];
 ---
 <Layout headHtml={headInner} bodyClass={bodyClass}>
   <Nav />
@@ -89,8 +43,8 @@ const stories = [
         We record them here.
       </p>
       <div class="st-hero-count">
-        <span class="st-hero-count-num">1,240+</span>
-        <span class="st-hero-count-label">stories collected since 2019</span>
+        <span class="st-hero-count-num">Thousands</span>
+        <span class="st-hero-count-label">of feminist supporters across the UK</span>
       </div>
     </div>
     <div class="st-hero-rule" aria-hidden="true"></div>
@@ -114,60 +68,24 @@ const stories = [
     </div>
   </section>
 
-  <!-- Featured story -->
-  <section class="st-featured-section" aria-label="Featured story">
-    <div class="st-featured-inner">
-      <div class="st-featured-aside">
-        <div class="st-featured-marker" aria-hidden="true">Featured</div>
-        <div class="st-featured-category">{featured.category}</div>
-        <div class="st-featured-byline">
-          <span class="st-name">{featured.name}</span>
-          <span class="st-date">{featured.date}</span>
-        </div>
-      </div>
-      <article class="st-featured-card">
-        <blockquote class="st-featured-title">
-          "{featured.title}"
-        </blockquote>
-        <p class="st-featured-excerpt">{featured.excerpt}</p>
-        <a href="#" class="st-featured-read" aria-label={`Read full story by ${featured.name}`}>
-          Read full account
-          <span class="st-read-arrow" aria-hidden="true">→</span>
-        </a>
-      </article>
-    </div>
-  </section>
-
-  <!-- Story grid -->
+  <!-- Stories empty state -->
   <section class="st-grid-section" aria-label="Community stories">
     <div class="st-grid-inner">
       <div class="st-grid-header">
-        <h2 class="st-grid-title">More Stories</h2>
-        <span class="st-grid-showing">Showing all categories</span>
+        <h2 class="st-grid-title">Community Stories</h2>
+        <span class="st-grid-showing">Coming soon</span>
       </div>
 
-      <div class="st-grid" role="list">
-        {stories.map((story, i) => (
-          <article class="st-card" role="listitem" data-category={story.category}>
-            <div class="st-card-top">
-              <span class="st-card-category">{story.category}</span>
-              <span class="st-card-date">{story.date}</span>
-            </div>
-            <blockquote class="st-card-title">"{story.title}"</blockquote>
-            <p class="st-card-excerpt">{story.excerpt}</p>
-            <div class="st-card-bottom">
-              <span class="st-card-name">{story.name}</span>
-              <a href="#" class="st-card-read" aria-label={`Read full story by ${story.name}`}>Read →</a>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <!-- Load more -->
-      <div class="st-load-more">
-        <button class="st-load-btn" aria-label="Load more stories">
-          Load more stories
-        </button>
+      <div class="st-empty-state">
+        <div class="st-empty-icon" aria-hidden="true">✦</div>
+        <p class="st-empty-heading">Stories from our community are coming soon.</p>
+        <p class="st-empty-body">
+          Level Up campaigns on sexist and racist harassment, domestic abuse, LGBTQ+ and Islamophobic hate crime,
+          pregnancy in prison, media coverage of gender-based violence, and more.
+          The community behind these campaigns has thousands of stories.
+          Be among the first to share yours.
+        </p>
+        <a href="/contact" class="st-empty-link">Share your story →</a>
       </div>
     </div>
   </section>
@@ -668,6 +586,51 @@ const stories = [
     transition: color 0.15s;
   }
   .st-share-link:hover { color: #A89CED; }
+
+  /* ── Empty state ────────────────────────── */
+  .st-empty-state {
+    background: #fff;
+    border: 1.5px dashed rgba(12,10,62,0.18);
+    padding: 64px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  .st-empty-icon {
+    font-size: 28px;
+    color: #A89CED;
+    line-height: 1;
+  }
+  .st-empty-heading {
+    font: 700 24px/1.2 'DM Sans';
+    color: #0C0A3E;
+    margin: 0;
+    letter-spacing: -0.02em;
+  }
+  .st-empty-body {
+    font: 400 16px/1.65 'DM Sans';
+    color: rgba(12,10,62,0.65);
+    margin: 0;
+    max-width: 580px;
+  }
+  .st-empty-link {
+    display: inline-block;
+    margin-top: 8px;
+    font: 700 13px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0C0A3E;
+    text-decoration: none;
+    border-bottom: 2px solid #CCFF33;
+    padding-bottom: 4px;
+    transition: border-color 0.15s, color 0.15s;
+    align-self: flex-start;
+  }
+  .st-empty-link:hover {
+    color: #A89CED;
+    border-color: #A89CED;
+  }
 
   /* ── Responsive ─────────────────────────── */
   @media (max-width: 1024px) {

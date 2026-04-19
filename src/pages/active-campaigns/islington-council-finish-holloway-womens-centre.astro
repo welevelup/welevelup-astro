@@ -109,6 +109,75 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
+  <!-- COMMUNITY VOICES -->
+  <section class="hw-voices">
+    <div class="hw-voices-inner">
+      <div class="hw-voices-header">
+        <span class="hw-voices-label">Community voices</span>
+        <h2 class="hw-voices-heading">What would it mean to you?</h2>
+      </div>
+
+      <div class="hw-voices-grid">
+
+        <!-- Taranjit -->
+        <article class="hw-voice-card">
+          <div class="hw-voice-card-header">
+            <span class="hw-voice-quote-mark">"</span>
+            <div>
+              <span class="hw-voice-name">Taranjit</span>
+              <span class="hw-voice-location">South London</span>
+            </div>
+          </div>
+          <blockquote class="hw-voice-quote">
+            This will be a healing space for women, a space free from the gaze of the patriarchy — a women-only space to honour our sistahs who were wrongly incarcerated, who did not get justice, who should have not been in prison. Having this place will be defiance, resistance and revolutionary.
+          </blockquote>
+          <div class="hw-voice-footer">
+            <span class="hw-voice-tag">Healing &amp; Sisterhood</span>
+          </div>
+        </article>
+
+        <!-- Marina -->
+        <article class="hw-voice-card hw-voice-card--alt">
+          <div class="hw-voice-card-header">
+            <span class="hw-voice-quote-mark">"</span>
+            <div>
+              <span class="hw-voice-name">Marina</span>
+              <span class="hw-voice-location">North London</span>
+            </div>
+          </div>
+          <blockquote class="hw-voice-quote">
+            This is a unique opportunity to really honour women's place in society through Islington's support of those women who have ended up in prison through complex circumstances. This is a chance to build a community that honours, empowers and supports women.
+          </blockquote>
+          <div class="hw-voice-footer">
+            <span class="hw-voice-tag">Community &amp; Empowerment</span>
+          </div>
+        </article>
+
+        <!-- Rona -->
+        <article class="hw-voice-card">
+          <div class="hw-voice-card-header">
+            <span class="hw-voice-quote-mark">"</span>
+            <div>
+              <span class="hw-voice-name">Rona</span>
+              <span class="hw-voice-location">Berkshire</span>
+            </div>
+          </div>
+          <blockquote class="hw-voice-quote">
+            I attended one of the first ever planning meetings for the women's centre, in 2016/17. It would focus on former inmates but be open to any woman in Islington — an amazing way of reclaiming the space for those it once constrained and repressed.
+          </blockquote>
+          <div class="hw-voice-footer">
+            <span class="hw-voice-tag">Planning History</span>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="hw-voices-cta">
+        <a href="/memory/holloway-stories" class="hw-voices-read-link">Read all voices &rarr;</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Share your thoughts -->
   <section class="hw-share">
     <div class="hw-share-inner">
@@ -202,6 +271,103 @@ const { headInner, bodyClass } = extract(homeRaw);
       transition: all 0.2s;
     }
     .dp-btn-primary:hover { background: #fff; }
+
+    /* ── COMMUNITY VOICES ──────────────────────────── */
+    .hw-voices {
+      background: #fff;
+      padding: 80px 24px;
+    }
+    .hw-voices-inner { max-width: 1000px; margin: 0 auto; }
+    .hw-voices-header { margin-bottom: 48px; }
+    .hw-voices-label {
+      display: inline-block;
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A89CED;
+      margin-bottom: 16px;
+    }
+    .hw-voices-heading {
+      font: 800 clamp(28px,4vw,44px)/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 !important;
+    }
+    .hw-voices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .hw-voice-card {
+      border-left: 4px solid #CCFF33;
+      background: #F8F7F0;
+      padding: 32px 28px 24px;
+      border-radius: 0 4px 4px 0;
+    }
+    .hw-voice-card--alt {
+      border-left-color: #A89CED;
+      background: #F3F1FC;
+    }
+    .hw-voice-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .hw-voice-quote-mark {
+      font: 800 56px/0.6 'DM Sans', sans-serif;
+      color: #CCFF33;
+      flex-shrink: 0;
+    }
+    .hw-voice-card--alt .hw-voice-quote-mark { color: #A89CED; }
+    .hw-voice-name {
+      display: block;
+      font: 700 16px/1.2 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+    }
+    .hw-voice-location {
+      display: block;
+      font: 400 11px/1 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.45) !important;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .hw-voice-quote {
+      font: 400 15px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 20px !important;
+      border: none !important;
+      padding: 0 !important;
+      quotes: none !important;
+    }
+    .hw-voice-footer { border-top: 1px solid rgba(12,10,62,0.08); padding-top: 12px; }
+    .hw-voice-tag {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(12,10,62,0.4);
+    }
+    .hw-voices-cta { text-align: right; }
+    .hw-voices-read-link {
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #0C0A3E !important;
+      text-decoration: none !important;
+      border-bottom: 2px solid #CCFF33;
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .hw-voices-read-link:hover { color: #A89CED !important; border-color: #A89CED; }
+    @media (max-width: 900px) {
+      .hw-voices-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .hw-voices-grid { grid-template-columns: 1fr; }
+      .hw-voices-cta { text-align: left; }
+    }
 
     /* ── SHARE YOUR THOUGHTS ──────────────────────────── */
     .hw-share {

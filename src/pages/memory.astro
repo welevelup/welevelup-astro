@@ -43,11 +43,15 @@ const { headInner, bodyClass } = extract(homeRaw);
         <span class="ms-ticker-dot">·</span>
         <span>Hair Stories</span>
         <span class="ms-ticker-dot">·</span>
+        <span>Holloway Voices</span>
+        <span class="ms-ticker-dot">·</span>
         <span>Abortion Stories</span>
         <span class="ms-ticker-dot">·</span>
         <span>Solidarity Messages</span>
         <span class="ms-ticker-dot">·</span>
         <span>Hair Stories</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Holloway Voices</span>
         <span class="ms-ticker-dot">·</span>
         <span>Abortion Stories</span>
         <span class="ms-ticker-dot">·</span>
@@ -123,6 +127,21 @@ const { headInner, bodyClass } = extract(homeRaw);
               <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4"/>
               <path d="M20 32h24M32 20v24" stroke="currentColor" stroke-width="2"/>
             </svg>
+          </div>
+        </a>
+
+        <!-- CARD 4 — Holloway Voices (cream/navy) -->
+        <a href="/memory/holloway-stories" class="ms-card ms-card--holloway" aria-label="Holloway Voices">
+          <div class="ms-card-content">
+            <div class="ms-card-top">
+              <span class="ms-card-index">04</span>
+              <span class="ms-card-tag">#HollowayWomensCentre</span>
+            </div>
+            <h2 class="ms-card-title">Holloway<br/>Voices</h2>
+            <p class="ms-card-body">
+              Women, allies, and professionals share what a Holloway Women's Centre would mean. A promise made — and not yet kept.
+            </p>
+            <span class="ms-card-cta">Read voices <span class="ms-card-arrow">→</span></span>
           </div>
         </a>
 
@@ -496,6 +515,19 @@ const { headInner, bodyClass } = extract(homeRaw);
     color: #0C0A3E;
   }
   .ms-deco-mark { width: 100%; height: 100%; }
+
+  /* Card 4 — Holloway */
+  .ms-card--holloway {
+    background: #EEEBD3;
+    color: #0C0A3E;
+    flex: 1;
+  }
+  .ms-card--holloway .ms-card-title { color: #0C0A3E; }
+  .ms-card--holloway .ms-card-tag   { background: rgba(12,10,62,0.1); color: #0C0A3E; }
+  .ms-card--holloway .ms-card-index { color: rgba(12,10,62,0.35); }
+  .ms-card--holloway .ms-card-body  { color: rgba(12,10,62,0.7); }
+  .ms-card--holloway .ms-card-cta   { color: #0C0A3E; }
+  .ms-card--holloway:hover { box-shadow: 0 12px 48px rgba(12,10,62,0.15); }
 
   /* ── FRAGMENT SCROLL ──────────────────────────────────────── */
   .ms-fragments {

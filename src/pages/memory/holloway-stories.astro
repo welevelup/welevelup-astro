@@ -1,0 +1,427 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HERO -->
+  <section class="hws-hero">
+    <div class="hws-hero-inner">
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="hws-back">&larr; Back to Holloway campaign</a>
+      <span class="hws-label">#HollowayWomensCentre</span>
+      <h1 class="hws-title">What would<br/>Holloway Women's<br/>Centre mean to you?</h1>
+      <p class="hws-tagline">Real voices from women, allies, and professionals who believe in keeping the promise.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="hws-intro">
+    <div class="hws-content">
+      <p>When HMP Holloway closed in 2016, Islington Council promised a women's centre would take its place. Ten years on, that promise remains unfulfilled. We asked: <strong>what would it mean to finally keep it?</strong></p>
+      <p>These responses were shared by people who wanted their voices heard. Some provided their names. All of them deserve to be listened to.</p>
+    </div>
+  </section>
+
+  <!-- STORIES -->
+  <section class="hws-stories">
+    <div class="hws-content">
+
+      <!-- 1: Panos — NHS & Perinatal Care -->
+      <article class="hws-story">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Panos</span>
+            <span class="hws-location">North London</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          As an NHS service manager supporting women in the perinatal period within the geographical area of the former Holloway Prison, a women's centre would provide a vital opportunity to complement and strengthen our work. It would enable the development of meaningful partnerships and targeted programmes for criminalised women sentenced in the community, addressing criminogenic factors through a holistic, wraparound model of care, while also enhancing maternal mental health and promoting healthy parent–child relationships.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">NHS &amp; Perinatal Care</span>
+        </div>
+      </article>
+
+      <!-- 2: Emma — Recovery & Community -->
+      <article class="hws-story hws-story--alt">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Emma</span>
+            <span class="hws-location">West London</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          Many years ago I did a Narcotics Anonymous talk for about 6 of the Women there. Afterwards a couple of the women shared how it was so tough going back out they would reoffend just to be safe. There's so much time and money spent putting people away rather than educating before and rehabilitating after. This women's centre sounds crucial. I know I couldn't have stayed clean and sober, led a good life, be a good enough Mum if I don't have the support and community offered.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Recovery &amp; Community</span>
+        </div>
+      </article>
+
+      <!-- 3: Nicolette — Justice & Legacy -->
+      <article class="hws-story">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Nicolette</span>
+            <span class="hws-location">South London</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          The essence of women lingers at Holloway. Women weeping, slammed in a man made system. Not much progress. Women still suffer under an archaic adversarial patriarchal system. HMP Holloway should be remembered. Daughters, sisters, aunties, mum, grannies went there. Liberty denied. The least they can do is leave women — 51% of population — a centre to heal, gather, recollect and recognise women's uniqueness.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Justice &amp; Legacy</span>
+        </div>
+      </article>
+
+      <!-- 4: Andrew — Safe Spaces -->
+      <article class="hws-story hws-story--alt">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Andrew</span>
+            <span class="hws-location">East Midlands</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          Safe spaces for women fleeing abuse are still a rarity and many women that I know who have suffered abuse in varying forms have had nowhere to run to. The majority of abuse is still in the home, making the need for safe environments even more important. That a place once used to punish women should now be a place where women can find safety is a fitting irony and gives some hope that maybe things will work out better.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Safe Spaces</span>
+        </div>
+      </article>
+
+      <!-- 5: Heather — NHS & Welfare -->
+      <article class="hws-story">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Heather</span>
+            <span class="hws-location">North East</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          Having worked in the NHS with vulnerable women and children, and also on a voluntary telephone helpline, I believe that women's centres are absolutely vital to promote the welfare and wellbeing of women and children.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">NHS &amp; Welfare</span>
+        </div>
+      </article>
+
+      <!-- 6: Lea — Prison Reform -->
+      <article class="hws-story hws-story--alt">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Lea</span>
+            <span class="hws-location">South West</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          Holloway project needs to be honoured as a vital resource for women. A move away from punitive treatment is the way to go. Prison harms and exacerbates problems, breaking up families and driving up cost. The services are ready and waiting — finish the building!
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Prison Reform</span>
+        </div>
+      </article>
+
+      <!-- 7: Taranjit — Healing & Sisterhood -->
+      <article class="hws-story">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Taranjit</span>
+            <span class="hws-location">South London</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          This will be a healing space for women, a space free from the gaze of the patriarchy — a women-only space to honour our sistahs who were wrongly incarcerated, who did not get justice, who should have not been in prison. The centre will have the spirit and footprints of our sistahs, a space that has become sacred through the tears, the hurt, the trauma, pain, joy, laughter, and sisterhood. Having this place will be defiance, resistance and revolutionary.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Healing &amp; Sisterhood</span>
+        </div>
+      </article>
+
+      <!-- 8: Madeleine — Probation & Rehabilitation -->
+      <article class="hws-story hws-story--alt">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Madeleine</span>
+            <span class="hws-location">Wales</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          I often used to visit Holloway prison when I was a Probation Officer. It was not always the best of places for the prisoners, many of whom could have been better dealt with in the community. Now we have the chance to turn that legacy into something positive. Many women who commit crime are the victims of both childhood and domestic abuse. With help they can deal with that trauma, gain friends and practical help and go on to lead productive and happy lives.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Probation &amp; Rehabilitation</span>
+        </div>
+      </article>
+
+      <!-- 9: Marina — Community & Empowerment -->
+      <article class="hws-story">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Marina</span>
+            <span class="hws-location">North London</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          This is a unique opportunity to really honour women's place in society through Islington's support of those women who have ended up in prison through complex circumstances. This is a chance to build a community that honours, empowers and supports women through initiatives like grief and bereavement support, parenting skills, art and literacy. This is an opportunity for other women to get involved in pioneering work that will redefine women's prisons for years to come.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Community &amp; Empowerment</span>
+        </div>
+      </article>
+
+      <!-- 10: Jennifer Louise — Women's Justice -->
+      <article class="hws-story hws-story--alt">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Jennifer Louise</span>
+            <span class="hws-location">Central London</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          The closure of HMP Holloway was a major 'moment' in the long march for women's justice — the promise to replace the prison with community support and specifically a women's centre must be kept. Women's centres are an alternative to prison, with a focus on prevention of social issues, not punishment. They are a place where women can get the support to stop the continuation of generational trauma and break the cycle of criminalisation.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Women's Justice</span>
+        </div>
+      </article>
+
+      <!-- 11: Sonya — Suffragette History -->
+      <article class="hws-story">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Sonya</span>
+            <span class="hws-location">East Sussex</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          We need to honour the women of the past who suffered horribly there with forced feeding when campaigning for women to have the vote. Disgusting that wealth has grown so vast and yet families with young and older children have to struggle to get by. The women of Holloway deserve to be remembered — and the site should reflect that legacy.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Suffragette History</span>
+        </div>
+      </article>
+
+      <!-- 12: Rona — Planning History -->
+      <article class="hws-story hws-story--alt">
+        <div class="hws-story-header">
+          <span class="hws-quote-mark">"</span>
+          <div>
+            <span class="hws-name">Rona</span>
+            <span class="hws-location">Berkshire</span>
+          </div>
+        </div>
+        <blockquote class="hws-quote">
+          I attended one of the first ever planning meetings for the women's centre, in 2016/17. Some of the people present were ex inmates, and they had suggested a women's building should have rehab facilities. I suggested an employment support and community centre/arts and leisure facility. It would focus on former inmates but be open to any woman in Islington — an amazing way of reclaiming the space for those it once constrained and repressed.
+        </blockquote>
+        <div class="hws-story-footer">
+          <span class="hws-tag">Planning History</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ADD YOUR VOICE CTA -->
+  <section class="hws-cta">
+    <div class="hws-cta-inner">
+      <h2>Add your voice</h2>
+      <p>Tell Islington Council what a Holloway Women's Centre would mean to you.</p>
+      <a href="https://levelup.yourmovement.org/p/share-your-thoughts-holloway-womens-centre" class="hws-btn-primary" target="_blank" rel="noopener">Share your thoughts &rarr;</a>
+    </div>
+  </section>
+
+  <!-- BACK TO CAMPAIGN -->
+  <section class="hws-back-section">
+    <div class="hws-content hws-back-inner">
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="hws-back-link">&larr; Back to the Holloway campaign</a>
+      <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="hws-btn-outline" target="_blank" rel="noopener">Sign the petition</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .hws-hero {
+    background: #0C0A3E;
+    padding: 120px 24px 80px;
+  }
+  .hws-hero-inner { max-width: 800px; margin: 0 auto; }
+  .hws-back {
+    display: inline-block;
+    font: 600 13px/1 'DM Sans', sans-serif;
+    color: #A89CED !important;
+    text-decoration: none !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .hws-back:hover { color: #CCFF33 !important; }
+  .hws-label {
+    display: block;
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    margin-bottom: 20px;
+  }
+  .hws-title {
+    font: 800 clamp(48px,10vw,80px)/0.9 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    letter-spacing: -0.045em !important;
+    margin: 0 0 28px !important;
+  }
+  .hws-tagline {
+    font: 400 20px/1.5 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.75) !important;
+    max-width: 560px;
+  }
+  .hws-intro {
+    background: #EEEBD3;
+    padding: 64px 24px;
+  }
+  .hws-content { max-width: 800px; margin: 0 auto; }
+  .hws-intro p {
+    font: 400 18px/1.65 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.8) !important;
+    margin: 0 0 16px !important;
+  }
+  .hws-intro strong { color: #0C0A3E !important; }
+  .hws-stories {
+    background: #fff;
+    padding: 80px 24px;
+  }
+  .hws-story {
+    border-left: 4px solid #CCFF33;
+    background: #F8F7F0;
+    padding: 40px 40px 32px;
+    margin-bottom: 40px;
+    border-radius: 0 4px 4px 0;
+  }
+  .hws-story--alt {
+    border-left-color: #A89CED;
+    background: #F3F1FC;
+  }
+  .hws-story-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .hws-quote-mark {
+    font: 800 72px/0.6 'DM Sans', sans-serif;
+    color: #CCFF33;
+    flex-shrink: 0;
+  }
+  .hws-story--alt .hws-quote-mark { color: #A89CED; }
+  .hws-name {
+    display: block;
+    font: 700 18px/1.2 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+  }
+  .hws-location {
+    display: block;
+    font: 400 12px/1 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.45) !important;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+  .hws-quote {
+    font: 400 17px/1.7 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.8) !important;
+    margin: 0 0 24px !important;
+    border: none !important;
+    padding: 0 !important;
+    quotes: none !important;
+  }
+  .hws-story-footer { border-top: 1px solid rgba(12,10,62,0.08); padding-top: 16px; }
+  .hws-tag {
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(12,10,62,0.4);
+  }
+  .hws-cta {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .hws-cta-inner { max-width: 560px; margin: 0 auto; }
+  .hws-cta h2 {
+    font: 800 clamp(32px,6vw,52px)/1 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    letter-spacing: -0.04em !important;
+    margin: 0 0 20px !important;
+  }
+  .hws-cta p {
+    font: 400 18px/1.55 'DM Sans', sans-serif !important;
+    color: rgba(238,235,211,0.7) !important;
+    margin: 0 0 36px !important;
+  }
+  .hws-btn-primary {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E !important;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 20px 40px;
+    text-decoration: none !important;
+    transition: background 0.2s;
+  }
+  .hws-btn-primary:hover { background: #fff; }
+  .hws-back-section {
+    background: #EEEBD3;
+    padding: 40px 24px;
+  }
+  .hws-back-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .hws-back-link {
+    font: 600 14px/1 'DM Sans', sans-serif;
+    color: #0C0A3E !important;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .hws-back-link:hover { color: #A89CED !important; }
+  .hws-btn-outline {
+    display: inline-block;
+    background: transparent;
+    color: #0C0A3E !important;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 18px 36px;
+    text-decoration: none !important;
+    border: 2px solid #0C0A3E;
+    transition: all 0.2s;
+  }
+  .hws-btn-outline:hover { background: #0C0A3E; color: #CCFF33 !important; }
+  @media (max-width: 640px) {
+    .hws-story { padding: 28px 20px 24px; }
+    .hws-back-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>

@@ -109,6 +109,24 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
+  <!-- Share your thoughts -->
+  <section class="hw-share">
+    <div class="hw-share-inner">
+      <div class="hw-share-left">
+        <span class="hw-share-label">Open call</span>
+        <h2 class="hw-share-heading">What would Holloway Women's Centre mean to you?</h2>
+        <p class="hw-share-sub">Share your thoughts, experiences, or messages of support.</p>
+      </div>
+      <div class="hw-share-right">
+        <p class="hw-share-body">Islington Council made a promise: to use the Holloway Prison site to build a women's centre that honours its feminist legacy and provides vital services for those who need them most. We're collecting voices in support of that promise being kept.</p>
+        <p class="hw-share-body">Your response may be shared anonymously in our emails or on social media.</p>
+        <a href="https://levelup.yourmovement.org/p/share-your-thoughts-holloway-womens-centre" class="hw-share-btn" target="_blank" rel="noopener">
+          Share your thoughts →
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA: JOIN -->
   <section class="dp-cta">
     <div class="dp-content" style="text-align:center">
@@ -184,6 +202,60 @@ const { headInner, bodyClass } = extract(homeRaw);
       transition: all 0.2s;
     }
     .dp-btn-primary:hover { background: #fff; }
+
+    /* ── SHARE YOUR THOUGHTS ──────────────────────────── */
+    .hw-share {
+      background: #EEEBD3;
+      padding: 80px 24px;
+    }
+    .hw-share-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 64px;
+      align-items: start;
+    }
+    .hw-share-label {
+      display: inline-block;
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A89CED;
+      margin-bottom: 20px;
+    }
+    .hw-share-heading {
+      font: 800 clamp(28px,4vw,44px)/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 0 16px !important;
+    }
+    .hw-share-sub {
+      font: 400 16px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.5) !important;
+      margin: 0 !important;
+    }
+    .hw-share-body {
+      font: 400 17px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 16px !important;
+    }
+    .hw-share-btn {
+      display: inline-block;
+      margin-top: 12px;
+      background: #0C0A3E;
+      color: #CCFF33 !important;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none !important;
+      transition: background 0.2s;
+    }
+    .hw-share-btn:hover { background: #CCFF33; color: #0C0A3E !important; }
+    @media (max-width: 768px) {
+      .hw-share-inner { grid-template-columns: 1fr; gap: 40px; }
+    }
 
     /* Sections */
     .dp-section { padding: 80px 24px; }

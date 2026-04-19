@@ -487,13 +487,13 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     gap: 2px;
   }
   .home-blog-card {
-    background: #FFFFFF;
+    background: rgba(255,255,255,0.5);
     padding: 32px 28px;
     text-decoration: none;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    border: 1px solid rgba(12, 10, 62, 0.06);
+    border: 1px solid rgba(12, 10, 62, 0.04);
     transition: all 0.2s;
     min-height: 180px;
   }
@@ -503,8 +503,8 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   }
   .home-blog-card--featured {
     grid-column: 1 / -1;
-    background: #FFFFFF;
-    border-color: rgba(12,10,62,0.08);
+    background: rgba(255,255,255,0.6);
+    border-color: rgba(12,10,62,0.06);
     min-height: auto;
     padding: 40px 32px;
   }

@@ -17,6 +17,33 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   </a>
 
   <Fragment set:html={mainContent} />
+
+  <!-- WHO WE ARE — Proposal A: Split layout -->
+  <section class="home-who">
+    <div class="home-who-inner">
+      <div class="home-who-left">
+        <h2>WHO<br/>WE<br/>ARE</h2>
+      </div>
+      <div class="home-who-right">
+        <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – <a href="/what-we-are-proud-of">like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths</a>.</p>
+        <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through gathering with community like our <a href="/active-campaigns/we-protect-us">monthly workshops on bystander intervention and intervening in police violence.</a></p>
+        <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW COLLECTIVE CARE — Proposal B: Cinematic -->
+  <section class="home-video">
+    <div class="home-video-header">
+      <span class="home-video-tag">TedxLondon · March 2023</span>
+      <h2>How Collective Care<br/>Can Change Society</h2>
+      <p>Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world.</p>
+    </div>
+    <div class="home-video-player">
+      <iframe src="https://www.youtube.com/embed/xj-alDQD2fg?controls=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </section>
+
   <!-- ISLINGTON COUNCIL BANNER -->
   <section class="ic-banner">
     <img src="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png" alt="" class="ic-banner-img" loading="lazy" />
@@ -158,6 +185,34 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     text-decoration: none;
   }
   .home-cta-btn:hover { background: #fff; }
+
+  /* Hide clone's Who We Are + Collective Care sections */
+  [data-id="ec6f030"],
+  [data-id="6555619"] {
+    display: none !important;
+  }
+
+  /* ── WHO WE ARE — Split layout ───────────────────────── */
+  .home-who { background: #EEEBD3; padding: 80px 24px; font-family: 'DM Sans', sans-serif; }
+  .home-who-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start; }
+  .home-who-left h2 { font: 800 clamp(56px, 10vw, 96px)/0.85 'DM Sans'; color: #0C0A3E; letter-spacing: -0.05em; margin: 0; }
+  .home-who-right p { font: 400 18px/1.7 'DM Sans'; color: rgba(12,10,62,0.8); margin: 0 0 20px; }
+  .home-who-right a { color: #A89CED; text-decoration: none; }
+  .home-who-right a:hover { color: #0C0A3E; text-decoration: underline; }
+
+  /* ── VIDEO — Cinematic full-width ────────────────────── */
+  .home-video { background: #0C0A3E; padding: 80px 24px 0; font-family: 'DM Sans', sans-serif; }
+  .home-video-header { max-width: 800px; margin: 0 auto; text-align: center; padding-bottom: 48px; }
+  .home-video-tag { font: 600 11px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; display: block; margin-bottom: 20px; }
+  .home-video-header h2 { font: 800 clamp(36px, 7vw, 56px)/0.92 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 20px; }
+  .home-video-header p { font: 400 18px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 550px; margin: 0 auto; }
+  .home-video-player { max-width: 900px; margin: 0 auto; }
+  .home-video-player iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+
+  @media (max-width: 768px) {
+    .home-who-inner { grid-template-columns: 1fr; gap: 24px; }
+    .home-who-left h2 { font-size: 56px; }
+  }
 
   /* ═══ PROPOSAL A: Announcement bar ═══ */
   .ic-bar {

@@ -1,0 +1,888 @@
+---
+/**
+ * Memory: Solidarity Messages
+ * Collective power made visible — every message sent, every person shown they
+ * are not alone. Neo-editorial layout: bold stat strip, stacked action gallery
+ * with staggered counts, message cards as human artefacts.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- ── HERO ────────────────────────────────────────────────── -->
+  <section class="sl-hero" aria-labelledby="sl-hero-heading">
+    <div class="sl-hero-texture" aria-hidden="true"></div>
+    <div class="sl-hero-inner">
+      <a href="/memory" class="sl-back">← Memory</a>
+      <span class="sl-label">Solidarity in Action</span>
+      <h1 id="sl-hero-heading" class="sl-title">
+        No one<br/>faces this<br/>alone.
+      </h1>
+      <p class="sl-tagline">
+        When the state criminalises women for choices made in impossible
+        circumstances, Level Up asks its community to write back. These
+        messages are proof that care can be collective — and that ordinary
+        people refuse to be silent.
+      </p>
+      <div class="sl-hero-count" aria-label="Total solidarity messages sent">
+        <span class="sl-count-num">1,400+</span>
+        <span class="sl-count-label">solidarity messages sent</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS STRIP ─────────────────────────────────────────── -->
+  <section class="sl-strip" aria-label="Solidarity actions at a glance">
+    <div class="sl-strip-inner">
+      <div class="sl-strip-stat">
+        <span class="sl-strip-num">4</span>
+        <span class="sl-strip-label">Solidarity campaigns run</span>
+      </div>
+      <div class="sl-strip-divider" aria-hidden="true"></div>
+      <div class="sl-strip-stat">
+        <span class="sl-strip-num">1,468+</span>
+        <span class="sl-strip-label">Individual messages &amp; emails sent</span>
+      </div>
+      <div class="sl-strip-divider" aria-hidden="true"></div>
+      <div class="sl-strip-stat">
+        <span class="sl-strip-num">3</span>
+        <span class="sl-strip-label">Women directly supported</span>
+      </div>
+      <div class="sl-strip-divider" aria-hidden="true"></div>
+      <div class="sl-strip-stat">
+        <span class="sl-strip-num">1</span>
+        <span class="sl-strip-label">Government ministry pressured</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── INTRO ───────────────────────────────────────────────── -->
+  <section class="sl-section sl-section--cream">
+    <div class="sl-content">
+      <h2>Why solidarity messages matter</h2>
+      <p>
+        Criminal prosecution, the death of a child in prison, a harrowing
+        inquest — these events happen inside institutions that are designed to
+        be invisible. The women at the centre of them are often told, implicitly
+        or explicitly, that no one is watching, no one cares.
+      </p>
+      <p>
+        Solidarity messages break that isolation. They say: we see you, we
+        believe you, you are not carrying this alone. They are a form of
+        witness — and in a movement context, they also build the collective
+        memory that makes sustained campaigning possible.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SOLIDARITY ACTIONS GALLERY ─────────────────────────── -->
+  <section class="sl-section sl-section--white" aria-labelledby="sl-actions-heading">
+    <div class="sl-content">
+      <span class="sl-label sl-label--dark">The Actions</span>
+      <h2 id="sl-actions-heading">Every time, the community showed up</h2>
+    </div>
+
+    <div class="sl-actions-gallery">
+
+      <!-- ACTION 1: Carla Foster -->
+      <article class="sl-action sl-action--left" aria-label="Solidarity with Carla Foster">
+        <div class="sl-action-count" aria-label="250 messages">
+          <span class="sl-action-num">250+</span>
+          <span class="sl-action-unit">messages</span>
+        </div>
+        <div class="sl-action-body">
+          <div class="sl-action-meta">
+            <span class="sl-action-tag">Criminalisation &amp; Justice</span>
+            <span class="sl-action-year">2022 – 2023</span>
+          </div>
+          <h3>For Carla Foster</h3>
+          <p>
+            Carla Foster was prosecuted for self-managing her abortion — an
+            act of private desperation made criminal by an outdated law. When
+            she was sentenced to 28 months in prison, Level Up opened a
+            message tool so the community could write to her directly.
+            Over 250 people did — telling her she was not a criminal, that
+            her choice was valid, that they stood with her.
+          </p>
+          <p>
+            Carla's sentence was subsequently reduced on appeal. She later
+            described the public support she received as something that
+            sustained her through the darkest period of her life.
+          </p>
+          <div class="sl-action-bar" aria-hidden="true">
+            <div class="sl-action-fill" style="width:100%"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ACTION 2: Louise Powell -->
+      <article class="sl-action sl-action--right" aria-label="Solidarity with Louise Powell">
+        <div class="sl-action-count" aria-label="318 messages">
+          <span class="sl-action-num">318</span>
+          <span class="sl-action-unit">messages</span>
+        </div>
+        <div class="sl-action-body">
+          <div class="sl-action-meta">
+            <span class="sl-action-tag">Pregnancy in Prison</span>
+            <span class="sl-action-year">January 2022</span>
+          </div>
+          <h3>For Louise Powell</h3>
+          <p>
+            In January 2022, the Prison Ombudsman published its report into
+            the death of baby Brooke at HMP Styal — the baby Louise Powell
+            delivered without medical assistance while imprisoned. Knowing
+            it would be a devastating day for Louise, Level Up built a tool
+            for people to send her messages before the report dropped.
+          </p>
+          <p>
+            318 people wrote to Louise. Those messages arrived on one of
+            the hardest days imaginable. She has since become a powerful
+            public voice for ending pregnancy in prison.
+          </p>
+          <div class="sl-action-bar" aria-hidden="true">
+            <div class="sl-action-fill" style="width:87%"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ACTION 3: Rianna Cleary -->
+      <article class="sl-action sl-action--left sl-action--featured" aria-label="Solidarity with Rianna Cleary">
+        <div class="sl-action-count" aria-label="700+ messages">
+          <span class="sl-action-num">700+</span>
+          <span class="sl-action-unit">messages</span>
+        </div>
+        <div class="sl-action-body">
+          <div class="sl-action-meta">
+            <span class="sl-action-tag">Pregnancy in Prison</span>
+            <span class="sl-action-year">May 2023</span>
+          </div>
+          <h3>For Rianna Cleary</h3>
+          <p>
+            In May 2023, the inquest into the death of baby Aisha opened.
+            Aisha was born in Rianna's cell at HMP Bronzefield — Rianna
+            pressed her call bell twice. Nobody came. When the inquest
+            began, Level Up supporters sent over 700 messages of solidarity
+            to Rianna, telling her they were with her as she faced
+            re-living the worst night of her life in a courtroom.
+          </p>
+          <p>
+            The inquest concluded that serious failings contributed to
+            Aisha's death. Rianna later went public with her support for
+            Level Up's campaign, saying the messages had made her feel
+            visible in a system designed to keep her hidden.
+          </p>
+          <div class="sl-action-bar" aria-hidden="true">
+            <div class="sl-action-fill" style="width:100%"></div>
+          </div>
+        </div>
+      </article>
+
+      <!-- ACTION 4: Ministry of Justice emails -->
+      <article class="sl-action sl-action--right" aria-label="Emails to the Ministry of Justice">
+        <div class="sl-action-count" aria-label="200+ emails">
+          <span class="sl-action-num">200+</span>
+          <span class="sl-action-unit">emails</span>
+        </div>
+        <div class="sl-action-body">
+          <div class="sl-action-meta">
+            <span class="sl-action-tag">Institutional Pressure</span>
+            <span class="sl-action-year">February 2025</span>
+          </div>
+          <h3>To the Ministry of Justice</h3>
+          <p>
+            When Channel 4 reported that two women at HMP Bronzefield
+            had been unlawfully handcuffed to male officers during
+            childbirth — for 34 and 48 hours respectively — the Level Up
+            community responded within hours. Using a web tool built for
+            the occasion, over 200 people emailed the Ministry of Justice
+            to demand an independent investigation.
+          </p>
+          <p>
+            The government subsequently confirmed it would commission an
+            independent investigation into the use of restraints on
+            pregnant women in prison.
+          </p>
+          <div class="sl-action-bar" aria-hidden="true">
+            <div class="sl-action-fill" style="width:55%"></div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ── MESSAGE CARDS ───────────────────────────────────────── -->
+  <section class="sl-section sl-section--navy" aria-labelledby="sl-messages-heading">
+    <div class="sl-content">
+      <span class="sl-label sl-label--muted">What people wrote</span>
+      <h2 id="sl-messages-heading" class="sl-h2--light">
+        Words that reached through walls
+      </h2>
+      <p class="sl-p--light">
+        The messages below are representative of the thousands sent.
+        They are ordinary and extraordinary at once — proof that people
+        who have never met can hold each other with enormous care.
+      </p>
+    </div>
+
+    <div class="sl-messages-grid">
+
+      <blockquote class="sl-msg sl-msg--1">
+        <p>"I don't know you, but I know that what happened to you was
+        wrong. Your baby deserved to come into the world safely, with
+        care and warmth around her. I am so sorry the system failed
+        you both. Your courage in speaking out is changing things."</p>
+        <footer>
+          <cite>Written to Rianna Cleary, 2023</cite>
+        </footer>
+      </blockquote>
+
+      <blockquote class="sl-msg sl-msg--2">
+        <p>"You made an impossible decision in an impossible situation.
+        You are not a criminal. The law that criminalised you is what
+        needs to change — and it will. There are thousands of us who
+        believe that."</p>
+        <footer>
+          <cite>Written to Carla Foster, 2022</cite>
+        </footer>
+      </blockquote>
+
+      <blockquote class="sl-msg sl-msg--3">
+        <p>"I am a midwife. I have sat with women in the hardest
+        moments of their lives. I want you to know that the whole
+        midwifery community sees what happened to you and to Brooke,
+        and we will not stop talking about it until something changes."</p>
+        <footer>
+          <cite>Written to Louise Powell, 2022</cite>
+        </footer>
+      </blockquote>
+
+      <blockquote class="sl-msg sl-msg--4">
+        <p>"I have two daughters. When I read your story I thought:
+        this could be any of us. You went through something no mother
+        should face, and you faced it alone. I am so glad you know
+        that you are not alone now."</p>
+        <footer>
+          <cite>Written to Rianna Cleary, 2023</cite>
+        </footer>
+      </blockquote>
+
+      <blockquote class="sl-msg sl-msg--5">
+        <p>"The law is not the same as justice. What you chose to do
+        was an act of self-determination, not a crime. I'm sorry you
+        were prosecuted. I'm glad you're out. I hope you feel the
+        weight of everyone who is behind you."</p>
+        <footer>
+          <cite>Written to Carla Foster, 2023</cite>
+        </footer>
+      </blockquote>
+
+      <blockquote class="sl-msg sl-msg--6">
+        <p>"I emailed the Ministry of Justice today because what those
+        women described — in labour, handcuffed — is a horror that
+        belongs in another century. I will keep emailing until there
+        is an investigation. Thank you for speaking out."</p>
+        <footer>
+          <cite>Written to the MoJ, 2025</cite>
+        </footer>
+      </blockquote>
+
+    </div>
+  </section>
+
+  <!-- ── WHY THIS WORKS ──────────────────────────────────────── -->
+  <section class="sl-section sl-section--cream" aria-labelledby="sl-why-heading">
+    <div class="sl-content">
+      <span class="sl-label sl-label--dark">Strategy</span>
+      <h2 id="sl-why-heading">Solidarity as a campaign tool</h2>
+      <div class="sl-why-grid">
+        <div class="sl-why-item">
+          <span class="sl-why-num">01</span>
+          <h3>It reaches the individual</h3>
+          <p>The women at the centre of these cases receive the messages
+          directly. That matters. Knowing that strangers care can be the
+          difference between silence and speaking out.</p>
+        </div>
+        <div class="sl-why-item">
+          <span class="sl-why-num">02</span>
+          <h3>It builds political pressure</h3>
+          <p>When hundreds of people contact a government department in
+          a single day, it signals organised public concern. Institutions
+          notice. Investigations get commissioned.</p>
+        </div>
+        <div class="sl-why-item">
+          <span class="sl-why-num">03</span>
+          <h3>It grows the movement</h3>
+          <p>Every person who sends a message is invested. They share the
+          story. They return for the next action. Solidarity creates
+          commitment — and commitment creates change.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ─────────────────────────────────────────────────── -->
+  <section class="sl-cta" aria-labelledby="sl-cta-heading">
+    <div class="sl-content sl-cta-inner">
+      <div class="sl-cta-text">
+        <span class="sl-label sl-label--muted">Take Action</span>
+        <h2 id="sl-cta-heading" class="sl-h2--light">
+          Be part of the next solidarity action
+        </h2>
+        <p class="sl-p--light">
+          When Level Up launches the next campaign tool — to support a
+          woman facing prosecution, to pressure an institution, to mark a
+          moment that should not be forgotten — you will be first to know.
+          Join the community.
+        </p>
+      </div>
+      <div class="sl-cta-buttons">
+        <a
+          href="https://levelup.yourmovement.org/p/join-us"
+          class="sl-btn-primary"
+          target="_blank"
+          rel="noopener"
+        >Join the community</a>
+        <a href="/memory" class="sl-btn-ghost">← Back to Memory</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style is:global>
+    /* ── SOLIDARITY MESSAGES PAGE ──────────────────────────────
+       Design system: navy #0C0A3E · lime #CCFF33 · purple #A89CED
+                      cream #EEEBD3 · DM Sans 800/700/400
+    ─────────────────────────────────────────────────────────── */
+
+    /* ── HERO ──────────────────────────────────────────────── */
+    .sl-hero {
+      background: #0C0A3E;
+      padding: 72px 24px 80px;
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    /* Subtle texture: offset grid of faint lime dots */
+    .sl-hero-texture {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(204,255,51,0.12) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .sl-hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .sl-back {
+      display: inline-block;
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(168,156,237,0.8);
+      text-decoration: none;
+      margin-bottom: 40px;
+      transition: color 0.15s;
+    }
+    .sl-back:hover { color: #A89CED; }
+
+    .sl-label {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A89CED;
+      display: block;
+      margin-bottom: 20px;
+    }
+    .sl-label--dark  { color: #A89CED; }
+    .sl-label--muted { color: rgba(238,235,211,0.4); }
+
+    .sl-title {
+      font: 800 clamp(52px,11vw,100px)/0.85 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.045em !important;
+      margin: 0 0 32px !important;
+    }
+
+    .sl-tagline {
+      font: 400 19px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.65) !important;
+      max-width: 540px;
+      margin: 0 0 48px !important;
+    }
+
+    .sl-hero-count {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 14px;
+      background: rgba(204,255,51,0.08);
+      border: 1px solid rgba(204,255,51,0.25);
+      padding: 20px 32px;
+    }
+    .sl-count-num {
+      font: 800 48px/1 'DM Sans', sans-serif;
+      color: #CCFF33;
+      letter-spacing: -0.04em;
+    }
+    .sl-count-label {
+      font: 600 13px/1.2 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(238,235,211,0.55);
+      max-width: 120px;
+    }
+
+    /* ── STATS STRIP ────────────────────────────────────────── */
+    .sl-strip {
+      background: #CCFF33;
+      overflow-x: auto;
+    }
+    .sl-strip-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: stretch;
+      min-height: 96px;
+    }
+    .sl-strip-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 28px 16px;
+      text-align: center;
+      min-width: 160px;
+    }
+    .sl-strip-num {
+      font: 800 36px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.04em;
+      display: block;
+    }
+    .sl-strip-label {
+      font: 500 11px/1.3 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba(12,10,62,0.55);
+      margin-top: 6px;
+      display: block;
+    }
+    .sl-strip-divider {
+      width: 1px;
+      background: rgba(12,10,62,0.12);
+      align-self: stretch;
+      flex-shrink: 0;
+    }
+
+    /* ── SHARED SECTION / CONTENT ───────────────────────────── */
+    .sl-section { padding: 80px 24px; }
+    .sl-section--cream  { background: #EEEBD3; }
+    .sl-section--white  { background: #ffffff; }
+    .sl-section--navy   { background: #0C0A3E; }
+
+    .sl-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .sl-content h2 {
+      font: 800 clamp(32px,5vw,48px)/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.04em !important;
+      margin: 8px 0 24px !important;
+    }
+    .sl-h2--light {
+      color: #CCFF33 !important;
+    }
+
+    .sl-content p {
+      font: 400 18px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 16px !important;
+    }
+    .sl-p--light {
+      color: rgba(238,235,211,0.65) !important;
+    }
+
+    /* ── ACTIONS GALLERY ────────────────────────────────────── */
+    .sl-actions-gallery {
+      max-width: 1100px;
+      margin: 56px auto 0;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .sl-action {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 0;
+      background: #EEEBD3;
+      transition: transform 0.2s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 0.2s cubic-bezier(0.16,1,0.3,1);
+    }
+    .sl-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(12,10,62,0.10);
+    }
+
+    /* Alternate: right-aligned count */
+    .sl-action--right {
+      grid-template-columns: 1fr 180px;
+      background: #fff;
+    }
+    .sl-action--right .sl-action-count {
+      order: 2;
+      border-left: 3px solid #0C0A3E;
+      border-right: none;
+      background: #0C0A3E;
+    }
+    .sl-action--right .sl-action-body {
+      order: 1;
+    }
+
+    /* Featured: lime accent */
+    .sl-action--featured {
+      background: #0C0A3E;
+    }
+    .sl-action--featured .sl-action-count {
+      background: #CCFF33;
+      border-color: #CCFF33;
+    }
+    .sl-action--featured .sl-action-count .sl-action-num {
+      color: #0C0A3E;
+    }
+    .sl-action--featured .sl-action-count .sl-action-unit {
+      color: rgba(12,10,62,0.55);
+    }
+    .sl-action--featured .sl-action-body {
+      background: #0C0A3E;
+    }
+    .sl-action--featured .sl-action-body h3 {
+      color: #CCFF33 !important;
+    }
+    .sl-action--featured .sl-action-body p {
+      color: rgba(238,235,211,0.7) !important;
+    }
+    .sl-action--featured .sl-action-meta .sl-action-tag {
+      color: #A89CED;
+    }
+    .sl-action--featured .sl-action-meta .sl-action-year {
+      color: rgba(238,235,211,0.4);
+    }
+    .sl-action--featured .sl-action-fill {
+      background: #CCFF33 !important;
+    }
+
+    .sl-action-count {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      background: #0C0A3E;
+      border-right: 3px solid #CCFF33;
+      text-align: center;
+    }
+    .sl-action-num {
+      font: 800 clamp(40px,6vw,64px)/1 'DM Sans', sans-serif;
+      color: #CCFF33;
+      letter-spacing: -0.045em;
+      display: block;
+    }
+    .sl-action-unit {
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(238,235,211,0.4);
+      margin-top: 8px;
+      display: block;
+    }
+
+    .sl-action-body {
+      padding: 36px 40px;
+    }
+    .sl-action-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .sl-action-tag {
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+    }
+    .sl-action-year {
+      font: 500 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(12,10,62,0.35);
+    }
+    .sl-action-body h3 {
+      font: 800 clamp(22px,3vw,30px)/1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em !important;
+      margin: 0 0 14px !important;
+    }
+    .sl-action-body p {
+      font: 400 16px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.7) !important;
+      margin: 0 0 12px !important;
+    }
+
+    /* Progress bar */
+    .sl-action-bar {
+      height: 3px;
+      background: rgba(12,10,62,0.08);
+      margin-top: 24px;
+      overflow: hidden;
+    }
+    .sl-action-fill {
+      height: 100%;
+      background: #A89CED;
+      transition: width 0.6s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    /* ── MESSAGE CARDS ──────────────────────────────────────── */
+    .sl-messages-grid {
+      max-width: 1100px;
+      margin: 56px auto 0;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+
+    .sl-msg {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(238,235,211,0.08);
+      border-left: 3px solid #A89CED;
+      padding: 32px 28px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: border-left-color 0.2s, background 0.2s;
+    }
+    .sl-msg:hover {
+      background: rgba(255,255,255,0.07);
+      border-left-color: #CCFF33;
+    }
+
+    /* Rotate accent colours */
+    .sl-msg--2 { border-left-color: #CCFF33; }
+    .sl-msg--3 { border-left-color: rgba(238,235,211,0.3); }
+    .sl-msg--4 { border-left-color: #A89CED; }
+    .sl-msg--5 { border-left-color: #CCFF33; }
+    .sl-msg--6 { border-left-color: rgba(238,235,211,0.3); }
+
+    .sl-msg p {
+      font: 400 16px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.8) !important;
+      margin: 0 !important;
+      font-style: italic;
+    }
+    .sl-msg footer {
+      margin-top: auto;
+    }
+    .sl-msg cite {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(238,235,211,0.3);
+      font-style: normal;
+    }
+
+    /* ── WHY IT WORKS ───────────────────────────────────────── */
+    .sl-why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 48px;
+    }
+    .sl-why-item {
+      border-top: 2px solid #A89CED;
+      padding-top: 24px;
+    }
+    .sl-why-num {
+      font: 800 32px/1 'DM Sans', sans-serif;
+      color: #A89CED;
+      letter-spacing: -0.04em;
+      display: block;
+      margin-bottom: 16px;
+    }
+    .sl-why-item h3 {
+      font: 700 20px/1.1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.025em !important;
+      margin: 0 0 12px !important;
+    }
+    .sl-why-item p {
+      font: 400 15px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.65) !important;
+      margin: 0 !important;
+    }
+
+    /* ── CTA ────────────────────────────────────────────────── */
+    .sl-cta {
+      background: #0C0A3E;
+      padding: 96px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .sl-cta::before {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      right: -80px;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: rgba(204,255,51,0.06);
+      pointer-events: none;
+    }
+    .sl-cta-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+    }
+    .sl-cta-text h2 {
+      color: #CCFF33 !important;
+      margin-bottom: 20px !important;
+    }
+    .sl-cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+      flex-shrink: 0;
+    }
+    .sl-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 20px 40px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .sl-btn-primary:hover { background: #ffffff; }
+    .sl-btn-ghost {
+      display: inline-block;
+      color: rgba(238,235,211,0.45);
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: color 0.15s;
+      padding: 8px 0;
+    }
+    .sl-btn-ghost:hover { color: #EEEBD3; }
+
+    /* ── FOOTER OVERRIDE ────────────────────────────────────── */
+    footer[data-elementor-type="footer"],
+    .elementor-location-footer {
+      background: #0C0A3E !important;
+      color: #EEEBD3 !important;
+    }
+    footer[data-elementor-type="footer"] p,
+    footer[data-elementor-type="footer"] a,
+    footer[data-elementor-type="footer"] span,
+    footer[data-elementor-type="footer"] div {
+      color: rgba(238,235,211,0.7) !important;
+    }
+    footer[data-elementor-type="footer"] a:hover { color: #CCFF33 !important; }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .sl-messages-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .sl-why-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .sl-cta-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .sl-cta-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .sl-hero { min-height: auto; padding: 64px 20px 72px; }
+      .sl-title {
+        font-size: clamp(44px, 14vw, 72px) !important;
+      }
+      .sl-hero-count {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+      }
+      .sl-strip-inner {
+        flex-wrap: wrap;
+      }
+      .sl-strip-stat { min-width: 45%; }
+      .sl-strip-divider { display: none; }
+
+      .sl-action {
+        grid-template-columns: 1fr;
+      }
+      .sl-action--right {
+        grid-template-columns: 1fr;
+      }
+      .sl-action--right .sl-action-count {
+        order: 1;
+        border-left: none;
+        border-bottom: 3px solid #CCFF33;
+      }
+      .sl-action--right .sl-action-body { order: 2; }
+      .sl-action-count {
+        padding: 28px 24px;
+        border-right: none;
+        border-bottom: 3px solid #CCFF33;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 12px;
+        align-items: baseline;
+      }
+      .sl-action-body { padding: 24px; }
+
+      .sl-messages-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sl-cta-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</Layout>

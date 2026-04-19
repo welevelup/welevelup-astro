@@ -1,0 +1,686 @@
+---
+/**
+ * Memory / Stories — Feminist archive of community testimonies.
+ * Voices from the Movement: personal accounts of sexism, racism,
+ * harassment, gender-based violence, and resistance.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+
+const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justice System', 'Online'];
+
+const featured = {
+  category: 'Workplace',
+  name: 'Amara, Birmingham',
+  date: 'March 2025',
+  title: 'They asked me to smile more. Then they gave my promotion to a man who shouted.',
+  excerpt: 'For three years I was told I was "too intense" in meetings. My ideas were picked up by male colleagues and credited to them in front of clients. When I raised it with HR they suggested I try a "communication style workshop." I started recording everything after that. This is what I found.',
+};
+
+const stories = [
+  {
+    category: 'Public Spaces',
+    name: 'Priya, London',
+    date: 'Feb 2025',
+    title: 'The police told me I should have taken a different route home.',
+    excerpt: 'I was followed for twenty minutes from the tube. When I finally got inside and called 999, the first question was what I was wearing.',
+  },
+  {
+    category: 'Justice System',
+    name: 'Anonymous',
+    date: 'Jan 2025',
+    title: 'My barrister told me to expect the defence to bring up my mental health history.',
+    excerpt: 'The CPS dropped the case four days before trial. Nobody called me. I found out by checking the court portal.',
+  },
+  {
+    category: 'Online',
+    name: 'Kezia, Manchester',
+    date: 'Dec 2024',
+    title: 'Two thousand messages in one week. The platform said it didn\'t violate community guidelines.',
+    excerpt: 'I had written one article about equal pay. They found my home address within 48 hours. I had to move.',
+  },
+  {
+    category: 'Relationships',
+    name: 'Sofia, Bristol',
+    date: 'Nov 2024',
+    title: 'He said no one would believe me because I had stayed.',
+    excerpt: 'I did stay. For seven years. Leaving is the most dangerous moment — the statistics told me that, but nobody around me understood it.',
+  },
+  {
+    category: 'Workplace',
+    name: 'Ngozi, Leeds',
+    date: 'Oct 2024',
+    title: 'When I named it as racism the conversation became about my tone.',
+    excerpt: 'I had documented eighteen months of being passed over, spoken over, and excluded from key meetings. HR\'s response was a diversity training afternoon for the team.',
+  },
+];
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- Back nav -->
+  <div class="st-back-bar">
+    <div class="st-back-inner">
+      <a href="/memory" class="st-back-link">
+        <span class="st-back-arrow">←</span>
+        Memory
+      </a>
+      <span class="st-back-sep">/</span>
+      <span class="st-back-current">Stories</span>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="st-hero" aria-labelledby="st-hero-heading">
+    <div class="st-hero-inner">
+      <div class="st-hero-label">Community Archive</div>
+      <h1 class="st-hero-title" id="st-hero-heading">
+        <span class="st-hero-line1">Voices</span>
+        <span class="st-hero-line2">from the</span>
+        <span class="st-hero-line3">Movement</span>
+      </h1>
+      <p class="st-hero-sub">
+        Personal testimonies of sexism, racism, harassment, gender-based violence, and resistance.
+        These are stories that are routinely silenced, dismissed, or disbelieved.
+        We record them here.
+      </p>
+      <div class="st-hero-count">
+        <span class="st-hero-count-num">1,240+</span>
+        <span class="st-hero-count-label">stories collected since 2019</span>
+      </div>
+    </div>
+    <div class="st-hero-rule" aria-hidden="true"></div>
+  </section>
+
+  <!-- Category filters -->
+  <section class="st-filters" aria-label="Filter stories by category">
+    <div class="st-filters-inner">
+      <div class="st-filters-track" role="tablist" aria-label="Story categories">
+        {categories.map((cat, i) => (
+          <button
+            class={`st-filter-btn${i === 0 ? ' st-filter-btn--active' : ''}`}
+            role="tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured story -->
+  <section class="st-featured-section" aria-label="Featured story">
+    <div class="st-featured-inner">
+      <div class="st-featured-aside">
+        <div class="st-featured-marker" aria-hidden="true">Featured</div>
+        <div class="st-featured-category">{featured.category}</div>
+        <div class="st-featured-byline">
+          <span class="st-name">{featured.name}</span>
+          <span class="st-date">{featured.date}</span>
+        </div>
+      </div>
+      <article class="st-featured-card">
+        <blockquote class="st-featured-title">
+          "{featured.title}"
+        </blockquote>
+        <p class="st-featured-excerpt">{featured.excerpt}</p>
+        <a href="#" class="st-featured-read" aria-label={`Read full story by ${featured.name}`}>
+          Read full account
+          <span class="st-read-arrow" aria-hidden="true">→</span>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <!-- Story grid -->
+  <section class="st-grid-section" aria-label="Community stories">
+    <div class="st-grid-inner">
+      <div class="st-grid-header">
+        <h2 class="st-grid-title">More Stories</h2>
+        <span class="st-grid-showing">Showing all categories</span>
+      </div>
+
+      <div class="st-grid" role="list">
+        {stories.map((story, i) => (
+          <article class="st-card" role="listitem" data-category={story.category}>
+            <div class="st-card-top">
+              <span class="st-card-category">{story.category}</span>
+              <span class="st-card-date">{story.date}</span>
+            </div>
+            <blockquote class="st-card-title">"{story.title}"</blockquote>
+            <p class="st-card-excerpt">{story.excerpt}</p>
+            <div class="st-card-bottom">
+              <span class="st-card-name">{story.name}</span>
+              <a href="#" class="st-card-read" aria-label={`Read full story by ${story.name}`}>Read →</a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- Load more -->
+      <div class="st-load-more">
+        <button class="st-load-btn" aria-label="Load more stories">
+          Load more stories
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Share your story CTA -->
+  <section class="st-share" aria-labelledby="st-share-heading">
+    <div class="st-share-inner">
+      <div class="st-share-left">
+        <div class="st-share-label">Your voice matters</div>
+        <h2 class="st-share-title" id="st-share-heading">Share<br/>your story</h2>
+      </div>
+      <div class="st-share-right">
+        <p class="st-share-desc">
+          You don't need to use your real name. You don't need to have reported it.
+          You don't need to prove anything. Your experience is valid, and it belongs in this archive.
+        </p>
+        <ul class="st-share-points" aria-label="What you should know">
+          <li>Stories are reviewed by our team before publishing</li>
+          <li>You choose how much detail to share</li>
+          <li>Anonymous submissions are always welcome</li>
+          <li>You can request removal at any time</li>
+        </ul>
+        <a href="/contact" class="st-share-btn">
+          Submit your story
+        </a>
+        <p class="st-share-note">
+          Need to talk to someone first?
+          <a href="https://www.refuge.org.uk" class="st-share-link" target="_blank" rel="noopener">Refuge</a>
+          and
+          <a href="https://rapecrisis.org.uk" class="st-share-link" target="_blank" rel="noopener">Rape Crisis</a>
+          are available 24/7.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* ── Back bar ───────────────────────────── */
+  .st-back-bar {
+    background: #0C0A3E;
+    border-bottom: 1px solid rgba(168,156,237,0.2);
+    padding: 14px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .st-back-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .st-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #A89CED;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .st-back-link:hover { color: #CCFF33; }
+  .st-back-arrow { font-size: 14px; }
+  .st-back-sep { color: rgba(168,156,237,0.3); font-size: 12px; }
+  .st-back-current {
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(238,235,211,0.4);
+  }
+
+  /* ── Hero ───────────────────────────────── */
+  .st-hero {
+    background: #0C0A3E;
+    padding: 72px 24px 0;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+  .st-hero-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 56px;
+  }
+  .st-hero-label {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #A89CED;
+    margin-bottom: 28px;
+  }
+  .st-hero-title {
+    display: block;
+    margin: 0 0 32px;
+    line-height: 0.88;
+  }
+  .st-hero-line1,
+  .st-hero-line2,
+  .st-hero-line3 {
+    display: block;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    color: #EEEBD3;
+  }
+  .st-hero-line1 { font-size: clamp(72px, 12vw, 140px); }
+  .st-hero-line2 { font-size: clamp(44px, 7vw, 88px); color: rgba(238,235,211,0.3); padding-left: clamp(20px, 4vw, 60px); }
+  .st-hero-line3 { font-size: clamp(72px, 12vw, 140px); color: #CCFF33; }
+
+  .st-hero-sub {
+    font: 400 18px/1.6 'DM Sans';
+    color: rgba(238,235,211,0.6);
+    max-width: 560px;
+    margin: 0 0 40px;
+  }
+  .st-hero-count {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 12px;
+    background: rgba(204,255,51,0.08);
+    border: 1px solid rgba(204,255,51,0.2);
+    padding: 12px 20px;
+  }
+  .st-hero-count-num {
+    font: 800 28px/1 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.03em;
+  }
+  .st-hero-count-label {
+    font: 400 13px/1 'DM Sans';
+    color: rgba(238,235,211,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .st-hero-rule {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(204,255,51,0.6) 0%, rgba(168,156,237,0.2) 50%, transparent 100%);
+    margin-top: 0;
+  }
+
+  /* ── Filters ────────────────────────────── */
+  .st-filters {
+    background: #0C0A3E;
+    padding: 0 24px 40px;
+    font-family: 'DM Sans', sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid rgba(168,156,237,0.15);
+  }
+  .st-filters-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .st-filters-track {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 20px;
+  }
+  .st-filter-btn {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 10px 20px;
+    border: 1px solid rgba(168,156,237,0.3);
+    background: transparent;
+    color: rgba(238,235,211,0.5);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .st-filter-btn:hover {
+    border-color: rgba(204,255,51,0.5);
+    color: #CCFF33;
+  }
+  .st-filter-btn--active {
+    background: #CCFF33;
+    border-color: #CCFF33;
+    color: #0C0A3E;
+  }
+  .st-filter-btn--active:hover {
+    background: #d4ff55;
+    border-color: #d4ff55;
+    color: #0C0A3E;
+  }
+
+  /* ── Featured story ─────────────────────── */
+  .st-featured-section {
+    background: #EEEBD3;
+    padding: 56px 24px 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .st-featured-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+    align-items: start;
+    border-top: 3px solid #0C0A3E;
+    padding-top: 40px;
+  }
+  .st-featured-aside { position: sticky; top: 100px; }
+  .st-featured-marker {
+    font: 700 10px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    background: #CCFF33;
+    color: #0C0A3E;
+    display: inline-block;
+    padding: 6px 10px;
+    margin-bottom: 20px;
+  }
+  .st-featured-category {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    margin-bottom: 16px;
+  }
+  .st-featured-byline { display: flex; flex-direction: column; gap: 6px; }
+  .st-name {
+    font: 700 14px/1 'DM Sans';
+    color: #0C0A3E;
+    display: block;
+  }
+  .st-date {
+    font: 400 12px/1 'DM Sans';
+    color: rgba(12,10,62,0.4);
+    display: block;
+  }
+
+  .st-featured-card {
+    background: #fff;
+    padding: 48px 48px 40px;
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .st-featured-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #CCFF33;
+  }
+  .st-featured-title {
+    font: 800 clamp(22px,3vw,32px)/1.15 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 0 0 24px;
+    padding: 0;
+    border: none;
+  }
+  .st-featured-excerpt {
+    font: 400 17px/1.7 'DM Sans';
+    color: rgba(12,10,62,0.7);
+    margin: 0 0 32px;
+  }
+  .st-featured-read {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 700 13px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0C0A3E;
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid #CCFF33;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .st-featured-read:hover { border-color: #A89CED; color: #A89CED; }
+  .st-read-arrow { transition: transform 0.15s; }
+  .st-featured-read:hover .st-read-arrow { transform: translateX(4px); }
+
+  /* ── Story grid ─────────────────────────── */
+  .st-grid-section {
+    background: #EEEBD3;
+    padding: 0 24px 80px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .st-grid-inner { max-width: 1200px; margin: 0 auto; }
+  .st-grid-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 48px 0 32px;
+    border-top: 1px solid rgba(12,10,62,0.12);
+  }
+  .st-grid-title {
+    font: 800 18px/1 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .st-grid-showing {
+    font: 400 12px/1 'DM Sans';
+    color: rgba(12,10,62,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .st-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .st-card {
+    background: #fff;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-top: 3px solid transparent;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .st-card:hover {
+    border-top-color: #CCFF33;
+    box-shadow: 0 8px 32px rgba(12,10,62,0.08);
+    z-index: 1;
+  }
+  /* Offset alternating cards for editorial rhythm */
+  .st-card:nth-child(even) { margin-top: 24px; }
+
+  .st-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .st-card-category {
+    font: 600 10px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    padding: 4px 8px;
+    border: 1px solid rgba(168,156,237,0.3);
+  }
+  .st-card-date {
+    font: 400 11px/1 'DM Sans';
+    color: rgba(12,10,62,0.35);
+  }
+  .st-card-title {
+    font: 700 clamp(16px,1.8vw,20px)/1.25 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.025em;
+    margin: 0;
+    padding: 0;
+    border: none;
+    flex: 1;
+  }
+  .st-card-excerpt {
+    font: 400 14px/1.6 'DM Sans';
+    color: rgba(12,10,62,0.6);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .st-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(12,10,62,0.08);
+  }
+  .st-card-name {
+    font: 600 12px/1 'DM Sans';
+    color: rgba(12,10,62,0.5);
+  }
+  .st-card-read {
+    font: 700 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0C0A3E;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .st-card:hover .st-card-read { opacity: 1; }
+
+  /* Load more */
+  .st-load-more {
+    display: flex;
+    justify-content: center;
+    padding-top: 48px;
+  }
+  .st-load-btn {
+    font: 700 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #0C0A3E;
+    background: transparent;
+    border: 2px solid rgba(12,10,62,0.2);
+    padding: 18px 40px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .st-load-btn:hover {
+    border-color: #0C0A3E;
+    background: #0C0A3E;
+    color: #CCFF33;
+  }
+
+  /* ── Share CTA ──────────────────────────── */
+  .st-share {
+    background: #0C0A3E;
+    padding: 80px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .st-share-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .st-share-label {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #A89CED;
+    margin-bottom: 20px;
+  }
+  .st-share-title {
+    font: 800 clamp(52px, 8vw, 96px)/0.88 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.045em;
+    margin: 0;
+  }
+  .st-share-desc {
+    font: 400 18px/1.7 'DM Sans';
+    color: rgba(238,235,211,0.7);
+    margin: 0 0 32px;
+  }
+  .st-share-points {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .st-share-points li {
+    font: 400 15px/1.4 'DM Sans';
+    color: rgba(238,235,211,0.55);
+    padding-left: 20px;
+    position: relative;
+  }
+  .st-share-points li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: #A89CED;
+  }
+  .st-share-btn {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E;
+    font: 700 13px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 20px 44px;
+    text-decoration: none;
+    margin-bottom: 24px;
+    transition: background 0.15s;
+  }
+  .st-share-btn:hover { background: #d4ff55; }
+  .st-share-note {
+    font: 400 13px/1.6 'DM Sans';
+    color: rgba(238,235,211,0.35);
+    margin: 0;
+  }
+  .st-share-link {
+    color: rgba(238,235,211,0.55);
+    text-decoration: underline;
+    text-decoration-color: rgba(168,156,237,0.4);
+    transition: color 0.15s;
+  }
+  .st-share-link:hover { color: #A89CED; }
+
+  /* ── Responsive ─────────────────────────── */
+  @media (max-width: 1024px) {
+    .st-grid { grid-template-columns: repeat(2, 1fr); }
+    .st-share-inner { grid-template-columns: 1fr; gap: 48px; }
+  }
+
+  @media (max-width: 768px) {
+    .st-hero { padding: 48px 20px 0; }
+    .st-hero-line2 { padding-left: 0; }
+    .st-filters { padding: 0 20px 24px; position: static; }
+    .st-filters-track { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; -webkit-overflow-scrolling: touch; }
+    .st-filter-btn { white-space: nowrap; flex-shrink: 0; }
+    .st-featured-section { padding: 40px 20px 0; }
+    .st-featured-inner { grid-template-columns: 1fr; gap: 24px; padding-top: 28px; }
+    .st-featured-aside { position: static; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+    .st-featured-card { padding: 32px 24px; }
+    .st-grid-section { padding: 0 20px 56px; }
+    .st-grid { grid-template-columns: 1fr; }
+    .st-card:nth-child(even) { margin-top: 0; }
+    .st-card-read { opacity: 1; }
+    .st-share { padding: 60px 20px; }
+    .st-share-inner { gap: 40px; }
+  }
+</style>

@@ -1,0 +1,769 @@
+---
+/**
+ * Memory Space — hub page for Abortion Stories, Solidarity Messages, and Community Stories.
+ * Editorial dark-luxury aesthetic. Bento asymmetric grid. No external libraries.
+ */
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { extract } from '../lib/extractHtml';
+import homeRaw from '../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <section class="ms-hero" aria-labelledby="ms-hero-heading">
+    <div class="ms-hero-inner">
+      <span class="ms-eyebrow">Memory Space</span>
+
+      <h1 class="ms-hero-title" id="ms-hero-heading">
+        <span class="ms-title-line ms-title-line--1">A Space</span>
+        <span class="ms-title-line ms-title-line--2">to Remember</span>
+        <span class="ms-title-line ms-title-line--3">to Resist</span>
+      </h1>
+
+      <div class="ms-hero-desc-wrap">
+        <p class="ms-hero-desc">
+          This is where personal experience lives alongside grief, solidarity, and resistance.
+          Abortion stories told in your own words. Messages of support sent to women the
+          state tried to silence. Community stories that refuse to be forgotten.
+          Together, they form an archive of what it means to fight for your body and your freedom.
+        </p>
+        <div class="ms-hero-rule" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="ms-hero-ticker" aria-hidden="true">
+      <div class="ms-ticker-track">
+        <span>Abortion Stories</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Solidarity Messages</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Community Stories</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Abortion Stories</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Solidarity Messages</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Community Stories</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Abortion Stories</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Solidarity Messages</span>
+        <span class="ms-ticker-dot">·</span>
+        <span>Community Stories</span>
+        <span class="ms-ticker-dot">·</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BENTO SUBSECTION CARDS ────────────────────────────── -->
+  <section class="ms-bento" aria-label="Memory Space sections">
+    <div class="ms-bento-inner">
+
+      <!-- CARD 1 — Abortion Stories (dark, dominant) -->
+      <a href="/memory/abortion-stories" class="ms-card ms-card--abortion" aria-label="Abortion Stories">
+        <div class="ms-card-content">
+          <div class="ms-card-top">
+            <span class="ms-card-index">01</span>
+            <span class="ms-card-tag">Anonymous</span>
+          </div>
+          <h2 class="ms-card-title">Abortion<br/>Stories</h2>
+          <p class="ms-card-body">
+            Real experiences, told anonymously. These stories push back against shame and silence — because abortion is healthcare, and your story belongs to you.
+          </p>
+          <div class="ms-card-footer">
+            <span class="ms-card-cta">Read stories <span class="ms-card-arrow">→</span></span>
+            <div class="ms-card-count">
+              <span class="ms-count-num">40+</span>
+              <span class="ms-count-label">stories shared</span>
+            </div>
+          </div>
+        </div>
+        <div class="ms-card-deco ms-card-deco--abortion" aria-hidden="true">
+          <div class="ms-deco-circle"></div>
+        </div>
+      </a>
+
+      <!-- RIGHT COLUMN: two stacked cards -->
+      <div class="ms-bento-right">
+
+        <!-- CARD 2 — Solidarity Messages (lime, electric) -->
+        <a href="/memory/solidarity" class="ms-card ms-card--solidarity" aria-label="Solidarity Messages">
+          <div class="ms-card-content">
+            <div class="ms-card-top">
+              <span class="ms-card-index">02</span>
+              <span class="ms-card-tag">From the community</span>
+            </div>
+            <h2 class="ms-card-title">Solidarity<br/>Messages</h2>
+            <p class="ms-card-body">
+              Messages sent directly to Carla Foster, Rianna Cleary, Louise Powell, and others the system tried to punish for their choices. Proof that they are not alone.
+            </p>
+            <span class="ms-card-cta">Read messages <span class="ms-card-arrow">→</span></span>
+          </div>
+        </a>
+
+        <!-- CARD 3 — Stories (purple, warm) -->
+        <a href="/memory/stories" class="ms-card ms-card--stories" aria-label="Community Stories">
+          <div class="ms-card-content">
+            <div class="ms-card-top">
+              <span class="ms-card-index">03</span>
+              <span class="ms-card-tag">Community</span>
+            </div>
+            <h2 class="ms-card-title">Stories</h2>
+            <p class="ms-card-body">
+              From activists to survivors, carers to campaigners — the broader tapestry of lives lived in the face of systemic injustice.
+            </p>
+            <span class="ms-card-cta">Read stories <span class="ms-card-arrow">→</span></span>
+          </div>
+          <div class="ms-card-deco ms-card-deco--stories" aria-hidden="true">
+            <svg class="ms-deco-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4"/>
+              <path d="M20 32h24M32 20v24" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FRAGMENT SCROLL (textural) ───────────────────────── -->
+  <section class="ms-fragments" aria-label="Anonymous story fragments">
+    <div class="ms-fragments-label">
+      <span>Voices from the archive</span>
+    </div>
+    <div class="ms-fragments-scroll" role="list">
+
+      <figure class="ms-fragment" role="listitem">
+        <blockquote>
+          <p>"I was 19 and completely alone. No one told me I could get support. Writing this down is the first time I've said it out loud."</p>
+        </blockquote>
+        <figcaption>Anonymous — Abortion Stories</figcaption>
+      </figure>
+
+      <figure class="ms-fragment ms-fragment--accent" role="listitem">
+        <blockquote>
+          <p>"Carla — I wept when I read what happened to you. You are not a criminal. You are a mother. We stand with you."</p>
+        </blockquote>
+        <figcaption>Solidarity message to Carla Foster</figcaption>
+      </figure>
+
+      <figure class="ms-fragment" role="listitem">
+        <blockquote>
+          <p>"The hardest thing wasn't the procedure. It was the silence that came after it — the feeling that I had no one to tell."</p>
+        </blockquote>
+        <figcaption>Anonymous — Abortion Stories</figcaption>
+      </figure>
+
+      <figure class="ms-fragment ms-fragment--purple" role="listitem">
+        <blockquote>
+          <p>"I've been campaigning for reproductive rights for eleven years. I still find it hard to talk about my own experience. That is the power of shame — and why this space matters."</p>
+        </blockquote>
+        <figcaption>Community Stories</figcaption>
+      </figure>
+
+      <figure class="ms-fragment" role="listitem">
+        <blockquote>
+          <p>"Rianna — the system failed you. We will not forget your name. You deserved care, not prosecution."</p>
+        </blockquote>
+        <figcaption>Solidarity message to Rianna Cleary</figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- ── WHAT IS MEMORY SPACE ──────────────────────────────── -->
+  <section class="ms-about" aria-labelledby="ms-about-heading">
+    <div class="ms-about-inner">
+      <div class="ms-about-left">
+        <h2 class="ms-about-heading" id="ms-about-heading">
+          Why this<br/>space exists
+        </h2>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="ms-about-link" target="_blank" rel="noopener">
+          Add your story <span>→</span>
+        </a>
+      </div>
+      <div class="ms-about-right">
+        <p>
+          Too many experiences are buried — lost to shame, to fear of judgement, to a culture that treats women's bodies as political territory rather than human lives. Memory Space exists because forgetting is a form of erasure.
+        </p>
+        <p>
+          When the state prosecutes a woman for her pregnancy outcome, the cruelest part is the isolation. Solidarity messages break that isolation. When abortion is treated as something unspeakable, anonymous stories dismantle that silence one truth at a time.
+        </p>
+        <p>
+          This archive is not passive. It is a record of what happened — and a refusal to let it be normal.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ───────────────────────────────────────────────── -->
+  <section class="ms-cta" aria-labelledby="ms-cta-heading">
+    <div class="ms-cta-inner">
+      <span class="ms-cta-eyebrow">Join the movement</span>
+      <h2 class="ms-cta-heading" id="ms-cta-heading">Your story<br/>matters here</h2>
+      <p class="ms-cta-body">
+        Join the Level Up community — campaign updates, event invitations, and feminist thinking, straight to your inbox.
+      </p>
+      <div class="ms-cta-actions">
+        <a href="https://levelup.yourmovement.org/p/join-us" class="ms-cta-btn ms-cta-btn--primary" target="_blank" rel="noopener">
+          Join us
+        </a>
+        <a href="/memory/abortion-stories" class="ms-cta-btn ms-cta-btn--ghost">
+          Read stories
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* ── HERO ─────────────────────────────────────────────────── */
+  .ms-hero {
+    background: #0C0A3E;
+    padding: 96px 24px 0;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ms-hero-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+  }
+
+  .ms-eyebrow {
+    display: inline-block;
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #A89CED;
+    border: 1px solid rgba(168, 156, 237, 0.35);
+    padding: 6px 14px;
+    margin-bottom: 40px;
+  }
+
+  .ms-hero-title {
+    margin: 0 0 48px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ms-title-line {
+    display: block;
+    font: 800 clamp(72px, 12vw, 148px)/0.84 'DM Sans';
+    letter-spacing: -0.045em;
+    color: #CCFF33;
+    will-change: transform, opacity;
+    animation: ms-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .ms-title-line--1 { animation-delay: 0.05s; }
+  .ms-title-line--2 {
+    animation-delay: 0.15s;
+    color: #EEEBD3;
+    padding-left: clamp(24px, 6vw, 112px);
+  }
+  .ms-title-line--3 {
+    animation-delay: 0.25s;
+    color: #A89CED;
+  }
+
+  @keyframes ms-reveal {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ms-hero-desc-wrap {
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: ms-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  }
+
+  .ms-hero-desc {
+    font: 400 17px/1.65 'DM Sans';
+    color: rgba(238, 235, 211, 0.65);
+    margin: 0;
+  }
+
+  .ms-hero-rule {
+    width: 56px;
+    height: 3px;
+    background: #CCFF33;
+  }
+
+  /* Ticker */
+  .ms-hero-ticker {
+    border-top: 1px solid rgba(168, 156, 237, 0.2);
+    overflow: hidden;
+    padding: 16px 0;
+  }
+
+  .ms-ticker-track {
+    display: flex;
+    gap: 32px;
+    width: max-content;
+    animation: ms-ticker 28s linear infinite;
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(168, 156, 237, 0.5);
+    white-space: nowrap;
+  }
+
+  .ms-ticker-dot { color: #CCFF33; opacity: 0.5; }
+
+  @keyframes ms-ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ms-title-line,
+    .ms-hero-desc-wrap { animation: none; opacity: 1; transform: none; }
+    .ms-ticker-track { animation: none; }
+  }
+
+  /* ── BENTO GRID ───────────────────────────────────────────── */
+  .ms-bento {
+    background: #EEEBD3;
+    padding: 48px 24px 64px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .ms-bento-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 3px;
+  }
+
+  /* Shared card styles */
+  .ms-card {
+    display: flex;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .ms-card:hover { transform: translateY(-2px); }
+  .ms-card:focus-visible { outline: 3px solid #CCFF33; outline-offset: 2px; }
+
+  .ms-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 40px 36px;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .ms-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .ms-card-index {
+    font: 700 11px/1 'DM Sans';
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .ms-card-tag {
+    font: 500 10px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 4px 10px;
+    border: 1px solid currentColor;
+    opacity: 0.55;
+  }
+
+  .ms-card-title {
+    font: 800 clamp(40px, 5vw, 60px)/0.9 'DM Sans';
+    letter-spacing: -0.04em;
+    margin: 0;
+  }
+
+  .ms-card-body {
+    font: 400 15px/1.6 'DM Sans';
+    margin: 0;
+    max-width: 340px;
+    flex: 1;
+  }
+
+  .ms-card-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+
+  .ms-card-cta {
+    font: 700 13px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ms-card-arrow {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
+  }
+  .ms-card:hover .ms-card-arrow { transform: translateX(5px); }
+
+  .ms-card-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+  .ms-count-num {
+    font: 800 28px/1 'DM Sans';
+    letter-spacing: -0.04em;
+  }
+  .ms-count-label {
+    font: 400 10px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.55;
+  }
+
+  /* Card 1 — Abortion Stories */
+  .ms-card--abortion {
+    background: #0C0A3E;
+    color: #EEEBD3;
+    min-height: 480px;
+  }
+  .ms-card--abortion .ms-card-title { color: #CCFF33; }
+  .ms-card--abortion .ms-card-cta   { color: #CCFF33; }
+  .ms-card--abortion .ms-count-num  { color: #CCFF33; }
+  .ms-card--abortion:hover { box-shadow: 0 12px 48px rgba(12,10,62,0.35); }
+
+  .ms-card-deco { position: absolute; pointer-events: none; }
+
+  .ms-card-deco--abortion {
+    bottom: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    opacity: 0.06;
+  }
+  .ms-deco-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 32px solid #CCFF33;
+  }
+
+  /* Right column */
+  .ms-bento-right {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  /* Card 2 — Solidarity */
+  .ms-card--solidarity {
+    background: #CCFF33;
+    color: #0C0A3E;
+    flex: 1;
+  }
+  .ms-card--solidarity .ms-card-title { color: #0C0A3E; }
+  .ms-card--solidarity .ms-card-cta   { color: #0C0A3E; }
+  .ms-card--solidarity:hover { box-shadow: 0 12px 48px rgba(204,255,51,0.3); }
+
+  /* Card 3 — Stories */
+  .ms-card--stories {
+    background: #A89CED;
+    color: #0C0A3E;
+    flex: 1;
+  }
+  .ms-card--stories .ms-card-title { color: #0C0A3E; }
+  .ms-card--stories .ms-card-cta   { color: #0C0A3E; }
+  .ms-card--stories:hover { box-shadow: 0 12px 48px rgba(168,156,237,0.35); }
+
+  .ms-card-deco--stories {
+    bottom: 20px;
+    right: 24px;
+    width: 64px;
+    height: 64px;
+    opacity: 0.25;
+    color: #0C0A3E;
+  }
+  .ms-deco-mark { width: 100%; height: 100%; }
+
+  /* ── FRAGMENT SCROLL ──────────────────────────────────────── */
+  .ms-fragments {
+    background: #0C0A3E;
+    padding: 64px 0;
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+  }
+
+  .ms-fragments-label {
+    max-width: 1100px;
+    margin: 0 auto 32px;
+    padding: 0 24px;
+  }
+
+  .ms-fragments-label span {
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(168, 156, 237, 0.6);
+  }
+
+  .ms-fragments-scroll {
+    display: flex;
+    gap: 3px;
+    padding: 0 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ms-fragments-scroll::-webkit-scrollbar { display: none; }
+
+  .ms-fragment {
+    flex: 0 0 320px;
+    background: rgba(168, 156, 237, 0.08);
+    border: 1px solid rgba(168, 156, 237, 0.15);
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 0;
+    transition: border-color 0.2s;
+  }
+
+  .ms-fragment:hover {
+    border-color: rgba(204, 255, 51, 0.4);
+  }
+
+  .ms-fragment--accent {
+    background: rgba(204, 255, 51, 0.05);
+    border-color: rgba(204, 255, 51, 0.15);
+  }
+
+  .ms-fragment--purple {
+    background: rgba(168, 156, 237, 0.12);
+  }
+
+  .ms-fragment blockquote {
+    margin: 0;
+    padding: 0;
+  }
+
+  .ms-fragment blockquote p {
+    font: 400 16px/1.6 'DM Sans';
+    color: rgba(238, 235, 211, 0.8);
+    margin: 0;
+  }
+
+  .ms-fragment figcaption {
+    font: 600 10px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(168, 156, 237, 0.6);
+  }
+
+  /* ── ABOUT ─────────────────────────────────────────────────── */
+  .ms-about {
+    background: #EEEBD3;
+    padding: 96px 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .ms-about-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .ms-about-heading {
+    font: 800 clamp(40px, 6vw, 72px)/0.88 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.04em;
+    margin: 0 0 32px;
+  }
+
+  .ms-about-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font: 700 13px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0C0A3E;
+    text-decoration: none;
+    border-bottom: 2px solid #CCFF33;
+    padding-bottom: 4px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .ms-about-link:hover { color: #A89CED; border-bottom-color: #A89CED; }
+
+  .ms-about-right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .ms-about-right p {
+    font: 400 17px/1.7 'DM Sans';
+    color: rgba(12, 10, 62, 0.7);
+    margin: 0;
+  }
+
+  .ms-about-right p:first-child {
+    font-weight: 500;
+    color: #0C0A3E;
+  }
+
+  /* ── CTA ──────────────────────────────────────────────────── */
+  .ms-cta {
+    background: #0C0A3E;
+    padding: 100px 24px;
+    font-family: 'DM Sans', sans-serif;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Large decorative text behind CTA */
+  .ms-cta::before {
+    content: '♀';
+    position: absolute;
+    font-size: clamp(300px, 40vw, 500px);
+    font-weight: 900;
+    color: rgba(168, 156, 237, 0.04);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .ms-cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .ms-cta-eyebrow {
+    display: inline-block;
+    font: 600 11px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #A89CED;
+    margin-bottom: 20px;
+  }
+
+  .ms-cta-heading {
+    font: 800 clamp(48px, 9vw, 96px)/0.88 'DM Sans';
+    color: #CCFF33;
+    letter-spacing: -0.045em;
+    margin: 0 0 24px;
+  }
+
+  .ms-cta-body {
+    font: 400 18px/1.6 'DM Sans';
+    color: rgba(238, 235, 211, 0.6);
+    margin: 0 auto 40px;
+    max-width: 440px;
+  }
+
+  .ms-cta-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .ms-cta-btn {
+    display: inline-block;
+    font: 700 13px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 18px 40px;
+    text-decoration: none;
+    transition: all 0.15s;
+  }
+
+  .ms-cta-btn--primary {
+    background: #CCFF33;
+    color: #0C0A3E;
+  }
+  .ms-cta-btn--primary:hover {
+    background: #fff;
+  }
+
+  .ms-cta-btn--ghost {
+    background: transparent;
+    color: #EEEBD3;
+    border: 1px solid rgba(238, 235, 211, 0.25);
+  }
+  .ms-cta-btn--ghost:hover {
+    border-color: #CCFF33;
+    color: #CCFF33;
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .ms-bento-inner {
+      grid-template-columns: 1fr;
+    }
+
+    .ms-card--abortion {
+      min-height: 360px;
+    }
+
+    .ms-about-inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .ms-hero { padding: 72px 20px 0; }
+    .ms-hero-inner { padding-bottom: 56px; }
+
+    .ms-bento { padding: 32px 20px 48px; }
+    .ms-bento-inner { gap: 2px; }
+
+    .ms-card-content { padding: 28px 24px; }
+
+    .ms-card-title {
+      font-size: clamp(32px, 10vw, 48px);
+    }
+
+    .ms-fragments-scroll { padding: 0 20px; }
+    .ms-fragment { flex: 0 0 280px; padding: 24px; }
+
+    .ms-about { padding: 64px 20px; }
+
+    .ms-cta { padding: 80px 20px; }
+    .ms-cta-btn { padding: 16px 28px; }
+  }
+</style>

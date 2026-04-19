@@ -1,0 +1,849 @@
+---
+/**
+ * Abortion Stories — Memory subsection
+ * Safe, warm, feminist editorial space for anonymous stories.
+ * Aesthetic: warm literary journal — cream ground, typographic pull-quote cards,
+ * each story card a distinct visual treatment, not a uniform grid.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section class="as-hero">
+    <div class="as-hero-bg-shape" aria-hidden="true"></div>
+    <div class="as-hero-inner">
+      <a href="/memory" class="as-back-link">
+        <span class="as-back-arrow" aria-hidden="true">←</span>
+        Back to Memory
+      </a>
+      <div class="as-hero-label">
+        <span class="as-dot" aria-hidden="true"></span>
+        Anonymous stories
+      </div>
+      <h1 class="as-hero-title">
+        Abortion<br/>
+        <em>Stories</em>
+      </h1>
+      <p class="as-hero-intro">
+        Real words from real people. Shared anonymously, held with care.
+      </p>
+    </div>
+    <div class="as-hero-accent-bar" aria-hidden="true"></div>
+  </section>
+
+  <!-- ── FRAMING ───────────────────────────────────────── -->
+  <section class="as-section as-section--cream">
+    <div class="as-content as-content--wide">
+      <div class="as-framing">
+        <div class="as-framing-pull">
+          <blockquote class="as-pull-statement">
+            "Move the conversation away from debate —<br/>
+            and towards compassion."
+          </blockquote>
+          <cite class="as-pull-cite">Level Up</cite>
+        </div>
+        <div class="as-framing-body">
+          <p>In 2023, when Carla Foster was prosecuted and imprisoned under Britain's archaic abortion laws, Level Up opened up space for people to share their abortion stories anonymously.</p>
+          <p>Not to debate. Not to justify. But to be heard.</p>
+          <p>These stories belong to the people who lived them. They are offered here as an act of solidarity — with Carla, and with everyone who has needed an abortion and deserved compassion instead of criminalisation.</p>
+          <p>Abortion is healthcare. And every person who has needed it has a story that matters.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STORIES ───────────────────────────────────────── -->
+  <section class="as-section as-section--white" aria-labelledby="stories-heading">
+    <div class="as-content">
+      <h2 id="stories-heading" class="as-section-heading">
+        Their words
+      </h2>
+
+      <div class="as-stories-grid">
+
+        <!-- Story 1 — large pull-quote, cream card, left accent -->
+        <article class="as-story as-story--one" aria-label="Anonymous story">
+          <div class="as-story-number" aria-hidden="true">01</div>
+          <div class="as-story-body">
+            <p class="as-story-quote">
+              "I was 19, in my first year of university. I had no money, no partner, and no way to raise a child. I made my decision within 24 hours and I have never once regretted it. What I do regret is that I felt I had to keep it a secret from almost everyone I loved. The shame wasn't mine to carry."
+            </p>
+          </div>
+          <footer class="as-story-footer">
+            <span class="as-story-tag">Age 19, Student</span>
+          </footer>
+        </article>
+
+        <!-- Story 2 — dark card, lime accent, typographic contrast -->
+        <article class="as-story as-story--two" aria-label="Anonymous story">
+          <div class="as-story-number" aria-hidden="true">02</div>
+          <div class="as-story-body">
+            <p class="as-story-overline">I already had two children.</p>
+            <p class="as-story-quote">
+              "My youngest was eight months old when I found out I was pregnant again. We were already stretched beyond our limits — emotionally, financially, every way. I knew immediately. My GP was kind. The clinic staff were kind. Everyone was kind except the laws that made me feel like a criminal for doing what was right for my family."
+            </p>
+          </div>
+          <footer class="as-story-footer">
+            <span class="as-story-tag">Mother of two, 34</span>
+          </footer>
+        </article>
+
+        <!-- Story 3 — cream background, large decorative first letter -->
+        <article class="as-story as-story--three" aria-label="Anonymous story">
+          <div class="as-story-number" aria-hidden="true">03</div>
+          <div class="as-story-body">
+            <p class="as-story-quote as-story-quote--dropcap">
+              "My pregnancy was very much wanted. When we found out at 22 weeks that our baby had a condition incompatible with life, the abortion we chose was the most loving thing I have ever done. I held her. I named her. And then I grieved her — without anyone ever suggesting I had done something wrong. That grace was everything."
+            </p>
+          </div>
+          <footer class="as-story-footer">
+            <span class="as-story-tag">Wanted pregnancy, late termination</span>
+          </footer>
+        </article>
+
+        <!-- Story 4 — horizontal layout, purple accent, different rhythm -->
+        <article class="as-story as-story--four" aria-label="Anonymous story">
+          <div class="as-story-number" aria-hidden="true">04</div>
+          <div class="as-story-body">
+            <p class="as-story-quote">
+              "I was in a relationship that had become dangerous. I did not tell him. I arranged everything alone. It took three weeks I barely remember. The hardest part was not the procedure — it was sitting in a waiting room and wondering if he would find out where I was. Abortion access is a safety issue. It always has been."
+            </p>
+          </div>
+          <footer class="as-story-footer">
+            <span class="as-story-tag">Domestic abuse survivor</span>
+          </footer>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SOLIDARITY STATEMENT ──────────────────────────── -->
+  <section class="as-solidarity">
+    <div class="as-solidarity-inner">
+      <p class="as-solidarity-text">
+        One in three women will have an abortion in their lifetime.<br/>
+        <strong>None of them owe anyone an explanation.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SHARE YOUR STORY ──────────────────────────────── -->
+  <section class="as-section as-section--cream" id="share-your-story" aria-labelledby="share-heading">
+    <div class="as-content">
+      <div class="as-share-layout">
+        <div class="as-share-left">
+          <span class="as-label-tag">Open call</span>
+          <h2 id="share-heading" class="as-share-heading">Share<br/>your story</h2>
+          <p class="as-share-sub">Your words, your way. Completely anonymous.</p>
+        </div>
+        <div class="as-share-right">
+          <p class="as-share-body">
+            If you'd like to share your abortion story anonymously to help move the conversation from debate to compassion, we'd be honoured to receive it.
+          </p>
+          <p class="as-share-body">
+            You set the terms. You can be as brief or as detailed as you choose. You can share why you'd like it to be included — or not explain yourself at all.
+          </p>
+
+          <div class="as-form-prompt" role="group" aria-labelledby="form-legend">
+            <p id="form-legend" class="as-form-legend">What would you like to share?</p>
+            <div class="as-form-field">
+              <label class="as-form-label" for="story-text">Your story</label>
+              <textarea
+                id="story-text"
+                class="as-form-textarea"
+                rows="6"
+                placeholder="Write as much or as little as feels right. There is no wrong way to do this."
+                aria-describedby="story-hint"
+              ></textarea>
+              <p id="story-hint" class="as-form-hint">Your submission is anonymous. We will never publish your name or any identifying details without your explicit consent.</p>
+            </div>
+            <div class="as-form-field">
+              <label class="as-form-label" for="story-context">A brief context (optional)</label>
+              <input
+                id="story-context"
+                class="as-form-input"
+                type="text"
+                placeholder="e.g. Mother of one, age 28 — or leave blank"
+              />
+            </div>
+            <button class="as-form-submit" type="button" aria-label="Submit your story">
+              Send your story
+              <span class="as-form-arrow" aria-hidden="true">→</span>
+            </button>
+            <p class="as-form-note">This form is not yet active. To share your story, email us at <a href="mailto:hello@welevelup.org" class="as-form-link">hello@welevelup.org</a> with the subject line "My Story".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BACK LINK / NAV ───────────────────────────────── -->
+  <section class="as-section as-section--navy">
+    <div class="as-content" style="text-align:center">
+      <h2 class="as-nav-heading">Continue exploring</h2>
+      <div class="as-nav-links">
+        <a href="/memory" class="as-nav-link">
+          <span class="as-nav-link-label">Memory</span>
+          <span class="as-nav-link-desc">Return to the full archive</span>
+          <span class="as-nav-arrow" aria-hidden="true">←</span>
+        </a>
+        <a href="/active-campaigns/abortion-is-healthcare" class="as-nav-link">
+          <span class="as-nav-link-label">Abortion Is Healthcare</span>
+          <span class="as-nav-link-desc">The campaign behind these stories</span>
+          <span class="as-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── JOIN CTA ──────────────────────────────────────── -->
+  <section class="as-cta">
+    <div class="as-content" style="text-align:center">
+      <h2 class="as-cta-heading">Join the Level Up community</h2>
+      <p class="as-cta-body">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="as-btn-primary" target="_blank" rel="noopener">Join us</a>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style is:global>
+    /* ═══════════════════════════════════════════════════════
+       ABORTION STORIES PAGE — as- namespace
+       Design tokens inherited from site palette:
+         navy   #0C0A3E
+         lime   #CCFF33
+         purple #A89CED
+         cream  #EEEBD3
+         font   DM Sans 800/700/400
+    ═══════════════════════════════════════════════════════ */
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .as-hero {
+      background: #EEEBD3;
+      padding: 80px 24px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .as-hero-bg-shape {
+      position: absolute;
+      top: -40px;
+      right: -80px;
+      width: 480px;
+      height: 480px;
+      background: #A89CED;
+      border-radius: 50%;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .as-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .as-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(12,10,62,0.5) !important;
+      text-decoration: none !important;
+      margin-bottom: 48px;
+      transition: color 0.2s;
+    }
+    .as-back-link:hover {
+      color: #0C0A3E !important;
+    }
+    .as-back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+    .as-back-link:hover .as-back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .as-hero-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A89CED;
+      margin-bottom: 24px;
+    }
+    .as-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #A89CED;
+      flex-shrink: 0;
+    }
+
+    .as-hero-title {
+      font: 800 clamp(72px, 14vw, 128px)/0.85 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.05em !important;
+      margin: 0 0 32px;
+    }
+    .as-hero-title em {
+      font-style: italic;
+      color: #A89CED !important;
+      font-weight: 700 !important;
+    }
+
+    .as-hero-intro {
+      font: 400 20px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.6) !important;
+      max-width: 440px;
+      margin: 0 0 64px;
+    }
+
+    .as-hero-accent-bar {
+      height: 6px;
+      background: linear-gradient(to right, #CCFF33 0%, #A89CED 50%, #0C0A3E 100%);
+      margin-top: 0;
+    }
+
+    /* ── SECTIONS ─────────────────────────────────────── */
+    .as-section {
+      padding: 80px 24px;
+    }
+    .as-section--cream { background: #EEEBD3; }
+    .as-section--white { background: #ffffff; }
+    .as-section--navy  { background: #0C0A3E; }
+
+    .as-content {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .as-content--wide {
+      max-width: 1020px;
+    }
+
+    .as-section-heading {
+      font: 800 clamp(36px, 6vw, 56px)/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 0 56px;
+    }
+
+    /* ── FRAMING ──────────────────────────────────────── */
+    .as-framing {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .as-framing-pull {
+      position: sticky;
+      top: 32px;
+    }
+
+    .as-pull-statement {
+      font: 700 clamp(22px, 3.5vw, 32px)/1.15 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      padding: 0;
+      border: none;
+      quotes: none;
+    }
+    .as-pull-statement::before,
+    .as-pull-statement::after { content: none; }
+
+    .as-pull-cite {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      font-style: normal;
+    }
+
+    .as-framing-body p {
+      font: 400 18px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 20px;
+    }
+    .as-framing-body p:last-child { margin-bottom: 0; }
+
+    /* ── STORY CARDS ──────────────────────────────────── */
+    .as-stories-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+
+    /* Base story card */
+    .as-story {
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    .as-story-number {
+      font: 800 11px/1 'DM Sans', sans-serif;
+      letter-spacing: 0.1em;
+      opacity: 0.25;
+      color: currentColor;
+    }
+
+    .as-story-quote {
+      font: 400 18px/1.7 'DM Sans', sans-serif !important;
+      margin: 0 !important;
+      flex: 1;
+    }
+
+    .as-story-overline {
+      font: 700 13px/1 'DM Sans', sans-serif !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 !important;
+    }
+
+    .as-story-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid currentColor;
+      opacity: 0.3;
+    }
+    .as-story-tag {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Card 01 — Cream ground, navy text, lime left border */
+    .as-story--one {
+      background: #EEEBD3;
+      color: #0C0A3E;
+      border-left: 4px solid #CCFF33;
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .as-story--one .as-story-quote {
+      color: #0C0A3E !important;
+      font-size: 20px !important;
+    }
+    .as-story--one .as-story-number {
+      color: #0C0A3E;
+    }
+
+    /* Card 02 — Navy ground, cream text, lime accent number */
+    .as-story--two {
+      background: #0C0A3E;
+      color: #EEEBD3;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      padding: 48px 40px;
+    }
+    .as-story--two .as-story-quote {
+      color: rgba(238,235,211,0.85) !important;
+      font-size: 17px !important;
+    }
+    .as-story--two .as-story-overline {
+      color: #CCFF33 !important;
+      opacity: 1;
+    }
+    .as-story--two .as-story-number {
+      color: #CCFF33;
+      opacity: 1;
+      font-size: 13px;
+    }
+    .as-story--two .as-story-footer {
+      border-top-color: rgba(238,235,211,0.2);
+      opacity: 1;
+    }
+    .as-story--two .as-story-tag {
+      color: rgba(238,235,211,0.45);
+    }
+
+    /* Card 03 — Purple ground, navy/cream text, italic drop cap */
+    .as-story--three {
+      background: #A89CED;
+      color: #0C0A3E;
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .as-story--three .as-story-quote {
+      color: #0C0A3E !important;
+      font-size: 16px !important;
+      line-height: 1.75 !important;
+    }
+    .as-story--three .as-story-number {
+      color: #0C0A3E;
+    }
+    .as-story--three .as-story-footer {
+      border-top-color: rgba(12,10,62,0.25);
+      opacity: 1;
+    }
+    .as-story--three .as-story-tag {
+      color: rgba(12,10,62,0.5);
+    }
+
+    /* Drop cap on card 03 */
+    .as-story-quote--dropcap::first-letter {
+      float: left;
+      font: 800 88px/0.7 'DM Sans', sans-serif;
+      margin: 4px 12px 0 0;
+      color: #0C0A3E;
+      opacity: 0.18;
+    }
+
+    /* Card 04 — White ground with navy, large typographic quote mark */
+    .as-story--four {
+      background: #ffffff;
+      color: #0C0A3E;
+      grid-column: 1 / span 2;
+      grid-row: 3;
+      border-top: 4px solid #CCFF33;
+      padding: 48px 40px;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 32px;
+      align-items: start;
+    }
+    .as-story--four .as-story-number {
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 48px !important;
+      letter-spacing: -0.04em;
+      opacity: 0.08;
+      color: #0C0A3E;
+      line-height: 1;
+    }
+    .as-story--four .as-story-body {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .as-story--four .as-story-footer {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .as-story--four .as-story-quote {
+      color: #0C0A3E !important;
+      font-size: clamp(18px, 2.5vw, 22px) !important;
+      font-weight: 400 !important;
+      font-style: italic;
+    }
+
+    /* ── SOLIDARITY STATEMENT ─────────────────────────── */
+    .as-solidarity {
+      background: #CCFF33;
+      padding: 56px 24px;
+    }
+    .as-solidarity-inner {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .as-solidarity-text {
+      font: 400 clamp(20px, 3.5vw, 30px)/1.4 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      margin: 0 !important;
+      letter-spacing: -0.02em;
+    }
+    .as-solidarity-text strong {
+      font-weight: 800 !important;
+      color: #0C0A3E !important;
+      display: block;
+      font-size: 1.15em;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── SHARE YOUR STORY ─────────────────────────────── */
+    .as-share-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .as-label-tag {
+      display: inline-block;
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A89CED;
+      margin-bottom: 20px;
+    }
+
+    .as-share-heading {
+      font: 800 clamp(48px, 8vw, 72px)/0.85 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.05em !important;
+      margin: 0 0 16px;
+    }
+
+    .as-share-sub {
+      font: 400 16px/1.4 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.5) !important;
+      margin: 0;
+    }
+
+    .as-share-body {
+      font: 400 17px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 20px;
+    }
+    .as-share-body:last-of-type { margin-bottom: 32px; }
+
+    /* Form prompt */
+    .as-form-prompt {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .as-form-legend {
+      font: 700 14px/1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 !important;
+    }
+
+    .as-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .as-form-label {
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(12,10,62,0.55);
+    }
+
+    .as-form-textarea,
+    .as-form-input {
+      font: 400 16px/1.5 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      background: #ffffff;
+      border: 1.5px solid rgba(12,10,62,0.15);
+      padding: 16px 18px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: vertical;
+      outline: none;
+      border-radius: 0;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .as-form-textarea::placeholder,
+    .as-form-input::placeholder {
+      color: rgba(12,10,62,0.3);
+    }
+    .as-form-textarea:focus,
+    .as-form-input:focus {
+      border-color: #A89CED;
+      box-shadow: 0 0 0 3px rgba(168,156,237,0.15);
+    }
+
+    .as-form-hint {
+      font: 400 13px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.4) !important;
+      margin: 0 !important;
+    }
+
+    .as-form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      align-self: flex-start;
+      background: #0C0A3E;
+      color: #CCFF33;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 2px solid #0C0A3E;
+      padding: 18px 32px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .as-form-submit:hover {
+      background: #CCFF33;
+      color: #0C0A3E;
+      border-color: #CCFF33;
+    }
+    .as-form-arrow {
+      font-size: 18px;
+      transition: transform 0.2s;
+    }
+    .as-form-submit:hover .as-form-arrow {
+      transform: translateX(4px);
+    }
+
+    .as-form-note {
+      font: 400 13px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.45) !important;
+      margin: 0 !important;
+    }
+    .as-form-link {
+      color: #A89CED !important;
+      text-decoration: underline !important;
+      text-underline-offset: 2px;
+    }
+    .as-form-link:hover {
+      color: #0C0A3E !important;
+    }
+
+    /* ── NAVIGATION SECTION ───────────────────────────── */
+    .as-nav-heading {
+      font: 700 12px/1 'DM Sans', sans-serif !important;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(238,235,211,0.35) !important;
+      margin: 0 0 32px;
+    }
+
+    .as-nav-links {
+      display: flex;
+      gap: 3px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .as-nav-link {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(238,235,211,0.05);
+      border: 1px solid rgba(238,235,211,0.08);
+      padding: 28px 32px;
+      text-decoration: none !important;
+      color: #EEEBD3 !important;
+      min-width: 240px;
+      flex: 1;
+      max-width: 340px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .as-nav-link:hover {
+      background: rgba(204,255,51,0.06);
+      border-color: rgba(204,255,51,0.25);
+    }
+    .as-nav-link-label {
+      font: 700 18px/1.1 'DM Sans', sans-serif;
+      color: #EEEBD3;
+    }
+    .as-nav-link-desc {
+      font: 400 13px/1.4 'DM Sans', sans-serif;
+      color: rgba(238,235,211,0.4);
+    }
+    .as-nav-arrow {
+      font-size: 20px;
+      color: #CCFF33;
+      margin-top: 8px;
+    }
+
+    /* ── CTA ──────────────────────────────────────────── */
+    .as-cta {
+      background: #0C0A3E;
+      padding: 80px 24px;
+    }
+    .as-cta-heading {
+      font: 800 clamp(32px, 5vw, 44px)/0.9 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 0 16px;
+    }
+    .as-cta-body {
+      font: 400 17px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.55) !important;
+      max-width: 440px;
+      margin: 0 auto 32px !important;
+    }
+
+    .as-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E !important;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 18px 40px;
+      text-decoration: none !important;
+      transition: background 0.2s, color 0.2s;
+    }
+    .as-btn-primary:hover {
+      background: #ffffff;
+      color: #0C0A3E !important;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 900px) {
+      .as-framing {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .as-framing-pull {
+        position: static;
+      }
+      .as-stories-grid {
+        grid-template-columns: 1fr;
+      }
+      .as-story--two {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .as-story--four {
+        grid-column: 1;
+        grid-template-columns: 1fr;
+      }
+      .as-story--four .as-story-number {
+        grid-column: 1;
+        display: none;
+      }
+      .as-story--four .as-story-body,
+      .as-story--four .as-story-footer {
+        grid-column: 1;
+      }
+      .as-share-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .as-nav-links {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .as-nav-link {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .as-hero {
+        padding: 60px 24px 0;
+      }
+      .as-story {
+        padding: 32px 24px;
+      }
+      .as-story--four {
+        padding: 32px 24px;
+      }
+      .as-solidarity {
+        padding: 40px 24px;
+      }
+    }
+  </style>
+</Layout>

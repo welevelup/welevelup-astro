@@ -126,19 +126,22 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   /* Intro */
   .au-intro {
-    background: #EEEBD3;
-    padding: 80px 24px;
+    background: #EEEBD3 !important;
+    padding: 80px 24px !important;
+    box-sizing: border-box !important;
   }
   .au-intro-inner {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 800px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
   }
   .au-intro-p {
     font: 400 18px/1.75 'DM Sans', sans-serif !important;
     color: rgba(12,10,62,0.75) !important;
-    margin: 0 0 24px;
+    margin: 0 0 24px !important;
+    padding: 0 !important;
   }
-  .au-intro-p:last-child { margin: 0; }
+  .au-intro-p:last-child { margin: 0 !important; }
 
   /* Vision */
   .au-vision {

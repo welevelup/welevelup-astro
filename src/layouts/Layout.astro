@@ -24,7 +24,7 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">
   <head>
     <Fragment set:html={headHtml} />
-    <style>
+    <style is:global>
       /* Must come after WP CSS to win cascade — hides Elementor header/footer */
       header[data-elementor-type="header"],
       .elementor-location-header,
@@ -40,6 +40,34 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
     <meta property="og:image" content={ogImage} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Level Up" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@we_level_up" />
+    {title && <meta name="twitter:title" content={title} />}
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "NGO",
+      "name": "Level Up",
+      "alternateName": "welevelup.org",
+      "url": "https://welevelup.org",
+      "logo": "https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp",
+      "description": "Level Up is a UK-based feminist campaigning organisation working to advance reproductive justice, abortion decriminalisation and freedom from systemic violence.",
+      "foundingDate": "2018",
+      "email": "hello@welevelup.org",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "New Derwent House, 69–73 Theobalds Road",
+        "addressLocality": "London",
+        "postalCode": "WC1X 8TA",
+        "addressCountry": "GB"
+      },
+      "sameAs": [
+        "https://www.facebook.com/levelupaction",
+        "https://twitter.com/we_level_up",
+        "https://www.instagram.com/welevelup"
+      ]
+    })} />
   </head>
   <body class={bodyClass}>
     <slot />

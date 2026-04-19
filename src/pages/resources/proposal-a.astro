@@ -1,0 +1,458 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- ── Hero ─────────────────────────────────────────────── -->
+  <section class="ra-hero">
+    <div class="ra-hero-inner">
+      <p class="ra-campaign-tag">#NoMoreLyes</p>
+      <h1 class="ra-hero-headline">Relaxer<br/>Info Kit</h1>
+      <p class="ra-hero-sub">
+        Everything you need to understand the risks, find support,
+        and take action on chemical hair relaxers.
+      </p>
+      <div class="ra-hero-actions">
+        <a
+          href="https://levelup.yourmovement.org/p/no-more-lyes"
+          target="_blank"
+          rel="noopener"
+          class="ra-btn ra-btn--lime"
+        >Sign petition</a>
+        <a
+          href="https://levelup.movement-action.org/p/share-your-hair-story"
+          target="_blank"
+          rel="noopener"
+          class="ra-btn ra-btn--ghost"
+        >Share your hair story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Resource rows ─────────────────────────────────────── -->
+  <section class="ra-resources">
+    <div class="ra-resources-inner">
+
+      <!-- Category: Academic Research -->
+      <h2 class="ra-category">Academic Research</h2>
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--academic">ACADEMIC</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Use of Straighteners and Incident Uterine Cancer</p>
+          <p class="ra-row-meta">2022 &middot; Oxford Academic / NIH</p>
+          <p class="ra-row-desc">Landmark Sister Study cohort analysis linking chemical hair straightener use to significantly elevated uterine cancer risk.</p>
+        </div>
+        <a
+          href="https://doi.org/10.1093/jnci/djac165"
+          target="_blank"
+          rel="noopener"
+          class="ra-row-link"
+        >Read &rarr;</a>
+      </div>
+      <hr class="ra-divider" />
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--academic">ACADEMIC</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Hair Product Use and Breast Cancer Incidence</p>
+          <p class="ra-row-meta">2021 &middot; Carcinogenesis / Oxford Academic</p>
+          <p class="ra-row-desc">Prospective study examining the association between hair dye and chemical relaxer use and breast cancer risk in a large US cohort.</p>
+        </div>
+        <a
+          href="https://doi.org/10.1093/carcin/bgab041"
+          target="_blank"
+          rel="noopener"
+          class="ra-row-link"
+        >Read &rarr;</a>
+      </div>
+      <hr class="ra-divider" />
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--pdf">PDF</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Level Up's Parliamentary Submission</p>
+          <p class="ra-row-meta">Dec 2025 &middot; UK Parliament Written Evidence</p>
+          <p class="ra-row-desc">Level Up's formal written evidence to Parliament on the health risks of chemical hair relaxers and the need for regulatory action.</p>
+        </div>
+        <a
+          href="https://committees.parliament.uk/writtenevidence/160638/pdf/"
+          target="_blank"
+          rel="noopener"
+          class="ra-row-link"
+        >Download &rarr;</a>
+      </div>
+
+      <!-- Category: Media Coverage -->
+      <h2 class="ra-category">Media Coverage</h2>
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--article">ARTICLE</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">While Black Women Abandon Relaxers, Sales Climb in African Countries</p>
+          <p class="ra-row-meta">April 2024 &middot; The Examination</p>
+          <p class="ra-row-desc">Investigation into how major beauty corporations are expanding relaxer markets in Africa as Western consumers move away from the products.</p>
+        </div>
+        <a
+          href="https://theexamination.org"
+          target="_blank"
+          rel="noopener"
+          class="ra-row-link"
+        >Read &rarr;</a>
+      </div>
+      <hr class="ra-divider" />
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--article">ARTICLE</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Majority of Black British Women Suffer Side Effects</p>
+          <p class="ra-row-meta">May 2023 &middot; The Independent</p>
+          <p class="ra-row-desc">Survey findings revealing that most Black British women who use or have used chemical relaxers report experiencing adverse health effects.</p>
+        </div>
+        <a
+          href="https://independent.co.uk"
+          target="_blank"
+          rel="noopener"
+          class="ra-row-link"
+        >Read &rarr;</a>
+      </div>
+      <hr class="ra-divider" />
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--article">ARTICLE</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Hair-Straightening Products Entail Acute Kidney Failure Risk</p>
+          <p class="ra-row-meta">March 2024 &middot; Medscape</p>
+          <p class="ra-row-desc">Clinical reporting on studies linking chemical straightener exposure to acute kidney injury, expanding the known scope of associated health harms.</p>
+        </div>
+        <a
+          href="https://medscape.com"
+          target="_blank"
+          rel="noopener"
+          class="ra-row-link"
+        >Read &rarr;</a>
+      </div>
+
+      <!-- Category: Organisations & Support -->
+      <h2 class="ra-category">Organisations &amp; Support</h2>
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--org">ORG</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Treasure Tress</p>
+          <p class="ra-row-meta">Natural hair product discovery</p>
+          <p class="ra-row-desc">A platform helping people with Afro and textured hair discover products, routines, and community support for natural hair journeys.</p>
+        </div>
+        <a href="#" class="ra-row-link">Visit &rarr;</a>
+      </div>
+      <hr class="ra-divider" />
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--org">ORG</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Project Embrace</p>
+          <p class="ra-row-meta">Afro-textured hair representation</p>
+          <p class="ra-row-desc">Charity working to combat hair discrimination and promote positive representation of Afro-textured hair in media and public life.</p>
+        </div>
+        <a href="#" class="ra-row-link">Visit &rarr;</a>
+      </div>
+      <hr class="ra-divider" />
+
+      <div class="ra-row">
+        <span class="ra-badge ra-badge--org">ORG</span>
+        <div class="ra-row-body">
+          <p class="ra-row-title">Curlture UK</p>
+          <p class="ra-row-meta">Culture and curls</p>
+          <p class="ra-row-desc">Community space celebrating the intersection of culture and curl patterns, offering editorial, community events, and resources.</p>
+        </div>
+        <a href="#" class="ra-row-link">Visit &rarr;</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── CTA band ───────────────────────────────────────────── -->
+  <section class="ra-cta">
+    <div class="ra-cta-inner">
+      <h2 class="ra-cta-heading">Join the Level Up community</h2>
+      <p class="ra-cta-body">
+        Be the first to hear about new research, campaign milestones,
+        and ways to take action on the issues that matter to you.
+      </p>
+      <a
+        href="https://levelup.yourmovement.org/p/join-us"
+        target="_blank"
+        rel="noopener"
+        class="ra-btn ra-btn--lime"
+      >Join Us</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* ── Design tokens ──────────────────────────────────────────── */
+  .ra-hero,
+  .ra-resources,
+  .ra-cta {
+    --ra-navy:   #0C0A3E;
+    --ra-lime:   #CCFF33;
+    --ra-purple: #A89CED;
+    --ra-cream:  #EEEBD3;
+    --ra-font:   'DM Sans', system-ui, sans-serif;
+  }
+
+  /* ── Hero ───────────────────────────────────────────────────── */
+  .ra-hero {
+    background: var(--ra-navy);
+    padding: clamp(72px, 10vw, 120px) 24px clamp(64px, 9vw, 112px);
+  }
+
+  .ra-hero-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .ra-campaign-tag {
+    font: 700 13px/1 var(--ra-font);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ra-purple);
+    margin: 0 0 24px;
+  }
+
+  .ra-hero-headline {
+    font: 900 clamp(3.5rem, 9vw, 7rem)/0.92 var(--ra-font);
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    color: var(--ra-lime);
+    margin: 0 0 28px;
+  }
+
+  .ra-hero-sub {
+    font: 400 clamp(1rem, 1.5vw, 1.2rem)/1.65 var(--ra-font);
+    color: rgba(238, 235, 211, 0.72);
+    max-width: 560px;
+    margin: 0 0 40px;
+  }
+
+  .ra-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* ── Buttons ────────────────────────────────────────────────── */
+  .ra-btn {
+    display: inline-flex;
+    align-items: center;
+    font: 800 14px/1 var(--ra-font);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    text-decoration: none;
+    padding: 16px 32px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+
+  .ra-btn--lime {
+    background: var(--ra-lime);
+    color: var(--ra-navy);
+    border: 2px solid var(--ra-lime);
+  }
+  .ra-btn--lime:hover {
+    background: transparent;
+    color: var(--ra-lime);
+  }
+
+  .ra-btn--ghost {
+    background: transparent;
+    color: var(--ra-cream);
+    border: 2px solid rgba(238, 235, 211, 0.35);
+  }
+  .ra-btn--ghost:hover {
+    border-color: var(--ra-cream);
+    color: var(--ra-cream);
+  }
+
+  /* ── Resource rows section ──────────────────────────────────── */
+  .ra-resources {
+    background: var(--ra-cream);
+    padding: clamp(56px, 8vw, 96px) 24px clamp(64px, 9vw, 112px);
+  }
+
+  .ra-resources-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* Category label */
+  .ra-category {
+    font: 800 11px/1 var(--ra-font);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--ra-purple);
+    margin: 52px 0 20px;
+  }
+
+  .ra-category:first-child {
+    margin-top: 0;
+  }
+
+  /* Divider */
+  .ra-divider {
+    border: none;
+    border-top: 1px solid rgba(12, 10, 62, 0.08);
+    margin: 0;
+  }
+
+  /* Individual row */
+  .ra-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 22px 0;
+  }
+
+  /* Badge pill */
+  .ra-badge {
+    flex-shrink: 0;
+    font: 700 10px/1 var(--ra-font);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin-top: 4px;
+  }
+
+  .ra-badge--pdf {
+    background: var(--ra-navy);
+    color: var(--ra-lime);
+  }
+
+  .ra-badge--article {
+    background: rgba(12, 10, 62, 0.07);
+    color: var(--ra-navy);
+    border: 1px solid rgba(12, 10, 62, 0.15);
+  }
+
+  .ra-badge--academic {
+    background: var(--ra-purple);
+    color: #ffffff;
+  }
+
+  .ra-badge--org {
+    background: #ffffff;
+    color: var(--ra-navy);
+    border: 1px solid rgba(12, 10, 62, 0.2);
+  }
+
+  /* Row body */
+  .ra-row-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ra-row-title {
+    font: 700 16px/1.35 var(--ra-font);
+    color: var(--ra-navy);
+    margin: 0 0 4px;
+  }
+
+  .ra-row-meta {
+    font: 400 12px/1 var(--ra-font);
+    color: rgba(12, 10, 62, 0.45);
+    margin: 0 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ra-row-desc {
+    font: 400 14px/1.6 var(--ra-font);
+    color: rgba(12, 10, 62, 0.65);
+    margin: 0;
+  }
+
+  /* Arrow link */
+  .ra-row-link {
+    flex-shrink: 0;
+    font: 700 13px/1 var(--ra-font);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--ra-navy);
+    text-decoration: none;
+    padding: 10px 0 10px 16px;
+    white-space: nowrap;
+    margin-top: 2px;
+    transition: color 0.15s;
+    border-bottom: 2px solid var(--ra-lime);
+  }
+
+  .ra-row-link:hover {
+    color: var(--ra-purple);
+    border-bottom-color: var(--ra-purple);
+  }
+
+  /* ── CTA section ────────────────────────────────────────────── */
+  .ra-cta {
+    background: var(--ra-navy);
+    padding: clamp(64px, 9vw, 112px) 24px;
+    text-align: center;
+  }
+
+  .ra-cta-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .ra-cta-heading {
+    font: 900 clamp(2rem, 5vw, 3.25rem)/1.05 var(--ra-font);
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    color: var(--ra-cream);
+    margin: 0 0 20px;
+  }
+
+  .ra-cta-body {
+    font: 400 clamp(1rem, 1.4vw, 1.1rem)/1.65 var(--ra-font);
+    color: rgba(238, 235, 211, 0.6);
+    margin: 0 0 36px;
+  }
+
+  /* ── Mobile responsive ──────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .ra-row {
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px 0;
+    }
+
+    .ra-badge {
+      margin-top: 0;
+    }
+
+    .ra-row-link {
+      padding: 8px 0;
+      align-self: flex-start;
+    }
+
+    .ra-hero-actions {
+      flex-direction: column;
+    }
+
+    .ra-btn {
+      justify-content: center;
+      width: 100%;
+      max-width: 320px;
+    }
+  }
+</style>

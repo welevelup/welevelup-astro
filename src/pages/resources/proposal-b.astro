@@ -1,0 +1,583 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- ═══════════════════════════════════════════════════
+       1. HERO — Navy, colour-coded headline, muted desc
+  ═══════════════════════════════════════════════════ -->
+  <section class="rb-hero" aria-labelledby="rb-hero-heading">
+    <div class="rb-hero-inner">
+      <span class="rb-eyebrow">Campaign Resources</span>
+      <h1 id="rb-hero-heading" class="rb-hero-title">
+        #NoMoreLyes<br />
+        <em class="rb-hero-sub">Relaxer Info Kit</em>
+      </h1>
+      <p class="rb-hero-desc">
+        A curated library of research, media coverage and organisations
+        supporting the movement to remove toxic hair relaxers from UK shelves.
+      </p>
+      <div class="rb-hero-actions">
+        <a
+          href="https://levelup.yourmovement.org/p/no-more-lyes"
+          class="rb-btn rb-btn--lime"
+          target="_blank"
+          rel="noopener"
+        >Sign the petition →</a>
+        <a
+          href="/active-campaigns/nomorelyes-2"
+          class="rb-btn rb-btn--ghost"
+        >About the campaign</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       2. FILTER PILLS + CARD GRID
+  ═══════════════════════════════════════════════════ -->
+  <section class="rb-grid-section" aria-label="Resource library">
+    <div class="rb-grid-inner">
+
+      <!-- Filter pills — visual only -->
+      <div class="rb-filters" role="list" aria-label="Filter by type">
+        <button class="rb-pill rb-pill--active" role="listitem">All</button>
+        <button class="rb-pill" role="listitem">Academic</button>
+        <button class="rb-pill" role="listitem">Media Coverage</button>
+        <button class="rb-pill" role="listitem">Organisations</button>
+      </div>
+
+      <!-- Card grid -->
+      <div class="rb-grid" role="list">
+
+        <!-- ── ACADEMIC cards — purple bg ── -->
+        <article class="rb-card rb-card--academic" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--academic">Academic</span>
+          </div>
+          <h2 class="rb-card-title">
+            Uterine Cancer &amp; Hair Relaxer Exposure
+          </h2>
+          <p class="rb-card-meta">2022 · Journal of the National Cancer Institute</p>
+          <p class="rb-card-desc">
+            Prospective cohort study linking frequent relaxer use to elevated uterine cancer risk.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://academic.oup.com/jnci/article/114/12/1636/6759686"
+              class="rb-link-btn rb-link-btn--white"
+              target="_blank"
+              rel="noopener"
+            >Read →</a>
+          </div>
+        </article>
+
+        <article class="rb-card rb-card--academic" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--academic">Academic</span>
+          </div>
+          <h2 class="rb-card-title">
+            Hair Relaxers &amp; Breast Cancer Risk
+          </h2>
+          <p class="rb-card-meta">2021 · International Journal of Cancer</p>
+          <p class="rb-card-desc">
+            Sister Study analysis showing higher incidence among Black women using chemical straighteners.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://onlinelibrary.wiley.com/doi/10.1002/ijc.33427"
+              class="rb-link-btn rb-link-btn--white"
+              target="_blank"
+              rel="noopener"
+            >Read →</a>
+          </div>
+        </article>
+
+        <article class="rb-card rb-card--pdf" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--pdf">PDF</span>
+          </div>
+          <h2 class="rb-card-title">
+            Level Up Parliamentary Submission
+          </h2>
+          <p class="rb-card-meta">2025 · Level Up</p>
+          <p class="rb-card-desc">
+            Formal evidence submitted to the APPG on Beauty &amp; Wellbeing calling for mandatory disclosure.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="/active-campaigns/nomorelyes-2"
+              class="rb-link-btn rb-link-btn--lime"
+            >Download →</a>
+          </div>
+        </article>
+
+        <!-- ── ARTICLE cards — cream bg ── -->
+        <article class="rb-card rb-card--article" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--article">Media</span>
+          </div>
+          <h2 class="rb-card-title">
+            The Chemical in Your Relaxer
+          </h2>
+          <p class="rb-card-meta">2024 · The Examination</p>
+          <p class="rb-card-desc">
+            Investigative feature mapping the UK hair-care industry's slow response to carcinogen evidence.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://theexamination.org"
+              class="rb-link-btn rb-link-btn--navy"
+              target="_blank"
+              rel="noopener"
+            >Read →</a>
+          </div>
+        </article>
+
+        <article class="rb-card rb-card--article" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--article">Media</span>
+          </div>
+          <h2 class="rb-card-title">
+            Why Black Women Are Still Using Toxic Products
+          </h2>
+          <p class="rb-card-meta">2023 · The Independent</p>
+          <p class="rb-card-desc">
+            Analysis of systemic inequity in beauty regulation and the burden placed on Black consumers.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://independent.co.uk"
+              class="rb-link-btn rb-link-btn--navy"
+              target="_blank"
+              rel="noopener"
+            >Read →</a>
+          </div>
+        </article>
+
+        <article class="rb-card rb-card--article" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--article">Media</span>
+          </div>
+          <h2 class="rb-card-title">
+            Hair Relaxers and Cancer: What Clinicians Should Know
+          </h2>
+          <p class="rb-card-meta">2024 · Medscape</p>
+          <p class="rb-card-desc">
+            Clinical briefing on the emerging evidence and guidance for oncology practitioners.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://medscape.com"
+              class="rb-link-btn rb-link-btn--navy"
+              target="_blank"
+              rel="noopener"
+            >Read →</a>
+          </div>
+        </article>
+
+        <!-- ── ORG cards — white/navy border ── -->
+        <article class="rb-card rb-card--org" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--org">Organisation</span>
+          </div>
+          <h2 class="rb-card-title">Treasure Tress</h2>
+          <p class="rb-card-meta">Community · UK</p>
+          <p class="rb-card-desc">
+            Subscription box and platform championing natural Black hair care and safer alternatives.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://treasuretress.com"
+              class="rb-link-btn rb-link-btn--navy"
+              target="_blank"
+              rel="noopener"
+            >Visit →</a>
+          </div>
+        </article>
+
+        <article class="rb-card rb-card--org" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--org">Organisation</span>
+          </div>
+          <h2 class="rb-card-title">Project Embrace</h2>
+          <p class="rb-card-meta">Advocacy · UK</p>
+          <p class="rb-card-desc">
+            Campaigns to end hair discrimination and celebrate natural textures in British workplaces.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://projectembrace.co.uk"
+              class="rb-link-btn rb-link-btn--navy"
+              target="_blank"
+              rel="noopener"
+            >Visit →</a>
+          </div>
+        </article>
+
+        <article class="rb-card rb-card--org" role="listitem">
+          <div class="rb-card-top">
+            <span class="rb-badge rb-badge--org">Organisation</span>
+          </div>
+          <h2 class="rb-card-title">Curlture UK</h2>
+          <p class="rb-card-meta">Community · UK</p>
+          <p class="rb-card-desc">
+            Digital community and resource hub for people embracing their natural curl patterns.
+          </p>
+          <div class="rb-card-foot">
+            <a
+              href="https://curlture.co.uk"
+              class="rb-link-btn rb-link-btn--navy"
+              target="_blank"
+              rel="noopener"
+            >Visit →</a>
+          </div>
+        </article>
+
+      </div><!-- /rb-grid -->
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       4. CTA STRIP — Navy
+  ═══════════════════════════════════════════════════ -->
+  <section class="rb-cta" aria-label="Join Level Up">
+    <div class="rb-cta-inner">
+      <h2 class="rb-cta-title">Join the Level Up community</h2>
+      <p class="rb-cta-body">
+        Campaign updates, event invitations, and feminist thinking —
+        straight to your inbox.
+      </p>
+      <a
+        href="https://levelup.yourmovement.org/p/join-us"
+        class="rb-btn rb-btn--lime"
+        target="_blank"
+        rel="noopener"
+      >Join Us</a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* ═══════════════════════════════════════════════════
+     PROPOSAL B — Typed Cards  (namespace: rb-)
+  ═══════════════════════════════════════════════════ */
+
+  /* Tokens */
+  .rb-hero,
+  .rb-grid-section,
+  .rb-cta {
+    --rb-navy:   #0C0A3E;
+    --rb-lime:   #CCFF33;
+    --rb-purple: #A89CED;
+    --rb-cream:  #EEEBD3;
+    --rb-white:  #FFFFFF;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* ──────────────────────────────────────────────────
+     1. HERO
+  ────────────────────────────────────────────────── */
+  .rb-hero {
+    background: var(--rb-navy);
+    padding: clamp(64px, 10vw, 120px) 24px clamp(56px, 8vw, 100px);
+  }
+  .rb-hero-inner {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .rb-eyebrow {
+    display: inline-block;
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--rb-purple);
+    margin-bottom: 24px;
+  }
+  .rb-hero-title {
+    font: 800 clamp(48px, 10vw, 88px)/0.88 'DM Sans', sans-serif;
+    color: var(--rb-white);
+    letter-spacing: -0.04em;
+    margin: 0 0 28px;
+  }
+  .rb-hero-sub {
+    display: block;
+    color: var(--rb-lime);
+    font-style: italic;
+    font-weight: 800;
+  }
+  .rb-hero-desc {
+    font: 400 18px/1.6 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.55);
+    max-width: 520px;
+    margin: 0 0 36px;
+  }
+  .rb-hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* ──────────────────────────────────────────────────
+     Shared buttons
+  ────────────────────────────────────────────────── */
+  .rb-btn {
+    display: inline-block;
+    font: 700 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 16px 32px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .rb-btn--lime {
+    background: var(--rb-lime);
+    color: var(--rb-navy);
+  }
+  .rb-btn--lime:hover { background: var(--rb-white); color: var(--rb-navy); }
+  .rb-btn--ghost {
+    background: transparent;
+    color: var(--rb-cream);
+    border: 1.5px solid rgba(238, 235, 211, 0.3);
+  }
+  .rb-btn--ghost:hover {
+    border-color: var(--rb-lime);
+    color: var(--rb-lime);
+  }
+
+  /* ──────────────────────────────────────────────────
+     2. GRID SECTION
+  ────────────────────────────────────────────────── */
+  .rb-grid-section {
+    background: var(--rb-white);
+    padding: clamp(48px, 8vw, 96px) 24px clamp(64px, 10vw, 120px);
+  }
+  .rb-grid-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* ── Filter pills ── */
+  .rb-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .rb-pill {
+    font: 600 12px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 10px 20px;
+    border: 1.5px solid rgba(12, 10, 62, 0.18);
+    background: transparent;
+    color: var(--rb-navy);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .rb-pill:hover,
+  .rb-pill--active {
+    background: var(--rb-navy);
+    color: var(--rb-lime);
+    border-color: var(--rb-navy);
+  }
+
+  /* ── Card grid — 3 col ── */
+  .rb-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* ──────────────────────────────────────────────────
+     3. CARDS — shared shell
+  ────────────────────────────────────────────────── */
+  .rb-card {
+    display: flex;
+    flex-direction: column;
+    padding: 28px 28px 24px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .rb-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(12, 10, 62, 0.12);
+  }
+  .rb-card-top {
+    margin-bottom: 14px;
+  }
+  .rb-card-title {
+    font: 700 18px/1.25 'DM Sans', sans-serif;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+  .rb-card-meta {
+    font: 400 12px/1.4 'DM Sans', sans-serif;
+    margin: 0 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .rb-card-desc {
+    font: 400 14px/1.55 'DM Sans', sans-serif;
+    margin: 0;
+    flex: 1;
+  }
+  .rb-card-foot {
+    margin-top: 24px;
+  }
+
+  /* ── Card type: ACADEMIC — purple bg ── */
+  .rb-card--academic {
+    background: var(--rb-purple);
+  }
+  .rb-card--academic .rb-card-title { color: var(--rb-navy); }
+  .rb-card--academic .rb-card-meta  { color: rgba(12, 10, 62, 0.55); }
+  .rb-card--academic .rb-card-desc  { color: rgba(12, 10, 62, 0.75); }
+
+  /* ── Card type: ARTICLE — cream bg ── */
+  .rb-card--article {
+    background: var(--rb-cream);
+  }
+  .rb-card--article .rb-card-title { color: var(--rb-navy); }
+  .rb-card--article .rb-card-meta  { color: rgba(12, 10, 62, 0.5); }
+  .rb-card--article .rb-card-desc  { color: rgba(12, 10, 62, 0.7); }
+
+  /* ── Card type: PDF — navy bg ── */
+  .rb-card--pdf {
+    background: var(--rb-navy);
+  }
+  .rb-card--pdf .rb-card-title { color: var(--rb-lime); }
+  .rb-card--pdf .rb-card-meta  { color: rgba(204, 255, 51, 0.5); }
+  .rb-card--pdf .rb-card-desc  { color: var(--rb-cream); }
+
+  /* ── Card type: ORG — white, navy border ── */
+  .rb-card--org {
+    background: var(--rb-white);
+    border: 1.5px solid rgba(12, 10, 62, 0.14);
+  }
+  .rb-card--org .rb-card-title { color: var(--rb-navy); }
+  .rb-card--org .rb-card-meta  { color: rgba(12, 10, 62, 0.45); }
+  .rb-card--org .rb-card-desc  { color: rgba(12, 10, 62, 0.65); }
+  .rb-card--org:hover { border-color: var(--rb-navy); }
+
+  /* ──────────────────────────────────────────────────
+     Badges
+  ────────────────────────────────────────────────── */
+  .rb-badge {
+    display: inline-block;
+    font: 700 9px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 5px 10px;
+  }
+  .rb-badge--academic {
+    background: rgba(12, 10, 62, 0.14);
+    color: var(--rb-navy);
+  }
+  .rb-badge--article {
+    background: rgba(12, 10, 62, 0.1);
+    color: var(--rb-navy);
+  }
+  .rb-badge--pdf {
+    background: rgba(204, 255, 51, 0.15);
+    color: var(--rb-lime);
+  }
+  .rb-badge--org {
+    background: rgba(12, 10, 62, 0.07);
+    color: var(--rb-navy);
+  }
+
+  /* ──────────────────────────────────────────────────
+     Card link buttons
+  ────────────────────────────────────────────────── */
+  .rb-link-btn {
+    display: inline-block;
+    font: 700 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 11px 20px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, opacity 0.15s;
+  }
+  .rb-link-btn--white {
+    background: var(--rb-white);
+    color: var(--rb-navy);
+  }
+  .rb-link-btn--white:hover { background: var(--rb-navy); color: var(--rb-white); }
+  .rb-link-btn--navy {
+    background: var(--rb-navy);
+    color: var(--rb-white);
+  }
+  .rb-link-btn--navy:hover { background: var(--rb-purple); color: var(--rb-navy); }
+  .rb-link-btn--lime {
+    background: var(--rb-lime);
+    color: var(--rb-navy);
+  }
+  .rb-link-btn--lime:hover { background: var(--rb-white); color: var(--rb-navy); }
+
+  /* ──────────────────────────────────────────────────
+     4. CTA STRIP
+  ────────────────────────────────────────────────── */
+  .rb-cta {
+    background: var(--rb-navy);
+    padding: clamp(56px, 8vw, 96px) 24px;
+    text-align: center;
+  }
+  .rb-cta-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .rb-cta-title {
+    font: 800 clamp(28px, 5vw, 44px)/0.95 'DM Sans', sans-serif;
+    color: var(--rb-lime);
+    letter-spacing: -0.04em;
+    margin: 0 0 16px;
+  }
+  .rb-cta-body {
+    font: 400 17px/1.6 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.55);
+    margin: 0 0 36px;
+  }
+
+  /* ──────────────────────────────────────────────────
+     RESPONSIVE
+  ────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .rb-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .rb-grid {
+      grid-template-columns: 1fr;
+    }
+    .rb-hero-title {
+      font-size: clamp(36px, 11vw, 56px);
+    }
+    .rb-hero-actions {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .rb-btn {
+      width: 100%;
+      text-align: center;
+    }
+    .rb-filters {
+      gap: 6px;
+    }
+    .rb-pill {
+      font-size: 11px;
+      padding: 9px 14px;
+    }
+  }
+</style>

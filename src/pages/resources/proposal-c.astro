@@ -1,0 +1,660 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- ═══════════════════════════════════════════════════════════
+       HERO — cream background, editorial oversized type
+  ════════════════════════════════════════════════════════════ -->
+  <section class="rc-hero" aria-labelledby="rc-hero-heading">
+    <div class="rc-hero-bg-text" aria-hidden="true">#NOMORELYES</div>
+    <div class="rc-hero-inner">
+      <span class="rc-eyebrow">Campaign Resources</span>
+      <h1 id="rc-hero-heading" class="rc-hero-title">
+        Relaxer<br/>Info Kit
+      </h1>
+      <p class="rc-hero-subtitle">
+        Everything you need to understand the risks, share the research,
+        and take action on chemical hair relaxers.
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       TWO-COLUMN — sticky sidebar + staggered content
+  ════════════════════════════════════════════════════════════ -->
+  <section class="rc-body">
+    <div class="rc-body-inner">
+
+      <!-- LEFT SIDEBAR -->
+      <aside class="rc-sidebar" aria-label="Campaign info and actions">
+        <p class="rc-sidebar-campaign">&#35;NoMoreLyes</p>
+        <p class="rc-sidebar-desc">
+          Level Up's campaign challenging L'Oréal and the relaxer industry
+          to be honest about the health risks associated with chemical
+          hair straighteners — backed by peer-reviewed research and
+          community testimony.
+        </p>
+
+        <div class="rc-sidebar-stats">
+          <div class="rc-stat">
+            <span class="rc-stat-num">9+</span>
+            <span class="rc-stat-label">Academic studies reviewed</span>
+          </div>
+          <div class="rc-stat">
+            <span class="rc-stat-num">2025</span>
+            <span class="rc-stat-label">Parliamentary submission</span>
+          </div>
+        </div>
+
+        <hr class="rc-divider" />
+
+        <nav class="rc-sidebar-actions" aria-label="Campaign actions">
+          <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="rc-action-link">
+            Sign petition →
+          </a>
+          <a href="https://levelup.movement-action.org/p/share-your-hair-story" target="_blank" rel="noopener" class="rc-action-link">
+            Share your hair story →
+          </a>
+          <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="rc-action-link">
+            Open letter to L'Oréal →
+          </a>
+        </nav>
+      </aside>
+
+      <!-- RIGHT CONTENT -->
+      <div class="rc-content">
+
+        <!-- Featured resource card -->
+        <article class="rc-featured" aria-label="Featured resource">
+          <span class="rc-featured-badge">Key Document</span>
+          <h2 class="rc-featured-title">
+            Level Up's Parliamentary Submission 2025
+          </h2>
+          <p class="rc-featured-desc">
+            Our formal submission to Parliament outlining the evidence base
+            for mandatory labelling, independent safety testing, and consumer
+            rights reform for chemical hair relaxers sold in the UK.
+          </p>
+          <a
+            href="/active-campaigns/nomorelyes-2"
+            class="rc-featured-btn"
+          >
+            Download PDF →
+          </a>
+        </article>
+
+        <!-- Staggered resource list -->
+        <ol class="rc-list" aria-label="All campaign resources">
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">01</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Chemical Relaxers &amp; Uterine Cancer Risk
+              </h3>
+              <p class="rc-item-meta">Sister Study (NIEHS) · 2022</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge">Research</span>
+              <a href="/active-campaigns/nomorelyes-2" class="rc-item-link" aria-label="Read Chemical Relaxers and Uterine Cancer Risk">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">02</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Breast Cancer &amp; Hair Straightener Use
+              </h3>
+              <p class="rc-item-meta">Journal of the National Cancer Institute · 2020</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge">Research</span>
+              <a href="/active-campaigns/nomorelyes-2" class="rc-item-link" aria-label="Read Breast Cancer and Hair Straightener Use">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">03</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Endocrine-Disrupting Chemicals in Hair Products
+              </h3>
+              <p class="rc-item-meta">Environmental Health Perspectives · 2019</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge">Research</span>
+              <a href="/active-campaigns/nomorelyes-2" class="rc-item-link" aria-label="Read Endocrine-Disrupting Chemicals in Hair Products">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">04</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                #NoMoreLyes Open Letter to L'Oréal
+              </h3>
+              <p class="rc-item-meta">Level Up · 2024</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge rc-type-badge--action">Action</span>
+              <a href="/active-campaigns/nomorelyes-open-letter-to-loreal" class="rc-item-link" aria-label="Read the Open Letter to L'Oréal">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">05</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Relaxer Market Analysis: UK Consumer Exposure
+              </h3>
+              <p class="rc-item-meta">Level Up Research · 2024</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge">Report</span>
+              <a href="/active-campaigns/nomorelyes-2" class="rc-item-link" aria-label="Read Relaxer Market Analysis">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">06</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Fibroids &amp; Chemical Hair Relaxer Exposure
+              </h3>
+              <p class="rc-item-meta">American Journal of Epidemiology · 2012</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge">Research</span>
+              <a href="/active-campaigns/nomorelyes-2" class="rc-item-link" aria-label="Read Fibroids and Chemical Hair Relaxer Exposure">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">07</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Scalp Penetration &amp; Systemic Absorption in Relaxers
+              </h3>
+              <p class="rc-item-meta">Toxicology Letters · 2021</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge">Research</span>
+              <a href="/active-campaigns/nomorelyes-2" class="rc-item-link" aria-label="Read Scalp Penetration and Systemic Absorption">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">08</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Community Hair Stories — Lived Experience Testimony
+              </h3>
+              <p class="rc-item-meta">Level Up Community · 2023–2025</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge rc-type-badge--community">Community</span>
+              <a href="https://levelup.movement-action.org/p/share-your-hair-story" target="_blank" rel="noopener" class="rc-item-link" aria-label="Read Community Hair Stories">↗</a>
+            </div>
+          </li>
+
+          <li class="rc-item">
+            <span class="rc-item-num" aria-hidden="true">09</span>
+            <div class="rc-item-body">
+              <h3 class="rc-item-title">
+                Ovarian Cancer Risk &amp; Hair Product Chemicals
+              </h3>
+              <p class="rc-item-meta">Cancer Prevention Research · 2023</p>
+            </div>
+            <div class="rc-item-end">
+              <span class="rc-type-badge">Research</span>
+              <a href="/active-campaigns/nomorelyes-2" class="rc-item-link" aria-label="Read Ovarian Cancer Risk and Hair Product Chemicals">↗</a>
+            </div>
+          </li>
+
+        </ol>
+      </div><!-- /rc-content -->
+    </div><!-- /rc-body-inner -->
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       NAVY CTA
+  ════════════════════════════════════════════════════════════ -->
+  <section class="rc-cta" aria-labelledby="rc-cta-heading">
+    <div class="rc-cta-inner">
+      <h2 id="rc-cta-heading" class="rc-cta-title">
+        Join the Level Up community
+      </h2>
+      <p class="rc-cta-body">
+        Receive campaign updates, research summaries, and actions you can
+        take — straight to your inbox.
+      </p>
+      <a
+        href="https://levelup.yourmovement.org/p/join-us"
+        target="_blank"
+        rel="noopener"
+        class="rc-cta-btn"
+      >
+        Join us →
+      </a>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  /* ── Tokens ─────────────────────────────────────────────── */
+  .rc-hero,
+  .rc-body,
+  .rc-cta {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════════════════════════ */
+  .rc-hero {
+    background: #EEEBD3;
+    position: relative;
+    overflow: hidden;
+    padding: 100px 24px 88px;
+  }
+
+  .rc-hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-8deg);
+    font: 900 clamp(72px, 18vw, 200px)/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    opacity: 0.04;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.04em;
+  }
+
+  .rc-hero-inner {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .rc-eyebrow {
+    display: inline-block;
+    font: 600 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #A89CED;
+    margin-bottom: 24px;
+  }
+
+  .rc-hero-title {
+    font: 900 clamp(56px, 11vw, 120px)/0.88 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.05em;
+    margin: 0 0 32px;
+  }
+
+  .rc-hero-subtitle {
+    font: 400 18px/1.65 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.6);
+    max-width: 540px;
+    margin: 0;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     TWO-COLUMN BODY
+  ═══════════════════════════════════════════════════════════ */
+  .rc-body {
+    background: #EEEBD3;
+    border-top: 1px solid rgba(12, 10, 62, 0.08);
+    padding: 72px 24px 96px;
+  }
+
+  .rc-body-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* ── Sidebar ─────────────────────────────────────────────── */
+  .rc-sidebar {
+    position: sticky;
+    top: 120px;
+  }
+
+  .rc-sidebar-campaign {
+    font: 700 10px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #0C0A3E;
+    margin: 0 0 16px;
+  }
+
+  .rc-sidebar-desc {
+    font: 400 14px/1.65 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.65);
+    margin: 0 0 28px;
+  }
+
+  .rc-sidebar-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .rc-stat {}
+
+  .rc-stat-num {
+    display: block;
+    font: 800 32px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+  }
+
+  .rc-stat-label {
+    display: block;
+    font: 400 12px/1.4 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.55);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .rc-divider {
+    border: none;
+    border-top: 1px solid rgba(12, 10, 62, 0.14);
+    margin: 0 0 24px;
+  }
+
+  .rc-sidebar-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .rc-action-link {
+    display: block;
+    font: 700 13px/1 'DM Sans', sans-serif;
+    color: #CCFF33;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(12, 10, 62, 0.1);
+    /* Render on cream bg — needs contrast */
+    color: #0C0A3E;
+    transition: color 0.15s, padding-left 0.15s;
+  }
+
+  /* Override to lime on hover for visibility */
+  .rc-action-link:hover {
+    color: #A89CED;
+    padding-left: 6px;
+  }
+
+  /* ── Featured card ───────────────────────────────────────── */
+  .rc-featured {
+    background: #0C0A3E;
+    padding: 40px 44px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .rc-featured-badge {
+    display: inline-block;
+    font: 700 10px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: #0C0A3E;
+    background: #A89CED;
+    padding: 5px 10px;
+    margin-bottom: 20px;
+  }
+
+  .rc-featured-title {
+    font: 800 clamp(22px, 3vw, 30px)/1.1 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+  }
+
+  .rc-featured-desc {
+    font: 400 15px/1.65 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.65);
+    margin: 0 0 28px;
+    max-width: 580px;
+  }
+
+  .rc-featured-btn {
+    display: inline-block;
+    font: 800 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: #CCFF33;
+    color: #0C0A3E;
+    text-decoration: none;
+    padding: 14px 28px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .rc-featured-btn:hover {
+    background: #EEEBD3;
+    color: #0C0A3E;
+  }
+
+  /* ── Resource list ───────────────────────────────────────── */
+  .rc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .rc-item {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: 20px;
+    align-items: center;
+    padding: 22px 0;
+    border-bottom: 1px solid rgba(12, 10, 62, 0.1);
+    transition: background 0.15s;
+  }
+
+  .rc-item:first-child {
+    border-top: 1px solid rgba(12, 10, 62, 0.1);
+  }
+
+  .rc-item:hover {
+    background: rgba(12, 10, 62, 0.03);
+    margin: 0 -12px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .rc-item-num {
+    font: 800 13px/1 'DM Sans', sans-serif;
+    color: #CCFF33;
+    /* On cream bg need contrast — use navy instead */
+    color: rgba(12, 10, 62, 0.25);
+    letter-spacing: 0.04em;
+    align-self: center;
+  }
+
+  .rc-item-title {
+    font: 700 15px/1.3 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+
+  .rc-item-meta {
+    font: 400 12px/1 'DM Sans', sans-serif;
+    color: rgba(12, 10, 62, 0.45);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .rc-item-end {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .rc-type-badge {
+    display: inline-block;
+    font: 700 10px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 4px 8px;
+    background: rgba(12, 10, 62, 0.07);
+    color: rgba(12, 10, 62, 0.5);
+    white-space: nowrap;
+  }
+
+  .rc-type-badge--action {
+    background: rgba(168, 156, 237, 0.2);
+    color: #6B5BD6;
+  }
+
+  .rc-type-badge--community {
+    background: rgba(204, 255, 51, 0.25);
+    color: #5a7000;
+  }
+
+  .rc-item-link {
+    font: 800 18px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    text-decoration: none;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid rgba(12, 10, 62, 0.15);
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+
+  .rc-item-link:hover {
+    background: #0C0A3E;
+    color: #CCFF33;
+    border-color: #0C0A3E;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     CTA
+  ═══════════════════════════════════════════════════════════ */
+  .rc-cta {
+    background: #0C0A3E;
+    padding: 96px 24px;
+    text-align: center;
+  }
+
+  .rc-cta-inner {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .rc-cta-title {
+    font: 900 clamp(32px, 6vw, 56px)/0.95 'DM Sans', sans-serif;
+    color: #EEEBD3;
+    letter-spacing: -0.04em;
+    margin: 0 0 20px;
+  }
+
+  .rc-cta-body {
+    font: 400 17px/1.65 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.6);
+    margin: 0 0 36px;
+  }
+
+  .rc-cta-btn {
+    display: inline-block;
+    font: 900 14px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: #CCFF33;
+    color: #0C0A3E;
+    text-decoration: none;
+    padding: 18px 48px;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .rc-cta-btn:hover {
+    background: #EEEBD3;
+    color: #0C0A3E;
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     RESPONSIVE
+  ═══════════════════════════════════════════════════════════ */
+  @media (max-width: 900px) {
+    .rc-body-inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .rc-sidebar {
+      position: static;
+      /* Horizontal layout for stats on tablet */
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 32px;
+    }
+
+    .rc-sidebar-campaign { grid-column: 1 / -1; }
+    .rc-sidebar-desc { grid-column: 1 / -1; }
+    .rc-sidebar-stats { flex-direction: row; grid-column: 1 / -1; gap: 32px; }
+    .rc-divider { grid-column: 1 / -1; }
+    .rc-sidebar-actions { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; gap: 0 24px; }
+    .rc-action-link { border-bottom: none; border-left: 2px solid rgba(12,10,62,0.12); padding: 8px 0 8px 14px; }
+    .rc-action-link:hover { padding-left: 18px; }
+  }
+
+  @media (max-width: 640px) {
+    .rc-hero { padding: 72px 20px 64px; }
+
+    .rc-body { padding: 48px 20px 72px; }
+
+    .rc-sidebar {
+      display: block;
+    }
+
+    .rc-sidebar-stats { flex-direction: row; gap: 24px; }
+
+    .rc-sidebar-actions { flex-direction: column; }
+    .rc-action-link { border-bottom: 1px solid rgba(12,10,62,0.1); border-left: none; padding: 14px 0; }
+    .rc-action-link:hover { padding-left: 6px; }
+
+    .rc-featured { padding: 28px 24px; }
+
+    .rc-item {
+      grid-template-columns: 32px 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .rc-item-end {
+      grid-column: 2;
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+    }
+
+    .rc-cta { padding: 72px 20px; }
+  }
+</style>

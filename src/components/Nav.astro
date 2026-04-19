@@ -68,7 +68,7 @@
 
       <div class="lu-nav-group">
         <span>Community ▾</span>
-        <div class="lu-nav-drop lu-nav-mega">
+        <div class="lu-nav-drop lu-nav-mega lu-nav-mega--center">
           <div class="lu-nav-mega-grid" style="grid-template-columns: repeat(2, 1fr);">
             <div class="lu-nav-mega-col">
               <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="lu-nav-mega-title">Islington Council Campaign</a>
@@ -248,6 +248,12 @@
   }
   .lu-nav-mega-col:nth-child(3n) { border-right: none; }
   .lu-nav-mega-col:nth-child(n+4) { border-bottom: none; }
+  /* Centered mega dropdown */
+  .lu-nav-mega--center {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
   /* Wide dropdown for Community Campaigns */
   .lu-nav-drop--wide { min-width: 420px; }
   .lu-nav-drop-cols {

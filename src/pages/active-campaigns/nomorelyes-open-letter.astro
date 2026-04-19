@@ -106,6 +106,62 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
+  <!-- SIGN CTA -->
+  <section class="ol-cta">
+    <div class="ol-sign-inner">
+      <div class="ol-sign-left">
+        <h2>Add your name</h2>
+        <p>Over 5,000 people have already signed. Add your voice to the open letter demanding L'Oréal make hair relaxers safe — or remove them.</p>
+
+        <div class="ol-signers">
+          <p class="ol-signers-label">Recent signers</p>
+          <ul class="ol-signers-list">
+            <li><span class="ol-signer-name">Aisha K.</span><span class="ol-signer-loc">London</span></li>
+            <li><span class="ol-signer-name">Beverley T.</span><span class="ol-signer-loc">Birmingham</span></li>
+            <li><span class="ol-signer-name">Marcia W.</span><span class="ol-signer-loc">Manchester</span></li>
+            <li><span class="ol-signer-name">Priya S.</span><span class="ol-signer-loc">Bristol</span></li>
+            <li><span class="ol-signer-name">Dawn B.</span><span class="ol-signer-loc">Leeds</span></li>
+            <li><span class="ol-signer-name">Zoe A.</span><span class="ol-signer-loc">Glasgow</span></li>
+          </ul>
+          <p class="ol-signers-more">+ 5,000 others across the UK</p>
+        </div>
+      </div>
+
+      <div class="ol-sign-right">
+        <form class="ol-form" action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST">
+          <input type="hidden" name="_subject" value="New open letter signature — #NoMoreLyes" />
+          <input type="hidden" name="_next" value="https://welevelup.org/nomorelyes-open-letter-to-loreal/?signed=1" />
+          <div class="ol-form-row">
+            <div class="ol-form-field">
+              <label class="ol-form-label" for="ol-first-name">First name</label>
+              <input id="ol-first-name" class="ol-form-input" type="text" name="first_name" placeholder="Your first name" required />
+            </div>
+            <div class="ol-form-field">
+              <label class="ol-form-label" for="ol-last-name">Last name</label>
+              <input id="ol-last-name" class="ol-form-input" type="text" name="last_name" placeholder="Your last name" required />
+            </div>
+          </div>
+          <div class="ol-form-field">
+            <label class="ol-form-label" for="ol-email">Email address</label>
+            <input id="ol-email" class="ol-form-input" type="email" name="email" placeholder="hello@example.com" required />
+          </div>
+          <div class="ol-form-field">
+            <label class="ol-form-label" for="ol-postcode">Postcode</label>
+            <input id="ol-postcode" class="ol-form-input" type="text" name="postcode" placeholder="e.g. E1 6RF" />
+          </div>
+          <div class="ol-form-check">
+            <input type="checkbox" id="ol-updates" name="keep_me_updated" class="ol-check-input" />
+            <label for="ol-updates" class="ol-check-label">Keep me updated on this campaign and Level Up news</label>
+          </div>
+          <button type="submit" class="ol-form-submit">
+            Sign the open letter <span aria-hidden="true">→</span>
+          </button>
+          <p class="ol-form-note">Your details are stored securely. We will never share your personal data with third parties.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
   <!-- SIGNATORIES -->
   <section class="ol-section ol-section--cream">
     <div class="ol-content">
@@ -211,61 +267,6 @@ const { headInner, bodyClass } = extract(homeRaw);
   </section>
 
   <!-- SIGN CTA -->
-  <section class="ol-cta">
-    <div class="ol-sign-inner">
-      <div class="ol-sign-left">
-        <h2>Add your name</h2>
-        <p>Over 5,000 people have already signed. Add your voice to the open letter demanding L'Oréal make hair relaxers safe — or remove them.</p>
-
-        <div class="ol-signers">
-          <p class="ol-signers-label">Recent signers</p>
-          <ul class="ol-signers-list">
-            <li><span class="ol-signer-name">Aisha K.</span><span class="ol-signer-loc">London</span></li>
-            <li><span class="ol-signer-name">Beverley T.</span><span class="ol-signer-loc">Birmingham</span></li>
-            <li><span class="ol-signer-name">Marcia W.</span><span class="ol-signer-loc">Manchester</span></li>
-            <li><span class="ol-signer-name">Priya S.</span><span class="ol-signer-loc">Bristol</span></li>
-            <li><span class="ol-signer-name">Dawn B.</span><span class="ol-signer-loc">Leeds</span></li>
-            <li><span class="ol-signer-name">Zoe A.</span><span class="ol-signer-loc">Glasgow</span></li>
-          </ul>
-          <p class="ol-signers-more">+ 5,000 others across the UK</p>
-        </div>
-      </div>
-
-      <div class="ol-sign-right">
-        <form class="ol-form" action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST">
-          <input type="hidden" name="_subject" value="New open letter signature — #NoMoreLyes" />
-          <input type="hidden" name="_next" value="https://welevelup.org/nomorelyes-open-letter-to-loreal/?signed=1" />
-          <div class="ol-form-row">
-            <div class="ol-form-field">
-              <label class="ol-form-label" for="ol-first-name">First name</label>
-              <input id="ol-first-name" class="ol-form-input" type="text" name="first_name" placeholder="Your first name" required />
-            </div>
-            <div class="ol-form-field">
-              <label class="ol-form-label" for="ol-last-name">Last name</label>
-              <input id="ol-last-name" class="ol-form-input" type="text" name="last_name" placeholder="Your last name" required />
-            </div>
-          </div>
-          <div class="ol-form-field">
-            <label class="ol-form-label" for="ol-email">Email address</label>
-            <input id="ol-email" class="ol-form-input" type="email" name="email" placeholder="hello@example.com" required />
-          </div>
-          <div class="ol-form-field">
-            <label class="ol-form-label" for="ol-postcode">Postcode</label>
-            <input id="ol-postcode" class="ol-form-input" type="text" name="postcode" placeholder="e.g. E1 6RF" />
-          </div>
-          <div class="ol-form-check">
-            <input type="checkbox" id="ol-updates" name="keep_me_updated" class="ol-check-input" />
-            <label for="ol-updates" class="ol-check-label">Keep me updated on this campaign and Level Up news</label>
-          </div>
-          <button type="submit" class="ol-form-submit">
-            Sign the open letter <span aria-hidden="true">→</span>
-          </button>
-          <p class="ol-form-note">Your details are stored securely. We will never share your personal data with third parties.</p>
-        </form>
-      </div>
-    </div>
-  </section>
-
   <!-- REFERENCES -->
   <section class="ol-section ol-section--white ol-references-section">
     <div class="ol-content">
@@ -288,11 +289,42 @@ const { headInner, bodyClass } = extract(homeRaw);
   </section>
 
   <!-- HAIR STORIES -->
-  <section class="ol-section ol-section--white">
-    <div class="ol-content">
+  <section class="ol-section ol-section--cream">
+    <div class="ol-hs-inner">
       <span class="ol-label ol-label--dark">Community voices</span>
-      <h2>Real experiences</h2>
-      <p>Black women across the UK have shared what using hair relaxers has meant for their health. <a href="/memory/hair-stories" class="ol-inline-link">Read their stories →</a></p>
+      <h2>Hair stories</h2>
+      <p class="ol-hs-intro">Black women across the UK have shared what using hair relaxers has meant for their lives and health.</p>
+
+      <div class="ol-hs-grid">
+        <div class="ol-hs-card">
+          <p class="ol-hs-quote">"I've been relaxing my hair since I was a child. It was never a choice — it was survival in a world that told me my natural hair wasn't professional."</p>
+          <div class="ol-hs-meta">
+            <span class="ol-hs-name">DJ Mystikle Blue</span>
+            <span class="ol-hs-loc">UK</span>
+          </div>
+        </div>
+        <div class="ol-hs-card">
+          <p class="ol-hs-quote">"I developed fibroids in my 30s. No doctor ever asked me about my hair products. I had to connect those dots myself, years later."</p>
+          <div class="ol-hs-meta">
+            <span class="ol-hs-name">Emma</span>
+            <span class="ol-hs-loc">UK</span>
+          </div>
+        </div>
+        <div class="ol-hs-card">
+          <p class="ol-hs-quote">"The burns on my scalp were so bad I had to take time off work. The salon said it was normal. It was not normal."</p>
+          <div class="ol-hs-meta">
+            <span class="ol-hs-name">Anonymous</span>
+          </div>
+        </div>
+        <div class="ol-hs-card">
+          <p class="ol-hs-quote">"I want my daughter to grow up knowing her hair is beautiful exactly as it grows. But I also want her to be safe if she ever chooses to chemically treat it."</p>
+          <div class="ol-hs-meta">
+            <span class="ol-hs-name">Anonymous</span>
+          </div>
+        </div>
+      </div>
+
+      <a href="/memory/hair-stories" class="ol-hs-link">Read all hair stories →</a>
     </div>
   </section>
 
@@ -630,6 +662,62 @@ const { headInner, bodyClass } = extract(homeRaw);
     color: rgba(12,10,62,0.7);
   }
   .ol-refs-list em { font-style: italic; }
+
+  /* HAIR STORIES */
+  .ol-hs-inner { max-width: 1100px; margin: 0 auto; padding: 0; }
+  .ol-hs-intro {
+    font: 400 18px/1.6 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.7) !important;
+    margin: 0 0 40px !important;
+    max-width: 600px;
+  }
+  .ol-hs-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 36px;
+  }
+  .ol-hs-card {
+    background: #fff;
+    padding: 28px 24px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .ol-hs-quote {
+    font: 400 15px/1.65 'DM Sans', sans-serif !important;
+    color: rgba(12,10,62,0.8) !important;
+    margin: 0 !important;
+  }
+  .ol-hs-meta { border-top: 1px solid rgba(12,10,62,0.08); padding-top: 14px; }
+  .ol-hs-name {
+    display: block;
+    font: 700 13px/1 'DM Sans', sans-serif;
+    color: #0C0A3E;
+  }
+  .ol-hs-loc {
+    display: block;
+    font: 400 12px/1 'DM Sans', sans-serif;
+    color: rgba(12,10,62,0.45);
+    margin-top: 4px;
+  }
+  .ol-hs-link {
+    display: inline-block;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    color: #0C0A3E !important;
+    text-decoration: underline;
+    letter-spacing: 0.02em;
+  }
+  .ol-hs-link:hover { color: #A89CED !important; }
+
+  @media (max-width: 900px) {
+    .ol-hs-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .ol-hs-grid { grid-template-columns: 1fr; }
+  }
 
   @media (max-width: 768px) {
     .ol-sig-notable { grid-template-columns: 1fr; }

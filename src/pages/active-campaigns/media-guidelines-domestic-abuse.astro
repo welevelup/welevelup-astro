@@ -20,6 +20,45 @@ const { headInner, bodyClass } = extract(homeRaw);
 >
   <Nav />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Level Up's Dignity for Dead Women campaign?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Dignity for Dead Women is Level Up's campaign challenging harmful and inaccurate media reporting on fatal domestic abuse. In the UK, a woman is murdered by her partner or ex-partner every three days. Level Up produced the UK's first media guidelines on how to report these deaths with accuracy and dignity."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are Level Up's media guidelines on domestic abuse reporting?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Level Up's media guidelines set standards for how journalists should report on domestic abuse deaths — avoiding victim-blaming language, not platforming perpetrators, and centring the voices of bereaved families. The guidelines have been backed by over 100 organisations and used to train over 500 journalists."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Level Up asking IPSO to do?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Level Up is asking IPSO (the Independent Press Standards Organisation) to adopt and enforce standards that ensure media coverage of domestic abuse deaths does not victim-blame, sensationalise, or cause additional harm to bereaved families. Over 29,200 people have signed the petition."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does media coverage affect families of domestic abuse victims?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Research shows that 2 in 3 bereaved families had their grieving negatively impacted by media coverage of their loved one's death. Victim-blaming headlines and sensational reporting cause lasting harm to families and distort public understanding of domestic abuse."
+        }
+      }
+    ]
+  })} />
+
   <!-- HERO — plain navy with background image -->
   <section class="dp-hero" style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Level-Up-at-IPSO-e1680513085600-800x418-1-e1769804722383.jpg'); background-size: cover; background-position: center;">
     <div class="dp-hero-overlay"></div>

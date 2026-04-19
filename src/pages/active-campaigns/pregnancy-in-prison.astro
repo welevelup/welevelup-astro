@@ -19,6 +19,45 @@ const { headInner, bodyClass } = extract(homeRaw);
 >
   <Nav />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How many pregnant women are in prison in England?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "196 pregnant women were held in prison in England in 2024/25. In that same period, 42 babies were born in prison and 2 babies have died in prison since 2019."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is Level Up's Pregnancy in Prison campaign?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Level Up campaigns to end the imprisonment of pregnant women and new mothers in England. Prison is never a safe environment for pregnancy — it puts both mother and baby at serious risk. The campaign has over 13,100 signatures and demands legislative change."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can pregnant women be sent to prison in the UK?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. In England, there is no law preventing pregnant women from being sentenced to prison. Level Up is campaigning to change this, arguing that the state has a duty of care that cannot be met inside a prison environment."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can I help end pregnancy in prison?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sign Level Up's petition at welevelup.org/active-campaigns/pregnancy-in-prison and share it with your network. You can also access the legal toolkit for advocates and journalists on the campaign resources page."
+        }
+      }
+    ]
+  })} />
+
   <!-- HERO WITH VIDEO BACKGROUND -->
   <section class="dp-hero">
     <div class="dp-hero-video-bg">

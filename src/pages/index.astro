@@ -15,8 +15,6 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 >
   <Nav />
 
-  <h1 class="sr-only">Level Up — Feminist Campaigns for Gender Justice in the UK</h1>
-
   <Fragment set:html={mainContent} />
 
   <!-- Animated announcement bar -->
@@ -35,6 +33,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
         <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
       </a>
     </div>
+  </div>
+
+  <div class="home-h1-band">
+    <h1>Feminist campaigns for gender justice in the UK</h1>
   </div>
 
   <!-- WHO WE ARE — Proposal A: Split layout -->
@@ -244,6 +246,19 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 <style is:global>
   body { overflow-x: hidden; }
   .e-con, .e-con-boxed, .elementor-section { max-width: 100vw !important; overflow-x: hidden !important; }
+
+  .home-h1-band {
+    background: #0C0A3E;
+    padding: 20px 24px;
+    text-align: center;
+  }
+  .home-h1-band h1 {
+    font: 700 15px/1 'DM Sans', sans-serif;
+    color: #CCFF33;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
 
   .home-cta {
     background: #0C0A3E;

@@ -19,6 +19,45 @@ const { headInner, bodyClass } = extract(homeRaw);
 >
   <Nav />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Is abortion legal in England and Wales?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Abortion is technically permitted under the Abortion Act 1967, but it is still governed by the Offences Against the Person Act 1861 — a Victorian law. This means abortion is not fully decriminalised. Women can face criminal prosecution outside the narrow conditions of the 1967 Act."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does Level Up's Abortion is Healthcare campaign want?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Level Up's Abortion is Healthcare campaign calls for the full decriminalisation of abortion in England and Wales. This means removing abortion from criminal law entirely so that it is treated as a healthcare matter, not a criminal one."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How many people have signed the Abortion is Healthcare petition?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Over 6,100 people have signed Level Up's Abortion is Healthcare petition calling for decriminalisation of abortion in Britain."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How can I support abortion decriminalisation in the UK?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can sign Level Up's Abortion is Healthcare petition at welevelup.org/active-campaigns/abortion-is-healthcare, share the campaign, and join Level Up's community to receive campaign updates."
+        }
+      }
+    ]
+  })} />
+
   <!-- HERO — plain navy (no video for this campaign) -->
   <section class="dp-hero" style="background-image: url('https://welevelup.org/wp-content/uploads/2025/08/Screenshot-2024-06-14-at-12-1.webp'); background-size: cover; background-position: center;">
     <div class="dp-hero-overlay"></div>

@@ -1,44 +1,24 @@
-# TODO — Próxima sesión
+# TODO — Remaining tasks
 
-## Cola en orden de prioridad
+## Done this session
+- ✅ Hide "Next Event" section (via JS)
+- ✅ YouTube video loader (via JS)  
+- ✅ Footer logo fixed
+- ✅ Petition cards redesigned (dark style with images)
+- ✅ Hide duplicate "Join the Level Up Community"
+- ✅ Sign petition links all point to Movement
+- ✅ Navy section wildcard text fix (!important)
+- ✅ Action cards no underline
+- ✅ Blog section purple bg with lime text
+- ✅ Islington banner navy + lime
+- ✅ Announcement bar
+- ✅ Mobile responsive basics
+- ✅ CTA + Footer as one navy block
 
-1. **Reconstruir HOME completo** como página editorial propia (no parches sobre clone)
-   - Video TedxLondon (youtube: xj-alDQD2fg) embebido en sección "How Collective Care Can Change Society"
-   - Sección "Who We Are" limpia
-   - Esconder/eliminar "Next Event" vacío
-   - Petitions con imágenes exactas del original y estilo similar
-   - Sección "From the Blog" ya hecha (cards navy)
-   - CTA "Join the Level Up community" ya hecho
-
-2. **Stats strip** en campañas que tienen datos numéricos
-
-3. **Audit colores** — pasada final de texto navy-sobre-navy en TODAS las campañas
-
-4. **Mobile responsive** — revisión completa de Nav, campañas, blog, home
-
-5. **Imágenes exactas** de cada petition card del original de WordPress
-
-6. **Sign petition links** correctos en mega-dropdown del Nav
-
-7. **Menú caído** — fix spacing/layout del nav (items posiblemente wrapping)
-
-8. **Estilo petition cards** similar al original (marco lime, layout)
-
-9. **Blog post títulos** — cambiar color y estilo de letra al verde claro/mint como la propuesta "Feminist Thinking" (ver screenshot de referencia)
-
-10. **Footer logo** — el logo footer-logo.webp tiene colores navy que no se ven sobre fondo navy. Necesita versión blanca o lime del logo, o usar CSS filter para hacerlo visible
-
-## Lo que está HECHO
-
-- 9 campañas con diseño editorial (pregnancy-in-prison manualmente, resto via agentes)
-- Blog listing /blog (Magazine editorial - Proposal A)
-- Blog posts /blog/[slug] (con campaign callout, related posts, share)
-- Contacto /contact (form + info)
-- Donate /donate (Mollie integration, test mode funciona)
-- Nav component (2 filas, mega-dropdown de campaigns)
-- Footer component (logo, sociales, contacto, CC license)
-- Mollie integration (create-donation, webhook, idempotente)
-- Script legacy webhooks (dry-run exitoso, 75 subs)
-- SEO: URLs preservadas, redirects, sitemap, JSON-LD de Rank Math
-- GitHub: welevelup/welevelup-astro (público, auto-deploy)
-- Vercel: levelup-astro.vercel.app (producción)
+## Still pending
+1. Stats strip in campaigns with numerical data
+2. Mobile responsive — thorough testing on all pages
+3. Blog post title style (green/lime like "Feminist Thinking")
+4. Petition card images — get exact originals from WP
+5. Home: video still not loading visually (JS injects iframe but Elementor widget structure may block it)
+6. Proposal for redesigning petition cards section

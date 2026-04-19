@@ -82,32 +82,32 @@ const { headInner, bodyClass } = extract(homeRaw);
   <section class="nr-faq" aria-labelledby="nr-faq-heading">
     <div class="nr-faq-inner">
       <h2 id="nr-faq-heading" class="nr-faq-title">Common Questions</h2>
-      <dl class="nr-faq-list">
-        <div class="nr-faq-item">
-          <dt>Are hair relaxers linked to cancer?</dt>
-          <dd>Yes. A 2022 study in the Journal of the National Cancer Institute found women who frequently used chemical hair straighteners had a higher risk of uterine cancer. Research from Boston University also links relaxer use to uterine fibroids. The chemicals implicated include formaldehyde, lye (sodium hydroxide), and endocrine-disrupting compounds.</dd>
-        </div>
-        <div class="nr-faq-item">
-          <dt>What is the #NoMoreLyes campaign?</dt>
-          <dd>#NoMoreLyes is Level Up's campaign calling on L'Oréal — the world's largest hair relaxer manufacturer — to reformulate or withdraw lye-based products. Launched in 2021, it has tens of thousands of signatures and coverage from the BBC, Reuters, The Guardian, and CNN.</dd>
-        </div>
-        <div class="nr-faq-item">
-          <dt>What chemicals in hair relaxers are harmful?</dt>
-          <dd>Hair relaxers contain lye (sodium hydroxide), which causes chemical burns, plus endocrine-disrupting chemicals including phthalates, parabens, and formaldehyde-releasing compounds. Glyoxylic acid — used in some "formaldehyde-free" products — has been linked to acute kidney failure.</dd>
-        </div>
-        <div class="nr-faq-item">
-          <dt>Has L'Oréal responded to these concerns?</dt>
-          <dd>L'Oréal denies its relaxers are unsafe and states it complies with all regulations. The company faces thousands of US lawsuits from women alleging its products caused cancer. It continues to sell lye-based relaxers in the UK and globally.</dd>
-        </div>
-        <div class="nr-faq-item">
-          <dt>Are hair relaxers banned anywhere?</dt>
-          <dd>As of 2025, hair relaxers are not banned in the UK or EU. The FDA has proposed new US rules restricting formaldehyde in hair products. Level Up's campaign is actively lobbying for UK regulatory action.</dd>
-        </div>
-        <div class="nr-faq-item">
-          <dt>Why does this disproportionately affect Black women?</dt>
-          <dd>Black women use relaxers at higher rates and from a younger age due to Eurocentric beauty standards and social pressure around natural hair — resulting in greater cumulative chemical exposure. The #NoMoreLyes campaign frames this as both a health justice and racial justice issue.</dd>
-        </div>
-      </dl>
+      <div class="nr-faq-list">
+        <details class="nr-faq-item">
+          <summary class="nr-faq-q">Are hair relaxers linked to cancer?</summary>
+          <div class="nr-faq-a">Yes. A 2022 study in the Journal of the National Cancer Institute found women who frequently used chemical hair straighteners had a higher risk of uterine cancer. Research from Boston University also links relaxer use to uterine fibroids. The chemicals implicated include formaldehyde, lye (sodium hydroxide), and endocrine-disrupting compounds.</div>
+        </details>
+        <details class="nr-faq-item">
+          <summary class="nr-faq-q">What is the #NoMoreLyes campaign?</summary>
+          <div class="nr-faq-a">#NoMoreLyes is Level Up's campaign calling on L'Oréal — the world's largest hair relaxer manufacturer — to reformulate or withdraw lye-based products. Launched in 2021, it has tens of thousands of signatures and coverage from the BBC, Reuters, The Guardian, and CNN.</div>
+        </details>
+        <details class="nr-faq-item">
+          <summary class="nr-faq-q">What chemicals in hair relaxers are harmful?</summary>
+          <div class="nr-faq-a">Hair relaxers contain lye (sodium hydroxide), which causes chemical burns, plus endocrine-disrupting chemicals including phthalates, parabens, and formaldehyde-releasing compounds. Glyoxylic acid — used in some "formaldehyde-free" products — has been linked to acute kidney failure.</div>
+        </details>
+        <details class="nr-faq-item">
+          <summary class="nr-faq-q">Has L'Oréal responded to these concerns?</summary>
+          <div class="nr-faq-a">L'Oréal denies its relaxers are unsafe and states it complies with all regulations. The company faces thousands of US lawsuits from women alleging its products caused cancer. It continues to sell lye-based relaxers in the UK and globally.</div>
+        </details>
+        <details class="nr-faq-item">
+          <summary class="nr-faq-q">Are hair relaxers banned anywhere?</summary>
+          <div class="nr-faq-a">As of 2025, hair relaxers are not banned in the UK or EU. The FDA has proposed new US rules restricting formaldehyde in hair products. Level Up's campaign is actively lobbying for UK regulatory action.</div>
+        </details>
+        <details class="nr-faq-item">
+          <summary class="nr-faq-q">Why does this disproportionately affect Black women?</summary>
+          <div class="nr-faq-a">Black women use relaxers at higher rates and from a younger age due to Eurocentric beauty standards and social pressure around natural hair — resulting in greater cumulative chemical exposure. The #NoMoreLyes campaign frames this as both a health justice and racial justice issue.</div>
+        </details>
+      </div>
     </div>
   </section>
 
@@ -199,6 +199,7 @@ const { headInner, bodyClass } = extract(homeRaw);
         <option value="uterine-cancer">Uterine Cancer</option>
         <option value="wellness">Wellness</option>
       </select>
+      <button class="nr-filter-reset" id="nr-reset" aria-label="Clear all filters" style="display:none">Clear ×</button>
     </div>
   </section>
 
@@ -760,14 +761,17 @@ const { headInner, bodyClass } = extract(homeRaw);
   .nr-intro-btn { display: inline-block; font: 800 13px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.1em; background: #0C0A3E; color: #CCFF33; text-decoration: none; padding: 16px 32px; margin-top: 8px; transition: background 0.15s; }
   .nr-intro-btn:hover { background: #A89CED; color: #0C0A3E; }
 
-  .nr-faq { background: #FFFFFF; padding: 60px 24px; border-top: 1px solid rgba(12,10,62,0.08); }
+  .nr-faq { background: #EEEBD3; padding: 60px 24px; border-top: 1px solid rgba(12,10,62,0.08); }
   .nr-faq-inner { max-width: 860px; margin: 0 auto; }
   .nr-faq-title { font: 900 28px/1 'DM Sans', sans-serif; color: #0C0A3E; text-transform: uppercase; letter-spacing: -0.02em; margin: 0 0 40px; }
-  .nr-faq-list { margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
-  .nr-faq-item { border-top: 1px solid rgba(12,10,62,0.1); padding: 24px 0; }
-  .nr-faq-item:last-child { border-bottom: 1px solid rgba(12,10,62,0.1); }
-  .nr-faq-item dt { font: 700 16px/1.3 'DM Sans', sans-serif; color: #0C0A3E; margin: 0 0 12px; }
-  .nr-faq-item dd { font: 400 15px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); margin: 0; }
+  .nr-faq-list { display: flex; flex-direction: column; gap: 0; }
+  .nr-faq-item { border-top: 1px solid rgba(12,10,62,0.15); }
+  .nr-faq-item:last-child { border-bottom: 1px solid rgba(12,10,62,0.15); }
+  .nr-faq-item summary { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; font: 700 16px/1.3 'DM Sans', sans-serif; color: #0C0A3E; cursor: pointer; list-style: none; gap: 16px; }
+  .nr-faq-item summary::-webkit-details-marker { display: none; }
+  .nr-faq-item summary::after { content: '+'; font: 300 24px/1 'DM Sans', sans-serif; color: #0C0A3E; flex-shrink: 0; transition: transform 0.2s; }
+  .nr-faq-item[open] summary::after { content: '−'; }
+  .nr-faq-a { font: 400 15px/1.65 'DM Sans', sans-serif; color: rgba(12,10,62,0.7); padding: 0 0 22px; max-width: 720px; }
 
   .nr-filters { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.1); padding: 20px 24px; overflow-x: auto; }
   .nr-filters-inner { max-width: 1100px; margin: 0 auto; display: flex; flex-wrap: nowrap; gap: 12px; min-width: 0; }
@@ -791,6 +795,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     min-width: 0;
   }
   .nr-filter-select:focus { outline: 2px solid #A89CED; outline-offset: 2px; }
+  .nr-filter-reset { font: 700 12px/1 'DM Sans', sans-serif; text-transform: uppercase; letter-spacing: 0.07em; color: #0C0A3E; background: transparent; border: 1.5px solid rgba(12,10,62,0.4); padding: 14px 18px; cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.15s; }
+  .nr-filter-reset:hover { background: #0C0A3E; color: #CCFF33; border-color: #0C0A3E; }
 
   .nr-body { background: #EEEBD3; border-top: 1px solid rgba(12,10,62,0.08); padding: 72px 24px 96px; }
   .nr-body-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 260px 1fr; gap: 64px; align-items: start; }
@@ -861,36 +867,88 @@ const { headInner, bodyClass } = extract(homeRaw);
 
 <script>
   (() => {
-    const items = document.querySelectorAll<HTMLElement>('.nr-resource-item');
+    const items = Array.from(document.querySelectorAll<HTMLElement>('.nr-resource-item'));
     const catSel = document.getElementById('nr-cat') as HTMLSelectElement;
     const typeSel = document.getElementById('nr-type') as HTMLSelectElement;
     const platformSel = document.getElementById('nr-platform') as HTMLSelectElement;
     const topicSel = document.getElementById('nr-topic') as HTMLSelectElement;
+    const resetBtn = document.getElementById('nr-reset') as HTMLButtonElement;
+    const selects = [catSel, typeSel, platformSel, topicSel];
 
-    function applyFilters() {
-      const cat = catSel?.value || 'all';
-      const type = typeSel?.value || 'all';
-      const platform = platformSel?.value || 'all';
-      const topic = topicSel?.value || 'all';
+    function getFilters() {
+      return {
+        cat: catSel?.value || 'all',
+        type: typeSel?.value || 'all',
+        platform: platformSel?.value || 'all',
+        topic: topicSel?.value || 'all',
+      };
+    }
 
-      items.forEach(item => {
-        const tags = (item.dataset.tags || '').split(' ');
-        const itemType = item.dataset.type || '';
-        const source = item.dataset.source || '';
-        const topics = (item.dataset.topic || '').split(' ');
+    function itemMatches(item: HTMLElement, f: ReturnType<typeof getFilters>) {
+      const tags = (item.dataset.tags || '').split(' ');
+      const itemType = item.dataset.type || '';
+      const source = item.dataset.source || '';
+      const topics = (item.dataset.topic || '').split(' ');
+      return (f.cat === 'all' || tags.includes(f.cat))
+        && (f.type === 'all' || itemType === f.type)
+        && (f.platform === 'all' || source === f.platform)
+        && (f.topic === 'all' || topics.includes(f.topic));
+    }
 
-        const catMatch = cat === 'all' || tags.includes(cat);
-        const typeMatch = type === 'all' || itemType === type;
-        const platformMatch = platform === 'all' || source === platform;
-        const topicMatch = topic === 'all' || topics.includes(topic);
-
-        item.style.display = catMatch && typeMatch && platformMatch && topicMatch ? '' : 'none';
+    function updateCounts() {
+      const f = getFilters();
+      selects.forEach(sel => {
+        if (!sel) return;
+        const key = sel.id.replace('nr-', '') as keyof typeof f;
+        Array.from(sel.options).forEach(opt => {
+          if (opt.value === 'all') { opt.disabled = false; return; }
+          const testF = { ...f, [key]: opt.value };
+          const count = items.filter(item => itemMatches(item, testF)).length;
+          const label = opt.dataset.label || opt.text.replace(/ \(\d+\)$/, '');
+          opt.dataset.label = label;
+          opt.text = count > 0 ? `${label} (${count})` : label;
+          opt.disabled = count === 0;
+        });
       });
     }
 
-    catSel?.addEventListener('change', applyFilters);
-    typeSel?.addEventListener('change', applyFilters);
-    platformSel?.addEventListener('change', applyFilters);
-    topicSel?.addEventListener('change', applyFilters);
+    function syncUrl(f: ReturnType<typeof getFilters>) {
+      const params = new URLSearchParams();
+      if (f.cat !== 'all') params.set('cat', f.cat);
+      if (f.type !== 'all') params.set('type', f.type);
+      if (f.platform !== 'all') params.set('platform', f.platform);
+      if (f.topic !== 'all') params.set('topic', f.topic);
+      const qs = params.toString();
+      history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    }
+
+    function applyFilters() {
+      const f = getFilters();
+      items.forEach(item => {
+        item.style.display = itemMatches(item, f) ? '' : 'none';
+      });
+      updateCounts();
+      syncUrl(f);
+      const anyActive = Object.values(f).some(v => v !== 'all');
+      if (resetBtn) resetBtn.style.display = anyActive ? '' : 'none';
+    }
+
+    function loadFromUrl() {
+      const params = new URLSearchParams(location.search);
+      if (catSel && params.has('cat')) catSel.value = params.get('cat')!;
+      if (typeSel && params.has('type')) typeSel.value = params.get('type')!;
+      if (platformSel && params.has('platform')) platformSel.value = params.get('platform')!;
+      if (topicSel && params.has('topic')) topicSel.value = params.get('topic')!;
+    }
+
+    selects.forEach(sel => sel?.addEventListener('change', applyFilters));
+
+    resetBtn?.addEventListener('click', () => {
+      selects.forEach(sel => { if (sel) sel.value = 'all'; });
+      applyFilters();
+    });
+
+    loadFromUrl();
+    applyFilters();
   })();
 </script>

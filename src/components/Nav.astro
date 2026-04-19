@@ -6,7 +6,7 @@
 <header class="lu-nav">
   <div class="lu-nav-top">
     <a href="/" class="lu-nav-logo">
-      <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="38" />
+      <img src="https://welevelup.org/wp-content/uploads/2025/07/cropped-cropped-square-shape-01.webp" alt="Level Up" height="38" />
     </a>
     <div class="lu-nav-ctas">
       <a href="/donate" class="lu-nav-donate">Donate</a>
@@ -16,11 +16,14 @@
 
   <nav class="lu-nav-bar">
     <div class="lu-nav-bar-inner">
+      <a href="/donate" class="lu-nav-mobile-donate">Donate</a>
       <div class="lu-nav-group">
         <span>About Us ▾</span>
         <div class="lu-nav-drop">
           <a href="/about-us">What we do</a>
+          <a href="/who-we-are">Who we are</a>
           <a href="/what-we-are-proud-of">What we are proud of</a>
+          <a href="/blog/how-we-choose-our-campaigns">How we choose our campaigns</a>
         </div>
       </div>
 
@@ -31,27 +34,22 @@
             <div class="lu-nav-mega-col">
               <a href="/active-campaigns/media-guidelines-domestic-abuse" class="lu-nav-mega-title">Dignity for Dead Women</a>
               <a href="https://levelup.yourmovement.org/p/ipso-dignity-for-dead-women" target="_blank" rel="noopener">Sign the petition</a>
-              <a href="/ddw-resources">Resources</a>
             </div>
             <div class="lu-nav-mega-col">
               <a href="/active-campaigns/pregnancy-in-prison" class="lu-nav-mega-title">Pregnancy in Prison</a>
               <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" target="_blank" rel="noopener">Sign the petition</a>
-              <a href="/pp-resources">Resources</a>
             </div>
             <div class="lu-nav-mega-col">
               <a href="/active-campaigns/sexual-violence-in-football" class="lu-nav-mega-title">Sexual Violence in Football</a>
-              <a href="https://levelup.yourmovement.org/p/share-your-story" target="_blank" rel="noopener">Sign the petition</a>
+              <a href="https://levelup.yourmovement.org/p/share-your-story" target="_blank" rel="noopener">Share your story</a>
             </div>
             <div class="lu-nav-mega-col">
               <a href="/active-campaigns/abortion-is-healthcare" class="lu-nav-mega-title">Abortion is Healthcare</a>
               <a href="https://levelup.yourmovement.org/p/abortion-is-healthcare" target="_blank" rel="noopener">Sign the petition</a>
-              <a href="/abortion-is-healthcare-resources">Resources</a>
             </div>
             <div class="lu-nav-mega-col">
               <a href="/active-campaigns/nomorelyes-2" class="lu-nav-mega-title">#NoMoreLyes</a>
-              <a href="https://levelup.yourmovement.org/p/nomorelyes" target="_blank" rel="noopener">Sign the petition</a>
-              <a href="/nomorelyes-relaxer-info-kit">Relaxer Info Kit</a>
-              <a href="/nomorelyes-open-letter-to-loreal">Open letter to L'Oréal</a>
+              <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener">Sign the petition</a>
             </div>
             <div class="lu-nav-mega-col">
               <a href="/active-campaigns/we-protect-us" class="lu-nav-mega-title">We Protect Us</a>
@@ -71,14 +69,13 @@
             </div>
             <div class="lu-nav-mega-col">
               <a href="/stories-of-the-community" class="lu-nav-mega-title">Space for Memory</a>
-              <a href="/news-and-events">Events</a>
-              <a href="/solidarity-with-katie">Solidarity with Katie</a>
+              <a href="/abortion-stories">Abortion stories</a>
+              <a href="/experiences-with-hair-relaxers">Experiences with hair relaxers</a>
+              <a href="/solidarity-with-katie">Messages of solidarity with Katie</a>
             </div>
           </div>
         </div>
       </div>
-
-      <a href="/all-resources">Resources</a>
 
       <div class="lu-nav-group">
         <span>Blog ▾</span>
@@ -101,6 +98,10 @@
 </header>
 
 <style is:global>
+  /* Hide WP clone header from leaking through */
+  header[data-elementor-type="header"],
+  .elementor-location-header { display: none !important; }
+
   .lu-nav {
     background: #FFFFFF;
     position: sticky;
@@ -125,7 +126,7 @@
     gap: 14px;
     text-decoration: none;
   }
-  .lu-nav-logo img { height: 30px; width: auto; }
+  .lu-nav-logo img { height: 48px; width: 48px; object-fit: contain; }
   .lu-nav-tagline {
     font: 400 11px/1.35 'DM Sans', sans-serif;
     color: #0C0A3E;
@@ -302,25 +303,20 @@
     height: 3px;
     background: #0C0A3E;
   }
+  .lu-nav-bar.open ~ .lu-nav-toggle span,
+  .lu-nav.menu-open .lu-nav-toggle span { background: #EEEBD3; }
 
   @media (max-width: 900px) {
     .lu-nav-toggle { display: flex; }
     .lu-nav-top {
       padding: 16px 16px;
     }
-    .lu-nav-logo img { height: 28px; }
+    .lu-nav-logo img { height: 40px; width: 40px; }
     .lu-nav-ctas {
-      margin-right: 48px;
+      margin-right: 56px;
     }
-    .lu-nav-donate {
-      font-size: 11px !important;
-      padding: 10px 14px !important;
-      white-space: nowrap;
-      position: fixed;
-      top: 8px;
-      right: 56px;
-      z-index: 10000;
-    }
+    .lu-nav-donate { display: none !important; }
+    .lu-nav-ctas { margin-right: 48px; }
     .lu-nav-join {
       display: none !important;
     }
@@ -365,5 +361,8 @@
 <script>
   const toggle = document.getElementById('nav-toggle');
   const bar = document.querySelector('.lu-nav-bar');
-  toggle?.addEventListener('click', () => bar?.classList.toggle('open'));
+  toggle?.addEventListener('click', () => {
+    bar?.classList.toggle('open');
+    toggle.closest('.lu-nav')?.classList.toggle('menu-open');
+  });
 </script>

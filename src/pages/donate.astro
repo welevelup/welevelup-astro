@@ -252,6 +252,39 @@ const { headInner, bodyClass } = extract(homeRaw);
     .lu-donate__legal a {
       color: #0d0a3e;
     }
+
+    /* ── Mobile ── */
+    @media (max-width: 640px) {
+      .lu-donate {
+        padding: 32px 16px 64px;
+      }
+      .lu-donate__hero h1 {
+        font-size: 32px;
+      }
+      .lu-donate__hero p {
+        font-size: 16px;
+        margin-bottom: 28px;
+      }
+      .lu-donate__field--type {
+        flex-direction: column;
+      }
+      .lu-donate__field--type label {
+        min-width: 0;
+        width: 100%;
+      }
+      .lu-donate__amounts {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .lu-donate__custom input,
+      .lu-donate__field--details input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .lu-donate__submit {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
   </style>
 
   <script>

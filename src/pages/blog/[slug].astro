@@ -50,6 +50,7 @@ const relatedCampaign = campaignMap[post.id];
   <header class="bp-header">
     <div class="bp-header-inner">
       <a href="/blog" class="bp-back">← Back to blog</a>
+      <span class="bp-post-tag">{post.data.tag ?? 'From the Blog'}</span>
       <h1 class="bp-post-title">{post.data.title}</h1>
       <div class="bp-post-meta">
         <span>By <strong>{post.data.author}</strong></span>
@@ -143,9 +144,9 @@ const relatedCampaign = campaignMap[post.id];
     margin-bottom: 16px;
   }
   .bp-post-title {
-    font: 800 clamp(32px, 6vw, 48px)/1.05 'DM Sans';
+    font: 800 clamp(40px, 7vw, 64px)/0.92 'DM Sans';
     color: #CCFF33;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
     margin: 0 0 24px;
   }
   .bp-post-meta {

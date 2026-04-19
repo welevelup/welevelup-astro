@@ -1,0 +1,444 @@
+---
+/**
+ * Campaign: Pregnancy in Prison
+ * Real content from the archive version.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout headHtml={headInner} bodyClass={bodyClass}>
+  <Nav />
+
+  <!-- HERO WITH VIDEO BACKGROUND -->
+  <section class="dp-hero">
+    <div class="dp-hero-video-bg">
+      <iframe
+        src="https://www.youtube.com/embed/m-svZxxLVms?autoplay=1&mute=1&loop=1&playlist=m-svZxxLVms&controls=0&showinfo=0&modestbranding=1&playsinline=1"
+        title="Background video"
+        frameborder="0"
+        allow="autoplay"
+        loading="eager"
+      ></iframe>
+    </div>
+    <div class="dp-hero-overlay"></div>
+    <div class="dp-hero-inner">
+      <span class="dp-label">Criminalisation &amp; Justice</span>
+      <h1 class="dp-title">Pregnancy<br/>in Prison</h1>
+      <p class="dp-tagline">Prison will never be a safe place to be pregnant. It's time to demand an end to the imprisonment of pregnant women and new mothers.</p>
+      <div class="dp-hero-cta">
+        <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" class="dp-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
+        <span class="dp-supporters">12,000+ signatures</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="dp-stats">
+    <div class="dp-stats-inner">
+      <div class="dp-stat">
+        <span class="dp-stat-num">196</span>
+        <span class="dp-stat-label">Pregnant women in prison (2024/25)</span>
+      </div>
+      <div class="dp-stat">
+        <span class="dp-stat-num">42</span>
+        <span class="dp-stat-label">Births in prison (2024/25)</span>
+      </div>
+      <div class="dp-stat">
+        <span class="dp-stat-num">7×</span>
+        <span class="dp-stat-label">More likely to suffer a stillbirth</span>
+      </div>
+      <div class="dp-stat">
+        <span class="dp-stat-num">1 in 3</span>
+        <span class="dp-stat-label">Pregnant prisoners not yet sentenced</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- AIM -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Aim</h2>
+      <p>Let's end the imprisonment of pregnant women.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <p><strong>Prison is no place to be pregnant.</strong> Level Up campaigns to end the imprisonment of pregnant women and new mothers in England. Evidence shows that pregnancy in prison is inherently unsafe, placing women and babies at serious risk of harm, trauma and death. Through public pressure, legal action and solidarity, we are working to ensure courts stop sending pregnant women to prison and choose safe, community-based alternatives instead.</p>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <h2>Why?</h2>
+      <p>Prison will never be a safe place to be pregnant. In the past three years, two babies have died when their mothers went into labour inside prison. It's time to demand an end to the imprisonment of pregnant women and new mothers.</p>
+    </div>
+  </section>
+
+  <!-- HOW IT BEGAN -->
+  <section class="dp-section dp-section--white">
+    <div class="dp-content">
+      <h2>How the Pregnancy in Prison Campaign began</h2>
+      <p>In September 2019, Rianna Cleary went into labour alone in her cell inside HMP Bronzefield. She called for help, but nobody came. Prison guards found her the next morning with her dead baby, Aisha, in her arms.</p>
+      <p>In June 2020, another woman, Louise Powell, went into labour without medical assistance at HMP Styal. Her baby, Brooke, died.</p>
+      <p>When these harrowing baby deaths broke into the news, the glaring failures of the prison system were stark. Yet there was nobody calling for the obvious: to end the imprisonment for pregnant women. So Level Up set about building a public solidarity movement to demand this.</p>
+      <p>There's plenty of evidence that prison is not safe for pregnant women – for years academics and charities have called for healthcare reforms inside prison – but no amount of reforms can keep anyone safe when they're isolated behind locked doors. Our campaign has successfully shifted the discourse away from reform and toward a total end to imprisonment of pregnant women. Step by step, we're working to end pregnancy in prison.</p>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <span class="dp-label">The Journey So Far</span>
+      <h2>The journey so far</h2>
+
+      <div class="dp-timeline">
+
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot"></div>
+          <div class="dp-tl-year">2021</div>
+          <div class="dp-tl-body">
+            <p><strong>In October 2021,</strong> when the Prison Ombudsman published its report into the death of Aisha Cleary at HMP Bronzefield, Level Up secured media coverage on the wider issue of pregnancy in prison.</p>
+            <p>Level Up joined forces with women who had been pregnant in prison and charities Birth Companions and Women in Prison to launch a public petition demanding the government put an end to prison sentencing for pregnant women. 12,000 people signed it.</p>
+            <p>At the same time, the Policing, Crime, Sentencing and Courts Act was going through parliament. Amendments were debated on changes to the sentencing and bail of pregnant women and primary carers, but they didn't make it into law.</p>
+          </div>
+        </div>
+
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--purple"></div>
+          <div class="dp-tl-year">2022</div>
+          <div class="dp-tl-body">
+            <p><strong>In January 2022,</strong> the Prison Ombudsman report into the death of Baby Brooke at HMP Styal in June 2020 was published. Knowing that it would be a distressing day for her mother – Louise Powell – Level Up built an online tool for the public to write a message of solidarity to her. 318 people sent heartfelt messages.</p>
+            <p>A solidarity movement of mums and babies, No Births Behind Bars, was born and staged four <em>very cute</em> protests across the course of the year in order to keep a spotlight on pregnant women in prison, building momentum around the issue. Every time a protest was held, the media covered it, and the Ministry of Justice were asked for comment.</p>
+            <p><strong>In March 2022,</strong> No Births Behind Bars <a href="https://www.theguardian.com/society/2022/mar/28/female-former-inmates-protest-uk-imprisonment-pregnant-women" target="_blank" rel="noopener">organised the biggest baby protest in history</a> outside Parliament for Mother's Day 2022.</p>
+            <p>In June, <a href="https://www.manchestereveningnews.co.uk/news/greater-manchester-news/prison-never-ever-safe-place-24255509" target="_blank" rel="noopener">a group of mums and babies demonstrated outside HMP Styal</a> on the two-year anniversary of the death of Baby Brooke.</p>
+            <p>This was timed with Level Up and No Births Behind Bars' <strong>open letter to the Sentencing Council and Ministry of Justice</strong>, demanding a change to sentencing practices for pregnant women and new mothers. The letter was signed by almost 100 healthcare and legal professionals, including the Royal College of Midwives, Royal College of Obstetricians and Gynaecologists and British Association of Perinatal Medicine. Speaking in support of the campaign, the Royal College of Midwives said <a href="https://www.independent.co.uk/news/uk/home-news/prison-pregnant-women-babies-deaths-b2175384.html" target="_blank" rel="noopener">"prison is no place for a pregnant woman."</a></p>
+            <p>The Sentencing Council responded to say that they would be evaluating their existing guidance, and would be consulting on whether a separate guideline is needed for pregnant women.</p>
+          </div>
+        </div>
+
+        <div class="dp-tl-node">
+          <div class="dp-tl-dot dp-tl-dot--yellow"></div>
+          <div class="dp-tl-year">2023</div>
+          <div class="dp-tl-body">
+            <p><strong>In March 2023,</strong> we worked with journalists to uncover new statistics that found women in prison are <a href="https://www.theguardian.com/society/2023/mar/25/pregnant-women-in-english-jails-are-seven-times-more-likely-to-suffer-stillbirth" target="_blank" rel="noopener">seven times more likely to suffer a stillbirth than women in the general population.</a></p>
+            <p>To draw attention to this, Level Up joined No Births Behind Bars for a Mother's Day protest outside the Royal Courts of Justice in London, where the Sentencing Council is based, to sing nursery rhymes and keep up the public pressure on the courts.</p>
+            <p><strong>In May 2023,</strong> when the Aisha Cleary inquest opened, Level Up supporters sent over 700 messages of solidarity and support to her mother, Rianna Cleary.</p>
+            <p><strong>In July 2023,</strong> the Aisha Cleary inquest concluded that 'serious failings' had contributed to her death. Level Up worked with Inquest to ensure that the press gallery of Surrey Coroner's Court was full of journalists, and secured national media coverage ranging from The Times to the Mirror, LBC and Channel 4.</p>
+            <p><strong>In September 2023,</strong> on the four-year anniversary of Aisha Cleary's death at HMP Bronzefield, Level Up and No Births Behind Bars held a vigil outside the Ministry of Justice to commemorate her death and renew public calls for an end to imprisonment for pregnant women.</p>
+            <p><strong>In September 2023,</strong> the campaign also won the support of Seema Misra, the former postmistress who was wrongly convicted in the Post Office scandal and sent to prison while pregnant. In an <a href="https://inews.co.uk/opinion/doctors-agree-that-prison-isnt-safe-for-pregnant-women-so-why-are-we-still-locking-them-up-2657607" target="_blank" rel="noopener">interview with iNews</a>, she said "innocent or not, it is wrong that we send pregnant women to prison".</p>
+            <p><strong>In September 2023,</strong> the Sentencing Council also opened a public consultation on whether they should introduce a new mitigating factor for pregnancy.</p>
+            <p><strong>In October 2023,</strong> <a href="https://news.sky.com/story/should-pregnant-women-be-spared-jail-sentencing-council-reviews-the-impact-of-prison-on-unborn-babies-12991044" target="_blank" rel="noopener"><strong>Sky News covered the campaign</strong></a> and included the experiences of women who were pregnant in prison. Level Up also did a live interview with Kay Burley to explain the proposed changes.</p>
+            <p><strong>Also in October,</strong> <a href="https://www.theguardian.com/society/2023/oct/28/revealed-one-in-three-jailed-pregnant-women-in-england-and-wales-still-to-face-trial" target="_blank" rel="noopener"><strong>The Observer published new statistics</strong></a> showing that <strong>one in three pregnant women being held in prison are on remand</strong> – meaning they haven't even been sentenced.</p>
+            <p><strong>In November 2023,</strong> Rianna Cleary <a href="https://www.instagram.com/p/Czo6jgyoHtF/" target="_blank" rel="noopener"><strong>read her statement on Channel 4 News</strong></a>, announcing her support of Level Up's campaign. She said: "when it comes to prisons, what's written on a piece of paper is never what happens in practice. The way the prisons are run, it is all about <strong>power and control</strong>. They will never be caring places. Prison officers do not always follow policy – look what happened to me when I pressed my cell bell twice – <strong>nobody came</strong>."</p>
+            <p><strong>At the end of November 2023,</strong> alongside lawyers, academics, psychiatrists and organisations, Level Up submitted a response to the Sentencing Council's consultation on a new mitigating factor for pregnancy.</p>
+          </div>
+        </div>
+
+        <div class="dp-tl-node dp-tl-node--highlight">
+          <div class="dp-tl-dot dp-tl-dot--green"></div>
+          <div class="dp-tl-year">2024</div>
+          <div class="dp-tl-body">
+            <p>In January 2024, Level Up kicked off the year with a huge campaign victory: we helped secure a landmark judgment where the Court of Appeal overturned a heavily pregnant woman's prison sentence and replaced it with a suspended sentence on the basis of risks to her pregnancy. The case established a legal precedent, where pregnancy can contribute to "exceptional circumstances" that make a mandatory minimum sentence disproportionate. <strong><a href="https://www.theguardian.com/society/2024/jan/19/pregnant-woman-jail-sentence-quashed-in-landmark-uk-ruling" target="_blank" rel="noreferrer noopener">Read more about the case in the Guardian here.</a></strong></p>
+            <p><strong>In February 2024,</strong> in coalition with leading lawyers and academics, Level Up submitted our response to the Sentencing Council's consultation on the revised Imposition of Custodial and Community Sentences guideline. We also found that <a href="https://www.theguardian.com/society/2024/feb/24/pregnant-women-and-new-mothers-shouldnt-be-sent-to-jail-uk-public-says" target="_blank" rel="noopener">the majority of the public support sentencing reform for pregnant women and mothers.</a></p>
+            <p><strong>In March 2024,</strong> Level Up joined No Births Behind Bars once more for our third Mother's Day protest outside the Royal Courts of Justice to demand the Sentencing Council take action to stop courts sending pregnant women to prison.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW YOU CAN HELP -->
+  <section class="dp-section dp-section--neutral">
+    <div class="dp-content">
+      <span class="dp-label">Take Action</span>
+      <h2>How you can help</h2>
+      <div class="dp-actions">
+        <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" class="dp-action" target="_blank" rel="noopener">
+          <strong>Sign the petition</strong>
+          <p>Demand an end to the imprisonment of pregnant women and new mothers</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="/donate" class="dp-action">
+          <strong>Donate</strong>
+          <p>Support this ongoing work</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="dp-action" target="_blank" rel="noopener">
+          <strong>Join the Level Up Community</strong>
+          <p>Stay updated and take action with us</p>
+          <span class="dp-arrow">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="dp-final-cta">
+    <div class="dp-content">
+      <h2 class="dp-h2--light">Prison will never be a safe place to be pregnant</h2>
+      <div class="dp-final-cta-buttons">
+        <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" class="dp-btn-primary dp-btn-large" target="_blank" rel="noopener">Sign the petition</a>
+        <a href="/donate" class="dp-btn-secondary-light dp-btn-large">Donate</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA: JOIN -->
+  <section class="dp-cta">
+    <div class="dp-content" style="text-align:center">
+      <h2 class="dp-h2--light">Join the Level Up community</h2>
+      <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px">Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="dp-btn-primary" target="_blank" rel="noopener">Join us</a>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style is:global>
+    .dp-hero {
+      background: #0C0A3E;
+      padding: 100px 24px 80px;
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+    }
+    .dp-hero-video-bg {
+      position: absolute;
+      top: -60px; left: -60px; right: -60px; bottom: -60px;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .dp-hero-video-bg iframe {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scale(1.2);
+    }
+    .dp-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(12, 10, 62, 0.75);
+      z-index: 1;
+    }
+    .dp-hero p, .dp-hero-inner p, .dp-hero span, .dp-hero div { color: rgba(238,235,211,0.8) !important; }
+    .dp-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+    .dp-label {
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      margin-bottom: 20px;
+      display: block;
+    }
+    .dp-label--light { color: #FFFFFF; }
+    .dp-title {
+      font: 800 clamp(48px,10vw,88px)/0.88 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.045em !important;
+      margin: 0 0 24px;
+    }
+    .dp-tagline {
+      color: rgba(238,235,211,0.8) !important;
+      font: 400 20px/1.4 'DM Sans', sans-serif !important;
+      max-width: 560px;
+      margin-bottom: 40px;
+    }
+    .dp-hero-cta { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+    .dp-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E !important;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none !important;
+      transition: all 0.2s;
+    }
+    .dp-btn-primary:hover { background: #fff; }
+    .dp-supporters {
+      font: 700 14px/1 'DM Sans', sans-serif;
+      color: #FFFFFF !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .dp-stats { background: #CCFF33; }
+    .dp-stats-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .dp-stat {
+      padding: 36px 20px;
+      text-align: center;
+      border-right: 1px solid rgba(12,10,62,0.1);
+    }
+    .dp-stat:last-child { border-right: none; }
+    .dp-stat-num {
+      display: block;
+      font: 800 44px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      letter-spacing: -0.04em;
+    }
+    .dp-stat-label {
+      display: block;
+      font: 500 11px/1.3 'DM Sans', sans-serif;
+      color: rgba(12,10,62,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 8px;
+    }
+
+    .dp-section { padding: 80px 24px; }
+    .dp-section--cream { background: #EEEBD3; }
+    .dp-section--navy { background: #0C0A3E; }
+    .dp-section--neutral { background: #fff; }
+    .dp-section--white { background: #fff; }
+    .dp-content { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .dp-content h2 {
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.045em !important;
+      margin: 8px 0 24px;
+    }
+    .dp-h2--light { color: #CCFF33 !important; }
+    .dp-content p {
+      font: 400 18px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.8) !important;
+      margin: 0 0 16px;
+    }
+    .dp-content a { color: #0C0A3E; text-decoration: underline; text-decoration-color: #A89CED; }
+    .dp-actions a, .dp-action { text-decoration: none !important; }
+
+    .dp-timeline { position: relative; padding-left: 56px; margin-top: 48px; }
+    .dp-timeline::before {
+      content: '';
+      position: absolute;
+      left: 19px; top: 8px; bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(12,10,62,0.1) 0%, #A89CED 25%, #CCFF33 65%, #4CAF50 100%);
+    }
+    .dp-tl-node {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 0 16px;
+      margin-bottom: 64px;
+    }
+    .dp-tl-node:last-child { margin-bottom: 0; }
+    .dp-tl-dot {
+      position: absolute;
+      left: -56px; top: 4px;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: #0C0A3E;
+      border: 4px solid #EEEBD3;
+      z-index: 1;
+    }
+    .dp-tl-dot--purple { background: #A89CED; }
+    .dp-tl-dot--yellow { background: #CCFF33; }
+    .dp-tl-dot--green { background: #4CAF50; }
+    .dp-tl-year {
+      font: 800 28px/1 'DM Sans', sans-serif;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em;
+      padding-top: 6px;
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .dp-tl-body { grid-column: 2; }
+    .dp-tl-body h3 {
+      font: 700 20px/1.1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      margin: 24px 0 8px;
+    }
+    .dp-tl-body h3:first-child { margin-top: 0; }
+    .dp-tl-body p {
+      font: 400 16px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 14px;
+    }
+    .dp-tl-body strong { color: #0C0A3E !important; }
+    .dp-tl-body a { color: #0C0A3E !important; text-decoration: underline !important; text-decoration-color: #A89CED !important; }
+    .dp-tl-body a:hover { color: #A89CED !important; }
+    .dp-tl-node--highlight .dp-tl-body {
+      background: rgba(204,255,51,0.12);
+      padding: 20px;
+      margin: -8px -20px;
+      border-left: 3px solid #CCFF33;
+    }
+
+    .dp-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .dp-action {
+      background: #EEEBD3;
+      padding: 32px 24px;
+      text-decoration: none !important;
+      color: #0C0A3E;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .dp-action:hover { border-color: #CCFF33; }
+    .dp-action strong { font: 700 20px/1.1 'DM Sans', sans-serif !important; color: #0C0A3E !important; }
+    .dp-action p { text-decoration: none !important; font-size: 15px !important; color: rgba(12,10,62,0.6) !important; margin: 0 !important; }
+    .dp-arrow { font-size: 20px; color: #CCFF33; margin-top: auto; padding-top: 8px; }
+
+    .dp-final-cta { background: #A89CED; padding: 64px 24px; text-align: center; }
+    .dp-final-cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .dp-btn-large { padding: 22px 48px !important; font-size: 16px !important; }
+    .dp-btn-secondary-light {
+      display: inline-block;
+      background: #0C0A3E;
+      color: #FFFFFF !important;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none !important;
+      border: 2px solid #0C0A3E;
+      transition: all 0.2s;
+    }
+    .dp-btn-secondary-light:hover { color: #CCFF33 !important; }
+
+    .dp-cta { background: #0C0A3E; padding: 80px 24px; text-align: center; }
+    .dp-cta h2 { margin: 0 0 16px; font: 800 40px/0.9 'DM Sans', sans-serif !important; color: #CCFF33 !important; letter-spacing: -0.04em !important; }
+    .dp-cta p { color: rgba(238,235,211,0.6) !important; font: 400 17px/1.5 'DM Sans', sans-serif !important; max-width: 440px; margin: 0 auto 32px !important; }
+
+    @media (max-width: 768px) {
+      .dp-hero { min-height: 100vh; flex-direction: column; justify-content: center; padding: 80px 24px 60px; }
+      .dp-stats-inner { grid-template-columns: repeat(2, 1fr); }
+      .dp-stat { border-bottom: 1px solid rgba(12,10,62,0.1); }
+      .dp-tl-node { grid-template-columns: 1fr; }
+      .dp-tl-year { grid-column: 1; grid-row: 1; margin-bottom: 8px; }
+      .dp-tl-body { grid-column: 1; }
+      .dp-timeline { padding-left: 48px; }
+      .dp-tl-dot { left: -48px; width: 36px; height: 36px; }
+      .dp-final-cta-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</Layout>

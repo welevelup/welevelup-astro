@@ -11,6 +11,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   <section class="ct-hero">
     <div class="ct-hero-inner">
+      <span class="ct-label">Get in touch</span>
       <h1 class="ct-title">Contact Level Up</h1>
       <p class="ct-subtitle">Get in touch with us. We'd love to hear from you.</p>
     </div>
@@ -84,8 +85,16 @@ const { headInner, bodyClass } = extract(homeRaw);
     font-family: 'DM Sans', sans-serif;
   }
   .ct-hero-inner { max-width: 900px; margin: 0 auto; }
+  .ct-label {
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    display: block;
+    margin-bottom: 12px;
+  }
   .ct-title {
-    font: 800 clamp(40px, 8vw, 64px)/0.9 'DM Sans';
+    font: 800 clamp(40px, 8vw, 72px)/0.9 'DM Sans';
     color: #CCFF33;
     letter-spacing: -0.04em;
     margin: 0 0 16px;

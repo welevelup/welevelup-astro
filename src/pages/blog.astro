@@ -86,10 +86,10 @@ const posts = [
   .bl-title { font: 800 64px/0.9 'DM Sans'; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 16px; }
   .bl-subtitle { font: 400 18px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 500px; }
 
-  .bl-content { background: #EEEBD3; padding: 40px 24px 64px; font-family: 'DM Sans', sans-serif; }
+  .bl-content { background: #EEEBD3; padding: 40px 24px 64px; font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
   .bl-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.3fr 1fr; gap: 2px; }
 
-  .bl-featured { text-decoration: none; color: #0C0A3E; background: #fff; display: flex; flex-direction: column; transition: all 0.2s; }
+  .bl-featured { text-decoration: none; color: #0C0A3E; background: #fff; display: flex; flex-direction: column; transition: all 0.2s; overflow: hidden; }
   .bl-featured:hover { box-shadow: 0 4px 24px rgba(12,10,62,0.1); }
   .bl-featured-img { height: 280px; background-size: cover; background-position: center; }
   .bl-featured-body { padding: 32px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
@@ -116,8 +116,9 @@ const posts = [
   .bl-cta-btn:hover { background: #fff; }
 
   @media (max-width: 768px) {
-    .bl-grid { grid-template-columns: 1fr; }
-    .bl-rest { grid-template-columns: 1fr; }
+    .bl-grid { grid-template-columns: 1fr; width: 100%; overflow: hidden; }
+    .bl-rest { grid-template-columns: 1fr; width: 100%; }
+    .bl-rest-card { min-width: 0; }
     .bl-title { font-size: 40px; }
   }
 </style>

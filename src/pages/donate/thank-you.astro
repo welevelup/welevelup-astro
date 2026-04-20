@@ -1,10 +1,7 @@
 ---
-/**
- * Landing page Mollie redirects donors to after they finish (or abandon) the
- * checkout. Mollie does NOT pass payment status here — for that we rely on
- * the webhook. The page is intentionally generic.
- */
 import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 
@@ -16,52 +13,156 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="Thank You for Your Donation | Level Up"
   description="Thank you for supporting Level Up's feminist campaigns. Your contribution helps us fight for gender justice in the UK."
 >
+  <Nav />
+
   <main class="lu-thanks">
-    <h1>Thank you</h1>
-    <p>
-      Your donation is being processed by Mollie. You'll receive a confirmation
-      email at the address you provided shortly.
-    </p>
-    <p>
-      If you set up a monthly donation, your subscription will start once this
-      first payment clears — usually within minutes for cards, a few days for
-      direct debit.
-    </p>
-    <p>
-      Questions? Email
-      <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
-      and we'll get back to you.
-    </p>
-    <p class="lu-thanks__back">
-      <a href="/">← Back to welevelup.org</a>
-    </p>
+    <div class="lu-thanks__hero">
+      <p class="lu-thanks__label">Donation received</p>
+      <h1 class="lu-thanks__heading">Thank you<br/>for standing<br/>with us.</h1>
+    </div>
+
+    <div class="lu-thanks__body">
+      <div class="lu-thanks__message">
+        <p>Your donation is being processed. You'll receive a confirmation email shortly.</p>
+        <p>If you set up a monthly donation, your subscription starts once this first payment clears — usually within minutes for cards.</p>
+      </div>
+
+      <div class="lu-thanks__impact">
+        <p class="lu-thanks__impact-label">Your donation powers</p>
+        <ul class="lu-thanks__list">
+          <li>Campaigns for abortion decriminalisation in England and Wales</li>
+          <li>Ending the imprisonment of pregnant women</li>
+          <li>Dignified media coverage of domestic abuse deaths</li>
+          <li>Community bystander training — We Protect Us</li>
+        </ul>
+      </div>
+
+      <div class="lu-thanks__actions">
+        <a href="/active-campaigns" class="lu-thanks__btn-primary">See our campaigns →</a>
+        <a href="/" class="lu-thanks__btn-secondary">Back to home</a>
+      </div>
+
+      <p class="lu-thanks__contact">Questions? <a href="mailto:hello@welevelup.org">hello@welevelup.org</a></p>
+    </div>
   </main>
 
-  <style is:global>
-    .lu-thanks {
-      max-width: 560px;
-      margin: 0 auto;
-      padding: 96px 24px;
-      font-family: 'DM Sans', system-ui, sans-serif;
-      color: #0d0a3e;
-    }
-    .lu-thanks h1 {
-      font-size: 56px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      margin: 0 0 24px;
-    }
-    .lu-thanks p {
-      font-size: 18px;
-      line-height: 1.55;
-      margin: 0 0 16px;
-    }
-    .lu-thanks__back {
-      margin-top: 40px;
-    }
-    .lu-thanks__back a {
-      color: #0d0a3e;
-      text-decoration: underline;
-    }
-  </style>
+  <Footer />
 </Layout>
+
+<style is:global>
+  .lu-thanks {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  .lu-thanks__hero {
+    background: #0C0A3E;
+    padding: 80px 40px 72px;
+  }
+
+  .lu-thanks__label {
+    margin: 0 0 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #CCFF33;
+  }
+
+  .lu-thanks__heading {
+    margin: 0;
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: #EEEBD3;
+  }
+
+  .lu-thanks__body {
+    max-width: 640px;
+    padding: 64px 40px 96px;
+  }
+
+  .lu-thanks__message p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333;
+    margin: 0 0 16px;
+  }
+
+  .lu-thanks__impact {
+    margin-top: 48px;
+    padding: 32px;
+    background: #EEEBD3;
+    border-left: 4px solid #CCFF33;
+  }
+
+  .lu-thanks__impact-label {
+    margin: 0 0 16px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #0C0A3E;
+  }
+
+  .lu-thanks__list {
+    margin: 0;
+    padding: 0 0 0 20px;
+    list-style: disc;
+  }
+
+  .lu-thanks__list li {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333;
+  }
+
+  .lu-thanks__actions {
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .lu-thanks__btn-primary {
+    background: #0C0A3E;
+    color: #CCFF33;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    padding: 16px 32px;
+    display: inline-block;
+  }
+
+  .lu-thanks__btn-secondary {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0C0A3E;
+    text-decoration: none;
+    border-bottom: 2px solid #0C0A3E;
+    padding-bottom: 2px;
+  }
+
+  .lu-thanks__contact {
+    margin-top: 48px;
+    font-size: 14px;
+    color: #888;
+  }
+
+  .lu-thanks__contact a {
+    color: #0C0A3E;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 600px) {
+    .lu-thanks__hero {
+      padding: 56px 24px 48px;
+    }
+    .lu-thanks__body {
+      padding: 48px 24px 72px;
+    }
+  }
+</style>

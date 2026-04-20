@@ -8,7 +8,7 @@
     <a href="/" class="lu-nav-logo">
       <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="38" class="lu-nav-logo-full" />
       <span class="lu-nav-logo-icon-bg">
-        <img src="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp" alt="Level Up" height="32" class="lu-nav-logo-icon" />
+        <img src="/images/logo.webp" alt="Level Up" height="36" class="lu-nav-logo-icon" />
       </span>
     </a>
     <div class="lu-nav-ctas">
@@ -180,9 +180,7 @@
     gap: 8px;
     position: relative;
   }
-  .lu-nav-donate::after { content: '→'; font-size: 16px; transition: transform 0.15s; }
   .lu-nav-donate:hover { background: #d9ff4d; box-shadow: 0 4px 20px rgba(204,255,51,0.45); transform: translateY(-1px); }
-  .lu-nav-donate:hover::after { transform: translateX(3px); }
   .lu-nav-join {
     background: #0C0A3E;
     color: #FFFFFF !important;
@@ -361,13 +359,12 @@
     .lu-nav-ctas { margin-right: 84px; }
     .lu-nav-logo-full { display: none !important; }
     .lu-nav-logo-icon-bg { display: flex !important; align-items: center; }
-    .lu-nav-logo-icon { height: 30px !important; width: 110px !important; object-fit: cover !important; object-position: left center !important; }
+    .lu-nav-logo-icon { height: 36px !important; width: 36px !important; object-fit: cover !important; object-position: center !important; }
     .lu-nav-donate {
       padding: 10px 14px;
       font-size: 13px;
       border-radius: 4px;
     }
-    .lu-nav-donate::after { content: '→'; }
     .lu-nav-join {
       display: none !important;
     }

@@ -47,6 +47,14 @@ const { headInner, bodyClass } = extract(homeRaw);
   </main>
 
   <Footer />
+
+  {import.meta.env.PUBLIC_META_PIXEL_ID && (
+    <script>
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Donate');
+      }
+    </script>
+  )}
 </Layout>
 
 <style is:global>

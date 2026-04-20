@@ -13,9 +13,12 @@ Stable alias: `https://levelup-astro.vercel.app`
 
 ```
 levelup-astro/
-├── api/                        # Root-level Vercel serverless functions (Node.js)
-│   ├── create-donation.ts      # POST /api/create-donation — creates Mollie payment
-│   └── mollie-webhook.ts       # POST /api/mollie-webhook — handles payment events, sends email
+├── api/                              # Root-level Vercel serverless functions (Node.js)
+│   ├── create-donation.ts            # POST /api/create-donation — creates Mollie payment
+│   ├── mollie-webhook.ts             # POST /api/mollie-webhook — handles payment events, sends email
+│   └── donor-portal/
+│       ├── request-link.ts           # POST /api/donor-portal/request-link — sends magic link email
+│       └── cancel.ts                 # POST /api/donor-portal/cancel — cancels Mollie subscription
 ├── src/
 │   ├── pages/
 │   │   ├── donate.astro        # Donation form page
@@ -45,7 +48,7 @@ Additionally, root `api/` functions **bypass Vercel BotID**, which blocks server
 | `MOLLIE_WEBHOOK_URL` | URL Mollie POSTs to on payment events — must use bypass token (see below) |
 | `PUBLIC_SITE_URL` | Base URL used for redirect after Mollie checkout |
 | `RESEND_API_KEY` | Resend API key for transactional email |
-| `MAGIC_LINK_SECRET` | Secret for signing donor portal magic links |
+| `PORTAL_SECRET` | Secret for signing/verifying donor portal magic link tokens |
 
 ### Webhook URL format
 
@@ -118,7 +121,11 @@ Both use the same visual style: Montserrat font, Movement-platform header/footer
 
 Located at `/donor-portal`. Donors enter their email, receive a magic link (valid 1 hour), and can view/manage their donations.
 
-Magic links are signed with `MAGIC_LINK_SECRET`. The portal reads Mollie subscription data to show recurring donation status.
+Magic links are signed with `PORTAL_SECRET`. The portal reads Mollie subscription data to show recurring donation status.
+
+**Important:** The donor portal only works for **recurring donors**. One-time payments do not create a Mollie customer record, so there is nothing to look up. Only monthly donors will receive a magic link.
+
+The lookup searches all Mollie customers by email address. If no matching customer is found, the portal silently returns success (to avoid email enumeration) — the donor simply won't receive an email.
 
 ---
 
@@ -132,21 +139,34 @@ Magic links are signed with `MAGIC_LINK_SECRET`. The portal reads Mollie subscri
 
 ---
 
+## Known Issues / Gotchas
+
+- **Vercel 100 deployments/day limit** — the free plan caps at 100 deployments per day. If hit, wait until midnight UTC to deploy again.
+- **`PUBLIC_SITE_URL` had a trailing `\n`** — fixed in code with `.replace(/\\n/g, '').trim()`. If you ever recreate this env var, paste it carefully without a trailing newline.
+- **Test vs live Mollie environments are completely separate** — customers, payments, and subscriptions in test mode do not appear in live mode and vice versa. After switching to the live API key, there are zero customers until a real live payment is made.
+- **git-main alias must be re-pointed after every deploy** — `vercel deploy --prod` creates a new URL each time. The stable `levelup-astro-git-main-tech-8249s-projects.vercel.app` alias (used by `MOLLIE_WEBHOOK_URL`) must be manually re-pointed with `vercel alias set`.
+- **Mollie webhook stores URL per payment at creation time** — changing `MOLLIE_WEBHOOK_URL` only affects new payments. Existing subscriptions will POST to the URL that was set when their first payment was created.
+
+---
+
 ## Next Steps
+
+### Do tomorrow (deploy pending — hit daily limit today)
+- [ ] Deploy commit `854ad69` — removes `source` filter from donor portal customer lookup, adds debug logging
+- [ ] Make a live recurring (monthly) donation to create the first live Mollie customer
+- [ ] Test donor portal magic link with that email
 
 ### High priority
 - [ ] **Custom domain** — point `welevelup.org` (or a subdomain) to this Vercel project so donors don't see the `.vercel.app` URL
-- [ ] **Mollie live webhook registration** — verify in Mollie dashboard that the live webhook URL is set correctly for existing subscriptions
-- [ ] **Gift Aid** — confirm Gift Aid declaration is being captured and stored correctly for HMRC reporting
-- [ ] **Donor portal** — test the full magic-link flow in production with a real donor email
+- [ ] **Email deliverability** — verify SPF/DKIM records for `welevelup.org` in Resend dashboard so confirmation emails don't land in spam
+- [ ] **Gift Aid** — confirm Gift Aid data is being stored and a process exists for HMRC reporting
 
 ### Medium priority
-- [ ] **Error monitoring** — add Sentry or similar to catch webhook failures silently
-- [ ] **Email deliverability** — verify SPF/DKIM records for `welevelup.org` in Resend dashboard so emails don't land in spam
-- [ ] **Resend domain verification** — confirm `welevelup.org` is fully verified in Resend
-- [ ] **Recurring donation management** — donor portal should let donors cancel/pause subscriptions
+- [ ] **Error monitoring** — add Sentry or similar to catch silent webhook failures
+- [ ] **Resend domain verification** — confirm `welevelup.org` is fully verified in Resend dashboard
+- [ ] **Recurring donation management** — donor portal cancel button is wired up; test it with a live subscription
 
 ### Nice to have
-- [ ] **Donation amount analytics** — log donation amounts to a simple store (Vercel KV or Supabase) for reporting
+- [ ] **Donation analytics** — log amounts to Vercel KV or Supabase for reporting
 - [ ] **Admin view** — simple password-protected page showing recent donations
-- [ ] **Accessibility audit** — run axe or Lighthouse accessibility check on the donate form
+- [ ] **Accessibility audit** — run Lighthouse on the donate form

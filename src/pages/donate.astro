@@ -397,6 +397,11 @@ const { headInner, bodyClass } = extract(homeRaw);
   updateCancelNote();
   document.querySelectorAll('input[name="frequency"]').forEach(r => r.addEventListener('change', updateCancelNote));
 
+  customInput.addEventListener('keydown', (e) => {
+    const allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Enter','.'];
+    if (!allowed.includes(e.key) && !/^\d$/.test(e.key)) e.preventDefault();
+  });
+
   customInput.addEventListener('input', () => {
     const customRadio = form.querySelector('input[name="preset"][value="custom"]') as HTMLInputElement;
     if (customRadio) customRadio.checked = true;
@@ -407,7 +412,11 @@ const { headInner, bodyClass } = extract(homeRaw);
     radio.addEventListener('change', (e) => {
       const val = (e.target as HTMLInputElement).value;
       customLabel.hidden = val !== 'custom';
-      if (val === 'custom') customInput.focus();
+      if (val === 'custom') {
+        customInput.focus();
+      } else {
+        customInput.value = '';
+      }
     });
   });
 

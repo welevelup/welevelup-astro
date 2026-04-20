@@ -70,8 +70,9 @@ export const POST: APIRoute = async ({ request }) => {
     let subs;
     try {
       subs = await mollie.customerSubscriptions.page({ customerId });
-    } catch {
-      subs = { length: 0 };
+    } catch (subsErr) {
+      console.error('[mollie-webhook] failed to fetch subscriptions, aborting to avoid duplicate', subsErr);
+      return new Response('Internal error', { status: 500 });
     }
 
     const duplicate = Array.from(subs as Iterable<{ status: string; id: string }>).find(

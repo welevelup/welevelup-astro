@@ -9,3 +9,4 @@ dist
 .env.local
 .omc/
 .superpowers/
+.env.vercel.local

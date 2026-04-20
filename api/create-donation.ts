@@ -36,7 +36,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const mollie = createMollieClient({ apiKey });
   const formattedAmount = amountNum.toFixed(2);
-  const redirectUrl = `${siteUrl.replace(/\/$/, '')}/donate/thank-you`;
+  const redirectUrl = `${siteUrl.replace(/\\n/g, '').trim().replace(/\/$/, '')}/donate/thank-you`;
 
   try {
     if (recurring) {

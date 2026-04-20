@@ -107,7 +107,17 @@ function stripDuplicateHeadTags(raw: string): string {
     .replace(/<meta\b[^>]*\bname="twitter:[^"]*"[^>]*>/gi, '')
     .replace(/<link\b[^>]*\brel="canonical"[^>]*>/gi, '')
     .replace(/<meta\b[^>]*\bcharset=[^>]*>/gi, '')
-    .replace(/<meta\b[^>]*\bname="viewport"[^>]*>/gi, '');
+    .replace(/<meta\b[^>]*\bname="viewport"[^>]*>/gi, '')
+    // Strip heavy WP scripts that bloat every page (GTM, GA, GiveWP, pixel duplicates)
+    .replace(/<script\b[^>]*googletagmanager[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<script\b[^>]*googletagmanager[^>]*\/?>/gi, '')
+    .replace(/<script\b[^>]*gtag[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<script\b[^>]*give\.js[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<script\b[^>]*give\.js[^>]*\/?>/gi, '')
+    .replace(/<script\b[^>]*fbevents[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<script\b[^>]*fbevents[^>]*\/?>/gi, '')
+    .replace(/<script\b[^>]*pixelyoursite[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<noscript\b[^>]*>[\s\S]*?googletagmanager[\s\S]*?<\/noscript>/gi, '');
 }
 
 export function extract(rawHtml: string): ExtractedHtml {

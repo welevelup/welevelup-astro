@@ -38,12 +38,15 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const meta = payment.metadata as Record<string, string> | null;
+    console.log(`[mollie-webhook] meta=${JSON.stringify(meta)}`);
+    console.log(`[mollie-webhook] RESEND_API_KEY set=${!!import.meta.env.RESEND_API_KEY}`);
 
     // Send confirmation email for new one-time or first recurring payments
     if (
       (payment.sequenceType === 'oneoff' || payment.sequenceType === 'first') &&
       meta?.donorEmail
     ) {
+      console.log(`[mollie-webhook] sending email to ${meta.donorEmail}`);
       try {
         await sendDonationConfirmation({
           to: meta.donorEmail,

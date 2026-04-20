@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
+import { sendDonationConfirmation } from '../../lib/email';
 
 export const prerender = false;
 
@@ -32,12 +33,32 @@ export const POST: APIRoute = async ({ request }) => {
       `[mollie-webhook] payment=${paymentId} status=${payment.status} seq=${payment.sequenceType}`
     );
 
-    if (payment.status !== 'paid' || payment.sequenceType !== 'first') {
+    if (payment.status !== 'paid') {
       return new Response('OK', { status: 200 });
     }
 
     const meta = payment.metadata as Record<string, string> | null;
-    if (!meta || meta.type !== 'recurring') {
+
+    // Send confirmation email for new one-time or first recurring payments
+    if (
+      (payment.sequenceType === 'oneoff' || payment.sequenceType === 'first') &&
+      meta?.donorEmail
+    ) {
+      try {
+        await sendDonationConfirmation({
+          to: meta.donorEmail,
+          name: meta.donorName || '',
+          amount: meta.amount || payment.amount.value,
+          recurring: meta.type === 'recurring',
+          giftAid: meta.giftAid === 'true',
+        });
+      } catch (emailErr) {
+        console.error('[mollie-webhook] email send failed', emailErr);
+      }
+    }
+
+    // Create subscription for first recurring payment
+    if (payment.sequenceType !== 'first' || !meta || meta.type !== 'recurring') {
       return new Response('OK', { status: 200 });
     }
 
@@ -71,6 +92,7 @@ export const POST: APIRoute = async ({ request }) => {
       interval: '1 month',
       description: `Level Up — Monthly donation (£${amount}/month)`,
       webhookUrl: import.meta.env.MOLLIE_WEBHOOK_URL,
+      metadata: { source: 'astro', donorEmail: meta.donorEmail },
     });
 
     console.log(

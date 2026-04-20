@@ -1,0 +1,89 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+<Layout
+  headHtml=""
+  title="Donor Portal — Level Up"
+  description="Access your Level Up donor portal to manage your monthly donation."
+  noindex={true}
+>
+  <Nav />
+  <main style="background:#f4f4f0;min-height:70vh;padding:60px 16px;font-family:'DM Sans',system-ui,sans-serif;">
+    <div style="max-width:480px;margin:0 auto;">
+      <div style="background:#0C0A3E;padding:28px 40px 24px;">
+        <p style="margin:0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#CCFF33;">Level Up</p>
+      </div>
+      <div style="background:#fff;padding:48px 40px;">
+        <h1 style="margin:0 0 8px;font-size:28px;font-weight:800;color:#0C0A3E;letter-spacing:-0.03em;">Donor portal</h1>
+        <p style="margin:0 0 32px;font-size:16px;color:#555;line-height:1.6;">Enter your email address and we'll send you a secure link to manage your donation.</p>
+
+        <form id="portal-form" novalidate>
+          <label style="display:block;font-size:14px;font-weight:700;color:#0C0A3E;margin-bottom:8px;" for="dp-email">Email address</label>
+          <input
+            id="dp-email"
+            name="email"
+            type="email"
+            autocomplete="email"
+            required
+            style="display:block;width:100%;box-sizing:border-box;border:2px solid #ddd;padding:14px 16px;font-size:16px;font-family:inherit;outline:none;"
+            placeholder="you@example.com"
+          />
+          <p id="portal-error" hidden style="margin:8px 0 0;font-size:14px;color:#c0392b;"></p>
+          <button
+            type="submit"
+            style="margin-top:24px;display:block;width:100%;background:#0C0A3E;color:#CCFF33;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;border:none;padding:18px;cursor:pointer;font-family:inherit;"
+          >Send access link →</button>
+        </form>
+
+        <div id="portal-success" hidden style="text-align:center;padding:16px 0;">
+          <p style="font-size:18px;font-weight:700;color:#0C0A3E;margin:0 0 8px;">Check your inbox</p>
+          <p style="font-size:15px;color:#555;margin:0;line-height:1.6;">If we have a donation on record for that email, you'll receive a link shortly. It expires in 1 hour.</p>
+        </div>
+      </div>
+      <div style="background:#0C0A3E;padding:20px 40px;text-align:center;">
+        <p style="margin:0;font-size:12px;color:rgba(238,235,211,0.5);">Questions? <a href="mailto:hello@welevelup.org" style="color:#CCFF33;text-decoration:none;">hello@welevelup.org</a></p>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  const form = document.getElementById('portal-form') as HTMLFormElement;
+  const errorEl = document.getElementById('portal-error') as HTMLParagraphElement;
+  const successEl = document.getElementById('portal-success') as HTMLDivElement;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorEl.hidden = true;
+
+    const email = (form.querySelector('#dp-email') as HTMLInputElement).value.trim();
+    if (!email) {
+      errorEl.textContent = 'Please enter your email address.';
+      errorEl.hidden = false;
+      return;
+    }
+
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+      const res = await fetch('/api/donor-portal/request-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error();
+      form.hidden = true;
+      successEl.hidden = false;
+    } catch {
+      errorEl.textContent = 'Something went wrong. Please try again or email hello@welevelup.org.';
+      errorEl.hidden = false;
+      btn.disabled = false;
+      btn.textContent = 'Send access link →';
+    }
+  });
+</script>

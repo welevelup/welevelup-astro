@@ -1,0 +1,140 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { verifyToken } from '../../lib/token';
+import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
+
+const token = Astro.url.searchParams.get('token') ?? '';
+const secret = import.meta.env.PORTAL_SECRET ?? '';
+const apiKey = import.meta.env.MOLLIE_API_KEY ?? '';
+
+interface TokenPayload { email: string; mollieCustomerId: string }
+
+const payload = secret ? verifyToken<TokenPayload>(token, secret) : null;
+
+let subscriptions: Array<{
+  id: string;
+  amount: { value: string; currency: string };
+  status: string;
+  nextPaymentDate?: string | null;
+  description: string;
+}> = [];
+
+let loadError = false;
+
+if (payload && apiKey) {
+  try {
+    const mollie = createMollieClient({ apiKey });
+    const page = await mollie.customerSubscriptions.page({ customerId: payload.mollieCustomerId });
+    subscriptions = Array.from(page as Iterable<typeof subscriptions[number]>).filter(
+      (s) => s.status === SubscriptionStatus.active || s.status === SubscriptionStatus.pending
+    );
+  } catch {
+    loadError = true;
+  }
+}
+
+const invalid = !payload;
+---
+<Layout
+  headHtml=""
+  title="Your Donation — Level Up"
+  description="Manage your Level Up monthly donation."
+  noindex={true}
+>
+  <Nav />
+  <main style="background:#f4f4f0;min-height:70vh;padding:60px 16px;font-family:'DM Sans',system-ui,sans-serif;">
+    <div style="max-width:540px;margin:0 auto;">
+      <div style="background:#0C0A3E;padding:28px 40px 24px;">
+        <p style="margin:0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#CCFF33;">Level Up</p>
+      </div>
+      <div style="background:#fff;padding:48px 40px;">
+
+        {invalid && (
+          <div>
+            <h1 style="margin:0 0 8px;font-size:28px;font-weight:800;color:#0C0A3E;letter-spacing:-0.03em;">Link expired</h1>
+            <p style="margin:0 0 24px;font-size:16px;color:#555;line-height:1.6;">This link has expired or is invalid. Please request a new one.</p>
+            <a href="/donor-portal" style="display:inline-block;background:#0C0A3E;color:#CCFF33;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none;padding:16px 32px;">Request new link →</a>
+          </div>
+        )}
+
+        {!invalid && loadError && (
+          <div>
+            <h1 style="margin:0 0 8px;font-size:28px;font-weight:800;color:#0C0A3E;letter-spacing:-0.03em;">Something went wrong</h1>
+            <p style="margin:0;font-size:16px;color:#555;line-height:1.6;">We couldn't load your donation details. Please try again or email <a href="mailto:hello@welevelup.org" style="color:#0C0A3E;">hello@welevelup.org</a>.</p>
+          </div>
+        )}
+
+        {!invalid && !loadError && subscriptions.length === 0 && (
+          <div>
+            <h1 style="margin:0 0 8px;font-size:28px;font-weight:800;color:#0C0A3E;letter-spacing:-0.03em;">No active donations</h1>
+            <p style="margin:0;font-size:16px;color:#555;line-height:1.6;">We don't have any active monthly donations for <strong>{payload!.email}</strong>. If you think this is a mistake, email <a href="mailto:hello@welevelup.org" style="color:#0C0A3E;">hello@welevelup.org</a>.</p>
+          </div>
+        )}
+
+        {!invalid && !loadError && subscriptions.length > 0 && (
+          <div>
+            <h1 style="margin:0 0 8px;font-size:28px;font-weight:800;color:#0C0A3E;letter-spacing:-0.03em;">Your donation</h1>
+            <p style="margin:0 0 32px;font-size:16px;color:#555;line-height:1.6;">Signed in as <strong>{payload!.email}</strong></p>
+
+            {subscriptions.map((sub) => (
+              <div style="border:2px solid #eee;padding:24px;margin-bottom:16px;">
+                <p style="margin:0 0 4px;font-size:22px;font-weight:800;color:#0C0A3E;">£{sub.amount.value}<span style="font-size:14px;font-weight:400;color:#888;">/month</span></p>
+                <p style="margin:0 0 4px;font-size:14px;color:#555;">{sub.description}</p>
+                {sub.nextPaymentDate && (
+                  <p style="margin:0 0 20px;font-size:13px;color:#888;">Next payment: {sub.nextPaymentDate}</p>
+                )}
+                {!sub.nextPaymentDate && <p style="margin:0 0 20px;"></p>}
+                <button
+                  class="cancel-btn"
+                  data-sub-id={sub.id}
+                  style="background:transparent;border:2px solid #0C0A3E;color:#0C0A3E;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:10px 20px;cursor:pointer;font-family:inherit;"
+                >Cancel donation</button>
+                <p class="cancel-status" hidden style="margin:8px 0 0;font-size:14px;"></p>
+              </div>
+            ))}
+          </div>
+        )}
+
+      </div>
+      <div style="background:#0C0A3E;padding:20px 40px;text-align:center;">
+        <p style="margin:0;font-size:12px;color:rgba(238,235,211,0.5);">Questions? <a href="mailto:hello@welevelup.org" style="color:#CCFF33;text-decoration:none;">hello@welevelup.org</a></p>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<script define:vars={{ token }}>
+  document.querySelectorAll('.cancel-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const button = btn as HTMLButtonElement;
+      const subscriptionId = button.dataset.subId;
+      const statusEl = button.nextElementSibling as HTMLParagraphElement;
+
+      if (!confirm('Are you sure you want to cancel your monthly donation to Level Up?')) return;
+
+      button.disabled = true;
+      button.textContent = 'Cancelling…';
+
+      try {
+        const res = await fetch('/api/donor-portal/cancel', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token, subscriptionId }),
+        });
+        if (!res.ok) throw new Error();
+        window.location.href = '/donor-portal/cancelled';
+      } catch {
+        statusEl.textContent = 'Failed to cancel. Please email hello@welevelup.org.';
+        statusEl.style.color = '#c0392b';
+        statusEl.hidden = false;
+        button.disabled = false;
+        button.textContent = 'Cancel donation';
+      }
+    });
+  });
+</script>

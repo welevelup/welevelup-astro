@@ -439,6 +439,7 @@ const { headInner, bodyClass } = extract(homeRaw);
           recurring: freq === 'monthly',
           donorName,
           donorEmail,
+          giftAid: (form.querySelector('input[name="giftAid"]') as HTMLInputElement)?.checked ?? false,
         }),
       });
 

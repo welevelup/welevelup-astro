@@ -18,14 +18,14 @@ export const POST: APIRoute = async ({ request }) => {
     return json({ error: 'Mollie env vars not configured' }, 500);
   }
 
-  let body: { amount?: string; recurring?: boolean; donorName?: string; donorEmail?: string };
+  let body: { amount?: string; recurring?: boolean; donorName?: string; donorEmail?: string; giftAid?: boolean };
   try {
     body = await request.json();
   } catch {
     return json({ error: 'Invalid request body' }, 400);
   }
 
-  const { amount, recurring, donorName = '', donorEmail = '' } = body;
+  const { amount, recurring, donorName = '', donorEmail = '', giftAid = false } = body;
 
   const amountNum = parseFloat(amount ?? '');
   if (!Number.isFinite(amountNum) || amountNum < 1) {
@@ -44,7 +44,7 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     if (recurring) {
-      const customer = await mollie.customers.create({ name: donorName, email: donorEmail });
+      const customer = await mollie.customers.create({ name: donorName, email: donorEmail, metadata: { source: 'astro' } });
       const payment = await mollie.payments.create({
         amount: { currency: 'GBP', value: formattedAmount },
         description: `Level Up — Monthly donation (£${formattedAmount}/month)`,
@@ -52,7 +52,7 @@ export const POST: APIRoute = async ({ request }) => {
         webhookUrl,
         customerId: customer.id,
         sequenceType: SequenceType.first,
-        metadata: { type: 'recurring', amount: formattedAmount, donorEmail, donorName, source: 'astro' },
+        metadata: { type: 'recurring', amount: formattedAmount, donorEmail, donorName, giftAid: String(giftAid), source: 'astro' },
       });
       return json({ checkoutUrl: payment.getCheckoutUrl() });
     }
@@ -62,7 +62,7 @@ export const POST: APIRoute = async ({ request }) => {
       description: `Level Up — Donation (£${formattedAmount})`,
       redirectUrl,
       webhookUrl,
-      metadata: { type: 'one-time', amount: formattedAmount, donorEmail: donorEmail || null, donorName: donorName || null, source: 'astro' },
+      metadata: { type: 'one-time', amount: formattedAmount, donorEmail: donorEmail || null, donorName: donorName || null, giftAid: String(giftAid), source: 'astro' },
     });
     return json({ checkoutUrl: payment.getCheckoutUrl() });
   } catch (err) {

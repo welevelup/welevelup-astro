@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+---
+<Layout
+  headHtml=""
+  title="Donation Cancelled — Level Up"
+  description="Your monthly donation to Level Up has been cancelled."
+  noindex={true}
+>
+  <Nav />
+  <main style="background:#f4f4f0;min-height:70vh;padding:60px 16px;font-family:'DM Sans',system-ui,sans-serif;">
+    <div style="max-width:480px;margin:0 auto;">
+      <div style="background:#0C0A3E;padding:28px 40px 24px;">
+        <p style="margin:0;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#CCFF33;">Level Up</p>
+      </div>
+      <div style="background:#fff;padding:48px 40px;">
+        <h1 style="margin:0 0 8px;font-size:28px;font-weight:800;color:#0C0A3E;letter-spacing:-0.03em;">Donation cancelled</h1>
+        <p style="margin:0 0 24px;font-size:16px;color:#555;line-height:1.6;">Your monthly donation has been cancelled. We're sorry to see you go.</p>
+        <p style="margin:0 0 32px;font-size:16px;color:#555;line-height:1.6;">If you ever want to support Level Up's feminist campaigns again, we'd love to have you back.</p>
+        <a href="/donate" style="display:inline-block;background:#0C0A3E;color:#CCFF33;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;text-decoration:none;padding:16px 32px;margin-right:16px;">Donate again</a>
+        <a href="/" style="display:inline-block;font-size:14px;font-weight:700;color:#0C0A3E;text-decoration:none;padding:16px 0;">Back to home</a>
+      </div>
+      <div style="background:#0C0A3E;padding:20px 40px;text-align:center;">
+        <p style="margin:0;font-size:12px;color:rgba(238,235,211,0.5);">Questions? <a href="mailto:hello@welevelup.org" style="color:#CCFF33;text-decoration:none;">hello@welevelup.org</a></p>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

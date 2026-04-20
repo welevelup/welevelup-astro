@@ -397,6 +397,12 @@ const { headInner, bodyClass } = extract(homeRaw);
   updateCancelNote();
   document.querySelectorAll('input[name="frequency"]').forEach(r => r.addEventListener('change', updateCancelNote));
 
+  customInput.addEventListener('input', () => {
+    const customRadio = form.querySelector('input[name="preset"][value="custom"]') as HTMLInputElement;
+    if (customRadio) customRadio.checked = true;
+    customLabel.hidden = false;
+  });
+
   document.querySelectorAll('input[name="preset"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
       const val = (e.target as HTMLInputElement).value;

@@ -43,9 +43,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     do {
       const page = await mollie.customers.page({ from: cursor, limit: 250 });
       const list = Array.from(page as Iterable<{ id: string; email: string; metadata?: Record<string, string> | null }>);
-      const match = list.find(
-        (c) => c.email?.toLowerCase() === email && (c.metadata as Record<string, string> | null)?.source === 'astro'
-      );
+      const match = list.find((c) => c.email?.toLowerCase() === email);
       if (match) {
         customerId = match.id;
         break;
@@ -53,6 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       cursor = (page as unknown as { nextPageCursor?: string }).nextPageCursor ?? undefined;
     } while (cursor);
 
+    console.log(`[request-link] lookup for ${email} → customerId=${customerId ?? 'not found'}`);
     if (!customerId) return ok();
 
     const token = createToken({ email, mollieCustomerId: customerId }, secret);

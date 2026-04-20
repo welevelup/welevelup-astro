@@ -8,7 +8,7 @@ export const POST: APIRoute = async ({ request }) => {
   const apiKey = import.meta.env.MOLLIE_API_KEY;
 
   if (!apiKey) {
-    console.error('[mollie-webhook] missing env vars');
+    console.error('[mollie-webhook] MOLLIE_API_KEY missing');
     return new Response('Internal error', { status: 500 });
   }
 
@@ -29,24 +29,30 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     const payment = await mollie.payments.get(paymentId);
-    console.log(
-      `[mollie-webhook] payment=${paymentId} status=${payment.status} seq=${payment.sequenceType}`
-    );
+    const seq = payment.sequenceType;
+    const status = payment.status;
+    console.log(`[webhook] id=${paymentId} status=${status} seq=${seq}`);
 
-    if (payment.status !== 'paid') {
+    if (status !== 'paid') {
+      console.log(`[webhook] skipping: not paid`);
       return new Response('OK', { status: 200 });
     }
 
-    const meta = payment.metadata as Record<string, string> | null;
-    console.log(`[mollie-webhook] meta=${JSON.stringify(meta)}`);
-    console.log(`[mollie-webhook] RESEND_API_KEY set=${!!import.meta.env.RESEND_API_KEY}`);
+    // Mollie metadata can be object or stringified JSON
+    let meta: Record<string, string> | null = null;
+    if (payment.metadata && typeof payment.metadata === 'string') {
+      try { meta = JSON.parse(payment.metadata); } catch { meta = null; }
+    } else if (payment.metadata && typeof payment.metadata === 'object') {
+      meta = payment.metadata as Record<string, string>;
+    }
 
-    // Send confirmation email for new one-time or first recurring payments
-    if (
-      (payment.sequenceType === 'oneoff' || payment.sequenceType === 'first') &&
-      meta?.donorEmail
-    ) {
-      console.log(`[mollie-webhook] sending email to ${meta.donorEmail}`);
+    console.log(`[webhook] meta=${JSON.stringify(meta)}`);
+    console.log(`[webhook] RESEND_KEY=${!!import.meta.env.RESEND_API_KEY}`);
+
+    const shouldEmail = (seq === 'oneoff' || seq === 'first') && !!meta?.donorEmail;
+    console.log(`[webhook] shouldEmail=${shouldEmail} email=${meta?.donorEmail ?? 'none'}`);
+
+    if (shouldEmail && meta) {
       try {
         await sendDonationConfirmation({
           to: meta.donorEmail,
@@ -55,13 +61,14 @@ export const POST: APIRoute = async ({ request }) => {
           recurring: meta.type === 'recurring',
           giftAid: meta.giftAid === 'true',
         });
+        console.log(`[webhook] email sent to ${meta.donorEmail}`);
       } catch (emailErr) {
-        console.error('[mollie-webhook] email send failed', emailErr);
+        console.error(`[webhook] email FAILED:`, emailErr);
       }
     }
 
     // Create subscription for first recurring payment
-    if (payment.sequenceType !== 'first' || !meta || meta.type !== 'recurring') {
+    if (seq !== 'first' || !meta || meta.type !== 'recurring') {
       return new Response('OK', { status: 200 });
     }
 
@@ -74,7 +81,7 @@ export const POST: APIRoute = async ({ request }) => {
     try {
       subs = await mollie.customerSubscriptions.page({ customerId });
     } catch (subsErr) {
-      console.error('[mollie-webhook] failed to fetch subscriptions, aborting to avoid duplicate', subsErr);
+      console.error('[webhook] failed to fetch subscriptions', subsErr);
       return new Response('Internal error', { status: 500 });
     }
 
@@ -83,9 +90,7 @@ export const POST: APIRoute = async ({ request }) => {
     );
 
     if (duplicate) {
-      console.log(
-        `[mollie-webhook] subscription already exists (${duplicate.id}) for customer ${customerId}`
-      );
+      console.log(`[webhook] subscription already exists: ${duplicate.id}`);
       return new Response('OK', { status: 200 });
     }
 
@@ -99,13 +104,10 @@ export const POST: APIRoute = async ({ request }) => {
       metadata: { source: 'astro', donorEmail: meta.donorEmail },
     });
 
-    console.log(
-      `[mollie-webhook] created subscription ${subscription.id} for customer ${customerId} (£${amount}/month)`
-    );
-
+    console.log(`[webhook] subscription created: ${subscription.id} for ${customerId}`);
     return new Response('OK', { status: 200 });
   } catch (err) {
-    console.error('[mollie-webhook] error', err);
+    console.error('[webhook] error:', err);
     return new Response('Internal error', { status: 500 });
   }
 };

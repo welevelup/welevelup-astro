@@ -6,6 +6,32 @@ const FROM = 'Level Up <no-reply@welevelup.org>';
 const LOGO_URL = 'https://levelup.yourmovement.org/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBc01XIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--899d9333f326b8d370f2acf06f7fe589aef9efd5/image.png';
 const SITE_URL = 'https://welevelup.org';
 
+const MOVEMENT_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+body, .mceText, .mcnTextContent, p, a, li, td, blockquote, h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+.mceStandardButton td a, .mceButtonLink, .mceButton a, .mceButtonLink a {
+  border-radius: 6px !important; -webkit-border-radius: 6px !important; -moz-border-radius: 6px !important; overflow: hidden;
+}
+img { -ms-interpolation-mode: bicubic; }
+table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+p, a, li, td, body, table, blockquote { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
+body { height: 100%; margin: 0; padding: 0; width: 100%; background-color: rgb(244,244,244); }
+p { margin: 0; padding: 0; }
+table { border-collapse: collapse; }
+td, p, a { word-break: break-word; }
+h1,h2,h3,h4,h5,h6 { display: block; margin: 0; padding: 0; }
+img, a img { border: 0; height: auto; outline: none; text-decoration: none; }
+a[href^="tel"], a[href^="sms"] { color: inherit; cursor: default; text-decoration: none; }
+li p { margin: 0 !important; }
+@media only screen and (max-width: 480px) {
+  body { width: 100% !important; min-width: 100% !important; }
+  img { height: auto !important; }
+  .mceBlockContainer, .mceTextBlockContainer { padding-right: 16px !important; padding-left: 16px !important; }
+}`;
+
 function baseTemplate(content: string): string {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -13,41 +39,43 @@ function baseTemplate(content: string): string {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Level Up</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-body, p, a, li, td, h1, h2, h3, h4, h5, h6 {
-  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
-}
-body { margin: 0; padding: 0; background: #f4f4f4; }
-table { border-collapse: collapse; }
-img { border: 0; height: auto; outline: none; text-decoration: none; }
-p { margin: 0; padding: 0; }
-</style>
+<style>${MOVEMENT_CSS}</style>
 </head>
-<body style="margin:0;padding:0;background:#f4f4f4;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f4;padding:32px 16px;">
+<body style="margin:0;padding:0;background-color:rgb(244,244,244);">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:rgb(244,244,244);padding:32px 16px;">
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;">
-        <tr><td style="padding:24px 40px;text-align:center;">
+
+        <!-- Header -->
+        <tr><td style="padding:24px 40px;text-align:center;background:#ffffff;">
           <center>
             <a href="${SITE_URL}" target="_blank" rel="noopener">
-              <img src="${LOGO_URL}" alt="Level Up Logo" width="120" style="display:inline-block;max-width:120px;margin:20px 0;" />
+              <img src="${LOGO_URL}" alt="Level Up Logo" width="120" style="display:inline-block;max-width:120px;margin:20px 0;height:auto;" />
             </a>
           </center>
         </td></tr>
+
+        <!-- Divider -->
         <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e0e0e0;"></div></td></tr>
-        <tr><td style="padding:32px 40px 24px;font-size:16px;line-height:1.6;color:#000000;">${content}</td></tr>
+
+        <!-- Body -->
+        <tr><td style="padding:32px 40px 24px;font-size:16px;line-height:1.5;color:#000000;">${content}</td></tr>
+
+        <!-- Divider -->
         <tr><td style="padding:0 40px;"><div style="border-top:1px solid #e0e0e0;"></div></td></tr>
+
+        <!-- Footer -->
         <tr><td style="padding:24px 40px 32px;text-align:center;">
           <center>
             <a href="${SITE_URL}" target="_blank" rel="noopener">
-              <img src="${LOGO_URL}" alt="Level Up Logo" width="80" style="display:inline-block;max-width:80px;margin:20px 0;" />
+              <img src="${LOGO_URL}" alt="Level Up Logo" width="80" style="display:inline-block;max-width:80px;margin:20px 0;height:auto;" />
             </a>
           </center>
-          <p style="font-size:12px;color:#666;margin:0 0 8px;">You are receiving this email because you subscribed to Level Up's mailing list.</p>
+          <p style="font-size:12px;color:#666;margin:0 0 8px;">You are receiving this email because you subscribed to Level Up's mailing list. We don't email often, but if you'd prefer not to hear from us again, you can unsubscribe below.</p>
           <p style="font-size:12px;color:#666;margin:0 0 8px;"><strong>Our mailing address is:</strong><br>New Derwent House<br>69–73 Theobalds Road<br>London WC1X 8TA</p>
           <p style="font-size:12px;color:#666;margin:0;"><strong>Contact us at:</strong> <a href="mailto:hello@welevelup.org" style="color:#5b4fcf;text-decoration:none;">hello@welevelup.org</a></p>
         </td></tr>
+
       </table>
     </td></tr>
   </table>
@@ -73,7 +101,7 @@ async function sendDonationConfirmation({
   const resend = new Resend(key);
 
   const firstName = name ? name.split(' ')[0] : '';
-  const greeting = firstName ? `${firstName},` : 'Thank you,';
+  const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
   const typeLabel = recurring ? 'monthly donation' : 'donation';
 
   const giftAidNote = giftAid
@@ -85,9 +113,10 @@ async function sendDonationConfirmation({
     : '';
 
   const html = baseTemplate(`
-    <p style="margin:0 0 20px;">${greeting} with your support we're fighting for gender justice in the UK — and your ${typeLabel} of <strong>£${amount}${recurring ? ' every month' : ''}</strong> makes that possible.</p>
+    <p style="margin:0 0 20px;">${greeting}</p>
+    <p style="margin:0 0 20px;">With your support we're fighting for gender justice in the UK — and your ${typeLabel} of <strong>£${amount}${recurring ? ' every month' : ''}</strong> makes that possible.</p>
     <p style="margin:0 0 20px;"><strong>Here's what your donation powers:</strong></p>
-    <ul style="margin:0 0 20px;padding-left:20px;color:#1a1a1a;">
+    <ul style="margin:0 0 20px;padding-left:20px;color:#000000;">
       <li style="margin-bottom:8px;">Campaigns for abortion decriminalisation in England and Wales</li>
       <li style="margin-bottom:8px;">Ending the imprisonment of pregnant women</li>
       <li style="margin-bottom:8px;">Dignified media coverage of domestic abuse deaths</li>
@@ -95,8 +124,8 @@ async function sendDonationConfirmation({
     </ul>
     ${giftAidNote}
     ${ctaButton(SITE_URL, 'Visit our website')}
-    <p style="margin:24px 0 8px;">In solidarity,</p>
-    <p style="margin:0;">Level Up</p>
+    <p style="margin:24px 0 0;line-height:1.25;">In solidarity,</p>
+    <p style="margin:8px 0 0;line-height:1.25;">Level Up</p>
     ${portalNote}
   `);
 

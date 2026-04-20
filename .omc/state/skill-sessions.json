@@ -1,11 +1,10 @@
 {
   "sessions": {
-    "e6e70b34-ce42-4f85-8735-cd6f4d8d6663": {
+    "1462bc37-0abe-4635-a404-05d2094b1ec3": {
       "injectedPaths": [
-        "/Users/crojasu/.claude/skills/omc-learned/frontend-design/SKILL.md",
-        "/Users/crojasu/.claude/skills/omc-learned/web-design-guidelines/SKILL.md"
+        "/Users/crojasu/.claude/skills/omc-learned/frontend-design/SKILL.md"
       ],
-      "timestamp": 1776614076474
+      "timestamp": 1776683935639
     }
   }
 }

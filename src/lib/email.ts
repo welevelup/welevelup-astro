@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 
-const FROM = 'Level Up <hello@welevelup.org>';
+const FROM = 'Level Up <no-reply@welevelup.org>';
 
 function getResend() {
   const key = import.meta.env.RESEND_API_KEY;

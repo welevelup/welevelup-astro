@@ -10,7 +10,7 @@ import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
 
-const posts = [
+const allPosts = [
   { slug: 'if-you-like-us-cite-us', title: 'TLDR: If you like us, cite us', tag: 'Solidarity & Movement', date: '19 Apr 2026' },
   { slug: 'abortion-is-healthcare-why-decriminalisation-must-include-health-workers', title: 'Abortion Is Healthcare: Why Decriminalisation Must Include Health Workers', tag: 'Reproductive Rights', date: '12 Sep 2025', img: 'https://welevelup.org/wp-content/uploads/2025/08/image-5.webp' },
   { slug: 'ending-prison-for-pregnant-women-a-non-reformist-reform', title: 'Ending Prison for Pregnant Women: A Non-Reformist Reform', tag: 'Criminalisation & Justice', date: '28 Aug 2025' },
@@ -23,6 +23,10 @@ const posts = [
   { slug: 'why-expanding-criminalisation-is-a-feminist-issue', title: 'Why Expanding Criminalisation Is a Feminist Issue', tag: 'Criminalisation & Justice', date: '5 Jan 2025' },
   { slug: 'its-time-to-reclaim-the-socialist-roots-of-international-womens-day', title: "It's Time to Reclaim the Socialist Roots of International Women's Day", tag: 'Solidarity & Movement', date: '8 Mar 2024' },
 ];
+
+const featuredIdx = allPosts.findIndex(p => p.img);
+const featured = allPosts[featuredIdx];
+const posts = allPosts.filter((_, i) => i !== featuredIdx);
 ---
 <Layout
   headHtml={headInner}
@@ -41,17 +45,17 @@ const posts = [
 
   <section class="bl-content">
     <div class="bl-grid">
-      <a href={`/blog/${posts[0].slug}`} class="bl-featured">
-        <div class="bl-featured-img" style={`background-image:url('${posts[0].img}')`}></div>
+      <a href={`/blog/${featured.slug}`} class="bl-featured">
+        <div class="bl-featured-img" style={`background-image:url('${featured.img}')`}></div>
         <div class="bl-featured-body">
-          <span class="bl-tag">{posts[0].tag}</span>
-          <h2>{posts[0].title}</h2>
-          <span class="bl-date">{posts[0].date}</span>
+          <span class="bl-tag">{featured.tag}</span>
+          <h2>{featured.title}</h2>
+          <span class="bl-date">{featured.date}</span>
           <span class="bl-read">Read article →</span>
         </div>
       </a>
       <div class="bl-stack">
-        {posts.slice(1, 5).map(post => (
+        {posts.slice(0, 4).map(post => (
           <a href={`/blog/${post.slug}`} class="bl-card">
             <span class="bl-tag">{post.tag}</span>
             <h3>{post.title}</h3>
@@ -62,7 +66,7 @@ const posts = [
     </div>
 
     <div class="bl-rest">
-      {posts.slice(5).map(post => (
+      {posts.slice(4).map(post => (
         <a href={`/blog/${post.slug}`} class="bl-rest-card">
           <span class="bl-tag">{post.tag}</span>
           <h3>{post.title}</h3>

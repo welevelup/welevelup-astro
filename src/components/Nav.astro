@@ -176,8 +176,13 @@
   .lu-nav-donate {
     background: #CCFF33;
     color: #0C0A3E;
+    border-radius: 0 4px 4px 0;
+    gap: 8px;
+    position: relative;
   }
-  .lu-nav-donate:hover { background: #FFFFFF; color: #0C0A3E; }
+  .lu-nav-donate::after { content: '→'; font-size: 16px; transition: transform 0.15s; }
+  .lu-nav-donate:hover { background: #d9ff4d; box-shadow: 0 4px 20px rgba(204,255,51,0.45); transform: translateY(-1px); }
+  .lu-nav-donate:hover::after { transform: translateX(3px); }
   .lu-nav-join {
     background: #0C0A3E;
     color: #FFFFFF !important;
@@ -360,7 +365,9 @@
     .lu-nav-donate {
       padding: 10px 14px;
       font-size: 13px;
+      border-radius: 4px;
     }
+    .lu-nav-donate::after { content: '→'; }
     .lu-nav-join {
       display: none !important;
     }

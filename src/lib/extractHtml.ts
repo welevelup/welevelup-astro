@@ -106,8 +106,7 @@ function stripDuplicateHeadTags(raw: string): string {
     .replace(/<meta\b[^>]*\bproperty="og:[^"]*"[^>]*>/gi, '')
     .replace(/<meta\b[^>]*\bname="twitter:[^"]*"[^>]*>/gi, '')
     .replace(/<link\b[^>]*\brel="canonical"[^>]*>/gi, '')
-    .replace(/<meta\b[^>]*\bcharset=[^>]*>/gi, '')
-    .replace(/<meta\b[^>]*\bname="viewport"[^>]*>/gi, '')
+    // DO NOT strip charset or viewport — these are essential HTML metadata
     // Strip heavy WP scripts that bloat every page (GTM, GA, GiveWP, pixel duplicates)
     .replace(/<script\b[^>]*googletagmanager[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<script\b[^>]*googletagmanager[^>]*\/?>/gi, '')
@@ -118,6 +117,23 @@ function stripDuplicateHeadTags(raw: string): string {
     .replace(/<script\b[^>]*fbevents[^>]*\/?>/gi, '')
     .replace(/<script\b[^>]*pixelyoursite[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<noscript\b[^>]*>[\s\S]*?googletagmanager[\s\S]*?<\/noscript>/gi, '');
+}
+
+function stripSvgPlaceholders(html: string): string {
+  // Remove WordPress SVG placeholder bloat that kills LCP/CLS (495+ instances)
+  // If there's a data-src (real image), promote it; otherwise strip the img tag entirely
+  return html.replace(/<img[^>]*src="data:image\/svg[^"]*"[^>]*>/gi, (match) => {
+    const dataSrcMatch = match.match(/data-src="([^"]*)"/);
+    if (dataSrcMatch && dataSrcMatch[1]) {
+      // Extract alt text if present, fallback to empty string
+      const altMatch = match.match(/alt="([^"]*)"/);
+      const alt = altMatch ? altMatch[1] : '';
+      // Promote data-src to src and add alt text
+      return `<img src="${dataSrcMatch[1]}" alt="${alt}" loading="lazy" />`;
+    }
+    // No real image URL found, remove completely
+    return '';
+  });
 }
 
 export function extract(rawHtml: string): ExtractedHtml {
@@ -165,8 +181,8 @@ export function extract(rawHtml: string): ExtractedHtml {
 
   // mainContent = everything between </header> and <footer (the actual page content)
   const mainContent = (headerEndIdx >= 0 && footerStartIdx >= 0)
-    ? bodyInner.slice(headerEndIdx + '</header>'.length, footerStartIdx)
-    : bodyInner;
+    ? stripSvgPlaceholders(bodyInner.slice(headerEndIdx + '</header>'.length, footerStartIdx))
+    : stripSvgPlaceholders(bodyInner);
 
   return { headInner, bodyClass, bodyInner, navHtml, footerHtml, preHeaderHtml, chromeBeforeMain, chromeAfterMain, mainContent };
 }

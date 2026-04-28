@@ -1,0 +1,496 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Terms of Use | Level Up';
+const description = 'Legal terms for using Level Up\'s website, making donations, and accessing our content.';
+const ogUrl = 'https://welevelup.org/terms-of-use';
+---
+
+<Layout title={title} description={description} ogUrl={ogUrl}>
+  <Nav />
+
+  <main class="lp-page">
+    <!-- HERO -->
+    <section class="lp-hero" aria-labelledby="lp-hero-heading">
+      <div class="lp-hero-inner">
+        <span class="lp-eyebrow">Legal</span>
+        <h1 id="lp-hero-heading" class="lp-hero-title">Terms of Use</h1>
+        <p class="lp-hero-subtitle">Legal terms for our website and services</p>
+        <p class="lp-updated">Last updated: April 2026</p>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="lp-content">
+      <div class="lp-content-inner">
+        <nav class="lp-toc">
+          <h2>Contents</h2>
+          <ul>
+            <li><a href="#acceptance">Acceptance of terms</a></li>
+            <li><a href="#changes">Changes to website</a></li>
+            <li><a href="#donations">Donation terms</a></li>
+            <li><a href="#email">Email & communications</a></li>
+            <li><a href="#content">Content & intellectual property</a></li>
+            <li><a href="#liability">Limitation of liability</a></li>
+            <li><a href="#termination">Termination</a></li>
+            <li><a href="#governing">Governing law</a></li>
+            <li><a href="#contact-terms">Contact us</a></li>
+          </ul>
+        </nav>
+
+      <section id="acceptance">
+        <h2>1. Acceptance of Terms</h2>
+        <p>
+          By accessing and using welevelup.org (the "Website"), you agree to be bound by these Terms of Use. If you do not agree with any part of these terms, you may not use the Website.
+        </p>
+        <p>
+          Level Up reserves the right to modify these Terms of Use at any time. Changes will be posted to this page with an updated "Last updated" date. Your continued use of the Website constitutes acceptance of the updated terms.
+        </p>
+      </section>
+
+      <section id="use">
+        <h2>2. Permitted Use</h2>
+        <p>You agree to use the Website only for lawful purposes and in a way that does not infringe upon the rights of others or restrict their use and enjoyment. Prohibited behavior includes:</p>
+        <ul>
+          <li>Harassment or cause distress or inconvenience to any person</li>
+          <li>Transmit obscene or offensive content or disrupt the normal flow of dialogue within our Website</li>
+          <li>Attempt to gain unauthorized access to our systems</li>
+          <li>Interfere with the proper functioning of the Website (hacking, malware, DDoS attacks)</li>
+          <li>Scrape or systematically download content for non-personal use without permission</li>
+          <li>Use the Website for commercial purposes without consent</li>
+          <li>Promote illegal activities or hate speech</li>
+        </ul>
+      </section>
+
+      <section id="changes">
+        <h2>3. Changes to Website</h2>
+        <p>
+          Level Up may change, suspend, or discontinue the Website (or any part of it) at any time without notice. We are not liable for any loss or damage resulting from such changes.
+        </p>
+        <p>
+          The Website is provided on an "as is" and "as available" basis. We make no warranty that the Website will be error-free, uninterrupted, or free from viruses or harmful code.
+        </p>
+      </section>
+
+      <section id="donations">
+        <h2>4. Donation Terms</h2>
+
+        <h3>General</h3>
+        <ul>
+          <li>Donations are voluntary gifts to Level Up. They are non-refundable.</li>
+          <li>All donations are final. We cannot accept refunds except in cases of technical error or duplicate processing.</li>
+          <li>Donations are processed securely by Mollie. We do not store your payment card details.</li>
+          <li>You must be 18 years or older (or have parental consent) to make a donation.</li>
+        </ul>
+
+        <h3>Payment</h3>
+        <ul>
+          <li>We accept major credit/debit cards via Mollie's secure payment gateway.</li>
+          <li>All transactions are in British pounds (GBP).</li>
+          <li>You authorize us to charge the payment method you provide.</li>
+          <li>If payment fails, we will not process your donation but may retry at your request.</li>
+        </ul>
+
+        <h3>Recurring (Monthly) Donations</h3>
+        <ul>
+          <li>Monthly donations will be charged on the same day each month until you cancel.</li>
+          <li>You can cancel at any time by emailing <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>. Cancellation takes effect immediately.</li>
+          <li>You may update your payment method or donation amount by contacting us.</li>
+          <li>We will email you a reminder before each monthly charge.</li>
+        </ul>
+
+        <h3>Gift Aid (UK Donors)</h3>
+        <ul>
+          <li>If you are a UK taxpayer, you can claim Gift Aid on your donation, allowing Level Up to reclaim an additional 25% from the government.</li>
+          <li>You confirm you have paid sufficient income tax or capital gains tax to cover the Gift Aid amount.</li>
+          <li>Gift Aid is only valid if you provide your full name and address.</li>
+          <li>You must notify us if your tax status changes and you no longer qualify for Gift Aid.</li>
+        </ul>
+
+        <h3>Refund Policy</h3>
+        <p>
+          <strong>Donations are non-refundable.</strong> However, we will refund a donation in these circumstances:
+        </p>
+        <ul>
+          <li><strong>Duplicate processing:</strong> You were charged twice for the same donation due to a system error</li>
+          <li><strong>Unauthorized charge:</strong> The donation was processed without your consent (contact Mollie directly for fraud claims)</li>
+          <li><strong>Cancellation within 14 days:</strong> For recurring monthly donations, you can cancel within 14 days and request a refund of the first charge (UK consumer law)</li>
+        </ul>
+        <p>
+          To request a refund, email <a href="mailto:hello@welevelup.org">hello@welevelup.org</a> with:
+        </p>
+        <ul>
+          <li>Your full name and email address</li>
+          <li>Donation date and amount</li>
+          <li>Reason for refund request</li>
+        </ul>
+        <p>
+          We will respond within 14 business days. Refunds are processed back to your original payment method and may take 3-5 business days to appear.
+        </p>
+
+        <h3>Tax and legal information</h3>
+        <ul>
+          <li>We are a UK-based organisation working for gender justice.</li>
+          <li>Donations support our campaigns and operations.</li>
+          <li>You will receive a donation receipt via email for your records.</li>
+          <li>Level Up does not provide tax, legal, or financial advice.</li>
+        </ul>
+      </section>
+
+      <section id="email">
+        <h2>5. Email & Communications</h2>
+
+        <h3>Transactional emails</h3>
+        <ul>
+          <li>We will send you donation receipts, invoices, and payment confirmations.</li>
+          <li>These emails are essential and cannot be unsubscribed from if you are an active donor.</li>
+        </ul>
+
+        <h3>Campaign updates & newsletters</h3>
+        <ul>
+          <li>If you opt in, we will send you emails about our campaigns, petitions, and news.</li>
+          <li>You can unsubscribe at any time by clicking the "unsubscribe" link in any email or emailing <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>.</li>
+          <li>Unsubscribe requests are processed within 48 hours.</li>
+        </ul>
+
+        <h3>Email frequency</h3>
+        <ul>
+          <li>We aim to send no more than 2-3 emails per week.</li>
+          <li>We respect your inbox and only send content we believe is relevant to you.</li>
+        </ul>
+
+        <h3>Email address verification</h3>
+        <ul>
+          <li>You are responsible for providing an accurate email address.</li>
+          <li>We may send you a verification email to confirm you own the address.</li>
+          <li>If your email bounces repeatedly, we may remove you from our list.</li>
+        </ul>
+      </section>
+
+      <section id="content">
+        <h2>6. Content & Intellectual Property</h2>
+
+        <h3>Our content license</h3>
+        <p>
+          Unless otherwise stated, all content on the Website (including text, images, videos, designs, and code) is licensed under the <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License (CC BY-NC-ND 4.0)</a>.
+        </p>
+        <p>
+          This means you may:
+        </p>
+        <ul>
+          <li><strong>Share:</strong> Copy and redistribute our content in any medium or format</li>
+          <li><strong>Attribute:</strong> Give credit to Level Up (required)</li>
+        </ul>
+        <p>
+          You may NOT:
+        </p>
+        <ul>
+          <li><strong>Commercial use:</strong> Use our content for commercial or profit-making purposes</li>
+          <li><strong>Modify:</strong> Remix, transform, or build upon our content</li>
+        </ul>
+
+        <h3>User-generated content</h3>
+        <ul>
+          <li>Any content you submit (petitions, comments, suggestions) may be used by Level Up in our campaigns and materials.</li>
+          <li>You grant us a perpetual, royalty-free license to use, modify, and distribute your content.</li>
+          <li>We will not sell your content to third parties.</li>
+          <li>You are responsible for ensuring your content does not violate anyone's rights.</li>
+        </ul>
+
+        <h3>Trademarks</h3>
+        <ul>
+          <li>"Level Up" and our logo are trademarks of Level Up (UK).</li>
+          <li>You may not use our trademarks without written permission.</li>
+        </ul>
+
+        <h3>Third-party content</h3>
+        <ul>
+          <li>Our Website may link to third-party websites or embed third-party content (YouTube videos, etc.).</li>
+          <li>We are not responsible for the content, accuracy, or practices of third-party sites.</li>
+          <li>Your use of third-party sites is governed by their own terms and privacy policies.</li>
+        </ul>
+      </section>
+
+      <section id="liability">
+        <h2>7. Limitation of Liability</h2>
+
+        <h3>Disclaimer</h3>
+        <p>
+          The Website is provided "as is" without any warranty, express or implied. Level Up makes no guarantee that:
+        </p>
+        <ul>
+          <li>The Website will be error-free or uninterrupted</li>
+          <li>Defects will be corrected</li>
+          <li>The Website will be free from viruses or harmful code</li>
+          <li>The information will be complete or accurate</li>
+        </ul>
+
+        <h3>Limitation of damages</h3>
+        <p>
+          <strong>To the fullest extent permitted by law,</strong> Level Up shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including:
+        </p>
+        <ul>
+          <li>Loss of profits or revenue</li>
+          <li>Loss of data or business opportunities</li>
+          <li>Emotional distress</li>
+          <li>Damage to reputation</li>
+          <li>Third-party claims</li>
+        </ul>
+        <p>
+          This applies even if Level Up has been advised of the possibility of such damages.
+        </p>
+
+        <h3>Maximum liability</h3>
+        <p>
+          In any case, Level Up's total liability to you shall not exceed the amount you paid to Level Up in the 12 months preceding the claim (or £100, whichever is greater).
+        </p>
+      </section>
+
+      <section id="termination">
+        <h2>8. Termination</h2>
+
+        <h3>By you</h3>
+        <p>
+          You may stop using the Website at any time. If you have an active recurring donation, you must explicitly cancel it by emailing <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>.
+        </p>
+
+        <h3>By us</h3>
+        <p>
+          Level Up may terminate your use of the Website immediately without notice if:
+        </p>
+        <ul>
+          <li>You violate these Terms of Use</li>
+          <li>You engage in abusive, threatening, or illegal behavior</li>
+          <li>You attempt to gain unauthorized access to our systems</li>
+          <li>You repeatedly submit false or fraudulent donations</li>
+        </ul>
+
+        <h3>Effects of termination</h3>
+        <ul>
+          <li>You will no longer have access to the Website</li>
+          <li>Any active recurring donations will be cancelled</li>
+          <li>We will retain your data as required by law (tax records, etc.)</li>
+        </ul>
+      </section>
+
+      <section id="governing">
+        <h2>9. Governing Law & Jurisdiction</h2>
+        <p>
+          These Terms of Use are governed by the laws of England and Wales. Any disputes shall be subject to the exclusive jurisdiction of the courts of England and Wales.
+        </p>
+        <p>
+          If you are a consumer in the UK, you may also bring claims in your local court.
+        </p>
+      </section>
+
+      <section id="contact-terms">
+        <h2>10. Contact Us</h2>
+        <p>
+          If you have questions about these Terms of Use or any disputes:
+        </p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:hello@welevelup.org">hello@welevelup.org</a><br/>
+          <strong>Address:</strong> New Derwent House, 69–73 Theobalds Road, London WC1X 8TA, UK<br/>
+          <strong>Website:</strong> welevelup.org
+        </p>
+      </section>
+
+      <section id="agreement">
+        <h2>11. Entire Agreement</h2>
+        <p>
+          These Terms of Use, together with our <a href="/privacy-policy">Privacy Policy</a> and <a href="/cookie-policy">Cookie Policy</a>, constitute the entire agreement between you and Level Up regarding the Website.
+        </p>
+        <p>
+          If any provision of these terms is found to be invalid or unenforceable, the remaining provisions shall remain in full force and effect.
+        </p>
+      </section>
+
+      <div class="lp-footer-links">
+        <a href="/privacy-policy">Privacy Policy</a> |
+        <a href="/cookie-policy">Cookie Policy</a> |
+        <a href="/">Back to homepage</a>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .lp-page {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* HERO */
+  .lp-hero {
+    background: #0C0A3E;
+    padding: 80px 24px 64px;
+    text-align: center;
+  }
+
+  .lp-hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .lp-eyebrow {
+    display: block;
+    font: 600 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #CCFF33;
+    margin-bottom: 16px;
+  }
+
+  .lp-hero-title {
+    font: 700 48px/1.2 'DM Sans', sans-serif;
+    color: white;
+    margin: 0 0 16px;
+  }
+
+  .lp-hero-subtitle {
+    font: 400 18px/1.4 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.8);
+    margin: 0;
+  }
+
+  .lp-updated {
+    font: 400 13px/1 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.6);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* CONTENT */
+  .lp-content {
+    background: #fafaf8;
+    padding: 64px 24px;
+  }
+
+  .lp-content-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 48px;
+    border-radius: 8px;
+  }
+
+  .lp-toc {
+    background: #f5f5f0;
+    padding: 24px;
+    border-radius: 6px;
+    margin-bottom: 48px;
+  }
+
+  .lp-toc h2 {
+    font: 600 16px/1.2 'DM Sans', sans-serif;
+    margin: 0 0 16px;
+    color: #0C0A3E;
+  }
+
+  .lp-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .lp-toc li {
+    margin-bottom: 8px;
+  }
+
+  .lp-toc a {
+    color: #0C0A3E;
+    text-decoration: underline;
+    font: 400 14px 'DM Sans', sans-serif;
+  }
+
+  .lp-toc a:hover {
+    color: #CCFF33;
+  }
+
+  .lp-content section {
+    margin-bottom: 40px;
+  }
+
+  .lp-content h2 {
+    font: 700 28px/1.2 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 16px;
+  }
+
+  .lp-content h3 {
+    font: 600 16px/1.2 'DM Sans', sans-serif;
+    color: #1a1a1a;
+    margin: 20px 0 12px;
+  }
+
+  .lp-content p {
+    font: 400 16px/1.6 'DM Sans', sans-serif;
+    color: #2c2c2c;
+    margin: 0 0 12px;
+  }
+
+  .lp-content p a {
+    color: #0C0A3E;
+    text-decoration: underline;
+  }
+
+  .lp-content p a:hover {
+    color: #CCFF33;
+  }
+
+  .lp-content ul, .lp-content ol {
+    padding-left: 24px;
+    margin: 12px 0 16px;
+  }
+
+  .lp-content li {
+    font: 400 16px/1.6 'DM Sans', sans-serif;
+    color: #2c2c2c;
+    margin-bottom: 8px;
+  }
+
+  .lp-footer-links {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font: 400 14px 'DM Sans', sans-serif;
+  }
+
+  .lp-footer-links a {
+    color: #0C0A3E;
+    text-decoration: none;
+    margin: 0 12px;
+  }
+
+  .lp-footer-links a:hover {
+    color: #CCFF33;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .lp-hero {
+      padding: 48px 24px 40px;
+    }
+
+    .lp-hero-title {
+      font-size: 32px;
+    }
+
+    .lp-hero-subtitle {
+      font-size: 16px;
+    }
+
+    .lp-content-inner {
+      padding: 24px;
+    }
+
+    .lp-content h2 {
+      font-size: 22px;
+    }
+  }
+</style>

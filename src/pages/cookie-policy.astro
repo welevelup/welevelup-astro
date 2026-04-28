@@ -1,0 +1,504 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Cookie Policy | Level Up';
+const description = 'How Level Up uses cookies and tracking technologies. Manage your cookie preferences.';
+const ogUrl = 'https://welevelup.org/cookie-policy';
+---
+
+<Layout title={title} description={description} ogUrl={ogUrl}>
+  <Nav />
+
+  <main class="lp-page">
+    <!-- HERO -->
+    <section class="lp-hero" aria-labelledby="lp-hero-heading">
+      <div class="lp-hero-inner">
+        <span class="lp-eyebrow">Legal</span>
+        <h1 id="lp-hero-heading" class="lp-hero-title">Cookie Policy</h1>
+        <p class="lp-hero-subtitle">How we use cookies and tracking</p>
+        <p class="lp-updated">Last updated: April 2026</p>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="lp-content">
+      <div class="lp-content-inner">
+        <nav class="lp-toc">
+          <h2>Contents</h2>
+          <ul>
+            <li><a href="#what">What are cookies?</a></li>
+            <li><a href="#types">Types of cookies we use</a></li>
+            <li><a href="#consent">Consent & control</a></li>
+            <li><a href="#third">Third-party cookies</a></li>
+            <li><a href="#manage">How to manage cookies</a></li>
+            <li><a href="#questions">Questions?</a></li>
+          </ul>
+        </nav>
+
+      <section id="what">
+        <h2>1. What Are Cookies?</h2>
+        <p>
+          Cookies are small text files placed on your device (computer, smartphone, tablet) when you visit our website. They allow us to recognize you on repeat visits and remember your preferences.
+        </p>
+        <p>
+          <strong>Why we use cookies:</strong>
+        </p>
+        <ul>
+          <li>To measure how visitors use our website</li>
+          <li>To track campaign effectiveness</li>
+          <li>To personalize your experience</li>
+          <li>To prevent fraud</li>
+          <li>To show you relevant advertising</li>
+        </ul>
+      </section>
+
+      <section id="types">
+        <h2>2. Types of Cookies We Use</h2>
+
+        <h3>Essential Cookies (always active)</h3>
+        <p><strong>Required for the website to function.</strong> These are not optional and do not require consent.</p>
+        <table class="lp-table">
+          <thead>
+            <tr>
+              <th>Cookie Name</th>
+              <th>Purpose</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Session ID</td>
+              <td>Keep you logged in during your visit</td>
+              <td>End of session</td>
+            </tr>
+            <tr>
+              <td>CSRF token</td>
+              <td>Prevent cross-site forgery attacks (security)</td>
+              <td>End of session</td>
+            </tr>
+            <tr>
+              <td>Donation form state</td>
+              <td>Remember your form choices during checkout</td>
+              <td>During transaction</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Analytics Cookies (requires consent)</h3>
+        <p><strong>Help us understand how visitors use our site.</strong> These cookies are only set after you accept our cookie banner.</p>
+        <table class="lp-table">
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Purpose</th>
+              <th>Cookie Name(s)</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Google Analytics 4</strong></td>
+              <td>Tracks pages visited, time on site, bounce rate, referrer source</td>
+              <td>_ga, _ga_[ID]</td>
+              <td>2 years</td>
+            </tr>
+            <tr>
+              <td><strong>Google Analytics 4</strong></td>
+              <td>User ID tracking (for logged-in users)</td>
+              <td>_gid</td>
+              <td>24 hours</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Advertising & Conversion Cookies (requires consent)</h3>
+        <p><strong>Track conversions (donations, petition signups) for advertising optimization.</strong> These cookies are only set after you accept our cookie banner.</p>
+        <table class="lp-table">
+          <thead>
+            <tr>
+              <th>Provider</th>
+              <th>Purpose</th>
+              <th>Cookie Name(s)</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Meta Pixel</strong> (Facebook)</td>
+              <td>Tracks donations and petition signups for Facebook advertising</td>
+              <td>_fbp, _fbc, act</td>
+              <td>3 months</td>
+            </tr>
+            <tr>
+              <td><strong>Meta Pixel</strong></td>
+              <td>Conversion event tracking (for retargeting donors)</td>
+              <td>fbevents</td>
+              <td>End of session</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>Preference Cookies (requires consent)</h3>
+        <p><strong>Remember your choices and preferences.</strong></p>
+        <table class="lp-table">
+          <thead>
+            <tr>
+              <th>Purpose</th>
+              <th>Cookie Name</th>
+              <th>Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Cookie consent choice</td>
+              <td>cookie-consent</td>
+              <td>1 year</td>
+            </tr>
+            <tr>
+              <td>Language preference</td>
+              <td>language</td>
+              <td>1 year</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="consent">
+        <h2>3. Consent & Control</h2>
+
+        <h3>How consent works</h3>
+        <p>
+          When you first visit Level Up, a cookie banner appears asking you to accept or reject non-essential cookies. Your choice is remembered for 12 months.
+        </p>
+
+        <h3>What we track by default (without consent)</h3>
+        <ul>
+          <li>Essential cookies only (session, security, form state)</li>
+          <li>No analytics</li>
+          <li>No advertising pixels</li>
+        </ul>
+
+        <h3>What we track after you accept</h3>
+        <ul>
+          <li>Essential cookies (always)</li>
+          <li>Google Analytics (page views, traffic source, device type)</li>
+          <li>Meta Pixel (conversion tracking for advertising)</li>
+          <li>Preference cookies (your consent choice)</li>
+        </ul>
+
+        <h3>Change your mind?</h3>
+        <p>
+          You can withdraw consent at any time by clicking the cookie icon in the bottom left corner of any page, or email us at <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>.
+        </p>
+      </section>
+
+      <section id="third">
+        <h2>4. Third-Party Cookies</h2>
+
+        <h3>Google Analytics 4</h3>
+        <ul>
+          <li><strong>Provider:</strong> Google LLC (USA)</li>
+          <li><strong>Purpose:</strong> Measure website traffic, user behavior, campaign effectiveness</li>
+          <li><strong>Data collected:</strong> Pages visited, time on page, referrer, device type, approximate location (IP-based)</li>
+          <li><strong>Retention:</strong> 26 months (default Google setting)</li>
+          <li><strong>Privacy:</strong> <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></li>
+          <li><strong>Opt-out:</strong> Install <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Browser Add-on</a></li>
+        </ul>
+
+        <h3>Meta Pixel (Facebook)</h3>
+        <ul>
+          <li><strong>Provider:</strong> Meta Platforms, Inc. (USA)</li>
+          <li><strong>Purpose:</strong> Track donations and petition signups; optimize ad campaigns</li>
+          <li><strong>Data collected:</strong> Conversion events (donation amount, petition name), device identifier, hashed email</li>
+          <li><strong>Retention:</strong> 90 days (then anonymized)</li>
+          <li><strong>Privacy:</strong> <a href="https://www.facebook.com/privacy/explanation" target="_blank" rel="noopener">Meta Privacy Policy</a></li>
+          <li><strong>Opt-out:</strong> Visit <a href="https://www.facebook.com/ads/preferences" target="_blank" rel="noopener">Facebook Ad Preferences</a></li>
+        </ul>
+
+        <h3>Mollie (Payment processor)</h3>
+        <ul>
+          <li><strong>Provider:</strong> Mollie B.V. (Netherlands)</li>
+          <li><strong>Purpose:</strong> Process donations securely</li>
+          <li><strong>Cookies:</strong> Mollie sets its own cookies during payment, separate from our consent</li>
+          <li><strong>Privacy:</strong> <a href="https://www.mollie.com/en/privacy" target="_blank" rel="noopener">Mollie Privacy Policy</a></li>
+        </ul>
+
+        <h3>Resend (Email service)</h3>
+        <ul>
+          <li><strong>Provider:</strong> Resend (USA)</li>
+          <li><strong>Purpose:</strong> Send donation receipts and transactional emails</li>
+          <li><strong>Cookies:</strong> None — Resend does not set cookies on our site</li>
+          <li><strong>Privacy:</strong> <a href="https://resend.com/privacy" target="_blank" rel="noopener">Resend Privacy Policy</a></li>
+        </ul>
+
+        <h3>International data transfers</h3>
+        <p>
+          Google Analytics and Meta Pixel are based in the USA. Transfers of data to the USA are protected by Standard Contractual Clauses (SCCs) approved by the UK ICO. For more information, see our <a href="/privacy-policy">Privacy Policy</a>.
+        </p>
+      </section>
+
+      <section id="manage">
+        <h2>5. How to Manage Cookies</h2>
+
+        <h3>Browser controls</h3>
+        <p>You can control cookies through your browser settings:</p>
+        <ul>
+          <li><strong>Chrome:</strong> Settings → Privacy and security → Cookies and other site data</li>
+          <li><strong>Firefox:</strong> Preferences → Privacy & Security → Cookies and Site Data</li>
+          <li><strong>Safari:</strong> Preferences → Privacy → Cookies and website data</li>
+          <li><strong>Edge:</strong> Settings → Privacy, search, and services → Clear browsing data</li>
+        </ul>
+
+        <h3>Do Not Track</h3>
+        <p>
+          Most browsers allow you to send a "Do Not Track" signal. We respect this signal, though not all websites do. If you enable Do Not Track, Meta Pixel and Google Analytics will not load.
+        </p>
+
+        <h3>Third-party opt-outs</h3>
+        <ul>
+          <li><a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener">Google Analytics Opt-out Add-on</a></li>
+          <li><a href="https://www.networkadvertising.org/choices/" target="_blank" rel="noopener">Network Advertising Initiative (NAI) Opt-out Tool</a></li>
+          <li><a href="https://www.youronlinechoices.com/" target="_blank" rel="noopener">Your Online Choices (IAB)</a></li>
+        </ul>
+
+        <h3>GDPR Right to Withdraw Consent</h3>
+        <p>
+          You have the right to withdraw consent at any time. Email <a href="mailto:hello@welevelup.org">hello@welevelup.org</a> and we'll stop tracking you immediately. We'll also update your donor record so you don't receive unnecessary communications.
+        </p>
+
+        <h3>Privacy mode / Incognito browsing</h3>
+        <p>
+          Most browsers have a "Private" or "Incognito" mode that prevents cookies from being stored. Use this mode if you prefer to browse without any tracking.
+        </p>
+      </section>
+
+      <section id="questions">
+        <h2>6. Questions?</h2>
+        <p>
+          If you have any questions about our use of cookies or this policy, please contact us:
+        </p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:hello@welevelup.org">hello@welevelup.org</a><br/>
+          <strong>Address:</strong> New Derwent House, 69–73 Theobalds Road, London WC1X 8TA, UK
+        </p>
+      </section>
+
+        <div class="lp-footer-links">
+          <a href="/privacy-policy">Privacy Policy</a> |
+          <a href="/terms-of-use">Terms of Use</a> |
+          <a href="/">Back to homepage</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .lp-page {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* HERO */
+  .lp-hero {
+    background: #0C0A3E;
+    padding: 80px 24px 64px;
+    text-align: center;
+  }
+
+  .lp-hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .lp-eyebrow {
+    display: block;
+    font: 600 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #CCFF33;
+    margin-bottom: 16px;
+  }
+
+  .lp-hero-title {
+    font: 700 48px/1.2 'DM Sans', sans-serif;
+    color: white;
+    margin: 0 0 16px;
+  }
+
+  .lp-hero-subtitle {
+    font: 400 18px/1.4 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.8);
+    margin: 0;
+  }
+
+  .lp-updated {
+    font: 400 13px/1 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.6);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* CONTENT */
+  .lp-content {
+    background: #fafaf8;
+    padding: 64px 24px;
+  }
+
+  .lp-content-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 48px;
+    border-radius: 8px;
+  }
+
+  .lp-toc {
+    background: #f5f5f0;
+    padding: 24px;
+    border-radius: 6px;
+    margin-bottom: 48px;
+  }
+
+  .lp-toc h2 {
+    font: 600 16px/1.2 'DM Sans', sans-serif;
+    margin: 0 0 16px;
+    color: #0C0A3E;
+  }
+
+  .lp-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .lp-toc li {
+    margin-bottom: 8px;
+  }
+
+  .lp-toc a {
+    color: #0C0A3E;
+    text-decoration: underline;
+    font: 400 14px 'DM Sans', sans-serif;
+  }
+
+  .lp-toc a:hover {
+    color: #CCFF33;
+  }
+
+  .lp-content section {
+    margin-bottom: 40px;
+  }
+
+  .lp-content h2 {
+    font: 700 28px/1.2 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 16px;
+  }
+
+  .lp-content h3 {
+    font: 600 16px/1.2 'DM Sans', sans-serif;
+    color: #1a1a1a;
+    margin: 20px 0 12px;
+  }
+
+  .lp-content p {
+    font: 400 16px/1.6 'DM Sans', sans-serif;
+    color: #2c2c2c;
+    margin: 0 0 12px;
+  }
+
+  .lp-content p a {
+    color: #0C0A3E;
+    text-decoration: underline;
+  }
+
+  .lp-content p a:hover {
+    color: #CCFF33;
+  }
+
+  .lp-content ul, .lp-content ol {
+    padding-left: 24px;
+    margin: 12px 0 16px;
+  }
+
+  .lp-content li {
+    font: 400 16px/1.6 'DM Sans', sans-serif;
+    color: #2c2c2c;
+    margin-bottom: 8px;
+  }
+
+  .lp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+  }
+
+  .lp-table th,
+  .lp-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font: 400 14px 'DM Sans', sans-serif;
+    color: #2c2c2c;
+  }
+
+  .lp-table th {
+    background: #f5f5f0;
+    font-weight: 600;
+    color: #0C0A3E;
+  }
+
+  .lp-footer-links {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font: 400 14px 'DM Sans', sans-serif;
+  }
+
+  .lp-footer-links a {
+    color: #0C0A3E;
+    text-decoration: none;
+    margin: 0 12px;
+  }
+
+  .lp-footer-links a:hover {
+    color: #CCFF33;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .lp-hero {
+      padding: 48px 24px 40px;
+    }
+
+    .lp-hero-title {
+      font-size: 32px;
+    }
+
+    .lp-hero-subtitle {
+      font-size: 16px;
+    }
+
+    .lp-content-inner {
+      padding: 24px;
+    }
+
+    .lp-content h2 {
+      font-size: 22px;
+    }
+
+    .lp-table {
+      font-size: 12px;
+    }
+
+    .lp-table th,
+    .lp-table td {
+      padding: 8px;
+    }
+  }
+</style>

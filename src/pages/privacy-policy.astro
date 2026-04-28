@@ -1,0 +1,457 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'Privacy Policy | Level Up';
+const description = 'How Level Up collects, uses, and protects your personal data. GDPR compliant.';
+const ogUrl = 'https://welevelup.org/privacy-policy';
+---
+
+<Layout title={title} description={description} ogUrl={ogUrl}>
+  <Nav />
+
+  <main class="lp-page">
+    <!-- HERO -->
+    <section class="lp-hero" aria-labelledby="lp-hero-heading">
+      <div class="lp-hero-inner">
+        <span class="lp-eyebrow">Legal</span>
+        <h1 id="lp-hero-heading" class="lp-hero-title">Privacy Policy</h1>
+        <p class="lp-hero-subtitle">How we protect your data</p>
+        <p class="lp-updated">Last updated: April 2026</p>
+      </div>
+    </section>
+
+    <!-- CONTENT -->
+    <section class="lp-content">
+      <div class="lp-content-inner">
+        <nav class="lp-toc">
+          <h2>Contents</h2>
+          <ul>
+            <li><a href="#who">Who we are</a></li>
+            <li><a href="#data">Data we collect</a></li>
+            <li><a href="#why">Why we collect it</a></li>
+            <li><a href="#sharing">Who we share with</a></li>
+            <li><a href="#retention">How long we keep it</a></li>
+            <li><a href="#rights">Your rights</a></li>
+            <li><a href="#contact">Contact us</a></li>
+          </ul>
+        </nav>
+
+        <section id="who">
+          <h2>1. Who We Are</h2>
+          <p>
+            <strong>Level Up</strong> is a UK-based feminist campaigning organisation working for gender justice.
+          </p>
+          <p>
+            <strong>Address:</strong> New Derwent House, 69–73 Theobalds Road, London WC1X 8TA, UK<br/>
+            <strong>Email:</strong> <a href="mailto:hello@welevelup.org">hello@welevelup.org</a><br/>
+            <strong>Website:</strong> welevelup.org
+          </p>
+          <p>We are committed to protecting your privacy and complying with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.</p>
+        </section>
+
+        <section id="data">
+          <h2>2. Data We Collect</h2>
+          <p>We collect personal data in the following ways:</p>
+
+          <h3>When you donate</h3>
+          <ul>
+            <li>First name, last name</li>
+            <li>Email address</li>
+            <li>Donation amount and frequency (one-off or monthly)</li>
+            <li>Payment method details (processed by Mollie, not stored by us)</li>
+            <li>Gift Aid eligibility (if applicable)</li>
+          </ul>
+
+          <h3>When you sign a petition or campaign</h3>
+          <ul>
+            <li>First name, last name</li>
+            <li>Email address</li>
+            <li>Petition signature/support (stored by the petition platform, not by Level Up)</li>
+          </ul>
+
+          <h3>When you join our mailing list</h3>
+          <ul>
+            <li>Email address</li>
+            <li>First name (optional)</li>
+            <li>Signup date</li>
+          </ul>
+
+          <h3>When you visit our website</h3>
+          <ul>
+            <li>IP address</li>
+            <li>Browser type and version</li>
+            <li>Pages visited and time spent</li>
+            <li>Referring website</li>
+            <li>Approximate location (from IP address)</li>
+            <li>Device type (mobile, desktop, tablet)</li>
+          </ul>
+
+          <h3>Via tracking technologies</h3>
+          <p>We use cookies and similar tracking to measure how visitors use our site. See our <a href="/cookie-policy">Cookie Policy</a> for details.</p>
+        </section>
+
+        <section id="why">
+          <h2>3. Why We Collect It (Legal Basis)</h2>
+          <p>Under UK GDPR, we only process personal data when we have a legal basis to do so:</p>
+
+          <h3>Consent</h3>
+          <ul>
+            <li><strong>Email newsletter:</strong> You actively sign up to our mailing list</li>
+            <li><strong>Tracking (Meta Pixel, Google Analytics):</strong> You accept our cookie banner</li>
+            <li><strong>Marketing communications:</strong> You tick "send me campaign updates"</li>
+          </ul>
+
+          <h3>Contract</h3>
+          <ul>
+            <li><strong>Donations:</strong> We need your name and email to process payment and send receipts</li>
+            <li><strong>Gift Aid:</strong> We need your details to claim tax relief on your behalf</li>
+          </ul>
+
+          <h3>Legitimate interest</h3>
+          <ul>
+            <li><strong>Analytics:</strong> To understand how our campaigns perform and improve our website</li>
+            <li><strong>Fraud prevention:</strong> To prevent donation fraud</li>
+            <li><strong>Communications:</strong> To send donation receipts and campaign updates (if you've consented)</li>
+          </ul>
+
+          <h3>Legal obligation</h3>
+          <ul>
+            <li><strong>Tax records:</strong> We keep donation records for 6 years for UK tax and charity law compliance</li>
+          </ul>
+        </section>
+
+        <section id="sharing">
+          <h2>4. Who We Share Your Data With</h2>
+          <p>We do not sell your data. We only share it with trusted third parties to deliver our services:</p>
+
+          <h3>Payment processing</h3>
+          <ul>
+            <li><strong>Mollie B.V.</strong> (Netherlands) — processes card payments securely. We never store card details. <a href="https://www.mollie.com/en/privacy" target="_blank" rel="noopener">Mollie Privacy Policy</a></li>
+          </ul>
+
+          <h3>Email and communications</h3>
+          <ul>
+            <li><strong>Resend</strong> (USA) — sends donation receipts and transactional emails. <a href="https://resend.com/privacy" target="_blank" rel="noopener">Resend Privacy Policy</a></li>
+            <li><strong>Mailchimp</strong> (USA, if used) — sends campaign newsletters. <a href="https://mailchimp.com/legal/privacy/" target="_blank" rel="noopener">Mailchimp Privacy Policy</a></li>
+          </ul>
+
+          <h3>Analytics and advertising</h3>
+          <ul>
+            <li><strong>Google Analytics 4</strong> (USA) — measures website traffic. Data is anonymized. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a></li>
+            <li><strong>Meta Pixel</strong> (USA) — tracks conversions for advertising. Data is anonymized. <a href="https://www.facebook.com/privacy/explanation" target="_blank" rel="noopener">Meta Privacy Policy</a></li>
+          </ul>
+
+          <h3>Petition platforms</h3>
+          <ul>
+            <li><strong>YourMovement</strong> and <strong>Movement Action</strong> — petition signature hosting. Signatures are stored on their platforms, not ours.</li>
+          </ul>
+
+          <h3>Legal and regulatory</h3>
+          <p>We may disclose your data if required by law (e.g., court order, regulatory request from the Information Commissioner's Office).</p>
+
+          <h3>International transfers</h3>
+          <p>Some of our third parties are based in the USA. Transfers to the USA are protected by Standard Contractual Clauses approved by the UK ICO.</p>
+        </section>
+
+        <section id="retention">
+          <h2>5. How Long We Keep Your Data</h2>
+          <table class="lp-table">
+            <thead>
+              <tr>
+                <th>Data Type</th>
+                <th>Retention Period</th>
+                <th>Reason</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Donation records (name, email, amount)</td>
+                <td>6 years</td>
+                <td>UK tax law & charity accounting</td>
+              </tr>
+              <tr>
+                <td>Monthly donor details</td>
+                <td>Until cancellation + 6 years</td>
+                <td>Payment processing & accounts</td>
+              </tr>
+              <tr>
+                <td>Email newsletter list</td>
+                <td>Until unsubscribe</td>
+                <td>Marketing consent</td>
+              </tr>
+              <tr>
+                <td>Website analytics (Google)</td>
+                <td>26 months</td>
+                <td>Default Google Analytics retention</td>
+              </tr>
+              <tr>
+                <td>Server access logs</td>
+                <td>30 days</td>
+                <td>Security & debugging</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="rights">
+          <h2>6. Your Rights</h2>
+          <p>Under UK GDPR, you have the right to:</p>
+
+          <h3>Access (Right of Access)</h3>
+          <p>Request a copy of all personal data we hold about you. We will respond within 30 days.</p>
+
+          <h3>Rectification</h3>
+          <p>Ask us to correct inaccurate or incomplete data (e.g., misspelled name, wrong email).</p>
+
+          <h3>Erasure (Right to be Forgotten)</h3>
+          <p>Request deletion of your data, except where we have a legal obligation to keep it (e.g., 6-year tax records).</p>
+
+          <h3>Restrict Processing</h3>
+          <p>Ask us to limit how we use your data (e.g., "don't send me emails, but keep my donation record").</p>
+
+          <h3>Data Portability</h3>
+          <p>Request your data in a portable format (CSV, JSON, etc.) so you can transfer it elsewhere.</p>
+
+          <h3>Object</h3>
+          <p>Opt out of specific processing (e.g., "don't use my data for analytics", "don't send me marketing emails").</p>
+
+          <h3>Lodge a Complaint</h3>
+          <p>If you believe we've breached your privacy rights, you can complain to the Information Commissioner's Office (ICO):</p>
+          <p>
+            <strong>Information Commissioner's Office</strong><br/>
+            Wycliffe House, Water Lane<br/>
+            Wilmslow, Cheshire SK9 5AF<br/>
+            <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a>
+          </p>
+
+          <h3>To exercise your rights</h3>
+          <p>Email us at <a href="mailto:hello@welevelup.org">hello@welevelup.org</a> with your full name, email, which right you're exercising, and any relevant details.</p>
+        </section>
+
+        <section id="contact">
+          <h2>7. Contact Us</h2>
+          <p>
+            <strong>Email:</strong> <a href="mailto:hello@welevelup.org">hello@welevelup.org</a><br/>
+            <strong>Address:</strong> New Derwent House, 69–73 Theobalds Road, London WC1X 8TA, UK
+          </p>
+        </section>
+
+        <div class="lp-footer-links">
+          <a href="/cookie-policy">Cookie Policy</a> |
+          <a href="/terms-of-use">Terms of Use</a> |
+          <a href="/">Back to homepage</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style is:global>
+  .lp-page {
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  /* HERO */
+  .lp-hero {
+    background: #0C0A3E;
+    padding: 80px 24px 64px;
+    text-align: center;
+  }
+
+  .lp-hero-inner {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .lp-eyebrow {
+    display: block;
+    font: 600 11px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #CCFF33;
+    margin-bottom: 16px;
+  }
+
+  .lp-hero-title {
+    font: 700 48px/1.2 'DM Sans', sans-serif;
+    color: white;
+    margin: 0 0 16px;
+  }
+
+  .lp-hero-subtitle {
+    font: 400 18px/1.4 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.8);
+    margin: 0;
+  }
+
+  .lp-updated {
+    font: 400 13px/1 'DM Sans', sans-serif;
+    color: rgba(238, 235, 211, 0.6);
+    margin-top: 12px;
+    font-style: italic;
+  }
+
+  /* CONTENT */
+  .lp-content {
+    background: #fafaf8;
+    padding: 64px 24px;
+  }
+
+  .lp-content-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 48px;
+    border-radius: 8px;
+  }
+
+  .lp-toc {
+    background: #f5f5f0;
+    padding: 24px;
+    border-radius: 6px;
+    margin-bottom: 48px;
+  }
+
+  .lp-toc h2 {
+    font: 600 16px/1.2 'DM Sans', sans-serif;
+    margin: 0 0 16px;
+    color: #0C0A3E;
+  }
+
+  .lp-toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .lp-toc li {
+    margin-bottom: 8px;
+  }
+
+  .lp-toc a {
+    color: #0C0A3E;
+    text-decoration: underline;
+    font: 400 14px 'DM Sans', sans-serif;
+  }
+
+  .lp-toc a:hover {
+    color: #CCFF33;
+  }
+
+  .lp-content section {
+    margin-bottom: 40px;
+  }
+
+  .lp-content h2 {
+    font: 700 28px/1.2 'DM Sans', sans-serif;
+    color: #0C0A3E;
+    margin: 0 0 16px;
+  }
+
+  .lp-content h3 {
+    font: 600 16px/1.2 'DM Sans', sans-serif;
+    color: #1a1a1a;
+    margin: 20px 0 12px;
+  }
+
+  .lp-content p {
+    font: 400 16px/1.6 'DM Sans', sans-serif;
+    color: #2c2c2c;
+    margin: 0 0 12px;
+  }
+
+  .lp-content p a {
+    color: #0C0A3E;
+    text-decoration: underline;
+  }
+
+  .lp-content p a:hover {
+    color: #CCFF33;
+  }
+
+  .lp-content ul, .lp-content ol {
+    padding-left: 24px;
+    margin: 12px 0 16px;
+  }
+
+  .lp-content li {
+    font: 400 16px/1.6 'DM Sans', sans-serif;
+    color: #2c2c2c;
+    margin-bottom: 8px;
+  }
+
+  .lp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+  }
+
+  .lp-table th,
+  .lp-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    font: 400 14px 'DM Sans', sans-serif;
+    color: #2c2c2c;
+  }
+
+  .lp-table th {
+    background: #f5f5f0;
+    font-weight: 600;
+    color: #0C0A3E;
+  }
+
+  .lp-footer-links {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font: 400 14px 'DM Sans', sans-serif;
+  }
+
+  .lp-footer-links a {
+    color: #0C0A3E;
+    text-decoration: none;
+    margin: 0 12px;
+  }
+
+  .lp-footer-links a:hover {
+    color: #CCFF33;
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .lp-hero {
+      padding: 48px 24px 40px;
+    }
+
+    .lp-hero-title {
+      font-size: 32px;
+    }
+
+    .lp-hero-subtitle {
+      font-size: 16px;
+    }
+
+    .lp-content-inner {
+      padding: 24px;
+    }
+
+    .lp-content h2 {
+      font-size: 22px;
+    }
+
+    .lp-table {
+      font-size: 12px;
+    }
+
+    .lp-table th,
+    .lp-table td {
+      padding: 8px;
+    }
+  }
+</style>

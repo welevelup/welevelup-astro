@@ -5,6 +5,26 @@ import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
+
+const campaignSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Campaign',
+  name: '#NoMoreLyes Campaign',
+  description: 'The #NoMoreLyes campaign is a feminist campaign led by Level Up challenging beauty brands to remove toxic chemicals from hair products used by Black women.',
+  url: 'https://welevelup.org/active-campaigns/nomorelyes',
+  image: 'https://welevelup.org/wp-content/uploads/2025/08/nomorelyes-hero.jpg',
+  sponsor: {
+    '@type': 'Organization',
+    name: 'Level Up',
+    logo: 'https://welevelup.org/logo.png'
+  },
+  potentialAction: {
+    '@type': 'SignAction',
+    name: 'Sign the petition',
+    url: 'https://levelup.yourmovement.org/p/no-more-lyes'
+  },
+  keywords: 'hair relaxers, Black women health, toxic chemicals, beauty industry, petition'
+};
 ---
 <Layout
   headHtml={headInner}

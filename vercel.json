@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/active-campaigns/nomorelyes-2",
+      "destination": "/active-campaigns/nomorelyes",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

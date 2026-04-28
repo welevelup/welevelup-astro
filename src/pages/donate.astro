@@ -377,10 +377,19 @@ const { headInner, bodyClass } = extract(homeRaw);
   .lu-donate__cancel-note a { color: rgba(12,10,62,0.8); }
   .lu-donate__legal {
     font: 400 12px/1.6 'DM Sans', sans-serif;
-    color: rgba(12, 10, 62, 0.5);
+    color: rgba(12, 10, 62, 0.6);
     margin: 0;
   }
-  .lu-donate__legal a { color: rgba(12, 10, 62, 0.7); }
+  .lu-donate__legal a {
+    color: #0C0A3E;
+    text-decoration: underline;
+    text-decoration-color: #CCFF33;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+  .lu-donate__legal a:hover {
+    color: #CCFF33;
+  }
 
 </style>
 

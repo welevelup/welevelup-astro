@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/wp-content/:path*",
+      "destination": "http://159.65.95.172/wp-content/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

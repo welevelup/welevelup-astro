@@ -16,58 +16,64 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   <section class="ct-hero">
     <div class="ct-hero-inner">
+      <span class="ct-label">Get in touch</span>
       <h1 class="ct-title">Contact Level Up</h1>
+      <p class="ct-subtitle">We're a UK-based feminist campaigning organisation working to end bodily and systemic violence. If you're a journalist, supporter, potential partner, or someone with a campaign idea — we'd love to hear from you.</p>
     </div>
   </section>
 
   <section class="ct-content">
     <div class="ct-grid">
-      <!-- INFO -->
-      <div class="ct-info">
-        <h2 class="ct-info-heading">Get in touch with the Level Up team</h2>
-        <p class="ct-info-intro">We're a UK-based feminist campaigning organisation working to end bodily and systemic violence. If you're a journalist, supporter, potential partner, or someone with a campaign idea — we'd love to hear from you.</p>
-
-        <div class="ct-info-block">
-          <p class="ct-info-label">For media enquiries:</p>
-          <a href="mailto:media@welevelup.org" class="ct-info-email">media@welevelup.org</a>
-        </div>
-        <div class="ct-info-block">
-          <p class="ct-info-label">Got a campaign idea, or just want to say hi?</p>
-          <a href="mailto:hello@welevelup.org" class="ct-info-email">hello@welevelup.org</a>
-        </div>
-        <div class="ct-info-block">
-          <p class="ct-info-label">Work with us</p>
-          <a href="mailto:hello@welevelup.org" class="ct-info-email">hello@welevelup.org</a>
-        </div>
-        <div class="ct-info-block">
-          <p class="ct-info-label">Address</p>
-          <p class="ct-info-address">3rd Floor 86 – 90 Paul Street<br/>London<br/>EC2A 4NE</p>
-        </div>
-      </div>
-
       <!-- FORM -->
       <div class="ct-form-wrap">
+        <h2>Send us a message</h2>
         <form class="ct-form" action="mailto:hello@welevelup.org" method="POST" enctype="text/plain">
-          <div class="ct-form-row">
-            <label>
-              <span>Name</span>
-              <input type="text" name="name" required autocomplete="given-name" />
-            </label>
-            <label>
-              <span>Last Name</span>
-              <input type="text" name="last_name" autocomplete="family-name" />
-            </label>
-          </div>
           <label>
-            <span>Email <em class="ct-required">*</em></span>
+            <span>Name</span>
+            <input type="text" name="name" required autocomplete="name" />
+          </label>
+          <label>
+            <span>Email</span>
             <input type="email" name="email" required autocomplete="email" />
           </label>
           <label>
-            <span>Post Body <em class="ct-required">*</em></span>
-            <textarea name="message" rows="8" required></textarea>
+            <span>Subject</span>
+            <input type="text" name="subject" />
+          </label>
+          <label>
+            <span>Message</span>
+            <textarea name="message" rows="6" required></textarea>
           </label>
           <button type="submit">Send message</button>
         </form>
+      </div>
+
+      <!-- INFO -->
+      <div class="ct-info">
+        <div class="ct-info-block">
+          <h3>For media enquiries</h3>
+          <a href="mailto:media@welevelup.org">media@welevelup.org</a>
+        </div>
+        <div class="ct-info-block">
+          <h3>Got a campaign idea, or just want to say hi?</h3>
+          <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
+        </div>
+        <div class="ct-info-block">
+          <h3>Work with us</h3>
+          <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
+        </div>
+        <div class="ct-info-block">
+          <h3>Address</h3>
+          <p>3rd Floor 86 – 90 Paul Street<br/>London<br/>EC2A 4NE</p>
+        </div>
+        <div class="ct-info-block">
+          <h3>Follow us</h3>
+          <div class="ct-social">
+            <a href="https://www.facebook.com/levelupaction" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://twitter.com/we_level_up" target="_blank" rel="noopener">Twitter/X</a>
+            <a href="https://www.instagram.com/welevelup" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -88,72 +94,48 @@ const { headInner, bodyClass } = extract(homeRaw);
     font-family: 'DM Sans', sans-serif;
   }
   .ct-hero-inner { max-width: 900px; margin: 0 auto; }
-  .ct-title {
-    font: 800 clamp(48px, 10vw, 96px)/0.88 'DM Sans';
-    color: #EEEBD3 !important;
-    letter-spacing: -0.04em;
-    margin: 0;
+  .ct-label {
+    font: 600 12px/1 'DM Sans';
     text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #A89CED;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .ct-title {
+    font: 800 clamp(40px, 8vw, 72px)/0.9 'DM Sans';
+    color: #CCFF33 !important;
+    letter-spacing: -0.04em;
+    margin: 0 0 16px;
+  }
+  .ct-subtitle {
+    font: 400 18px/1.5 'DM Sans';
+    color: rgba(238,235,211,0.6);
   }
 
   .ct-content {
-    background: #fff;
-    padding: 72px 24px;
+    background: #EEEBD3;
+    padding: 64px 24px;
     font-family: 'DM Sans', sans-serif;
   }
   .ct-grid {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 80px;
-    align-items: start;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 64px;
   }
 
-  /* Info column */
-  .ct-info { display: flex; flex-direction: column; }
-  .ct-info-heading {
-    font: 700 22px/1.2 'DM Sans' !important;
-    color: #0C0A3E !important;
-    letter-spacing: -0.01em;
-    margin: 0 0 20px !important;
+  .ct-form-wrap h2 {
+    font: 800 28px/1.1 'DM Sans';
+    color: #0C0A3E;
+    letter-spacing: -0.03em;
+    margin: 0 0 32px;
   }
-  .ct-info-intro {
-    font: 400 16px/1.65 'DM Sans' !important;
-    color: rgba(12,10,62,0.75) !important;
-    margin: 0 0 40px !important;
-  }
-  .ct-info-block {
-    padding: 20px 0;
-    border-top: 1px solid rgba(12,10,62,0.1);
-  }
-  .ct-info-label {
-    font: 400 14px/1.4 'DM Sans' !important;
-    color: rgba(12,10,62,0.55) !important;
-    margin: 0 0 6px !important;
-  }
-  .ct-info-email {
-    font: 700 16px/1 'DM Sans' !important;
-    color: #0C0A3E !important;
-    text-decoration: none !important;
-  }
-  .ct-info-email:hover { color: #A89CED !important; }
-  .ct-info-address {
-    font: 400 14px/1.6 'DM Sans' !important;
-    color: rgba(12,10,62,0.7) !important;
-    margin: 0 !important;
-  }
-
-  /* Form column */
   .ct-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-  .ct-form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
   }
   .ct-form label {
     display: flex;
@@ -161,40 +143,67 @@ const { headInner, bodyClass } = extract(homeRaw);
     gap: 6px;
   }
   .ct-form label span {
-    font: 600 13px/1 'DM Sans';
-    color: #0C0A3E;
-  }
-  .ct-required {
-    font-style: normal;
-    color: #C0392B;
-    margin-left: 2px;
+    font: 600 12px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(12,10,62,0.5);
   }
   .ct-form input, .ct-form textarea {
-    font: 400 15px/1.4 'DM Sans';
-    padding: 12px 14px;
-    border: 1px solid rgba(12,10,62,0.18);
+    font: 400 16px/1.4 'DM Sans';
+    padding: 14px 16px;
+    border: 2px solid rgba(12,10,62,0.12);
     background: #fff;
     color: #0C0A3E;
     transition: border-color 0.15s;
   }
   .ct-form input:focus, .ct-form textarea:focus {
     outline: none;
-    border-color: #0C0A3E !important;
+    border-color: #CCFF33 !important;
   }
   .ct-form button {
-    font: 700 13px/1 'DM Sans';
+    font: 900 14px/1 'DM Sans';
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     background: #CCFF33;
     color: #0C0A3E;
     border: none;
     padding: 18px 36px;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: all 0.15s;
     align-self: flex-start;
-    margin-top: 4px;
   }
   .ct-form button:hover { background: #0C0A3E; color: #CCFF33 !important; }
+
+  .ct-info { display: flex; flex-direction: column; gap: 32px; }
+  .ct-info-block h3 {
+    font: 700 14px/1 'DM Sans';
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #0C0A3E;
+    margin: 0 0 10px;
+  }
+  .ct-info-block a {
+    font: 500 16px/1.4 'DM Sans';
+    color: #0C0A3E;
+    text-decoration: underline;
+    text-decoration-color: #A89CED;
+    text-underline-offset: 3px;
+  }
+  .ct-info-block a:hover { text-decoration-color: #CCFF33 !important; }
+  .ct-info-block p {
+    font: 400 16px/1.6 'DM Sans';
+    color: rgba(12,10,62,0.7);
+    margin: 0;
+  }
+  .ct-social { display: flex; gap: 16px; }
+  .ct-social a {
+    font: 600 13px/1 'DM Sans';
+    color: #0C0A3E;
+    text-decoration: none;
+    border-bottom: 2px solid #A89CED;
+    padding-bottom: 2px;
+  }
+  .ct-social a:hover { border-bottom-color: #CCFF33 !important; }
 
   .ct-cta {
     background: #0C0A3E;
@@ -208,7 +217,6 @@ const { headInner, bodyClass } = extract(homeRaw);
   .ct-cta-btn:hover { background: #fff; }
 
   @media (max-width: 768px) {
-    .ct-grid { grid-template-columns: 1fr; gap: 48px; }
-    .ct-form-row { grid-template-columns: 1fr; }
+    .ct-grid { grid-template-columns: 1fr; gap: 40px; }
   }
 </style>

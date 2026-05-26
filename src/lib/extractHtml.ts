@@ -118,9 +118,6 @@ function stripDuplicateHeadTags(raw: string): string {
     .replace(/<script\b[^>]*fbevents[^>]*\/?>/gi, '')
     .replace(/<script\b[^>]*pixelyoursite[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<noscript\b[^>]*>[\s\S]*?googletagmanager[\s\S]*?<\/noscript>/gi, '')
-    // Strip all WordPress plugin/theme/core CSS and JS — these 404 or loop on the Astro host.
-    // Page styling is provided entirely by Astro <style is:global> blocks.
-    .replace(/<link\b[^>]*href="[^"]*(?:wp-content|wp-includes)[^"]*"[^>]*\/?>/gi, '')
     .replace(/<script\b[^>]*src="[^"]*(?:wp-content|wp-includes)[^"]*"[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<script\b[^>]*src="[^"]*(?:wp-content|wp-includes)[^"]*"[^>]*\/?>/gi, '');
 }

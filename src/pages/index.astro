@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import rawHtml from '../_clone/index.html?raw';
 
-const { headInner, bodyClass } = extract(rawHtml);
+const { headInner, bodyClass, mainContent } = extract(rawHtml);
 ---
 <Layout
   headHtml={headInner}
@@ -14,20 +14,7 @@ const { headInner, bodyClass } = extract(rawHtml);
   description="Level Up creates digital tools and campaigns fighting for gender justice in the UK — from reproductive rights to ending violence against women."
 >
   <Nav />
-
-
-  <!-- Hero -->
-  <section class="home-hero">
-    <div class="home-hero-inner">
-      <p class="home-hero-eyebrow">Level Up</p>
-      <h2 class="home-hero-title">Can Change Society</h2>
-      <p class="home-hero-sub">Level Up's vision is a world where everyone is loved and liberated.<br/>We believe that collective care is the route to building this world.</p>
-      <div class="home-hero-actions">
-        <a href="/donate" class="home-hero-btn-primary">Donate</a>
-        <a href="https://levelup.yourmovement.org/p/join-us" class="home-hero-btn" target="_blank" rel="noopener">Join us →</a>
-      </div>
-    </div>
-  </section>
+  <Fragment set:html={mainContent} />
 
   <!-- Animated announcement bar -->
   <div class="ic-bar">
@@ -256,6 +243,7 @@ const { headInner, bodyClass } = extract(rawHtml);
 </Layout>
 
 <style is:global>
+  body { background-color: #0C0A3E; }
   .home-hero { background: #0C0A3E; padding: 100px 24px 80px; font-family: 'DM Sans', sans-serif; }
   .home-hero-inner { max-width: 900px; margin: 0 auto; }
   .home-hero-eyebrow { font: 600 12px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; margin: 0 0 20px; }

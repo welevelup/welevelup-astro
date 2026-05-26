@@ -11,12 +11,16 @@ export const POST: APIRoute = async ({ request }) => {
   // Verify the shared secret passed as a query param in MOLLIE_WEBHOOK_URL.
   // Rejects any request that doesn't know the secret — guards against arbitrary
   // payment IDs being submitted by third parties.
-  if (webhookSecret) {
-    const incoming = new URL(request.url).searchParams.get('secret');
-    if (!incoming || incoming !== webhookSecret) {
-      console.warn('[mollie-webhook] rejected: invalid or missing secret');
-      return new Response('Forbidden', { status: 403 });
-    }
+  // MOLLIE_WEBHOOK_SECRET is required — fail hard if unset so misconfiguration
+  // is immediately visible rather than silently accepting unauthenticated requests.
+  if (!webhookSecret) {
+    console.error('[mollie-webhook] MOLLIE_WEBHOOK_SECRET not set — rejecting all requests');
+    return new Response('Forbidden', { status: 403 });
+  }
+  const incoming = new URL(request.url).searchParams.get('secret');
+  if (!incoming || incoming !== webhookSecret) {
+    console.warn('[mollie-webhook] rejected: invalid or missing secret');
+    return new Response('Forbidden', { status: 403 });
   }
 
   if (!apiKey) {

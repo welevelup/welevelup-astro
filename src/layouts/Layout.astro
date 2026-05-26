@@ -58,6 +58,8 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
     </style>
     {title && <title>{title}</title>}
     {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/webp" href="/wp-content/uploads/2025/07/cropped-cropped-square-shape-01-180x180.webp" />
+    <link rel="apple-touch-icon" href="/wp-content/uploads/2025/07/cropped-cropped-square-shape-01-180x180.webp" />
     <link rel="canonical" href={canonicalUrl} />
     {title && <meta property="og:title" content={title} />}
     {description && <meta property="og:description" content={description} />}

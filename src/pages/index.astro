@@ -16,6 +16,19 @@ const { headInner, bodyClass } = extract(rawHtml);
   <Nav />
 
 
+  <!-- Hero -->
+  <section class="home-hero">
+    <div class="home-hero-inner">
+      <p class="home-hero-eyebrow">Level Up</p>
+      <h2 class="home-hero-title">Collective care<br/>can change society</h2>
+      <p class="home-hero-sub">We are a feminist community campaigning for gender justice in the UK.<br/>We create digital tools and campaigns that interrupt cultural moments.</p>
+      <div class="home-hero-actions">
+        <a href="/donate" class="home-hero-btn-primary">Donate</a>
+        <a href="https://levelup.yourmovement.org/p/join-us" class="home-hero-btn" target="_blank" rel="noopener">Join us →</a>
+      </div>
+    </div>
+  </section>
+
   <!-- Animated announcement bar -->
   <div class="ic-bar">
     <div class="ic-bar-track">
@@ -243,6 +256,16 @@ const { headInner, bodyClass } = extract(rawHtml);
 </Layout>
 
 <style is:global>
+  .home-hero { background: #0C0A3E; padding: 100px 24px 80px; font-family: 'DM Sans', sans-serif; }
+  .home-hero-inner { max-width: 900px; margin: 0 auto; }
+  .home-hero-eyebrow { font: 600 12px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; margin: 0 0 20px; }
+  .home-hero-title { font: 900 clamp(48px, 9vw, 110px)/0.88 'DM Sans', sans-serif; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 32px; }
+  .home-hero-sub { font: 400 clamp(16px, 1.8vw, 20px)/1.6 'DM Sans', sans-serif; color: rgba(238,235,211,0.75); max-width: 640px; margin: 0 0 40px; }
+  .home-hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+  .home-hero-btn-primary { background: #CCFF33; color: #0C0A3E; font: 700 15px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 16px 36px; text-decoration: none; transition: background 0.15s; }
+  .home-hero-btn-primary:hover { background: #fff; }
+  .home-hero-btn { color: #CCFF33; font: 700 15px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 16px 0; text-decoration: none; border-bottom: 2px solid #CCFF33; transition: color 0.15s; }
+  .home-hero-btn:hover { color: #fff; border-color: #fff; }
   body { overflow-x: hidden; }
   .e-con, .e-con-boxed, .elementor-section { max-width: 100vw !important; overflow-x: hidden !important; }
 

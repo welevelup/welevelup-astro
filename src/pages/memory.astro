@@ -274,7 +274,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     display: block;
     font: 800 clamp(72px, 12vw, 148px)/0.84 'DM Sans';
     letter-spacing: -0.045em;
-    color: #CCFF33;
+    color: #CCFF33 !important;
     will-change: transform, opacity;
     animation: ms-reveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
@@ -334,7 +334,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     white-space: nowrap;
   }
 
-  .ms-ticker-dot { color: #CCFF33; opacity: 0.5; }
+  .ms-ticker-dot { color: #CCFF33 !important; opacity: 0.5; }
 
   @keyframes ms-ticker {
     from { transform: translateX(0); }
@@ -463,9 +463,9 @@ const { headInner, bodyClass } = extract(homeRaw);
     color: #EEEBD3;
     min-height: 480px;
   }
-  .ms-card--abortion .ms-card-title { color: #CCFF33; }
-  .ms-card--abortion .ms-card-cta   { color: #CCFF33; }
-  .ms-card--abortion .ms-count-num  { color: #CCFF33; }
+  .ms-card--abortion .ms-card-title { color: #CCFF33 !important; }
+  .ms-card--abortion .ms-card-cta   { color: #CCFF33 !important; }
+  .ms-card--abortion .ms-count-num  { color: #CCFF33 !important; }
   .ms-card--abortion:hover { box-shadow: 0 12px 48px rgba(12,10,62,0.35); }
 
   .ms-card-deco { position: absolute; pointer-events: none; }
@@ -709,7 +709,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   .ms-cta-heading {
     font: 800 clamp(48px, 9vw, 96px)/0.88 'DM Sans';
-    color: #CCFF33;
+    color: #CCFF33 !important;
     letter-spacing: -0.045em;
     margin: 0 0 24px;
   }
@@ -752,8 +752,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     border: 1px solid rgba(238, 235, 211, 0.25);
   }
   .ms-cta-btn--ghost:hover {
-    border-color: #CCFF33;
-    color: #CCFF33;
+    border-color: #CCFF33 !important;
+    color: #CCFF33 !important;
   }
 
   /* ── RESPONSIVE ───────────────────────────────────────────── */

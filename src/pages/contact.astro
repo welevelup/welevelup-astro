@@ -61,7 +61,7 @@ const { headInner, bodyClass } = extract(homeRaw);
               const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
               const json = await res.json();
               if (res.ok) {
-                status.textContent = 'Message sent — we'll be in touch soon!';
+                status.textContent = "Message sent — we’ll be in touch soon!";
                 status.className = 'ct-status ct-status--ok';
                 form.reset();
               } else {

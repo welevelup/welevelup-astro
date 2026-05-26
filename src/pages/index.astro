@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import rawHtml from '../_clone/index.html?raw';
 
-const { headInner, bodyClass, mainContent } = extract(rawHtml);
+const { headInner, bodyClass } = extract(rawHtml);
 ---
 <Layout
   headHtml={headInner}
@@ -15,7 +15,6 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
 >
   <Nav />
 
-  <Fragment set:html={mainContent} />
 
   <!-- Animated announcement bar -->
   <div class="ic-bar">

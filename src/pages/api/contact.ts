@@ -43,7 +43,7 @@ export const POST: APIRoute = async ({ request }) => {
   const resend = new Resend(apiKey);
   try {
     await resend.emails.send({
-      from: 'Level Up Website <hello@welevelup.org>',
+      from: 'Level Up <hello@welevelup.org>',
       to: 'hello@welevelup.org',
       replyTo: email,
       subject: subject ? `[Contact] ${subject}` : `[Contact] Message from ${name}`,

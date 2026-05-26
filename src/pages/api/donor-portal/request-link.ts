@@ -5,6 +5,25 @@ import { sendMagicLink } from '../../../lib/email';
 
 export const prerender = false;
 
+// Simple in-memory rate limiter: max 5 requests per IP per 15 minutes.
+// Not shared across serverless instances but provides meaningful protection
+// against single-client abuse of the expensive Mollie customer list lookup.
+const rateLimit = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT = 5;
+const RATE_WINDOW_MS = 15 * 60 * 1000;
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimit.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimit.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return false;
+  }
+  if (entry.count >= RATE_LIMIT) return true;
+  entry.count++;
+  return false;
+}
+
 export const POST: APIRoute = async ({ request }) => {
   const json = (data: unknown, status = 200) =>
     new Response(JSON.stringify(data), {
@@ -18,6 +37,11 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!apiKey || !secret || !siteUrl) {
     return json({ error: 'Server misconfigured' }, 500);
+  }
+
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+  if (isRateLimited(ip)) {
+    return json({ error: 'Too many requests' }, 429);
   }
 
   let email: string | undefined;

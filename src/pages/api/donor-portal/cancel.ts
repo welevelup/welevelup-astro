@@ -41,9 +41,16 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     const mollie = createMollieClient({ apiKey });
+    // Fetch first — Mollie returns 404 if subscriptionId doesn't belong to this
+    // customer, so this acts as an ownership check before we cancel anything.
+    await mollie.customerSubscriptions.get(subscriptionId, { customerId: mollieCustomerId });
     await mollie.customerSubscriptions.cancel(subscriptionId, { customerId: mollieCustomerId });
     return json({ ok: true });
-  } catch (err) {
+  } catch (err: unknown) {
+    const status = (err as { status?: number })?.status;
+    if (status === 404 || status === 422) {
+      return json({ error: 'Subscription not found' }, 404);
+    }
     console.error('[cancel] Mollie error', err);
     return json({ error: 'Failed to cancel subscription' }, 500);
   }

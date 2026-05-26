@@ -6,6 +6,18 @@ export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   const apiKey = import.meta.env.MOLLIE_API_KEY;
+  const webhookSecret = import.meta.env.MOLLIE_WEBHOOK_SECRET;
+
+  // Verify the shared secret passed as a query param in MOLLIE_WEBHOOK_URL.
+  // Rejects any request that doesn't know the secret — guards against arbitrary
+  // payment IDs being submitted by third parties.
+  if (webhookSecret) {
+    const incoming = new URL(request.url).searchParams.get('secret');
+    if (!incoming || incoming !== webhookSecret) {
+      console.warn('[mollie-webhook] rejected: invalid or missing secret');
+      return new Response('Forbidden', { status: 403 });
+    }
+  }
 
   if (!apiKey) {
     console.error('[mollie-webhook] MOLLIE_API_KEY missing');

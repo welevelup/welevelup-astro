@@ -12,7 +12,8 @@
 /active-campaigns/premier-league-and-fa/  /active-campaigns/premier-league-and-fa  301
 /active-campaigns/sexual-violence-in-football/  /active-campaigns/sexual-violence-in-football  301
 /active-campaigns/we-protect-us/  /active-campaigns/we-protect-us  301
-/all-resources/  /all-resources  301
+/all-resources/  /resources  301
+/all-resources  /resources  301
 /beyond-sympathy-feminist-solidarity-without-deservingness/  /beyond-sympathy-feminist-solidarity-without-deservingness  301
 /blog/  /blog  301
 /blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers/  /blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers  301
@@ -28,12 +29,15 @@
 /contact/  /contact  301
 /ddw-resources/  /ddw-resources  301
 /donate/  /donate  301
-/media-guidelines/  /media-guidelines  301
+/media-guidelines/  /active-campaigns/media-guidelines-domestic-abuse  301
+/media-guidelines  /active-campaigns/media-guidelines-domestic-abuse  301
 /nbbb-letter/  /nbbb-letter  301
-/news-and-events/  /news-and-events  301
+/news-and-events/  /blog  301
+/news-and-events  /blog  301
 /nomorelyes-open-letter-to-loreal/  /nomorelyes-open-letter-to-loreal  301
 /nomorelyes-relaxer-info-kit/  /nomorelyes-relaxer-info-kit  301
-/our-work/  /our-work  301
+/our-work/  /about-us  301
+/our-work  /about-us  301
 /petition/abortion-is-healthcare/  /petition/abortion-is-healthcare  301
 /petition/dignity-for-dead-women/  /petition/dignity-for-dead-women  301
 /petition/ipso-dignity-for-dead-women/  /petition/ipso-dignity-for-dead-women  301
@@ -44,11 +48,14 @@
 /petition/stop-sending-pregnant-women-to-prison/  /petition/stop-sending-pregnant-women-to-prison  301
 /pp-resources/  /pp-resources  301
 /press/  /press  301
-/solidarity-with-katie/  /solidarity-with-katie  301
-/stories-of-the-community/  /stories-of-the-community  301
+/solidarity-with-katie/  /active-campaigns/we-protect-us  301
+/solidarity-with-katie  /active-campaigns/we-protect-us  301
+/stories-of-the-community/  /memory  301
+/stories-of-the-community  /memory  301
 /surveys/abortion-stories-complete/  /surveys/abortion-stories-complete  301
 /the-griefs-left-unattended/  /the-griefs-left-unattended  301
-/what-we-are-proud-of/  /what-we-are-proud-of  301
+/what-we-are-proud-of/  /about-us  301
+/what-we-are-proud-of  /about-us  301
 /why-expanding-criminalisation-is-a-feminist-issue/  /why-expanding-criminalisation-is-a-feminist-issue  301
 
 # WordPress artifacts → homepage

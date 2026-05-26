@@ -3,6 +3,7 @@
   Row 1: Logo + tagline | Donate + Join Us
   Row 2: Navigation links with mega-dropdown for Campaigns
 -->
+<a href="#main-content" class="lu-skip-link">Skip to main content</a>
 <header class="lu-nav">
   <div class="lu-nav-top">
     <a href="/" class="lu-nav-logo">
@@ -17,10 +18,10 @@
     </div>
     </div>
 
-  <nav class="lu-nav-bar">
+  <nav class="lu-nav-bar" id="nav-bar">
     <div class="lu-nav-bar-inner">
       <div class="lu-nav-group">
-        <span>About Us ▾</span>
+        <span role="button" aria-expanded="false">About Us ▾</span>
         <div class="lu-nav-drop">
           <a href="/about-us">What we do</a>
           <a href="/who-we-are">Who we are</a>
@@ -30,7 +31,7 @@
       </div>
 
       <div class="lu-nav-group">
-        <span>Campaigns ▾</span>
+        <span role="button" aria-expanded="false">Campaigns ▾</span>
         <div class="lu-nav-drop lu-nav-mega">
           <div class="lu-nav-mega-grid">
             <div class="lu-nav-mega-col">
@@ -71,7 +72,7 @@
       </div>
 
       <div class="lu-nav-group">
-        <span>Community ▾</span>
+        <span role="button" aria-expanded="false">Community ▾</span>
         <div class="lu-nav-drop lu-nav-mega lu-nav-mega--center">
           <div class="lu-nav-mega-grid" style="grid-template-columns: repeat(2, 1fr);">
             <div class="lu-nav-mega-col">
@@ -90,7 +91,7 @@
       </div>
 
       <div class="lu-nav-group">
-        <span>Blog ▾</span>
+        <span role="button" aria-expanded="false">Blog ▾</span>
         <div class="lu-nav-drop">
           <a href="/blog">All posts</a>
           <a href="/blog/if-you-like-us-cite-us">If you like us, cite us</a>
@@ -100,7 +101,7 @@
       </div>
 
       <div class="lu-nav-group">
-        <span>Resources ▾</span>
+        <span role="button" aria-expanded="false">Resources ▾</span>
         <div class="lu-nav-drop">
           <a href="/resources">All Resources</a>
           <a href="/resources/nomorelyes">#NoMoreLyes Info Kit</a>
@@ -116,12 +117,25 @@
     </div>
   </nav>
 
-  <button class="lu-nav-toggle" id="nav-toggle" aria-label="Menu">
+  <button class="lu-nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-bar">
     <span></span><span></span><span></span>
   </button>
 </header>
 
 <style is:global>
+  .lu-skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 8px;
+    z-index: 9999;
+    background: #CCFF33;
+    color: #0C0A3E;
+    padding: 8px 16px;
+    font: 700 14px/1 'DM Sans', sans-serif;
+    text-decoration: none;
+  }
+  .lu-skip-link:focus { left: 8px; }
+
   /* Hide WP clone header from leaking through */
   header[data-elementor-type="header"],
   .elementor-location-header { display: none !important; }
@@ -459,8 +473,10 @@
   const nav = toggle?.closest('.lu-nav');
 
   toggle?.addEventListener('click', () => {
+    const isOpen = bar?.classList.contains('open');
     bar?.classList.toggle('open');
     nav?.classList.toggle('menu-open');
+    toggle.setAttribute('aria-expanded', String(!isOpen));
   });
 
   // Mobile: click to toggle sub-dropdowns
@@ -469,9 +485,16 @@
       span.addEventListener('click', () => {
         const group = span.closest('.lu-nav-group');
         const isOpen = group?.classList.contains('mob-open');
-        // Close all
-        document.querySelectorAll('.lu-nav-group.mob-open').forEach(g => g.classList.remove('mob-open'));
-        if (!isOpen) group?.classList.add('mob-open');
+        // Close all and reset aria-expanded
+        document.querySelectorAll('.lu-nav-group.mob-open').forEach(g => {
+          g.classList.remove('mob-open');
+          const s = g.querySelector(':scope > span');
+          if (s) s.setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          group?.classList.add('mob-open');
+          span.setAttribute('aria-expanded', 'true');
+        }
       });
     });
   }

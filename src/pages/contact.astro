@@ -49,41 +49,41 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
         <script>
-          const btn = document.getElementById(‘ct-submit’);
-          const form = document.getElementById(‘ct-form’);
-          const status = document.getElementById(‘ct-status’);
-          btn?.addEventListener(‘click’, async () => {
-            const name = form.querySelector(‘[name=name]’).value.trim();
-            const email = form.querySelector(‘[name=email]’).value.trim();
-            const message = form.querySelector(‘[name=message]’).value.trim();
+          const btn = document.getElementById('ct-submit');
+          const form = document.getElementById('ct-form');
+          const status = document.getElementById('ct-status');
+          btn?.addEventListener('click', async () => {
+            const name = form.querySelector('[name=name]').value.trim();
+            const email = form.querySelector('[name=email]').value.trim();
+            const message = form.querySelector('[name=message]').value.trim();
             if (!name || !email || !message) {
-              status.textContent = ‘Name, email and message are required.’;
-              status.className = ‘ct-status ct-status--err’;
+              status.textContent = 'Name, email and message are required.';
+              status.className = 'ct-status ct-status--err';
               return;
             }
-            const subject = (form.querySelector(‘[name=subject]’)?.value ?? ‘’);
-            btn.textContent = ‘Sending…’;
+            const subject = (form.querySelector('[name=subject]')?.value ?? '');
+            btn.textContent = 'Sending…';
             btn.disabled = true;
-            status.textContent = ‘’;
-            status.className = ‘ct-status’;
+            status.textContent = '';
+            status.className = 'ct-status';
             try {
-              const res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify({ name, email, message, subject }) });
+              const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, message, subject }) });
               let json = {};
               try { json = await res.json(); } catch(_) {}
               if (res.ok) {
-                status.textContent = "Message sent — we’ll be in touch soon!";
-                status.className = ‘ct-status ct-status--ok’;
+                status.textContent = "Message sent — we'll be in touch soon!";
+                status.className = 'ct-status ct-status--ok';
                 form.reset();
-                status.scrollIntoView({ behavior: ‘smooth’, block: ‘nearest’ });
+                status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
               } else {
-                status.textContent = json.error || ‘Something went wrong. Please email us directly.’;
-                status.className = ‘ct-status ct-status--err’;
+                status.textContent = json.error || 'Something went wrong. Please email us directly.';
+                status.className = 'ct-status ct-status--err';
               }
             } catch {
-              status.textContent = ‘Something went wrong. Please email hello@welevelup.org’;
-              status.className = ‘ct-status ct-status--err’;
+              status.textContent = 'Something went wrong. Please email hello@welevelup.org';
+              status.className = 'ct-status ct-status--err';
             }
-            btn.textContent = ‘Send message’;
+            btn.textContent = 'Send message';
             btn.disabled = false;
           });
         </script>

@@ -5,7 +5,6 @@ import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
 ---
 <Layout
   headHtml={headInner}
@@ -45,17 +44,10 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
             <span>Message</span>
             <textarea name="message" rows="6" required></textarea>
           </label>
-          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="light"></div>
           <button type="button" id="ct-submit" onclick="ctSend()">Send message</button>
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
         <script is:inline>
-          (function() {
-            var s = document.createElement(‘script’);
-            s.src = ‘https://challenges.cloudflare.com/turnstile/v0/api.js’;
-            s.async = true;
-            document.head.appendChild(s);
-          })();
           async function ctSend() {
             var form = document.getElementById(‘ct-form’);
             var btn = document.getElementById(‘ct-submit’);
@@ -68,10 +60,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
               status.className = ‘ct-status ct-status--err’;
               return;
             }
-            var tokenEl = form.querySelector(‘[name=cf-turnstile-response]’);
             var data = { name: name, email: email, message: message,
-              subject: (form.querySelector(‘[name=subject]’) || {}).value || ‘’,
-              ‘cf-turnstile-response’: tokenEl ? tokenEl.value : ‘’ };
+              subject: (form.querySelector(‘[name=subject]’) || {}).value || ‘’ };
             btn.textContent = ‘Sending…’;
             btn.disabled = true;
             status.textContent = ‘’;
@@ -95,7 +85,6 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
             }
             btn.textContent = ‘Send message’;
             btn.disabled = false;
-            if (window.turnstile) window.turnstile.reset();
           }
         </script>
       </div>

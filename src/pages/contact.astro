@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x00000000000000000000AA';
 ---
 <Layout
   headHtml={headInner}
@@ -44,36 +45,46 @@ const { headInner, bodyClass } = extract(homeRaw);
             <span>Message</span>
             <textarea name="message" rows="6" required></textarea>
           </label>
+          <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="light"></div>
           <button type="submit" id="ct-submit">Send message</button>
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
+        <script is:inline>
+          (function() {
+            var s = document.createElement(‘script’);
+            s.src = ‘https://challenges.cloudflare.com/turnstile/v0/api.js’;
+            s.async = true;
+            document.head.appendChild(s);
+          })();
+        </script>
         <script>
-          const form = document.getElementById('ct-form');
-          const btn = document.getElementById('ct-submit');
-          const status = document.getElementById('ct-status');
-          form?.addEventListener('submit', async (e) => {
+          const form = document.getElementById(‘ct-form’) as HTMLFormElement;
+          const btn = document.getElementById(‘ct-submit’) as HTMLButtonElement;
+          const status = document.getElementById(‘ct-status’) as HTMLElement;
+          form?.addEventListener(‘submit’, async (e) => {
             e.preventDefault();
-            btn.textContent = 'Sending…';
+            btn.textContent = ‘Sending…’;
             btn.disabled = true;
-            status.textContent = '';
+            status.textContent = ‘’;
             const data = Object.fromEntries(new FormData(form));
             try {
-              const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-              const json = await res.json();
+              const res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
+              const json = await res.json().catch(() => ({}));
               if (res.ok) {
                 status.textContent = "Message sent — we’ll be in touch soon!";
-                status.className = 'ct-status ct-status--ok';
+                status.className = ‘ct-status ct-status--ok’;
                 form.reset();
               } else {
-                status.textContent = json.error ?? 'Something went wrong. Please email us directly.';
-                status.className = 'ct-status ct-status--err';
+                status.textContent = (json as any).error ?? ‘Something went wrong. Please email us directly.’;
+                status.className = ‘ct-status ct-status--err’;
               }
             } catch {
-              status.textContent = 'Network error. Please try again.';
-              status.className = 'ct-status ct-status--err';
+              status.textContent = ‘Something went wrong. Please email us at hello@welevelup.org’;
+              status.className = ‘ct-status ct-status--err’;
             }
-            btn.textContent = 'Send message';
+            btn.textContent = ‘Send message’;
             btn.disabled = false;
+            (window as any).turnstile?.reset();
           });
         </script>
       </div>

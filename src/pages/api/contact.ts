@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { Resend } from 'resend';
+import { sendContactMessage } from '../../lib/email';
 
 export const prerender = false;
 
@@ -20,8 +20,7 @@ export const POST: APIRoute = async ({ request }) => {
   const json = (data: unknown, status = 200) =>
     new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 
-  const apiKey = import.meta.env.RESEND_API_KEY;
-  if (!apiKey) return json({ error: 'Server misconfigured' }, 500);
+  if (!import.meta.env.RESEND_API_KEY) return json({ error: 'Server misconfigured' }, 500);
 
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
   if (isRateLimited(ip)) return json({ error: 'Too many requests' }, 429);
@@ -52,15 +51,8 @@ export const POST: APIRoute = async ({ request }) => {
   if (!name || !email || !message) return json({ error: 'Name, email and message are required' }, 400);
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return json({ error: 'Valid email required' }, 400);
 
-  const resend = new Resend(apiKey);
   try {
-    await resend.emails.send({
-      from: 'Level Up <hello@welevelup.org>',
-      to: 'hello@welevelup.org',
-      replyTo: email,
-      subject: subject ? `[Contact] ${subject}` : `[Contact] Message from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
-    });
+    await sendContactMessage({ name, email, subject, message });
     return json({ ok: true });
   } catch (err) {
     console.error('[contact] send failed:', err);

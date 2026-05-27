@@ -4,7 +4,7 @@ import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  output: 'server',
+  output: 'static',
   adapter: vercel(),
   site: 'https://welevelup.org',
   trailingSlash: 'never',

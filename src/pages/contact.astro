@@ -49,7 +49,9 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
         <script is:inline>
+          alert(‘contact script loaded’);
           document.getElementById(‘ct-submit’).addEventListener(‘click’, async function() {
+            alert(‘button clicked’);
             var form = document.getElementById(‘ct-form’);
             var btn = document.getElementById(‘ct-submit’);
             var status = document.getElementById(‘ct-status’);

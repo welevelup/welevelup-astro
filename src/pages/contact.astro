@@ -58,34 +58,39 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
           })();
         </script>
         <script is:inline>
-          var form = document.getElementById(‘ct-form’);
-          var btn = document.getElementById(‘ct-submit’);
-          var status = document.getElementById(‘ct-status’);
-          form && form.addEventListener(‘submit’, async function(e) {
-            e.preventDefault();
-            btn.textContent = ‘Sending…’;
-            btn.disabled = true;
-            status.textContent = ‘’;
-            var data = Object.fromEntries(new FormData(form));
-            try {
-              var res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
-              var json = {};
-              try { json = await res.json(); } catch(e) {}
-              if (res.ok) {
-                status.textContent = "Message sent — we’ll be in touch soon!";
-                status.className = ‘ct-status ct-status--ok’;
-                form.reset();
-              } else {
-                status.textContent = json.error || ‘Something went wrong. Please email us directly.’;
+          document.addEventListener(‘DOMContentLoaded’, function() {
+            var form = document.getElementById(‘ct-form’);
+            var btn = document.getElementById(‘ct-submit’);
+            var status = document.getElementById(‘ct-status’);
+            if (!form) return;
+            form.addEventListener(‘submit’, async function(e) {
+              e.preventDefault();
+              btn.textContent = ‘Sending…’;
+              btn.disabled = true;
+              status.textContent = ‘’;
+              status.className = ‘ct-status’;
+              var data = Object.fromEntries(new FormData(form));
+              try {
+                var res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
+                var json = {};
+                try { json = await res.json(); } catch(_) {}
+                if (res.ok) {
+                  status.textContent = "Message sent — we’ll be in touch soon!";
+                  status.className = ‘ct-status ct-status--ok’;
+                  form.reset();
+                  status.scrollIntoView({ behavior: ‘smooth’, block: ‘nearest’ });
+                } else {
+                  status.textContent = json.error || ‘Something went wrong. Please email us directly.’;
+                  status.className = ‘ct-status ct-status--err’;
+                }
+              } catch(err) {
+                status.textContent = ‘Something went wrong. Please email hello@welevelup.org’;
                 status.className = ‘ct-status ct-status--err’;
               }
-            } catch(err) {
-              status.textContent = ‘Something went wrong. Please email hello@welevelup.org’;
-              status.className = ‘ct-status ct-status--err’;
-            }
-            btn.textContent = ‘Send message’;
-            btn.disabled = false;
-            if (window.turnstile) window.turnstile.reset();
+              btn.textContent = ‘Send message’;
+              btn.disabled = false;
+              if (window.turnstile) window.turnstile.reset();
+            });
           });
         </script>
       </div>
@@ -248,6 +253,25 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
     padding-bottom: 2px;
   }
   .ct-social a:hover { border-bottom-color: #CCFF33 !important; }
+
+  .ct-status {
+    font: 500 15px/1.5 'DM Sans';
+    padding: 14px 16px;
+    margin: 0;
+    display: none;
+  }
+  .ct-status--ok {
+    display: block;
+    background: #CCFF33;
+    color: #0C0A3E;
+    border-left: 4px solid #0C0A3E;
+  }
+  .ct-status--err {
+    display: block;
+    background: #ffe0e0;
+    color: #8b0000;
+    border-left: 4px solid #8b0000;
+  }
 
   .ct-cta {
     background: #0C0A3E;

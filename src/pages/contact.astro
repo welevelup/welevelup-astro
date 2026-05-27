@@ -5,9 +5,10 @@ import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
+const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
 ---
 <Layout
-  headHtml={headInner}
+  headHtml={cleanHead}
   bodyClass={bodyClass}
   title="Contact Level Up"
   description="Get in touch with Level Up. We'd love to hear from you. Email us at hello@welevelup.org or send a message via our contact form."

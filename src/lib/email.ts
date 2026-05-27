@@ -144,6 +144,27 @@ export async function sendDonationConfirmation({
   });
 }
 
+export async function sendContactMessage({
+  name,
+  email,
+  subject,
+  message,
+}: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}): Promise<void> {
+  const resend = getResend();
+  await resend.emails.send({
+    from: 'Level Up <hello@welevelup.org>',
+    to: 'hello@welevelup.org',
+    replyTo: email,
+    subject: subject ? `[Contact] ${subject}` : `[Contact] Message from ${name}`,
+    text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
+  });
+}
+
 export async function sendMagicLink({
   to,
   url,

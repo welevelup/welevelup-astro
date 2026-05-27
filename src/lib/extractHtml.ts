@@ -56,9 +56,9 @@ function rewriteLink(url: string): string {
   // e.g. https://welevelup.org/our-team/ → /our-team
   if (WELEVELUP_ABS.test(url)) {
     const path = url.replace(WELEVELUP_ABS, '/');
-    // Skip external-looking assets
-    if (ASSET_PATH.test(path)) return url;
-    if (ASSET_EXT.test(path)) return url;
+    // Rewrite wp-content/wp-includes assets to relative paths (served from public/)
+    if (ASSET_PATH.test(path)) return path;
+    if (ASSET_EXT.test(path)) return path;
     // Clean trailing slash and .html
     let clean = path.replace(/\/index\.html$/, '').replace(/\.html$/, '');
     if (clean.length > 1) clean = clean.replace(/\/+$/, '');

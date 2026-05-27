@@ -46,7 +46,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
             <textarea name="message" rows="6" required></textarea>
           </label>
           <div class="cf-turnstile" data-sitekey={turnstileSiteKey} data-theme="light"></div>
-          <button type="submit" id="ct-submit">Send message</button>
+          <button type="button" id="ct-submit" onclick="ctSend()">Send message</button>
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
         <script is:inline>
@@ -56,42 +56,47 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
             s.async = true;
             document.head.appendChild(s);
           })();
-        </script>
-        <script is:inline>
-          document.addEventListener(‘DOMContentLoaded’, function() {
+          async function ctSend() {
             var form = document.getElementById(‘ct-form’);
             var btn = document.getElementById(‘ct-submit’);
             var status = document.getElementById(‘ct-status’);
-            if (!form) return;
-            form.addEventListener(‘submit’, async function(e) {
-              e.preventDefault();
-              btn.textContent = ‘Sending…’;
-              btn.disabled = true;
-              status.textContent = ‘’;
-              status.className = ‘ct-status’;
-              var data = Object.fromEntries(new FormData(form));
-              try {
-                var res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
-                var json = {};
-                try { json = await res.json(); } catch(_) {}
-                if (res.ok) {
-                  status.textContent = "Message sent — we’ll be in touch soon!";
-                  status.className = ‘ct-status ct-status--ok’;
-                  form.reset();
-                  status.scrollIntoView({ behavior: ‘smooth’, block: ‘nearest’ });
-                } else {
-                  status.textContent = json.error || ‘Something went wrong. Please email us directly.’;
-                  status.className = ‘ct-status ct-status--err’;
-                }
-              } catch(err) {
-                status.textContent = ‘Something went wrong. Please email hello@welevelup.org’;
+            var name = form.querySelector(‘[name=name]’).value.trim();
+            var email = form.querySelector(‘[name=email]’).value.trim();
+            var message = form.querySelector(‘[name=message]’).value.trim();
+            if (!name || !email || !message) {
+              status.textContent = ‘Name, email and message are required.’;
+              status.className = ‘ct-status ct-status--err’;
+              return;
+            }
+            var tokenEl = form.querySelector(‘[name=cf-turnstile-response]’);
+            var data = { name: name, email: email, message: message,
+              subject: (form.querySelector(‘[name=subject]’) || {}).value || ‘’,
+              ‘cf-turnstile-response’: tokenEl ? tokenEl.value : ‘’ };
+            btn.textContent = ‘Sending…’;
+            btn.disabled = true;
+            status.textContent = ‘’;
+            status.className = ‘ct-status’;
+            try {
+              var res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
+              var json = {};
+              try { json = await res.json(); } catch(_) {}
+              if (res.ok) {
+                status.textContent = "Message sent — we’ll be in touch soon!";
+                status.className = ‘ct-status ct-status--ok’;
+                form.reset();
+                status.scrollIntoView({ behavior: ‘smooth’, block: ‘nearest’ });
+              } else {
+                status.textContent = json.error || ‘Something went wrong. Please email us directly.’;
                 status.className = ‘ct-status ct-status--err’;
               }
-              btn.textContent = ‘Send message’;
-              btn.disabled = false;
-              if (window.turnstile) window.turnstile.reset();
-            });
-          });
+            } catch(err) {
+              status.textContent = ‘Something went wrong. Please email hello@welevelup.org’;
+              status.className = ‘ct-status ct-status--err’;
+            }
+            btn.textContent = ‘Send message’;
+            btn.disabled = false;
+            if (window.turnstile) window.turnstile.reset();
+          }
         </script>
       </div>
 

@@ -57,34 +57,35 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '1x0000000
             document.head.appendChild(s);
           })();
         </script>
-        <script>
-          const form = document.getElementById(‘ct-form’) as HTMLFormElement;
-          const btn = document.getElementById(‘ct-submit’) as HTMLButtonElement;
-          const status = document.getElementById(‘ct-status’) as HTMLElement;
-          form?.addEventListener(‘submit’, async (e) => {
+        <script is:inline>
+          var form = document.getElementById(‘ct-form’);
+          var btn = document.getElementById(‘ct-submit’);
+          var status = document.getElementById(‘ct-status’);
+          form && form.addEventListener(‘submit’, async function(e) {
             e.preventDefault();
             btn.textContent = ‘Sending…’;
             btn.disabled = true;
             status.textContent = ‘’;
-            const data = Object.fromEntries(new FormData(form));
+            var data = Object.fromEntries(new FormData(form));
             try {
-              const res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
-              const json = await res.json().catch(() => ({}));
+              var res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
+              var json = {};
+              try { json = await res.json(); } catch(e) {}
               if (res.ok) {
                 status.textContent = "Message sent — we’ll be in touch soon!";
                 status.className = ‘ct-status ct-status--ok’;
                 form.reset();
               } else {
-                status.textContent = (json as any).error ?? ‘Something went wrong. Please email us directly.’;
+                status.textContent = json.error || ‘Something went wrong. Please email us directly.’;
                 status.className = ‘ct-status ct-status--err’;
               }
-            } catch {
-              status.textContent = ‘Something went wrong. Please email us at hello@welevelup.org’;
+            } catch(err) {
+              status.textContent = ‘Something went wrong. Please email hello@welevelup.org’;
               status.className = ‘ct-status ct-status--err’;
             }
             btn.textContent = ‘Send message’;
             btn.disabled = false;
-            (window as any).turnstile?.reset();
+            if (window.turnstile) window.turnstile.reset();
           });
         </script>
       </div>

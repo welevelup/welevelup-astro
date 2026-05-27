@@ -1,29 +1,26 @@
 /**
- * One-shot script to update the `webhookUrl` of every active recurring
- * subscription in the LEGACY Mollie organisation (the one used by GiveWP).
+ * One-shot script to migrate all active GiveWP subscriptions to the new
+ * Astro webhook endpoint.
  *
  * Why this exists:
- *   When DNS for welevelup.org is cut over to Vercel, the existing 70 GiveWP
- *   subscriptions still send their webhooks to https://welevelup.org/?give-
- *   listener=mollie. That URL will now hit Vercel, which doesn't speak the
- *   GiveWP webhook protocol — so the webhooks 404 and Mollie eventually
- *   pauses the subscriptions / spams the admin.
+ *   Old subscriptions created via GiveWP still have their webhookUrl set to
+ *   the old WordPress handler (https://welevelup.org/?give-listener=mollie).
+ *   Since DNS now points to Vercel/Astro, those webhooks 404 — meaning Mollie
+ *   retries endlessly and donors don't receive renewal confirmation emails.
  *
- *   This script walks every active subscription in the legacy org and
- *   rewrites its webhookUrl to point at the Cloudways URL where the WP
- *   install (and the GiveWP handler) still lives.
+ *   This script walks every active subscription and rewrites its webhookUrl
+ *   to the new Astro endpoint so renewals are handled correctly going forward.
  *
- * Run this BEFORE the DNS cutover. It is safe to run multiple times — Mollie
- * accepts identical PATCHes without side effects.
+ * It is safe to run multiple times — Mollie ignores identical PATCHes.
  *
  * Usage:
- *   1. Set MOLLIE_LEGACY_API_KEY and MOLLIE_LEGACY_WEBHOOK_URL in .env.local
- *   2. Run:  npx tsx scripts/update-legacy-webhooks.ts --dry-run
- *   3. Verify the report
- *   4. Run:  npx tsx scripts/update-legacy-webhooks.ts --apply
- *
- * After it succeeds, you can remove MOLLIE_LEGACY_API_KEY from .env.local —
- * we no longer need it for day-to-day operation.
+ *   1. In .env.local set:
+ *        MOLLIE_LEGACY_API_KEY=live_xxxxx        ← your live Mollie API key
+ *        MOLLIE_LEGACY_WEBHOOK_URL=https://welevelup.org/api/mollie-webhook?secret=YOUR_PRODUCTION_SECRET
+ *      (get YOUR_PRODUCTION_SECRET from Vercel env vars → MOLLIE_WEBHOOK_SECRET)
+ *   2. Dry run first:  npx tsx scripts/update-legacy-webhooks.ts --dry-run
+ *   3. Review the output — it shows every subscription and what will change
+ *   4. Apply:          npx tsx scripts/update-legacy-webhooks.ts --apply
  */
 import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
 import { readFileSync, existsSync } from 'node:fs';

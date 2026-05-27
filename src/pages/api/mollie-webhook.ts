@@ -65,19 +65,34 @@ export const POST: APIRoute = async ({ request }) => {
     console.log(`[webhook] meta=${JSON.stringify(meta)}`);
     console.log(`[webhook] RESEND_KEY=${!!import.meta.env.RESEND_API_KEY}`);
 
-    const shouldEmail = (seq === 'oneoff' || seq === 'first') && !!meta?.donorEmail;
-    console.log(`[webhook] shouldEmail=${shouldEmail} email=${meta?.donorEmail ?? 'none'}`);
+    // For old GiveWP subscriptions metadata is missing — fall back to the
+    // Mollie customer object to get the donor's email address.
+    let donorEmail = meta?.donorEmail;
+    let donorName = meta?.donorName || '';
+    if (!donorEmail && payment.customerId) {
+      try {
+        const customer = await mollie.customers.get(payment.customerId);
+        donorEmail = customer.email ?? undefined;
+        donorName = donorName || customer.name || '';
+        console.log(`[webhook] resolved customer email: ${donorEmail}`);
+      } catch (customerErr) {
+        console.warn('[webhook] could not fetch customer:', customerErr);
+      }
+    }
 
-    if (shouldEmail && meta) {
+    const shouldEmail = (seq === 'oneoff' || seq === 'first' || seq === 'recurring') && !!donorEmail;
+    console.log(`[webhook] shouldEmail=${shouldEmail} email=${donorEmail ?? 'none'} seq=${seq}`);
+
+    if (shouldEmail && donorEmail) {
       try {
         await sendDonationConfirmation({
-          to: meta.donorEmail,
-          name: meta.donorName || '',
-          amount: meta.amount || payment.amount.value,
-          recurring: meta.type === 'recurring',
-          giftAid: meta.giftAid === 'true',
+          to: donorEmail,
+          name: donorName,
+          amount: meta?.amount || payment.amount.value,
+          recurring: seq === 'recurring' || meta?.type === 'recurring',
+          giftAid: meta?.giftAid === 'true',
         });
-        console.log(`[webhook] email sent to ${meta.donorEmail}`);
+        console.log(`[webhook] email sent to ${donorEmail}`);
       } catch (emailErr) {
         console.error(`[webhook] email FAILED:`, emailErr);
       }

@@ -1,7 +1,0 @@
-{
-  "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"git add src/pages/api/test-email.ts && git commit -m \\\"fix: add prerender=false to test-email endpoint\\\" && git push\"}",
-  "error": "Exit code 1\nEn la rama main\nTu rama está actualizada con 'origin/main'.\n\nCambios no rastreados para el commit:\n  (usa \"git add/rm <archivo>...\" para actualizar a lo que se le va a hacer commit)\n  (usa \"git restore <archivo>...\" para descartar los cambios en el directorio de trabajo)\n\tmodificados:     .omc/project-memory.json\n\tborrados:        .omc/state/agent-replay-e6e70b34-ce42-4f85-8735-cd6f4d8d6663.jsonl\n\tmodificados:     .omc/state/idle-notif-cooldown.json\n\tmodificados:     .omc/state/last-...",
-  "timestamp": "2026-04-20T11:00:27.724Z",
-  "retry_count": 1
-}

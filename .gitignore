@@ -10,3 +10,5 @@ dist
 .omc/
 .superpowers/
 .env.vercel.local
+_archive/
+designs/

@@ -5,9 +5,10 @@ import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
+const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
 ---
 <Layout
-  headHtml={headInner}
+  headHtml={cleanHead}
   bodyClass={bodyClass}
   title="Contact Level Up"
   description="Get in touch with Level Up. We'd love to hear from you. Email us at hello@welevelup.org or send a message via our contact form."
@@ -44,48 +45,47 @@ const { headInner, bodyClass } = extract(homeRaw);
             <span>Message</span>
             <textarea name="message" rows="6" required></textarea>
           </label>
-          <button type="button" id="ct-submit" onclick="ctSend()">Send message</button>
+          <button type="button" id="ct-submit">Send message</button>
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
-        <script is:inline>
-          async function ctSend() {
-            var form = document.getElementById(‘ct-form’);
-            var btn = document.getElementById(‘ct-submit’);
-            var status = document.getElementById(‘ct-status’);
-            var name = form.querySelector(‘[name=name]’).value.trim();
-            var email = form.querySelector(‘[name=email]’).value.trim();
-            var message = form.querySelector(‘[name=message]’).value.trim();
+        <script>
+          const btn = document.getElementById('ct-submit');
+          const form = document.getElementById('ct-form');
+          const status = document.getElementById('ct-status');
+          btn?.addEventListener('click', async () => {
+            const name = form.querySelector('[name=name]').value.trim();
+            const email = form.querySelector('[name=email]').value.trim();
+            const message = form.querySelector('[name=message]').value.trim();
             if (!name || !email || !message) {
-              status.textContent = ‘Name, email and message are required.’;
-              status.className = ‘ct-status ct-status--err’;
+              status.textContent = 'Name, email and message are required.';
+              status.className = 'ct-status ct-status--err';
               return;
             }
-            var data = { name: name, email: email, message: message,
-              subject: (form.querySelector(‘[name=subject]’) || {}).value || ‘’ };
-            btn.textContent = ‘Sending…’;
+            const subject = (form.querySelector('[name=subject]')?.value ?? '');
+            btn.textContent = 'Sending…';
             btn.disabled = true;
-            status.textContent = ‘’;
-            status.className = ‘ct-status’;
+            status.textContent = '';
+            status.className = 'ct-status';
             try {
-              var res = await fetch(‘/api/contact’, { method: ‘POST’, headers: { ‘Content-Type’: ‘application/json’ }, body: JSON.stringify(data) });
-              var json = {};
+              const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, message, subject }) });
+              let json = {};
               try { json = await res.json(); } catch(_) {}
               if (res.ok) {
-                status.textContent = "Message sent — we’ll be in touch soon!";
-                status.className = ‘ct-status ct-status--ok’;
+                status.textContent = "Message sent — we'll be in touch soon!";
+                status.className = 'ct-status ct-status--ok';
                 form.reset();
-                status.scrollIntoView({ behavior: ‘smooth’, block: ‘nearest’ });
+                status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
               } else {
-                status.textContent = json.error || ‘Something went wrong. Please email us directly.’;
-                status.className = ‘ct-status ct-status--err’;
+                status.textContent = json.error || 'Something went wrong. Please email us directly.';
+                status.className = 'ct-status ct-status--err';
               }
-            } catch(err) {
-              status.textContent = ‘Something went wrong. Please email hello@welevelup.org’;
-              status.className = ‘ct-status ct-status--err’;
+            } catch {
+              status.textContent = 'Something went wrong. Please email hello@welevelup.org';
+              status.className = 'ct-status ct-status--err';
             }
-            btn.textContent = ‘Send message’;
+            btn.textContent = 'Send message';
             btn.disabled = false;
-          }
+          });
         </script>
       </div>
 

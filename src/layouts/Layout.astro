@@ -40,19 +40,28 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
       footer[data-elementor-type="footer"],
       .elementor-location-footer { display: none !important; }
 
+      /* Hide Elementor mobile-hidden elements (e.g. secondary CTA button) */
+      .elementor-hidden-mobile { display: none !important; }
+
+      /* Hide "Big beauty brands..." subtext on tablet + mobile — too verbose */
+      @media (max-width: 1024px) {
+        .elementor-element-c703ee4 { display: none !important; }
+      }
+
       /* Homepage hero: full-screen on mobile with readable text */
       @media (max-width: 768px) {
+        /* Leave ~56px at bottom so the campaign ticker stays visible */
         .elementor-element-c89219b {
-          min-height: 100dvh !important;
+          min-height: calc(100dvh - 56px) !important;
           height: auto !important;
         }
         .home-caption .elementor-widget-container p {
-          font-size: 15px !important;
+          font-size: 17px !important;
           line-height: 1.5 !important;
         }
         .home-caption .elementor-heading-title {
-          font-size: 28px !important;
-          line-height: 1.1 !important;
+          font-size: 40px !important;
+          line-height: 1.05 !important;
         }
       }
     </style>

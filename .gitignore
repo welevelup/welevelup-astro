@@ -10,3 +10,9 @@ dist
 .omc/
 .superpowers/
 .env.vercel.local
+_archive/
+designs/
+credential.json
+*.pem
+*.p12
+*.key

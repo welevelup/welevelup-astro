@@ -56,14 +56,15 @@
       "permanent": true
     },
     {
-      "source": "/wp-content/(.*)",
-      "destination": "/",
-      "permanent": false
-    },
-    {
       "source": "/wp-admin(.*)",
       "destination": "/",
       "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/wp-content/:path*",
+      "destination": "https://welevelup.org/wp-content/:path*"
     }
   ],
   "headers": [

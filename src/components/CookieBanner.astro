@@ -1,8 +1,8 @@
 ---
 // Cookie consent banner — GDPR compliance for Meta Pixel
 ---
-<div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
-  <p>We use cookies to understand how our campaigns are performing. Do you consent?</p>
+<div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-modal="true" aria-describedby="cookie-desc">
+  <p id="cookie-desc">We use cookies to understand how our campaigns are performing. Do you consent?</p>
   <div class="cookie-actions">
     <button id="cookie-accept" type="button">Accept</button>
     <button id="cookie-decline" type="button">Decline</button>
@@ -91,6 +91,20 @@
 
     // Show banner — override the display:none from CSS default
     banner.style.display = 'flex';
+
+    // Focus trap: keep keyboard focus inside the banner while it's visible
+    var focusable = banner.querySelectorAll('button');
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    banner.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab') return;
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    first && first.focus();
 
     document.getElementById('cookie-accept').addEventListener('click', function () {
       localStorage.setItem('lu_cookie_consent', 'accepted');

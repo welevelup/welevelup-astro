@@ -11,5 +11,11 @@ export default defineConfig({
   build: {
     format: 'file',
   },
-  integrations: [sitemap()],
+  integrations: [sitemap({
+    filter: (page) => ![
+      'https://welevelup.org/donate/thank-you',
+      'https://welevelup.org/donor-portal/manage',
+      'https://welevelup.org/donor-portal/cancelled',
+    ].includes(page),
+  })],
 });

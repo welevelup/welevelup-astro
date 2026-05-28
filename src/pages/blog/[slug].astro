@@ -49,6 +49,7 @@ const relatedCampaign = campaignMap[post.id];
   title={`${post.data.title} | Level Up`}
   description={post.data.excerpt ?? post.data.title}
   ogImage={post.data.image}
+  ogType="article"
 >
   <Nav />
 
@@ -74,6 +75,7 @@ const relatedCampaign = campaignMap[post.id];
     </div>
   </header>
 
+  <main id="main-content">
   <!-- ARTICLE -->
   <article class="bp-article">
     <div class="bp-article-inner">
@@ -127,8 +129,26 @@ const relatedCampaign = campaignMap[post.id];
     <p>Campaign updates, event invitations, and feminist thinking — straight to your inbox.</p>
     <a href="https://levelup.yourmovement.org/p/join-us" class="bp-cta-btn" target="_blank" rel="noopener">Join us</a>
   </section>
+  </main>
 
   <Footer />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.data.title,
+    "description": post.data.excerpt ?? post.data.title,
+    "datePublished": new Date(post.data.date).toISOString(),
+    "author": { "@type": "Person", "name": post.data.author },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Level Up",
+      "url": "https://welevelup.org",
+      "logo": { "@type": "ImageObject", "url": "https://welevelup.org/images/logo-email.png" }
+    },
+    "url": `https://welevelup.org/blog/${post.id}`,
+    ...(post.data.image ? { "image": post.data.image } : {})
+  })} />
 </Layout>
 
 <style is:global>
@@ -379,10 +399,13 @@ const relatedCampaign = campaignMap[post.id];
 </style>
 
 <script>
-  document.querySelector('.bp-copy-link')?.addEventListener('click', (e) => {
-    const url = (e.currentTarget as HTMLElement).dataset.url;
-    if (url) navigator.clipboard.writeText(url);
-    (e.currentTarget as HTMLElement).textContent = 'Copied!';
-    setTimeout(() => { (e.currentTarget as HTMLElement).textContent = 'Copy link'; }, 2000);
+  document.querySelectorAll('.bp-copy-link').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const el = e.currentTarget as HTMLElement;
+      const url = el.dataset.url;
+      if (url) navigator.clipboard.writeText(url);
+      el.textContent = 'Copied!';
+      setTimeout(() => { el.textContent = 'Copy link'; }, 2000);
+    });
   });
 </script>

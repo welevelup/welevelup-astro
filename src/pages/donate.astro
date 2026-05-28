@@ -16,7 +16,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 >
   <Nav />
 
-  <main class="lu-donate">
+  <main class="lu-donate" id="main-content">
 
     <!-- HERO -->
     <section class="lu-donate__hero">
@@ -241,7 +241,17 @@ const { headInner, bodyClass } = extract(homeRaw);
     width: fit-content;
   }
   .lu-donate__toggle-opt { cursor: pointer; }
-  .lu-donate__toggle-opt input { display: none; }
+  .lu-donate__toggle-opt input {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border: 0;
+  }
+  .lu-donate__toggle-opt:focus-within span {
+    outline: 3px solid #0C0A3E;
+    outline-offset: 2px;
+  }
   .lu-donate__toggle-opt span {
     display: block;
     padding: 12px 28px;
@@ -261,7 +271,17 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin-bottom: 12px;
   }
   .lu-donate__amounts label { cursor: pointer; }
-  .lu-donate__amounts input { display: none; }
+  .lu-donate__amounts input {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0,0,0,0);
+    white-space: nowrap; border: 0;
+  }
+  .lu-donate__amounts label:focus-within span {
+    outline: 3px solid #0C0A3E;
+    outline-offset: 2px;
+  }
   .lu-donate__amounts span {
     display: block;
     text-align: center;
@@ -313,7 +333,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     transition: border-color 0.15s;
   }
   .lu-donate__field--details input:focus {
-    outline: none;
+    outline: 3px solid #0C0A3E;
+    outline-offset: 2px;
     border-color: #A89CED;
   }
   .lu-donate__error {

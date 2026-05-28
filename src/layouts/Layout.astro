@@ -8,6 +8,7 @@ interface Props {
   description?: string;
   ogUrl?: string;
   ogImage?: string;
+  ogType?: string;
   noindex?: boolean;
 }
 
@@ -17,7 +18,8 @@ const {
   title,
   description,
   ogUrl,
-  ogImage = '/wp-content/uploads/2023/05/Level-Up-OG.png',
+  ogImage = 'https://welevelup.org/wp-content/uploads/2023/05/Level-Up-OG.png',
+  ogType = 'website',
   noindex = false,
 } = Astro.props;
 
@@ -43,16 +45,24 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
       /* Hide Elementor mobile-hidden elements (e.g. secondary CTA button) */
       .elementor-hidden-mobile { display: none !important; }
 
-      /* Hide "Big beauty brands..." subtext on tablet + mobile — too verbose */
-      @media (max-width: 1024px) {
+      /* Hide "Big beauty brands..." subtext on mobile only */
+      @media (max-width: 768px) {
         .elementor-element-c703ee4 { display: none !important; }
+      }
+
+      /* Desktop hero: fill viewport minus nav (~109px) and ic-bar (~42px) */
+      @media (min-width: 769px) {
+        .elementor-element-c89219b {
+          min-height: calc(100dvh - 155px) !important;
+          height: auto !important;
+        }
       }
 
       /* Homepage hero: full-screen on mobile with readable text */
       @media (max-width: 768px) {
-        /* Leave ~56px at bottom so the campaign ticker stays visible */
+        /* Hero fills viewport minus mobile nav (~68px) and ic-bar with padding (~62px) */
         .elementor-element-c89219b {
-          min-height: calc(100dvh - 56px) !important;
+          min-height: calc(100dvh - 135px) !important;
           height: auto !important;
         }
         .home-caption .elementor-widget-container p {
@@ -74,7 +84,7 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content="Level Up" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@we_level_up" />

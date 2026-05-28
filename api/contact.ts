@@ -59,7 +59,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   try {
     const resend = new Resend(resendKey);
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: 'Level Up <hello@welevelup.org>',
       to: 'hello@welevelup.org',
       cc: 'tech@welevelup.org',
@@ -67,6 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       subject: subject ? `[Contact] ${subject}` : `[Contact] Message from ${name}`,
       text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
     });
+    if (error) throw new Error(error.message);
     return res.status(200).json({ ok: true });
   } catch (err) {
     console.error('[contact] send failed:', err);

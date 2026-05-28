@@ -1,4 +1,71 @@
 {
+  "redirects": [
+    {
+      "source": "/petition/(.*)",
+      "destination": "https://levelup.yourmovement.org/p/$1",
+      "permanent": true
+    },
+    {
+      "source": "/sitemap_index.xml",
+      "destination": "/sitemap-index.xml",
+      "permanent": true
+    },
+    {
+      "source": "/category/abortion-stories",
+      "destination": "/memory/abortion-stories",
+      "permanent": true
+    },
+    {
+      "source": "/category/abortion-stories/(.*)",
+      "destination": "/memory/abortion-stories",
+      "permanent": true
+    },
+    {
+      "source": "/tag/lye",
+      "destination": "/active-campaigns/nomorelyes",
+      "permanent": true
+    },
+    {
+      "source": "/tag/packaging",
+      "destination": "/resources/nomorelyes",
+      "permanent": true
+    },
+    {
+      "source": "/tag/ovarian-cancer",
+      "destination": "/resources/nomorelyes",
+      "permanent": true
+    },
+    {
+      "source": "/tag/kidney-failure",
+      "destination": "/resources/nomorelyes",
+      "permanent": true
+    },
+    {
+      "source": "/category/(.*)",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/tag/(.*)",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/author/(.*)",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/wp-content/(.*)",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/wp-admin(.*)",
+      "destination": "/",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

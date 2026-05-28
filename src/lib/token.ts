@@ -21,7 +21,10 @@ export function verifyToken<T = Record<string, unknown>>(
   const [data, sig] = parts;
   try {
     const expected = createHmac(ALGO, secret).update(data).digest('base64url');
-    if (!timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+    const sigBuf = Buffer.from(sig, 'base64url');
+    const expBuf = Buffer.from(expected, 'base64url');
+    if (sigBuf.length !== expBuf.length) return null;
+    if (!timingSafeEqual(sigBuf, expBuf)) return null;
   } catch {
     return null;
   }

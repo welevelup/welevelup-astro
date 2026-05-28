@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 
 const FROM = 'Level Up <no-reply@welevelup.org>';
-const LOGO_URL = 'https://levelup.yourmovement.org/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBc01XIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--899d9333f326b8d370f2acf06f7fe589aef9efd5/image.png';
+const LOGO_URL = 'https://welevelup.org/images/logo-email.png';
 const SITE_URL = 'https://welevelup.org';
 
 function getResend() {
@@ -70,7 +70,7 @@ a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !im
             </a>
           </center>
           <p style="font-size:12px;color:#666;margin:0 0 8px;">You are receiving this email because you subscribed to Level Up's mailing list.</p>
-          <p style="font-size:12px;color:#666;margin:0 0 8px;"><strong>Our mailing address is:</strong><br>3rd Floor 86–90 Paul Street<br>London EC2A 4NE</p>
+          <p style="font-size:12px;color:#666;margin:0 0 8px;"><strong>Our mailing address is:</strong><br>3rd Floor 86 – 90 Paul Street<br>London<br>EC2A 4NE</p>
           <p style="font-size:12px;color:#666;margin:0;"><strong>Contact us at:</strong> <a href="mailto:hello@welevelup.org" style="color:#5b4fcf;text-decoration:none;">hello@welevelup.org</a></p>
         </td></tr>
 
@@ -136,12 +136,13 @@ export async function sendDonationConfirmation({
     ${portalNote}
   `);
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to,
     subject: `Thank you for your ${typeLabel} to Level Up`,
     html,
   });
+  if (error) throw new Error(`Resend error (donation confirmation): ${error.message}`);
 }
 
 export async function sendContactMessage({
@@ -156,13 +157,14 @@ export async function sendContactMessage({
   message: string;
 }): Promise<void> {
   const resend = getResend();
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: 'Level Up <hello@welevelup.org>',
     to: 'hello@welevelup.org',
     replyTo: email,
     subject: subject ? `[Contact] ${subject}` : `[Contact] Message from ${name}`,
     text: `Name: ${name}\nEmail: ${email}\n\n${message}`,
   });
+  if (error) throw new Error(`Resend error (contact): ${error.message}`);
 }
 
 export async function sendMagicLink({
@@ -183,10 +185,11 @@ export async function sendMagicLink({
     <p style="margin:24px 0 0;font-size:14px;color:#666;">If you didn't request this, you can ignore this email. Questions? <a href="mailto:hello@welevelup.org" style="color:#5b4fcf;">hello@welevelup.org</a></p>
   `);
 
-  await resend.emails.send({
+  const { error } = await resend.emails.send({
     from: FROM,
     to,
     subject: 'Your Level Up donor portal access link',
     html,
   });
+  if (error) throw new Error(`Resend error (magic link): ${error.message}`);
 }

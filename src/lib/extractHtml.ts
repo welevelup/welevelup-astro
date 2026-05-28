@@ -119,7 +119,11 @@ function stripDuplicateHeadTags(raw: string): string {
     .replace(/<script\b[^>]*pixelyoursite[^>]*>[\s\S]*?<\/script>/gi, '')
     .replace(/<noscript\b[^>]*>[\s\S]*?googletagmanager[\s\S]*?<\/noscript>/gi, '')
     .replace(/<script\b[^>]*src="[^"]*(?:wp-content|wp-includes)[^"]*"[^>]*>[\s\S]*?<\/script>/gi, '')
-    .replace(/<script\b[^>]*src="[^"]*(?:wp-content|wp-includes)[^"]*"[^>]*\/?>/gi, '');
+    .replace(/<script\b[^>]*src="[^"]*(?:wp-content|wp-includes)[^"]*"[^>]*\/?>/gi, '')
+    // Strip render-blocking Google Fonts <link> tags from WP plugins (Inter, Montserrat, Sora — not used by Astro UI)
+    .replace(/<link\b[^>]*href="[^"]*fonts\.googleapis\.com[^"]*"[^>]*\/?>/gi, '')
+    // Strip WP plugin stylesheets
+    .replace(/<link\b[^>]*rel=["']stylesheet["'][^>]*href="[^"]*wp-content[^"]*"[^>]*\/?>/gi, '');
 }
 
 export function extract(rawHtml: string): ExtractedHtml {
@@ -133,7 +137,7 @@ export function extract(rawHtml: string): ExtractedHtml {
 
   const bodyMatch = html.match(BODY_RE);
   if (!bodyMatch) {
-    return { headInner, bodyClass: '', bodyInner: '', navHtml: '', footerHtml: '', preHeaderHtml: '' };
+    return { headInner, bodyClass: '', bodyInner: '', navHtml: '', footerHtml: '', preHeaderHtml: '', chromeBeforeMain: '', chromeAfterMain: '', mainContent: '' };
   }
 
   const bodyAttrs = bodyMatch[1];

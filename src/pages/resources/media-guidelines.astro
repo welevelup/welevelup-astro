@@ -1,0 +1,425 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="UK Media Guidelines for Reporting Domestic Abuse Deaths | Level Up"
+  description="Level Up's media guidelines help journalists report fatal domestic abuse with accuracy and dignity. Built around the AIDA framework, endorsed by IPSO and IMPRESS."
+  ogImage="https://welevelup.org/wp-content/uploads/2025/08/Level-Up-at-IPSO-e1680513085600-800x418-1-e1769804722383.jpg"
+>
+  <Nav />
+
+  <script type="application/ld+json" set:html={JSON.stringify([
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+        { "@type": "ListItem", "position": 2, "name": "Resources", "item": "https://welevelup.org/resources" },
+        { "@type": "ListItem", "position": 3, "name": "Media Guidelines — Domestic Abuse", "item": "https://welevelup.org/resources/media-guidelines" }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is the AIDA framework for reporting domestic abuse?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AIDA stands for Accountability, Images, Dignity, and Accuracy. Accountability means naming the perpetrator's choices as choices. Images means avoiding photos that sexualise victims or humanise perpetrators at the expense of victims. Dignity means focusing on the victim's life, not just their death. Accuracy means reflecting that domestic homicide is the outcome of sustained coercive control, not a spontaneous act of passion."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Are these media guidelines endorsed by press regulators?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Level Up's media guidelines for reporting fatal domestic abuse are endorsed by both IPSO (the Independent Press Standards Organisation) and IMPRESS, the UK's two press regulators."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can journalists access training on reporting domestic abuse deaths?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Level Up offers CPD-accredited journalist training developed with domestic abuse training service AVA. Sessions feature testimony from domestic abuse survivors and victims' families. Contact mediasupport@welevelup.org to book a training for yourself or your newsroom."
+          }
+        }
+      ]
+    }
+  ])} />
+
+  <main id="main-content">
+
+    <!-- HERO -->
+    <section class="mg-hero">
+      <div class="mg-inner">
+        <span class="mg-eyebrow">Dignity for Dead Women</span>
+        <h1 class="mg-title">Media Guidelines for Reporting<br/>Domestic Abuse Deaths</h1>
+        <p class="mg-subtitle">Every three days in the UK, a woman is killed by a partner or ex-partner. How the media covers these deaths matters — for public understanding, for bereaved families, and for prevention. Level Up produced the UK's first media guidelines on reporting fatal domestic abuse.</p>
+        <div class="mg-hero-ctas">
+          <a href="/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" class="mg-btn-primary" target="_blank" rel="noopener">Download the guidelines (PDF)</a>
+          <a href="/active-campaigns/media-guidelines-domestic-abuse" class="mg-btn-secondary">About the campaign →</a>
+        </div>
+        <div class="mg-endorsements">
+          <span class="mg-endorsed-label">Endorsed by</span>
+          <span class="mg-badge">IPSO</span>
+          <span class="mg-badge">IMPRESS</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY IT MATTERS -->
+    <section class="mg-section mg-section--cream">
+      <div class="mg-inner">
+        <h2>Why media reporting of domestic abuse deaths matters</h2>
+        <p>Every three days in the UK, a woman is killed by her partner or ex-partner. Yet media coverage frequently misrepresents these killings — as isolated incidents, crimes of passion, or domestic disputes — rather than the predictable outcome of sustained coercive control.</p>
+        <p>Irresponsible reporting reinforces myths about domestic abuse, adds to the trauma of bereaved families, and reduces public pressure on institutions to act. Level Up's research found that <strong>2 in 3 families bereaved by domestic homicide</strong> had their grieving process negatively impacted by media coverage.</p>
+        <p>These guidelines give journalists a clear, evidence-based framework for reporting these deaths accurately, responsibly, and with dignity.</p>
+      </div>
+    </section>
+
+    <!-- AIDA FRAMEWORK -->
+    <section class="mg-section mg-section--navy">
+      <div class="mg-inner">
+        <span class="mg-eyebrow mg-eyebrow--light">The Framework</span>
+        <h2 class="mg-h2--light">AIDA: How to report domestic abuse deaths</h2>
+        <p class="mg-p--light">Level Up developed the AIDA framework — four principles for responsible reporting of fatal domestic abuse. This framework underpins the media guidelines and the journalist training programme.</p>
+        <div class="mg-aida-grid">
+          <div class="mg-aida-card">
+            <span class="mg-aida-letter">A</span>
+            <h3>Accountability</h3>
+            <p>Name the perpetrator's choices as choices. Domestic homicide is not a loss of control — it is the culmination of sustained, deliberate abuse. Language like "snapped" or "crime of passion" obscures this reality.</p>
+          </div>
+          <div class="mg-aida-card">
+            <span class="mg-aida-letter">I</span>
+            <h3>Images</h3>
+            <p>Choose photographs that do not sexualise victims or humanise perpetrators at the victim's expense. Avoid "happy couple" images that centre the perpetrator. Centre the victim's identity and life.</p>
+          </div>
+          <div class="mg-aida-card">
+            <span class="mg-aida-letter">D</span>
+            <h3>Dignity</h3>
+            <p>Focus on who the victim was — her life, relationships, achievements, and personhood — not only how she died. Bereaved families should not have to relive their loved one's death in degrading or sensationalised terms.</p>
+          </div>
+          <div class="mg-aida-card">
+            <span class="mg-aida-letter">A</span>
+            <h3>Accuracy</h3>
+            <p>Reflect the reality of coercive control. Domestic homicide almost always follows a pattern of controlling behaviour. Reporting that treats each killing as an isolated incident misrepresents the systemic nature of the problem.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD -->
+    <section class="mg-section mg-section--white">
+      <div class="mg-inner mg-download-block">
+        <div class="mg-download-text">
+          <h2>Download the full guidelines</h2>
+          <p>The complete Level Up media guidelines for reporting fatal domestic abuse — including the AIDA framework, case studies, and language guidance. Endorsed by IPSO and IMPRESS. Free to download and use.</p>
+          <p>A second edition of the guidelines was published in 2024, incorporating feedback from journalists, editors, and bereaved families.</p>
+        </div>
+        <div class="mg-download-cta">
+          <a href="/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" class="mg-btn-primary" target="_blank" rel="noopener">Download PDF</a>
+          <p class="mg-download-note">Free — no email required</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- IPSO & CAMPAIGN -->
+    <section class="mg-section mg-section--cream">
+      <div class="mg-inner">
+        <h2>The campaign to change press standards</h2>
+        <p>The media guidelines are the foundation of Level Up's <strong>Dignity for Dead Women</strong> campaign — a years-long campaign to change how the UK press covers fatal domestic abuse.</p>
+        <p>Since 2018, Level Up has:</p>
+        <ul class="mg-list">
+          <li>Trained over <strong>500 journalists</strong> in responsible reporting of domestic abuse deaths</li>
+          <li>Delivered a petition signed by <strong>over 26,700 people</strong> to IPSO headquarters</li>
+          <li>Submitted formal evidence to the IPSO Editor's Code Committee review calling for a specific clause on fatal domestic abuse reporting</li>
+          <li>Secured endorsement from both UK press regulators: IPSO and IMPRESS</li>
+        </ul>
+        <a href="/active-campaigns/media-guidelines-domestic-abuse" class="mg-btn-secondary">Read the full campaign →</a>
+      </div>
+    </section>
+
+    <!-- TRAINING -->
+    <section class="mg-section mg-section--white">
+      <div class="mg-inner">
+        <h2>Journalist training</h2>
+        <p>Level Up offers <strong>CPD-accredited training</strong> for journalists and newsrooms on reporting fatal domestic abuse. Training sessions are developed in partnership with domestic abuse training service AVA and feature testimony from domestic abuse survivors and bereaved families.</p>
+        <p>Sessions are co-facilitated by award-winning journalist Helena Wadia and are available for individual journalists and news teams.</p>
+        <div class="mg-training-contact">
+          <p>To book training for yourself or your newsroom:</p>
+          <a href="mailto:mediasupport@welevelup.org" class="mg-btn-primary">mediasupport@welevelup.org</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- RELATED RESOURCES -->
+    <section class="mg-section mg-section--cream">
+      <div class="mg-inner">
+        <h2>Related resources</h2>
+        <div class="mg-related-grid">
+          <a href="/resources/ddw" class="mg-related-card">
+            <span class="mg-related-tag">Dignity for Dead Women</span>
+            <h3>All DDW campaign resources</h3>
+            <p>Research, press coverage, regulatory submissions, and campaign materials.</p>
+            <span class="mg-related-arrow">Browse →</span>
+          </a>
+          <a href="/active-campaigns/media-guidelines-domestic-abuse" class="mg-related-card">
+            <span class="mg-related-tag">Campaign</span>
+            <h3>Dignity for Dead Women campaign</h3>
+            <p>The full story of the campaign to change press standards on domestic abuse reporting.</p>
+            <span class="mg-related-arrow">Read →</span>
+          </a>
+          <a href="/wp-content/uploads/2025/08/Final-LU-AAFDA-families-report-1.pdf" class="mg-related-card" target="_blank" rel="noopener">
+            <span class="mg-related-tag">Research</span>
+            <h3>AAFDA families report</h3>
+            <p>Level Up's research on how domestic homicide media coverage affects bereaved families.</p>
+            <span class="mg-related-arrow">Download PDF →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+
+  <style is:global>
+    .mg-hero {
+      background: #0C0A3E;
+      padding: 100px 24px 80px;
+    }
+    .mg-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .mg-eyebrow {
+      display: block;
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      margin-bottom: 20px;
+    }
+    .mg-eyebrow--light { color: rgba(238,235,211,0.6); }
+    .mg-title {
+      font: 800 clamp(40px,8vw,72px)/0.92 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 0 28px;
+    }
+    .mg-subtitle {
+      font: 400 20px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.75) !important;
+      max-width: 660px;
+      margin: 0 0 40px;
+    }
+    .mg-hero-ctas {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+    .mg-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E !important;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 18px 36px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .mg-btn-primary:hover { background: #fff; }
+    .mg-btn-secondary {
+      display: inline-block;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #CCFF33 !important;
+      text-decoration: none;
+      border-bottom: 2px solid #CCFF33;
+      padding-bottom: 3px;
+      transition: color 0.15s;
+    }
+    .mg-btn-secondary:hover { color: #fff !important; border-color: #fff; }
+    .mg-endorsements {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mg-endorsed-label {
+      font: 500 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(238,235,211,0.4);
+    }
+    .mg-badge {
+      font: 700 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid rgba(238,235,211,0.25);
+      color: rgba(238,235,211,0.6);
+      padding: 6px 12px;
+      border-radius: 2px;
+    }
+
+    /* Sections */
+    .mg-section { padding: 80px 24px; }
+    .mg-section--cream { background: #EEEBD3; }
+    .mg-section--navy { background: #0C0A3E; }
+    .mg-section--white { background: #fff; }
+    .mg-section h2 {
+      font: 800 40px/0.92 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 0 24px;
+    }
+    .mg-h2--light { color: #CCFF33 !important; }
+    .mg-section p {
+      font: 400 18px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.8) !important;
+      margin: 0 0 16px;
+      max-width: 700px;
+    }
+    .mg-p--light { color: rgba(238,235,211,0.75) !important; max-width: 660px; }
+    .mg-section--navy p { color: rgba(238,235,211,0.75) !important; }
+    .mg-section--navy h2 { color: #CCFF33 !important; }
+    .mg-section--navy h3 { color: #EEEBD3 !important; }
+
+    /* AIDA grid */
+    .mg-aida-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .mg-aida-card {
+      border-left: 3px solid #CCFF33;
+      padding-left: 20px;
+    }
+    .mg-aida-letter {
+      display: block;
+      font: 800 48px/1 'DM Sans', sans-serif;
+      color: #CCFF33 !important;
+      margin-bottom: 8px;
+    }
+    .mg-aida-card h3 {
+      font: 700 20px/1.1 'DM Sans', sans-serif !important;
+      color: #EEEBD3 !important;
+      margin: 0 0 10px;
+    }
+    .mg-aida-card p {
+      font: 400 15px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.65) !important;
+      margin: 0;
+      max-width: none;
+    }
+
+    /* Download block */
+    .mg-download-block {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 48px;
+      align-items: center;
+    }
+    .mg-download-cta {
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .mg-download-note {
+      font: 400 13px/1 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.4) !important;
+      margin-top: 12px !important;
+      text-align: center;
+    }
+
+    /* List */
+    .mg-list {
+      padding-left: 20px;
+      margin: 16px 0 24px;
+    }
+    .mg-list li {
+      font: 400 18px/1.6 'DM Sans', sans-serif;
+      color: rgba(12,10,62,0.8);
+      margin-bottom: 8px;
+    }
+
+    /* Training */
+    .mg-training-contact {
+      margin-top: 32px;
+      padding: 32px;
+      background: #EEEBD3;
+      border-left: 4px solid #CCFF33;
+    }
+    .mg-training-contact p {
+      font: 600 16px/1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      margin: 0 0 16px !important;
+    }
+
+    /* Related grid */
+    .mg-related-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .mg-related-card {
+      background: #fff;
+      padding: 28px 24px;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border: 1px solid rgba(12,10,62,0.1);
+      border-left: 3px solid #CCFF33;
+      transition: border-color 0.15s;
+    }
+    .mg-related-card:hover { border-left-color: #A89CED; }
+    .mg-related-tag {
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #A89CED;
+    }
+    .mg-related-card h3 {
+      font: 700 18px/1.2 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      margin: 0;
+    }
+    .mg-related-card p {
+      font: 400 14px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.6) !important;
+      margin: 0;
+      max-width: none;
+    }
+    .mg-related-arrow {
+      font: 600 13px/1 'DM Sans', sans-serif;
+      color: #CCFF33;
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .mg-hero { padding: 72px 24px 56px; }
+      .mg-hero-ctas { flex-direction: column; align-items: flex-start; }
+      .mg-aida-grid { grid-template-columns: 1fr; }
+      .mg-download-block { grid-template-columns: 1fr; }
+      .mg-download-cta { text-align: left; }
+      .mg-related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</Layout>

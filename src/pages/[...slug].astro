@@ -21,11 +21,19 @@ export async function getStaticPaths() {
   }));
 }
 
+const slugMeta: Record<string, { title: string; description: string }> = {
+  'nomorelyes-relaxer-info-kit': {
+    title: 'Hair Relaxer Cancer Risk — What You Need to Know | Level Up',
+    description: "Hair relaxers may double the risk of womb cancer. Level Up's #NoMoreLyes campaign calls on beauty brands to remove toxic chemicals from hair relaxers. Read the science and take action.",
+  },
+};
+
 const { file } = Astro.props;
 const rawHtml = readFileSync(file, 'utf-8');
 const { headInner, bodyClass, mainContent } = extract(rawHtml);
+const meta = slugMeta[Astro.params.slug ?? ''] ?? {};
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass}>
+<Layout headHtml={headInner} bodyClass={bodyClass} title={meta.title} description={meta.description}>
   <Nav />
   <Fragment set:html={mainContent} />
   <Footer />

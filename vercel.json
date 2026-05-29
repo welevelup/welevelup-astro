@@ -93,6 +93,11 @@
       "permanent": true
     },
     {
+      "source": "/gender-critical-feminism-isnt-feminist",
+      "destination": "/blog/gender-critical-feminism-isnt-feminist",
+      "permanent": true
+    },
+    {
       "source": "/beyond-sympathy-feminist-solidarity-without-deservingness",
       "destination": "/blog/beyond-sympathy-feminist-solidarity-without-deservingness",
       "permanent": true

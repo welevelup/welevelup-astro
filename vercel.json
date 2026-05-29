@@ -75,7 +75,7 @@
     },
     {
       "source": "/media-guidelines",
-      "destination": "/resources/ddw",
+      "destination": "/resources/media-guidelines",
       "permanent": true
     },
     {

@@ -2,7 +2,7 @@
 title: "\"Gender-Critical\" Feminism Isn't Feminist — It's Anti-Trans Politics"
 author: "Vic Parsons"
 date: "2025-12-04"
-excerpt: "Those in the movement position themselves as women's rights advocates with reasonable concerns about trans people. They're anything but."
+excerpt: "Gender-critical feminism claims to defend women's rights — but its documented alliances with the far-right reveal what it really is: anti-trans politics."
 image: "https://welevelup.org/wp-content/uploads/2025/12/captura_de_pantalla_2025-12-02_a_la_s__16.04.17_720.png"
 ---
 

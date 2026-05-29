@@ -1,0 +1,3 @@
+[allowlist]
+description = "Expired VERCEL_OIDC_TOKEN accidentally committed in early scaffolding, since removed and gitignored"
+commits = ["01435f23784fb13fc518dee16e84bacd0b61b79e"]

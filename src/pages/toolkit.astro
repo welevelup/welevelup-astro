@@ -47,7 +47,10 @@ const { headInner, bodyClass } = extract(homeRaw);
             <span class="tk-meta-sep">·</span>
             <span class="tk-meta-item">Updated November 2025</span>
           </div>
-          <a href="/active-campaigns/pregnancy-in-prison" class="tk-btn-secondary">About the campaign →</a>
+          <div class="tk-hero-actions">
+            <a href="/active-campaigns/pregnancy-in-prison" class="tk-btn-secondary">About the campaign →</a>
+            <a href="#" class="tk-btn-download" download>Download Toolkit (PDF)</a>
+          </div>
         </div>
         <aside class="tk-hero-aside">
           <div class="tk-stat-card">
@@ -98,6 +101,7 @@ const { headInner, bodyClass } = extract(homeRaw);
           <a href="#checklist" class="tk-nav-link">Checklist for Lawyers</a>
           <a href="#resources" class="tk-nav-link">Support Organisations</a>
           <hr class="tk-sidebar-divider" />
+          <a href="#" class="tk-nav-action tk-nav-download" download>⬇ Download PDF</a>
           <a href="/resources/pregnancy-in-prison" class="tk-nav-action">All PIP resources →</a>
           <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" target="_blank" rel="noopener" class="tk-nav-action">Sign the petition →</a>
         </nav>
@@ -438,6 +442,26 @@ const { headInner, bodyClass } = extract(homeRaw);
     transition: color 0.15s, border-color 0.15s;
   }
   .tk-btn-secondary:hover { color: #A89CED; border-color: #A89CED; }
+  .tk-hero-actions {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 16px;
+  }
+  .tk-btn-download {
+    display: inline-flex;
+    align-items: center;
+    font: 700 13px/1 'DM Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #0C0A3E;
+    background: #CCFF33;
+    text-decoration: none;
+    padding: 12px 20px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .tk-btn-download:hover { background: #A89CED; color: #fff; }
 
   .tk-hero-aside {
     display: flex;
@@ -550,6 +574,14 @@ const { headInner, bodyClass } = extract(homeRaw);
     transition: color 0.15s;
   }
   .tk-nav-action:hover { color: #A89CED; }
+  .tk-nav-download {
+    background: #CCFF33;
+    color: #0C0A3E;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    transition: background 0.15s;
+  }
+  .tk-nav-download:hover { background: #A89CED; color: #0C0A3E; }
 
   /* ── Sections ── */
   .tk-section {

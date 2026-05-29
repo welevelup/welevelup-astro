@@ -18,3 +18,4 @@ credential.json
 *.key
 .claude/
 scripts/backups/
+.env*.local

@@ -6,6 +6,66 @@
       "permanent": true
     },
     {
+      "source": "/all-resources",
+      "destination": "/resources",
+      "permanent": true
+    },
+    {
+      "source": "/ddw-resources",
+      "destination": "/resources/ddw",
+      "permanent": true
+    },
+    {
+      "source": "/pp-resources",
+      "destination": "/resources/pregnancy-in-prison",
+      "permanent": true
+    },
+    {
+      "source": "/abortion-is-healthcare-resources",
+      "destination": "/resources/abortion-is-healthcare",
+      "permanent": true
+    },
+    {
+      "source": "/media-guidelines",
+      "destination": "/resources/ddw",
+      "permanent": true
+    },
+    {
+      "source": "/our-work",
+      "destination": "/our-impact",
+      "permanent": true
+    },
+    {
+      "source": "/our-team",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/news-and-events",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/beyond-sympathy-feminist-solidarity-without-deservingness",
+      "destination": "/blog/beyond-sympathy-feminist-solidarity-without-deservingness",
+      "permanent": true
+    },
+    {
+      "source": "/how-we-choose-our-campaigns",
+      "destination": "/blog/how-we-choose-our-campaigns",
+      "permanent": true
+    },
+    {
+      "source": "/the-griefs-left-unattended",
+      "destination": "/blog/the-griefs-left-unattended",
+      "permanent": true
+    },
+    {
+      "source": "/why-expanding-criminalisation-is-a-feminist-issue",
+      "destination": "/blog/why-expanding-criminalisation-is-a-feminist-issue",
+      "permanent": true
+    },
+    {
       "source": "/sitemap_index.xml",
       "destination": "/sitemap-index.xml",
       "permanent": true

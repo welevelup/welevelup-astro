@@ -252,7 +252,8 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   .home-hero-btn:hover { color: #fff; border-color: #fff; }
   body { overflow-x: hidden; }
   .e-con, .e-con-boxed, .elementor-section { max-width: 100vw !important; overflow-x: hidden !important; }
-  .elementor-element-c89219b { min-height: 100vh !important; }
+  .elementor-element-c89219b { height: calc(100vh - 175px) !important; overflow: hidden; }
+  .elementor-element-c89219b .e-con-inner { padding: 80px 48px 48px !important; }
 
   .home-h1-band {
     background: #EEEBD3;
@@ -855,9 +856,10 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
     }
   });
 
-  // Remove all WP Elementor homepage sections except the hero
+  // Remove all WP Elementor homepage sections except the hero and campaign carousel
   document.querySelectorAll('.elementor-1818 > .elementor-element').forEach(el => {
-    if (!el.classList.contains('elementor-element-c89219b')) el.remove();
+    const keep = ['elementor-element-c89219b', 'elementor-element-0362161'];
+    if (!keep.some(cls => el.classList.contains(cls))) el.remove();
   });
 
   // On mobile: move announcement bar below the hero section

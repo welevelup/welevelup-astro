@@ -16,3 +16,5 @@ credential.json
 *.pem
 *.p12
 *.key
+.claude/
+scripts/backups/

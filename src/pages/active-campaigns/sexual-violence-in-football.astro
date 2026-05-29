@@ -15,9 +15,22 @@ const { headInner, bodyClass } = extract(homeRaw);
   headHtml={headInner}
   bodyClass={bodyClass}
   title="Sexual Violence in Football | Level Up"
-  description="Level Up's campaign challenging the culture of impunity around gender-based violence in professional football. Sign the petition to hold the Premier League and FA to account."
+  description="Level Up campaigns against gender-based violence in professional football. Sign the petition demanding the Premier League and FA enforce zero tolerance."
   ogImage="/wp-content/uploads/2025/08/1553e305-ff32-46ed-a997-a255d801a668_tfywcj-1-e1769823018750.webp"
 >
+  <script type="application/ld+json" set:html={JSON.stringify([
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Campaigns", "item": "https://welevelup.org/active-campaigns" },
+      { "@type": "ListItem", "position": 3, "name": "Sexual Violence in Football", "item": "https://welevelup.org/active-campaigns/sexual-violence-in-football" }
+    ]},
+    { "@context": "https://schema.org", "@type": "WebPage",
+      "name": "Sexual Violence in Football | Level Up",
+      "url": "https://welevelup.org/active-campaigns/sexual-violence-in-football",
+      "description": "Level Up campaigns against gender-based violence in professional football.",
+      "publisher": { "@type": "NGO", "name": "Level Up", "url": "https://welevelup.org" }
+    }
+  ])} />
   <Nav />
 
   <!-- HERO — plain navy with background image -->

@@ -10,7 +10,21 @@ const { headInner, bodyClass } = extract(homeRaw);
   headHtml={headInner}
   bodyClass={bodyClass}
   title="Finish Holloway Women's Centre | Level Up"
-  description="Holloway Women's Centre is built but standing empty. Tell Islington Council to keep their promise and deliver vital support for women facing trauma, violence, poverty and homelessness."
+  description="Holloway Women's Centre is built but standing empty. Tell Islington Council to keep their promise and deliver vital support for women facing violence and homelessness."
+>
+  <script type="application/ld+json" set:html={JSON.stringify([
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Campaigns", "item": "https://welevelup.org/active-campaigns" },
+      { "@type": "ListItem", "position": 3, "name": "Finish Holloway Women's Centre", "item": "https://welevelup.org/active-campaigns/islington-council-finish-holloway-womens-centre" }
+    ]},
+    { "@context": "https://schema.org", "@type": "WebPage",
+      "name": "Finish Holloway Women's Centre | Level Up",
+      "url": "https://welevelup.org/active-campaigns/islington-council-finish-holloway-womens-centre",
+      "description": "Holloway Women's Centre is built but standing empty. Tell Islington Council to deliver vital support for women facing violence and homelessness.",
+      "publisher": { "@type": "NGO", "name": "Level Up", "url": "https://welevelup.org" }
+    }
+  ])} />
   ogImage="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png"
 >
   <Nav />

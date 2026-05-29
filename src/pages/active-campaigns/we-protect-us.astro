@@ -10,9 +10,22 @@ const { headInner, bodyClass } = extract(homeRaw);
   headHtml={headInner}
   bodyClass={bodyClass}
   title="We Protect Us — Free Bystander Intervention Training | Level Up"
-  description="Join Level Up's free online bystander intervention training. Learn how to safely interrupt harassment in public, at work, or in your community. 413 people trained."
+  description="Free online bystander intervention training from Level Up — learn to safely interrupt harassment in public, at work, or in your community."
   ogImage="/wp-content/uploads/2025/09/we-protect-us-2.webp"
 >
+  <script type="application/ld+json" set:html={JSON.stringify([
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Campaigns", "item": "https://welevelup.org/active-campaigns" },
+      { "@type": "ListItem", "position": 3, "name": "We Protect Us", "item": "https://welevelup.org/active-campaigns/we-protect-us" }
+    ]},
+    { "@context": "https://schema.org", "@type": "WebPage",
+      "name": "We Protect Us — Free Bystander Intervention Training | Level Up",
+      "url": "https://welevelup.org/active-campaigns/we-protect-us",
+      "description": "Free online bystander intervention training from Level Up.",
+      "publisher": { "@type": "NGO", "name": "Level Up", "url": "https://welevelup.org" }
+    }
+  ])} />
   <Nav />
 
   <!-- HERO (plain navy — no video) -->

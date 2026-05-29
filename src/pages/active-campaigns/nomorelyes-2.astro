@@ -19,6 +19,21 @@ const { headInner, bodyClass } = extract(homeRaw);
   ogImage="/wp-content/uploads/2025/08/NML11-2.webp"
 >
   <Nav />
+  <script type="application/ld+json" set:html={JSON.stringify([
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Campaigns", "item": "https://welevelup.org/active-campaigns" },
+      { "@type": "ListItem", "position": 3, "name": "#NoMoreLyes", "item": "https://welevelup.org/active-campaigns/nomorelyes-2" }
+    ]},
+    { "@context": "https://schema.org", "@type": "WebPage",
+      "name": "#NoMoreLyes | Take Toxic Hair Relaxers Off the Shelves | Level Up",
+      "url": "https://welevelup.org/active-campaigns/nomorelyes-2",
+      "description": "Level Up's #NoMoreLyes campaign challenges beauty brands to remove toxic chemicals from hair relaxers used by Black women.",
+      "publisher": { "@type": "NGO", "name": "Level Up", "url": "https://welevelup.org" }
+    }
+  ])} />
+>
+  <Nav />
 
   <!-- HERO WITH VIDEO BACKGROUND -->
   <section class="dp-hero">

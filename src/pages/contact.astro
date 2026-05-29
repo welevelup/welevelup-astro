@@ -15,6 +15,27 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
 >
   <Nav />
 
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Level Up",
+    "url": "https://welevelup.org/contact",
+    "description": "Get in touch with Level Up — a UK feminist campaigning organisation. Email hello@welevelup.org or use the contact form.",
+    "mainEntity": {
+      "@type": "NGO",
+      "name": "Level Up",
+      "url": "https://welevelup.org",
+      "email": "hello@welevelup.org",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "3rd Floor, 86–90 Paul Street",
+        "addressLocality": "London",
+        "postalCode": "EC2A 4NE",
+        "addressCountry": "GB"
+      }
+    }
+  })} />
+
   <section class="ct-hero">
     <div class="ct-hero-inner">
       <span class="ct-label">Get in touch</span>

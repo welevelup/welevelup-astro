@@ -13,6 +13,19 @@ const { headInner, bodyClass } = extract(homeRaw);
   description="Level Up campaigns for the Premier League and FA to take a stand against gender-based violence in football. Take action now."
   ogImage="/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.34.png"
 >
+  <script type="application/ld+json" set:html={JSON.stringify([
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Campaigns", "item": "https://welevelup.org/active-campaigns" },
+      { "@type": "ListItem", "position": 3, "name": "Premier League and FA", "item": "https://welevelup.org/active-campaigns/premier-league-and-fa" }
+    ]},
+    { "@context": "https://schema.org", "@type": "WebPage",
+      "name": "Premier League and FA — End Gender-Based Violence in Football | Level Up",
+      "url": "https://welevelup.org/active-campaigns/premier-league-and-fa",
+      "description": "Level Up campaigns for the Premier League and FA to take a stand against gender-based violence in football.",
+      "publisher": { "@type": "NGO", "name": "Level Up", "url": "https://welevelup.org" }
+    }
+  ])} />
   <Nav />
 
   <!-- HERO (plain navy with image) -->

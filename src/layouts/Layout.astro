@@ -137,5 +137,23 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
   <body class={bodyClass}>
     <slot />
     <CookieBanner />
+
+    <script is:inline>
+      document.addEventListener('click', function (e) {
+        var el = e.target.closest('a[href*="yourmovement.org"]');
+        if (!el || typeof gtag !== 'function') return;
+        var url = el.getAttribute('href') || '';
+        var text = (el.textContent || '').trim();
+        var action = url.includes('/p/join-us') ? 'join_us'
+          : url.includes('petition') || text.toLowerCase().includes('petition') ? 'sign_petition'
+          : url.includes('training') || text.toLowerCase().includes('training') ? 'sign_up_training'
+          : 'yourmovement_click';
+        gtag('event', action, {
+          event_category: 'outbound',
+          event_label: url,
+          link_text: text,
+        });
+      });
+    </script>
   </body>
 </html>

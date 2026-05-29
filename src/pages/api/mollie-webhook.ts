@@ -80,6 +80,37 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
+    // Fire GA4 Measurement Protocol purchase event (server-side backup —
+    // catches conversions where the donor closed the tab before reaching /thank-you).
+    const ga4MeasurementId = import.meta.env.GA4_MEASUREMENT_ID;
+    const ga4ApiSecret = import.meta.env.GA4_MEASUREMENT_PROTOCOL_SECRET;
+    if (ga4MeasurementId && ga4ApiSecret) {
+      const amountValue = parseFloat(meta?.amount || payment.amount.value);
+      fetch(
+        `https://www.google-analytics.com/mp/collect?measurement_id=${ga4MeasurementId}&api_secret=${ga4ApiSecret}`,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            client_id: 'mollie-webhook',
+            events: [{
+              name: 'purchase',
+              params: {
+                currency: 'GBP',
+                value: amountValue,
+                transaction_id: paymentId,
+                items: [{
+                  item_id: meta?.type === 'recurring' ? 'monthly-donation' : 'one-time-donation',
+                  item_name: meta?.type === 'recurring' ? 'Level Up Monthly Donation' : 'Level Up Donation',
+                  price: amountValue,
+                  quantity: 1,
+                }],
+              },
+            }],
+          }),
+        }
+      ).catch((err) => console.warn('[webhook] GA4 MP event failed:', err));
+    }
+
     const shouldEmail = (seq === 'oneoff' || seq === 'first' || seq === 'recurring') && !!donorEmail;
     console.log(`[webhook] shouldEmail=${shouldEmail} email=${donorEmail ?? 'none'} seq=${seq}`);
 

@@ -40,7 +40,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   const mollie = createMollieClient({ apiKey });
   const formattedAmount = amountNum.toFixed(2);
-  const redirectUrl = `${siteUrl.replace(/\/$/, '')}/donate/thank-you`;
+  const type = recurring ? 'monthly' : 'one-time';
+  const redirectUrl = `${siteUrl.replace(/\/$/, '')}/donate/thank-you?amount=${formattedAmount}&type=${type}`;
 
   try {
     if (recurring) {

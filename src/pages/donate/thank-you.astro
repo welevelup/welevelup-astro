@@ -56,6 +56,34 @@ const { headInner, bodyClass } = extract(homeRaw);
       }
     </script>
   )}
+
+  <script is:inline>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const amount = parseFloat(params.get('amount') || '0');
+      const isMonthly = params.get('type') === 'monthly';
+      if (amount <= 0) return;
+      function fireEvent() {
+        if (typeof gtag !== 'function') return;
+        gtag('event', 'purchase', {
+          currency: 'GBP',
+          value: amount,
+          transaction_id: 'donation-' + Date.now(),
+          items: [{
+            item_id: isMonthly ? 'monthly-donation' : 'one-time-donation',
+            item_name: isMonthly ? 'Level Up Monthly Donation' : 'Level Up Donation',
+            price: amount,
+            quantity: 1,
+          }],
+        });
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fireEvent);
+      } else {
+        fireEvent();
+      }
+    })();
+  </script>
 </Layout>
 
 <style is:global>

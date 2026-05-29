@@ -1,6 +1,5 @@
 {
   "redirects": [
-    { "source": "/toolkit", "destination": "https://piptoolkit.squarespace.com/", "permanent": false },
     {
       "source": "/petition/(.*)",
       "destination": "https://levelup.yourmovement.org/p/$1",

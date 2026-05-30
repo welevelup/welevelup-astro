@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { isRateLimited } from '../../../lib/ratelimit';
 import { createMollieClient } from '@mollie/api-client';
 import { verifyToken } from '../../../lib/token';
 
@@ -16,6 +17,11 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!apiKey || !secret) {
     return json({ error: 'Server misconfigured' }, 500);
+  }
+
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+  if (await isRateLimited(`cancel:${ip}`)) {
+    return json({ error: 'Too many requests' }, 429);
   }
 
   let token: string | undefined;

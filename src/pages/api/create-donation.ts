@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { isRateLimited } from '../../lib/ratelimit';
 import { createMollieClient, SequenceType } from '@mollie/api-client';
 
 export const prerender = false;
@@ -16,6 +17,11 @@ export const POST: APIRoute = async ({ request }) => {
 
   if (!apiKey || !siteUrl || !webhookUrl) {
     return json({ error: 'Mollie env vars not configured' }, 500);
+  }
+
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+  if (await isRateLimited(`donation:${ip}`)) {
+    return json({ error: 'Too many requests' }, 429);
   }
 
   let body: { amount?: string; recurring?: boolean; donorName?: string; donorEmail?: string; giftAid?: boolean };

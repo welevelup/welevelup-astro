@@ -16,7 +16,7 @@
     "@mollie/api-client": "^4.5.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
-    "@vercel/node": "^4.0.0",
+    "@vercel/node": "^5.8.8",
     "astro": "^6.3.8",
     "resend": "^6.12.0"
   }

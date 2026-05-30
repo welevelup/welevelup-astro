@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { timingSafeEqual } from 'crypto';
 import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
 import { sendDonationConfirmation, sendFailedPaymentNotice, sendSubscriptionSuspended } from '../../lib/email';
 
@@ -18,7 +19,9 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response('Forbidden', { status: 403 });
   }
   const incoming = new URL(request.url).searchParams.get('secret');
-  if (!incoming || incoming !== webhookSecret) {
+  const incomingBuf = Buffer.from(incoming ?? '');
+  const secretBuf = Buffer.from(webhookSecret);
+  if (!incoming || incomingBuf.length !== secretBuf.length || !timingSafeEqual(incomingBuf, secretBuf)) {
     console.warn('[mollie-webhook] rejected: invalid or missing secret');
     return new Response('Forbidden', { status: 403 });
   }
@@ -46,17 +49,22 @@ export const POST: APIRoute = async ({ request }) => {
   // Subscription status webhook — id starts with sub_
   if (paymentId.startsWith('sub_')) {
     try {
-      let foundSub: { id: string; status: string; customerId?: string; amount: { value: string }; metadata?: unknown } | undefined;
-      let cursor: string | undefined;
-      do {
-        const page = await (mollie as unknown as { subscriptions: { page(o: object): Promise<unknown> } }).subscriptions.page({ from: cursor, limit: 250 });
-        foundSub = Array.from(page as Iterable<typeof foundSub>).find((s) => (s as { id: string }).id === paymentId) as typeof foundSub;
-        if (foundSub) break;
-        cursor = (page as { nextPageCursor?: string }).nextPageCursor ?? undefined;
-      } while (cursor);
+      type SubRecord = { id: string; status: string; customerId?: string; amount: { value: string }; metadata?: unknown };
+      let foundSub: SubRecord | undefined;
+      let foundCustomerId: string | undefined;
+      let customerCursor: string | undefined;
+      outer: do {
+        const customers = await mollie.customers.page({ from: customerCursor, limit: 250 });
+        for (const customer of customers as Iterable<{ id: string }>) {
+          const subs = await mollie.customerSubscriptions.page({ customerId: customer.id, limit: 250 });
+          const match = Array.from(subs as Iterable<SubRecord>).find(s => s.id === paymentId);
+          if (match) { foundSub = match; foundCustomerId = customer.id; break outer; }
+        }
+        customerCursor = (customers as unknown as { nextPageCursor?: string }).nextPageCursor ?? undefined;
+      } while (customerCursor);
 
-      if (foundSub?.status === 'suspended' && foundSub.customerId) {
-        const customer = await mollie.customers.get(foundSub.customerId);
+      if (foundSub?.status === 'suspended' && foundCustomerId) {
+        const customer = await mollie.customers.get(foundCustomerId);
         const meta = foundSub.metadata as Record<string, string> | null;
         const donorEmail = meta?.donorEmail || customer.email;
         if (donorEmail) {
@@ -65,7 +73,7 @@ export const POST: APIRoute = async ({ request }) => {
             name: customer.name || '',
             amount: foundSub.amount.value,
           });
-          console.log(`[webhook] subscription suspended email sent to ${donorEmail}`);
+          console.log('[webhook] subscription suspended email sent');
         }
       }
     } catch (err) {
@@ -107,7 +115,7 @@ export const POST: APIRoute = async ({ request }) => {
               name: donorName,
               amount: meta?.amount || payment.amount.value,
             });
-            console.log(`[webhook] failed payment notice sent to ${donorEmail}`);
+            console.log('[webhook] failed payment notice sent');
           } catch (emailErr) {
             console.error('[webhook] failed payment notice error:', emailErr);
           }
@@ -116,7 +124,7 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response('OK', { status: 200 });
     }
 
-    console.log(`[webhook] meta=${JSON.stringify(meta)}`);
+    console.log(`[webhook] meta keys=${meta ? Object.keys(meta).join(',') : 'null'}`);
     console.log(`[webhook] RESEND_KEY=${!!import.meta.env.RESEND_API_KEY}`);
 
     // For old GiveWP subscriptions metadata is missing — fall back to the
@@ -128,7 +136,7 @@ export const POST: APIRoute = async ({ request }) => {
         const customer = await mollie.customers.get(payment.customerId);
         donorEmail = customer.email ?? undefined;
         donorName = donorName || customer.name || '';
-        console.log(`[webhook] resolved customer email: ${donorEmail}`);
+        console.log('[webhook] resolved customer from Mollie');
       } catch (customerErr) {
         console.warn('[webhook] could not fetch customer:', customerErr);
       }

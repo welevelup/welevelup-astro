@@ -165,7 +165,7 @@ export const POST: APIRoute = async ({ request }) => {
       ).catch((err) => console.warn('[webhook] GA4 MP event failed:', err));
     }
 
-    const shouldEmail = (seq === 'oneoff' || seq === 'first' || seq === 'recurring') && !!donorEmail;
+    const shouldEmail = (seq === 'oneoff' || seq === 'first') && !!donorEmail;
     console.log(`[webhook] shouldEmail=${shouldEmail} email=${donorEmail ?? 'none'} seq=${seq}`);
 
     if (shouldEmail && donorEmail) {

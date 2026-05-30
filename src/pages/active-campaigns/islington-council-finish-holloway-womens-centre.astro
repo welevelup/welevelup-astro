@@ -11,6 +11,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   bodyClass={bodyClass}
   title="Finish Holloway Women's Centre | Level Up"
   description="Holloway Women's Centre is built but standing empty. Tell Islington Council to keep their promise and deliver vital support for women facing violence and homelessness."
+  ogImage="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png"
 >
   <script type="application/ld+json" set:html={JSON.stringify([
     { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -25,8 +26,6 @@ const { headInner, bodyClass } = extract(homeRaw);
       "publisher": { "@type": "NGO", "name": "Level Up", "url": "https://welevelup.org" }
     }
   ])} />
-  ogImage="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png"
->
   <Nav />
 
   <!-- HERO -->
@@ -246,7 +245,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     .dp-hero-overlay {
       position: absolute;
       inset: 0;
-      background: rgba(12, 10, 62, 0.75);
+      background: rgba(12, 10, 62, 0.3);
       z-index: 1;
     }
     .dp-hero p, .dp-hero-inner p, .dp-hero span, .dp-hero div { color: rgba(238,235,211,0.8) !important; }

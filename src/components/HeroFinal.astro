@@ -183,6 +183,12 @@
 
   /* ===== MOBILE ===== */
   @media (max-width: 767px) {
+    /* Use min-height so ticker is never clipped */
+    .hero-final {
+      height: auto !important;
+      min-height: calc(100svh - var(--nav-height, 68px)) !important;
+    }
+
     /* Lighter overlay so image is more visible */
     .hero-bg::after {
       background: rgba(12, 10, 62, 0.22) !important;
@@ -227,11 +233,12 @@
 
 <script>
   function setNavHeight() {
-    const nav = document.querySelector('header') || document.querySelector('.site-header');
+    const nav = document.querySelector('.lu-nav') as HTMLElement | null;
     if (nav) {
       document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
     }
   }
-  setNavHeight();
+  // Wait for WP header removal before measuring
+  requestAnimationFrame(() => requestAnimationFrame(setNavHeight));
   window.addEventListener('resize', setNavHeight);
 </script>

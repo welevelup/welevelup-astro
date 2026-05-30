@@ -1,20 +1,8 @@
 import type { APIRoute } from 'astro';
 import { sendContactMessage } from '../../lib/email';
+import { isRateLimited } from '../../lib/ratelimit';
 
 export const prerender = false;
-
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
-    return false;
-  }
-  if (entry.count >= 5) return true;
-  entry.count++;
-  return false;
-}
 
 export const POST: APIRoute = async ({ request }) => {
   const json = (data: unknown, status = 200) =>
@@ -23,7 +11,7 @@ export const POST: APIRoute = async ({ request }) => {
   if (!import.meta.env.RESEND_API_KEY) return json({ error: 'Server misconfigured' }, 500);
 
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
-  if (isRateLimited(ip)) return json({ error: 'Too many requests' }, 429);
+  if (await isRateLimited(`contact:${ip}`)) return json({ error: 'Too many requests' }, 429);
 
   let name: string, email: string, subject: string, message: string, turnstileToken: string;
   try {

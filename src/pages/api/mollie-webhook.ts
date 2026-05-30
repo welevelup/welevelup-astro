@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
-import { sendDonationConfirmation } from '../../lib/email';
+import { sendDonationConfirmation, sendFailedPaymentNotice, sendSubscriptionSuspended } from '../../lib/email';
 
 export const prerender = false;
 
@@ -43,23 +43,77 @@ export const POST: APIRoute = async ({ request }) => {
 
   const mollie = createMollieClient({ apiKey });
 
+  // Subscription status webhook — id starts with sub_
+  if (paymentId.startsWith('sub_')) {
+    try {
+      let foundSub: { id: string; status: string; customerId?: string; amount: { value: string }; metadata?: unknown } | undefined;
+      let cursor: string | undefined;
+      do {
+        const page = await (mollie as unknown as { subscriptions: { page(o: object): Promise<unknown> } }).subscriptions.page({ from: cursor, limit: 250 });
+        foundSub = Array.from(page as Iterable<typeof foundSub>).find((s) => (s as { id: string }).id === paymentId) as typeof foundSub;
+        if (foundSub) break;
+        cursor = (page as { nextPageCursor?: string }).nextPageCursor ?? undefined;
+      } while (cursor);
+
+      if (foundSub?.status === 'suspended' && foundSub.customerId) {
+        const customer = await mollie.customers.get(foundSub.customerId);
+        const meta = foundSub.metadata as Record<string, string> | null;
+        const donorEmail = meta?.donorEmail || customer.email;
+        if (donorEmail) {
+          await sendSubscriptionSuspended({
+            to: donorEmail,
+            name: customer.name || '',
+            amount: foundSub.amount.value,
+          });
+          console.log(`[webhook] subscription suspended email sent to ${donorEmail}`);
+        }
+      }
+    } catch (err) {
+      console.error('[webhook] subscription webhook error:', err);
+    }
+    return new Response('OK', { status: 200 });
+  }
+
   try {
     const payment = await mollie.payments.get(paymentId);
     const seq = payment.sequenceType;
     const status = payment.status;
     console.log(`[webhook] id=${paymentId} status=${status} seq=${seq}`);
 
-    if (status !== 'paid') {
-      console.log(`[webhook] skipping: not paid`);
-      return new Response('OK', { status: 200 });
-    }
-
-    // Mollie metadata can be object or stringified JSON
+    // Parse metadata early — needed by both the failure path and the success path
     let meta: Record<string, string> | null = null;
     if (payment.metadata && typeof payment.metadata === 'string') {
       try { meta = JSON.parse(payment.metadata); } catch { meta = null; }
     } else if (payment.metadata && typeof payment.metadata === 'object') {
       meta = payment.metadata as Record<string, string>;
+    }
+
+    if (status !== 'paid') {
+      console.log(`[webhook] skipping: not paid (status=${status})`);
+      if ((status === 'failed' || status === 'expired') && seq === 'recurring') {
+        let donorEmail = meta?.donorEmail;
+        let donorName = meta?.donorName || '';
+        if (!donorEmail && payment.customerId) {
+          try {
+            const customer = await mollie.customers.get(payment.customerId);
+            donorEmail = customer.email ?? undefined;
+            donorName = donorName || customer.name || '';
+          } catch { /* best-effort */ }
+        }
+        if (donorEmail) {
+          try {
+            await sendFailedPaymentNotice({
+              to: donorEmail,
+              name: donorName,
+              amount: meta?.amount || payment.amount.value,
+            });
+            console.log(`[webhook] failed payment notice sent to ${donorEmail}`);
+          } catch (emailErr) {
+            console.error('[webhook] failed payment notice error:', emailErr);
+          }
+        }
+      }
+      return new Response('OK', { status: 200 });
     }
 
     console.log(`[webhook] meta=${JSON.stringify(meta)}`);

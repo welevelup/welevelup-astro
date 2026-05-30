@@ -4,6 +4,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import rawHtml from '../_clone/index.html?raw';
+import HeroOption2 from '../components/HeroOption2.astro'; // Dark Bold
 
 const { headInner, bodyClass, mainContent } = extract(rawHtml);
 ---
@@ -14,25 +15,11 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   description="Level Up is a UK feminist campaigning organisation fighting for reproductive rights, an end to pregnancy in prison, and freedom from gender-based violence. Join us."
 >
   <Nav />
-  <Fragment set:html={mainContent} />
 
-  <!-- Animated announcement bar -->
-  <div class="ic-bar">
-    <div class="ic-bar-track">
-      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
-        <span class="ic-bar-badge">NEW</span>
-        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
-      </a>
-      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
-        <span class="ic-bar-badge">NEW</span>
-        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
-      </a>
-      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item">
-        <span class="ic-bar-badge">NEW</span>
-        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
-      </a>
-    </div>
-  </div>
+  <!-- HERO BANNER -->
+  <HeroOption2 />
+
+  <!-- Rest of content from Elementor clone -->
 
   <!-- WHO WE ARE — Proposal A: Split layout -->
   <section class="home-who">
@@ -252,73 +239,166 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   .home-hero-btn:hover { color: #fff; border-color: #fff; }
   body { overflow-x: hidden; }
   .e-con, .e-con-boxed, .elementor-section { max-width: 100vw !important; overflow-x: hidden !important; }
-  .elementor-element-c89219b { 
-    height: calc(100vh - 167px) !important; 
-    overflow: hidden; 
+  /* ===== HERO BANNER - SINGLE COLUMN FIX ===== */
+
+  /* Contenedor principal del héroe */
+  .elementor-element-c89219b {
+    /* Altura correcta: 100vh - (nav 70px + ticker 37px) */
+    height: calc(100vh - 107px) !important;
+    min-height: calc(100vh - 107px) !important;
+
+    /* Layout de columna única */
     display: flex !important;
     flex-direction: column !important;
-  }
-  .elementor-element-c89219b .e-con-inner { 
-    padding: 80px 48px 48px !important; 
-    max-width: 100% !important; 
+
+    /* Espaciado interno */
+    padding: 80px 48px 48px !important;
+
+    /* Evitar desbordes */
     overflow: hidden !important;
-    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
   }
-  .elementor-element-c89219b .elementor-heading-title { overflow: hidden !important; word-break: break-word !important; }
-  .elementor-element-c89219b .elementor-widget-container { overflow: visible !important; max-width: 100% !important; }
-  .elementor-element-c89219b .elementor-button {
-    border-radius: 6px !important;
+
+  /* Contenedor interno flex (hereda la columna) */
+  .elementor-element-c89219b .e-con-inner {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 16px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Caja que agrupa intro + título + botón */
+  .elementor-element-9b1e9a1.home-caption {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+    padding: 0 !important;
+  }
+
+  /* Texto de introducción */
+  .elementor-element-c89219b .elementor-element-5d634f6.home-subtitle p {
     font-size: 15px !important;
-    display: inline-block !important;
-    padding: 12px 28px !important;
+    line-height: 1.4 !important;
+    margin: 0 0 4px 0 !important;
+  }
+
+  /* Título #NO MORE LYES */
+  .elementor-element-c89219b .elementor-heading-title {
+    font-size: 48px !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    margin: 8px 0 16px 0 !important;
+    word-break: break-word !important;
+  }
+
+  /* Contenedor de los botones + descripción (antes era "columna derecha") */
+  .elementor-element-5198fdb {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 16px !important;
+    padding: 0 !important;
+  }
+
+  /* Estilo del botón principal (verde lima) */
+  .elementor-element-c89219b .elementor-button {
     background: #CCFF33 !important;
     color: #0C0A3E !important;
-    font-weight: 700 !important;
-    text-decoration: none !important;
+    font-size: 15px !important;
+    padding: 12px 28px !important;
     min-height: 44px !important;
-    line-height: 1.2 !important;
+    border-radius: 6px !important;
+    font-weight: 700 !important;
+    display: inline-block !important;
+    border: none !important;
+    cursor: pointer !important;
   }
-  .elementor-element-c89219b .elementor-button-wrapper { display: inline-block !important; }
 
+  /* Texto descriptivo (el que debe desaparecer en móvil) */
+  .elementor-element-c89219b .elementor-element-c703ee4 p {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+    margin: 0 !important;
   }
 
-  /* ── Hero tablet (768–1024px): stack + smaller fonts ── */
+  /* ===== TABLET (768px - 1024px) ===== */
   @media (max-width: 1024px) {
     .elementor-element-c89219b {
-      height: calc(100svh - 70px) !important;
-      overflow: hidden !important;
+      height: calc(100vh - 70px) !important;
+      min-height: calc(100vh - 70px) !important;
+      padding: 24px 20px 20px !important;
     }
-    .elementor-element-c89219b > .e-con-inner {
-      flex-direction: column !important;
-      padding: 20px 20px 16px !important;
+
+    .elementor-element-c89219b .e-con-inner {
       gap: 8px !important;
-      align-items: flex-start !important;
-      height: 100% !important;
-      overflow: hidden !important;
     }
-    .elementor-element-9b1e9a1,
-    .elementor-element-5198fdb {
-      width: 100% !important;
-      max-width: 100% !important;
-      flex: 0 0 auto !important;
+
+    .elementor-element-9b1e9a1.home-caption {
+      gap: 8px !important;
     }
-    .elementor-element-9b1e9a1 p,
-    .elementor-element-9b1e9a1 .elementor-widget-text-editor {
+
+    .elementor-element-c89219b .elementor-element-5d634f6.home-subtitle p {
+      font-size: clamp(13px, 2vw, 15px) !important;
+    }
+
+    .elementor-element-c89219b .elementor-heading-title {
+      font-size: clamp(28px, 6vw, 42px) !important;
+      margin: 4px 0 12px 0 !important;
+    }
+
+    .elementor-element-c89219b .elementor-element-c703ee4 p {
+      font-size: clamp(13px, 1.5vw, 14px) !important;
+    }
+  }
+
+  /* ===== MÓVIL (<768px) ===== */
+  @media (max-width: 767px) {
+    .elementor-element-c89219b {
+      height: calc(100vh - 70px) !important;
+      padding: 16px 16px 12px !important;
+    }
+
+    .elementor-element-c89219b .e-con-inner {
+      gap: 6px !important;
+    }
+
+    .elementor-element-9b1e9a1.home-caption {
+      gap: 6px !important;
+    }
+
+    .elementor-element-c89219b .elementor-element-5d634f6.home-subtitle p {
+      font-size: clamp(12px, 1.5vw, 13px) !important;
+      line-height: 1.3 !important;
+    }
+
+    .elementor-element-c89219b .elementor-heading-title {
+      font-size: clamp(20px, 4vw, 28px) !important;
+      margin: 2px 0 8px 0 !important;
+    }
+
+    /* ⭐ EL TEXTO DESCRIPTIVO DESAPARECE EN MÓVIL */
+    .elementor-element-c89219b .elementor-element-c703ee4 {
+      display: none !important;
+    }
+
+    /* Botón ligeramente más pequeño pero aún clickeable */
+    .elementor-element-c89219b .elementor-button {
       font-size: 13px !important;
-      line-height: 1.35 !important;
-      margin-bottom: 2px !important;
+      padding: 10px 20px !important;
+      min-height: 40px !important;
     }
-    .elementor-element-5198fdb .elementor-heading-title {
-      font-size: clamp(28px, 7vw, 44px) !important;
-      line-height: 0.92 !important;
-      margin-bottom: 10px !important;
-    }
-    .elementor-element-c89219b .elementor-button-wrapper {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-    .elementor-element-c89219b .elementor-button { font-size: 13px !important; padding: 10px 20px !important; }
+  }
+
+
+  /* Hide the old ticker from Elementor clone */
+  .ic-bar {
+    display: none !important;
   }
 
   .home-h1-band {

@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/:path*/",
+      "destination": "/:path*",
+      "permanent": true
+    },
+    {
       "source": "/toolkit",
       "destination": "https://piptoolkit.squarespace.com",
       "permanent": false

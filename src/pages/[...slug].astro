@@ -22,6 +22,26 @@ export async function getStaticPaths() {
 }
 
 const slugMeta: Record<string, { title: string; description: string }> = {
+  'about-us': {
+    title: 'About Level Up | Feminist Campaigning Organisation',
+    description: 'Level Up is a UK-based feminist community campaigning for gender justice — from abortion rights to ending pregnancy in prison. Find out who we are and what drives us.',
+  },
+  'our-team': {
+    title: 'Our Team | Level Up',
+    description: 'Meet the team behind Level Up, the UK feminist campaigning organisation fighting for gender justice through people-powered campaigns.',
+  },
+  'press': {
+    title: 'Level Up Press Coverage | Feminist Campaigning in the UK',
+    description: 'Explore media coverage of Level Up, a UK-based feminist campaigning organisation working on reproductive justice, abortion decriminalisation and gender justice.',
+  },
+  'contact': {
+    title: 'Contact Level Up | Media Enquiries & Campaign Ideas',
+    description: 'Get in touch with Level Up. Contact us for media enquiries, campaign ideas, partnerships or collaboration opportunities. Based in London, working across the UK.',
+  },
+  'media-guidelines': {
+    title: 'Media Guidelines for Reporting Fatal Domestic Abuse | Level Up',
+    description: 'Media guidelines for reporting fatal domestic abuse led by Level Up, challenging harmful press coverage and calling for responsible journalism to prevent domestic homicide.',
+  },
   'nomorelyes-relaxer-info-kit': {
     title: 'Hair Relaxer Cancer Risk — What You Need to Know | Level Up',
     description: "Hair relaxers may double the risk of womb cancer. Level Up's #NoMoreLyes campaign calls on beauty brands to remove toxic chemicals from hair relaxers. Read the science and take action.",
@@ -33,7 +53,7 @@ const rawHtml = readFileSync(file, 'utf-8');
 const { headInner, bodyClass, mainContent } = extract(rawHtml);
 const meta = slugMeta[Astro.params.slug ?? ''] ?? {};
 ---
-<Layout headHtml={headInner} bodyClass={bodyClass} title={meta.title} description={meta.description}>
+<Layout headHtml={headInner} bodyClass={bodyClass} title={meta.title} description={meta.description} noindex={!meta.title}>
   <Nav />
   <Fragment set:html={mainContent} />
   <Footer />

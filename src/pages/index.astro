@@ -7,9 +7,10 @@ import rawHtml from '../_clone/index.html?raw';
 import HeroFinal from '../components/HeroFinal.astro';
 
 const { headInner, bodyClass, mainContent } = extract(rawHtml);
+const headHtmlWithPreload = `<link rel="preload" as="image" href="/images/hero-banner.jpg" fetchpriority="high" />${headInner}`;
 ---
 <Layout
-  headHtml={headInner}
+  headHtml={headHtmlWithPreload}
   bodyClass={bodyClass}
   title="Level Up | UK Feminist Campaigns for Gender Justice"
   description="Level Up is a UK feminist campaigning organisation fighting for reproductive rights, an end to pregnancy in prison, and freedom from gender-based violence. Join us."

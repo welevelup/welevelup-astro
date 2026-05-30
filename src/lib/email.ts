@@ -193,3 +193,72 @@ export async function sendMagicLink({
   });
   if (error) throw new Error(`Resend error (magic link): ${error.message}`);
 }
+
+export async function sendFailedPaymentNotice({
+  to,
+  name,
+  amount,
+}: {
+  to: string;
+  name: string;
+  amount: string;
+}): Promise<void> {
+  const resend = getResend();
+  const firstName = name ? name.split(' ')[0] : '';
+  const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
+
+  const html = baseTemplate(`
+    <p style="margin:0 0 20px;">${greeting}</p>
+    <p style="margin:0 0 20px;">We tried to process your monthly donation of <strong>£${amount}</strong> to Level Up, but the payment was unsuccessful.</p>
+    <p style="margin:0 0 20px;">This is usually caused by an expired or updated card. Mollie will automatically retry the payment over the next few days.</p>
+    <p style="margin:0 0 24px;">If you'd like to update your payment details or need any help, please get in touch:</p>
+
+    ${ctaButton(`${SITE_URL}/contact`, 'Contact us')}
+
+    <p style="margin:24px 0 8px;">Thank you for your continued support.</p>
+    <p style="margin:0;">Level Up</p>
+  `);
+
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to,
+    subject: 'Action needed: your Level Up donation could not be processed',
+    html,
+  });
+  if (error) throw new Error(`Resend error (failed payment notice): ${error.message}`);
+}
+
+export async function sendSubscriptionSuspended({
+  to,
+  name,
+  amount,
+}: {
+  to: string;
+  name: string;
+  amount: string;
+}): Promise<void> {
+  const resend = getResend();
+  const firstName = name ? name.split(' ')[0] : '';
+  const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
+
+  const html = baseTemplate(`
+    <p style="margin:0 0 20px;">${greeting}</p>
+    <p style="margin:0 0 20px;">Unfortunately we weren't able to process your monthly donation of <strong>£${amount}</strong> after several attempts, so your recurring donation has been paused.</p>
+    <p style="margin:0 0 24px;">We'd love to keep you as a supporter. If you'd like to restart your donation, you can do so here:</p>
+
+    ${ctaButton(`${SITE_URL}/donate`, 'Donate again')}
+
+    <p style="margin:24px 0 20px;">If you have any questions or would like help, just reply to this email or contact us at <a href="mailto:hello@welevelup.org" style="color:#5b4fcf;">hello@welevelup.org</a>.</p>
+    <p style="margin:0 0 20px;">Thank you for your donations to Level Up, we appreciate your support.</p>
+    <p style="margin:24px 0 8px;">In solidarity,</p>
+    <p style="margin:0;">Level Up</p>
+  `);
+
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to,
+    subject: 'Your Level Up donation has been paused',
+    html,
+  });
+  if (error) throw new Error(`Resend error (subscription suspended): ${error.message}`);
+}

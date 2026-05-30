@@ -47,7 +47,7 @@ const relatedCampaign = campaignMap[post.id];
   headHtml={headInner}
   bodyClass={bodyClass}
   title={`${post.data.title} | Level Up`}
-  description={post.data.excerpt ?? post.data.title}
+  description={post.data.excerpt || undefined}
   ogImage={post.data.image}
   ogType="article"
 >

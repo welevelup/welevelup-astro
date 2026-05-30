@@ -174,7 +174,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const shouldEmail = (seq === 'oneoff' || seq === 'first') && !!donorEmail;
-    console.log(`[webhook] shouldEmail=${shouldEmail} email=${donorEmail ?? 'none'} seq=${seq}`);
+    console.log(`[webhook] shouldEmail=${shouldEmail} seq=${seq}`);
 
     if (shouldEmail && donorEmail) {
       try {
@@ -182,10 +182,10 @@ export const POST: APIRoute = async ({ request }) => {
           to: donorEmail,
           name: donorName,
           amount: meta?.amount || payment.amount.value,
-          recurring: seq === 'recurring' || meta?.type === 'recurring',
+          recurring: seq === 'first' || meta?.type === 'recurring',
           giftAid: meta?.giftAid === 'true',
         });
-        console.log(`[webhook] email sent to ${donorEmail}`);
+        console.log('[webhook] confirmation email sent');
       } catch (emailErr) {
         console.error(`[webhook] email FAILED:`, emailErr);
       }

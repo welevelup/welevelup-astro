@@ -1,0 +1,238 @@
+---
+// Hero banner — desktop: left-aligned with dark overlay / mobile: centered, lighter overlay
+---
+
+<section class="hero-final">
+  <div class="hero-bg" style="background-image: url('/images/hero-banner.jpg');"></div>
+
+  <div class="hero-content">
+    <p class="hero-intro">We are a feminist community campaigning for gender justice in the UK.</p>
+    <p class="hero-intro">Take action on our latest campaign:</p>
+    <h1 class="hero-title">#NOMORELYES</h1>
+    <div class="hero-cta">
+      <a href="https://levelup.yourmovement.org/p/no-more-lyes" target="_blank" rel="noopener" class="hero-btn">
+        Sign the petition
+      </a>
+    </div>
+    <p class="hero-desc">
+      Big beauty brands like L'Oréal must remove toxic ingredients from hair relaxers.<br/>
+      The price of Black women's beauty should never be our health.
+    </p>
+  </div>
+
+  <div class="ic-bar-hero">
+    <div class="ic-bar-track-hero">
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item-hero">
+        <span class="ic-bar-badge-hero">NEW</span>
+        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
+      </a>
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item-hero">
+        <span class="ic-bar-badge-hero">NEW</span>
+        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
+      </a>
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-bar-item-hero">
+        <span class="ic-bar-badge-hero">NEW</span>
+        <span>⚠ Islington Council must finish Holloway Women's Centre — 847 signed this week →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .elementor-element-c89219b,
+  [data-id="c89219b"] { display: none !important; }
+  .ic-bar { display: none !important; }
+</style>
+
+<style>
+  /* ===== BASE (desktop) ===== */
+  .hero-final {
+    height: calc(100vh - var(--nav-height, 130px));
+    background: #0C0A3E;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg,
+      rgba(12, 10, 62, 0.75) 0%,
+      rgba(12, 10, 62, 0.45) 55%,
+      rgba(12, 10, 62, 0.15) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 80px 48px 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 800px;
+  }
+
+  .hero-intro {
+    font: 600 15px/1.4 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    margin: 0 0 6px 0 !important;
+    padding: 0 !important;
+  }
+
+  .hero-title {
+    font: 900 clamp(3rem, 10vw, 6.5rem)/0.95 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    letter-spacing: -0.03em !important;
+    margin: 16px 0 24px 0 !important;
+    text-transform: uppercase !important;
+  }
+
+  .hero-cta {
+    margin-bottom: 20px !important;
+  }
+
+  .hero-btn {
+    display: inline-block !important;
+    background: #CCFF33 !important;
+    color: #0C0A3E !important;
+    font: 700 15px/1 'DM Sans', sans-serif !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    padding: 14px 32px !important;
+    text-decoration: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    min-height: 44px !important;
+    border-radius: 0 !important;
+    transition: background 0.15s !important;
+    width: fit-content !important;
+  }
+
+  .hero-btn:hover { background: #c0f01a !important; }
+
+  .hero-desc {
+    font: 600 14px/1.5 'DM Sans', sans-serif !important;
+    color: #CCFF33 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* ===== TICKER ===== */
+  .ic-bar-hero {
+    background: #CCFF33 !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    position: relative !important;
+    z-index: 2 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .ic-bar-hero:hover .ic-bar-track-hero { animation-play-state: paused; }
+
+  .ic-bar-track-hero {
+    display: inline-flex !important;
+    animation: marquee-final 20s linear infinite !important;
+  }
+
+  .ic-bar-item-hero {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 12px 48px !important;
+    font: 600 13px/1 'DM Sans', sans-serif !important;
+    color: #0C0A3E !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+  }
+
+  .ic-bar-badge-hero {
+    background: #0C0A3E !important;
+    color: #CCFF33 !important;
+    font: 700 10px/1 'DM Sans', sans-serif !important;
+    padding: 4px 8px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+  }
+
+  @keyframes marquee-final {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-33.33%); }
+  }
+
+  /* ===== TABLET ===== */
+  @media (max-width: 1024px) {
+    .hero-content { padding: 40px 24px 32px; }
+    .hero-intro { font-size: 14px !important; }
+    .hero-title { font-size: clamp(2.5rem, 8vw, 4rem) !important; }
+  }
+
+  /* ===== MOBILE ===== */
+  @media (max-width: 767px) {
+    /* Lighter overlay so image is more visible */
+    .hero-bg::after {
+      background: rgba(12, 10, 62, 0.22) !important;
+    }
+
+    .hero-content {
+      align-items: center !important;
+      text-align: center !important;
+      justify-content: center !important;
+      padding: 24px 20px 20px !important;
+      max-width: 100% !important;
+    }
+
+    .hero-intro {
+      font-size: 18px !important;
+      line-height: 1.4 !important;
+      max-width: 360px !important;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 11vw, 3.8rem) !important;
+      margin: 10px 0 24px !important;
+    }
+
+    .hero-desc { display: none !important; }
+
+    .hero-btn {
+      width: auto !important;
+      max-width: 100% !important;
+      text-align: center !important;
+      padding: 15px 32px !important;
+      border-radius: 4px !important;
+      white-space: nowrap !important;
+      font-size: 15px !important;
+    }
+
+    .ic-bar-item-hero {
+      font-size: 11px !important;
+      padding: 10px 24px !important;
+    }
+  }
+</style>
+
+<script>
+  function setNavHeight() {
+    const nav = document.querySelector('header') || document.querySelector('.site-header');
+    if (nav) {
+      document.documentElement.style.setProperty('--nav-height', nav.offsetHeight + 'px');
+    }
+  }
+  setNavHeight();
+  window.addEventListener('resize', setNavHeight);
+</script>

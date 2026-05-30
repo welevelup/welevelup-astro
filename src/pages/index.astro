@@ -256,15 +256,17 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   .elementor-element-c89219b .e-con-inner { padding: 80px 48px 48px !important; }
   .elementor-element-c89219b .elementor-button { border-radius: 6px !important; font-size: 15px !important; }
 
-  /* ── Hero desktop: enforce 2-column row layout ── */
+  /* ── Hero desktop: force 2-column grid layout ── */
   @media (min-width: 1025px) {
     .elementor-element-c89219b > .e-con-inner {
-      flex-direction: row !important;
-      align-items: center !important;
+      display: grid !important;
+      grid-template-columns: 38% 1fr !important;
       gap: 48px !important;
+      flex-direction: unset !important;
+      align-items: center !important;
     }
-    .elementor-element-9b1e9a1 { flex: 0 0 35% !important; max-width: 35% !important; }
-    .elementor-element-5198fdb { flex: 1 1 0 !important; }
+    .elementor-element-9b1e9a1,
+    .elementor-element-5198fdb { width: 100% !important; max-width: 100% !important; }
   }
 
   /* ── Hero tablet (768–1024px): stack + smaller fonts ── */

@@ -256,6 +256,32 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   .elementor-element-c89219b .e-con-inner { padding: 80px 48px 48px !important; }
   .elementor-element-c89219b .elementor-button { border-radius: 6px !important; border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; border-bottom-left-radius: 6px !important; border-bottom-right-radius: 6px !important; font-size: 15px !important; }
 
+  /* ── Hero mobile / tablet fix ── */
+  @media (max-width: 1024px) {
+    .elementor-element-c89219b {
+      height: auto !important;
+      min-height: calc(100svh - 70px);
+      overflow: visible !important;
+    }
+    .elementor-element-c89219b > .e-con-inner {
+      flex-direction: column !important;
+      padding: 48px 24px 48px !important;
+      gap: 24px !important;
+      align-items: flex-start !important;
+    }
+    .elementor-element-9b1e9a1,
+    .elementor-element-5198fdb {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 0 0 100% !important;
+    }
+    .elementor-element-c89219b .elementor-button-wrapper {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
+
   .home-h1-band {
     background: #EEEBD3;
     padding: 20px 24px;

@@ -4,7 +4,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import rawHtml from '../_clone/index.html?raw';
-import HeroOption2 from '../components/HeroOption2.astro'; // Dark Bold
+import HeroFinal from '../components/HeroFinal.astro';
 
 const { headInner, bodyClass, mainContent } = extract(rawHtml);
 ---
@@ -17,7 +17,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   <Nav />
 
   <!-- HERO BANNER -->
-  <HeroOption2 />
+  <HeroFinal />
 
   <!-- Rest of content from Elementor clone -->
 

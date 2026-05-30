@@ -254,24 +254,21 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
   .e-con, .e-con-boxed, .elementor-section { max-width: 100vw !important; overflow-x: hidden !important; }
   .elementor-element-c89219b { height: calc(100vh - 167px) !important; overflow: hidden; }
   .elementor-element-c89219b .e-con-inner { padding: 80px 48px 48px !important; }
-  .elementor-element-c89219b .elementor-button { border-radius: 6px !important; border-top-left-radius: 6px !important; border-top-right-radius: 6px !important; border-bottom-left-radius: 6px !important; border-bottom-right-radius: 6px !important; font-size: 15px !important; }
+  .elementor-element-c89219b .elementor-button { border-radius: 6px !important; font-size: 15px !important; }
 
-  /* ── Hero tablet fix (768–1024px): keep 2 cols, fix overflow ── */
-  @media (min-width: 768px) and (max-width: 1024px) {
-    .elementor-element-c89219b {
-      height: calc(100vh - 130px) !important;
-      overflow: hidden !important;
-    }
+  /* ── Hero desktop: enforce 2-column row layout ── */
+  @media (min-width: 1025px) {
     .elementor-element-c89219b > .e-con-inner {
-      padding: 40px 32px !important;
-      gap: 24px !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 48px !important;
     }
-    .elementor-element-9b1e9a1 { flex: 0 0 38% !important; max-width: 38% !important; }
-    .elementor-element-5198fdb { flex: 0 0 58% !important; max-width: 58% !important; }
+    .elementor-element-9b1e9a1 { flex: 0 0 35% !important; max-width: 35% !important; }
+    .elementor-element-5198fdb { flex: 1 1 0 !important; }
   }
 
-  /* ── Hero mobile fix (≤767px): stack columns ── */
-  @media (max-width: 767px) {
+  /* ── Hero tablet (768–1024px): stack + smaller fonts ── */
+  @media (max-width: 1024px) {
     .elementor-element-c89219b {
       height: calc(100svh - 70px) !important;
       overflow: hidden !important;
@@ -282,6 +279,7 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
       gap: 8px !important;
       align-items: flex-start !important;
       height: 100% !important;
+      overflow: hidden !important;
     }
     .elementor-element-9b1e9a1,
     .elementor-element-5198fdb {
@@ -289,11 +287,17 @@ const { headInner, bodyClass, mainContent } = extract(rawHtml);
       max-width: 100% !important;
       flex: 0 0 auto !important;
     }
-    /* Scale down intro text on mobile */
     .elementor-element-9b1e9a1 p,
-    .elementor-element-9b1e9a1 .elementor-widget-text-editor { font-size: 14px !important; line-height: 1.4 !important; margin-bottom: 4px !important; }
-    /* Scale down campaign title so it fits on 1-2 lines */
-    .elementor-element-5198fdb .elementor-heading-title { font-size: clamp(36px, 10vw, 52px) !important; line-height: 0.9 !important; margin-bottom: 12px !important; }
+    .elementor-element-9b1e9a1 .elementor-widget-text-editor {
+      font-size: 13px !important;
+      line-height: 1.35 !important;
+      margin-bottom: 2px !important;
+    }
+    .elementor-element-5198fdb .elementor-heading-title {
+      font-size: clamp(28px, 7vw, 44px) !important;
+      line-height: 0.92 !important;
+      margin-bottom: 10px !important;
+    }
     .elementor-element-c89219b .elementor-button-wrapper {
       display: block !important;
       visibility: visible !important;

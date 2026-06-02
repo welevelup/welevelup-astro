@@ -118,7 +118,7 @@ if (isAuthenticated(Astro.request)) {
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(form as HTMLFormElement);
-      const res = await fetch('/api/admin/auth', { method: 'POST', body: fd });
+      const res = await fetch('/api/auth', { method: 'POST', body: fd });
       if (res.ok) {
         window.location.href = '/admin/dashboard';
       } else {

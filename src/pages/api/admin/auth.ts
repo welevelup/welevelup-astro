@@ -8,7 +8,7 @@ export const POST: APIRoute = async ({ request }) => {
   const password = form.get('password')?.toString() ?? '';
 
   if (!checkPassword(password)) {
-    return new Response(JSON.stringify({ error: 'Invalid password' }), {
+    return new Response(JSON.stringify({ error: 'Invalid password', receivedLength: password.length, firstChar: password[0] ?? '' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });

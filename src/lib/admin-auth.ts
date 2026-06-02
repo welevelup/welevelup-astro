@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? '';
-const JWT_SECRET = process.env.ADMIN_JWT_SECRET ?? process.env.PORTAL_SECRET ?? '';
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD ?? process.env.ADMIN_PASSWORD ?? '';
+const JWT_SECRET = import.meta.env.ADMIN_JWT_SECRET ?? process.env.ADMIN_JWT_SECRET ?? import.meta.env.PORTAL_SECRET ?? process.env.PORTAL_SECRET ?? '';
 const COOKIE = 'admin_session';
 const TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
 

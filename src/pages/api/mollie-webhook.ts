@@ -5,6 +5,8 @@ import { sendDonationConfirmation, sendFailedPaymentNotice, sendSubscriptionSusp
 
 export const prerender = false;
 
+export const prerender = false;
+
 export const POST: APIRoute = async ({ request }) => {
   const apiKey = import.meta.env.MOLLIE_API_KEY;
   const webhookSecret = import.meta.env.MOLLIE_WEBHOOK_SECRET;

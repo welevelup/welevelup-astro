@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+export const prerender = false;
 import { saveDonationData, type DonationData } from '../../../lib/admin-data';
 
 const MOLLIE_BASE = 'https://api.mollie.com/v2';

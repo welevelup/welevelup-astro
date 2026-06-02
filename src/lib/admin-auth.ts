@@ -1,13 +1,17 @@
 import { createHmac, timingSafeEqual } from 'crypto';
 
-const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD ?? process.env.ADMIN_PASSWORD ?? '';
-const JWT_SECRET = import.meta.env.ADMIN_JWT_SECRET ?? process.env.ADMIN_JWT_SECRET ?? import.meta.env.PORTAL_SECRET ?? process.env.PORTAL_SECRET ?? '';
+function getAdminPassword(): string {
+  return (process.env.ADMIN_PASSWORD ?? import.meta.env.ADMIN_PASSWORD ?? '').trim();
+}
+function getJwtSecret(): string {
+  return (process.env.ADMIN_JWT_SECRET ?? import.meta.env.ADMIN_JWT_SECRET ?? process.env.PORTAL_SECRET ?? '').trim();
+}
 const COOKIE = 'admin_session';
 const TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
 
 function sign(payload: object): string {
   const data = Buffer.from(JSON.stringify({ ...payload, exp: Date.now() + TTL_MS })).toString('base64url');
-  const sig = createHmac('sha256', JWT_SECRET).update(data).digest('base64url');
+  const sig = createHmac('sha256', getJwtSecret()).update(data).digest('base64url');
   return `${data}.${sig}`;
 }
 
@@ -15,7 +19,7 @@ function verify(token: string): Record<string, unknown> | null {
   const [data, sig] = token.split('.');
   if (!data || !sig) return null;
   try {
-    const expected = createHmac('sha256', JWT_SECRET).update(data).digest('base64url');
+    const expected = createHmac('sha256', getJwtSecret()).update(data).digest('base64url');
     const a = Buffer.from(sig, 'base64url');
     const b = Buffer.from(expected, 'base64url');
     if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
@@ -28,9 +32,11 @@ function verify(token: string): Record<string, unknown> | null {
 }
 
 export function checkPassword(password: string): boolean {
-  if (!ADMIN_PASSWORD) return false;
-  const a = Buffer.from(password);
-  const b = Buffer.from(ADMIN_PASSWORD);
+  const stored = getAdminPassword();
+  const input = (password ?? '').trim();
+  if (!stored) return false;
+  const a = Buffer.from(input);
+  const b = Buffer.from(stored);
   if (a.length !== b.length) return false;
   return timingSafeEqual(a, b);
 }

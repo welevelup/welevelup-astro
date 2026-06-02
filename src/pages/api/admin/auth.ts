@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { checkPassword, createSessionCookie, clearSessionCookie } from '../../../lib/admin-auth';
 
+export const prerender = false;
+
 export const POST: APIRoute = async ({ request }) => {
   const form = await request.formData();
   const password = form.get('password')?.toString() ?? '';

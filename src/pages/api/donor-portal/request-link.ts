@@ -6,8 +6,6 @@ import { isRateLimited } from '../../../lib/ratelimit';
 
 export const prerender = false;
 
-export const prerender = false;
-
 export const POST: APIRoute = async ({ request }) => {
   const json = (data: unknown, status = 200) =>
     new Response(JSON.stringify(data), {

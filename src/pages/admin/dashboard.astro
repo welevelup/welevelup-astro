@@ -1,0 +1,262 @@
+---
+import { isAuthenticated } from '../../lib/admin-auth';
+import { getAdminData } from '../../lib/admin-data';
+
+if (!isAuthenticated(Astro.request)) {
+  return Astro.redirect('/admin');
+}
+
+const { donations, lastSync } = await getAdminData();
+
+const fmt = (n: number) => `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'Never';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — Level Up Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: #0C0A3E;
+      color: #EEEBD3;
+      min-height: 100vh;
+    }
+    /* Nav */
+    nav {
+      background: #13114a;
+      border-bottom: 1px solid rgba(204,255,51,0.15);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-brand { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #CCFF33; }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .sync-btn {
+      background: #CCFF33;
+      color: #0C0A3E;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .sync-btn:hover { opacity: 0.85; }
+    .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .logout-btn {
+      background: none;
+      border: 1px solid rgba(238,235,211,0.2);
+      color: rgba(238,235,211,0.6);
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .logout-btn:hover { border-color: rgba(238,235,211,0.5); color: #EEEBD3; }
+    .last-sync { font-size: 11px; color: rgba(238,235,211,0.4); }
+    /* Layout */
+    main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: rgba(238,235,211,0.5); margin-bottom: 40px; }
+    /* Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: #13114a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(238,235,211,0.4); margin-bottom: 12px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: #CCFF33; }
+    .stat-sub { font-size: 12px; color: rgba(238,235,211,0.4); margin-top: 4px; }
+    /* Sections */
+    .section { margin-bottom: 40px; }
+    .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(238,235,211,0.5); margin-bottom: 16px; }
+    /* Table */
+    .table-wrap {
+      background: #13114a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(238,235,211,0.4);
+      padding: 12px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-recurring { background: rgba(204,255,51,0.1); color: #CCFF33; }
+    .badge-oneoff { background: rgba(255,255,255,0.08); color: rgba(238,235,211,0.6); }
+    /* Monthly chart */
+    .bar-chart { display: flex; flex-direction: column; gap: 8px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; }
+    .bar-label { font-size: 12px; color: rgba(238,235,211,0.5); width: 60px; flex-shrink: 0; }
+    .bar-track { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 20px; overflow: hidden; }
+    .bar-fill { height: 100%; background: #CCFF33; border-radius: 4px; transition: width 0.5s; }
+    .bar-amount { font-size: 12px; color: rgba(238,235,211,0.6); width: 80px; text-align: right; flex-shrink: 0; }
+    /* Empty state */
+    .empty { padding: 48px; text-align: center; color: rgba(238,235,211,0.3); font-size: 14px; }
+    /* Sync status */
+    #sync-status { font-size: 12px; color: #CCFF33; display: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">Level Up · Admin</div>
+    <div class="nav-right">
+      <span class="last-sync">Last sync: {fmtDate(lastSync)}</span>
+      <span id="sync-status">Syncing…</span>
+      <button class="sync-btn" id="sync-btn">Sync Now</button>
+      <button class="logout-btn" id="logout-btn">Sign out</button>
+    </div>
+  </nav>
+
+  <main>
+    <h1>Dashboard</h1>
+    <p class="subtitle">Donations and performance overview for welevelup.org</p>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value">{donations ? fmt(donations.totalMonth) : '—'}</div>
+        <div class="stat-sub">Total donations received</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">This Year</div>
+        <div class="stat-value">{donations ? fmt(donations.totalYear) : '—'}</div>
+        <div class="stat-sub">Year to date</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Subscribers</div>
+        <div class="stat-value">{donations?.activeSubscribers ?? '—'}</div>
+        <div class="stat-sub">Monthly recurring donors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">New This Month</div>
+        <div class="stat-value">{donations?.newThisMonth ?? '—'}</div>
+        <div class="stat-sub">New recurring donors</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Cancelled</div>
+        <div class="stat-value">{donations?.cancelledThisMonth ?? '—'}</div>
+        <div class="stat-sub">Cancellations this month</div>
+      </div>
+    </div>
+
+    <!-- Monthly chart -->
+    <div class="section">
+      <div class="section-title">Monthly Donations (Last 12 Months)</div>
+      {donations?.monthlyTotals?.length ? (
+        <div class="table-wrap" style="padding: 24px;">
+          <div class="bar-chart">
+            {(() => {
+              const max = Math.max(...donations.monthlyTotals.map(m => m.total));
+              return donations.monthlyTotals.map(({ month, total }) => (
+                <div class="bar-row">
+                  <span class="bar-label">{month.slice(0, 7)}</span>
+                  <div class="bar-track">
+                    <div class="bar-fill" style={`width: ${max > 0 ? (total / max * 100) : 0}%`}></div>
+                  </div>
+                  <span class="bar-amount">{fmt(total)}</span>
+                </div>
+              ));
+            })()}
+          </div>
+        </div>
+      ) : (
+        <div class="table-wrap"><div class="empty">No data yet — click "Sync Now" to fetch donations.</div></div>
+      )}
+    </div>
+
+    <!-- Recent donations -->
+    <div class="section">
+      <div class="section-title">Recent Donations</div>
+      {donations?.recentDonations?.length ? (
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Gateway</th>
+              </tr>
+            </thead>
+            <tbody>
+              {donations.recentDonations.map(d => (
+                <tr>
+                  <td>{new Date(d.date).toLocaleDateString('en-GB')}</td>
+                  <td>{d.currency} {d.amount.toFixed(2)}</td>
+                  <td><span class={`badge ${d.type === 'recurring' ? 'badge-recurring' : 'badge-oneoff'}`}>{d.type}</span></td>
+                  <td style="text-transform: capitalize;">{d.gateway}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div class="table-wrap"><div class="empty">No donations data yet.</div></div>
+      )}
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('sync-btn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('sync-btn') as HTMLButtonElement;
+      const status = document.getElementById('sync-status');
+      btn.disabled = true;
+      if (status) status.style.display = 'inline';
+      try {
+        const res = await fetch('/api/admin/sync', { method: 'POST' });
+        const data = await res.json();
+        if (res.ok) {
+          window.location.reload();
+        } else {
+          alert('Sync failed: ' + data.error);
+        }
+      } finally {
+        btn.disabled = false;
+        if (status) status.style.display = 'none';
+      }
+    });
+
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      await fetch('/api/admin/auth', { method: 'DELETE' });
+      window.location.href = '/admin';
+    });
+  </script>
+</body>
+</html>

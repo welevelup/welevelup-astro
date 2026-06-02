@@ -34,11 +34,8 @@ function verify(token: string): Record<string, unknown> | null {
 export function checkPassword(password: string): boolean {
   const stored = getAdminPassword();
   const input = (password ?? '').trim();
-  if (!stored) return false;
-  const a = Buffer.from(input);
-  const b = Buffer.from(stored);
-  if (a.length !== b.length) return false;
-  return timingSafeEqual(a, b);
+  if (!stored || !input) return false;
+  return input === stored;
 }
 
 export function createSessionCookie(): string {

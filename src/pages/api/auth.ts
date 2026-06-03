@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { checkPassword, createSessionCookie, clearSessionCookie } from '../../../lib/admin-auth';
+import { checkPassword, createSessionCookie, clearSessionCookie } from '../../lib/admin-auth';
 
 export const prerender = false;
 

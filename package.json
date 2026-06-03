@@ -17,6 +17,7 @@
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "@vercel/node": "^5.8.8",
+    "@vercel/speed-insights": "^2.0.0",
     "astro": "^6.3.8",
     "resend": "^6.12.0"
   }

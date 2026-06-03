@@ -1,5 +1,6 @@
 ---
 import CookieBanner from '../components/CookieBanner.astro';
+import { default as SpeedInsights } from '@vercel/speed-insights/astro';
 
 interface Props {
   headHtml: string;
@@ -141,6 +142,7 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
   <body class={bodyClass}>
     <slot />
     <CookieBanner />
+    <SpeedInsights />
 
     <script is:inline>
       document.addEventListener('click', function (e) {

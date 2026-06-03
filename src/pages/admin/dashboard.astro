@@ -1,11 +1,6 @@
 ---
 export const prerender = false;
-import { isAuthenticated } from '../../lib/admin-auth';
 import { getAdminData } from '../../lib/admin-data';
-
-if (!isAuthenticated(Astro.request)) {
-  return Astro.redirect('/admin');
-}
 
 const { donations, lastSync } = await getAdminData();
 

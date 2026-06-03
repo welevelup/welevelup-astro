@@ -2,7 +2,16 @@
 export const prerender = false;
 import { getAdminData } from '../../lib/admin-data';
 
-const { donations, lastSync } = await getAdminData();
+let donations = null;
+let lastSync = null;
+
+try {
+  const data = await getAdminData();
+  donations = data.donations;
+  lastSync = data.lastSync;
+} catch (error) {
+  console.error('Failed to load admin data:', error);
+}
 
 const fmt = (n: number) => `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'Never';

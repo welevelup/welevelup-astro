@@ -1,5 +1,3 @@
-import * as https from 'https';
-
 interface Donation {
   id: string;
   date: string;
@@ -18,40 +16,26 @@ interface SyncResult {
   lastSync: string;
 }
 
-function fetchJson(
+async function fetchJson(
   url: string,
   options: { method?: string; headers?: Record<string, string>; body?: string } = {}
 ): Promise<any> {
-  return new Promise((resolve, reject) => {
-    const isHttps = url.startsWith('https');
-    const protocol = isHttps ? https : require('http');
-
-    const urlObj = new URL(url);
-    const reqOptions = {
-      method: options.method || 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'User-Agent': 'LevelUp-Sync/1.0',
-        ...options.headers,
-      },
-    };
-
-    const req = protocol.request(urlObj, reqOptions, (res: any) => {
-      let data = '';
-      res.on('data', (chunk: Buffer) => (data += chunk));
-      res.on('end', () => {
-        if (res.statusCode >= 400) {
-          reject(new Error(`HTTP ${res.statusCode}: ${data.slice(0, 200)}`));
-        } else {
-          resolve(JSON.parse(data));
-        }
-      });
-    });
-
-    req.on('error', reject);
-    if (options.body) req.write(options.body);
-    req.end();
+  const res = await fetch(url, {
+    method: options.method || 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'User-Agent': 'LevelUp-Sync/1.0',
+      ...options.headers,
+    },
+    body: options.body,
   });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`HTTP ${res.status}: ${text.slice(0, 200)}`);
+  }
+
+  return res.json();
 }
 
 // ============================================================================

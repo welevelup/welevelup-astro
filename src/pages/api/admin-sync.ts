@@ -1,100 +1,72 @@
 import type { APIRoute } from 'astro';
+import { syncDonations } from '../../lib/donation-sync';
 import { saveDonationData, type DonationData } from '../../lib/admin-data';
 
 export const prerender = false;
-
-const MOLLIE_BASE = 'https://api.mollie.com/v2';
-
-async function mollieGet(path: string) {
-  const key = process.env.MOLLIE_API_KEY;
-  if (!key) throw new Error('MOLLIE_API_KEY not set');
-  const res = await fetch(`${MOLLIE_BASE}${path}`, {
-    headers: { Authorization: `Bearer ${key}` },
-  });
-  if (!res.ok) throw new Error(`Mollie ${res.status}: ${path}`);
-  return res.json();
-}
-
-function toGBP(amount: { value: string; currency: string }): number {
-  return parseFloat(amount.value);
-}
 
 function monthKey(dateStr: string): string {
   return dateStr.slice(0, 7);
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  const cronSecret = process.env.CRON_SECRET;
-  const authHeader = request.headers.get('authorization');
+  const cronSecret = request.headers.get('x-vercel-cron-secret');
+  const envSecret = process.env.CRON_SECRET;
 
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-    return new Response('Unauthorized', { status: 401 });
+  if (envSecret && cronSecret !== envSecret) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   }
 
   try {
+    const year = new Date().getFullYear();
     const now = new Date();
     const thisMonth = monthKey(now.toISOString());
-    const thisYear = now.getFullYear().toString();
 
-    let totalMonth = 0;
-    let totalYear = 0;
-    let activeSubscribers = 0;
-    let newThisMonth = 0;
-    let cancelledThisMonth = 0;
-    const recentDonations: DonationData['recentDonations'] = [];
+    const result = await syncDonations(year);
+
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const thisMonthDonations = result.donations.filter((d) => {
+      const dDate = new Date(d.date);
+      return dDate.getMonth() === currentMonth && dDate.getFullYear() === currentYear;
+    });
+    const totalMonth = thisMonthDonations.reduce((sum, d) => sum + d.amount, 0);
+    const totalYear = result.donations
+      .filter((d) => new Date(d.date).getFullYear() === currentYear)
+      .reduce((sum, d) => sum + d.amount, 0);
+
+    const uniqueRecurringDonors = new Set(
+      result.donations
+        .filter((d) => d.type === 'recurring')
+        .map((d) => d.payer?.email || d.id)
+    );
+    const activeSubscribers = uniqueRecurringDonors.size;
+    const newThisMonth = thisMonthDonations.filter((d) => d.type === 'recurring').length;
+
+    const byGateway = {
+      mollie: result.donations.filter((d) => d.gateway === 'mollie').reduce((s, d) => s + d.amount, 0),
+      gocardless: result.donations.filter((d) => d.gateway === 'gocardless').reduce((s, d) => s + d.amount, 0),
+      paypal: result.donations.filter((d) => d.gateway === 'paypal').reduce((s, d) => s + d.amount, 0),
+    };
+
+    const recentDonations = result.donations.slice(0, 10).map((d) => ({
+      date: d.date,
+      amount: d.amount,
+      currency: d.currency,
+      type: d.type,
+      gateway: d.gateway,
+    }));
+
     const monthlyMap: Record<string, number> = {};
-
-    // Fetch payments
-    let nextUrl: string | null = `${MOLLIE_BASE}/payments?limit=250`;
-    let pageCount = 0;
-    while (nextUrl && pageCount < 10) {
-      const key = process.env.MOLLIE_API_KEY;
-      const res = await fetch(nextUrl, { headers: { Authorization: `Bearer ${key}` } });
-      if (!res.ok) break;
-      const data = await res.json() as { _embedded: { payments: any[] }; _links: { next?: { href: string } } };
-      const payments = data._embedded?.payments ?? [];
-
-      for (const p of payments) {
-        if (p.status !== 'paid') continue;
-        const amount = toGBP(p.amount);
-        const date = p.paidAt ?? p.createdAt ?? '';
-        const month = monthKey(date);
-        const year = date.slice(0, 4);
-
-        if (month === thisMonth) totalMonth += amount;
-        if (year === thisYear) totalYear += amount;
-
-        monthlyMap[month] = (monthlyMap[month] ?? 0) + amount;
-
-        if (recentDonations.length < 20) {
-          recentDonations.push({
-            date,
-            amount,
-            currency: p.amount.currency,
-            type: p.sequenceType === 'first' || p.sequenceType === 'recurring' ? 'recurring' : 'one-off',
-            gateway: 'mollie',
-          });
-        }
-      }
-
-      nextUrl = data._links?.next?.href ?? null;
-      pageCount++;
-    }
-
-    // Fetch subscriptions
-    const subsData = await mollieGet('/subscriptions?limit=250').catch(() => ({ _embedded: { subscriptions: [] } }));
-    const subs = subsData._embedded?.subscriptions ?? [];
-    for (const s of subs) {
-      if (s.status === 'active') activeSubscribers++;
-      const created = monthKey(s.createdAt ?? '');
-      const cancelled = s.canceledAt ? monthKey(s.canceledAt) : null;
-      if (created === thisMonth) newThisMonth++;
-      if (cancelled === thisMonth) cancelledThisMonth++;
+    for (const d of result.donations) {
+      const month = monthKey(d.date);
+      monthlyMap[month] = (monthlyMap[month] ?? 0) + d.amount;
     }
 
     const monthlyTotals = Object.entries(monthlyMap)
       .sort(([a], [b]) => b.localeCompare(a))
       .slice(0, 12)
+      .reverse()
       .map(([month, total]) => ({ month, total: Math.round(total * 100) / 100 }));
 
     const donationData: DonationData = {
@@ -102,20 +74,25 @@ export const POST: APIRoute = async ({ request }) => {
       totalYear: Math.round(totalYear * 100) / 100,
       activeSubscribers,
       newThisMonth,
-      cancelledThisMonth,
-      byGateway: { mollie: Math.round(totalYear * 100) / 100, gocardless: 0, paypal: 0 },
+      cancelledThisMonth: 0,
+      byGateway: {
+        mollie: Math.round(byGateway.mollie * 100) / 100,
+        gocardless: Math.round(byGateway.gocardless * 100) / 100,
+        paypal: Math.round(byGateway.paypal * 100) / 100,
+      },
       recentDonations,
       monthlyTotals,
     };
 
     await saveDonationData(donationData);
 
-    return new Response(JSON.stringify({ ok: true, synced: recentDonations.length }), {
+    return new Response(JSON.stringify({ ok: true, synced: result.count, total: result.total }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Sync error:', msg, err);
     return new Response(JSON.stringify({ error: msg }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

@@ -241,7 +241,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       btn.disabled = true;
       if (status) status.style.display = 'inline';
       try {
-        const res = await fetch('/api/sync', { method: 'POST' });
+        const res = await fetch('/api/admin-sync', { method: 'POST' });
         const data = await res.json();
         if (res.ok) {
           window.location.reload();
@@ -255,7 +255,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     });
 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await fetch('/api/auth', { method: 'DELETE' });
+      await fetch('/api/admin-auth', { method: 'DELETE' });
       window.location.href = '/admin';
     });
   </script>

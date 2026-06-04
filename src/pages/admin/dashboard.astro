@@ -24,6 +24,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
   <title>Dashboard — Level Up Admin</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --bg-primary: #0C0A3E;
@@ -118,6 +119,15 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     /* Sections */
     .section { margin-bottom: 40px; }
     .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
+    /* Charts */
+    .chart-wrap {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      position: relative;
+      height: 350px;
+    }
     /* Table */
     .table-wrap {
       background: var(--bg-secondary);
@@ -148,13 +158,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     }
     .badge-recurring { background: rgba(204,255,51,0.1); color: #CCFF33; }
     .badge-oneoff { background: var(--border); color: var(--text-secondary); }
-    /* Monthly chart */
-    .bar-chart { display: flex; flex-direction: column; gap: 8px; }
-    .bar-row { display: flex; align-items: center; gap: 12px; }
-    .bar-label { font-size: 12px; color: var(--text-secondary); width: 60px; flex-shrink: 0; }
-    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 20px; overflow: hidden; }
-    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.5s; }
-    .bar-amount { font-size: 12px; color: var(--text-secondary); width: 80px; text-align: right; flex-shrink: 0; }
     /* Empty state */
     .empty { padding: 48px; text-align: center; color: var(--text-muted); font-size: 14px; }
     /* Sync status */
@@ -211,24 +214,23 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     <div class="section">
       <div class="section-title">Monthly Donations (Last 12 Months)</div>
       {donations?.monthlyTotals?.length ? (
-        <div class="table-wrap" style="padding: 24px;">
-          <div class="bar-chart">
-            {(() => {
-              const max = Math.max(...donations.monthlyTotals.map(m => m.total));
-              return donations.monthlyTotals.map(({ month, total }) => (
-                <div class="bar-row">
-                  <span class="bar-label">{month.slice(0, 7)}</span>
-                  <div class="bar-track">
-                    <div class="bar-fill" style={`width: ${max > 0 ? (total / max * 100) : 0}%`}></div>
-                  </div>
-                  <span class="bar-amount">{fmt(total)}</span>
-                </div>
-              ));
-            })()}
-          </div>
+        <div class="chart-wrap">
+          <canvas id="monthlyChart"></canvas>
         </div>
       ) : (
         <div class="table-wrap"><div class="empty">No data yet — click "Sync Now" to fetch donations.</div></div>
+      )}
+    </div>
+
+    <!-- Gateway Breakdown -->
+    <div class="section">
+      <div class="section-title">Subscriptions by Gateway (Total)</div>
+      {donations?.monthlyTotals?.length ? (
+        <div class="chart-wrap">
+          <canvas id="gatewayChart"></canvas>
+        </div>
+      ) : (
+        <div class="table-wrap"><div class="empty">No data yet.</div></div>
       )}
     </div>
 
@@ -352,6 +354,77 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         themeBtn.textContent = '☀️';
       }
     });
+
+    // Charts initialization
+    function initCharts() {
+      const donationsData = {donations};
+      if (!donationsData.donations?.monthlyTotals?.length) return;
+
+      const isDark = !htmlElement.classList.contains('light-mode');
+      const textColor = isDark ? '#EEEBD3' : '#1A1A1A';
+      const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
+      const accentColor = isDark ? '#CCFF33' : '#8B7EBD';
+
+      const months = donationsData.donations.monthlyTotals.map((m: any) => m.month);
+      const totals = donationsData.donations.monthlyTotals.map((m: any) => m.total);
+
+      // Monthly line chart
+      const monthlyCtx = document.getElementById('monthlyChart') as HTMLCanvasElement;
+      if (monthlyCtx) {
+        new Chart(monthlyCtx, {
+          type: 'line',
+          data: {
+            labels: months,
+            datasets: [{
+              label: 'Monthly Donations',
+              data: totals,
+              borderColor: accentColor,
+              backgroundColor: accentColor + '20',
+              borderWidth: 2,
+              fill: true,
+              tension: 0.4,
+              pointRadius: 4,
+              pointBackgroundColor: accentColor,
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: textColor } } },
+            scales: {
+              y: { ticks: { color: textColor }, grid: { color: gridColor } },
+              x: { ticks: { color: textColor }, grid: { color: gridColor } },
+            },
+          },
+        });
+      }
+
+      // Gateway doughnut chart
+      const mollieTotal = donationsData.donations.monthlyTotals.reduce((s: number, m: any) => s + (m.mollie_count || 0), 0);
+      const gocardlessTotal = donationsData.donations.monthlyTotals.reduce((s: number, m: any) => s + (m.gocardless_count || 0), 0);
+      const paypalTotal = donationsData.donations.monthlyTotals.reduce((s: number, m: any) => s + (m.paypal_count || 0), 0);
+
+      const gatewayCtx = document.getElementById('gatewayChart') as HTMLCanvasElement;
+      if (gatewayCtx) {
+        new Chart(gatewayCtx, {
+          type: 'doughnut',
+          data: {
+            labels: ['Mollie', 'GoCardless', 'PayPal'],
+            datasets: [{
+              data: [mollieTotal, gocardlessTotal, paypalTotal],
+              backgroundColor: ['#8B7EBD', '#6B63B5', '#5B53A0'],
+            }],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: textColor } } },
+          },
+        });
+      }
+    }
+
+    initCharts();
 
     document.getElementById('sync-btn')?.addEventListener('click', async () => {
       const btn = document.getElementById('sync-btn') as HTMLButtonElement;

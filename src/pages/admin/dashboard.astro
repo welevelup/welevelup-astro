@@ -378,16 +378,24 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       btn.appendChild(text);
 
       try {
+        console.log('[Sync] Starting sync...');
         const res = await fetch('/api/admin-sync', { method: 'POST' });
+        console.log('[Sync] Response status:', res.status);
+
         if (res.ok) {
+          const data = await res.json();
+          console.log('[Sync] Success:', data);
           text.textContent = 'Done! Reloading...';
           setTimeout(() => location.reload(), 800);
         } else {
-          alert('Sync failed');
+          const error = await res.text();
+          console.error('[Sync] Failed:', res.status, error);
+          alert(`Sync failed (${res.status}): ${error.slice(0, 100)}`);
           btn.innerHTML = 'Sync Now';
           btn.disabled = false;
         }
       } catch (e) {
+        console.error('[Sync] Error:', e);
         alert('Error: ' + e.message);
         btn.innerHTML = 'Sync Now';
         btn.disabled = false;

@@ -8,22 +8,19 @@ export const config = {
 function cleanEnvVar(value: string): string {
   if (!value) return '';
 
+  // Remove all quotes and backslashes from start/end
   let cleaned = value
-    .trim()
-    .split('\n')[0] // Take only first line if multi-line
+    .replace(/^["\\'\\n\\r]+/, '')  // Strip from start
+    .replace(/["\\'\\n\\r]+$/, '')  // Strip from end
     .trim();
 
-  // Try JSON.parse if it looks like JSON
-  if ((cleaned.startsWith('"') && cleaned.endsWith('"')) || (cleaned.startsWith("'") && cleaned.endsWith("'"))) {
-    try {
-      cleaned = JSON.parse(cleaned);
-    } catch {
-      // If JSON parse fails, just strip quotes manually
-      cleaned = cleaned.replace(/^["'\\]+|["'\\]+$/g, '').trim();
-    }
-  } else {
-    // Not JSON-quoted, just strip any quotes/backslashes
-    cleaned = cleaned.replace(/^["'\\]+|["'\\]+$/g, '').trim();
+  // If contains UPSTASH_ key name, it's a multi-var issue - extract just our part
+  if (cleaned.includes('UPSTASH_')) {
+    const urlMatch = cleaned.match(/https:\/\/[a-z0-9-]+\.upstash\.io/);
+    if (urlMatch) return urlMatch[0];
+
+    const tokenMatch = cleaned.match(/[a-zA-Z0-9]+$/);
+    if (tokenMatch) return tokenMatch[0];
   }
 
   return cleaned;

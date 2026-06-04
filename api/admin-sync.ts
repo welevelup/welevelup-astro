@@ -1,26 +1,21 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { Redis } from '@upstash/redis';
 
 export const config = {
   runtime: 'nodejs',
 };
 
-async function saveDonationData(data: any): Promise<void> {
+function getRedis(): Redis {
   const url = process.env.UPSTASH_REDIS_REST_URL;
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) throw new Error('Redis not configured');
+  return new Redis({ url, token });
+}
 
-  const res = await fetch(`${url}/set/admin:donations`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-    body: JSON.stringify(data),
-  });
-
-  // Also set lastSync
-  await fetch(`${url}/set/admin:lastSync`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` },
-    body: JSON.stringify(new Date().toISOString()),
-  });
+async function saveDonationData(data: any): Promise<void> {
+  const redis = getRedis();
+  await redis.set('admin:donations', data);
+  await redis.set('admin:lastSync', new Date().toISOString());
 }
 
 interface Donation {

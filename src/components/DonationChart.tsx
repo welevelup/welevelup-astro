@@ -19,10 +19,10 @@ interface MonthlyTotal {
 
 interface DonationChartProps {
   data?: MonthlyTotal[];
-  isDarkMode: boolean;
+  isDarkMode?: boolean;
 }
 
-export default function DonationChart({ data, isDarkMode }: DonationChartProps) {
+export default function DonationChart({ data, isDarkMode = true }: DonationChartProps) {
   if (!data || data.length === 0) {
     return (
       <div style={{ textAlign: 'center', padding: '40px', color: '#999' }}>

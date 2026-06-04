@@ -6,14 +6,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
+    // Verify CRON_SECRET if configured
     const cronSecret = req.headers['x-vercel-cron-secret'];
     const envSecret = process.env.CRON_SECRET;
 
-    if (envSecret && cronSecret !== envSecret) {
-      return res.status(401).json({ error: 'Unauthorized' });
+    if (envSecret) {
+      if (!cronSecret || cronSecret !== envSecret) {
+        return res.status(401).json({ error: 'Unauthorized' });
+      }
     }
 
-    // TODO: Call donation sync for current year + historical years
+    // TODO: Implement actual donation sync (Mollie, GoCardless, PayPal)
+    // For now: return placeholder data
     const syncedCount = 0;
     const totalAmount = 0;
 
@@ -25,6 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
+    console.error('Sync error:', msg);
     return res.status(500).json({ error: msg });
   }
 }

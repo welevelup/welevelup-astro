@@ -225,7 +225,13 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     <div class="section">
       <div class="section-title">Monthly Donations (Last 12 Months)</div>
       <div class="chart-container">
-        <DonationChart client:load data={donations?.monthlyTotals} isDarkMode={!donations} />
+        {donations?.monthlyTotals?.length ? (
+          <svg id="lineChart" viewBox="0 0 1000 300" style="width: 100%; height: 300px;">
+            <!-- Chart will be rendered by JavaScript -->
+          </svg>
+        ) : (
+          <div style="text-align: center; padding: 40px; color: var(--text-tertiary);">No data yet — click "Sync Now" to fetch donations.</div>
+        )}
       </div>
     </div>
 

@@ -24,7 +24,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
   <title>Dashboard — Level Up Admin</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --bg-primary: #0C0A3E;
@@ -302,7 +302,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     </div>
   </main>
 
-  <script type="application/json" id="donations-data">{JSON.stringify({donations})}</script>
+  <script type="application/json" id="donations-data">{JSON.stringify({donations: donations || null})}</script>
 
   <script>
     // Theme toggle

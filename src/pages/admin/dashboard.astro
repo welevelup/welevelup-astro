@@ -331,27 +331,24 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     function initCharts() {
       const dataEl = document.getElementById('donations-data');
       const donationsData = JSON.parse(dataEl.textContent);
-
-      if (!donationsData.donations?.monthlyTotals?.length) return;
-
       const isDark = !htmlElement.classList.contains('light-mode');
       const textColor = isDark ? '#EEEBD3' : '#1A1A1A';
       const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
       const accentColor = isDark ? '#CCFF33' : '#8B7EBD';
 
-      const months = donationsData.donations.monthlyTotals.map((m) => m.month);
-      const totals = donationsData.donations.monthlyTotals.map((m) => m.total);
-
       // Monthly line chart
       const monthlyCtx = document.getElementById('monthlyChart');
       if (monthlyCtx && window.Chart) {
+        const months = donationsData.donations?.monthlyTotals?.map((m) => m.month) || [];
+        const totals = donationsData.donations?.monthlyTotals?.map((m) => m.total) || [];
+
         new Chart(monthlyCtx, {
           type: 'line',
           data: {
-            labels: months,
+            labels: months.length ? months : ['No data'],
             datasets: [{
               label: 'Monthly Donations',
-              data: totals,
+              data: totals.length ? totals : [0],
               borderColor: accentColor,
               backgroundColor: accentColor + '20',
               borderWidth: 2,
@@ -374,18 +371,19 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       }
 
       // Gateway doughnut chart
-      const mollieTotal = donationsData.donations.monthlyTotals.reduce((s, m) => s + (m.mollie_count || 0), 0);
-      const gocardlessTotal = donationsData.donations.monthlyTotals.reduce((s, m) => s + (m.gocardless_count || 0), 0);
-      const paypalTotal = donationsData.donations.monthlyTotals.reduce((s, m) => s + (m.paypal_count || 0), 0);
-
       const gatewayCtx = document.getElementById('gatewayChart');
       if (gatewayCtx && window.Chart) {
+        const mollieTotal = donationsData.donations?.monthlyTotals?.reduce((s, m) => s + (m.mollie_count || 0), 0) || 0;
+        const gocardlessTotal = donationsData.donations?.monthlyTotals?.reduce((s, m) => s + (m.gocardless_count || 0), 0) || 0;
+        const paypalTotal = donationsData.donations?.monthlyTotals?.reduce((s, m) => s + (m.paypal_count || 0), 0) || 0;
+        const total = mollieTotal + gocardlessTotal + paypalTotal;
+
         new Chart(gatewayCtx, {
           type: 'doughnut',
           data: {
             labels: ['Mollie', 'GoCardless', 'PayPal'],
             datasets: [{
-              data: [mollieTotal, gocardlessTotal, paypalTotal],
+              data: total ? [mollieTotal, gocardlessTotal, paypalTotal] : [1, 1, 1],
               backgroundColor: ['#8B7EBD', '#6B63B5', '#5B53A0'],
             }],
           },

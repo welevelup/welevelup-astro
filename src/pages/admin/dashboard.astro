@@ -144,6 +144,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       <span class="last-sync">Last sync: {fmtDate(lastSync)}</span>
       <span id="sync-status">Syncing…</span>
       <button class="sync-btn" id="sync-btn">Sync Now</button>
+      <button id="theme-btn" style="background: none; border: none; font-size: 16px; cursor: pointer; padding: 4px 8px;">🌙</button>
       <button class="logout-btn" id="logout-btn">Sign out</button>
     </div>
   </nav>
@@ -261,6 +262,29 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
       await fetch('/api/admin-auth', { method: 'DELETE' });
       window.location.href = '/admin';
+    });
+
+    // Theme toggle
+    const themeBtn = document.getElementById('theme-btn');
+    const htmlElement = document.documentElement;
+    const savedTheme = localStorage.getItem('admin-theme') || 'dark';
+
+    if (savedTheme === 'light') {
+      htmlElement.style.filter = 'invert(1) hue-rotate(180deg)';
+      themeBtn.textContent = '☀️';
+    }
+
+    themeBtn?.addEventListener('click', () => {
+      const isLight = htmlElement.style.filter ? false : true;
+      if (isLight) {
+        htmlElement.style.filter = 'invert(1) hue-rotate(180deg)';
+        localStorage.setItem('admin-theme', 'light');
+        themeBtn.textContent = '☀️';
+      } else {
+        htmlElement.style.filter = '';
+        localStorage.setItem('admin-theme', 'dark');
+        themeBtn.textContent = '🌙';
+      }
     });
   </script>
 </body>

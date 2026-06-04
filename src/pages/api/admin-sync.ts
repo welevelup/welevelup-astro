@@ -226,9 +226,6 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
 }
 
 export const POST: APIRoute = async ({ request }) => {
-  // Test: bypass everything to see if endpoint is reachable
-  return new Response(JSON.stringify({ test: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-
   try {
     const year = new Date().getFullYear();
     const donations: Donation[] = [];

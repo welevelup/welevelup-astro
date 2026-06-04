@@ -276,12 +276,38 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       monthlyTotals: Array.from(
         donations.reduce((m, d) => {
           const month = d.date.slice(0, 7);
-          m.set(month, (m.get(month) ?? 0) + d.amount);
+          const existing = m.get(month) || {
+            month,
+            total: 0,
+            monthly_donations: 0,
+            one_off_donations: 0,
+            active_subscribers: new Set<string>(),
+            mollie_count: 0,
+            gocardless_count: 0,
+            paypal_count: 0,
+          };
+          existing.total += d.amount;
+          if (d.type === 'recurring') {
+            existing.monthly_donations += d.amount;
+            existing.active_subscribers.add(d.payer?.email || d.id);
+          } else {
+            existing.one_off_donations += d.amount;
+          }
+          if (d.gateway === 'mollie') existing.mollie_count++;
+          else if (d.gateway === 'gocardless') existing.gocardless_count++;
+          else if (d.gateway === 'paypal') existing.paypal_count++;
+          m.set(month, existing);
           return m;
-        }, new Map<string, number>()).entries()
-      ).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 12).reverse().map(([month, total]) => ({
+        }, new Map()).entries()
+      ).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 12).reverse().map(([month, data]: any) => ({
         month,
-        total: Math.round(total * 100) / 100,
+        total: Math.round(data.total * 100) / 100,
+        monthly_donations: Math.round(data.monthly_donations * 100) / 100,
+        one_off_donations: Math.round(data.one_off_donations * 100) / 100,
+        active_subscribers: data.active_subscribers.size,
+        mollie_count: data.mollie_count,
+        gocardless_count: data.gocardless_count,
+        paypal_count: data.paypal_count,
       })),
     };
 

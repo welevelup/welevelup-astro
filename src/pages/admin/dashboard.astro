@@ -48,7 +48,42 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       background: var(--bg-primary);
       color: var(--text-primary);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+    .layout { display: flex; flex: 1; }
+    .sidebar {
+      width: 240px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sidebar-item {
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-item:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-primary);
+    }
+    .sidebar-item.active {
+      background: rgba(204,255,51,0.1);
+      color: var(--accent);
+      border-left-color: var(--accent);
+    }
+    .sidebar-icon { font-size: 18px; }
+    .content { flex: 1; display: flex; flex-direction: column; }
     nav {
       background: var(--bg-secondary);
       border-bottom: 1px solid var(--border);
@@ -148,7 +183,24 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     </div>
   </nav>
 
-  <main>
+  <div class="layout">
+    <div class="sidebar">
+      <a href="/admin/dashboard" class="sidebar-item active">
+        <span class="sidebar-icon">💰</span>
+        <span>Donations</span>
+      </a>
+      <a href="/admin/seo" class="sidebar-item">
+        <span class="sidebar-icon">🔍</span>
+        <span>SEO</span>
+      </a>
+      <a href="/admin/analytics" class="sidebar-item">
+        <span class="sidebar-icon">📊</span>
+        <span>Analytics</span>
+      </a>
+    </div>
+
+    <div class="content">
+      <main>
     <h1>Dashboard</h1>
     <p class="subtitle">Donations and performance overview for welevelup.org</p>
 
@@ -252,7 +304,9 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-tertiary);">No data yet.</div>
       )}
     </div>
-  </main>
+      </main>
+    </div>
+  </div>
 
   <script>
     // SVG Line Chart

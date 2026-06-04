@@ -1,24 +1,38 @@
 import type { APIRoute } from 'astro';
-import { checkPassword, createSessionCookie, clearSessionCookie } from '../../lib/admin-auth';
+import { checkCredentials, createSessionCookie, clearSessionCookie } from '../../lib/admin-auth';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const form = await request.formData();
-  const password = form.get('password')?.toString() ?? '';
+  let email = '';
+  let password = '';
 
-  if (!checkPassword(password)) {
-    return new Response(JSON.stringify({ error: 'Invalid password' }), {
+  const contentType = request.headers.get('content-type') ?? '';
+
+  if (contentType.includes('application/json')) {
+    const body = await request.json() as { email?: string; password?: string };
+    email = body.email?.trim() ?? '';
+    password = body.password ?? '';
+  } else {
+    const form = await request.formData();
+    email = form.get('email')?.toString().trim() ?? '';
+    password = form.get('password')?.toString() ?? '';
+  }
+
+  if (!checkCredentials(email, password)) {
+    return new Response(JSON.stringify({ error: 'Invalid credentials' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
+  const cookie = await createSessionCookie();
+
   return new Response(JSON.stringify({ ok: true }), {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Set-Cookie': createSessionCookie(),
+      'Set-Cookie': cookie,
     },
   });
 };

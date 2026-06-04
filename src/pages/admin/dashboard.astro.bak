@@ -1,7 +1,6 @@
 ---
 export const prerender = false;
 import { getAdminData } from '../../lib/admin-data';
-import DonationChart from '../../components/DonationChart';
 
 let donations = null;
 let lastSync = null;
@@ -14,15 +13,21 @@ try {
   console.error('Failed to load admin data:', error);
 }
 
-const fmt = (n: number) => `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'Never';
+const fmt = (n: number) =>
+  `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const fmtDate = (s: string | null) =>
+  s
+    ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })
+    : 'Never';
+
+const donationsJSON = JSON.stringify(donations ?? null);
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard — Level Up Admin</title>
+  <title>Donations Dashboard — Level Up Admin</title>
   <meta name="robots" content="noindex, nofollow" />
   <style>
     :root {
@@ -33,6 +38,12 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       --text-tertiary: rgba(238,235,211,0.4);
       --accent: #CCFF33;
       --border: rgba(255,255,255,0.06);
+      --good: #4ADE80;
+      --warning: #FBBF24;
+      --danger: #F87171;
+      --mollie: #4ADE80;
+      --gocardless: #FBBF24;
+      --paypal: #F87171;
     }
     :root.light-mode {
       --bg-primary: #FFFFFF;
@@ -42,6 +53,9 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       --text-tertiary: #888888;
       --accent: #8B7EBD;
       --border: rgba(0,0,0,0.1);
+      --mollie: #16a34a;
+      --gocardless: #d97706;
+      --paypal: #dc2626;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -53,6 +67,8 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       flex-direction: column;
     }
     .layout { display: flex; flex: 1; }
+
+    /* ── SIDEBAR ── */
     .sidebar {
       width: 240px;
       background: var(--bg-secondary);
@@ -61,6 +77,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       display: flex;
       flex-direction: column;
       gap: 8px;
+      flex-shrink: 0;
     }
     .sidebar-item {
       padding: 12px 20px;
@@ -70,21 +87,13 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       cursor: pointer;
       transition: all 0.2s;
       border-left: 3px solid transparent;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: block;
     }
-    .sidebar-item:hover {
-      background: rgba(255,255,255,0.05);
-      color: var(--text-primary);
-    }
-    .sidebar-item.active {
-      background: rgba(204,255,51,0.1);
-      color: var(--accent);
-      border-left-color: var(--accent);
-    }
-    .sidebar-icon { font-size: 18px; }
-    .content { flex: 1; display: flex; flex-direction: column; }
+    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
+
+    /* ── CONTENT ── */
+    .content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
     nav {
       background: var(--bg-secondary);
       border-bottom: 1px solid var(--border);
@@ -93,10 +102,14 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       align-items: center;
       justify-content: space-between;
       height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
     .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
-    .nav-right { display: flex; align-items: center; gap: 20px; }
-    .sync-btn {
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .sync-info { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+    .refresh-btn {
       background: var(--accent);
       color: var(--bg-primary);
       border: none;
@@ -104,308 +117,779 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       padding: 8px 16px;
       font-size: 12px;
       font-weight: 700;
-      text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      transition: opacity 0.15s;
     }
-    .sync-btn:hover { opacity: 0.85; }
-    .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .spinner {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border: 2px solid rgba(12,10,62,0.3);
-      border-top-color: #0C0A3E;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .logout-btn {
-      background: none;
-      border: 1px solid var(--text-secondary);
-      color: var(--text-secondary);
-      border-radius: 6px;
-      padding: 8px 16px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+    .refresh-btn:hover { opacity: 0.85; }
+    .refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .logout-btn { background: none; border: 1px solid var(--text-secondary); color: var(--text-secondary); border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; }
+    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
+
+    /* ── MAIN ── */
+    main { max-width: 1400px; margin: 0 auto; padding: 40px 32px; flex: 1; width: 100%; }
     h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-    .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
+    .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+    .subtitle { font-size: 12px; color: var(--text-secondary); }
+    .update-info { font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
+
+    /* ── STATS GRID ── */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 16px;
       margin-bottom: 40px;
     }
-    @media (max-width: 768px) {
-      .stats-grid { grid-template-columns: 1fr; }
-    }
     .stat-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
     .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
     .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
     .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
-    .section { margin-bottom: 40px; }
+    .stat-change { font-size: 11px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+    .change-up { color: var(--good); }
+    .change-down { color: var(--danger); }
+
+    /* ── CHART ── */
+    .section { margin-bottom: 50px; }
     .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
-    .chart-container {
+    .chart-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
     }
-    .bar-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-    .bar-label { font-size: 12px; width: 70px; flex-shrink: 0; color: var(--text-secondary); }
-    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
-    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
-    .bar-value { font-size: 12px; width: 80px; text-align: right; flex-shrink: 0; color: var(--text-secondary); }
+    .chart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .chart-legend {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .chart-wrap { width: 100%; overflow: hidden; }
+    #multi-chart { width: 100%; display: block; }
+
+    /* ── TABLES ── */
     table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); }
-    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-primary); }
+    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
     tr:last-child td { border-bottom: none; }
-    .last-sync { font-size: 11px; color: var(--text-tertiary); }
-    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .td-total { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .td-mono { font-variant-numeric: tabular-nums; }
+    .td-mollie { color: var(--mollie); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .td-gocardless { color: var(--gocardless); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .td-paypal { color: var(--paypal); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+    .badge-recurring { background: rgba(204,255,51,0.12); color: var(--accent); }
+
+    /* ── GATEWAY BARS ── */
+    .gateway-grid {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+    .gateway-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+    .gateway-row:last-child { margin-bottom: 0; }
+    .gateway-label { font-size: 12px; font-weight: 600; width: 120px; flex-shrink: 0; }
+    .gateway-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
+    .gateway-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .gateway-value { font-size: 12px; width: 100px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+    /* ── GRID 2 ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 48px 16px; color: var(--text-tertiary); font-size: 13px; }
+    .empty strong { display: block; font-size: 16px; margin-bottom: 6px; color: var(--text-secondary); }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
+      max-width: calc(100vw - 32px);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-left: 3px solid var(--good); }
+    .toast.error   { border-left: 3px solid var(--danger); }
+
+    /* ── CHART ANIMATION ── */
+    .chart-line-animated {
+      stroke-dasharray: 3000;
+      stroke-dashoffset: 3000;
+      animation: drawLine 1.4s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; padding: 12px 0; gap: 4px; flex-direction: row; flex-wrap: wrap; }
+      .sidebar-item { padding: 10px 16px; font-size: 12px; }
+      .layout { flex-direction: column; }
+      nav { padding: 0 16px; height: auto; min-height: 56px; flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+      .nav-brand { font-size: 10px; }
+      .nav-right { gap: 8px; flex-wrap: wrap; }
+      .sync-info { display: none; }
+      main { padding: 24px 16px; max-width: 100%; }
+      h1 { font-size: 20px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .stat-card { padding: 16px; }
+      .stat-label { font-size: 10px; }
+      .stat-value { font-size: 20px; }
+      .section-title { font-size: 12px; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 12px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .gateway-label { width: 90px; font-size: 11px; }
+      .gateway-value { width: 80px; font-size: 11px; }
+      .refresh-btn { padding: 6px 12px; font-size: 11px; }
+      .logout-btn { padding: 6px 12px; font-size: 11px; }
+      .chart-legend { gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .header-row { flex-direction: column; gap: 12px; }
+    }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="nav-brand">Level Up · Admin</div>
-    <div class="nav-right">
-      <span class="last-sync">Last sync: {fmtDate(lastSync)}</span>
-      <button class="sync-btn" id="sync-btn">
-        <span>Sync Now</span>
-      </button>
-      <button id="theme-btn">🌙</button>
-      <button class="logout-btn" id="logout-btn">Sign out</button>
-    </div>
-  </nav>
 
-  <div class="layout">
-    <div class="sidebar">
-      <a href="/admin/dashboard" class="sidebar-item active">Donations</a>
-      <a href="/admin/seo" class="sidebar-item">SEO</a>
-      <a href="/admin/analytics" class="sidebar-item">Analytics</a>
-    </div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <div class="content">
-      <main>
-    <h1>Dashboard</h1>
-    <p class="subtitle">Donations and performance overview for welevelup.org</p>
-
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">This Month</div>
-        <div class="stat-value">{donations ? fmt(donations.totalMonth) : '—'}</div>
-        <div class="stat-sub">Total donations received</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">This Year</div>
-        <div class="stat-value">{donations ? fmt(donations.totalYear) : '—'}</div>
-        <div class="stat-sub">Year to date</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Active Subscribers</div>
-        <div class="stat-value">{donations?.activeSubscribers ?? '—'}</div>
-        <div class="stat-sub">Monthly recurring donors</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">New This Month</div>
-        <div class="stat-value">{donations?.newThisMonth ?? '—'}</div>
-        <div class="stat-sub">New recurring donors</div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Monthly Donations (Last 12 Months)</div>
-      <div class="chart-container">
-        {donations?.monthlyTotals?.length ? (
-          <svg id="lineChart" viewBox="0 0 1000 300" style="width: 100%; height: 300px;">
-            <!-- Chart will be rendered by JavaScript -->
-          </svg>
-        ) : (
-          <div style="text-align: center; padding: 40px; color: var(--text-tertiary);">No data yet — click "Sync Now" to fetch donations.</div>
-        )}
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-title">Monthly Donation Totals</div>
-      {donations?.monthlyTotals?.length ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Active</th>
-              <th>Monthly</th>
-              <th>One-Off</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {donations.monthlyTotals.map((m: any) => (
-              <tr>
-                <td>{m.month}</td>
-                <td>{m.active_subscribers || 0}</td>
-                <td>{fmt(m.monthly_donations || 0)}</td>
-                <td>{fmt(m.one_off_donations || 0)}</td>
-                <td><strong>{fmt(m.total)}</strong></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-tertiary);">No data yet.</div>
-      )}
-    </div>
-
-    <div class="section">
-      <div class="section-title">Monthly Subscription Breakdown</div>
-      {donations?.monthlyTotals?.length ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Mollie</th>
-              <th>GoCardless</th>
-              <th>PayPal</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {donations.monthlyTotals.map((m: any) => (
-              <tr>
-                <td>{m.month}</td>
-                <td>{m.mollie_count || 0}</td>
-                <td>{m.gocardless_count || 0}</td>
-                <td>{m.paypal_count || 0}</td>
-                <td><strong>{(m.mollie_count || 0) + (m.gocardless_count || 0) + (m.paypal_count || 0)}</strong></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-tertiary);">No data yet.</div>
-      )}
-    </div>
-      </main>
-    </div>
+<nav aria-label="Admin navigation">
+  <div class="nav-brand">Level Up · Admin</div>
+  <div class="nav-right">
+    <span class="sync-info" id="sync-label">Synced: {fmtDate(lastSync)}</span>
+    <button class="refresh-btn" id="sync-btn" aria-label="Sync donation data now">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+      Sync Now
+    </button>
+    <button id="theme-btn" aria-label="Toggle light/dark theme">🌙</button>
+    <button class="logout-btn" id="logout-btn" aria-label="Sign out">Sign out</button>
   </div>
+</nav>
 
-  <script>
-    const html = document.documentElement;
-    const theme = localStorage.getItem('admin-theme') || 'dark';
-    if (theme === 'light') html.classList.add('light-mode');
+<div class="layout">
+  <aside class="sidebar" aria-label="Sidebar navigation">
+    <a href="/admin/dashboard" class="sidebar-item active" aria-current="page">Donations</a>
+    <a href="/admin/seo" class="sidebar-item">SEO</a>
+    <a href="/admin/analytics" class="sidebar-item">Analytics</a>
+  </aside>
 
-    // Render chart
-    function renderChart() {
-      const donationsData = JSON.parse(document.getElementById("donations-data")?.textContent || "null");
-    if (!donationsData) return;
-      const data = {donations}.monthlyTotals;
-      if (!data || data.length < 2) return;
+  <div class="content">
+    <main id="main-content">
+      <div class="header-row">
+        <div>
+          <h1>Donations Dashboard</h1>
+          <p class="subtitle">Donation revenue across all payment gateways — welevelup.org</p>
+          <p class="update-info" id="update-info">Last synced: {fmtDate(lastSync)}</p>
+        </div>
+      </div>
 
-      const svg = document.getElementById('lineChart');
-      if (!svg) return;
+      <!-- STATS GRID -->
+      <div class="stats-grid" role="list" aria-label="Donation statistics">
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">This Month</div>
+          <div class="stat-value" id="stat-month">—</div>
+          <div class="stat-sub">Total raised</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">This Year</div>
+          <div class="stat-value" id="stat-year">—</div>
+          <div class="stat-sub">Year to date</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">Active Subscribers</div>
+          <div class="stat-value" id="stat-subs">—</div>
+          <div class="stat-sub">Recurring donors</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">New This Month</div>
+          <div class="stat-value" id="stat-new">—</div>
+          <div class="stat-sub">First-time donors</div>
+        </div>
+      </div>
 
-      const isDark = !html.classList.contains('light-mode');
-      const accent = isDark ? '#CCFF33' : '#8B7EBD';
-      const grid = isDark ? '#333' : '#ddd';
-      const text = isDark ? '#999' : '#666';
+      <!-- MULTI-LINE CHART -->
+      <section class="section" aria-labelledby="chart-heading">
+        <div class="section-title" id="chart-heading">Donations by Gateway — Last 12 Months</div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <span style="font-size:11px;color:var(--text-tertiary);">Donation count per gateway per month</span>
+            <div class="chart-legend" aria-label="Chart legend">
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--mollie)"></div>
+                Mollie
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--gocardless)"></div>
+                GoCardless
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--paypal)"></div>
+                PayPal
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg id="multi-chart" viewBox="0 0 820 260" preserveAspectRatio="none" aria-label="Monthly donations by gateway chart" role="img">
+              <title>Monthly Donations by Gateway</title>
+              <defs>
+                <linearGradient id="gradMollie" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#4ADE80" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#4ADE80" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g id="chart-grid"></g>
+              <g id="chart-areas"></g>
+              <g id="chart-lines"></g>
+              <g id="chart-dots"></g>
+              <g id="chart-xlabels"></g>
+              <g id="chart-ylabels"></g>
+              <text id="chart-empty" x="410" y="130" text-anchor="middle" font-size="13" fill="rgba(200,200,200,0.4)" font-family="DM Sans,sans-serif">No chart data yet — run a sync</text>
+            </svg>
+          </div>
+        </div>
+      </section>
 
-      const w = 1000, h = 300, pad = 50;
-      const gw = w - 2 * pad, gh = h - 2 * pad;
-      const max = Math.max(...data.map(d => d.total));
+      <!-- GATEWAY BREAKDOWN BARS -->
+      <section class="section" aria-labelledby="gateway-heading">
+        <div class="section-title" id="gateway-heading">Revenue by Gateway (Year to Date)</div>
+        <div class="gateway-grid" id="gateway-bars">
+          <div class="empty">
+            <strong>No data</strong>
+            Run a sync to load donation data.
+          </div>
+        </div>
+      </section>
 
-      const pts = data.map((d, i) => ({
-        x: pad + (i / (data.length - 1)) * gw,
-        y: h - pad - (d.total / max) * gh
-      }));
+      <!-- MONTHLY TOTALS TABLE + GATEWAY COUNT TABLE -->
+      <div class="grid-2">
+        <section class="section" aria-labelledby="monthly-heading">
+          <div class="section-title" id="monthly-heading">Monthly Totals</div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Recurring</th>
+                  <th scope="col">One-Off</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody id="monthly-tbody">
+                <tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      svg.innerHTML = `
-        <defs>
-          <linearGradient id="fill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:${accent};stop-opacity:0.3" />
-            <stop offset="100%" style="stop-color:${accent};stop-opacity:0" />
-          </linearGradient>
-        </defs>
-        <g>
-          ${[0,1,2,3,4].map(i => {
-            const y = h - pad - (i / 4) * gh;
-            return `
-              <line x1="${pad}" y1="${y}" x2="${w-pad}" y2="${y}" stroke="${grid}" stroke-width="1"/>
-              <text x="${pad-10}" y="${y+5}" font-size="11" fill="${text}" text-anchor="end">£${Math.round(max * (i / 4))}</text>
-            `;
-          }).join('')}
-          ${pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')}
-          <path d="${pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')} L ${pts[pts.length-1].x} ${h-pad} L ${pts[0].x} ${h-pad} Z" fill="url(#fill)"/>
-          <polyline points="${pts.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="${accent}" stroke-width="3" stroke-linecap="round"/>
-          ${pts.map(p => `<circle cx="${p.x}" cy="${p.y}" r="5" fill="${accent}"/>`).join('')}
-          ${pts.map((p, i) => `<text x="${p.x}" y="${h-10}" font-size="11" fill="${text}" text-anchor="middle">${data[i].month.slice(5)}</text>`).join('')}
-        </g>
-      `;
+        <section class="section" aria-labelledby="gateway-table-heading">
+          <div class="section-title" id="gateway-table-heading">Monthly by Gateway</div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col" style="color:var(--mollie)">Mollie</th>
+                  <th scope="col" style="color:var(--gocardless)">GoCardless</th>
+                  <th scope="col" style="color:var(--paypal)">PayPal</th>
+                </tr>
+              </thead>
+              <tbody id="gateway-tbody">
+                <tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- RECENT DONATIONS -->
+      <section class="section" aria-labelledby="recent-heading">
+        <div class="section-title" id="recent-heading">Recent Donations</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Gateway</th>
+                <th scope="col">Type</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody">
+              <tr><td colspan="5"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">Cancelled Subscriptions</div>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+          <table>
+            <thead>
+              <tr style="background: var(--bg-secondary);">
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Gateway</th>
+                <th scope="col">Payer</th>
+              </tr>
+            </thead>
+            <tbody id="cancelled-tbody">
+              <tr><td colspan="5"><div class="empty"><strong>No cancelled subscriptions</strong></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">Failed Transactions</div>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+          <table>
+            <thead>
+              <tr style="background: var(--bg-secondary);">
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Gateway</th>
+                <th scope="col">Payer</th>
+              </tr>
+            </thead>
+            <tbody id="failed-tbody">
+              <tr><td colspan="5"><div class="empty"><strong>No failed transactions</strong></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>    </main>
+  </div>
+</div>
+
+<script define:vars={{ donationsJSON, lastSync }}>
+  // ── DATA ──────────────────────────────────────────────────
+  const donations = (() => {
+    try { return JSON.parse(donationsJSON); } catch { return null; }
+  })();
+
+  // ── THEME ─────────────────────────────────────────────────
+  const html = document.documentElement;
+  const THEME_KEY = 'admin-theme';
+
+  function applyTheme(t) {
+    if (t === 'light') {
+      html.classList.add('light-mode');
+      const btn = document.getElementById('theme-btn');
+      if (btn) btn.textContent = '☀️';
+    } else {
+      html.classList.remove('light-mode');
+      const btn = document.getElementById('theme-btn');
+      if (btn) btn.textContent = '🌙';
+    }
+  }
+  applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+
+  document.getElementById('theme-btn')?.addEventListener('click', () => {
+    const isLight = html.classList.toggle('light-mode');
+    const next = isLight ? 'light' : 'dark';
+    localStorage.setItem(THEME_KEY, next);
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = isLight ? '☀️' : '🌙';
+    if (donations?.monthlyTotals?.length) drawMultiChart(donations.monthlyTotals);
+    if (donations?.byGateway) drawGatewayBars(donations.byGateway);
+  });
+
+  // ── HELPERS ───────────────────────────────────────────────
+  function fmt(n) {
+    return '£' + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtNum(n) {
+    return Number(n || 0).toLocaleString('en-GB');
+  }
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+
+  // ── TOAST ─────────────────────────────────────────────────
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.className = 'toast ' + (type || 'success') + ' show';
+    setTimeout(() => { t.classList.remove('show'); }, 3500);
+  }
+
+  // ── STATS ─────────────────────────────────────────────────
+  function populateStats(d) {
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    if (!d) {
+      set('stat-month', '—'); set('stat-year', '—');
+      set('stat-subs', '—'); set('stat-new', '—');
+      return;
+    }
+    set('stat-month', fmt(d.totalMonth));
+    set('stat-year',  fmt(d.totalYear));
+    set('stat-subs',  fmtNum(d.activeSubscribers));
+    set('stat-new',   fmtNum(d.newThisMonth));
+  }
+
+  // ── MULTI-LINE CHART ──────────────────────────────────────
+  function drawMultiChart(rows) {
+    const empty = document.getElementById('chart-empty');
+    if (!rows || rows.length < 2) {
+      if (empty) empty.style.display = '';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    const W = 820, H = 260, PL = 44, PR = 20, PT = 20, PB = 44;
+    const gW = W - PL - PR;
+    const gH = H - PT - PB;
+
+    const mollieC    = cssVar('--mollie')     || '#4ADE80';
+    const gcC        = cssVar('--gocardless') || '#FBBF24';
+    const paypalC    = cssVar('--paypal')     || '#F87171';
+    const mutedC     = cssVar('--text-tertiary') || 'rgba(200,200,200,0.4)';
+    const faintC     = cssVar('--border')     || 'rgba(255,255,255,0.06)';
+
+    const allCounts = rows.flatMap(r => [r.mollie_count || 0, r.gocardless_count || 0, r.paypal_count || 0]);
+    const maxVal = Math.max(...allCounts, 1);
+    const gridLines = 4;
+
+    function xOf(i) { return PL + (i / (rows.length - 1)) * gW; }
+    function yOf(v) { return PT + gH - (v / maxVal) * gH; }
+
+    // Grid
+    let gridSvg = '';
+    for (let i = 0; i <= gridLines; i++) {
+      const y = PT + (i / gridLines) * gH;
+      const val = Math.round(maxVal * (1 - i / gridLines));
+      gridSvg += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="${faintC}" stroke-width="1"/>`;
+      gridSvg += `<text x="${PL - 5}" y="${y + 4}" font-size="9" fill="${mutedC}" text-anchor="end" font-family="DM Sans,sans-serif">${val}</text>`;
     }
 
-    renderChart();
-    const observer = new MutationObserver(renderChart);
-    observer.observe(html, {attributes: true, attributeFilter: ['class']});
+    // Month labels
+    const monthNames = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const step = rows.length > 8 ? 2 : 1;
+    let xlabels = '';
+    rows.forEach((r, i) => {
+      if (i % step !== 0 && i !== rows.length - 1) return;
+      const mm = (r.month || '').slice(5);
+      const label = monthNames[parseInt(mm, 10)] || mm;
+      xlabels += `<text x="${xOf(i)}" y="${H - 8}" font-size="10" fill="${mutedC}" text-anchor="middle" font-family="DM Sans,sans-serif">${label}</text>`;
+    });
 
-    document.getElementById('theme-btn')?.addEventListener('click', () => {
-      if (html.classList.toggle('light-mode')) {
-        localStorage.setItem('admin-theme', 'light');
-        document.getElementById('theme-btn').textContent = '☀️';
+    // Build polyline points for each gateway
+    function buildPoints(key) {
+      return rows.map((r, i) => `${xOf(i)},${yOf(r[key] || 0)}`).join(' ');
+    }
+
+    const molliePoints   = buildPoints('mollie_count');
+    const gcPoints       = buildPoints('gocardless_count');
+    const paypalPoints   = buildPoints('paypal_count');
+
+    // Dots with tooltips
+    function buildDots(key, color) {
+      return rows.map((r, i) => {
+        const v = r[key] || 0;
+        const month = (r.month || '').slice(0, 7);
+        const label = key.replace('_count', '');
+        return `<circle cx="${xOf(i)}" cy="${yOf(v)}" r="3.5" fill="${color}" stroke="var(--bg-secondary)" stroke-width="2"><title>${month} ${label}: ${v} donations</title></circle>`;
+      }).join('');
+    }
+
+    document.getElementById('chart-grid').innerHTML = gridSvg;
+    document.getElementById('chart-xlabels').innerHTML = xlabels;
+    document.getElementById('chart-ylabels').innerHTML = '';
+    document.getElementById('chart-areas').innerHTML = '';
+
+    // Lines — GoCardless and PayPal dashed, Mollie solid (primary)
+    document.getElementById('chart-lines').innerHTML = `
+      <polyline points="${paypalPoints}"   fill="none" stroke="${paypalC}"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3" opacity="0.85"/>
+      <polyline points="${gcPoints}"       fill="none" stroke="${gcC}"      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8,3" opacity="0.85"/>
+      <polyline points="${molliePoints}"   fill="none" stroke="${mollieC}"  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="chart-line-animated"/>
+    `;
+    document.getElementById('chart-dots').innerHTML =
+      buildDots('paypal_count',    paypalC) +
+      buildDots('gocardless_count', gcC) +
+      buildDots('mollie_count',    mollieC);
+
+    // Trigger line animation reset
+    const lines = document.querySelectorAll('.chart-line-animated');
+    lines.forEach(l => {
+      l.style.animation = 'none';
+      l.getBoundingClientRect();
+      l.style.animation = '';
+    });
+  }
+
+  // ── GATEWAY BARS ──────────────────────────────────────────
+  function drawGatewayBars(byGateway) {
+    const container = document.getElementById('gateway-bars');
+    if (!container) return;
+    if (!byGateway || (byGateway.mollie === 0 && byGateway.gocardless === 0 && byGateway.paypal === 0)) {
+      container.innerHTML = '<div class="empty"><strong>No data</strong>Run a sync to load donation data.</div>';
+      return;
+    }
+
+    const gateways = [
+      { label: 'Mollie',       value: byGateway.mollie || 0,      color: 'var(--mollie)' },
+      { label: 'GoCardless',   value: byGateway.gocardless || 0,  color: 'var(--gocardless)' },
+      { label: 'PayPal',       value: byGateway.paypal || 0,      color: 'var(--paypal)' },
+    ];
+    const total = gateways.reduce((s, g) => s + g.value, 0) || 1;
+
+    container.innerHTML = gateways.map(g => {
+      const pct = Math.round((g.value / total) * 100);
+      return `
+        <div class="gateway-row">
+          <div class="gateway-label" style="color:${g.color}">${g.label}</div>
+          <div class="gateway-track">
+            <div class="gateway-fill" style="width:${pct}%;background:${g.color};opacity:0.85"></div>
+          </div>
+          <div class="gateway-value">${fmt(g.value)} (${pct}%)</div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── MONTHLY TOTALS TABLE ──────────────────────────────────
+  function populateMonthlyTable(rows) {
+    const tbody = document.getElementById('monthly-tbody');
+    if (!tbody) return;
+    if (!rows || !rows.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = [...rows].reverse().map(m => {
+      const recurring = m.monthly_donations ?? 0;
+      const oneOff    = m.one_off_donations ?? 0;
+      const total     = m.total ?? 0;
+      const monthLabel = (m.month || '').slice(0, 7);
+      return `<tr>
+        <td>${monthLabel}</td>
+        <td class="td-mono">${fmt(recurring)}</td>
+        <td class="td-mono">${fmt(oneOff)}</td>
+        <td class="td-total">${fmt(total)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── GATEWAY TABLE ─────────────────────────────────────────
+  function populateGatewayTable(rows) {
+    const tbody = document.getElementById('gateway-tbody');
+    if (!tbody) return;
+    if (!rows || !rows.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = [...rows].reverse().map(m => {
+      const monthLabel = (m.month || '').slice(0, 7);
+      return `<tr>
+        <td>${monthLabel}</td>
+        <td class="td-mollie">${m.mollie_count ?? 0}</td>
+        <td class="td-gocardless">${m.gocardless_count ?? 0}</td>
+        <td class="td-paypal">${m.paypal_count ?? 0}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── RECENT DONATIONS TABLE ────────────────────────────────
+  function populateRecentTable(recents) {
+    const tbody = document.getElementById('recent-tbody');
+    if (!tbody) return;
+    if (!recents || !recents.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = recents.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--accent)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td>${d.type === 'recurring' ? '<span class="badge badge-recurring">Recurring</span>' : '<span style="font-size:11px;color:var(--text-tertiary)">One-off</span>'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── SYNC BUTTON ───────────────────────────────────────────
+  document.getElementById('sync-btn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('sync-btn');
+    if (!btn) return;
+    btn.disabled = true;
+    btn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true" style="animation:spin 1s linear infinite">
+        <path d="M21 12a9 9 0 1 1-3-6.7"/>
+      </svg>
+      Syncing…`;
+    const style = document.createElement('style');
+    style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(style);
+    try {
+      const res = await fetch('/api/admin-sync', { method: 'POST' });
+      if (res.ok) {
+        showToast('Sync complete — reloading…', 'success');
+        setTimeout(() => location.reload(), 1200);
       } else {
-        localStorage.setItem('admin-theme', 'dark');
-        document.getElementById('theme-btn').textContent = '🌙';
-      }
-    });
-
-    document.getElementById('sync-btn')?.addEventListener('click', async () => {
-      const btn = document.getElementById('sync-btn');
-      btn.disabled = true;
-
-      const spinner = document.createElement('div');
-      spinner.className = 'spinner';
-      btn.innerHTML = '';
-      btn.appendChild(spinner);
-      const text = document.createElement('span');
-      text.textContent = 'Syncing...';
-      btn.appendChild(text);
-
-      try {
-        console.log('[Sync] Starting sync...');
-        const res = await fetch('/api/admin-sync', { method: 'POST' });
-        console.log('[Sync] Response status:', res.status);
-
-        if (res.ok) {
-          const data = await res.json();
-          console.log('[Sync] Success:', data);
-          text.textContent = 'Done! Reloading...';
-          setTimeout(() => location.reload(), 800);
-        } else {
-          const error = await res.text();
-          console.error('[Sync] Failed:', res.status, error);
-          alert(`Sync failed (${res.status}): ${error.slice(0, 100)}`);
-          btn.innerHTML = 'Sync Now';
-          btn.disabled = false;
-        }
-      } catch (e) {
-        console.error('[Sync] Error:', e);
-        alert('Error: ' + e.message);
-        btn.innerHTML = 'Sync Now';
+        showToast('Sync failed (' + res.status + ')', 'error');
         btn.disabled = false;
+        btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sync Now`;
       }
-    });
+    } catch (e) {
+      showToast('Error: ' + e.message, 'error');
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sync Now`;
+    }
+  });
 
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await fetch('/api/admin-auth', { method: 'DELETE' });
-      location.href = '/admin';
-    });
-  </script>
+  // ── LOGOUT ────────────────────────────────────────────────
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    await fetch('/api/admin-auth', { method: 'DELETE' }).catch(() => {});
+    location.href = '/admin';
+  });
+
+  function populateCancelledTable(cancelled) {
+    const tbody = document.getElementById('cancelled-tbody');
+    if (!tbody) return;
+    if (!cancelled || !cancelled.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No cancelled subscriptions</strong></div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = cancelled.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--accent)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.payer || '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function populateFailedTable(failed) {
+    const tbody = document.getElementById('failed-tbody');
+    if (!tbody) return;
+    if (!failed || !failed.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No failed transactions</strong></div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = failed.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--danger)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.payer || '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── INITIALISE ────────────────────────────────────────────
+  populateStats(donations);
+  if (donations?.monthlyTotals?.length) {
+    drawMultiChart(donations.monthlyTotals);
+    populateMonthlyTable(donations.monthlyTotals);
+    populateGatewayTable(donations.monthlyTotals);
+  } else {
+    populateMonthlyTable(null);
+    populateGatewayTable(null);
+  }
+  if (donations?.byGateway) {
+    drawGatewayBars(donations.byGateway);
+  }
+  if (donations?.recentDonations?.length) {
+    populateRecentTable(donations.recentDonations);
+  } else {
+    populateRecentTable(null);
+  }
+  if (donations?.cancelledSubscriptions?.length) {
+    populateCancelledTable(donations.cancelledSubscriptions);
+  } else {
+    populateCancelledTable(null);
+  }
+  if (donations?.failedTransactions?.length) {
+    populateFailedTable(donations.failedTransactions);
+  } else {
+    populateFailedTable(null);
+  }
+</script>
 </body>
 </html>

@@ -18,6 +18,7 @@
     "@upstash/redis": "^1.38.0",
     "@vercel/node": "^5.8.8",
     "astro": "^6.3.8",
+    "jose": "^6.2.3",
     "recharts": "^3.8.1",
     "resend": "^6.12.0"
   }

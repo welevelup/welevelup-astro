@@ -1,48 +1,43 @@
-import { createHmac, timingSafeEqual } from 'crypto';
+import { SignJWT, jwtVerify } from 'jose';
 
-const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD ?? '';
-const JWT_SECRET = import.meta.env.ADMIN_JWT_SECRET ?? import.meta.env.PORTAL_SECRET ?? '';
-const COOKIE = 'admin_session';
-const TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
+const ADMIN_EMAIL = 'catalina@welevelup.org';
+const ADMIN_PASSWORD = 'catalina';
+const COOKIE_NAME = 'admin_session';
+const TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
 
-function sign(payload: object): string {
-  const data = Buffer.from(JSON.stringify({ ...payload, exp: Date.now() + TTL_MS })).toString('base64url');
-  const sig = createHmac('sha256', JWT_SECRET).update(data).digest('base64url');
-  return `${data}.${sig}`;
+function getSecret(): Uint8Array {
+  const secret = import.meta.env.JWT_SECRET ?? import.meta.env.ADMIN_JWT_SECRET ?? '';
+  if (!secret) throw new Error('JWT_SECRET env variable is not set');
+  return new TextEncoder().encode(secret);
 }
 
-function verify(token: string): Record<string, unknown> | null {
-  const [data, sig] = token.split('.');
-  if (!data || !sig) return null;
-  try {
-    const expected = createHmac('sha256', JWT_SECRET).update(data).digest('base64url');
-    const a = Buffer.from(sig, 'base64url');
-    const b = Buffer.from(expected, 'base64url');
-    if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
-    const payload = JSON.parse(Buffer.from(data, 'base64url').toString()) as Record<string, unknown>;
-    if (typeof payload.exp === 'number' && payload.exp < Date.now()) return null;
-    return payload;
-  } catch {
-    return null;
-  }
+export function checkCredentials(email: string, password: string): boolean {
+  return email === ADMIN_EMAIL && password === ADMIN_PASSWORD;
 }
 
-export function checkPassword(password: string): boolean {
-  return true;
-}
+export async function createSessionCookie(): Promise<string> {
+  const token = await new SignJWT({ role: 'admin' })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime(`${TTL_SECONDS}s`)
+    .sign(getSecret());
 
-export function createSessionCookie(): string {
-  const token = sign({ role: 'admin' });
-  return `${COOKIE}=${token}; HttpOnly; Secure; SameSite=Lax; Path=/admin; Max-Age=${TTL_MS / 1000}`;
+  return `${COOKIE_NAME}=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${TTL_SECONDS}`;
 }
 
 export function clearSessionCookie(): string {
-  return `${COOKIE}=; HttpOnly; Secure; SameSite=Lax; Path=/admin; Max-Age=0`;
+  return `${COOKIE_NAME}=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0`;
 }
 
-export function isAuthenticated(request: Request): boolean {
+export async function isAuthenticated(request: Request): Promise<boolean> {
   const cookies = request.headers.get('cookie') ?? '';
-  const match = cookies.match(new RegExp(`${COOKIE}=([^;]+)`));
+  const match = cookies.match(new RegExp(`${COOKIE_NAME}=([^;]+)`));
   if (!match) return false;
-  return verify(match[1]) !== null;
+
+  try {
+    await jwtVerify(match[1], getSecret());
+    return true;
+  } catch {
+    return false;
+  }
 }

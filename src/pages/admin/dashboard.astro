@@ -487,23 +487,45 @@ const donationsJSON = JSON.stringify(donations ?? null);
         </div>
       </section>
 
-        <div class="section">
-          <div class="section-title">Key Insights</div>
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">💰 Recurring Revenue</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Track monthly recurring donations to forecast predictable revenue.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">🎯 Gateway Performance</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Mollie leads in transaction volume. Optimize conversion flow for GoCardless and PayPal.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">📈 Growth Opportunity</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Current Active Subscribers need updating. Press SYNC NOW to fetch latest payment gateway data.</p>
-            </div>
-          </div>
-        </div>    </main>
+      <section class="section">
+        <div class="section-title">Cancelled Subscriptions</div>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+          <table>
+            <thead>
+              <tr style="background: var(--bg-secondary);">
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Gateway</th>
+                <th scope="col">Payer</th>
+              </tr>
+            </thead>
+            <tbody id="cancelled-tbody">
+              <tr><td colspan="5"><div class="empty"><strong>No cancelled subscriptions</strong></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">Failed Transactions</div>
+        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+          <table>
+            <thead>
+              <tr style="background: var(--bg-secondary);">
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Gateway</th>
+                <th scope="col">Payer</th>
+              </tr>
+            </thead>
+            <tbody id="failed-tbody">
+              <tr><td colspan="5"><div class="empty"><strong>No failed transactions</strong></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>    </main>
   </div>
 </div>
 
@@ -794,6 +816,107 @@ const donationsJSON = JSON.stringify(donations ?? null);
     location.href = '/admin';
   });
 
+  function populateCancelledTable(cancelled) {
+    const tbody = document.getElementById('cancelled-tbody');
+    if (!tbody) return;
+    if (!cancelled || !cancelled.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No cancelled subscriptions</strong></div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = cancelled.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--accent)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.payer || '—'}</td>
+      </tr>`;
+    }).join('');
+  if (donations?.cancelledSubscriptions?.length) {
+    populateCancelledTable(donations.cancelledSubscriptions);
+  } else {
+    populateCancelledTable(null);
+  }
+  if (donations?.failedTransactions?.length) {
+    populateFailedTable(donations.failedTransactions);
+  } else {
+    populateFailedTable(null);
+  }
+  }
+
+  function populateFailedTable(failed) {
+    const tbody = document.getElementById('failed-tbody');
+    if (!tbody) return;
+    if (!failed || !failed.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No failed transactions</strong></div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = failed.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--danger)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.payer || '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+  function populateCancelledTable(cancelled) {
+    const tbody = document.getElementById('cancelled-tbody');
+    if (!tbody) return;
+    if (!cancelled || !cancelled.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No cancelled subscriptions</strong></div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = cancelled.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--accent)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.payer || '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function populateFailedTable(failed) {
+    const tbody = document.getElementById('failed-tbody');
+    if (!tbody) return;
+    if (!failed || !failed.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No failed transactions</strong></div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = failed.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--danger)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.payer || '—'}</td>
+      </tr>`;
+    }).join('');
+  }
+
   // ── INITIALISE ────────────────────────────────────────────
   populateStats(donations);
   if (donations?.monthlyTotals?.length) {
@@ -811,6 +934,16 @@ const donationsJSON = JSON.stringify(donations ?? null);
     populateRecentTable(donations.recentDonations);
   } else {
     populateRecentTable(null);
+  }
+  if (donations?.cancelledSubscriptions?.length) {
+    populateCancelledTable(donations.cancelledSubscriptions);
+  } else {
+    populateCancelledTable(null);
+  }
+  if (donations?.failedTransactions?.length) {
+    populateFailedTable(donations.failedTransactions);
+  } else {
+    populateFailedTable(null);
   }
 </script>
 </body>

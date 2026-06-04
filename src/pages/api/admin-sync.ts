@@ -38,6 +38,7 @@ interface Donation {
   currency: string;
   gateway: 'mollie' | 'gocardless' | 'paypal';
   type: 'recurring' | 'oneoff';
+  status: 'paid' | 'cancelled' | 'failed';
   payer?: { name?: string; email?: string };
 }
 
@@ -266,6 +267,21 @@ export const POST: APIRoute = async ({ request }) => {
         currency: d.currency,
         type: d.type,
         gateway: d.gateway,
+        status: d.status,
+      })),
+      cancelledSubscriptions: donations.filter(d => d.status === 'cancelled').slice(0, 10).map(d => ({
+        date: d.date,
+        amount: d.amount,
+        currency: d.currency,
+        gateway: d.gateway,
+        payer: d.payer?.email || d.payer?.name || 'Unknown',
+      })),
+      failedTransactions: donations.filter(d => d.status === 'failed').slice(0, 10).map(d => ({
+        date: d.date,
+        amount: d.amount,
+        currency: d.currency,
+        gateway: d.gateway,
+        payer: d.payer?.email || d.payer?.name || 'Unknown',
       })),
       monthlyTotals: Array.from(
         donations.reduce((m, d) => {

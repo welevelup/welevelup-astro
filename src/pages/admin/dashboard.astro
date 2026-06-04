@@ -300,6 +300,10 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
   </div>
 
   <script>
+    const html = document.documentElement;
+    const theme = localStorage.getItem('admin-theme') || 'dark';
+    if (theme === 'light') html.classList.add('light-mode');
+
     // Render chart
     function renderChart() {
       if (!{donations}) return;
@@ -348,13 +352,8 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     }
 
     renderChart();
-    html.addEventListener('DOMContentLoaded', renderChart);
     const observer = new MutationObserver(renderChart);
     observer.observe(html, {attributes: true, attributeFilter: ['class']});
-
-    const html = document.documentElement;
-    const theme = localStorage.getItem('admin-theme') || 'dark';
-    if (theme === 'light') html.classList.add('light-mode');
 
     document.getElementById('theme-btn')?.addEventListener('click', () => {
       if (html.classList.toggle('light-mode')) {

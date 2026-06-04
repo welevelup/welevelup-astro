@@ -9,16 +9,25 @@ const KEYS = {
 
 function cleanEnvVar(value: string): string {
   if (!value) return '';
-  let cleaned = value.trim();
+
+  let cleaned = value
+    .trim()
+    .split('\n')[0] // Take only first line if multi-line
+    .trim();
+
   // Try JSON.parse if it looks like JSON
-  if (cleaned.startsWith('"') || cleaned.startsWith("'")) {
+  if ((cleaned.startsWith('"') && cleaned.endsWith('"')) || (cleaned.startsWith("'") && cleaned.endsWith("'"))) {
     try {
       cleaned = JSON.parse(cleaned);
     } catch {
       // If JSON parse fails, just strip quotes manually
       cleaned = cleaned.replace(/^["'\\]+|["'\\]+$/g, '').trim();
     }
+  } else {
+    // Not JSON-quoted, just strip any quotes/backslashes
+    cleaned = cleaned.replace(/^["'\\]+|["'\\]+$/g, '').trim();
   }
+
   return cleaned;
 }
 

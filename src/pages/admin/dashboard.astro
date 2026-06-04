@@ -1,7 +1,6 @@
 ---
 export const prerender = false;
 import { getAdminData } from '../../lib/admin-data';
-import DonationChart from '../../components/DonationChart';
 
 let donations = null;
 let lastSync = null;
@@ -16,6 +15,7 @@ try {
 
 const fmt = (n: number) => `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'Never';
+const donationsJSON = JSON.stringify(donations || {});
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -44,146 +44,62 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       --border: rgba(0,0,0,0.1);
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
     .layout { display: flex; flex: 1; }
-    .sidebar {
-      width: 240px;
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border);
-      padding: 24px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sidebar-item {
-      padding: 12px 20px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-left: 3px solid transparent;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .sidebar-item:hover {
-      background: rgba(255,255,255,0.05);
-      color: var(--text-primary);
-    }
-    .sidebar-item.active {
-      background: rgba(204,255,51,0.1);
-      color: var(--accent);
-      border-left-color: var(--accent);
-    }
-    .sidebar-icon { font-size: 18px; }
+    .sidebar { width: 240px; background: var(--bg-secondary); border-right: 1px solid var(--border); padding: 24px 0; display: flex; flex-direction: column; gap: 8px; }
+    .sidebar-item { padding: 12px 20px; color: var(--text-secondary); text-decoration: none; font-size: 14px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; display: block; }
+    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
     .content { flex: 1; display: flex; flex-direction: column; }
-    nav {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-    }
+    nav { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 0 16px; display: flex; align-items: center; justify-content: space-between; height: 56px; flex-wrap: wrap; }
     .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
-    .nav-right { display: flex; align-items: center; gap: 20px; }
-    .sync-btn {
-      background: var(--accent);
-      color: var(--bg-primary);
-      border: none;
-      border-radius: 6px;
-      padding: 8px 16px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .nav-right { display: flex; align-items: center; gap: 10px; }
+    .sync-btn { background: var(--accent); color: var(--bg-primary); border: none; border-radius: 6px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
     .sync-btn:hover { opacity: 0.85; }
     .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .spinner {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border: 2px solid rgba(12,10,62,0.3);
-      border-top-color: #0C0A3E;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .logout-btn {
-      background: none;
-      border: 1px solid var(--text-secondary);
-      color: var(--text-secondary);
-      border-radius: 6px;
-      padding: 8px 16px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
-    h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-    .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
-    }
-    @media (max-width: 768px) {
-      .stats-grid { grid-template-columns: 1fr; }
-    }
-    .stat-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-    }
-    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
-    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
-    .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
-    .section { margin-bottom: 40px; }
-    .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
-    .chart-container {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-    }
-    .bar-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-    .bar-label { font-size: 12px; width: 70px; flex-shrink: 0; color: var(--text-secondary); }
-    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
-    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
-    .bar-value { font-size: 12px; width: 80px; text-align: right; flex-shrink: 0; color: var(--text-secondary); }
-    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); }
-    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-primary); }
+    .logout-btn { background: none; border: 1px solid var(--text-secondary); color: var(--text-secondary); border-radius: 6px; padding: 8px 12px; font-size: 11px; cursor: pointer; }
+    main { max-width: 1200px; margin: 0 auto; padding: 24px 16px; flex: 1; }
+    h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
+    .subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .stat-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+    .stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 8px; }
+    .stat-value { font-size: 20px; font-weight: 800; color: var(--accent); }
+    .stat-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
+    .section { margin-bottom: 24px; }
+    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px; }
+    .chart-container { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-height: 300px; display: flex; align-items: center; justify-content: center; }
+    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 12px; }
+    th { text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
     tr:last-child td { border-bottom: none; }
-    .last-sync { font-size: 11px; color: var(--text-tertiary); }
-    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
+    .last-sync { font-size: 10px; color: var(--text-tertiary); }
+    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 14px; }
+    
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; padding: 8px 0; gap: 4px; }
+      .sidebar-item { padding: 8px 12px; font-size: 12px; }
+      nav { padding: 0 12px; height: auto; }
+      .nav-brand { font-size: 10px; }
+      .nav-right { gap: 8px; flex-wrap: wrap; }
+      main { padding: 16px 12px; }
+      h1 { font-size: 18px; }
+      .stats-grid { grid-template-columns: 1fr; gap: 10px; }
+      .stat-card { padding: 12px; }
+      table { font-size: 11px; }
+      th, td { padding: 6px 8px; }
+    }
   </style>
 </head>
 <body>
   <nav>
-    <div class="nav-brand">Level Up · Admin</div>
+    <div class="nav-brand">Level Up Admin</div>
     <div class="nav-right">
-      <span class="last-sync">Last sync: {fmtDate(lastSync)}</span>
-      <button class="sync-btn" id="sync-btn">
-        <span>Sync Now</span>
-      </button>
+      <span class="last-sync">Sync: {fmtDate(lastSync)}</span>
+      <button class="sync-btn" id="sync-btn">SYNC NOW</button>
       <button id="theme-btn">🌙</button>
-      <button class="logout-btn" id="logout-btn">Sign out</button>
+      <button class="logout-btn" id="logout-btn">Out</button>
     </div>
   </nav>
 
@@ -196,165 +112,147 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
 
     <div class="content">
       <main>
-    <h1>Dashboard</h1>
-    <p class="subtitle">Donations and performance overview for welevelup.org</p>
+        <h1>Dashboard</h1>
+        <p class="subtitle">Donations overview for welevelup.org</p>
 
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">This Month</div>
-        <div class="stat-value">{donations ? fmt(donations.totalMonth) : '—'}</div>
-        <div class="stat-sub">Total donations received</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">This Year</div>
-        <div class="stat-value">{donations ? fmt(donations.totalYear) : '—'}</div>
-        <div class="stat-sub">Year to date</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Active Subscribers</div>
-        <div class="stat-value">{donations?.activeSubscribers ?? '—'}</div>
-        <div class="stat-sub">Monthly recurring donors</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">New This Month</div>
-        <div class="stat-value">{donations?.newThisMonth ?? '—'}</div>
-        <div class="stat-sub">New recurring donors</div>
-      </div>
-    </div>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">This Month</div>
+            <div class="stat-value" id="month-total">£0</div>
+            <div class="stat-sub">Total</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">This Year</div>
+            <div class="stat-value" id="year-total">£0</div>
+            <div class="stat-sub">YTD</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Subscribers</div>
+            <div class="stat-value" id="subscribers">0</div>
+            <div class="stat-sub">Recurring</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">New This Month</div>
+            <div class="stat-value" id="new-month">0</div>
+            <div class="stat-sub">New</div>
+          </div>
+        </div>
 
-    <div class="section">
-      <div class="section-title">Monthly Donations (Last 12 Months)</div>
-      <div class="chart-container">
-        {donations?.monthlyTotals?.length ? (
-          <svg id="lineChart" viewBox="0 0 1000 300" style="width: 100%; height: 300px;">
-            <!-- Chart will be rendered by JavaScript -->
-          </svg>
-        ) : (
-          <div style="text-align: center; padding: 40px; color: var(--text-tertiary);">No data yet — click "Sync Now" to fetch donations.</div>
-        )}
-      </div>
-    </div>
+        <div class="section">
+          <div class="section-title">Monthly Donations (Last 12 Months)</div>
+          <div class="chart-container">
+            <svg id="lineChart" viewBox="0 0 800 250" style="width: 100%; max-height: 250px;"></svg>
+          </div>
+        </div>
 
-    <div class="section">
-      <div class="section-title">Monthly Donation Totals</div>
-      {donations?.monthlyTotals?.length ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Active</th>
-              <th>Monthly</th>
-              <th>One-Off</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {donations.monthlyTotals.map((m: any) => (
+        <div class="section">
+          <div class="section-title">Monthly Totals</div>
+          <table>
+            <thead>
               <tr>
-                <td>{m.month}</td>
-                <td>{m.active_subscribers || 0}</td>
-                <td>{fmt(m.monthly_donations || 0)}</td>
-                <td>{fmt(m.one_off_donations || 0)}</td>
-                <td><strong>{fmt(m.total)}</strong></td>
+                <th>Month</th>
+                <th>Recurring</th>
+                <th>One-Off</th>
+                <th>Total</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-tertiary);">No data yet.</div>
-      )}
-    </div>
-
-    <div class="section">
-      <div class="section-title">Monthly Subscription Breakdown</div>
-      {donations?.monthlyTotals?.length ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Mollie</th>
-              <th>GoCardless</th>
-              <th>PayPal</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {donations.monthlyTotals.map((m: any) => (
-              <tr>
-                <td>{m.month}</td>
-                <td>{m.mollie_count || 0}</td>
-                <td>{m.gocardless_count || 0}</td>
-                <td>{m.paypal_count || 0}</td>
-                <td><strong>{(m.mollie_count || 0) + (m.gocardless_count || 0) + (m.paypal_count || 0)}</strong></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-tertiary);">No data yet.</div>
-      )}
-    </div>
+            </thead>
+            <tbody id="monthly-table">
+              <tr><td colspan="4" style="text-align: center; color: var(--text-tertiary);">No data</td></tr>
+            </tbody>
+          </table>
+        </div>
       </main>
     </div>
   </div>
 
   <script>
     const html = document.documentElement;
+    const donationsData = JSON.parse('{donationsJSON}');
     const theme = localStorage.getItem('admin-theme') || 'dark';
     if (theme === 'light') html.classList.add('light-mode');
 
-    // Render chart
-    function renderChart() {
-      const donationsData = JSON.parse(document.getElementById("donations-data")?.textContent || "null");
-    if (!donationsData) return;
-      const data = donationsData.monthlyTotals;
-      if (!data || data.length < 2) return;
+    // Update stats
+    if (donationsData && donationsData.totalMonth) {
+      document.getElementById('month-total').textContent = '£' + donationsData.totalMonth.toFixed(2);
+      document.getElementById('year-total').textContent = '£' + donationsData.totalYear.toFixed(2);
+      document.getElementById('subscribers').textContent = donationsData.activeSubscribers;
+      document.getElementById('new-month').textContent = donationsData.newThisMonth;
 
-      const svg = document.getElementById('lineChart');
-      if (!svg) return;
+      // Update table
+      if (donationsData.monthlyTotals && donationsData.monthlyTotals.length) {
+        const tbody = document.getElementById('monthly-table');
+        tbody.innerHTML = donationsData.monthlyTotals.map(m => `
+          <tr>
+            <td>${m.month}</td>
+            <td>£${m.monthly_donations.toFixed(2)}</td>
+            <td>£${m.one_off_donations.toFixed(2)}</td>
+            <td><strong>£${m.total.toFixed(2)}</strong></td>
+          </tr>
+        `).join('');
+      }
 
-      const isDark = !html.classList.contains('light-mode');
-      const accent = isDark ? '#CCFF33' : '#8B7EBD';
-      const grid = isDark ? '#333' : '#ddd';
-      const text = isDark ? '#999' : '#666';
+      // Draw chart
+      const canvas = document.getElementById('lineChart');
+      if (donationsData.monthlyTotals && donationsData.monthlyTotals.length > 1) {
+        const data = donationsData.monthlyTotals;
+        const isDark = !html.classList.contains('light-mode');
+        const accent = isDark ? '#CCFF33' : '#8B7EBD';
+        const text = isDark ? '#EEEBD3' : '#1A1A1A';
+        const grid = isDark ? '#333' : '#ddd';
 
-      const w = 1000, h = 300, pad = 50;
-      const gw = w - 2 * pad, gh = h - 2 * pad;
-      const max = Math.max(...data.map(d => d.total));
+        const w = 800, h = 250, pad = 40;
+        const gw = w - 2 * pad, gh = h - 2 * pad;
+        const max = Math.max(...data.map(d => d.total));
+        
+        const pts = data.map((d, i) => ({
+          x: pad + (i / (data.length - 1)) * gw,
+          y: h - pad - (d.total / max) * gh
+        }));
 
-      const pts = data.map((d, i) => ({
-        x: pad + (i / (data.length - 1)) * gw,
-        y: h - pad - (d.total / max) * gh
-      }));
-
-      svg.innerHTML = `
-        <defs>
-          <linearGradient id="fill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" style="stop-color:${accent};stop-opacity:0.3" />
-            <stop offset="100%" style="stop-color:${accent};stop-opacity:0" />
-          </linearGradient>
-        </defs>
-        <g>
-          ${[0,1,2,3,4].map(i => {
-            const y = h - pad - (i / 4) * gh;
-            return `
-              <line x1="${pad}" y1="${y}" x2="${w-pad}" y2="${y}" stroke="${grid}" stroke-width="1"/>
-              <text x="${pad-10}" y="${y+5}" font-size="11" fill="${text}" text-anchor="end">£${Math.round(max * (i / 4))}</text>
-            `;
-          }).join('')}
-          ${pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')}
-          <path d="${pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ')} L ${pts[pts.length-1].x} ${h-pad} L ${pts[0].x} ${h-pad} Z" fill="url(#fill)"/>
-          <polyline points="${pts.map(p => `${p.x},${p.y}`).join(' ')}" fill="none" stroke="${accent}" stroke-width="3" stroke-linecap="round"/>
-          ${pts.map(p => `<circle cx="${p.x}" cy="${p.y}" r="5" fill="${accent}"/>`).join('')}
+        const pathData = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+        
+        canvas.innerHTML = `
+          <defs>
+            <linearGradient id="fill" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:${accent};stop-opacity:0.2" />
+              <stop offset="100%" style="stop-color:${accent};stop-opacity:0" />
+            </linearGradient>
+          </defs>
+          <path d="${pathData} L ${pts[pts.length-1].x} ${h-pad} L ${pts[0].x} ${h-pad} Z" fill="url(#fill)"/>
+          <polyline points="${pts.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="${accent}" stroke-width="2" stroke-linecap="round"/>
+          ${pts.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${accent}"/>`).join('')}
           ${pts.map((p, i) => `<text x="${p.x}" y="${h-10}" font-size="11" fill="${text}" text-anchor="middle">${data[i].month.slice(5)}</text>`).join('')}
-        </g>
-      `;
+        `;
+      }
     }
 
-    renderChart();
-    const observer = new MutationObserver(renderChart);
-    observer.observe(html, {attributes: true, attributeFilter: ['class']});
+    // Sync button
+    document.getElementById('sync-btn')?.addEventListener('click', async () => {
+      const btn = document.getElementById('sync-btn');
+      btn.disabled = true;
+      btn.textContent = 'Syncing...';
+      try {
+        const res = await fetch('/api/admin-sync', { method: 'POST' });
+        if (res.ok) {
+          const data = await res.json();
+          console.log('[Sync] Success:', data);
+          btn.textContent = 'Done!';
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          console.error('[Sync] Failed:', res.status);
+          alert('Sync failed: ' + res.status);
+          btn.textContent = 'SYNC NOW';
+          btn.disabled = false;
+        }
+      } catch (e) {
+        console.error('[Sync] Error:', e);
+        alert('Error: ' + e.message);
+        btn.textContent = 'SYNC NOW';
+        btn.disabled = false;
+      }
+    });
 
+    // Theme toggle
     document.getElementById('theme-btn')?.addEventListener('click', () => {
       if (html.classList.toggle('light-mode')) {
         localStorage.setItem('admin-theme', 'light');
@@ -365,43 +263,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       }
     });
 
-    document.getElementById('sync-btn')?.addEventListener('click', async () => {
-      const btn = document.getElementById('sync-btn');
-      btn.disabled = true;
-
-      const spinner = document.createElement('div');
-      spinner.className = 'spinner';
-      btn.innerHTML = '';
-      btn.appendChild(spinner);
-      const text = document.createElement('span');
-      text.textContent = 'Syncing...';
-      btn.appendChild(text);
-
-      try {
-        console.log('[Sync] Starting sync...');
-        const res = await fetch('/api/admin-sync', { method: 'POST' });
-        console.log('[Sync] Response status:', res.status);
-
-        if (res.ok) {
-          const data = await res.json();
-          console.log('[Sync] Success:', data);
-          text.textContent = 'Done! Reloading...';
-          setTimeout(() => location.reload(), 800);
-        } else {
-          const error = await res.text();
-          console.error('[Sync] Failed:', res.status, error);
-          alert(`Sync failed (${res.status}): ${error.slice(0, 100)}`);
-          btn.innerHTML = 'Sync Now';
-          btn.disabled = false;
-        }
-      } catch (e) {
-        console.error('[Sync] Error:', e);
-        alert('Error: ' + e.message);
-        btn.innerHTML = 'Sync Now';
-        btn.disabled = false;
-      }
-    });
-
+    // Logout
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
       await fetch('/api/admin-auth', { method: 'DELETE' });
       location.href = '/admin';
@@ -409,6 +271,3 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
   </script>
 </body>
 </html>
-  <script id="donations-data" type="application/json">
-    {JSON.stringify(donations)}
-  </script>

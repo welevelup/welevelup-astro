@@ -185,18 +185,9 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
 
   <div class="layout">
     <div class="sidebar">
-      <a href="/admin/dashboard" class="sidebar-item active">
-        <span class="sidebar-icon">💰</span>
-        <span>Donations</span>
-      </a>
-      <a href="/admin/seo" class="sidebar-item">
-        <span class="sidebar-icon">🔍</span>
-        <span>SEO</span>
-      </a>
-      <a href="/admin/analytics" class="sidebar-item">
-        <span class="sidebar-icon">📊</span>
-        <span>Analytics</span>
-      </a>
+      <a href="/admin/dashboard" class="sidebar-item active">Donations</a>
+      <a href="/admin/seo" class="sidebar-item">SEO</a>
+      <a href="/admin/analytics" class="sidebar-item">Analytics</a>
     </div>
 
     <div class="content">
@@ -314,6 +305,11 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       const svg = document.getElementById('lineChart');
       if (!svg || !data || data.length < 2) return;
 
+      const isDark = !html.classList.contains('light-mode');
+      const accentColor = isDark ? '#CCFF33' : '#8B7EBD';
+      const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+      const textColor = isDark ? 'rgba(238,235,211,0.5)' : 'rgba(0,0,0,0.5)';
+
       const w = 1000, h = 300;
       const padding = 50;
       const graphWidth = w - 2 * padding;
@@ -335,7 +331,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         line.setAttribute('y1', y);
         line.setAttribute('x2', w - padding);
         line.setAttribute('y2', y);
-        line.setAttribute('stroke', 'rgba(255,255,255,0.1)');
+        line.setAttribute('stroke', gridColor);
         line.setAttribute('stroke-width', '1');
         svg.appendChild(line);
 
@@ -343,7 +339,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         text.setAttribute('x', padding - 10);
         text.setAttribute('y', y + 5);
         text.setAttribute('font-size', '11');
-        text.setAttribute('fill', 'rgba(238,235,211,0.5)');
+        text.setAttribute('fill', textColor);
         text.setAttribute('text-anchor', 'end');
         text.textContent = '£' + Math.round(max * (i / 4));
         svg.appendChild(text);
@@ -353,7 +349,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       const pathData = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
       const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       path.setAttribute('d', pathData);
-      path.setAttribute('stroke', '#CCFF33');
+      path.setAttribute('stroke', accentColor);
       path.setAttribute('stroke-width', '3');
       path.setAttribute('fill', 'none');
       path.setAttribute('stroke-linecap', 'round');
@@ -362,7 +358,8 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       // Fill under curve
       const fillPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
       fillPath.setAttribute('d', pathData + ` L ${points[points.length-1].x} ${h-padding} L ${points[0].x} ${h-padding} Z`);
-      fillPath.setAttribute('fill', 'url(#gradient)');
+      fillPath.setAttribute('fill', accentColor);
+      fillPath.setAttribute('fill-opacity', '0.1');
       svg.appendChild(fillPath);
 
       // Points
@@ -371,7 +368,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         circle.setAttribute('cx', p.x);
         circle.setAttribute('cy', p.y);
         circle.setAttribute('r', '5');
-        circle.setAttribute('fill', '#CCFF33');
+        circle.setAttribute('fill', accentColor);
         svg.appendChild(circle);
       });
 
@@ -381,7 +378,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         text.setAttribute('x', p.x);
         text.setAttribute('y', h - 10);
         text.setAttribute('font-size', '11');
-        text.setAttribute('fill', 'rgba(238,235,211,0.5)');
+        text.setAttribute('fill', textColor);
         text.setAttribute('text-anchor', 'middle');
         text.textContent = p.month.slice(5);
         svg.appendChild(text);

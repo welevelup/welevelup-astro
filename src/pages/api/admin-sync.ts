@@ -248,7 +248,7 @@ export const POST: APIRoute = async ({ request }) => {
         return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
       }).reduce((s, d) => s + d.amount, 0),
       totalYear: total,
-      activeSubscribers: new Set(donations.filter(d => d.type === 'recurring').map(d => d.payer?.email || d.id)).size,
+      activeSubscribers: donations.filter(d => d.type === 'recurring').filter((d, i, a) => a.findIndex(x => x.payer?.email === d.payer?.email && x.payer?.email) === i).length,
       newThisMonth: donations.filter(d => {
         const dDate = new Date(d.date);
         const now = new Date();

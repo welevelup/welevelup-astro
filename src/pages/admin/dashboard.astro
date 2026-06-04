@@ -407,27 +407,22 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
 
     document.getElementById('sync-btn')?.addEventListener('click', async () => {
       const btn = document.getElementById('sync-btn');
-      const status = document.getElementById('sync-status');
       btn.disabled = true;
-
-      // Show spinner
-      const spinner = document.createElement('div');
-      spinner.className = 'spinner';
-      btn.innerHTML = 'Syncing... ';
-      btn.appendChild(spinner);
+      btn.innerHTML = 'Syncing... ⏳';
 
       try {
         const res = await fetch('/api/admin-sync', { method: 'POST' });
-        const data = await res.json();
         if (res.ok) {
-          window.location.reload();
+          btn.innerHTML = 'Done! Reloading...';
+          setTimeout(() => window.location.reload(), 500);
         } else {
-          alert('Sync failed: ' + data.error);
+          const data = await res.json();
+          alert('Sync failed: ' + (data.error || res.status));
           btn.textContent = 'Sync Now';
           btn.disabled = false;
         }
       } catch (err) {
-        alert('Sync error: ' + err);
+        alert('Sync error: ' + err.message);
         btn.textContent = 'Sync Now';
         btn.disabled = false;
       }

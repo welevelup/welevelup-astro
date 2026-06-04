@@ -6,8 +6,13 @@ export const config = {
 };
 
 function getRedis(): Redis {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  let url = process.env.UPSTASH_REDIS_REST_URL || '';
+  let token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+
+  // Strip embedded quotes from env vars
+  url = url.replace(/^["']|["']$/g, '');
+  token = token.replace(/^["']|["']$/g, '');
+
   if (!url || !token) throw new Error('Redis not configured');
   return new Redis({ url, token });
 }

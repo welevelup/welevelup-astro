@@ -25,28 +25,52 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
   <meta name="robots" content="noindex, nofollow" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <style>
+    :root {
+      --bg-primary: #0C0A3E;
+      --bg-secondary: #13114a;
+      --text-primary: #EEEBD3;
+      --text-secondary: #999999;
+      --text-tertiary: rgba(238,235,211,0.4);
+      --text-muted: rgba(238,235,211,0.3);
+      --accent: #CCFF33;
+      --border: rgba(255,255,255,0.06);
+      --border-light: rgba(255,255,255,0.04);
+      --hover: rgba(255,255,255,0.02);
+    }
+    :root.light-mode {
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F9F9F9;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --text-tertiary: #888888;
+      --text-muted: #AAAAAA;
+      --accent: #8B7EBD;
+      --border: rgba(0,0,0,0.1);
+      --border-light: rgba(0,0,0,0.05);
+      --hover: rgba(0,0,0,0.04);
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
-      background: #0C0A3E;
-      color: #EEEBD3;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       min-height: 100vh;
     }
     /* Nav */
     nav {
-      background: #13114a;
-      border-bottom: 1px solid rgba(204,255,51,0.15);
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
       padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       height: 56px;
     }
-    .nav-brand { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #CCFF33; }
+    .nav-brand { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
     .nav-right { display: flex; align-items: center; gap: 20px; }
     .sync-btn {
-      background: #CCFF33;
-      color: #0C0A3E;
+      background: var(--accent);
+      color: var(--bg-primary);
       border: none;
       border-radius: 6px;
       padding: 8px 16px;
@@ -61,20 +85,20 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .logout-btn {
       background: none;
-      border: 1px solid rgba(238,235,211,0.2);
-      color: rgba(238,235,211,0.6);
+      border: 1px solid var(--text-secondary);
+      color: var(--text-secondary);
       border-radius: 6px;
       padding: 8px 16px;
       font-size: 12px;
       cursor: pointer;
       transition: all 0.15s;
     }
-    .logout-btn:hover { border-color: rgba(238,235,211,0.5); color: #EEEBD3; }
-    .last-sync { font-size: 11px; color: rgba(238,235,211,0.4); }
+    .logout-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
+    .last-sync { font-size: 11px; color: var(--text-tertiary); }
     /* Layout */
     main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
     h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-    .subtitle { font-size: 14px; color: rgba(238,235,211,0.5); margin-bottom: 40px; }
+    .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
     /* Grid */
     .stats-grid {
       display: grid;
@@ -83,21 +107,21 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       margin-bottom: 40px;
     }
     .stat-card {
-      background: #13114a;
-      border: 1px solid rgba(255,255,255,0.06);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
     }
-    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(238,235,211,0.4); margin-bottom: 12px; }
-    .stat-value { font-size: 28px; font-weight: 800; color: #CCFF33; }
-    .stat-sub { font-size: 12px; color: rgba(238,235,211,0.4); margin-top: 4px; }
+    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
     /* Sections */
     .section { margin-bottom: 40px; }
-    .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(238,235,211,0.5); margin-bottom: 16px; }
+    .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
     /* Table */
     .table-wrap {
-      background: #13114a;
-      border: 1px solid rgba(255,255,255,0.06);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
       border-radius: 10px;
       overflow: hidden;
     }
@@ -108,13 +132,13 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: rgba(238,235,211,0.4);
+      color: var(--text-tertiary);
       padding: 12px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid var(--border);
     }
-    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid var(--border-light); color: var(--text-primary); }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: rgba(255,255,255,0.02); }
+    tr:hover td { background: var(--hover); }
     .badge {
       display: inline-block;
       padding: 2px 8px;
@@ -123,18 +147,19 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       font-weight: 600;
     }
     .badge-recurring { background: rgba(204,255,51,0.1); color: #CCFF33; }
-    .badge-oneoff { background: rgba(255,255,255,0.08); color: rgba(238,235,211,0.6); }
+    .badge-oneoff { background: var(--border); color: var(--text-secondary); }
     /* Monthly chart */
     .bar-chart { display: flex; flex-direction: column; gap: 8px; }
     .bar-row { display: flex; align-items: center; gap: 12px; }
-    .bar-label { font-size: 12px; color: rgba(238,235,211,0.5); width: 60px; flex-shrink: 0; }
-    .bar-track { flex: 1; background: rgba(255,255,255,0.05); border-radius: 4px; height: 20px; overflow: hidden; }
-    .bar-fill { height: 100%; background: #CCFF33; border-radius: 4px; transition: width 0.5s; }
-    .bar-amount { font-size: 12px; color: rgba(238,235,211,0.6); width: 80px; text-align: right; flex-shrink: 0; }
+    .bar-label { font-size: 12px; color: var(--text-secondary); width: 60px; flex-shrink: 0; }
+    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 20px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.5s; }
+    .bar-amount { font-size: 12px; color: var(--text-secondary); width: 80px; text-align: right; flex-shrink: 0; }
     /* Empty state */
-    .empty { padding: 48px; text-align: center; color: rgba(238,235,211,0.3); font-size: 14px; }
+    .empty { padding: 48px; text-align: center; color: var(--text-muted); font-size: 14px; }
     /* Sync status */
-    #sync-status { font-size: 12px; color: #CCFF33; display: none; }
+    #sync-status { font-size: 12px; color: var(--accent); display: none; }
+    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
   </style>
 </head>
 <body>
@@ -144,7 +169,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       <span class="last-sync">Last sync: {fmtDate(lastSync)}</span>
       <span id="sync-status">Syncing…</span>
       <button class="sync-btn" id="sync-btn">Sync Now</button>
-      <button id="theme-btn" style="background: none; border: none; font-size: 16px; cursor: pointer; padding: 4px 8px;">🌙</button>
+      <button id="theme-btn">🌙</button>
       <button class="logout-btn" id="logout-btn">Sign out</button>
     </div>
   </nav>
@@ -237,9 +262,97 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         <div class="table-wrap"><div class="empty">No donations data yet.</div></div>
       )}
     </div>
+
+    <!-- Monthly Donation Totals -->
+    <div class="section">
+      <div class="section-title">Monthly Donation Totals</div>
+      {donations?.monthlyTotals?.length ? (
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Active Subscribers</th>
+                <th>Monthly Donations</th>
+                <th>One-Off Donations</th>
+                <th>Total Donations</th>
+              </tr>
+            </thead>
+            <tbody>
+              {donations.monthlyTotals.map((m: any) => (
+                <tr>
+                  <td>{m.month}</td>
+                  <td>{m.active_subscribers || 0}</td>
+                  <td>{fmt(m.monthly_donations || 0)}</td>
+                  <td>{fmt(m.one_off_donations || 0)}</td>
+                  <td><strong>{fmt(m.total)}</strong></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div class="table-wrap"><div class="empty">No analytics data yet.</div></div>
+      )}
+    </div>
+
+    <!-- Monthly Subscription Breakdown by Gateway -->
+    <div class="section">
+      <div class="section-title">Monthly Subscription Breakdown</div>
+      {donations?.monthlyTotals?.length ? (
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Month</th>
+                <th>Mollie</th>
+                <th>GoCardless</th>
+                <th>PayPal</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {donations.monthlyTotals.map((m: any) => (
+                <tr>
+                  <td>{m.month}</td>
+                  <td>{m.mollie_count || 0}</td>
+                  <td>{m.gocardless_count || 0}</td>
+                  <td>{m.paypal_count || 0}</td>
+                  <td><strong>{(m.mollie_count || 0) + (m.gocardless_count || 0) + (m.paypal_count || 0)}</strong></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div class="table-wrap"><div class="empty">No analytics data yet.</div></div>
+      )}
+    </div>
   </main>
 
   <script>
+    // Theme toggle
+    const themeBtn = document.getElementById('theme-btn');
+    const htmlElement = document.documentElement;
+    const savedTheme = localStorage.getItem('admin-theme') || 'dark';
+
+    if (savedTheme === 'light') {
+      htmlElement.classList.add('light-mode');
+      themeBtn.textContent = '☀️';
+    }
+
+    themeBtn?.addEventListener('click', () => {
+      if (htmlElement.classList.contains('light-mode')) {
+        htmlElement.classList.remove('light-mode');
+        localStorage.setItem('admin-theme', 'dark');
+        themeBtn.textContent = '🌙';
+      } else {
+        htmlElement.classList.add('light-mode');
+        localStorage.setItem('admin-theme', 'light');
+        themeBtn.textContent = '☀️';
+      }
+    });
+
     document.getElementById('sync-btn')?.addEventListener('click', async () => {
       const btn = document.getElementById('sync-btn') as HTMLButtonElement;
       const status = document.getElementById('sync-status');
@@ -262,29 +375,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
       await fetch('/api/admin-auth', { method: 'DELETE' });
       window.location.href = '/admin';
-    });
-
-    // Theme toggle
-    const themeBtn = document.getElementById('theme-btn');
-    const htmlElement = document.documentElement;
-    const savedTheme = localStorage.getItem('admin-theme') || 'dark';
-
-    if (savedTheme === 'light') {
-      htmlElement.style.filter = 'invert(1) hue-rotate(180deg)';
-      themeBtn.textContent = '☀️';
-    }
-
-    themeBtn?.addEventListener('click', () => {
-      const isLight = htmlElement.style.filter ? false : true;
-      if (isLight) {
-        htmlElement.style.filter = 'invert(1) hue-rotate(180deg)';
-        localStorage.setItem('admin-theme', 'light');
-        themeBtn.textContent = '☀️';
-      } else {
-        htmlElement.style.filter = '';
-        localStorage.setItem('admin-theme', 'dark');
-        themeBtn.textContent = '🌙';
-      }
     });
   </script>
 </body>

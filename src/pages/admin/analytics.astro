@@ -199,6 +199,31 @@ const analyticsData = {
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
     @media (max-width: 1024px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; padding: 12px 0; gap: 4px; }
+      .sidebar-item { padding: 10px 16px; font-size: 12px; }
+      .layout { flex-direction: column; }
+      nav { padding: 0 16px; height: auto; flex-wrap: wrap; }
+      .nav-brand { font-size: 10px; }
+      .nav-right { gap: 10px; flex-wrap: wrap; width: 100%; padding-top: 8px; }
+      main { padding: 24px 16px; max-width: 100%; }
+      h1 { font-size: 20px; }
+      .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+      .stat-card { padding: 16px; }
+      .stat-label { font-size: 10px; }
+      .stat-value { font-size: 20px; }
+      .section-title { font-size: 12px; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 12px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .bar-row { gap: 8px; }
+      .bar-label { width: 100px; font-size: 11px; }
+      .bar-value { width: 70px; font-size: 11px; }
+      .refresh-btn { padding: 6px 12px; font-size: 11px; }
+      .logout-btn { padding: 6px 12px; font-size: 11px; }
+    }
+
     #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
   </style>
 </head>

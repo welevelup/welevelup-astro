@@ -140,6 +140,9 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       gap: 16px;
       margin-bottom: 40px;
     }
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr; }
+    }
     .stat-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);

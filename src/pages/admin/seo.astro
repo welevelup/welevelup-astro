@@ -1,0 +1,162 @@
+---
+export const prerender = false;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SEO Dashboard — Level Up Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    :root {
+      --bg-primary: #0C0A3E;
+      --bg-secondary: #13114a;
+      --text-primary: #EEEBD3;
+      --text-secondary: #999999;
+      --text-tertiary: rgba(238,235,211,0.4);
+      --accent: #CCFF33;
+      --border: rgba(255,255,255,0.06);
+    }
+    :root.light-mode {
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F9F9F9;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --text-tertiary: #888888;
+      --accent: #8B7EBD;
+      --border: rgba(0,0,0,0.1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .layout { display: flex; flex: 1; }
+    .sidebar {
+      width: 240px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sidebar-item {
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
+    .sidebar-icon { font-size: 18px; }
+    .content { flex: 1; display: flex; flex-direction: column; }
+    nav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .logout-btn { background: none; border: 1px solid var(--text-secondary); color: var(--text-secondary); border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; }
+    main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; flex: 1; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-brand">Level Up · Admin</div>
+    <div class="nav-right">
+      <button id="theme-btn">🌙</button>
+      <button class="logout-btn" id="logout-btn">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="layout">
+    <div class="sidebar">
+      <a href="/admin/dashboard" class="sidebar-item">
+        <span class="sidebar-icon">💰</span>
+        <span>Donations</span>
+      </a>
+      <a href="/admin/seo" class="sidebar-item active">
+        <span class="sidebar-icon">🔍</span>
+        <span>SEO</span>
+      </a>
+      <a href="/admin/analytics" class="sidebar-item">
+        <span class="sidebar-icon">📊</span>
+        <span>Analytics</span>
+      </a>
+    </div>
+
+    <div class="content">
+      <main>
+        <h1>SEO Dashboard</h1>
+        <p class="subtitle">Search Engine Optimization metrics for welevelup.org</p>
+
+        <div class="card">
+          <h2 style="margin-bottom: 16px; font-size: 18px;">📈 Core Web Vitals</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 12px;">Monitor your website's page experience metrics.</p>
+          <p style="color: var(--text-tertiary);">Integration with Google PageSpeed Insights coming soon...</p>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-bottom: 16px; font-size: 18px;">🔗 Indexation Status</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 12px;">Track how many pages are indexed in Google.</p>
+          <p style="color: var(--text-tertiary);">Connect Google Search Console to see live data...</p>
+        </div>
+
+        <div class="card">
+          <h2 style="margin-bottom: 16px; font-size: 18px;">🎯 Keyword Rankings</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 12px;">Monitor your top ranking keywords.</p>
+          <p style="color: var(--text-tertiary);">Setup keyword tracking to see ranking changes...</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const html = document.documentElement;
+    const theme = localStorage.getItem('admin-theme') || 'dark';
+    if (theme === 'light') html.classList.add('light-mode');
+
+    document.getElementById('theme-btn')?.addEventListener('click', () => {
+      if (html.classList.toggle('light-mode')) {
+        localStorage.setItem('admin-theme', 'light');
+        document.getElementById('theme-btn').textContent = '☀️';
+      } else {
+        localStorage.setItem('admin-theme', 'dark');
+        document.getElementById('theme-btn').textContent = '🌙';
+      }
+    });
+
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      await fetch('/api/admin-auth', { method: 'DELETE' });
+      location.href = '/admin';
+    });
+  </script>
+</body>
+</html>

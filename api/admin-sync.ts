@@ -4,6 +4,18 @@ export const config = {
   runtime: 'nodejs',
 };
 
+async function saveDonationData(data: any): Promise<void> {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) throw new Error('Redis not configured');
+
+  await fetch(`${url}/set/donations:${new Date().getFullYear()}`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify(data),
+  });
+}
+
 interface Donation {
   id: string;
   date: string;
@@ -210,6 +222,51 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     donations.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     const total = donations.reduce((sum, d) => sum + d.amount, 0);
+
+    // Save to Redis
+    const donationData = {
+      totalMonth: donations.filter(d => {
+        const dDate = new Date(d.date);
+        const now = new Date();
+        return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
+      }).reduce((s, d) => s + d.amount, 0),
+      totalYear: total,
+      activeSubscribers: new Set(donations.filter(d => d.type === 'recurring').map(d => d.payer?.email || d.id)).size,
+      newThisMonth: donations.filter(d => {
+        const dDate = new Date(d.date);
+        const now = new Date();
+        return d.type === 'recurring' && dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
+      }).length,
+      cancelledThisMonth: 0,
+      byGateway: {
+        mollie: donations.filter(d => d.gateway === 'mollie').reduce((s, d) => s + d.amount, 0),
+        gocardless: donations.filter(d => d.gateway === 'gocardless').reduce((s, d) => s + d.amount, 0),
+        paypal: donations.filter(d => d.gateway === 'paypal').reduce((s, d) => s + d.amount, 0),
+      },
+      recentDonations: donations.slice(0, 10).map(d => ({
+        date: d.date,
+        amount: d.amount,
+        currency: d.currency,
+        type: d.type,
+        gateway: d.gateway,
+      })),
+      monthlyTotals: Array.from(
+        donations.reduce((m, d) => {
+          const month = d.date.slice(0, 7);
+          m.set(month, (m.get(month) ?? 0) + d.amount);
+          return m;
+        }, new Map<string, number>()).entries()
+      ).sort((a, b) => b[0].localeCompare(a[0])).slice(0, 12).reverse().map(([month, total]) => ({
+        month,
+        total: Math.round(total * 100) / 100,
+      })),
+    };
+
+    try {
+      await saveDonationData(donationData);
+    } catch (err) {
+      console.error('Failed to save to Redis:', err);
+    }
 
     return res.status(200).json({
       ok: true,

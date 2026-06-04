@@ -23,384 +23,193 @@ const fmtDate = (s: string | null) =>
 const donationsJSON = JSON.stringify(donations ?? null);
 ---
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard — Level Up Admin</title>
+  <title>Donations Dashboard — Level Up Admin</title>
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* ── TOKENS ─────────────────────────────────────────────── */
     :root {
-      --bg:        #0C0A3E;
-      --surface:   #13114a;
-      --surface2:  #1a1860;
-      --text:      #EEEBD3;
-      --muted:     rgba(238,235,211,0.45);
-      --faint:     rgba(238,235,211,0.1);
-      --accent:    #CCFF33;
-      --accent-dim:rgba(204,255,51,0.12);
-      --border:    rgba(255,255,255,0.07);
-      --good:      #4ADE80;
-      --warn:      #FBBF24;
-      --danger:    #F87171;
-      --sidebar-w: 220px;
-      --nav-h:     56px;
-      --radius:    12px;
-      --ease:      cubic-bezier(0.16,1,0.3,1);
+      --bg-primary: #0C0A3E;
+      --bg-secondary: #13114a;
+      --text-primary: #EEEBD3;
+      --text-secondary: #999999;
+      --text-tertiary: rgba(238,235,211,0.4);
+      --accent: #CCFF33;
+      --border: rgba(255,255,255,0.06);
+      --good: #4ADE80;
+      --warning: #FBBF24;
+      --danger: #F87171;
+      --mollie: #4ADE80;
+      --gocardless: #FBBF24;
+      --paypal: #F87171;
     }
-    [data-theme="light"] {
-      --bg:        #F5F4FF;
-      --surface:   #FFFFFF;
-      --surface2:  #EDE9FF;
-      --text:      #1A1730;
-      --muted:     rgba(26,23,48,0.5);
-      --faint:     rgba(26,23,48,0.07);
-      --accent:    #6B5CE7;
-      --accent-dim:rgba(107,92,231,0.1);
-      --border:    rgba(26,23,48,0.1);
+    :root.light-mode {
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #F9F9F9;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --text-tertiary: #888888;
+      --accent: #8B7EBD;
+      --border: rgba(0,0,0,0.1);
+      --mollie: #16a34a;
+      --gocardless: #d97706;
+      --paypal: #dc2626;
     }
-
-    /* ── RESET ──────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; cursor: pointer; }
+    .layout { display: flex; flex: 1; }
 
-    /* ── APP SHELL ──────────────────────────────────────────── */
-    .app {
-      display: grid;
-      grid-template-rows: var(--nav-h) 1fr;
-      grid-template-columns: var(--sidebar-w) 1fr;
-      grid-template-areas:
-        "nav  nav"
-        "side main";
-      min-height: 100dvh;
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 240px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
     }
+    .sidebar-item {
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      display: block;
+    }
+    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+    .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
 
-    /* ── TOP NAV ────────────────────────────────────────────── */
-    .topnav {
-      grid-area: nav;
-      background: var(--surface);
+    /* ── CONTENT ── */
+    .content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    nav {
+      background: var(--bg-secondary);
       border-bottom: 1px solid var(--border);
+      padding: 0 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 clamp(16px, 3vw, 32px);
-      gap: 12px;
+      height: 56px;
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 10;
     }
-    .topnav-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      gap: 5px;
-      width: 36px;
-      height: 36px;
-      background: none;
+    .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .sync-info { font-size: 11px; color: var(--text-tertiary); white-space: nowrap; }
+    .refresh-btn {
+      background: var(--accent);
+      color: var(--bg-primary);
       border: none;
-      padding: 4px;
-      border-radius: 8px;
-      transition: background 0.15s;
-    }
-    .hamburger:hover { background: var(--faint); }
-    .hamburger span {
-      display: block;
-      height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: transform 0.25s var(--ease), opacity 0.2s;
-    }
-    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-    .brand {
-      font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-    .topnav-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .sync-info {
-      font-size: 11px;
-      color: var(--muted);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 180px;
-    }
-    .btn {
+      border-radius: 6px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      border: none;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 8px 14px;
-      transition: opacity 0.15s, transform 0.1s;
-      white-space: nowrap;
+      transition: opacity 0.15s;
     }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-    }
-    .btn-primary:hover { opacity: 0.88; }
-    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-ghost {
-      background: var(--faint);
-      color: var(--muted);
-    }
-    .btn-ghost:hover { color: var(--text); background: var(--border); }
-    .icon-btn {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: background 0.15s;
-    }
-    .icon-btn:hover { background: var(--faint); }
+    .refresh-btn:hover { opacity: 0.85; }
+    .refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .logout-btn { background: none; border: 1px solid var(--text-secondary); color: var(--text-secondary); border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; }
+    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
 
-    /* ── SIDEBAR ────────────────────────────────────────────── */
-    .sidebar {
-      grid-area: side;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      padding: 24px 0 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      position: sticky;
-      top: var(--nav-h);
-      height: calc(100dvh - var(--nav-h));
-      overflow-y: auto;
-    }
-    .sidebar-section {
-      padding: 0 12px 4px;
-      margin-top: 8px;
-    }
-    .sidebar-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 0 8px;
-      margin-bottom: 4px;
-      display: block;
-    }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 12px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--muted);
-      transition: background 0.15s, color 0.15s;
-      border-left: 2px solid transparent;
-    }
-    .nav-link:hover {
-      background: var(--faint);
-      color: var(--text);
-    }
-    .nav-link.active {
-      background: var(--accent-dim);
-      color: var(--accent);
-      font-weight: 700;
-      border-left-color: var(--accent);
-    }
-    .nav-link svg { flex-shrink: 0; opacity: 0.7; }
-    .nav-link.active svg { opacity: 1; }
+    /* ── MAIN ── */
+    main { max-width: 1400px; margin: 0 auto; padding: 40px 32px; flex: 1; width: 100%; }
+    h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+    .subtitle { font-size: 12px; color: var(--text-secondary); }
+    .update-info { font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
 
-    /* Mobile sidebar drawer */
-    .sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 90;
-      backdrop-filter: blur(2px);
-    }
-
-    /* ── MAIN CONTENT ───────────────────────────────────────── */
-    .main {
-      grid-area: main;
-      padding: clamp(20px, 3vw, 40px) clamp(16px, 4vw, 40px);
-      min-width: 0;
-    }
-    .page-header {
-      margin-bottom: clamp(20px, 3vw, 36px);
-    }
-    .page-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(22px, 3vw, 32px);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-    }
-    .page-subtitle {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    /* ── STATS GRID ─────────────────────────────────────────── */
+    /* ── STATS GRID ── */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: clamp(10px, 1.5vw, 16px);
-      margin-bottom: clamp(20px, 3vw, 32px);
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
     }
     .stat-card {
-      background: var(--surface);
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: var(--radius);
-      padding: clamp(14px, 2vw, 22px);
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: transform 0.2s var(--ease), box-shadow 0.2s;
+      border-radius: 10px;
+      padding: 24px;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .stat-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    }
-    .stat-label {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .stat-value {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(20px, 2.5vw, 28px);
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-    }
-    .stat-sub {
-      font-size: 11px;
-      color: var(--muted);
-    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+    .stat-change { font-size: 11px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
+    .change-up { color: var(--good); }
+    .change-down { color: var(--danger); }
 
-    /* ── CHART SECTION ──────────────────────────────────────── */
-    .chart-section {
-      background: var(--surface);
+    /* ── CHART ── */
+    .section { margin-bottom: 50px; }
+    .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
+    .chart-card {
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: clamp(16px, 2.5vw, 28px);
-      margin-bottom: clamp(20px, 3vw, 32px);
+      border-radius: 10px;
+      padding: 24px;
     }
-    .section-header {
+    .chart-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-    .chart-wrap {
-      width: 100%;
-      overflow: hidden;
-    }
-    #line-chart {
-      width: 100%;
-      display: block;
-    }
-
-    /* ── TABLE SECTION ──────────────────────────────────────── */
-    .table-section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-    .table-header {
+    .chart-legend {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: clamp(14px, 2vw, 20px) clamp(14px, 2.5vw, 24px);
-      border-bottom: 1px solid var(--border);
+      gap: 20px;
+      flex-wrap: wrap;
     }
-    .table-scroll {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-      min-width: 420px;
-    }
-    thead th {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 10px clamp(12px, 2vw, 20px);
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-      white-space: nowrap;
-    }
-    tbody td {
-      padding: 11px clamp(12px, 2vw, 20px);
-      border-bottom: 1px solid var(--faint);
-      vertical-align: middle;
-    }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr {
-      transition: background 0.1s;
-    }
-    tbody tr:hover { background: var(--faint); }
-    .td-mono {
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
       font-weight: 600;
-      font-variant-numeric: tabular-nums;
+      color: var(--text-secondary);
     }
-    .td-total {
-      font-weight: 700;
-      color: var(--accent);
-      font-variant-numeric: tabular-nums;
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
     }
+    .chart-wrap { width: 100%; overflow: hidden; }
+    #multi-chart { width: 100%; display: block; }
+
+    /* ── TABLES ── */
+    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    tr:last-child td { border-bottom: none; }
+    tbody tr { transition: background 0.1s; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .td-total { font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+    .td-mono { font-variant-numeric: tabular-nums; }
+    .td-mollie { color: var(--mollie); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .td-gocardless { color: var(--gocardless); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .td-paypal { color: var(--paypal); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .badge {
       display: inline-block;
       font-size: 10px;
@@ -409,31 +218,35 @@ const donationsJSON = JSON.stringify(donations ?? null);
       border-radius: 99px;
       letter-spacing: 0.04em;
     }
-    .badge-recurring {
-      background: var(--accent-dim);
-      color: var(--accent);
-    }
+    .badge-recurring { background: rgba(204,255,51,0.12); color: var(--accent); }
 
-    /* ── EMPTY STATE ────────────────────────────────────────── */
-    .empty {
-      text-align: center;
-      padding: 48px 16px;
-      color: var(--muted);
-      font-size: 13px;
+    /* ── GATEWAY BARS ── */
+    .gateway-grid {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
     }
-    .empty strong {
-      display: block;
-      font-size: 16px;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
+    .gateway-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+    .gateway-row:last-child { margin-bottom: 0; }
+    .gateway-label { font-size: 12px; font-weight: 600; width: 120px; flex-shrink: 0; }
+    .gateway-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
+    .gateway-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
+    .gateway-value { font-size: 12px; width: 100px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
 
-    /* ── TOAST ──────────────────────────────────────────────── */
+    /* ── GRID 2 ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    /* ── EMPTY STATE ── */
+    .empty { text-align: center; padding: 48px 16px; color: var(--text-tertiary); font-size: 13px; }
+    .empty strong { display: block; font-size: 16px; margin-bottom: 6px; color: var(--text-secondary); }
+
+    /* ── TOAST ── */
     .toast {
       position: fixed;
       bottom: 24px;
       right: 24px;
-      background: var(--surface2);
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 12px 18px;
@@ -445,228 +258,237 @@ const donationsJSON = JSON.stringify(donations ?? null);
       z-index: 999;
       transform: translateY(80px);
       opacity: 0;
-      transition: transform 0.3s var(--ease), opacity 0.3s;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
       max-width: calc(100vw - 32px);
     }
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    .toast.show { transform: translateY(0); opacity: 1; }
     .toast.success { border-left: 3px solid var(--good); }
     .toast.error   { border-left: 3px solid var(--danger); }
 
-    /* ── MOBILE ─────────────────────────────────────────────── */
-    @media (max-width: 639px) {
-      :root { --sidebar-w: 0px; }
-
-      .app {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "nav"
-          "main";
-      }
-
-      .hamburger { display: flex; }
-      .sync-info  { display: none; }
-
-      .sidebar {
-        grid-area: unset;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 260px;
-        height: 100dvh;
-        z-index: 95;
-        transform: translateX(-100%);
-        transition: transform 0.3s var(--ease);
-        padding-top: calc(var(--nav-h) + 12px);
-      }
-      .sidebar.open { transform: translateX(0); }
-      .sidebar-overlay { display: block; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-      .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
-
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-      .main { padding: 16px; }
+    /* ── CHART ANIMATION ── */
+    .chart-line-animated {
+      stroke-dasharray: 3000;
+      stroke-dashoffset: 3000;
+      animation: drawLine 1.4s 0.2s cubic-bezier(0.16,1,0.3,1) forwards;
     }
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
 
-    @media (max-width: 480px) {
-      .topnav-right .sync-info { display: none; }
-    }
-
-    @media (min-width: 640px) and (max-width: 900px) {
-      :root { --sidebar-w: 180px; }
-      .brand { font-size: 11px; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    @media (min-width: 901px) and (max-width: 1100px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    /* ── SVG CHART ANIMATION ────────────────────────────────── */
-    #chart-line {
-      stroke-dasharray: 2000;
-      stroke-dashoffset: 2000;
-      animation: drawLine 1.2s 0.2s var(--ease) forwards;
-    }
-    #chart-area {
-      opacity: 0;
-      animation: fadeArea 0.8s 0.9s ease forwards;
-    }
-    @keyframes drawLine {
-      to { stroke-dashoffset: 0; }
-    }
-    @keyframes fadeArea {
-      to { opacity: 1; }
-    }
-
-    /* ── SCROLLBAR ──────────────────────────────────────────── */
+    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .sidebar { width: 100%; padding: 12px 0; gap: 4px; flex-direction: row; flex-wrap: wrap; }
+      .sidebar-item { padding: 10px 16px; font-size: 12px; }
+      .layout { flex-direction: column; }
+      nav { padding: 0 16px; height: auto; min-height: 56px; flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+      .nav-brand { font-size: 10px; }
+      .nav-right { gap: 8px; flex-wrap: wrap; }
+      .sync-info { display: none; }
+      main { padding: 24px 16px; max-width: 100%; }
+      h1 { font-size: 20px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .stat-card { padding: 16px; }
+      .stat-label { font-size: 10px; }
+      .stat-value { font-size: 20px; }
+      .section-title { font-size: 12px; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 12px; }
+      .grid-2 { grid-template-columns: 1fr; }
+      .gateway-label { width: 90px; font-size: 11px; }
+      .gateway-value { width: 80px; font-size: 11px; }
+      .refresh-btn { padding: 6px 12px; font-size: 11px; }
+      .logout-btn { padding: 6px 12px; font-size: 11px; }
+      .chart-legend { gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr; }
+      .header-row { flex-direction: column; gap: 12px; }
+    }
   </style>
 </head>
 <body>
 
-<!-- Toast notification -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<div class="app">
-  <!-- ── TOP NAV ── -->
-  <nav class="topnav" role="navigation" aria-label="Admin navigation">
-    <div class="topnav-left">
-      <button class="hamburger" id="hamburger" aria-label="Toggle sidebar" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-      <span class="brand">Level Up · Admin</span>
-    </div>
-    <div class="topnav-right">
-      <span class="sync-info" id="sync-label">Synced: {fmtDate(lastSync)}</span>
-      <button class="btn btn-primary" id="sync-btn" aria-label="Sync donation data now">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-        </svg>
-        Sync Now
-      </button>
-      <button class="icon-btn" id="theme-btn" aria-label="Toggle light/dark theme" title="Toggle theme">
-        <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-      </button>
-      <button class="btn btn-ghost" id="logout-btn" aria-label="Sign out">Out</button>
-    </div>
-  </nav>
+<nav aria-label="Admin navigation">
+  <div class="nav-brand">Level Up · Admin</div>
+  <div class="nav-right">
+    <span class="sync-info" id="sync-label">Synced: {fmtDate(lastSync)}</span>
+    <button class="refresh-btn" id="sync-btn" aria-label="Sync donation data now">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+      Sync Now
+    </button>
+    <button id="theme-btn" aria-label="Toggle light/dark theme">🌙</button>
+    <button class="logout-btn" id="logout-btn" aria-label="Sign out">Sign out</button>
+  </div>
+</nav>
 
-  <!-- ── SIDEBAR OVERLAY ── -->
-  <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
-
-  <!-- ── SIDEBAR ── -->
-  <aside class="sidebar" id="sidebar" aria-label="Sidebar navigation">
-    <div class="sidebar-section">
-      <span class="sidebar-label">Reports</span>
-      <a href="/admin/dashboard" class="nav-link active" aria-current="page">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        Donations
-      </a>
-      <a href="/admin/analytics" class="nav-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Analytics
-      </a>
-      <a href="/admin/seo" class="nav-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        SEO
-      </a>
-    </div>
+<div class="layout">
+  <aside class="sidebar" aria-label="Sidebar navigation">
+    <a href="/admin/dashboard" class="sidebar-item active" aria-current="page">Donations</a>
+    <a href="/admin/seo" class="sidebar-item">SEO</a>
+    <a href="/admin/analytics" class="sidebar-item">Analytics</a>
   </aside>
 
-  <!-- ── MAIN ── -->
-  <main class="main" id="main-content">
-    <header class="page-header">
-      <h1 class="page-title">Donations</h1>
-      <p class="page-subtitle">welevelup.org · <span id="period-label">Loading…</span></p>
-    </header>
+  <div class="content">
+    <main id="main-content">
+      <div class="header-row">
+        <div>
+          <h1>Donations Dashboard</h1>
+          <p class="subtitle">Donation revenue across all payment gateways — welevelup.org</p>
+          <p class="update-info" id="update-info">Last synced: {fmtDate(lastSync)}</p>
+        </div>
+      </div>
 
-    <!-- Stats -->
-    <div class="stats-grid" role="list" aria-label="Donation statistics">
-      <div class="stat-card" role="listitem">
-        <div class="stat-label">This Month</div>
-        <div class="stat-value" id="stat-month">—</div>
-        <div class="stat-sub">Total raised</div>
+      <!-- STATS GRID -->
+      <div class="stats-grid" role="list" aria-label="Donation statistics">
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">This Month</div>
+          <div class="stat-value" id="stat-month">—</div>
+          <div class="stat-sub">Total raised</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">This Year</div>
+          <div class="stat-value" id="stat-year">—</div>
+          <div class="stat-sub">Year to date</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">Active Subscribers</div>
+          <div class="stat-value" id="stat-subs">—</div>
+          <div class="stat-sub">Recurring donors</div>
+        </div>
+        <div class="stat-card" role="listitem">
+          <div class="stat-label">New This Month</div>
+          <div class="stat-value" id="stat-new">—</div>
+          <div class="stat-sub">First-time donors</div>
+        </div>
       </div>
-      <div class="stat-card" role="listitem">
-        <div class="stat-label">This Year</div>
-        <div class="stat-value" id="stat-year">—</div>
-        <div class="stat-sub">Year to date</div>
-      </div>
-      <div class="stat-card" role="listitem">
-        <div class="stat-label">Active Subscribers</div>
-        <div class="stat-value" id="stat-subs">—</div>
-        <div class="stat-sub">Recurring donors</div>
-      </div>
-      <div class="stat-card" role="listitem">
-        <div class="stat-label">New This Month</div>
-        <div class="stat-value" id="stat-new">—</div>
-        <div class="stat-sub">First-time donors</div>
-      </div>
-    </div>
 
-    <!-- Chart -->
-    <section class="chart-section" aria-labelledby="chart-heading">
-      <div class="section-header">
-        <h2 class="section-title" id="chart-heading">Monthly Donations</h2>
-        <span style="font-size:11px;color:var(--muted);">Last 12 months</span>
-      </div>
-      <div class="chart-wrap">
-        <svg id="line-chart" viewBox="0 0 820 240" preserveAspectRatio="none" aria-label="Monthly donations line chart" role="img">
-          <title>Monthly Donations Chart</title>
-          <defs>
-            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%"   stop-color="var(--accent)" stop-opacity="0.25"/>
-              <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-          <g id="chart-grid"></g>
-          <path id="chart-area" fill="url(#areaGrad)"/>
-          <polyline id="chart-line" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <g id="chart-dots"></g>
-          <g id="chart-labels"></g>
-          <g id="chart-yaxis"></g>
-          <text id="chart-empty" x="410" y="120" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="DM Sans, sans-serif">No chart data yet</text>
-        </svg>
-      </div>
-    </section>
+      <!-- MULTI-LINE CHART -->
+      <section class="section" aria-labelledby="chart-heading">
+        <div class="section-title" id="chart-heading">Donations by Gateway — Last 12 Months</div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <span style="font-size:11px;color:var(--text-tertiary);">Donation count per gateway per month</span>
+            <div class="chart-legend" aria-label="Chart legend">
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--mollie)"></div>
+                Mollie
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--gocardless)"></div>
+                GoCardless
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:var(--paypal)"></div>
+                PayPal
+              </div>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg id="multi-chart" viewBox="0 0 820 260" preserveAspectRatio="none" aria-label="Monthly donations by gateway chart" role="img">
+              <title>Monthly Donations by Gateway</title>
+              <defs>
+                <linearGradient id="gradMollie" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#4ADE80" stop-opacity="0.15"/>
+                  <stop offset="100%" stop-color="#4ADE80" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g id="chart-grid"></g>
+              <g id="chart-areas"></g>
+              <g id="chart-lines"></g>
+              <g id="chart-dots"></g>
+              <g id="chart-xlabels"></g>
+              <g id="chart-ylabels"></g>
+              <text id="chart-empty" x="410" y="130" text-anchor="middle" font-size="13" fill="rgba(200,200,200,0.4)" font-family="DM Sans,sans-serif">No chart data yet — run a sync</text>
+            </svg>
+          </div>
+        </div>
+      </section>
 
-    <!-- Monthly table -->
-    <section class="table-section" aria-labelledby="table-heading">
-      <div class="table-header">
-        <h2 class="section-title" id="table-heading">Monthly Breakdown</h2>
-        <span style="font-size:11px;color:var(--muted);" id="table-count"></span>
+      <!-- GATEWAY BREAKDOWN BARS -->
+      <section class="section" aria-labelledby="gateway-heading">
+        <div class="section-title" id="gateway-heading">Revenue by Gateway (Year to Date)</div>
+        <div class="gateway-grid" id="gateway-bars">
+          <div class="empty">
+            <strong>No data</strong>
+            Run a sync to load donation data.
+          </div>
+        </div>
+      </section>
+
+      <!-- MONTHLY TOTALS TABLE + GATEWAY COUNT TABLE -->
+      <div class="grid-2">
+        <section class="section" aria-labelledby="monthly-heading">
+          <div class="section-title" id="monthly-heading">Monthly Totals</div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Recurring</th>
+                  <th scope="col">One-Off</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody id="monthly-tbody">
+                <tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="gateway-table-heading">
+          <div class="section-title" id="gateway-table-heading">Monthly by Gateway</div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col" style="color:var(--mollie)">Mollie</th>
+                  <th scope="col" style="color:var(--gocardless)">GoCardless</th>
+                  <th scope="col" style="color:var(--paypal)">PayPal</th>
+                </tr>
+              </thead>
+              <tbody id="gateway-tbody">
+                <tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
       </div>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Month</th>
-              <th scope="col">Recurring</th>
-              <th scope="col">One-Off</th>
-              <th scope="col">Total</th>
-              <th scope="col">Type</th>
-            </tr>
-          </thead>
-          <tbody id="monthly-tbody">
-            <tr>
-              <td colspan="5">
-                <div class="empty">
-                  <strong>No data</strong>
-                  Run a sync to load donation data.
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-  </main>
+
+      <!-- RECENT DONATIONS -->
+      <section class="section" aria-labelledby="recent-heading">
+        <div class="section-title" id="recent-heading">Recent Donations</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Currency</th>
+                <th scope="col">Gateway</th>
+                <th scope="col">Type</th>
+              </tr>
+            </thead>
+            <tbody id="recent-tbody">
+              <tr><td colspan="5"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
 </div>
 
 <script define:vars={{ donationsJSON, lastSync }}>
@@ -678,22 +500,28 @@ const donationsJSON = JSON.stringify(donations ?? null);
   // ── THEME ─────────────────────────────────────────────────
   const html = document.documentElement;
   const THEME_KEY = 'admin-theme';
-  const moonIcon = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
-  const sunIcon  = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
 
   function applyTheme(t) {
-    html.setAttribute('data-theme', t);
-    const icon = document.querySelector('#theme-icon');
-    if (icon) icon.innerHTML = t === 'dark' ? moonIcon : sunIcon;
+    if (t === 'light') {
+      html.classList.add('light-mode');
+      const btn = document.getElementById('theme-btn');
+      if (btn) btn.textContent = '☀️';
+    } else {
+      html.classList.remove('light-mode');
+      const btn = document.getElementById('theme-btn');
+      if (btn) btn.textContent = '🌙';
+    }
   }
   applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
 
   document.getElementById('theme-btn')?.addEventListener('click', () => {
-    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    applyTheme(next);
+    const isLight = html.classList.toggle('light-mode');
+    const next = isLight ? 'light' : 'dark';
     localStorage.setItem(THEME_KEY, next);
-    // Redraw chart so colors update
-    if (donations?.monthlyTotals?.length) drawChart(donations.monthlyTotals);
+    const btn = document.getElementById('theme-btn');
+    if (btn) btn.textContent = isLight ? '☀️' : '🌙';
+    if (donations?.monthlyTotals?.length) drawMultiChart(donations.monthlyTotals);
+    if (donations?.byGateway) drawGatewayBars(donations.byGateway);
   });
 
   // ── HELPERS ───────────────────────────────────────────────
@@ -703,131 +531,213 @@ const donationsJSON = JSON.stringify(donations ?? null);
   function fmtNum(n) {
     return Number(n || 0).toLocaleString('en-GB');
   }
-  function getComputedColor(varName) {
-    return getComputedStyle(html).getPropertyValue(varName).trim();
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   }
 
   // ── TOAST ─────────────────────────────────────────────────
-  function showToast(msg, type = 'success') {
+  function showToast(msg, type) {
     const t = document.getElementById('toast');
+    if (!t) return;
     t.textContent = msg;
-    t.className = `toast ${type} show`;
+    t.className = 'toast ' + (type || 'success') + ' show';
     setTimeout(() => { t.classList.remove('show'); }, 3500);
   }
 
-  // ── POPULATE STATS ────────────────────────────────────────
+  // ── STATS ─────────────────────────────────────────────────
   function populateStats(d) {
-    const set = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = val;
-    };
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     if (!d) {
-      set('stat-month', '—');
-      set('stat-year',  '—');
-      set('stat-subs',  '—');
-      set('stat-new',   '—');
-      set('period-label', 'No data available');
+      set('stat-month', '—'); set('stat-year', '—');
+      set('stat-subs', '—'); set('stat-new', '—');
       return;
     }
     set('stat-month', fmt(d.totalMonth));
     set('stat-year',  fmt(d.totalYear));
     set('stat-subs',  fmtNum(d.activeSubscribers));
     set('stat-new',   fmtNum(d.newThisMonth));
-    set('period-label', 'Live data');
   }
 
-  // ── DRAW CHART ────────────────────────────────────────────
-  function drawChart(rows) {
+  // ── MULTI-LINE CHART ──────────────────────────────────────
+  function drawMultiChart(rows) {
     const empty = document.getElementById('chart-empty');
-    if (!rows || rows.length < 2) { if (empty) empty.style.display = ''; return; }
-    if (empty) empty.style.display = 'none';
-
-    const W = 820, H = 240, PL = 56, PR = 20, PT = 20, PB = 40;
-    const gW = W - PL - PR;
-    const gH = H - PT - PB;
-    const max = Math.max(...rows.map(r => r.total || 0), 1);
-    const gridLines = 4;
-
-    const accent = getComputedColor('--accent');
-    const muted  = getComputedColor('--muted') || 'rgba(200,200,200,0.5)';
-    const faint  = getComputedColor('--faint') || 'rgba(255,255,255,0.06)';
-
-    const pts = rows.map((r, i) => ({
-      x: PL + (i / (rows.length - 1)) * gW,
-      y: PT + gH - ((r.total || 0) / max) * gH,
-      total: r.total || 0,
-      month: (r.month || '').slice(0, 7),
-    }));
-
-    // Y-axis grid
-    const gridSvg = Array.from({ length: gridLines + 1 }, (_, i) => {
-      const y = PT + (i / gridLines) * gH;
-      const val = max * (1 - i / gridLines);
-      return `
-        <line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="${faint}" stroke-width="1"/>
-        <text x="${PL - 6}" y="${y + 4}" font-size="9" fill="${muted}" text-anchor="end" font-family="DM Sans,sans-serif">£${val >= 1000 ? (val/1000).toFixed(1)+'k' : val.toFixed(0)}</text>
-      `;
-    }).join('');
-
-    // Area fill path
-    const lineD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
-    const areaD = `${lineD} L${pts.at(-1).x},${PT + gH} L${pts[0].x},${PT + gH} Z`;
-
-    // Dots with tooltip-ready data
-    const dots = pts.map(p =>
-      `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${accent}" stroke="var(--surface)" stroke-width="2">
-        <title>${p.month}: ${fmt(p.total)}</title>
-       </circle>`
-    ).join('');
-
-    // X-axis labels — show every other if many items
-    const step = rows.length > 8 ? 2 : 1;
-    const labels = pts.map((p, i) => {
-      if (i % step !== 0 && i !== pts.length - 1) return '';
-      const short = p.month.slice(5); // MM
-      const months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-      const label = months[parseInt(short, 10)] || short;
-      return `<text x="${p.x}" y="${H - 8}" font-size="10" fill="${muted}" text-anchor="middle" font-family="DM Sans,sans-serif">${label}</text>`;
-    }).join('');
-
-    document.getElementById('chart-grid').innerHTML = gridSvg;
-    document.getElementById('chart-area').setAttribute('d', areaD);
-    document.getElementById('chart-line').setAttribute('points', pts.map(p => `${p.x},${p.y}`).join(' '));
-    document.getElementById('chart-dots').innerHTML = dots;
-    document.getElementById('chart-labels').innerHTML = labels;
-
-    // Reset animation
-    const line = document.getElementById('chart-line');
-    line.style.animation = 'none';
-    line.getBoundingClientRect(); // reflow
-    line.style.animation = '';
-    const area = document.getElementById('chart-area');
-    area.style.animation = 'none';
-    area.getBoundingClientRect();
-    area.style.animation = '';
-  }
-
-  // ── POPULATE TABLE ────────────────────────────────────────
-  function populateTable(rows) {
-    const tbody = document.getElementById('monthly-tbody');
-    const count = document.getElementById('table-count');
-    if (!rows || !rows.length) {
-      tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><strong>No data</strong>Run a sync to load donation data.</div></td></tr>`;
-      if (count) count.textContent = '';
+    if (!rows || rows.length < 2) {
+      if (empty) empty.style.display = '';
       return;
     }
-    if (count) count.textContent = `${rows.length} months`;
-    tbody.innerHTML = rows.map(m => {
+    if (empty) empty.style.display = 'none';
+
+    const W = 820, H = 260, PL = 44, PR = 20, PT = 20, PB = 44;
+    const gW = W - PL - PR;
+    const gH = H - PT - PB;
+
+    const mollieC    = cssVar('--mollie')     || '#4ADE80';
+    const gcC        = cssVar('--gocardless') || '#FBBF24';
+    const paypalC    = cssVar('--paypal')     || '#F87171';
+    const mutedC     = cssVar('--text-tertiary') || 'rgba(200,200,200,0.4)';
+    const faintC     = cssVar('--border')     || 'rgba(255,255,255,0.06)';
+
+    const allCounts = rows.flatMap(r => [r.mollie_count || 0, r.gocardless_count || 0, r.paypal_count || 0]);
+    const maxVal = Math.max(...allCounts, 1);
+    const gridLines = 4;
+
+    function xOf(i) { return PL + (i / (rows.length - 1)) * gW; }
+    function yOf(v) { return PT + gH - (v / maxVal) * gH; }
+
+    // Grid
+    let gridSvg = '';
+    for (let i = 0; i <= gridLines; i++) {
+      const y = PT + (i / gridLines) * gH;
+      const val = Math.round(maxVal * (1 - i / gridLines));
+      gridSvg += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="${faintC}" stroke-width="1"/>`;
+      gridSvg += `<text x="${PL - 5}" y="${y + 4}" font-size="9" fill="${mutedC}" text-anchor="end" font-family="DM Sans,sans-serif">${val}</text>`;
+    }
+
+    // Month labels
+    const monthNames = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const step = rows.length > 8 ? 2 : 1;
+    let xlabels = '';
+    rows.forEach((r, i) => {
+      if (i % step !== 0 && i !== rows.length - 1) return;
+      const mm = (r.month || '').slice(5);
+      const label = monthNames[parseInt(mm, 10)] || mm;
+      xlabels += `<text x="${xOf(i)}" y="${H - 8}" font-size="10" fill="${mutedC}" text-anchor="middle" font-family="DM Sans,sans-serif">${label}</text>`;
+    });
+
+    // Build polyline points for each gateway
+    function buildPoints(key) {
+      return rows.map((r, i) => `${xOf(i)},${yOf(r[key] || 0)}`).join(' ');
+    }
+
+    const molliePoints   = buildPoints('mollie_count');
+    const gcPoints       = buildPoints('gocardless_count');
+    const paypalPoints   = buildPoints('paypal_count');
+
+    // Dots with tooltips
+    function buildDots(key, color) {
+      return rows.map((r, i) => {
+        const v = r[key] || 0;
+        const month = (r.month || '').slice(0, 7);
+        const label = key.replace('_count', '');
+        return `<circle cx="${xOf(i)}" cy="${yOf(v)}" r="3.5" fill="${color}" stroke="var(--bg-secondary)" stroke-width="2"><title>${month} ${label}: ${v} donations</title></circle>`;
+      }).join('');
+    }
+
+    document.getElementById('chart-grid').innerHTML = gridSvg;
+    document.getElementById('chart-xlabels').innerHTML = xlabels;
+    document.getElementById('chart-ylabels').innerHTML = '';
+    document.getElementById('chart-areas').innerHTML = '';
+
+    // Lines — GoCardless and PayPal dashed, Mollie solid (primary)
+    document.getElementById('chart-lines').innerHTML = `
+      <polyline points="${paypalPoints}"   fill="none" stroke="${paypalC}"  stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5,3" opacity="0.85"/>
+      <polyline points="${gcPoints}"       fill="none" stroke="${gcC}"      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8,3" opacity="0.85"/>
+      <polyline points="${molliePoints}"   fill="none" stroke="${mollieC}"  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="chart-line-animated"/>
+    `;
+    document.getElementById('chart-dots').innerHTML =
+      buildDots('paypal_count',    paypalC) +
+      buildDots('gocardless_count', gcC) +
+      buildDots('mollie_count',    mollieC);
+
+    // Trigger line animation reset
+    const lines = document.querySelectorAll('.chart-line-animated');
+    lines.forEach(l => {
+      l.style.animation = 'none';
+      l.getBoundingClientRect();
+      l.style.animation = '';
+    });
+  }
+
+  // ── GATEWAY BARS ──────────────────────────────────────────
+  function drawGatewayBars(byGateway) {
+    const container = document.getElementById('gateway-bars');
+    if (!container) return;
+    if (!byGateway || (byGateway.mollie === 0 && byGateway.gocardless === 0 && byGateway.paypal === 0)) {
+      container.innerHTML = '<div class="empty"><strong>No data</strong>Run a sync to load donation data.</div>';
+      return;
+    }
+
+    const gateways = [
+      { label: 'Mollie',       value: byGateway.mollie || 0,      color: 'var(--mollie)' },
+      { label: 'GoCardless',   value: byGateway.gocardless || 0,  color: 'var(--gocardless)' },
+      { label: 'PayPal',       value: byGateway.paypal || 0,      color: 'var(--paypal)' },
+    ];
+    const total = gateways.reduce((s, g) => s + g.value, 0) || 1;
+
+    container.innerHTML = gateways.map(g => {
+      const pct = Math.round((g.value / total) * 100);
+      return `
+        <div class="gateway-row">
+          <div class="gateway-label" style="color:${g.color}">${g.label}</div>
+          <div class="gateway-track">
+            <div class="gateway-fill" style="width:${pct}%;background:${g.color};opacity:0.85"></div>
+          </div>
+          <div class="gateway-value">${fmt(g.value)} (${pct}%)</div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── MONTHLY TOTALS TABLE ──────────────────────────────────
+  function populateMonthlyTable(rows) {
+    const tbody = document.getElementById('monthly-tbody');
+    if (!tbody) return;
+    if (!rows || !rows.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = [...rows].reverse().map(m => {
       const recurring = m.monthly_donations ?? 0;
       const oneOff    = m.one_off_donations ?? 0;
       const total     = m.total ?? 0;
-      const hasRecurring = recurring > 0;
+      const monthLabel = (m.month || '').slice(0, 7);
       return `<tr>
-        <td>${m.month || '—'}</td>
+        <td>${monthLabel}</td>
         <td class="td-mono">${fmt(recurring)}</td>
         <td class="td-mono">${fmt(oneOff)}</td>
         <td class="td-total">${fmt(total)}</td>
-        <td>${hasRecurring ? '<span class="badge badge-recurring">Recurring</span>' : '<span style="font-size:11px;color:var(--muted)">One-off</span>'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── GATEWAY TABLE ─────────────────────────────────────────
+  function populateGatewayTable(rows) {
+    const tbody = document.getElementById('gateway-tbody');
+    if (!tbody) return;
+    if (!rows || !rows.length) {
+      tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      return;
+    }
+    tbody.innerHTML = [...rows].reverse().map(m => {
+      const monthLabel = (m.month || '').slice(0, 7);
+      return `<tr>
+        <td>${monthLabel}</td>
+        <td class="td-mollie">${m.mollie_count ?? 0}</td>
+        <td class="td-gocardless">${m.gocardless_count ?? 0}</td>
+        <td class="td-paypal">${m.paypal_count ?? 0}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── RECENT DONATIONS TABLE ────────────────────────────────
+  function populateRecentTable(recents) {
+    const tbody = document.getElementById('recent-tbody');
+    if (!tbody) return;
+    if (!recents || !recents.length) {
+      tbody.innerHTML = '<tr><td colspan="5"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      return;
+    }
+    const gwColor = { mollie: 'var(--mollie)', gocardless: 'var(--gocardless)', paypal: 'var(--paypal)' };
+    tbody.innerHTML = recents.map(d => {
+      const dateStr = d.date ? new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+      const color = gwColor[d.gateway] || 'var(--text-secondary)';
+      const amtStr = (d.currency === 'GBP' ? '£' : (d.currency === 'EUR' ? '€' : '$')) +
+        Number(d.amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return `<tr>
+        <td>${dateStr}</td>
+        <td class="td-mono" style="font-weight:700;color:var(--accent)">${amtStr}</td>
+        <td style="font-size:11px;color:var(--text-tertiary)">${d.currency || '—'}</td>
+        <td style="font-weight:600;color:${color};text-transform:capitalize">${d.gateway || '—'}</td>
+        <td>${d.type === 'recurring' ? '<span class="badge badge-recurring">Recurring</span>' : '<span style="font-size:11px;color:var(--text-tertiary)">One-off</span>'}</td>
       </tr>`;
     }).join('');
   }
@@ -835,6 +745,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
   // ── SYNC BUTTON ───────────────────────────────────────────
   document.getElementById('sync-btn')?.addEventListener('click', async () => {
     const btn = document.getElementById('sync-btn');
+    if (!btn) return;
     btn.disabled = true;
     btn.innerHTML = `
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true" style="animation:spin 1s linear infinite">
@@ -850,12 +761,12 @@ const donationsJSON = JSON.stringify(donations ?? null);
         showToast('Sync complete — reloading…', 'success');
         setTimeout(() => location.reload(), 1200);
       } else {
-        showToast(`Sync failed (${res.status})`, 'error');
+        showToast('Sync failed (' + res.status + ')', 'error');
         btn.disabled = false;
         btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sync Now`;
       }
     } catch (e) {
-      showToast(`Error: ${e.message}`, 'error');
+      showToast('Error: ' + e.message, 'error');
       btn.disabled = false;
       btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sync Now`;
     }
@@ -867,39 +778,23 @@ const donationsJSON = JSON.stringify(donations ?? null);
     location.href = '/admin';
   });
 
-  // ── MOBILE SIDEBAR ────────────────────────────────────────
-  const hamburger = document.getElementById('hamburger');
-  const sidebar   = document.getElementById('sidebar');
-  const overlay   = document.getElementById('sidebar-overlay');
-
-  function openSidebar() {
-    sidebar?.classList.add('open');
-    overlay?.classList.add('open');
-    hamburger?.classList.add('open');
-    hamburger?.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeSidebar() {
-    sidebar?.classList.remove('open');
-    overlay?.classList.remove('open');
-    hamburger?.classList.remove('open');
-    hamburger?.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  hamburger?.addEventListener('click', () => {
-    sidebar?.classList.contains('open') ? closeSidebar() : openSidebar();
-  });
-  overlay?.addEventListener('click', closeSidebar);
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
-
   // ── INITIALISE ────────────────────────────────────────────
   populateStats(donations);
   if (donations?.monthlyTotals?.length) {
-    drawChart(donations.monthlyTotals);
-    populateTable(donations.monthlyTotals);
+    drawMultiChart(donations.monthlyTotals);
+    populateMonthlyTable(donations.monthlyTotals);
+    populateGatewayTable(donations.monthlyTotals);
   } else {
-    populateTable(null);
+    populateMonthlyTable(null);
+    populateGatewayTable(null);
+  }
+  if (donations?.byGateway) {
+    drawGatewayBars(donations.byGateway);
+  }
+  if (donations?.recentDonations?.length) {
+    populateRecentTable(donations.recentDonations);
+  } else {
+    populateRecentTable(null);
   }
 </script>
 </body>

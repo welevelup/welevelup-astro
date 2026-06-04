@@ -9,9 +9,9 @@ function getRedis(): Redis {
   let url = process.env.UPSTASH_REDIS_REST_URL || '';
   let token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
 
-  // Strip embedded quotes from env vars
-  url = url.replace(/^["']|["']$/g, '');
-  token = token.replace(/^["']|["']$/g, '');
+  // Strip quotes, escaped quotes, and whitespace
+  url = url.replace(/^["\\']+|["\\']+$/g, '').trim();
+  token = token.replace(/^["\\']+|["\\']+$/g, '').trim();
 
   if (!url || !token) throw new Error('Redis not configured');
   return new Redis({ url, token });

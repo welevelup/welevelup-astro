@@ -7,14 +7,24 @@ const KEYS = {
   lastSync: 'admin:lastSync',
 };
 
+function cleanEnvVar(value: string): string {
+  if (!value) return '';
+  let cleaned = value.trim();
+  // Try JSON.parse if it looks like JSON
+  if (cleaned.startsWith('"') || cleaned.startsWith("'")) {
+    try {
+      cleaned = JSON.parse(cleaned);
+    } catch {
+      // If JSON parse fails, just strip quotes manually
+      cleaned = cleaned.replace(/^["'\\]+|["'\\]+$/g, '').trim();
+    }
+  }
+  return cleaned;
+}
+
 function getRedis(): Redis {
-  let url = process.env.UPSTASH_REDIS_REST_URL || '';
-  let token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
-
-  // Strip quotes, escaped quotes, and whitespace
-  url = url.replace(/^["\\']+|["\\']+$/g, '').trim();
-  token = token.replace(/^["\\']+|["\\']+$/g, '').trim();
-
+  const url = cleanEnvVar(process.env.UPSTASH_REDIS_REST_URL || '');
+  const token = cleanEnvVar(process.env.UPSTASH_REDIS_REST_TOKEN || '');
   if (!url || !token) throw new Error('Redis not configured');
   return new Redis({ url, token });
 }

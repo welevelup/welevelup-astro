@@ -23,8 +23,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard — Level Up Admin</title>
   <meta name="robots" content="noindex, nofollow" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
     :root {
       --bg-primary: #0C0A3E;
@@ -32,11 +30,8 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       --text-primary: #EEEBD3;
       --text-secondary: #999999;
       --text-tertiary: rgba(238,235,211,0.4);
-      --text-muted: rgba(238,235,211,0.3);
       --accent: #CCFF33;
       --border: rgba(255,255,255,0.06);
-      --border-light: rgba(255,255,255,0.04);
-      --hover: rgba(255,255,255,0.02);
     }
     :root.light-mode {
       --bg-primary: #FFFFFF;
@@ -44,13 +39,10 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       --text-primary: #1A1A1A;
       --text-secondary: #666666;
       --text-tertiary: #888888;
-      --text-muted: #AAAAAA;
       --accent: #8B7EBD;
       --border: rgba(0,0,0,0.1);
-      --border-light: rgba(0,0,0,0.05);
-      --hover: rgba(0,0,0,0.04);
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'DM Sans', system-ui, sans-serif;
       background: var(--bg-primary);
@@ -66,7 +58,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       justify-content: space-between;
       height: 56px;
     }
-    .nav-brand { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+    .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
     .nav-right { display: flex; align-items: center; gap: 20px; }
     .sync-btn {
       background: var(--accent);
@@ -76,13 +68,25 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       padding: 8px 16px;
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: 0.05em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: opacity 0.15s;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .sync-btn:hover { opacity: 0.85; }
     .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(12,10,62,0.3);
+      border-top-color: #0C0A3E;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .logout-btn {
       background: none;
       border: 1px solid var(--text-secondary);
@@ -91,10 +95,7 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       padding: 8px 16px;
       font-size: 12px;
       cursor: pointer;
-      transition: all 0.15s;
     }
-    .logout-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
-    .last-sync { font-size: 11px; color: var(--text-tertiary); }
     main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
     h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
     .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
@@ -110,61 +111,28 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       border-radius: 10px;
       padding: 24px;
     }
-    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
+    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
     .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
     .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
     .section { margin-bottom: 40px; }
-    .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
-    .chart-wrap {
+    .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
+    .chart-container {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
-      position: relative;
-      height: 350px;
     }
-    .table-wrap {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    table { width: 100%; border-collapse: collapse; }
-    th {
-      text-align: left;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text-tertiary);
-      padding: 12px 20px;
-      border-bottom: 1px solid var(--border);
-    }
-    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid var(--border-light); color: var(--text-primary); }
+    .bar-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .bar-label { font-size: 12px; width: 70px; flex-shrink: 0; color: var(--text-secondary); }
+    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+    .bar-value { font-size: 12px; width: 80px; text-align: right; flex-shrink: 0; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); }
+    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-primary); }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: var(--hover); }
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-    .badge-recurring { background: rgba(204,255,51,0.1); color: #CCFF33; }
-    .badge-oneoff { background: var(--border); color: var(--text-secondary); }
-    .empty { padding: 48px; text-align: center; color: var(--text-muted); font-size: 14px; }
-    #sync-status { font-size: 12px; color: var(--accent); display: none; }
+    .last-sync { font-size: 11px; color: var(--text-tertiary); }
     #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
-    .spinner {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      border: 2px solid rgba(204,255,51,0.2);
-      border-top-color: #CCFF33;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -172,7 +140,9 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     <div class="nav-brand">Level Up · Admin</div>
     <div class="nav-right">
       <span class="last-sync">Last sync: {fmtDate(lastSync)}</span>
-      <button class="sync-btn" id="sync-btn">Sync Now</button>
+      <button class="sync-btn" id="sync-btn">
+        <span>Sync Now</span>
+      </button>
       <button id="theme-btn">🌙</button>
       <button class="logout-btn" id="logout-btn">Sign out</button>
     </div>
@@ -182,7 +152,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     <h1>Dashboard</h1>
     <p class="subtitle">Donations and performance overview for welevelup.org</p>
 
-    <!-- Stats -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">This Month</div>
@@ -204,231 +173,141 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         <div class="stat-value">{donations?.newThisMonth ?? '—'}</div>
         <div class="stat-sub">New recurring donors</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Cancelled</div>
-        <div class="stat-value">{donations?.cancelledThisMonth ?? '—'}</div>
-        <div class="stat-sub">Cancellations this month</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Monthly Donations (Last 12 Months)</div>
+      <div class="chart-container">
+        {donations?.monthlyTotals?.length ? (
+          <div>
+            {donations.monthlyTotals.map((m: any) => {
+              const max = Math.max(...donations.monthlyTotals.map((mt: any) => mt.total));
+              const pct = max > 0 ? (m.total / max * 100) : 0;
+              return (
+                <div class="bar-row">
+                  <div class="bar-label">{m.month}</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style={`width: ${pct}%`}></div>
+                  </div>
+                  <div class="bar-value">{fmt(m.total)}</div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div style="text-align: center; padding: 40px; color: var(--text-tertiary);">No data yet — click "Sync Now" to fetch donations.</div>
+        )}
       </div>
     </div>
 
-    <!-- Monthly chart -->
-    <div class="section">
-      <div class="section-title">Monthly Donations (Last 12 Months)</div>
-      {donations?.monthlyTotals?.length ? (
-        <div class="chart-wrap">
-          <canvas id="monthlyChart"></canvas>
-        </div>
-      ) : (
-        <div class="table-wrap"><div class="empty">No data yet — click "Sync Now" to fetch donations.</div></div>
-      )}
-    </div>
-
-    <!-- Gateway Breakdown -->
-    <div class="section">
-      <div class="section-title">Subscriptions by Gateway (Total)</div>
-      {donations?.monthlyTotals?.length ? (
-        <div class="chart-wrap">
-          <canvas id="gatewayChart"></canvas>
-        </div>
-      ) : (
-        <div class="table-wrap"><div class="empty">No data yet.</div></div>
-      )}
-    </div>
-
-    <!-- Monthly Donation Totals -->
     <div class="section">
       <div class="section-title">Monthly Donation Totals</div>
       {donations?.monthlyTotals?.length ? (
-        <div class="table-wrap">
-          <table>
-            <thead>
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Active</th>
+              <th>Monthly</th>
+              <th>One-Off</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {donations.monthlyTotals.map((m: any) => (
               <tr>
-                <th>Month</th>
-                <th>Active Subscribers</th>
-                <th>Monthly Donations</th>
-                <th>One-Off Donations</th>
-                <th>Total Donations</th>
+                <td>{m.month}</td>
+                <td>{m.active_subscribers || 0}</td>
+                <td>{fmt(m.monthly_donations || 0)}</td>
+                <td>{fmt(m.one_off_donations || 0)}</td>
+                <td><strong>{fmt(m.total)}</strong></td>
               </tr>
-            </thead>
-            <tbody>
-              {donations.monthlyTotals.map((m: any) => (
-                <tr>
-                  <td>{m.month}</td>
-                  <td>{m.active_subscribers || 0}</td>
-                  <td>{fmt(m.monthly_donations || 0)}</td>
-                  <td>{fmt(m.one_off_donations || 0)}</td>
-                  <td><strong>{fmt(m.total)}</strong></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       ) : (
-        <div class="table-wrap"><div class="empty">No analytics data yet.</div></div>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-tertiary);">No data yet.</div>
       )}
     </div>
 
-    <!-- Monthly Subscription Breakdown by Gateway -->
     <div class="section">
       <div class="section-title">Monthly Subscription Breakdown</div>
       {donations?.monthlyTotals?.length ? (
-        <div class="table-wrap">
-          <table>
-            <thead>
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Mollie</th>
+              <th>GoCardless</th>
+              <th>PayPal</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {donations.monthlyTotals.map((m: any) => (
               <tr>
-                <th>Month</th>
-                <th>Mollie</th>
-                <th>GoCardless</th>
-                <th>PayPal</th>
-                <th>Total</th>
+                <td>{m.month}</td>
+                <td>{m.mollie_count || 0}</td>
+                <td>{m.gocardless_count || 0}</td>
+                <td>{m.paypal_count || 0}</td>
+                <td><strong>{(m.mollie_count || 0) + (m.gocardless_count || 0) + (m.paypal_count || 0)}</strong></td>
               </tr>
-            </thead>
-            <tbody>
-              {donations.monthlyTotals.map((m: any) => (
-                <tr>
-                  <td>{m.month}</td>
-                  <td>{m.mollie_count || 0}</td>
-                  <td>{m.gocardless_count || 0}</td>
-                  <td>{m.paypal_count || 0}</td>
-                  <td><strong>{(m.mollie_count || 0) + (m.gocardless_count || 0) + (m.paypal_count || 0)}</strong></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       ) : (
-        <div class="table-wrap"><div class="empty">No analytics data yet.</div></div>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 40px; text-align: center; color: var(--text-tertiary);">No data yet.</div>
       )}
     </div>
   </main>
 
-  <script type="application/json" id="donations-data">{JSON.stringify({donations: donations || null})}</script>
-
   <script>
-    // Theme toggle
-    const themeBtn = document.getElementById('theme-btn');
-    const htmlElement = document.documentElement;
-    const savedTheme = localStorage.getItem('admin-theme') || 'dark';
+    const html = document.documentElement;
+    const theme = localStorage.getItem('admin-theme') || 'dark';
+    if (theme === 'light') html.classList.add('light-mode');
 
-    if (savedTheme === 'light') {
-      htmlElement.classList.add('light-mode');
-      themeBtn.textContent = '☀️';
-    }
-
-    themeBtn?.addEventListener('click', () => {
-      if (htmlElement.classList.contains('light-mode')) {
-        htmlElement.classList.remove('light-mode');
-        localStorage.setItem('admin-theme', 'dark');
-        themeBtn.textContent = '🌙';
-      } else {
-        htmlElement.classList.add('light-mode');
+    document.getElementById('theme-btn')?.addEventListener('click', () => {
+      if (html.classList.toggle('light-mode')) {
         localStorage.setItem('admin-theme', 'light');
-        themeBtn.textContent = '☀️';
+        document.getElementById('theme-btn').textContent = '☀️';
+      } else {
+        localStorage.setItem('admin-theme', 'dark');
+        document.getElementById('theme-btn').textContent = '🌙';
       }
     });
-
-    // Initialize charts with proper data
-    function initCharts() {
-      const dataEl = document.getElementById('donations-data');
-      const donationsData = JSON.parse(dataEl.textContent);
-      const isDark = !htmlElement.classList.contains('light-mode');
-      const textColor = isDark ? '#EEEBD3' : '#1A1A1A';
-      const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
-      const accentColor = isDark ? '#CCFF33' : '#8B7EBD';
-
-      // Monthly line chart
-      const monthlyCtx = document.getElementById('monthlyChart');
-      if (monthlyCtx && window.Chart) {
-        const months = donationsData.donations?.monthlyTotals?.map((m) => m.month) || [];
-        const totals = donationsData.donations?.monthlyTotals?.map((m) => m.total) || [];
-
-        new Chart(monthlyCtx, {
-          type: 'line',
-          data: {
-            labels: months.length ? months : ['No data'],
-            datasets: [{
-              label: 'Monthly Donations',
-              data: totals.length ? totals : [0],
-              borderColor: accentColor,
-              backgroundColor: accentColor + '20',
-              borderWidth: 2,
-              fill: true,
-              tension: 0.4,
-              pointRadius: 4,
-              pointBackgroundColor: accentColor,
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: textColor } } },
-            scales: {
-              y: { ticks: { color: textColor }, grid: { color: gridColor } },
-              x: { ticks: { color: textColor }, grid: { color: gridColor } },
-            },
-          },
-        });
-      }
-
-      // Gateway doughnut chart
-      const gatewayCtx = document.getElementById('gatewayChart');
-      if (gatewayCtx && window.Chart) {
-        const mollieTotal = donationsData.donations?.monthlyTotals?.reduce((s, m) => s + (m.mollie_count || 0), 0) || 0;
-        const gocardlessTotal = donationsData.donations?.monthlyTotals?.reduce((s, m) => s + (m.gocardless_count || 0), 0) || 0;
-        const paypalTotal = donationsData.donations?.monthlyTotals?.reduce((s, m) => s + (m.paypal_count || 0), 0) || 0;
-        const total = mollieTotal + gocardlessTotal + paypalTotal;
-
-        new Chart(gatewayCtx, {
-          type: 'doughnut',
-          data: {
-            labels: ['Mollie', 'GoCardless', 'PayPal'],
-            datasets: [{
-              data: total ? [mollieTotal, gocardlessTotal, paypalTotal] : [1, 1, 1],
-              backgroundColor: ['#8B7EBD', '#6B63B5', '#5B53A0'],
-            }],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: textColor } } },
-          },
-        });
-      }
-    }
-
-    // Wait for Chart.js to load
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initCharts);
-    } else {
-      initCharts();
-    }
 
     document.getElementById('sync-btn')?.addEventListener('click', async () => {
       const btn = document.getElementById('sync-btn');
       btn.disabled = true;
-      btn.innerHTML = 'Syncing... ⏳';
+
+      const spinner = document.createElement('div');
+      spinner.className = 'spinner';
+      btn.innerHTML = '';
+      btn.appendChild(spinner);
+      const text = document.createElement('span');
+      text.textContent = 'Syncing...';
+      btn.appendChild(text);
 
       try {
         const res = await fetch('/api/admin-sync', { method: 'POST' });
         if (res.ok) {
-          btn.innerHTML = 'Done! Reloading...';
-          setTimeout(() => window.location.reload(), 500);
+          text.textContent = 'Done! Reloading...';
+          setTimeout(() => location.reload(), 800);
         } else {
-          const data = await res.json();
-          alert('Sync failed: ' + (data.error || res.status));
-          btn.textContent = 'Sync Now';
+          alert('Sync failed');
+          btn.innerHTML = 'Sync Now';
           btn.disabled = false;
         }
-      } catch (err) {
-        alert('Sync error: ' + err.message);
-        btn.textContent = 'Sync Now';
+      } catch (e) {
+        alert('Error: ' + e.message);
+        btn.innerHTML = 'Sync Now';
         btn.disabled = false;
       }
     });
 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
       await fetch('/api/admin-auth', { method: 'DELETE' });
-      window.location.href = '/admin';
+      location.href = '/admin';
     });
   </script>
 </body>

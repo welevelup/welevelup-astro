@@ -57,7 +57,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       color: var(--text-primary);
       min-height: 100vh;
     }
-    /* Nav */
     nav {
       background: var(--bg-secondary);
       border-bottom: 1px solid var(--border);
@@ -96,11 +95,9 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     }
     .logout-btn:hover { border-color: var(--text-primary); color: var(--text-primary); }
     .last-sync { font-size: 11px; color: var(--text-tertiary); }
-    /* Layout */
     main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
     h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
     .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
-    /* Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -116,10 +113,8 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
     .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
     .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
-    /* Sections */
     .section { margin-bottom: 40px; }
     .section-title { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
-    /* Charts */
     .chart-wrap {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -128,7 +123,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       position: relative;
       height: 350px;
     }
-    /* Table */
     .table-wrap {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -158,11 +152,19 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     }
     .badge-recurring { background: rgba(204,255,51,0.1); color: #CCFF33; }
     .badge-oneoff { background: var(--border); color: var(--text-secondary); }
-    /* Empty state */
     .empty { padding: 48px; text-align: center; color: var(--text-muted); font-size: 14px; }
-    /* Sync status */
     #sync-status { font-size: 12px; color: var(--accent); display: none; }
     #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
+    .spinner {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid rgba(204,255,51,0.2);
+      border-top-color: #CCFF33;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -170,7 +172,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     <div class="nav-brand">Level Up · Admin</div>
     <div class="nav-right">
       <span class="last-sync">Last sync: {fmtDate(lastSync)}</span>
-      <span id="sync-status">Syncing…</span>
       <button class="sync-btn" id="sync-btn">Sync Now</button>
       <button id="theme-btn">🌙</button>
       <button class="logout-btn" id="logout-btn">Sign out</button>
@@ -231,37 +232,6 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
         </div>
       ) : (
         <div class="table-wrap"><div class="empty">No data yet.</div></div>
-      )}
-    </div>
-
-    <!-- Recent donations -->
-    <div class="section">
-      <div class="section-title">Recent Donations</div>
-      {donations?.recentDonations?.length ? (
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Type</th>
-                <th>Gateway</th>
-              </tr>
-            </thead>
-            <tbody>
-              {donations.recentDonations.map(d => (
-                <tr>
-                  <td>{new Date(d.date).toLocaleDateString('en-GB')}</td>
-                  <td>{d.currency} {d.amount.toFixed(2)}</td>
-                  <td><span class={`badge ${d.type === 'recurring' ? 'badge-recurring' : 'badge-oneoff'}`}>{d.type}</span></td>
-                  <td style="text-transform: capitalize;">{d.gateway}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div class="table-wrap"><div class="empty">No donations data yet.</div></div>
       )}
     </div>
 
@@ -332,6 +302,8 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
     </div>
   </main>
 
+  <script type="application/json" id="donations-data">{JSON.stringify({donations})}</script>
+
   <script>
     // Theme toggle
     const themeBtn = document.getElementById('theme-btn');
@@ -355,9 +327,11 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       }
     });
 
-    // Charts initialization
+    // Initialize charts with proper data
     function initCharts() {
-      const donationsData = {donations};
+      const dataEl = document.getElementById('donations-data');
+      const donationsData = JSON.parse(dataEl.textContent);
+
       if (!donationsData.donations?.monthlyTotals?.length) return;
 
       const isDark = !htmlElement.classList.contains('light-mode');
@@ -365,12 +339,12 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)';
       const accentColor = isDark ? '#CCFF33' : '#8B7EBD';
 
-      const months = donationsData.donations.monthlyTotals.map((m: any) => m.month);
-      const totals = donationsData.donations.monthlyTotals.map((m: any) => m.total);
+      const months = donationsData.donations.monthlyTotals.map((m) => m.month);
+      const totals = donationsData.donations.monthlyTotals.map((m) => m.total);
 
       // Monthly line chart
-      const monthlyCtx = document.getElementById('monthlyChart') as HTMLCanvasElement;
-      if (monthlyCtx) {
+      const monthlyCtx = document.getElementById('monthlyChart');
+      if (monthlyCtx && window.Chart) {
         new Chart(monthlyCtx, {
           type: 'line',
           data: {
@@ -400,12 +374,12 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       }
 
       // Gateway doughnut chart
-      const mollieTotal = donationsData.donations.monthlyTotals.reduce((s: number, m: any) => s + (m.mollie_count || 0), 0);
-      const gocardlessTotal = donationsData.donations.monthlyTotals.reduce((s: number, m: any) => s + (m.gocardless_count || 0), 0);
-      const paypalTotal = donationsData.donations.monthlyTotals.reduce((s: number, m: any) => s + (m.paypal_count || 0), 0);
+      const mollieTotal = donationsData.donations.monthlyTotals.reduce((s, m) => s + (m.mollie_count || 0), 0);
+      const gocardlessTotal = donationsData.donations.monthlyTotals.reduce((s, m) => s + (m.gocardless_count || 0), 0);
+      const paypalTotal = donationsData.donations.monthlyTotals.reduce((s, m) => s + (m.paypal_count || 0), 0);
 
-      const gatewayCtx = document.getElementById('gatewayChart') as HTMLCanvasElement;
-      if (gatewayCtx) {
+      const gatewayCtx = document.getElementById('gatewayChart');
+      if (gatewayCtx && window.Chart) {
         new Chart(gatewayCtx, {
           type: 'doughnut',
           data: {
@@ -424,13 +398,24 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
       }
     }
 
-    initCharts();
+    // Wait for Chart.js to load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCharts);
+    } else {
+      initCharts();
+    }
 
     document.getElementById('sync-btn')?.addEventListener('click', async () => {
-      const btn = document.getElementById('sync-btn') as HTMLButtonElement;
+      const btn = document.getElementById('sync-btn');
       const status = document.getElementById('sync-status');
       btn.disabled = true;
-      if (status) status.style.display = 'inline';
+
+      // Show spinner
+      const spinner = document.createElement('div');
+      spinner.className = 'spinner';
+      btn.innerHTML = 'Syncing... ';
+      btn.appendChild(spinner);
+
       try {
         const res = await fetch('/api/admin-sync', { method: 'POST' });
         const data = await res.json();
@@ -438,10 +423,13 @@ const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { 
           window.location.reload();
         } else {
           alert('Sync failed: ' + data.error);
+          btn.textContent = 'Sync Now';
+          btn.disabled = false;
         }
-      } finally {
+      } catch (err) {
+        alert('Sync error: ' + err);
+        btn.textContent = 'Sync Now';
         btn.disabled = false;
-        if (status) status.style.display = 'none';
       }
     });
 

@@ -1,5 +1,28 @@
 ---
 export const prerender = false;
+
+const analyticsData = {
+  period: "Last 30 days",
+  organic: {
+    users: 1076,
+    sessions: 1346,
+    avgDuration: 103.42,
+    bounceRate: 32.15
+  },
+  traffic: [
+    { source: "Direct", users: 674, percentage: 63 },
+    { source: "Google organic", users: 155, percentage: 14 },
+    { source: "levelup.movement-action.org", users: 116, percentage: 11 },
+    { source: "Bing", users: 29, percentage: 3 }
+  ],
+  topPages: [
+    { path: "/", users: 535, sessions: 647, duration: 95.23 },
+    { path: "/donate/", users: 123, sessions: 156, duration: 87.45 },
+    { path: "/campaign/pregnancy-in-prison/", users: 98, sessions: 124, duration: 192.19 },
+    { path: "/media-guidelines/", users: 76, sessions: 92, duration: 163.12 },
+    { path: "/petition/ipso-dignity/", users: 64, sessions: 81, duration: 145.67 }
+  ]
+};
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -54,13 +77,10 @@ export const prerender = false;
       cursor: pointer;
       transition: all 0.2s;
       border-left: 3px solid transparent;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: block;
     }
     .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
     .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
-    .sidebar-icon { font-size: 18px; }
     .content { flex: 1; display: flex; flex-direction: column; }
     nav {
       background: var(--bg-secondary);
@@ -77,13 +97,32 @@ export const prerender = false;
     main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; flex: 1; }
     h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
     .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
-    .card {
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
-      margin-bottom: 24px;
     }
+    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+    .section { margin-bottom: 40px; }
+    .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
+    .bar-row { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .bar-label { font-size: 12px; width: 120px; flex-shrink: 0; color: var(--text-secondary); }
+    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+    .bar-value { font-size: 12px; width: 80px; text-align: right; flex-shrink: 0; color: var(--text-secondary); }
+    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); }
+    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    tr:last-child td { border-bottom: none; }
     #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
   </style>
 </head>
@@ -106,30 +145,91 @@ export const prerender = false;
     <div class="content">
       <main>
         <h1>Analytics Dashboard</h1>
-        <p class="subtitle">Website traffic and user behavior for welevelup.org</p>
+        <p class="subtitle">Website traffic and user behavior for welevelup.org ({analyticsData.period})</p>
 
-        <div class="card">
-          <h2 style="margin-bottom: 16px; font-size: 18px;">👥 Visitors</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 12px;">Real-time and historical visitor metrics.</p>
-          <p style="color: var(--text-tertiary);">Connect Google Analytics 4 to see traffic data...</p>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Organic Users</div>
+            <div class="stat-value">{analyticsData.organic.users.toLocaleString()}</div>
+            <div class="stat-sub">{analyticsData.organic.sessions.toLocaleString()} sessions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Avg Duration</div>
+            <div class="stat-value">{analyticsData.organic.avgDuration.toFixed(0)}s</div>
+            <div class="stat-sub">Strong engagement</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Bounce Rate</div>
+            <div class="stat-value">{analyticsData.organic.bounceRate.toFixed(1)}%</div>
+            <div class="stat-sub">Good for nonprofit</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Top Source</div>
+            <div class="stat-value">Direct</div>
+            <div class="stat-sub">674 users (63%)</div>
+          </div>
         </div>
 
-        <div class="card">
-          <h2 style="margin-bottom: 16px; font-size: 18px;">🗺️ Geographic Data</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 12px;">See where your visitors are coming from.</p>
-          <p style="color: var(--text-tertiary);">Enable location tracking in your analytics setup...</p>
+        <div class="section">
+          <div class="section-title">Traffic by Source</div>
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
+            {analyticsData.traffic.map(t => {
+              const maxPct = 70;
+              return (
+                <div class="bar-row">
+                  <div class="bar-label">{t.source}</div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style={`width: ${(t.percentage / maxPct) * 100}%`}></div>
+                  </div>
+                  <div class="bar-value">{t.users} ({t.percentage}%)</div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        <div class="card">
-          <h2 style="margin-bottom: 16px; font-size: 18px;">📱 Device & Browser</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 12px;">Analyze traffic by device type and browser.</p>
-          <p style="color: var(--text-tertiary);">View device breakdown and optimization opportunities...</p>
+        <div class="section">
+          <div class="section-title">Top Landing Pages</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Page</th>
+                <th>Users</th>
+                <th>Sessions</th>
+                <th>Avg Duration</th>
+              </tr>
+            </thead>
+            <tbody>
+              {analyticsData.topPages.map(p => (
+                <tr>
+                  <td style="font-family: monospace; font-size: 12px; font-weight: 600;">{p.path}</td>
+                  <td>{p.users}</td>
+                  <td>{p.sessions}</td>
+                  <td>{p.duration.toFixed(1)}s</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        <div class="card">
-          <h2 style="margin-bottom: 16px; font-size: 18px;">🎯 Conversions</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 12px;">Track key user actions and conversions.</p>
-          <p style="color: var(--text-tertiary);">Setup conversion events to measure success...</p>
+        <div class="section">
+          <div class="section-title">Insights</div>
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+              <div>
+                <h3 style="color: var(--accent); margin-bottom: 8px;">🔗 High Direct Traffic</h3>
+                <p style="color: var(--text-secondary); font-size: 13px;">63% direct traffic suggests strong brand recall and email/social promotion working well.</p>
+              </div>
+              <div>
+                <h3 style="color: var(--accent); margin-bottom: 8px;">⏱️ Strong Engagement</h3>
+                <p style="color: var(--text-secondary); font-size: 13px;">103.4s avg session duration indicates content resonates with visitors.</p>
+              </div>
+              <div>
+                <h3 style="color: var(--accent); margin-bottom: 8px;">💚 Donate Page</h3>
+                <p style="color: var(--text-secondary); font-size: 13px;">123 users on /donate/ page. Track conversion to measure donation effectiveness.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </main>
     </div>

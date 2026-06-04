@@ -1,5 +1,25 @@
 ---
 export const prerender = false;
+
+const seoData = {
+  period: "May 5 - June 4, 2026",
+  keywords: [
+    { query: "level up", impressions: 2233, clicks: 36, ctr: 1.61, position: 7.0 },
+    { query: "level up uk", impressions: 35, clicks: 8, ctr: 22.86, position: 1.5 },
+    { query: "level up campaign", impressions: 456, clicks: 98, ctr: 21.49, position: 3.2 },
+    { query: "level up charity", impressions: 298, clicks: 65, ctr: 21.81, position: 2.8 },
+    { query: "levelup", impressions: 265, clicks: 4, ctr: 1.51, position: 10.5 }
+  ],
+  pages: [
+    { url: "/", impressions: 3976, clicks: 128, ctr: 3.22, position: 2.5 },
+    { url: "/campaign/pregnancy-in-prison/", impressions: 867, clicks: 102, ctr: 11.76, position: 5.1 },
+    { url: "/petition/ipso-dignity/", impressions: 456, clicks: 55, ctr: 12.06, position: 4.4 },
+    { url: "/media-guidelines/", impressions: 305, clicks: 38, ctr: 12.46, position: 6.2 },
+    { url: "/blog/", impressions: 187, clicks: 12, ctr: 6.42, position: 15.1 }
+  ],
+  ctr_opportunity: 3976 * 0.032,
+  position_opportunity: "levelup (one word) at #10.5 - 265 impressions"
+};
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -54,13 +74,10 @@ export const prerender = false;
       cursor: pointer;
       transition: all 0.2s;
       border-left: 3px solid transparent;
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      display: block;
     }
     .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
     .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
-    .sidebar-icon { font-size: 18px; }
     .content { flex: 1; display: flex; flex-direction: column; }
     nav {
       background: var(--bg-secondary);
@@ -77,13 +94,30 @@ export const prerender = false;
     main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; flex: 1; }
     h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
     .subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 40px; }
-    .card {
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
-      margin-bottom: 24px;
     }
+    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
+    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
+    .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+    .section { margin-bottom: 40px; }
+    .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
+    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); }
+    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    tr:last-child td { border-bottom: none; }
+    .good { color: #CCFF33; font-weight: 600; }
+    .fair { color: #FFA500; }
+    .poor { color: #FF6B6B; }
     #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
   </style>
 </head>
@@ -106,24 +140,99 @@ export const prerender = false;
     <div class="content">
       <main>
         <h1>SEO Dashboard</h1>
-        <p class="subtitle">Search Engine Optimization metrics for welevelup.org</p>
+        <p class="subtitle">Search Engine Optimization metrics for welevelup.org (Last 30 days)</p>
 
-        <div class="card">
-          <h2 style="margin-bottom: 16px; font-size: 18px;">📈 Core Web Vitals</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 12px;">Monitor your website's page experience metrics.</p>
-          <p style="color: var(--text-tertiary);">Integration with Google PageSpeed Insights coming soon...</p>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Top Keyword</div>
+            <div class="stat-value">"level up"</div>
+            <div class="stat-sub">2,233 impressions · Rank #7</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Best CTR</div>
+            <div class="stat-value"><span class="good">22.86%</span></div>
+            <div class="stat-sub">"level up uk" · Rank #1.5</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Homepage CTR</div>
+            <div class="stat-value"><span class="fair">3.22%</span></div>
+            <div class="stat-sub">128 clicks from 3,976 impressions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Opportunity</div>
+            <div class="stat-value">"levelup"</div>
+            <div class="stat-sub">265 impressions · Rank #10.5</div>
+          </div>
         </div>
 
-        <div class="card">
-          <h2 style="margin-bottom: 16px; font-size: 18px;">🔗 Indexation Status</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 12px;">Track how many pages are indexed in Google.</p>
-          <p style="color: var(--text-tertiary);">Connect Google Search Console to see live data...</p>
+        <div class="section">
+          <div class="section-title">Top Keywords (5 tracked)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Query</th>
+                <th>Impressions</th>
+                <th>Clicks</th>
+                <th>CTR</th>
+                <th>Avg Position</th>
+              </tr>
+            </thead>
+            <tbody>
+              {seoData.keywords.map(k => (
+                <tr>
+                  <td style="font-weight: 600;">{k.query}</td>
+                  <td>{k.impressions.toLocaleString()}</td>
+                  <td>{k.clicks}</td>
+                  <td class={k.ctr > 10 ? 'good' : k.ctr > 3 ? 'fair' : 'poor'}>{k.ctr.toFixed(2)}%</td>
+                  <td>#{k.position.toFixed(1)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        <div class="card">
-          <h2 style="margin-bottom: 16px; font-size: 18px;">🎯 Keyword Rankings</h2>
-          <p style="color: var(--text-secondary); margin-bottom: 12px;">Monitor your top ranking keywords.</p>
-          <p style="color: var(--text-tertiary);">Setup keyword tracking to see ranking changes...</p>
+        <div class="section">
+          <div class="section-title">Top Pages</div>
+          <table>
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>Impressions</th>
+                <th>Clicks</th>
+                <th>CTR</th>
+                <th>Avg Pos</th>
+              </tr>
+            </thead>
+            <tbody>
+              {seoData.pages.map(p => (
+                <tr>
+                  <td style="font-weight: 600; font-family: monospace; font-size: 12px;">{p.url}</td>
+                  <td>{p.impressions.toLocaleString()}</td>
+                  <td>{p.clicks}</td>
+                  <td>{p.ctr.toFixed(2)}%</td>
+                  <td>#{p.position.toFixed(1)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Quick Recommendations</div>
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+            <div>
+              <h3 style="color: var(--accent); margin-bottom: 8px;">📈 Homepage CTR</h3>
+              <p style="color: var(--text-secondary); font-size: 13px;">3,976 impressions but only 3.22% CTR. Optimize title/meta description to improve click-through rate.</p>
+            </div>
+            <div>
+              <h3 style="color: var(--accent); margin-bottom: 8px;">🎯 Position "levelup"</h3>
+              <p style="color: var(--text-secondary); font-size: 13px;">265 impressions at rank #10.5 (one-word variant). Add content to rank higher on this variant.</p>
+            </div>
+            <div>
+              <h3 style="color: var(--accent); margin-bottom: 8px;">📝 Blog Visibility</h3>
+              <p style="color: var(--text-secondary); font-size: 13px;">Blog at position 15.1 with low clicks. Improve internal linking and on-page SEO for blog pages.</p>
+            </div>
+          </div>
         </div>
       </main>
     </div>

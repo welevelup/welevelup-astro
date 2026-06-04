@@ -300,12 +300,12 @@ export const POST: APIRoute = async ({ request }) => {
           if (d.type === 'recurring') {
             existing.monthly_donations += d.amount;
             existing.active_subscribers.add(d.payer?.email || d.id);
+            if (d.gateway === 'mollie') existing.mollie_count++;
+            else if (d.gateway === 'gocardless') existing.gocardless_count++;
+            else if (d.gateway === 'paypal') existing.paypal_count++;
           } else {
             existing.one_off_donations += d.amount;
           }
-          if (d.gateway === 'mollie') existing.mollie_count++;
-          else if (d.gateway === 'gocardless') existing.gocardless_count++;
-          else if (d.gateway === 'paypal') existing.paypal_count++;
           m.set(month, existing);
           return m;
         }, new Map()).entries()

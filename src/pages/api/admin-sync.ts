@@ -5,22 +5,16 @@ export const prerender = false;
 
 function cleanEnvVar(value: string): string {
   if (!value) return '';
-
-  // Remove all quotes and backslashes from start/end
   let cleaned = value
-    .replace(/^["\\'\\n\\r]+/, '')  // Strip from start
-    .replace(/["\\'\\n\\r]+$/, '')  // Strip from end
+    .replace(/^["\\'\\n\\r]+/, '')
+    .replace(/["\\'\\n\\r]+$/, '')
     .trim();
-
-  // If contains UPSTASH_ key name, it's a multi-var issue - extract just our part
   if (cleaned.includes('UPSTASH_')) {
     const urlMatch = cleaned.match(/https:\/\/[a-z0-9-]+\.upstash\.io/);
     if (urlMatch) return urlMatch[0];
-
     const tokenMatch = cleaned.match(/[a-zA-Z0-9]+$/);
     if (tokenMatch) return tokenMatch[0];
   }
-
   return cleaned;
 }
 
@@ -69,7 +63,7 @@ async function fetchJson(url: string, options: { method?: string; headers?: Reco
 async function fetchMolliePayments(year: number): Promise<Donation[]> {
   const apiKey = process.env.MOLLIE_API_KEY;
   if (!apiKey) {
-    console.log('MOLLIE_API_KEY not configured, skipping');
+    console.log('[Mollie] API key not configured');
     return [];
   }
 
@@ -108,7 +102,7 @@ async function fetchMolliePayments(year: number): Promise<Donation[]> {
       url = data._links?.next?.href || '';
     }
   } catch (err) {
-    console.error('Mollie error:', err);
+    console.error('[Mollie] Error:', err);
   }
 
   return donations;
@@ -117,7 +111,7 @@ async function fetchMolliePayments(year: number): Promise<Donation[]> {
 async function fetchGoCardlessPayments(year: number): Promise<Donation[]> {
   const token = process.env.GOCARDLESS_ACCESS_TOKEN;
   if (!token) {
-    console.log('GOCARDLESS_ACCESS_TOKEN not configured, skipping');
+    console.log('[GoCardless] Token not configured');
     return [];
   }
 
@@ -158,7 +152,7 @@ async function fetchGoCardlessPayments(year: number): Promise<Donation[]> {
         : '';
     }
   } catch (err) {
-    console.error('GoCardless error:', err);
+    console.error('[GoCardless] Error:', err);
   }
 
   return donations;
@@ -168,7 +162,7 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
   if (!clientId || !clientSecret) {
-    console.log('PayPal credentials not configured, skipping');
+    console.log('[PayPal] Credentials not configured');
     return [];
   }
 
@@ -219,7 +213,7 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
       }
     }
   } catch (err) {
-    console.error('PayPal error:', err);
+    console.error('[PayPal] Error:', err);
   }
 
   return donations;
@@ -227,20 +221,26 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    console.log('[admin-sync] === SYNC START ===');
     const year = new Date().getFullYear();
     const donations: Donation[] = [];
 
-    // Fetch from all 3 gateways
+    console.log('[admin-sync] Fetching from Mollie...');
     donations.push(...(await fetchMolliePayments(year)));
-    donations.push(...(await fetchGoCardlessPayments(year)));
-    donations.push(...(await fetchPayPalPayments(year)));
+    console.log('[admin-sync] Mollie donations:', donations.filter(d => d.gateway === 'mollie').length);
 
-    // Sort by date descending
+    console.log('[admin-sync] Fetching from GoCardless...');
+    donations.push(...(await fetchGoCardlessPayments(year)));
+    console.log('[admin-sync] GoCardless donations:', donations.filter(d => d.gateway === 'gocardless').length);
+
+    console.log('[admin-sync] Fetching from PayPal...');
+    donations.push(...(await fetchPayPalPayments(year)));
+    console.log('[admin-sync] PayPal donations:', donations.filter(d => d.gateway === 'paypal').length);
+
     donations.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     const total = donations.reduce((sum, d) => sum + d.amount, 0);
 
-    // Save to Redis
     const donationData = {
       totalMonth: donations.filter(d => {
         const dDate = new Date(d.date);
@@ -305,12 +305,15 @@ export const POST: APIRoute = async ({ request }) => {
       })),
     };
 
+    console.log('[admin-sync] Saving to Redis...');
     try {
       await saveDonationData(donationData);
-    } catch (err) {
-      console.error('Failed to save to Redis:', err);
+      console.log('[admin-sync] ✅ Saved to Redis');
+    } catch (redisErr) {
+      console.error('[admin-sync] ⚠️ Redis save failed:', redisErr);
     }
 
+    console.log('[admin-sync] === SYNC COMPLETE ===');
     return new Response(JSON.stringify({
       ok: true,
       synced: donations.length,
@@ -325,7 +328,7 @@ export const POST: APIRoute = async ({ request }) => {
     }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
-    console.error('Sync error:', msg);
-    return new Response(JSON.stringify({ error: msg }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    console.error('[admin-sync] ❌ ERROR:', msg);
+    return new Response(JSON.stringify({ error: msg, ok: false }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 };

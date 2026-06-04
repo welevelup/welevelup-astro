@@ -9,10 +9,17 @@ async function saveDonationData(data: any): Promise<void> {
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) throw new Error('Redis not configured');
 
-  await fetch(`${url}/set/donations:${new Date().getFullYear()}`, {
+  const res = await fetch(`${url}/set/admin:donations`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },
     body: JSON.stringify(data),
+  });
+
+  // Also set lastSync
+  await fetch(`${url}/set/admin:lastSync`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify(new Date().toISOString()),
   });
 }
 

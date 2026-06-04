@@ -6,7 +6,7 @@ const COOKIE_NAME = 'admin_session';
 const TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
 
 function getSecret(): Uint8Array {
-  const secret = import.meta.env.JWT_SECRET ?? import.meta.env.ADMIN_JWT_SECRET ?? '';
+  const secret = process.env.JWT_SECRET ?? process.env.ADMIN_JWT_SECRET ?? '';
   if (!secret) throw new Error('JWT_SECRET env variable is not set');
   return new TextEncoder().encode(secret);
 }

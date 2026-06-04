@@ -13,261 +13,894 @@ try {
   console.error('Failed to load admin data:', error);
 }
 
-const fmt = (n: number) => `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-const fmtDate = (s: string | null) => s ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'Never';
-const donationsJSON = JSON.stringify(donations || {});
+const fmt = (n: number) =>
+  `£${n.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const fmtDate = (s: string | null) =>
+  s
+    ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })
+    : 'Never';
+
+const donationsJSON = JSON.stringify(donations ?? null);
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard — Level Up Admin</title>
   <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
     :root {
-      --bg-primary: #0C0A3E;
-      --bg-secondary: #13114a;
-      --text-primary: #EEEBD3;
-      --text-secondary: #999999;
-      --text-tertiary: rgba(238,235,211,0.4);
-      --accent: #CCFF33;
-      --border: rgba(255,255,255,0.06);
+      --bg:        #0C0A3E;
+      --surface:   #13114a;
+      --surface2:  #1a1860;
+      --text:      #EEEBD3;
+      --muted:     rgba(238,235,211,0.45);
+      --faint:     rgba(238,235,211,0.1);
+      --accent:    #CCFF33;
+      --accent-dim:rgba(204,255,51,0.12);
+      --border:    rgba(255,255,255,0.07);
+      --good:      #4ADE80;
+      --warn:      #FBBF24;
+      --danger:    #F87171;
+      --sidebar-w: 220px;
+      --nav-h:     56px;
+      --radius:    12px;
+      --ease:      cubic-bezier(0.16,1,0.3,1);
     }
-    :root.light-mode {
-      --bg-primary: #FFFFFF;
-      --bg-secondary: #F9F9F9;
-      --text-primary: #1A1A1A;
-      --text-secondary: #666666;
-      --text-tertiary: #888888;
-      --accent: #8B7EBD;
-      --border: rgba(0,0,0,0.1);
+    [data-theme="light"] {
+      --bg:        #F5F4FF;
+      --surface:   #FFFFFF;
+      --surface2:  #EDE9FF;
+      --text:      #1A1730;
+      --muted:     rgba(26,23,48,0.5);
+      --faint:     rgba(26,23,48,0.07);
+      --accent:    #6B5CE7;
+      --accent-dim:rgba(107,92,231,0.1);
+      --border:    rgba(26,23,48,0.1);
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; }
-    .layout { display: flex; flex: 1; }
-    .sidebar { width: 240px; background: var(--bg-secondary); border-right: 1px solid var(--border); padding: 24px 0; display: flex; flex-direction: column; gap: 8px; }
-    .sidebar-item { padding: 12px 20px; color: var(--text-secondary); text-decoration: none; font-size: 14px; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; display: block; }
-    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
-    .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
-    .content { flex: 1; display: flex; flex-direction: column; }
-    nav { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 0 16px; display: flex; align-items: center; justify-content: space-between; height: 56px; flex-wrap: wrap; }
-    .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
-    .nav-right { display: flex; align-items: center; gap: 10px; }
-    .sync-btn { background: var(--accent); color: var(--bg-primary); border: none; border-radius: 6px; padding: 8px 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
-    .sync-btn:hover { opacity: 0.85; }
-    .sync-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .logout-btn { background: none; border: 1px solid var(--text-secondary); color: var(--text-secondary); border-radius: 6px; padding: 8px 12px; font-size: 11px; cursor: pointer; }
-    main { max-width: 1200px; margin: 0 auto; padding: 24px 16px; flex: 1; }
-    h1 { font-size: 24px; font-weight: 800; margin-bottom: 8px; }
-    .subtitle { font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 24px; }
-    .stat-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-    .stat-label { font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 8px; }
-    .stat-value { font-size: 20px; font-weight: 800; color: var(--accent); }
-    .stat-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 4px; }
-    .section { margin-bottom: 24px; }
-    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 12px; }
-    .chart-container { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 16px; min-height: 300px; display: flex; align-items: center; justify-content: center; }
-    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 12px; }
-    th { text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 8px 12px; border-bottom: 1px solid var(--border); }
-    td { padding: 8px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    tr:last-child td { border-bottom: none; }
-    .last-sync { font-size: 10px; color: var(--text-tertiary); }
-    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 14px; }
-    
-    @media (max-width: 768px) {
-      .layout { flex-direction: column; }
-      .sidebar { width: 100%; padding: 8px 0; gap: 4px; }
-      .sidebar-item { padding: 8px 12px; font-size: 12px; }
-      nav { padding: 0 12px; height: auto; }
-      .nav-brand { font-size: 10px; }
-      .nav-right { gap: 8px; flex-wrap: wrap; }
-      main { padding: 16px 12px; }
-      h1 { font-size: 18px; }
-      .stats-grid { grid-template-columns: 1fr; gap: 10px; }
-      .stat-card { padding: 12px; }
-      table { font-size: 11px; }
-      th, td { padding: 6px 8px; }
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* ── APP SHELL ──────────────────────────────────────────── */
+    .app {
+      display: grid;
+      grid-template-rows: var(--nav-h) 1fr;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      grid-template-areas:
+        "nav  nav"
+        "side main";
+      min-height: 100dvh;
+    }
+
+    /* ── TOP NAV ────────────────────────────────────────────── */
+    .topnav {
+      grid-area: nav;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(16px, 3vw, 32px);
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topnav-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: none;
+      padding: 4px;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+    .hamburger:hover { background: var(--faint); }
+    .hamburger span {
+      display: block;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.25s var(--ease), opacity 0.2s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .brand {
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .topnav-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sync-info {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 180px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 14px;
+      transition: opacity 0.15s, transform 0.1s;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-ghost {
+      background: var(--faint);
+      color: var(--muted);
+    }
+    .btn-ghost:hover { color: var(--text); background: var(--border); }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: background 0.15s;
+    }
+    .icon-btn:hover { background: var(--faint); }
+
+    /* ── SIDEBAR ────────────────────────────────────────────── */
+    .sidebar {
+      grid-area: side;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 24px 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      position: sticky;
+      top: var(--nav-h);
+      height: calc(100dvh - var(--nav-h));
+      overflow-y: auto;
+    }
+    .sidebar-section {
+      padding: 0 12px 4px;
+      margin-top: 8px;
+    }
+    .sidebar-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 8px;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      transition: background 0.15s, color 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .nav-link:hover {
+      background: var(--faint);
+      color: var(--text);
+    }
+    .nav-link.active {
+      background: var(--accent-dim);
+      color: var(--accent);
+      font-weight: 700;
+      border-left-color: var(--accent);
+    }
+    .nav-link svg { flex-shrink: 0; opacity: 0.7; }
+    .nav-link.active svg { opacity: 1; }
+
+    /* Mobile sidebar drawer */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 90;
+      backdrop-filter: blur(2px);
+    }
+
+    /* ── MAIN CONTENT ───────────────────────────────────────── */
+    .main {
+      grid-area: main;
+      padding: clamp(20px, 3vw, 40px) clamp(16px, 4vw, 40px);
+      min-width: 0;
+    }
+    .page-header {
+      margin-bottom: clamp(20px, 3vw, 36px);
+    }
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+    .page-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── STATS GRID ─────────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(10px, 1.5vw, 16px);
+      margin-bottom: clamp(20px, 3vw, 32px);
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: var(--radius);
+      padding: clamp(14px, 2vw, 22px);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: transform 0.2s var(--ease), box-shadow 0.2s;
+    }
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .stat-value {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(20px, 2.5vw, 28px);
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── CHART SECTION ──────────────────────────────────────── */
+    .chart-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(16px, 2.5vw, 28px);
+      margin-bottom: clamp(20px, 3vw, 32px);
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .chart-wrap {
+      width: 100%;
+      overflow: hidden;
+    }
+    #line-chart {
+      width: 100%;
+      display: block;
+    }
+
+    /* ── TABLE SECTION ──────────────────────────────────────── */
+    .table-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: clamp(14px, 2vw, 20px) clamp(14px, 2.5vw, 24px);
+      border-bottom: 1px solid var(--border);
+    }
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 420px;
+    }
+    thead th {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px clamp(12px, 2vw, 20px);
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 11px clamp(12px, 2vw, 20px);
+      border-bottom: 1px solid var(--faint);
+      vertical-align: middle;
+    }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr {
+      transition: background 0.1s;
+    }
+    tbody tr:hover { background: var(--faint); }
+    .td-mono {
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+    .td-total {
+      font-weight: 700;
+      color: var(--accent);
+      font-variant-numeric: tabular-nums;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+    .badge-recurring {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    /* ── EMPTY STATE ────────────────────────────────────────── */
+    .empty {
+      text-align: center;
+      padding: 48px 16px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .empty strong {
+      display: block;
+      font-size: 16px;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    /* ── TOAST ──────────────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform 0.3s var(--ease), opacity 0.3s;
+      max-width: calc(100vw - 32px);
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .toast.success { border-left: 3px solid var(--good); }
+    .toast.error   { border-left: 3px solid var(--danger); }
+
+    /* ── MOBILE ─────────────────────────────────────────────── */
+    @media (max-width: 639px) {
+      :root { --sidebar-w: 0px; }
+
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "nav"
+          "main";
+      }
+
+      .hamburger { display: flex; }
+      .sync-info  { display: none; }
+
+      .sidebar {
+        grid-area: unset;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        height: 100dvh;
+        z-index: 95;
+        transform: translateX(-100%);
+        transition: transform 0.3s var(--ease);
+        padding-top: calc(var(--nav-h) + 12px);
+      }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay { display: block; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+      .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .main { padding: 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .topnav-right .sync-info { display: none; }
+    }
+
+    @media (min-width: 640px) and (max-width: 900px) {
+      :root { --sidebar-w: 180px; }
+      .brand { font-size: 11px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (min-width: 901px) and (max-width: 1100px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── SVG CHART ANIMATION ────────────────────────────────── */
+    #chart-line {
+      stroke-dasharray: 2000;
+      stroke-dashoffset: 2000;
+      animation: drawLine 1.2s 0.2s var(--ease) forwards;
+    }
+    #chart-area {
+      opacity: 0;
+      animation: fadeArea 0.8s 0.9s ease forwards;
+    }
+    @keyframes drawLine {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes fadeArea {
+      to { opacity: 1; }
+    }
+
+    /* ── SCROLLBAR ──────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="nav-brand">Level Up Admin</div>
-    <div class="nav-right">
-      <span class="last-sync">Sync: {fmtDate(lastSync)}</span>
-      <button class="sync-btn" id="sync-btn">SYNC NOW</button>
-      <button id="theme-btn">🌙</button>
-      <button class="logout-btn" id="logout-btn">Out</button>
+
+<!-- Toast notification -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="app">
+  <!-- ── TOP NAV ── -->
+  <nav class="topnav" role="navigation" aria-label="Admin navigation">
+    <div class="topnav-left">
+      <button class="hamburger" id="hamburger" aria-label="Toggle sidebar" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <span class="brand">Level Up · Admin</span>
+    </div>
+    <div class="topnav-right">
+      <span class="sync-info" id="sync-label">Synced: {fmtDate(lastSync)}</span>
+      <button class="btn btn-primary" id="sync-btn" aria-label="Sync donation data now">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+        </svg>
+        Sync Now
+      </button>
+      <button class="icon-btn" id="theme-btn" aria-label="Toggle light/dark theme" title="Toggle theme">
+        <svg id="theme-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+      <button class="btn btn-ghost" id="logout-btn" aria-label="Sign out">Out</button>
     </div>
   </nav>
 
-  <div class="layout">
-    <div class="sidebar">
-      <a href="/admin/dashboard" class="sidebar-item active">Donations</a>
-      <a href="/admin/seo" class="sidebar-item">SEO</a>
-      <a href="/admin/analytics" class="sidebar-item">Analytics</a>
+  <!-- ── SIDEBAR OVERLAY ── -->
+  <div class="sidebar-overlay" id="sidebar-overlay" aria-hidden="true"></div>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar" id="sidebar" aria-label="Sidebar navigation">
+    <div class="sidebar-section">
+      <span class="sidebar-label">Reports</span>
+      <a href="/admin/dashboard" class="nav-link active" aria-current="page">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Donations
+      </a>
+      <a href="/admin/analytics" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </a>
+      <a href="/admin/seo" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        SEO
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main" id="main-content">
+    <header class="page-header">
+      <h1 class="page-title">Donations</h1>
+      <p class="page-subtitle">welevelup.org · <span id="period-label">Loading…</span></p>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats-grid" role="list" aria-label="Donation statistics">
+      <div class="stat-card" role="listitem">
+        <div class="stat-label">This Month</div>
+        <div class="stat-value" id="stat-month">—</div>
+        <div class="stat-sub">Total raised</div>
+      </div>
+      <div class="stat-card" role="listitem">
+        <div class="stat-label">This Year</div>
+        <div class="stat-value" id="stat-year">—</div>
+        <div class="stat-sub">Year to date</div>
+      </div>
+      <div class="stat-card" role="listitem">
+        <div class="stat-label">Active Subscribers</div>
+        <div class="stat-value" id="stat-subs">—</div>
+        <div class="stat-sub">Recurring donors</div>
+      </div>
+      <div class="stat-card" role="listitem">
+        <div class="stat-label">New This Month</div>
+        <div class="stat-value" id="stat-new">—</div>
+        <div class="stat-sub">First-time donors</div>
+      </div>
     </div>
 
-    <div class="content">
-      <main>
-        <h1>Dashboard</h1>
-        <p class="subtitle">Donations overview for welevelup.org</p>
-
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">This Month</div>
-            <div class="stat-value" id="month-total">£0</div>
-            <div class="stat-sub">Total</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">This Year</div>
-            <div class="stat-value" id="year-total">£0</div>
-            <div class="stat-sub">YTD</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Active Subscribers</div>
-            <div class="stat-value" id="subscribers">0</div>
-            <div class="stat-sub">Recurring</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">New This Month</div>
-            <div class="stat-value" id="new-month">0</div>
-            <div class="stat-sub">New</div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Monthly Donations (Last 12 Months)</div>
-          <div class="chart-container">
-            <svg id="lineChart" viewBox="0 0 800 250" style="width: 100%; max-height: 250px;"></svg>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Monthly Totals</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Month</th>
-                <th>Recurring</th>
-                <th>One-Off</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody id="monthly-table">
-              <tr><td colspan="4" style="text-align: center; color: var(--text-tertiary);">No data</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </main>
-    </div>
-  </div>
-
-  <script>
-    const html = document.documentElement;
-    const donationsData = JSON.parse('{donationsJSON}');
-    const theme = localStorage.getItem('admin-theme') || 'dark';
-    if (theme === 'light') html.classList.add('light-mode');
-
-    // Update stats
-    if (donationsData && donationsData.totalMonth) {
-      document.getElementById('month-total').textContent = '£' + donationsData.totalMonth.toFixed(2);
-      document.getElementById('year-total').textContent = '£' + donationsData.totalYear.toFixed(2);
-      document.getElementById('subscribers').textContent = donationsData.activeSubscribers;
-      document.getElementById('new-month').textContent = donationsData.newThisMonth;
-
-      // Update table
-      if (donationsData.monthlyTotals && donationsData.monthlyTotals.length) {
-        const tbody = document.getElementById('monthly-table');
-        tbody.innerHTML = donationsData.monthlyTotals.map(m => `
-          <tr>
-            <td>${m.month}</td>
-            <td>£${m.monthly_donations.toFixed(2)}</td>
-            <td>£${m.one_off_donations.toFixed(2)}</td>
-            <td><strong>£${m.total.toFixed(2)}</strong></td>
-          </tr>
-        `).join('');
-      }
-
-      // Draw chart
-      const canvas = document.getElementById('lineChart');
-      if (donationsData.monthlyTotals && donationsData.monthlyTotals.length > 1) {
-        const data = donationsData.monthlyTotals;
-        const isDark = !html.classList.contains('light-mode');
-        const accent = isDark ? '#CCFF33' : '#8B7EBD';
-        const text = isDark ? '#EEEBD3' : '#1A1A1A';
-        const grid = isDark ? '#333' : '#ddd';
-
-        const w = 800, h = 250, pad = 40;
-        const gw = w - 2 * pad, gh = h - 2 * pad;
-        const max = Math.max(...data.map(d => d.total));
-        
-        const pts = data.map((d, i) => ({
-          x: pad + (i / (data.length - 1)) * gw,
-          y: h - pad - (d.total / max) * gh
-        }));
-
-        const pathData = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-        
-        canvas.innerHTML = `
+    <!-- Chart -->
+    <section class="chart-section" aria-labelledby="chart-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="chart-heading">Monthly Donations</h2>
+        <span style="font-size:11px;color:var(--muted);">Last 12 months</span>
+      </div>
+      <div class="chart-wrap">
+        <svg id="line-chart" viewBox="0 0 820 240" preserveAspectRatio="none" aria-label="Monthly donations line chart" role="img">
+          <title>Monthly Donations Chart</title>
           <defs>
-            <linearGradient id="fill" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:${accent};stop-opacity:0.2" />
-              <stop offset="100%" style="stop-color:${accent};stop-opacity:0" />
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="var(--accent)" stop-opacity="0.25"/>
+              <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
             </linearGradient>
           </defs>
-          <path d="${pathData} L ${pts[pts.length-1].x} ${h-pad} L ${pts[0].x} ${h-pad} Z" fill="url(#fill)"/>
-          <polyline points="${pts.map(p => p.x + ',' + p.y).join(' ')}" fill="none" stroke="${accent}" stroke-width="2" stroke-linecap="round"/>
-          ${pts.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${accent}"/>`).join('')}
-          ${pts.map((p, i) => `<text x="${p.x}" y="${h-10}" font-size="11" fill="${text}" text-anchor="middle">${data[i].month.slice(5)}</text>`).join('')}
-        `;
-      }
+          <g id="chart-grid"></g>
+          <path id="chart-area" fill="url(#areaGrad)"/>
+          <polyline id="chart-line" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <g id="chart-dots"></g>
+          <g id="chart-labels"></g>
+          <g id="chart-yaxis"></g>
+          <text id="chart-empty" x="410" y="120" text-anchor="middle" font-size="13" fill="var(--muted)" font-family="DM Sans, sans-serif">No chart data yet</text>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Monthly table -->
+    <section class="table-section" aria-labelledby="table-heading">
+      <div class="table-header">
+        <h2 class="section-title" id="table-heading">Monthly Breakdown</h2>
+        <span style="font-size:11px;color:var(--muted);" id="table-count"></span>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Month</th>
+              <th scope="col">Recurring</th>
+              <th scope="col">One-Off</th>
+              <th scope="col">Total</th>
+              <th scope="col">Type</th>
+            </tr>
+          </thead>
+          <tbody id="monthly-tbody">
+            <tr>
+              <td colspan="5">
+                <div class="empty">
+                  <strong>No data</strong>
+                  Run a sync to load donation data.
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script define:vars={{ donationsJSON, lastSync }}>
+  // ── DATA ──────────────────────────────────────────────────
+  const donations = (() => {
+    try { return JSON.parse(donationsJSON); } catch { return null; }
+  })();
+
+  // ── THEME ─────────────────────────────────────────────────
+  const html = document.documentElement;
+  const THEME_KEY = 'admin-theme';
+  const moonIcon = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+  const sunIcon  = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+
+  function applyTheme(t) {
+    html.setAttribute('data-theme', t);
+    const icon = document.querySelector('#theme-icon');
+    if (icon) icon.innerHTML = t === 'dark' ? moonIcon : sunIcon;
+  }
+  applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+
+  document.getElementById('theme-btn')?.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem(THEME_KEY, next);
+    // Redraw chart so colors update
+    if (donations?.monthlyTotals?.length) drawChart(donations.monthlyTotals);
+  });
+
+  // ── HELPERS ───────────────────────────────────────────────
+  function fmt(n) {
+    return '£' + Number(n || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtNum(n) {
+    return Number(n || 0).toLocaleString('en-GB');
+  }
+  function getComputedColor(varName) {
+    return getComputedStyle(html).getPropertyValue(varName).trim();
+  }
+
+  // ── TOAST ─────────────────────────────────────────────────
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => { t.classList.remove('show'); }, 3500);
+  }
+
+  // ── POPULATE STATS ────────────────────────────────────────
+  function populateStats(d) {
+    const set = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    };
+    if (!d) {
+      set('stat-month', '—');
+      set('stat-year',  '—');
+      set('stat-subs',  '—');
+      set('stat-new',   '—');
+      set('period-label', 'No data available');
+      return;
     }
+    set('stat-month', fmt(d.totalMonth));
+    set('stat-year',  fmt(d.totalYear));
+    set('stat-subs',  fmtNum(d.activeSubscribers));
+    set('stat-new',   fmtNum(d.newThisMonth));
+    set('period-label', 'Live data');
+  }
 
-    // Sync button
-    document.getElementById('sync-btn')?.addEventListener('click', async () => {
-      const btn = document.getElementById('sync-btn');
-      btn.disabled = true;
-      btn.textContent = 'Syncing...';
-      try {
-        const res = await fetch('/api/admin-sync', { method: 'POST' });
-        if (res.ok) {
-          const data = await res.json();
-          console.log('[Sync] Success:', data);
-          btn.textContent = 'Done!';
-          setTimeout(() => location.reload(), 1000);
-        } else {
-          console.error('[Sync] Failed:', res.status);
-          alert('Sync failed: ' + res.status);
-          btn.textContent = 'SYNC NOW';
-          btn.disabled = false;
-        }
-      } catch (e) {
-        console.error('[Sync] Error:', e);
-        alert('Error: ' + e.message);
-        btn.textContent = 'SYNC NOW';
-        btn.disabled = false;
-      }
-    });
+  // ── DRAW CHART ────────────────────────────────────────────
+  function drawChart(rows) {
+    const empty = document.getElementById('chart-empty');
+    if (!rows || rows.length < 2) { if (empty) empty.style.display = ''; return; }
+    if (empty) empty.style.display = 'none';
 
-    // Theme toggle
-    document.getElementById('theme-btn')?.addEventListener('click', () => {
-      if (html.classList.toggle('light-mode')) {
-        localStorage.setItem('admin-theme', 'light');
-        document.getElementById('theme-btn').textContent = '☀️';
+    const W = 820, H = 240, PL = 56, PR = 20, PT = 20, PB = 40;
+    const gW = W - PL - PR;
+    const gH = H - PT - PB;
+    const max = Math.max(...rows.map(r => r.total || 0), 1);
+    const gridLines = 4;
+
+    const accent = getComputedColor('--accent');
+    const muted  = getComputedColor('--muted') || 'rgba(200,200,200,0.5)';
+    const faint  = getComputedColor('--faint') || 'rgba(255,255,255,0.06)';
+
+    const pts = rows.map((r, i) => ({
+      x: PL + (i / (rows.length - 1)) * gW,
+      y: PT + gH - ((r.total || 0) / max) * gH,
+      total: r.total || 0,
+      month: (r.month || '').slice(0, 7),
+    }));
+
+    // Y-axis grid
+    const gridSvg = Array.from({ length: gridLines + 1 }, (_, i) => {
+      const y = PT + (i / gridLines) * gH;
+      const val = max * (1 - i / gridLines);
+      return `
+        <line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="${faint}" stroke-width="1"/>
+        <text x="${PL - 6}" y="${y + 4}" font-size="9" fill="${muted}" text-anchor="end" font-family="DM Sans,sans-serif">£${val >= 1000 ? (val/1000).toFixed(1)+'k' : val.toFixed(0)}</text>
+      `;
+    }).join('');
+
+    // Area fill path
+    const lineD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+    const areaD = `${lineD} L${pts.at(-1).x},${PT + gH} L${pts[0].x},${PT + gH} Z`;
+
+    // Dots with tooltip-ready data
+    const dots = pts.map(p =>
+      `<circle cx="${p.x}" cy="${p.y}" r="4" fill="${accent}" stroke="var(--surface)" stroke-width="2">
+        <title>${p.month}: ${fmt(p.total)}</title>
+       </circle>`
+    ).join('');
+
+    // X-axis labels — show every other if many items
+    const step = rows.length > 8 ? 2 : 1;
+    const labels = pts.map((p, i) => {
+      if (i % step !== 0 && i !== pts.length - 1) return '';
+      const short = p.month.slice(5); // MM
+      const months = ['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const label = months[parseInt(short, 10)] || short;
+      return `<text x="${p.x}" y="${H - 8}" font-size="10" fill="${muted}" text-anchor="middle" font-family="DM Sans,sans-serif">${label}</text>`;
+    }).join('');
+
+    document.getElementById('chart-grid').innerHTML = gridSvg;
+    document.getElementById('chart-area').setAttribute('d', areaD);
+    document.getElementById('chart-line').setAttribute('points', pts.map(p => `${p.x},${p.y}`).join(' '));
+    document.getElementById('chart-dots').innerHTML = dots;
+    document.getElementById('chart-labels').innerHTML = labels;
+
+    // Reset animation
+    const line = document.getElementById('chart-line');
+    line.style.animation = 'none';
+    line.getBoundingClientRect(); // reflow
+    line.style.animation = '';
+    const area = document.getElementById('chart-area');
+    area.style.animation = 'none';
+    area.getBoundingClientRect();
+    area.style.animation = '';
+  }
+
+  // ── POPULATE TABLE ────────────────────────────────────────
+  function populateTable(rows) {
+    const tbody = document.getElementById('monthly-tbody');
+    const count = document.getElementById('table-count');
+    if (!rows || !rows.length) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty"><strong>No data</strong>Run a sync to load donation data.</div></td></tr>`;
+      if (count) count.textContent = '';
+      return;
+    }
+    if (count) count.textContent = `${rows.length} months`;
+    tbody.innerHTML = rows.map(m => {
+      const recurring = m.monthly_donations ?? 0;
+      const oneOff    = m.one_off_donations ?? 0;
+      const total     = m.total ?? 0;
+      const hasRecurring = recurring > 0;
+      return `<tr>
+        <td>${m.month || '—'}</td>
+        <td class="td-mono">${fmt(recurring)}</td>
+        <td class="td-mono">${fmt(oneOff)}</td>
+        <td class="td-total">${fmt(total)}</td>
+        <td>${hasRecurring ? '<span class="badge badge-recurring">Recurring</span>' : '<span style="font-size:11px;color:var(--muted)">One-off</span>'}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── SYNC BUTTON ───────────────────────────────────────────
+  document.getElementById('sync-btn')?.addEventListener('click', async () => {
+    const btn = document.getElementById('sync-btn');
+    btn.disabled = true;
+    btn.innerHTML = `
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true" style="animation:spin 1s linear infinite">
+        <path d="M21 12a9 9 0 1 1-3-6.7"/>
+      </svg>
+      Syncing…`;
+    const style = document.createElement('style');
+    style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+    document.head.appendChild(style);
+    try {
+      const res = await fetch('/api/admin-sync', { method: 'POST' });
+      if (res.ok) {
+        showToast('Sync complete — reloading…', 'success');
+        setTimeout(() => location.reload(), 1200);
       } else {
-        localStorage.setItem('admin-theme', 'dark');
-        document.getElementById('theme-btn').textContent = '🌙';
+        showToast(`Sync failed (${res.status})`, 'error');
+        btn.disabled = false;
+        btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sync Now`;
       }
-    });
+    } catch (e) {
+      showToast(`Error: ${e.message}`, 'error');
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sync Now`;
+    }
+  });
 
-    // Logout
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await fetch('/api/admin-auth', { method: 'DELETE' });
-      location.href = '/admin';
-    });
-  </script>
+  // ── LOGOUT ────────────────────────────────────────────────
+  document.getElementById('logout-btn')?.addEventListener('click', async () => {
+    await fetch('/api/admin-auth', { method: 'DELETE' }).catch(() => {});
+    location.href = '/admin';
+  });
+
+  // ── MOBILE SIDEBAR ────────────────────────────────────────
+  const hamburger = document.getElementById('hamburger');
+  const sidebar   = document.getElementById('sidebar');
+  const overlay   = document.getElementById('sidebar-overlay');
+
+  function openSidebar() {
+    sidebar?.classList.add('open');
+    overlay?.classList.add('open');
+    hamburger?.classList.add('open');
+    hamburger?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeSidebar() {
+    sidebar?.classList.remove('open');
+    overlay?.classList.remove('open');
+    hamburger?.classList.remove('open');
+    hamburger?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger?.addEventListener('click', () => {
+    sidebar?.classList.contains('open') ? closeSidebar() : openSidebar();
+  });
+  overlay?.addEventListener('click', closeSidebar);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+
+  // ── INITIALISE ────────────────────────────────────────────
+  populateStats(donations);
+  if (donations?.monthlyTotals?.length) {
+    drawChart(donations.monthlyTotals);
+    populateTable(donations.monthlyTotals);
+  } else {
+    populateTable(null);
+  }
+</script>
 </body>
 </html>

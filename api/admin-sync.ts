@@ -114,58 +114,37 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
       body: 'grant_type=client_credentials',
     });
     const token = tokenData.access_token;
+    const currentMonth = new Date().getMonth() + 1;
 
-    // Fetch all subscriptions (recurring payments)
-    try {
-      let page = 1;
-      let hasMore = true;
-      while (hasMore) {
-        const subsData = await fetchJson(
-          `https://api-m.paypal.com/v1/billing/subscriptions?status=ACTIVE&page=${page}&page_size=20&total_required=true`,
+    // Fetch month by month (PayPal max 31 days per request)
+    for (let month = 1; month <= currentMonth; month++) {
+      const start = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+      const end = new Date(Date.UTC(year, month, 0, 23, 59, 59));
+      const fmt = (d: Date) => encodeURIComponent(d.toISOString().slice(0, 19) + '+0000');
+      try {
+        const data = await fetchJson(
+          `https://api-m.paypal.com/v1/reporting/transactions?start_date=${fmt(start)}&end_date=${fmt(end)}&fields=all&page_size=500`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        const subs = subsData.subscriptions || subsData._embedded?.subscriptions || [];
-        console.log(`[PayPal] Subscriptions page ${page}: ${subs.length} found`);
-        for (const sub of subs) {
-          const lastPayment = sub.billing_info?.last_payment;
-          if (!lastPayment) continue;
-          const date = lastPayment.time || sub.create_time || '';
+        const txs = data.transaction_details || [];
+        console.log(`[PayPal] Month ${month}: ${txs.length} transactions`);
+        for (const tx of txs) {
+          const info = tx.transaction_info || {};
+          const payer = tx.payer_info || {};
+          const amount = info.transaction_amount || {};
+          const val = parseFloat(amount.value || '0');
+          if (val <= 0) continue;
+          // T0002=subscription, T0011=recurring, T0006=donation
+          const isRecurring = ['T0002', 'T0011', 'T0001'].includes(info.transaction_event_code || '');
           donations.push({
-            id: sub.id, date,
-            amount: parseFloat(lastPayment.amount?.value || '0'),
-            currency: lastPayment.amount?.currency_code || 'GBP',
-            gateway: 'paypal', type: 'recurring', status: 'paid',
-            payer: { name: sub.subscriber?.name?.given_name, email: sub.subscriber?.email_address },
+            id: info.transaction_id, date: info.transaction_initiation_date || '',
+            amount: val, currency: amount.currency_code || 'GBP',
+            gateway: 'paypal', type: isRecurring ? 'recurring' : 'oneoff', status: 'paid',
+            payer: { name: payer.payer_name?.alternate_full_name, email: payer.email_address },
           });
         }
-        hasMore = subs.length === 20 && page < 10;
-        page++;
-      }
-    } catch (subErr) { console.error('[PayPal] Subscriptions error:', subErr); }
-
-    // Also fetch one-off transactions via reporting API
-    const start = new Date(Date.UTC(year, 0, 1, 0, 0, 0));
-    const end = new Date(Date.UTC(year, 11, 31, 23, 59, 59));
-    const fmt = (d: Date) => d.toISOString().slice(0, 19) + 'Z';
-    try {
-      const data = await fetchJson(
-        `https://api-m.paypal.com/v1/reporting/transactions?start_date=${fmt(start)}&end_date=${fmt(end)}&fields=all&page_size=500&transaction_type=T0006`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log(`[PayPal] One-off transactions: ${data.transaction_details?.length ?? 0}`);
-      for (const tx of data.transaction_details || []) {
-        const info = tx.transaction_info || {};
-        const payer = tx.payer_info || {};
-        const amount = info.transaction_amount || {};
-        if (parseFloat(amount.value || '0') <= 0) continue;
-        donations.push({
-          id: info.transaction_id, date: info.transaction_initiation_date || '',
-          amount: parseFloat(amount.value || '0'), currency: amount.currency_code || 'GBP',
-          gateway: 'paypal', type: 'oneoff', status: 'paid',
-          payer: { name: payer.payer_name?.alternate_full_name, email: payer.email_address },
-        });
-      }
-    } catch (txErr) { console.error('[PayPal] Transactions error:', txErr); }
+      } catch (monthErr) { console.error(`[PayPal] Month ${month} error:`, monthErr); }
+    }
   } catch (err) { console.error('[PayPal] Error:', err); }
   return donations;
 }

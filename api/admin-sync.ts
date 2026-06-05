@@ -218,18 +218,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const total = donations.reduce((sum, d) => sum + d.amount, 0);
     const now = new Date();
 
+    // Calculate month keys for current and previous month
+    const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    const prevMonth = now.getMonth() === 0
+      ? `${now.getFullYear() - 1}-12`
+      : `${now.getFullYear()}-${String(now.getMonth()).padStart(2, '0')}`;
+
     const donationData = {
       totalMonth: donations.filter(d => {
         const dDate = new Date(d.date);
         return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
       }).reduce((s, d) => s + d.amount, 0),
       totalYear: total,
-      activeSubscribers: donations.filter(d => d.type === 'recurring')
-        .filter((d, i, a) => a.findIndex(x => x.payer?.email === d.payer?.email && x.payer?.email) === i).length,
-      newThisMonth: donations.filter(d => {
-        const dDate = new Date(d.date);
-        return d.type === 'recurring' && dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
-      }).length,
+      activeSubscribers: 0, // Will be set from monthlyTotals below
+      newThisMonth: 0, // Will be calculated below
       cancelledThisMonth: donations.filter(d => d.status === 'cancelled').length,
       byGateway: {
         mollie: donations.filter(d => d.gateway === 'mollie').reduce((s, d) => s + d.amount, 0),
@@ -311,6 +313,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         total_lost: Math.round((data.failed_amount + data.cancelled_amount) * 100) / 100,
       })),
     };
+
+    // Calculate activeSubscribers and newThisMonth from monthlyTotals
+    const currentMonthData = donationData.monthlyTotals.find(m => m.month === currentMonth);
+    const prevMonthData = donationData.monthlyTotals.find(m => m.month === prevMonth);
+
+    if (currentMonthData) {
+      donationData.activeSubscribers = currentMonthData.active_subscribers;
+      donationData.newThisMonth = currentMonthData.active_subscribers - (prevMonthData?.active_subscribers || 0);
+    }
 
     const redis = getRedis();
     await redis.set('admin:donations', donationData);

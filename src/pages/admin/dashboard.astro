@@ -29,6 +29,8 @@ const donationsJSON = JSON.stringify(donations ?? null);
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Donations Dashboard — Level Up Admin</title>
   <meta name="robots" content="noindex, nofollow" />
+  <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
+  <script type="module" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
   <style>
     :root {
       --bg-primary: #0C0A3E;
@@ -669,26 +671,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
       <!-- MONTHLY DONATION TOTALS -->
       <section class="section" aria-labelledby="monthly-heading">
         <div class="section-title" id="monthly-heading">Monthly Donation Totals</div>
-        <div class="data-table-wrap">
-          <table aria-label="Monthly donation totals">
-            <thead>
-              <tr>
-                <th scope="col">Month</th>
-                <th scope="col" style="text-align:right">Active Subs</th>
-                <th scope="col" style="text-align:right">Recurring £</th>
-                <th scope="col" style="text-align:right">One-Off £</th>
-                <th scope="col" style="text-align:right">Total £</th>
-                <th scope="col" style="text-align:right">Failed #</th>
-                <th scope="col" style="text-align:right">Failed £</th>
-                <th scope="col" style="text-align:right">Cancelled #</th>
-                <th scope="col" style="text-align:right">Cancelled £</th>
-              </tr>
-            </thead>
-            <tbody id="monthly-tbody">
-              <tr><td colspan="9"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
-            </tbody>
-          </table>
-        </div>
+        <div id="monthly-table" style="border-radius: 10px; overflow: hidden; border: 1px solid var(--border);"></div>
       </section>
 
       <!-- MONTHLY SUBSCRIPTION BREAKDOWN BY GATEWAY -->
@@ -972,27 +955,42 @@ const donationsJSON = JSON.stringify(donations ?? null);
 
   // ── MONTHLY TOTALS TABLE ──────────────────────────────────
   function populateMonthlyTable(rows) {
-    const tbody = document.getElementById('monthly-tbody');
-    if (!tbody) return;
+    const container = document.getElementById('monthly-table');
+    if (!container) return;
     if (!rows || !rows.length) {
-      tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      container.innerHTML = '<div class="empty"><strong>No data</strong>Run a sync to load donation data.</div>';
       return;
     }
-    tbody.innerHTML = [...rows].reverse().map(m => {
-      const lbl = (m.month || '').slice(0, 7);
-      return `<tr>
-        <td class="td-month">${lbl}</td>
-        <td class="td-mono">${m.active_subscribers ?? 0}</td>
-        <td class="td-mono">${fmt(m.monthly_donations ?? 0)}</td>
-        <td class="td-mono">${fmt(m.one_off_donations ?? 0)}</td>
-        <td class="td-total col-sep">${fmt(m.total ?? 0)}</td>
-        <td class="td-failed">${m.failed_payments ?? 0}</td>
-        <td class="td-failed col-sep">${fmt(m.failed_amount ?? 0)}</td>
-        <td class="td-cancelled">${m.cancelled ?? 0}</td>
-        <td class="td-cancelled col-sep">${fmt(m.cancelled_amount ?? 0)}</td>
-        <td class="td-failed-total">${fmt(m.total_lost ?? 0)}</td>
-      </tr>`;
-    }).join('');
+
+    const data = [...rows].reverse().map(m => ({
+      month: (m.month || '').slice(0, 7),
+      active_subs: m.active_subscribers ?? 0,
+      recurring: m.monthly_donations ?? 0,
+      oneoff: m.one_off_donations ?? 0,
+      total: m.total ?? 0
+    }));
+
+    const table = new Tabulator(container, {
+      data: data,
+      layout: "fitColumns",
+      pagination: false,
+      columns: [
+        {title: "Month", field: "month", width: 100},
+        {title: "Active Subs", field: "active_subs", align: "right", width: 120},
+        {title: "Recurring £", field: "recurring", align: "right", width: 140, formatter: (cell) => {
+          const val = cell.getValue();
+          return val ? `£${val.toLocaleString('en-GB', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '£0.00';
+        }},
+        {title: "One-Off £", field: "oneoff", align: "right", width: 140, formatter: (cell) => {
+          const val = cell.getValue();
+          return val ? `£${val.toLocaleString('en-GB', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '£0.00';
+        }},
+        {title: "Total £", field: "total", align: "right", width: 140, formatter: (cell) => {
+          const val = cell.getValue();
+          return val ? `£${val.toLocaleString('en-GB', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '£0.00';
+        }}
+      ]
+    });
   }
 
   // ── GATEWAY TABLE ─────────────────────────────────────────

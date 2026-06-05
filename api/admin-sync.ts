@@ -31,6 +31,7 @@ interface Donation {
   gateway: 'mollie' | 'gocardless' | 'paypal';
   type: 'recurring' | 'oneoff';
   status: 'paid' | 'cancelled' | 'failed';
+  subscription_id?: string;
   payer?: { name?: string; email?: string };
 }
 
@@ -66,7 +67,8 @@ async function fetchMolliePayments(year: number): Promise<Donation[]> {
         donations.push({
           id: p.id, date: paidAt, amount: parseFloat(amount.value), currency: amount.currency || 'EUR',
           gateway: 'mollie', type: p.subscriptionId || p.method === 'directdebit' ? 'recurring' : 'oneoff',
-          status, payer: { name: customer.name, email: customer.email },
+          status, subscription_id: p.subscriptionId || undefined,
+          payer: { name: customer.name, email: customer.email },
         });
       }
       url = data._links?.next?.href || '';
@@ -91,7 +93,8 @@ async function fetchGoCardlessPayments(year: number): Promise<Donation[]> {
         donations.push({
           id: p.id, date: chargeDate, amount: p.amount ? p.amount / 100 : 0,
           currency: p.currency || 'GBP', gateway: 'gocardless', type: 'recurring',
-          status, payer: { name: p.description || '', email: '' },
+          status, subscription_id: p.links?.mandate || p.links?.subscription || undefined,
+          payer: { name: p.description || '', email: '' },
         });
       }
       url = data.meta?.cursors?.after
@@ -228,16 +231,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const month = d.date.slice(0, 7);
           const existing = m.get(month) || {
             month, total: 0, monthly_donations: 0, one_off_donations: 0,
-            active_subscribers: new Set<string>(), mollie_count: 0, gocardless_count: 0, paypal_count: 0,
+            active_subscribers: new Set<string>(),
+          mollie_subs: new Set<string>(), gocardless_subs: new Set<string>(), paypal_subs: new Set<string>(),
+          mollie_count: 0, gocardless_count: 0, paypal_count: 0,
           };
-          existing.total += d.amount;
-          if (d.type === 'recurring') {
+          if (d.currency === 'GBP') existing.total += d.amount;
+          if (d.type === 'recurring' && d.currency === 'GBP') {
             existing.monthly_donations += d.amount;
-            existing.active_subscribers.add(d.payer?.email || d.id);
-            if (d.gateway === 'mollie') existing.mollie_count++;
-            else if (d.gateway === 'gocardless') existing.gocardless_count++;
-            else if (d.gateway === 'paypal') existing.paypal_count++;
-          } else {
+            // Use subscription_id for dedup (matches spreadsheet logic)
+            const subKey = d.subscription_id || d.payer?.email || d.id;
+            existing.active_subscribers.add(subKey);
+            if (d.gateway === 'mollie') existing.mollie_subs.add(subKey);
+            else if (d.gateway === 'gocardless') existing.gocardless_subs.add(subKey);
+            else if (d.gateway === 'paypal') existing.paypal_subs.add(subKey);
+          } else if (d.type === 'oneoff' && d.currency === 'GBP') {
             existing.one_off_donations += d.amount;
           }
           m.set(month, existing);
@@ -249,9 +256,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         monthly_donations: Math.round(data.monthly_donations * 100) / 100,
         one_off_donations: Math.round(data.one_off_donations * 100) / 100,
         active_subscribers: data.active_subscribers.size,
-        mollie_count: data.mollie_count,
-        gocardless_count: data.gocardless_count,
-        paypal_count: data.paypal_count,
+        mollie_count: data.mollie_subs.size,
+        gocardless_count: data.gocardless_subs.size,
+        paypal_count: data.paypal_subs.size,
       })),
     };
 

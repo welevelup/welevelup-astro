@@ -5,7 +5,9 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   output: 'server',
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: { enabled: false },
+  }),
   site: 'https://welevelup.org',
   trailingSlash: 'never',
   integrations: [sitemap({

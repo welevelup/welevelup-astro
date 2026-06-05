@@ -317,11 +317,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Calculate activeSubscribers and newThisMonth from monthlyTotals
     const currentMonthData = donationData.monthlyTotals.find(m => m.month === currentMonth);
     const prevMonthData = donationData.monthlyTotals.find(m => m.month === prevMonth);
+    const monthBeforePrev = prevMonth.substring(0, 7); // Get month before prevMonth
+    const twoMonthsAgoStr = prevMonth.substring(0, 4) === '2026' && prevMonth.substring(5) === '01'
+      ? '2025-12'
+      : `${prevMonth.substring(0, 4)}-${String(parseInt(prevMonth.substring(5)) - 1).padStart(2, '0')}`;
+    const twoMonthsAgoData = donationData.monthlyTotals.find(m => m.month === twoMonthsAgoStr);
 
-    // Show previous month's active subscribers (normal baseline) and change from previous to current
+    // Show previous month's data: active subscribers and how many were new that month
     if (prevMonthData) {
       donationData.activeSubscribers = prevMonthData.active_subscribers;
-      donationData.newThisMonth = (currentMonthData?.active_subscribers || 0) - prevMonthData.active_subscribers;
+      donationData.newThisMonth = prevMonthData.active_subscribers - (twoMonthsAgoData?.active_subscribers || 0);
     } else if (currentMonthData) {
       donationData.activeSubscribers = currentMonthData.active_subscribers;
       donationData.newThisMonth = 0;

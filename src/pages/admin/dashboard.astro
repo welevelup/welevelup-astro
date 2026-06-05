@@ -640,32 +640,22 @@ const donationsJSON = JSON.stringify(donations ?? null);
       <section class="section" aria-labelledby="monthly-heading">
         <div class="section-title" id="monthly-heading">Monthly Donation Totals</div>
         <div class="data-table-wrap">
-          <table aria-label="Monthly donation totals by category">
+          <table aria-label="Monthly donation totals">
             <thead>
-              <!-- Group label row -->
               <tr>
-                <th class="th-group th-group-normal" scope="colgroup"></th>
-                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">&#x2714;&#xFE0E; Normal</th>
-                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="2">&#x2715; Failed</th>
-                <th class="th-group th-group-cancelled col-sep" scope="colgroup" colspan="2">&#x25CB; Cancelled</th>
-                <th class="th-group th-group-failed" scope="colgroup" colspan="1">Total Lost</th>
-              </tr>
-              <!-- Column label row -->
-              <tr>
-                <th class="th-sub th-sub-normal" scope="col">Month</th>
-                <th class="th-sub th-sub-normal" scope="col" style="text-align:right">Subs</th>
-                <th class="th-sub th-sub-normal" scope="col" style="text-align:right">Recurring £</th>
-                <th class="th-sub th-sub-normal" scope="col" style="text-align:right">One-Off £</th>
-                <th class="th-sub th-sub-normal col-sep" scope="col" style="text-align:right">Total £</th>
-                <th class="th-sub th-sub-failed" scope="col" style="text-align:right">#</th>
-                <th class="th-sub th-sub-failed col-sep" scope="col" style="text-align:right">£</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right">#</th>
-                <th class="th-sub th-sub-cancelled col-sep" scope="col" style="text-align:right">£</th>
-                <th class="th-sub th-sub-failed" scope="col" style="text-align:right">£</th>
+                <th scope="col">Month</th>
+                <th scope="col" style="text-align:right">Active Subs</th>
+                <th scope="col" style="text-align:right">Recurring £</th>
+                <th scope="col" style="text-align:right">One-Off £</th>
+                <th scope="col" style="text-align:right">Total £</th>
+                <th scope="col" style="text-align:right">Failed #</th>
+                <th scope="col" style="text-align:right">Failed £</th>
+                <th scope="col" style="text-align:right">Cancelled #</th>
+                <th scope="col" style="text-align:right">Cancelled £</th>
               </tr>
             </thead>
             <tbody id="monthly-tbody">
-              <tr><td colspan="10"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+              <tr><td colspan="9"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
             </tbody>
           </table>
         </div>
@@ -677,32 +667,18 @@ const donationsJSON = JSON.stringify(donations ?? null);
         <div class="data-table-wrap">
           <table aria-label="Monthly subscription breakdown by gateway">
             <thead>
-              <!-- Group label row -->
               <tr>
-                <th class="th-group th-group-normal" scope="colgroup"></th>
-                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">&#x2714;&#xFE0E; Active Subscriptions</th>
-                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="4">&#x2715; Failed</th>
-                <th class="th-group th-group-cancelled" scope="colgroup" colspan="4">&#x25CB; Cancelled</th>
-              </tr>
-              <!-- Column label row -->
-              <tr>
-                <th class="th-sub th-sub-normal" scope="col">Month</th>
-                <th class="th-sub th-sub-normal" scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
-                <th class="th-sub th-sub-normal" scope="col" style="text-align:right;color:var(--gocardless)">GC</th>
-                <th class="th-sub th-sub-normal" scope="col" style="text-align:right;color:var(--paypal)">PP</th>
-                <th class="th-sub th-sub-normal col-sep" scope="col" style="text-align:right">Total</th>
-                <th class="th-sub th-sub-failed" scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
-                <th class="th-sub th-sub-failed" scope="col" style="text-align:right;color:var(--gocardless)">GC</th>
-                <th class="th-sub th-sub-failed" scope="col" style="text-align:right;color:var(--paypal)">PP</th>
-                <th class="th-sub th-sub-failed col-sep" scope="col" style="text-align:right">Total</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right;color:var(--gocardless)">GC</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right;color:var(--paypal)">PP</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right">Total</th>
+                <th scope="col">Month</th>
+                <th scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
+                <th scope="col" style="text-align:right;color:var(--gocardless)">GoCardless</th>
+                <th scope="col" style="text-align:right;color:var(--paypal)">PayPal</th>
+                <th scope="col" style="text-align:right">Total</th>
+                <th scope="col" style="text-align:right">Failed</th>
+                <th scope="col" style="text-align:right">Cancelled</th>
               </tr>
             </thead>
             <tbody id="gateway-tbody">
-              <tr><td colspan="13"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+              <tr><td colspan="7"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
             </tbody>
           </table>
         </div>

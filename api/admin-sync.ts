@@ -63,11 +63,19 @@ async function fetchMolliePayments(year: number): Promise<Donation[]> {
         const amount = p.amount;
         if (!amount?.value) continue;
         const customer = p._embedded?.customer || {};
-        const status = p.status === 'paid' ? 'paid' : p.status === 'canceled' ? 'cancelled' : p.status === 'failed' ? 'failed' : 'paid';
+        // Skip Mollie-PayPal duplicates (matches Python script)
+        if (p.method === 'paypal') continue;
+        if (p.status !== 'paid') continue;
+        // Detect subscription from description (matches detect_subscription_from_text)
+        const desc = (p.description || '').toLowerCase();
+        const isSub = desc.includes('monthly') || desc.includes('subscription') || !!p.subscriptionId;
+        // Extract subscription ID from description e.g. "Subscription #123"
+        const subMatch = (p.description || '').match(/[Ss]ubscription\s*#(\d+)/);
+        const subId = p.subscriptionId || (subMatch ? subMatch[1] : undefined);
         donations.push({
           id: p.id, date: paidAt, amount: parseFloat(amount.value), currency: amount.currency || 'EUR',
-          gateway: 'mollie', type: p.subscriptionId || p.method === 'directdebit' ? 'recurring' : 'oneoff',
-          status, subscription_id: p.subscriptionId || undefined,
+          gateway: 'mollie', type: isSub ? 'recurring' : 'oneoff',
+          status: 'paid', subscription_id: subId,
           payer: { name: customer.name, email: customer.email },
         });
       }
@@ -89,11 +97,16 @@ async function fetchGoCardlessPayments(year: number): Promise<Donation[]> {
       for (const p of payments) {
         const chargeDate = p.charge_date || p.created_at || '';
         if (!chargeDate.startsWith(`${year}-`)) continue;
-        const status = p.status === 'paid_out' || p.status === 'confirmed' ? 'paid' : p.status === 'cancelled' ? 'cancelled' : p.status === 'failed' ? 'failed' : 'paid';
+        // Match Python script: confirmed, paid_out, submitted, paid, pending_submission
+        const gcSuccessStatuses = new Set(['confirmed', 'paid_out', 'submitted', 'paid', 'pending_submission', 'pending_customer_approval']);
+        const gcFailedStatuses = new Set(['failed', 'bounced']);
+        const status = gcSuccessStatuses.has(p.status) ? 'paid' : gcFailedStatuses.has(p.status) ? 'failed' : p.status === 'cancelled' ? 'cancelled' : 'paid';
+        // Use links.subscription (not mandate) - matches welevelup/tracking gocardless_to_sheets.py
+        const subId = p.links?.subscription || p.links?.mandate || undefined;
         donations.push({
           id: p.id, date: chargeDate, amount: p.amount ? p.amount / 100 : 0,
-          currency: p.currency || 'GBP', gateway: 'gocardless', type: 'recurring',
-          status, subscription_id: p.links?.mandate || p.links?.subscription || undefined,
+          currency: p.currency || 'GBP', gateway: 'gocardless', type: subId ? 'recurring' : 'oneoff',
+          status, subscription_id: subId,
           payer: { name: p.description || '', email: '' },
         });
       }

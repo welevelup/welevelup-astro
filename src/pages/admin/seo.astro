@@ -499,7 +499,7 @@ const seoData = {
     });
 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await fetch('/api/admin-auth', { method: 'DELETE' });
+      await fetch('/api/admin-logout', { method: 'DELETE' });
       location.href = '/admin';
     });
   </script>

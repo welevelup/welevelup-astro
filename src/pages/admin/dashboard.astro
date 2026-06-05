@@ -812,7 +812,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
 
   // ── LOGOUT ────────────────────────────────────────────────
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    await fetch('/api/admin-auth', { method: 'DELETE' }).catch(() => {});
+    await fetch('/api/admin-logout', { method: 'DELETE' }).catch(() => {});
     location.href = '/admin';
   });
 

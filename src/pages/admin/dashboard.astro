@@ -287,21 +287,51 @@ const donationsJSON = JSON.stringify(donations ?? null);
     }
     @keyframes drawLine { to { stroke-dashoffset: 0; } }
 
-    /* ── DATA TABLES (wide / grouped) ── */
+    /* ── DATA TABLES (clean style) ── */
     .data-table-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border-radius: 12px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--bg-secondary);
     }
     .data-table-wrap table {
       border: none;
       border-radius: 0;
-      width: max-content;
-      min-width: 100%;
-      border-collapse: separate;
+      width: 100%;
+      border-collapse: collapse;
       border-spacing: 0;
+    }
+    .data-table-wrap th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+    .data-table-wrap td {
+      padding: 12px 20px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .data-table-wrap td[style*="text-align:right"],
+    .data-table-wrap th[style*="text-align:right"] {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+      font-weight: 600;
+    }
+    .data-table-wrap tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table-wrap tbody tr:nth-child(even) td {
+      background: rgba(255,255,255,0.03);
+    }
+    .data-table-wrap tbody tr:hover td {
+      background: rgba(255,255,255,0.06) !important;
     }
     /* Sticky first column */
     .data-table-wrap th:first-child,

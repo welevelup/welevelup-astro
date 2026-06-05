@@ -130,7 +130,6 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
           const lastPayment = sub.billing_info?.last_payment;
           if (!lastPayment) continue;
           const date = lastPayment.time || sub.create_time || '';
-          if (!date.startsWith(`${year}-`)) continue;
           donations.push({
             id: sub.id, date,
             amount: parseFloat(lastPayment.amount?.value || '0'),
@@ -147,7 +146,7 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
     // Also fetch one-off transactions via reporting API
     const start = new Date(Date.UTC(year, 0, 1, 0, 0, 0));
     const end = new Date(Date.UTC(year, 11, 31, 23, 59, 59));
-    const fmt = (d: Date) => d.toISOString().slice(0, 19) + '+0000';
+    const fmt = (d: Date) => d.toISOString().slice(0, 19) + 'Z';
     try {
       const data = await fetchJson(
         `https://api-m.paypal.com/v1/reporting/transactions?start_date=${fmt(start)}&end_date=${fmt(end)}&fields=all&page_size=500&transaction_type=T0006`,

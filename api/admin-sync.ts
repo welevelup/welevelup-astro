@@ -158,19 +158,28 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
           );
           const txs = data.transaction_details || [];
           console.log(`[PayPal] Month ${month} page ${page}: ${txs.length} transactions`);
+          const seenIds = new Set<string>();
           for (const tx of txs) {
             const info = tx.transaction_info || {};
             const payer = tx.payer_info || {};
             const amount = info.transaction_amount || {};
+            // Only status S (success) - matches Python script
+            if (info.transaction_status !== 'S') continue;
+            const txId = info.transaction_id || '';
+            if (!txId || seenIds.has(txId)) continue;
+            seenIds.add(txId);
             const val = parseFloat(amount.value || '0');
             if (val <= 0) continue;
-            const isRecurring = ['T0002', 'T0011', 'T0001', 'T0003'].includes(info.transaction_event_code || '');
+            // Use transaction_subject for subscription detection (matches Python detect_subscription_from_text)
+            const subject = (info.transaction_subject || '').toLowerCase();
+            const isSub = subject.includes('monthly') || subject.includes('subscription');
             const payerName = payer.payer_name?.alternate_full_name ||
               [payer.payer_name?.given_name, payer.payer_name?.surname].filter(Boolean).join(' ');
             donations.push({
-              id: info.transaction_id, date: info.transaction_initiation_date || '',
+              id: txId, date: info.transaction_initiation_date || '',
               amount: val, currency: amount.currency_code || 'GBP',
-              gateway: 'paypal', type: isRecurring ? 'recurring' : 'oneoff', status: 'paid',
+              gateway: 'paypal', type: isSub ? 'recurring' : 'oneoff', status: 'paid',
+              subscription_id: undefined, // PayPal has no subscription_id - dedup by payer email
               payer: { name: payerName, email: payer.email_address },
             });
           }

@@ -318,9 +318,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const currentMonthData = donationData.monthlyTotals.find(m => m.month === currentMonth);
     const prevMonthData = donationData.monthlyTotals.find(m => m.month === prevMonth);
 
-    if (currentMonthData) {
+    // Show previous month's active subscribers (normal baseline) and change from previous to current
+    if (prevMonthData) {
+      donationData.activeSubscribers = prevMonthData.active_subscribers;
+      donationData.newThisMonth = (currentMonthData?.active_subscribers || 0) - prevMonthData.active_subscribers;
+    } else if (currentMonthData) {
       donationData.activeSubscribers = currentMonthData.active_subscribers;
-      donationData.newThisMonth = currentMonthData.active_subscribers - (prevMonthData?.active_subscribers || 0);
+      donationData.newThisMonth = 0;
     }
 
     const redis = getRedis();

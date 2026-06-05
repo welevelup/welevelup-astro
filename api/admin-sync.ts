@@ -115,11 +115,13 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
     });
     const token = tokenData.access_token;
     for (let month = 1; month <= new Date().getMonth() + 1; month++) {
-      const start = new Date(year, month - 1, 1, 0, 0, 0);
-      const end = new Date(year, month, 0, 23, 59, 59);
+      const start = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+      const end = new Date(Date.UTC(year, month, 0, 23, 59, 59));
+      // PayPal requires ISO 8601 with timezone: YYYY-MM-DDTHH:MM:SS+0000
+      const fmt = (d: Date) => d.toISOString().slice(0, 19) + '+0000';
       try {
         const data = await fetchJson(
-          `https://api-m.paypal.com/v1/reporting/transactions?start_date=${start.toISOString().slice(0, 19)}&end_date=${end.toISOString().slice(0, 19)}&transaction_status=S`,
+          `https://api-m.paypal.com/v1/reporting/transactions?start_date=${fmt(start)}&end_date=${fmt(end)}&transaction_status=S&fields=all`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         for (const tx of data.transaction_details || []) {

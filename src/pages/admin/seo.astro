@@ -487,19 +487,19 @@ const seoData = {
       btn.disabled = true;
       btn.textContent = 'Syncing...';
       try {
-        // Future: connect to Google Search Console API
-        alert('Google Search Console sync coming soon. For now, data is static.');
-        btn.textContent = 'Refresh Data';
-        btn.disabled = false;
+        const res = await fetch('/api/admin-seo-sync', { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Sync failed');
+        location.reload();
       } catch (e) {
-        alert('Error: ' + e.message);
+        alert('Sync error: ' + e.message);
         btn.textContent = 'Refresh Data';
         btn.disabled = false;
       }
     });
 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await fetch('/api/admin-logout', { method: 'DELETE' });
+      await fetch('/api/admin-login', { method: 'DELETE' });
       location.href = '/admin';
     });
   </script>

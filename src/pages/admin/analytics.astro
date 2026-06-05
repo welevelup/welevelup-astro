@@ -532,19 +532,19 @@ const analyticsData = {
       btn.disabled = true;
       btn.textContent = 'Syncing...';
       try {
-        // Future: connect to Google Analytics 4 API
-        alert('Google Analytics sync coming soon. For now, data is static.');
-        btn.textContent = 'Refresh Data';
-        btn.disabled = false;
+        const res = await fetch('/api/admin-analytics-sync', { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || 'Sync failed');
+        location.reload();
       } catch (e) {
-        alert('Error: ' + e.message);
+        alert('Sync error: ' + e.message);
         btn.textContent = 'Refresh Data';
         btn.disabled = false;
       }
     });
 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await fetch('/api/admin-logout', { method: 'DELETE' });
+      await fetch('/api/admin-login', { method: 'DELETE' });
       location.href = '/admin';
     });
   </script>

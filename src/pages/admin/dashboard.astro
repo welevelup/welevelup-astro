@@ -273,6 +273,93 @@ const donationsJSON = JSON.stringify(donations ?? null);
     }
     @keyframes drawLine { to { stroke-dashoffset: 0; } }
 
+    /* ── DATA TABLES (wide / grouped) ── */
+    .data-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      /* custom scrollbar track matches container bg */
+    }
+    .data-table-wrap table {
+      border: none;
+      border-radius: 0;
+      width: max-content;
+      min-width: 100%;
+    }
+    /* Sticky first column */
+    .data-table-wrap th:first-child,
+    .data-table-wrap td:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 2;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border);
+    }
+    .data-table-wrap tbody tr:nth-child(even) td:first-child {
+      background: var(--row-alt, var(--bg-secondary));
+    }
+    /* Compact cells for dense tables */
+    .data-table-wrap th {
+      font-size: 10px;
+      padding: 7px 12px;
+      white-space: nowrap;
+    }
+    .data-table-wrap td {
+      font-size: 11px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+    /* Alternating rows */
+    .data-table-wrap tbody tr:nth-child(even) {
+      background: rgba(255,255,255,0.025);
+      --row-alt: color-mix(in srgb, var(--bg-secondary) 92%, white 8%);
+    }
+    /* Group header rows — span the full column group, no data */
+    .th-group {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-bottom: none;
+    }
+    .th-group-normal {
+      background: rgba(204,255,51,0.07);
+      color: var(--accent);
+      border-right: 1px solid rgba(204,255,51,0.15);
+    }
+    .th-group-failed {
+      background: rgba(248,113,113,0.1);
+      color: var(--danger);
+      border-right: 1px solid rgba(248,113,113,0.2);
+    }
+    .th-group-cancelled {
+      background: rgba(251,191,36,0.08);
+      color: var(--warning);
+      border-right: 1px solid rgba(251,191,36,0.18);
+    }
+    /* Sub-header row (column labels) */
+    .th-sub { border-top: 1px solid var(--border); }
+    .th-sub-normal  { background: rgba(204,255,51,0.04); }
+    .th-sub-failed  { background: rgba(248,113,113,0.06); color: var(--danger); }
+    .th-sub-cancelled { background: rgba(251,191,36,0.05); color: var(--warning); }
+    /* Cell tints inside failed/cancelled groups */
+    .td-failed  { color: var(--danger);  font-variant-numeric: tabular-nums; }
+    .td-failed-total { color: var(--danger); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .td-cancelled { color: var(--warning); font-variant-numeric: tabular-nums; }
+    .td-cancelled-total { color: var(--warning); font-weight: 700; font-variant-numeric: tabular-nums; }
+    /* Right border separator between groups */
+    .col-sep { border-right: 1px solid var(--border) !important; }
+    /* Light-mode overrides */
+    :root.light-mode .data-table-wrap tbody tr:nth-child(even) { background: rgba(0,0,0,0.025); }
+    :root.light-mode .th-group-normal  { background: rgba(139,126,189,0.08); }
+    :root.light-mode .th-group-failed  { background: rgba(220,38,38,0.07); }
+    :root.light-mode .th-group-cancelled { background: rgba(217,119,6,0.07); }
+    :root.light-mode .th-sub-normal  { background: rgba(139,126,189,0.04); }
+    :root.light-mode .th-sub-failed  { background: rgba(220,38,38,0.04); }
+    :root.light-mode .th-sub-cancelled { background: rgba(217,119,6,0.04); }
+
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -428,20 +515,29 @@ const donationsJSON = JSON.stringify(donations ?? null);
       <!-- MONTHLY DONATION TOTALS -->
       <section class="section" aria-labelledby="monthly-heading">
         <div class="section-title" id="monthly-heading">Monthly Donation Totals</div>
-        <div class="table-scroll">
-          <table>
+        <div class="data-table-wrap">
+          <table aria-label="Monthly donation totals by category">
             <thead>
+              <!-- Group label row -->
               <tr>
-                <th scope="col">Month</th>
-                <th scope="col">Subscribers</th>
-                <th scope="col">Recurring £</th>
-                <th scope="col">One-Off £</th>
-                <th scope="col">Total £</th>
-                <th scope="col">Failed #</th>
-                <th scope="col">Failed £</th>
-                <th scope="col">Cancelled #</th>
-                <th scope="col">Cancelled £</th>
-                <th scope="col">Total Lost £</th>
+                <th class="th-group th-group-normal" scope="colgroup" rowspan="1"></th>
+                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">Normal</th>
+                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="2">Failed</th>
+                <th class="th-group th-group-cancelled col-sep" scope="colgroup" colspan="2">Cancelled</th>
+                <th class="th-group th-group-failed" scope="colgroup" colspan="1">Lost</th>
+              </tr>
+              <!-- Column label row -->
+              <tr>
+                <th class="th-sub th-sub-normal" scope="col">Month</th>
+                <th class="th-sub th-sub-normal" scope="col">Subs</th>
+                <th class="th-sub th-sub-normal" scope="col">Recurring £</th>
+                <th class="th-sub th-sub-normal" scope="col">One-Off £</th>
+                <th class="th-sub th-sub-normal col-sep" scope="col">Total £</th>
+                <th class="th-sub th-sub-failed" scope="col">#</th>
+                <th class="th-sub th-sub-failed col-sep" scope="col">£</th>
+                <th class="th-sub th-sub-cancelled" scope="col">#</th>
+                <th class="th-sub th-sub-cancelled col-sep" scope="col">£</th>
+                <th class="th-sub th-sub-failed" scope="col">Total Lost £</th>
               </tr>
             </thead>
             <tbody id="monthly-tbody">
@@ -454,23 +550,31 @@ const donationsJSON = JSON.stringify(donations ?? null);
       <!-- MONTHLY SUBSCRIPTION BREAKDOWN BY GATEWAY -->
       <section class="section" aria-labelledby="gateway-table-heading">
         <div class="section-title" id="gateway-table-heading">Monthly Subscription Breakdown</div>
-        <div class="table-scroll">
-          <table>
+        <div class="data-table-wrap">
+          <table aria-label="Monthly subscription breakdown by gateway">
             <thead>
+              <!-- Group label row -->
               <tr>
-                <th scope="col">Month</th>
-                <th scope="col" style="color:var(--mollie)"># Mollie</th>
-                <th scope="col" style="color:var(--gocardless)"># GoCardless</th>
-                <th scope="col" style="color:var(--paypal)"># PayPal</th>
-                <th scope="col"># Total</th>
-                <th scope="col" style="color:var(--danger)">Failed M</th>
-                <th scope="col" style="color:var(--danger)">Failed GC</th>
-                <th scope="col" style="color:var(--danger)">Failed PP</th>
-                <th scope="col" style="color:var(--danger)">Failed Total</th>
-                <th scope="col" style="color:var(--warning)">Cancelled M</th>
-                <th scope="col" style="color:var(--warning)">Cancelled GC</th>
-                <th scope="col" style="color:var(--warning)">Cancelled PP</th>
-                <th scope="col" style="color:var(--warning)">Cancelled Total</th>
+                <th class="th-group th-group-normal" scope="colgroup" rowspan="1"></th>
+                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">Active Subscriptions</th>
+                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="4">Failed</th>
+                <th class="th-group th-group-cancelled" scope="colgroup" colspan="4">Cancelled</th>
+              </tr>
+              <!-- Column label row -->
+              <tr>
+                <th class="th-sub th-sub-normal" scope="col">Month</th>
+                <th class="th-sub th-sub-normal" scope="col" style="color:var(--mollie)">Mollie</th>
+                <th class="th-sub th-sub-normal" scope="col" style="color:var(--gocardless)">GC</th>
+                <th class="th-sub th-sub-normal" scope="col" style="color:var(--paypal)">PP</th>
+                <th class="th-sub th-sub-normal col-sep" scope="col">Total</th>
+                <th class="th-sub th-sub-failed" scope="col" style="color:var(--mollie)">Mollie</th>
+                <th class="th-sub th-sub-failed" scope="col" style="color:var(--gocardless)">GC</th>
+                <th class="th-sub th-sub-failed" scope="col" style="color:var(--paypal)">PP</th>
+                <th class="th-sub th-sub-failed col-sep" scope="col">Total</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="color:var(--mollie)">Mollie</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="color:var(--gocardless)">GC</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="color:var(--paypal)">PP</th>
+                <th class="th-sub th-sub-cancelled" scope="col">Total</th>
               </tr>
             </thead>
             <tbody id="gateway-tbody">
@@ -739,19 +843,17 @@ const donationsJSON = JSON.stringify(donations ?? null);
     }
     tbody.innerHTML = [...rows].reverse().map(m => {
       const lbl = (m.month || '').slice(0, 7);
-      const red = 'color:var(--danger)';
-      const warn = 'color:var(--warning)';
       return `<tr>
         <td>${lbl}</td>
         <td class="td-mono">${m.active_subscribers ?? 0}</td>
         <td class="td-mono">${fmt(m.monthly_donations ?? 0)}</td>
         <td class="td-mono">${fmt(m.one_off_donations ?? 0)}</td>
-        <td class="td-total">${fmt(m.total ?? 0)}</td>
-        <td class="td-mono" style="${red}">${m.failed_payments ?? 0}</td>
-        <td class="td-mono" style="${red}">${fmt(m.failed_amount ?? 0)}</td>
-        <td class="td-mono" style="${warn}">${m.cancelled ?? 0}</td>
-        <td class="td-mono" style="${warn}">${fmt(m.cancelled_amount ?? 0)}</td>
-        <td class="td-mono" style="${red}">${fmt(m.total_lost ?? 0)}</td>
+        <td class="td-total col-sep">${fmt(m.total ?? 0)}</td>
+        <td class="td-failed">${m.failed_payments ?? 0}</td>
+        <td class="td-failed col-sep">${fmt(m.failed_amount ?? 0)}</td>
+        <td class="td-cancelled">${m.cancelled ?? 0}</td>
+        <td class="td-cancelled col-sep">${fmt(m.cancelled_amount ?? 0)}</td>
+        <td class="td-failed-total">${fmt(m.total_lost ?? 0)}</td>
       </tr>`;
     }).join('');
   }
@@ -774,15 +876,15 @@ const donationsJSON = JSON.stringify(donations ?? null);
         <td class="td-mollie">${m.mollie_count ?? 0}</td>
         <td class="td-gocardless">${m.gocardless_count ?? 0}</td>
         <td class="td-paypal">${m.paypal_count ?? 0}</td>
-        <td class="td-total">${total}</td>
-        <td style="color:var(--danger)">${m.failed_mollie ?? 0}</td>
-        <td style="color:var(--danger)">${m.failed_gocardless ?? 0}</td>
-        <td style="color:var(--danger)">${m.failed_paypal ?? 0}</td>
-        <td style="color:var(--danger);font-weight:700">${failedTotal}</td>
-        <td style="color:var(--warning)">${m.cancelled_mollie ?? 0}</td>
-        <td style="color:var(--warning)">${m.cancelled_gocardless ?? 0}</td>
-        <td style="color:var(--warning)">${m.cancelled_paypal ?? 0}</td>
-        <td style="color:var(--warning);font-weight:700">${cancelledTotal}</td>
+        <td class="td-total col-sep">${total}</td>
+        <td class="td-failed">${m.failed_mollie ?? 0}</td>
+        <td class="td-failed">${m.failed_gocardless ?? 0}</td>
+        <td class="td-failed">${m.failed_paypal ?? 0}</td>
+        <td class="td-failed-total col-sep">${failedTotal}</td>
+        <td class="td-cancelled">${m.cancelled_mollie ?? 0}</td>
+        <td class="td-cancelled">${m.cancelled_gocardless ?? 0}</td>
+        <td class="td-cancelled">${m.cancelled_paypal ?? 0}</td>
+        <td class="td-cancelled-total">${cancelledTotal}</td>
       </tr>`;
     }).join('');
   }

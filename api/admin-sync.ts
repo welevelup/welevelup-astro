@@ -228,24 +228,41 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })),
       monthlyTotals: Array.from(
         donations.reduce((m, d) => {
+          if (!d.date || d.date.length < 7) return m;
           const month = d.date.slice(0, 7);
           const existing = m.get(month) || {
             month, total: 0, monthly_donations: 0, one_off_donations: 0,
             active_subscribers: new Set<string>(),
-          mollie_subs: new Set<string>(), gocardless_subs: new Set<string>(), paypal_subs: new Set<string>(),
-          mollie_count: 0, gocardless_count: 0, paypal_count: 0,
+            mollie_subs: new Set<string>(), gocardless_subs: new Set<string>(), paypal_subs: new Set<string>(),
+            failed_payments: 0, failed_amount: 0,
+            failed_mollie: 0, failed_gocardless: 0, failed_paypal: 0,
+            cancelled: 0, cancelled_amount: 0,
+            cancelled_mollie: 0, cancelled_gocardless: 0, cancelled_paypal: 0,
           };
-          if (d.currency === 'GBP') existing.total += d.amount;
-          if (d.type === 'recurring' && d.currency === 'GBP') {
-            existing.monthly_donations += d.amount;
-            // Use subscription_id for dedup (matches spreadsheet logic)
-            const subKey = d.subscription_id || d.payer?.email || d.id;
-            existing.active_subscribers.add(subKey);
-            if (d.gateway === 'mollie') existing.mollie_subs.add(subKey);
-            else if (d.gateway === 'gocardless') existing.gocardless_subs.add(subKey);
-            else if (d.gateway === 'paypal') existing.paypal_subs.add(subKey);
-          } else if (d.type === 'oneoff' && d.currency === 'GBP') {
-            existing.one_off_donations += d.amount;
+          if (d.status === 'failed' && d.currency === 'GBP') {
+            existing.failed_payments++;
+            existing.failed_amount += d.amount;
+            if (d.gateway === 'mollie') existing.failed_mollie++;
+            else if (d.gateway === 'gocardless') existing.failed_gocardless++;
+            else if (d.gateway === 'paypal') existing.failed_paypal++;
+          } else if (d.status === 'cancelled' && d.currency === 'GBP') {
+            existing.cancelled++;
+            existing.cancelled_amount += d.amount;
+            if (d.gateway === 'mollie') existing.cancelled_mollie++;
+            else if (d.gateway === 'gocardless') existing.cancelled_gocardless++;
+            else if (d.gateway === 'paypal') existing.cancelled_paypal++;
+          } else if (d.currency === 'GBP') {
+            existing.total += d.amount;
+            if (d.type === 'recurring') {
+              existing.monthly_donations += d.amount;
+              const subKey = d.subscription_id || d.payer?.email || d.id;
+              existing.active_subscribers.add(subKey);
+              if (d.gateway === 'mollie') existing.mollie_subs.add(subKey);
+              else if (d.gateway === 'gocardless') existing.gocardless_subs.add(subKey);
+              else if (d.gateway === 'paypal') existing.paypal_subs.add(subKey);
+            } else {
+              existing.one_off_donations += d.amount;
+            }
           }
           m.set(month, existing);
           return m;
@@ -259,6 +276,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         mollie_count: data.mollie_subs.size,
         gocardless_count: data.gocardless_subs.size,
         paypal_count: data.paypal_subs.size,
+        failed_payments: data.failed_payments,
+        failed_amount: Math.round(data.failed_amount * 100) / 100,
+        failed_mollie: data.failed_mollie,
+        failed_gocardless: data.failed_gocardless,
+        failed_paypal: data.failed_paypal,
+        cancelled: data.cancelled,
+        cancelled_amount: Math.round(data.cancelled_amount * 100) / 100,
+        cancelled_mollie: data.cancelled_mollie,
+        cancelled_gocardless: data.cancelled_gocardless,
+        cancelled_paypal: data.cancelled_paypal,
+        total_lost: Math.round((data.failed_amount + data.cancelled_amount) * 100) / 100,
       })),
     };
 

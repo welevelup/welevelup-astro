@@ -425,46 +425,60 @@ const donationsJSON = JSON.stringify(donations ?? null);
         </div>
       </section>
 
-      <!-- MONTHLY TOTALS TABLE + GATEWAY COUNT TABLE -->
-      <div class="grid-2">
-        <section class="section" aria-labelledby="monthly-heading">
-          <div class="section-title" id="monthly-heading">Monthly Totals</div>
-          <div class="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Month</th>
-                  <th scope="col">Recurring</th>
-                  <th scope="col">One-Off</th>
-                  <th scope="col">Total</th>
-                </tr>
-              </thead>
-              <tbody id="monthly-tbody">
-                <tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
+      <!-- MONTHLY DONATION TOTALS -->
+      <section class="section" aria-labelledby="monthly-heading">
+        <div class="section-title" id="monthly-heading">Monthly Donation Totals</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Month</th>
+                <th scope="col">Subscribers</th>
+                <th scope="col">Recurring £</th>
+                <th scope="col">One-Off £</th>
+                <th scope="col">Total £</th>
+                <th scope="col">Failed #</th>
+                <th scope="col">Failed £</th>
+                <th scope="col">Cancelled #</th>
+                <th scope="col">Cancelled £</th>
+                <th scope="col">Total Lost £</th>
+              </tr>
+            </thead>
+            <tbody id="monthly-tbody">
+              <tr><td colspan="10"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-        <section class="section" aria-labelledby="gateway-table-heading">
-          <div class="section-title" id="gateway-table-heading">Monthly by Gateway</div>
-          <div class="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">Month</th>
-                  <th scope="col" style="color:var(--mollie)">Mollie</th>
-                  <th scope="col" style="color:var(--gocardless)">GoCardless</th>
-                  <th scope="col" style="color:var(--paypal)">PayPal</th>
-                </tr>
-              </thead>
-              <tbody id="gateway-tbody">
-                <tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </section>
-      </div>
+      <!-- MONTHLY SUBSCRIPTION BREAKDOWN BY GATEWAY -->
+      <section class="section" aria-labelledby="gateway-table-heading">
+        <div class="section-title" id="gateway-table-heading">Monthly Subscription Breakdown</div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Month</th>
+                <th scope="col" style="color:var(--mollie)"># Mollie</th>
+                <th scope="col" style="color:var(--gocardless)"># GoCardless</th>
+                <th scope="col" style="color:var(--paypal)"># PayPal</th>
+                <th scope="col"># Total</th>
+                <th scope="col" style="color:var(--danger)">Failed M</th>
+                <th scope="col" style="color:var(--danger)">Failed GC</th>
+                <th scope="col" style="color:var(--danger)">Failed PP</th>
+                <th scope="col" style="color:var(--danger)">Failed Total</th>
+                <th scope="col" style="color:var(--warning)">Cancelled M</th>
+                <th scope="col" style="color:var(--warning)">Cancelled GC</th>
+                <th scope="col" style="color:var(--warning)">Cancelled PP</th>
+                <th scope="col" style="color:var(--warning)">Cancelled Total</th>
+              </tr>
+            </thead>
+            <tbody id="gateway-tbody">
+              <tr><td colspan="13"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
       <!-- RECENT DONATIONS -->
       <section class="section" aria-labelledby="recent-heading">
@@ -720,19 +734,24 @@ const donationsJSON = JSON.stringify(donations ?? null);
     const tbody = document.getElementById('monthly-tbody');
     if (!tbody) return;
     if (!rows || !rows.length) {
-      tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="10"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
       return;
     }
     tbody.innerHTML = [...rows].reverse().map(m => {
-      const recurring = m.monthly_donations ?? 0;
-      const oneOff    = m.one_off_donations ?? 0;
-      const total     = m.total ?? 0;
-      const monthLabel = (m.month || '').slice(0, 7);
+      const lbl = (m.month || '').slice(0, 7);
+      const red = 'color:var(--danger)';
+      const warn = 'color:var(--warning)';
       return `<tr>
-        <td>${monthLabel}</td>
-        <td class="td-mono">${fmt(recurring)}</td>
-        <td class="td-mono">${fmt(oneOff)}</td>
-        <td class="td-total">${fmt(total)}</td>
+        <td>${lbl}</td>
+        <td class="td-mono">${m.active_subscribers ?? 0}</td>
+        <td class="td-mono">${fmt(m.monthly_donations ?? 0)}</td>
+        <td class="td-mono">${fmt(m.one_off_donations ?? 0)}</td>
+        <td class="td-total">${fmt(m.total ?? 0)}</td>
+        <td class="td-mono" style="${red}">${m.failed_payments ?? 0}</td>
+        <td class="td-mono" style="${red}">${fmt(m.failed_amount ?? 0)}</td>
+        <td class="td-mono" style="${warn}">${m.cancelled ?? 0}</td>
+        <td class="td-mono" style="${warn}">${fmt(m.cancelled_amount ?? 0)}</td>
+        <td class="td-mono" style="${red}">${fmt(m.total_lost ?? 0)}</td>
       </tr>`;
     }).join('');
   }
@@ -742,16 +761,28 @@ const donationsJSON = JSON.stringify(donations ?? null);
     const tbody = document.getElementById('gateway-tbody');
     if (!tbody) return;
     if (!rows || !rows.length) {
-      tbody.innerHTML = '<tr><td colspan="4"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="13"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
       return;
     }
     tbody.innerHTML = [...rows].reverse().map(m => {
       const monthLabel = (m.month || '').slice(0, 7);
+      const total = (m.mollie_count ?? 0) + (m.gocardless_count ?? 0) + (m.paypal_count ?? 0);
+      const failedTotal = (m.failed_mollie ?? 0) + (m.failed_gocardless ?? 0) + (m.failed_paypal ?? 0);
+      const cancelledTotal = (m.cancelled_mollie ?? 0) + (m.cancelled_gocardless ?? 0) + (m.cancelled_paypal ?? 0);
       return `<tr>
         <td>${monthLabel}</td>
         <td class="td-mollie">${m.mollie_count ?? 0}</td>
         <td class="td-gocardless">${m.gocardless_count ?? 0}</td>
         <td class="td-paypal">${m.paypal_count ?? 0}</td>
+        <td class="td-total">${total}</td>
+        <td style="color:var(--danger)">${m.failed_mollie ?? 0}</td>
+        <td style="color:var(--danger)">${m.failed_gocardless ?? 0}</td>
+        <td style="color:var(--danger)">${m.failed_paypal ?? 0}</td>
+        <td style="color:var(--danger);font-weight:700">${failedTotal}</td>
+        <td style="color:var(--warning)">${m.cancelled_mollie ?? 0}</td>
+        <td style="color:var(--warning)">${m.cancelled_gocardless ?? 0}</td>
+        <td style="color:var(--warning)">${m.cancelled_paypal ?? 0}</td>
+        <td style="color:var(--warning);font-weight:700">${cancelledTotal}</td>
       </tr>`;
     }).join('');
   }
@@ -812,7 +843,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
 
   // ── LOGOUT ────────────────────────────────────────────────
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    await fetch('/api/admin-logout', { method: 'DELETE' }).catch(() => {});
+    await fetch('/api/admin-login', { method: 'DELETE' }).catch(() => {});
     location.href = '/admin';
   });
 

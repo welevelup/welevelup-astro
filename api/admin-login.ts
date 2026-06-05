@@ -5,6 +5,19 @@ const ADMIN_EMAIL = 'catalina@welevelup.org';
 const ADMIN_PASSWORD = 'catalina';
 
 const sessions = new Map<string, { email: string; expiresAt: number }>();
+const loginAttempts = new Map<string, { count: number; resetAt: number }>();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const record = loginAttempts.get(ip);
+  if (!record || record.resetAt < now) {
+    loginAttempts.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
+    return true;
+  }
+  if (record.count >= 5) return false;
+  record.count++;
+  return true;
+}
 
 function createSession(email: string): string {
   const token = randomBytes(32).toString('hex');
@@ -33,6 +46,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || req.socket.remoteAddress || 'unknown';
+  if (!checkRateLimit(ip)) {
+    return res.status(429).json({ error: 'Too many attempts. Try again in 15 minutes.' });
   }
 
   const { email, password } = req.body ?? {};

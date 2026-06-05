@@ -690,21 +690,19 @@ const donationsJSON = JSON.stringify(donations ?? null);
       <!-- MONTHLY SUBSCRIPTION BREAKDOWN BY GATEWAY -->
       <section class="section" aria-labelledby="gateway-table-heading">
         <div class="section-title" id="gateway-table-heading">Monthly Subscription Breakdown</div>
-        <div class="data-table-wrap">
-          <table aria-label="Monthly subscription breakdown by gateway">
+        <div style="overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-secondary);">
+          <table id="gateway-table" style="width: 100%; border-collapse: collapse;">
             <thead>
-              <tr>
-                <th scope="col">Month</th>
-                <th scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
-                <th scope="col" style="text-align:right;color:var(--gocardless)">GoCardless</th>
-                <th scope="col" style="text-align:right;color:var(--paypal)">PayPal</th>
-                <th scope="col" style="text-align:right">Total</th>
-                <th scope="col" style="text-align:right">Failed</th>
-                <th scope="col" style="text-align:right">Cancelled</th>
+              <tr style="background: var(--bg-secondary); border-bottom: 1px solid var(--border);">
+                <th style="padding: 12px 20px; text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary);">Month</th>
+                <th style="padding: 12px 20px; text-align: right; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--mollie);">Mollie</th>
+                <th style="padding: 12px 20px; text-align: right; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--gocardless);">GoCardless</th>
+                <th style="padding: 12px 20px; text-align: right; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--paypal);">PayPal</th>
+                <th style="padding: 12px 20px; text-align: right; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary);">Total</th>
               </tr>
             </thead>
             <tbody id="gateway-tbody">
-              <tr><td colspan="7"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>
+              <tr><td colspan="5" style="padding: 48px 20px; text-align: center; color: var(--text-tertiary);">No data. Run a sync.</td></tr>
             </tbody>
           </table>
         </div>
@@ -994,28 +992,18 @@ const donationsJSON = JSON.stringify(donations ?? null);
     const tbody = document.getElementById('gateway-tbody');
     if (!tbody) return;
     if (!rows || !rows.length) {
-      tbody.innerHTML = '<tr><td colspan="13"><div class="empty"><strong>No data</strong>Run a sync.</div></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="padding: 48px 20px; text-align: center; color: var(--text-tertiary); font-size: 13px;"><strong>No data</strong><br/>Run a sync to load donation data.</td></tr>';
       return;
     }
     tbody.innerHTML = [...rows].reverse().map(m => {
       const monthLabel = (m.month || '').slice(0, 7);
       const total = (m.mollie_count ?? 0) + (m.gocardless_count ?? 0) + (m.paypal_count ?? 0);
-      const failedTotal = (m.failed_mollie ?? 0) + (m.failed_gocardless ?? 0) + (m.failed_paypal ?? 0);
-      const cancelledTotal = (m.cancelled_mollie ?? 0) + (m.cancelled_gocardless ?? 0) + (m.cancelled_paypal ?? 0);
-      return `<tr>
-        <td class="td-month">${monthLabel}</td>
-        <td class="td-mollie">${m.mollie_count ?? 0}</td>
-        <td class="td-gocardless">${m.gocardless_count ?? 0}</td>
-        <td class="td-paypal">${m.paypal_count ?? 0}</td>
-        <td class="td-total col-sep">${total}</td>
-        <td class="td-failed">${m.failed_mollie ?? 0}</td>
-        <td class="td-failed">${m.failed_gocardless ?? 0}</td>
-        <td class="td-failed">${m.failed_paypal ?? 0}</td>
-        <td class="td-failed-total col-sep">${failedTotal}</td>
-        <td class="td-cancelled">${m.cancelled_mollie ?? 0}</td>
-        <td class="td-cancelled">${m.cancelled_gocardless ?? 0}</td>
-        <td class="td-cancelled">${m.cancelled_paypal ?? 0}</td>
-        <td class="td-cancelled-total">${cancelledTotal}</td>
+      return `<tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+        <td style="padding: 12px 20px; font-size: 13px;">${monthLabel}</td>
+        <td style="padding: 12px 20px; font-size: 13px; text-align: right; font-family: 'SF Mono', monospace; color: var(--mollie);">${m.mollie_count ?? 0}</td>
+        <td style="padding: 12px 20px; font-size: 13px; text-align: right; font-family: 'SF Mono', monospace; color: var(--gocardless);">${m.gocardless_count ?? 0}</td>
+        <td style="padding: 12px 20px; font-size: 13px; text-align: right; font-family: 'SF Mono', monospace; color: var(--paypal);">${m.paypal_count ?? 0}</td>
+        <td style="padding: 12px 20px; font-size: 13px; text-align: right; font-family: 'SF Mono', monospace; font-weight: 600;">${total}</td>
       </tr>`;
     }).join('');
   }

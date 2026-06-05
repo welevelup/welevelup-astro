@@ -222,17 +222,31 @@ const donationsJSON = JSON.stringify(donations ?? null);
 
     /* ── GATEWAY BARS ── */
     .gateway-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .gateway-card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 24px;
+      transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
     }
-    .gateway-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
-    .gateway-row:last-child { margin-bottom: 0; }
-    .gateway-label { font-size: 12px; font-weight: 600; width: 120px; flex-shrink: 0; }
-    .gateway-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
-    .gateway-fill { height: 100%; border-radius: 4px; transition: width 0.6s cubic-bezier(0.16,1,0.3,1); }
-    .gateway-value { font-size: 12px; width: 100px; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+    .gateway-card:hover { border-color: var(--accent); background: rgba(204,255,51,0.03); }
+    .gateway-name { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+    .gateway-amount { font-size: 24px; font-weight: 800; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+    .gateway-percent { font-size: 14px; color: var(--text-tertiary); margin-bottom: 16px; }
+    .gateway-bar {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .gateway-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .gateway-meta { font-size: 11px; color: var(--text-secondary); display: flex; justify-content: space-between; }
+    .gateway-meta-item { display: flex; flex-direction: column; gap: 2px; }
 
     /* ── GRID 2 ── */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -914,7 +928,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
     });
   }
 
-  // ── GATEWAY BARS ──────────────────────────────────────────
+  // ── GATEWAY CARDS ──────────────────────────────────────────
   function drawGatewayBars(byGateway) {
     const container = document.getElementById('gateway-bars');
     if (!container) return;
@@ -933,12 +947,19 @@ const donationsJSON = JSON.stringify(donations ?? null);
     container.innerHTML = gateways.map(g => {
       const pct = Math.round((g.value / total) * 100);
       return `
-        <div class="gateway-row">
-          <div class="gateway-label" style="color:${g.color}">${g.label}</div>
-          <div class="gateway-track">
-            <div class="gateway-fill" style="width:${pct}%;background:${g.color};opacity:0.85"></div>
+        <div class="gateway-card">
+          <div class="gateway-name" style="color:${g.color}">${g.label}</div>
+          <div class="gateway-amount">${fmt(g.value)}</div>
+          <div class="gateway-percent">${pct}% of total</div>
+          <div class="gateway-bar">
+            <div class="gateway-bar-fill" style="width:${pct}%;background:${g.color}"></div>
           </div>
-          <div class="gateway-value">${fmt(g.value)} (${pct}%)</div>
+          <div class="gateway-meta">
+            <div class="gateway-meta-item">
+              <span style="font-size:10px;text-transform:uppercase;letter-spacing:0.05em;opacity:0.7">Year to Date</span>
+              <span style="font-weight:600">${fmt(g.value)}</span>
+            </div>
+          </div>
         </div>`;
     }).join('');
   }

@@ -277,15 +277,17 @@ const donationsJSON = JSON.stringify(donations ?? null);
     .data-table-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      /* custom scrollbar track matches container bg */
+      background: var(--bg-secondary);
     }
     .data-table-wrap table {
       border: none;
       border-radius: 0;
       width: max-content;
       min-width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
     }
     /* Sticky first column */
     .data-table-wrap th:first-child,
@@ -294,71 +296,179 @@ const donationsJSON = JSON.stringify(donations ?? null);
       left: 0;
       z-index: 2;
       background: var(--bg-secondary);
-      border-right: 1px solid var(--border);
+      border-right: 2px solid var(--border);
     }
     .data-table-wrap tbody tr:nth-child(even) td:first-child {
-      background: var(--row-alt, var(--bg-secondary));
+      background: var(--row-alt-bg, var(--bg-secondary));
     }
-    /* Compact cells for dense tables */
+    /* Base cell sizing — more breathing room */
     .data-table-wrap th {
-      font-size: 10px;
-      padding: 7px 12px;
+      font-size: 11px;
+      padding: 10px 16px;
       white-space: nowrap;
+      border-bottom: 1px solid var(--border);
     }
     .data-table-wrap td {
-      font-size: 11px;
-      padding: 6px 12px;
+      font-size: 12px;
+      padding: 10px 16px;
       white-space: nowrap;
+      min-height: 40px;
+      border-bottom: 1px solid rgba(255,255,255,0.035);
+      vertical-align: middle;
     }
-    /* Alternating rows */
-    .data-table-wrap tbody tr:nth-child(even) {
-      background: rgba(255,255,255,0.025);
-      --row-alt: color-mix(in srgb, var(--bg-secondary) 92%, white 8%);
-    }
-    /* Group header rows — span the full column group, no data */
-    .th-group {
-      font-size: 9px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 5px 12px;
+    .data-table-wrap tbody tr:last-child td {
       border-bottom: none;
     }
+    /* Alternating rows — more visible separation */
+    .data-table-wrap tbody tr:nth-child(even) {
+      --row-alt-bg: rgba(255,255,255,0.04);
+    }
+    .data-table-wrap tbody tr:nth-child(even) td {
+      background: rgba(255,255,255,0.04);
+    }
+    .data-table-wrap tbody tr:hover td {
+      background: rgba(255,255,255,0.07) !important;
+    }
+    .data-table-wrap tbody tr:hover td:first-child {
+      background: rgba(255,255,255,0.07) !important;
+    }
+
+    /* ── GROUP HEADER ROWS ── */
+    /* These rows hold the section labels: Normal / Failed / Cancelled */
+    .th-group {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-bottom: none;
+    }
+    /* Normal group — accent green */
     .th-group-normal {
-      background: rgba(204,255,51,0.07);
+      background: rgba(204,255,51,0.12);
       color: var(--accent);
-      border-right: 1px solid rgba(204,255,51,0.15);
     }
+    /* Separator between Normal and Failed groups */
+    .th-group-normal.col-sep {
+      border-right: 2px solid rgba(204,255,51,0.3) !important;
+    }
+    /* Failed group — danger red */
     .th-group-failed {
-      background: rgba(248,113,113,0.1);
+      background: rgba(248,113,113,0.14);
       color: var(--danger);
-      border-right: 1px solid rgba(248,113,113,0.2);
     }
+    .th-group-failed.col-sep {
+      border-right: 2px solid rgba(248,113,113,0.3) !important;
+    }
+    /* Cancelled group — warning amber */
     .th-group-cancelled {
+      background: rgba(251,191,36,0.12);
+      color: var(--warning);
+    }
+    .th-group-cancelled.col-sep {
+      border-right: 2px solid rgba(251,191,36,0.25) !important;
+    }
+
+    /* ── SUB-HEADER ROW (column labels) ── */
+    .th-sub {
+      border-top: 2px solid rgba(255,255,255,0.06);
+    }
+    .th-sub-normal {
+      background: rgba(204,255,51,0.06);
+      color: var(--text-secondary);
+    }
+    .th-sub-failed {
+      background: rgba(248,113,113,0.09);
+      color: var(--danger);
+    }
+    .th-sub-cancelled {
       background: rgba(251,191,36,0.08);
       color: var(--warning);
-      border-right: 1px solid rgba(251,191,36,0.18);
     }
-    /* Sub-header row (column labels) */
-    .th-sub { border-top: 1px solid var(--border); }
-    .th-sub-normal  { background: rgba(204,255,51,0.04); }
-    .th-sub-failed  { background: rgba(248,113,113,0.06); color: var(--danger); }
-    .th-sub-cancelled { background: rgba(251,191,36,0.05); color: var(--warning); }
-    /* Cell tints inside failed/cancelled groups */
-    .td-failed  { color: var(--danger);  font-variant-numeric: tabular-nums; }
-    .td-failed-total { color: var(--danger); font-weight: 700; font-variant-numeric: tabular-nums; }
-    .td-cancelled { color: var(--warning); font-variant-numeric: tabular-nums; }
-    .td-cancelled-total { color: var(--warning); font-weight: 700; font-variant-numeric: tabular-nums; }
-    /* Right border separator between groups */
-    .col-sep { border-right: 1px solid var(--border) !important; }
-    /* Light-mode overrides */
-    :root.light-mode .data-table-wrap tbody tr:nth-child(even) { background: rgba(0,0,0,0.025); }
-    :root.light-mode .th-group-normal  { background: rgba(139,126,189,0.08); }
-    :root.light-mode .th-group-failed  { background: rgba(220,38,38,0.07); }
-    :root.light-mode .th-group-cancelled { background: rgba(217,119,6,0.07); }
-    :root.light-mode .th-sub-normal  { background: rgba(139,126,189,0.04); }
-    :root.light-mode .th-sub-failed  { background: rgba(220,38,38,0.04); }
-    :root.light-mode .th-sub-cancelled { background: rgba(217,119,6,0.04); }
+    /* Sub-header separators mirror group separators */
+    .th-sub-normal.col-sep {
+      border-right: 2px solid rgba(204,255,51,0.2) !important;
+    }
+    .th-sub-failed.col-sep {
+      border-right: 2px solid rgba(248,113,113,0.25) !important;
+    }
+    .th-sub-cancelled.col-sep {
+      border-right: 2px solid rgba(251,191,36,0.2) !important;
+    }
+
+    /* ── NUMERIC CELLS ── */
+    /* Monospace font for all tabular numbers — true alignment */
+    .td-mono,
+    .td-total,
+    .td-failed,
+    .td-failed-total,
+    .td-cancelled,
+    .td-cancelled-total,
+    .td-mollie,
+    .td-gocardless,
+    .td-paypal {
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+    .td-failed  { color: var(--danger); }
+    .td-failed-total {
+      color: var(--danger);
+      font-weight: 700;
+    }
+    .td-cancelled { color: var(--warning); }
+    .td-cancelled-total {
+      color: var(--warning);
+      font-weight: 700;
+    }
+
+    /* Group column separators — right border acts as section fence */
+    .col-sep { border-right: 2px solid var(--border) !important; }
+    /* Normal-group separator gets accent tint */
+    td.col-sep:nth-child(5),
+    th.col-sep:nth-child(5) {
+      border-right: 2px solid rgba(204,255,51,0.18) !important;
+    }
+    /* Failed-group separator gets danger tint */
+    td.col-sep:nth-child(7),
+    th.col-sep:nth-child(7),
+    td.col-sep:nth-child(9),
+    th.col-sep:nth-child(9) {
+      border-right: 2px solid rgba(248,113,113,0.2) !important;
+    }
+
+    /* Month label column */
+    .td-month {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: 0.02em;
+    }
+
+    /* ── LIGHT-MODE OVERRIDES ── */
+    :root.light-mode .data-table-wrap tbody tr:nth-child(even) td {
+      background: rgba(0,0,0,0.03);
+    }
+    :root.light-mode .data-table-wrap tbody tr:hover td {
+      background: rgba(0,0,0,0.05) !important;
+    }
+    :root.light-mode .th-group-normal  { background: rgba(100,160,0,0.1); color: #5a8700; }
+    :root.light-mode .th-group-failed  { background: rgba(220,38,38,0.09); }
+    :root.light-mode .th-group-cancelled { background: rgba(180,100,0,0.09); }
+    :root.light-mode .th-sub-normal  { background: rgba(100,160,0,0.05); color: var(--text-secondary); }
+    :root.light-mode .th-sub-failed  { background: rgba(220,38,38,0.05); }
+    :root.light-mode .th-sub-cancelled { background: rgba(180,100,0,0.05); }
+    :root.light-mode .data-table-wrap td {
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    :root.light-mode .data-table-wrap th:first-child,
+    :root.light-mode .data-table-wrap td:first-child {
+      background: #F9F9F9;
+      border-right: 2px solid rgba(0,0,0,0.08);
+    }
+    :root.light-mode .data-table-wrap tbody tr:nth-child(even) td:first-child {
+      background: rgba(0,0,0,0.03);
+    }
 
     /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -520,24 +630,24 @@ const donationsJSON = JSON.stringify(donations ?? null);
             <thead>
               <!-- Group label row -->
               <tr>
-                <th class="th-group th-group-normal" scope="colgroup" rowspan="1"></th>
-                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">Normal</th>
-                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="2">Failed</th>
-                <th class="th-group th-group-cancelled col-sep" scope="colgroup" colspan="2">Cancelled</th>
-                <th class="th-group th-group-failed" scope="colgroup" colspan="1">Lost</th>
+                <th class="th-group th-group-normal" scope="colgroup"></th>
+                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">&#x2714;&#xFE0E; Normal</th>
+                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="2">&#x2715; Failed</th>
+                <th class="th-group th-group-cancelled col-sep" scope="colgroup" colspan="2">&#x25CB; Cancelled</th>
+                <th class="th-group th-group-failed" scope="colgroup" colspan="1">Total Lost</th>
               </tr>
               <!-- Column label row -->
               <tr>
                 <th class="th-sub th-sub-normal" scope="col">Month</th>
-                <th class="th-sub th-sub-normal" scope="col">Subs</th>
-                <th class="th-sub th-sub-normal" scope="col">Recurring £</th>
-                <th class="th-sub th-sub-normal" scope="col">One-Off £</th>
-                <th class="th-sub th-sub-normal col-sep" scope="col">Total £</th>
-                <th class="th-sub th-sub-failed" scope="col">#</th>
-                <th class="th-sub th-sub-failed col-sep" scope="col">£</th>
-                <th class="th-sub th-sub-cancelled" scope="col">#</th>
-                <th class="th-sub th-sub-cancelled col-sep" scope="col">£</th>
-                <th class="th-sub th-sub-failed" scope="col">Total Lost £</th>
+                <th class="th-sub th-sub-normal" scope="col" style="text-align:right">Subs</th>
+                <th class="th-sub th-sub-normal" scope="col" style="text-align:right">Recurring £</th>
+                <th class="th-sub th-sub-normal" scope="col" style="text-align:right">One-Off £</th>
+                <th class="th-sub th-sub-normal col-sep" scope="col" style="text-align:right">Total £</th>
+                <th class="th-sub th-sub-failed" scope="col" style="text-align:right">#</th>
+                <th class="th-sub th-sub-failed col-sep" scope="col" style="text-align:right">£</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right">#</th>
+                <th class="th-sub th-sub-cancelled col-sep" scope="col" style="text-align:right">£</th>
+                <th class="th-sub th-sub-failed" scope="col" style="text-align:right">£</th>
               </tr>
             </thead>
             <tbody id="monthly-tbody">
@@ -555,26 +665,26 @@ const donationsJSON = JSON.stringify(donations ?? null);
             <thead>
               <!-- Group label row -->
               <tr>
-                <th class="th-group th-group-normal" scope="colgroup" rowspan="1"></th>
-                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">Active Subscriptions</th>
-                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="4">Failed</th>
-                <th class="th-group th-group-cancelled" scope="colgroup" colspan="4">Cancelled</th>
+                <th class="th-group th-group-normal" scope="colgroup"></th>
+                <th class="th-group th-group-normal col-sep" scope="colgroup" colspan="4">&#x2714;&#xFE0E; Active Subscriptions</th>
+                <th class="th-group th-group-failed col-sep" scope="colgroup" colspan="4">&#x2715; Failed</th>
+                <th class="th-group th-group-cancelled" scope="colgroup" colspan="4">&#x25CB; Cancelled</th>
               </tr>
               <!-- Column label row -->
               <tr>
                 <th class="th-sub th-sub-normal" scope="col">Month</th>
-                <th class="th-sub th-sub-normal" scope="col" style="color:var(--mollie)">Mollie</th>
-                <th class="th-sub th-sub-normal" scope="col" style="color:var(--gocardless)">GC</th>
-                <th class="th-sub th-sub-normal" scope="col" style="color:var(--paypal)">PP</th>
-                <th class="th-sub th-sub-normal col-sep" scope="col">Total</th>
-                <th class="th-sub th-sub-failed" scope="col" style="color:var(--mollie)">Mollie</th>
-                <th class="th-sub th-sub-failed" scope="col" style="color:var(--gocardless)">GC</th>
-                <th class="th-sub th-sub-failed" scope="col" style="color:var(--paypal)">PP</th>
-                <th class="th-sub th-sub-failed col-sep" scope="col">Total</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="color:var(--mollie)">Mollie</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="color:var(--gocardless)">GC</th>
-                <th class="th-sub th-sub-cancelled" scope="col" style="color:var(--paypal)">PP</th>
-                <th class="th-sub th-sub-cancelled" scope="col">Total</th>
+                <th class="th-sub th-sub-normal" scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
+                <th class="th-sub th-sub-normal" scope="col" style="text-align:right;color:var(--gocardless)">GC</th>
+                <th class="th-sub th-sub-normal" scope="col" style="text-align:right;color:var(--paypal)">PP</th>
+                <th class="th-sub th-sub-normal col-sep" scope="col" style="text-align:right">Total</th>
+                <th class="th-sub th-sub-failed" scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
+                <th class="th-sub th-sub-failed" scope="col" style="text-align:right;color:var(--gocardless)">GC</th>
+                <th class="th-sub th-sub-failed" scope="col" style="text-align:right;color:var(--paypal)">PP</th>
+                <th class="th-sub th-sub-failed col-sep" scope="col" style="text-align:right">Total</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right;color:var(--mollie)">Mollie</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right;color:var(--gocardless)">GC</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right;color:var(--paypal)">PP</th>
+                <th class="th-sub th-sub-cancelled" scope="col" style="text-align:right">Total</th>
               </tr>
             </thead>
             <tbody id="gateway-tbody">
@@ -844,7 +954,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
     tbody.innerHTML = [...rows].reverse().map(m => {
       const lbl = (m.month || '').slice(0, 7);
       return `<tr>
-        <td>${lbl}</td>
+        <td class="td-month">${lbl}</td>
         <td class="td-mono">${m.active_subscribers ?? 0}</td>
         <td class="td-mono">${fmt(m.monthly_donations ?? 0)}</td>
         <td class="td-mono">${fmt(m.one_off_donations ?? 0)}</td>
@@ -872,7 +982,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
       const failedTotal = (m.failed_mollie ?? 0) + (m.failed_gocardless ?? 0) + (m.failed_paypal ?? 0);
       const cancelledTotal = (m.cancelled_mollie ?? 0) + (m.cancelled_gocardless ?? 0) + (m.cancelled_paypal ?? 0);
       return `<tr>
-        <td>${monthLabel}</td>
+        <td class="td-month">${monthLabel}</td>
         <td class="td-mollie">${m.mollie_count ?? 0}</td>
         <td class="td-gocardless">${m.gocardless_count ?? 0}</td>
         <td class="td-paypal">${m.paypal_count ?? 0}</td>

@@ -1,10 +1,31 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { randomBytes } from 'crypto';
 
-const ADMIN_EMAIL = 'catalina@welevelup.org';
-const ADMIN_PASSWORD = 'catalina';
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL || '';
+const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || '';
 
-const sessions = new Map<string, { email: string; expiresAt: number }>();
+if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+  throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD env vars are required');
+}
+
+async function redisCommand(command: string, args: (string | number)[] = []): Promise<any> {
+  const url = new URL(UPSTASH_REDIS_REST_URL);
+  url.pathname = `/v2/pipeline`;
+  const res = await fetch(url.toString(), {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify([[command, ...args]]),
+  });
+  if (!res.ok) throw new Error(`Redis error: ${res.statusText}`);
+  const data = await res.json() as any[];
+  return data[0];
+}
+
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(ip: string): boolean {
@@ -19,19 +40,26 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-function createSession(email: string): string {
+async function createSession(email: string): Promise<string> {
   const token = randomBytes(32).toString('hex');
-  sessions.set(token, { email, expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000 });
+  const ttl = 7 * 24 * 60 * 60; // 7 days in seconds
+  await redisCommand('SET', [
+    `session:${token}`,
+    JSON.stringify({ email }),
+    'EX',
+    ttl,
+  ]);
   return token;
 }
 
-export function getSession(token: string): { email: string } | null {
-  const session = sessions.get(token);
-  if (!session || session.expiresAt < Date.now()) {
-    sessions.delete(token);
+export async function getSession(token: string): Promise<{ email: string } | null> {
+  const data = await redisCommand('GET', [`session:${token}`]);
+  if (!data) return null;
+  try {
+    return JSON.parse(data as string);
+  } catch {
     return null;
   }
-  return { email: session.email };
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -39,7 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const cookies = req.headers.cookie ?? '';
     const match = cookies.match(/admin_session=([^;]+)/);
     const token = match?.[1];
-    if (token) sessions.delete(token);
+    if (token) await redisCommand('DEL', [`session:${token}`]);
     res.setHeader('Set-Cookie', 'admin_session=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict');
     return res.status(200).json({ ok: true });
   }
@@ -56,7 +84,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { email, password } = req.body ?? {};
 
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-    const token = createSession(email);
+    const token = await createSession(email);
     res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);
     return res.status(200).json({ ok: true });
   }

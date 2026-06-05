@@ -1,78 +1,56 @@
 ---
+import { Redis } from '@upstash/redis';
+
 export const prerender = false;
 
-const seoData = {
-  period: "May 5 - June 4, 2026",
-  lastUpdated: "2026-06-04 at 4:33pm GMT+3",
-  updateFrequency: "Manual — click 'Refresh Data' to sync from Google Search Console",
+const getRedis = () => {
+  const url = process.env.UPSTASH_REDIS_REST_URL || '';
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  if (!url || !token) throw new Error('Redis not configured');
+  return new Redis({ url, token });
+};
 
-  // Overview metrics
+let seoData: any = null;
+try {
+  const redis = getRedis();
+  seoData = await redis.get('admin:seo');
+} catch (err) {
+  console.error('Failed to fetch SEO data from Redis:', err);
+}
+
+const fallbackData = {
+  period: "Last 28 days",
+  lastUpdated: new Date().toISOString(),
+  updateFrequency: "Manual — click 'Refresh Data' to sync from Google Search Console",
+  overview: { totalImpressions: 0, totalClicks: 0, averageCTR: 0, averagePosition: 0, improvementFromLastMonth: { ctr: 0, position: 0 } },
+  keywords: [],
+  pages: [],
+  searchAppearance: [],
+  geography: [],
+  keywordMovement: [],
+  monthlyTrend: [],
+  devices: []
+};
+
+const displayData = seoData ? {
+  period: "Last 28 days",
+  lastUpdated: seoData.lastSync || new Date().toISOString(),
+  updateFrequency: "Manual — click 'Refresh Data' to sync from Google Search Console",
   overview: {
-    totalImpressions: 7848,
-    totalClicks: 433,
-    averageCTR: 5.52,
-    averagePosition: 5.22,
+    totalImpressions: seoData.totalImpressions || 0,
+    totalClicks: seoData.totalClicks || 0,
+    averageCTR: seoData.avgCtr || 0,
+    averagePosition: seoData.avgPosition || 0,
     improvementFromLastMonth: { ctr: 0.8, position: 0.3 }
   },
-
-  // Top keywords (5 tracked)
-  keywords: [
-    { query: "level up", impressions: 2233, clicks: 36, ctr: 1.61, position: 7.0, change: -0.5 },
-    { query: "level up uk", impressions: 35, clicks: 8, ctr: 22.86, position: 1.5, change: 0.2 },
-    { query: "feminist campaigns", impressions: 14, clicks: 1, ctr: 7.14, position: 1.5, change: 0 },
-    { query: "pregnancy in prison", impressions: 9, clicks: 0, ctr: 0.00, position: 18.9, change: -2.1 },
-    { query: "feminist groups uk", impressions: 3, clicks: 0, ctr: 0.00, position: 16.7, change: 1.4 }
-  ],
-
-  // Top pages
-  pages: [
-    { url: "/", impressions: 3976, clicks: 128, ctr: 3.22, position: 2.5, traffic: 535 },
-    { url: "/campaign/pregnancy-in-prison/", impressions: 867, clicks: 102, ctr: 11.76, position: 5.1, traffic: 98 },
-    { url: "/petition/ipso-dignity/", impressions: 456, clicks: 55, ctr: 12.06, position: 4.4, traffic: 64 },
-    { url: "/media-guidelines/", impressions: 305, clicks: 38, ctr: 12.46, position: 6.2, traffic: 76 },
-    { url: "/blog/", impressions: 187, clicks: 12, ctr: 6.42, position: 15.1, traffic: 23 }
-  ],
-
-  // Search appearance breakdown
-  searchAppearance: [
-    { type: "Web Results", count: 8234, percentage: 65 },
-    { type: "Featured Snippet", count: 1456, percentage: 18 },
-    { type: "Knowledge Panel", count: 892, percentage: 11 },
-    { type: "Image Results", count: 266, percentage: 3 },
-    { type: "News", count: 0, percentage: 0 }
-  ],
-
-  // Geographic breakdown
-  geography: [
-    { country: "United Kingdom", impressions: 5234, clicks: 289, ctr: 5.52 },
-    { country: "United States", impressions: 1456, clicks: 98, ctr: 6.73 },
-    { country: "Ireland", impressions: 789, clicks: 34, ctr: 4.31 },
-    { country: "Canada", impressions: 234, clicks: 8, ctr: 3.41 },
-    { country: "Australia", impressions: 135, clicks: 4, ctr: 2.96 }
-  ],
-
-  // Keywords gaining/losing positions
-  keywordMovement: [
-    { query: "feminist campaigns", movement: "up", change: 3.2, newPosition: 1.5 },
-    { query: "level up uk", movement: "stable", change: 0.2, newPosition: 1.5 },
-    { query: "feminist groups uk", movement: "down", change: -1.4, newPosition: 16.7 },
-    { query: "pregnancy in prison", movement: "down", change: -2.1, newPosition: 18.9 },
-    { query: "levelup", movement: "down", change: -0.8, newPosition: 10.5 }
-  ],
-
-  // Monthly comparison
-  monthlyTrend: [
-    { month: "May", impressions: 7234, clicks: 401, ctr: 5.55 },
-    { month: "June (current)", impressions: 7848, clicks: 433, ctr: 5.52 }
-  ],
-
-  // Device breakdown
-  devices: [
-    { device: "Mobile", impressions: 4567, clicks: 245, ctr: 5.37 },
-    { device: "Desktop", impressions: 2890, clicks: 172, ctr: 5.95 },
-    { device: "Tablet", impressions: 391, clicks: 16, ctr: 4.09 }
-  ]
-};
+  keywords: seoData.topKeywords || [],
+  pages: seoData.topPages || [],
+  searchAppearance: seoData.searchAppearance || [],
+  geography: seoData.geography || [],
+  keywordMovement: (seoData.topKeywords || []).map((k: any) => ({ query: k.query, movement: k.change > 0 ? 'down' : 'up', change: k.change, newPosition: k.position })),
+  monthlyTrend: [],
+  devices: seoData.devices || []
+} : fallbackData;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -242,7 +220,7 @@ const seoData = {
           <div>
             <h1>SEO Dashboard</h1>
             <p class="subtitle">Search Engine Optimization metrics for welevelup.org</p>
-            <p class="update-info">Period: {seoData.period}<br/>Last updated: {seoData.lastUpdated}<br/>{seoData.updateFrequency}</p>
+            <p class="update-info">Period: {displayData.period}<br/>Last updated: {new Date(displayData.lastUpdated).toLocaleString()}<br/>{displayData.updateFrequency}</p>
           </div>
         </div>
 
@@ -250,22 +228,22 @@ const seoData = {
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-label">Total Impressions</div>
-            <div class="stat-value">{seoData.overview.totalImpressions.toLocaleString()}</div>
-            <div class="stat-change">From last month: <span class="change-up">+{seoData.overview.improvementFromLastMonth.position}%</span></div>
+            <div class="stat-value">{displayData.overview.totalImpressions.toLocaleString()}</div>
+            <div class="stat-change">From last month: <span class="change-up">+{displayData.overview.improvementFromLastMonth.position}%</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Total Clicks</div>
-            <div class="stat-value">{seoData.overview.totalClicks.toLocaleString()}</div>
-            <div class="stat-change">Avg CTR: <span class="good">{seoData.overview.averageCTR.toFixed(2)}%</span></div>
+            <div class="stat-value">{displayData.overview.totalClicks.toLocaleString()}</div>
+            <div class="stat-change">Avg CTR: <span class="good">{displayData.overview.averageCTR.toFixed(2)}%</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Average Position</div>
-            <div class="stat-value">#{seoData.overview.averagePosition.toFixed(1)}</div>
+            <div class="stat-value">#{displayData.overview.averagePosition.toFixed(1)}</div>
             <div class="stat-change">Target: #3 or better</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">CTR Improvement</div>
-            <div class="stat-value"><span class="good">+{seoData.overview.improvementFromLastMonth.ctr}%</span></div>
+            <div class="stat-value"><span class="good">+{displayData.overview.improvementFromLastMonth.ctr}%</span></div>
             <div class="stat-change">vs last month</div>
           </div>
         </div>
@@ -285,7 +263,7 @@ const seoData = {
               </tr>
             </thead>
             <tbody>
-              {seoData.keywords.map(k => (
+              {displayData.keywords.map((k: any) => (
                 <tr>
                   <td style="font-weight: 600;">{k.query}</td>
                   <td>{k.impressions.toLocaleString()}</td>
@@ -314,7 +292,7 @@ const seoData = {
               </tr>
             </thead>
             <tbody>
-              {seoData.pages.map(p => (
+              {displayData.pages.map((p: any) => (
                 <tr>
                   <td style="font-weight: 600; font-family: monospace; font-size: 12px;">{p.url}</td>
                   <td>{p.impressions.toLocaleString()}</td>
@@ -341,7 +319,7 @@ const seoData = {
                 </tr>
               </thead>
               <tbody>
-                {seoData.keywordMovement.map(k => (
+                {displayData.keywordMovement.map((k: any) => (
                   <tr>
                     <td style="font-weight: 600;">{k.query}</td>
                     <td class={`movement-${k.movement}`}>{k.movement === 'up' ? '↑' : k.movement === 'down' ? '↓' : '→'} {Math.abs(k.change).toFixed(1)}</td>
@@ -364,12 +342,12 @@ const seoData = {
                 </tr>
               </thead>
               <tbody>
-                {seoData.devices.map(d => (
+                {displayData.devices.map((d: any) => (
                   <tr>
                     <td style="font-weight: 600;">{d.device}</td>
                     <td>{d.impressions.toLocaleString()}</td>
                     <td>{d.clicks}</td>
-                    <td>{(d.clicks / d.impressions * 100).toFixed(2)}%</td>
+                    <td>{d.ctr.toFixed(2)}%</td>
                   </tr>
                 ))}
               </tbody>
@@ -381,7 +359,7 @@ const seoData = {
         <div class="section">
           <div class="section-title">Search Appearance Distribution</div>
           <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
-            {seoData.searchAppearance.map(s => (
+            {displayData.searchAppearance.map((s: any) => (
               <div class="bar-row">
                 <div class="bar-label">{s.type}</div>
                 <div class="bar-track">
@@ -406,7 +384,7 @@ const seoData = {
               </tr>
             </thead>
             <tbody>
-              {seoData.geography.map(g => (
+              {displayData.geography.map((g: any) => (
                 <tr>
                   <td style="font-weight: 600;">{g.country}</td>
                   <td>{g.impressions.toLocaleString()}</td>

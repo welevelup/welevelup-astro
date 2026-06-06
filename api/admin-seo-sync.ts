@@ -100,9 +100,31 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
   startDate.setDate(startDate.getDate() - 28);
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
 
+  // Discover which site URL the service account can actually access
+  const sitesRes = await fetch(
+    'https://www.googleapis.com/webmasters/v3/sites',
+    { headers: { Authorization: `Bearer ${accessToken}` } }
+  );
+  if (!sitesRes.ok) throw new Error(`GSC sites list error: ${await sitesRes.text()}`);
+  const sitesData = await sitesRes.json();
+  const siteEntries: Array<{ siteUrl: string; permissionLevel: string }> = sitesData.siteEntry || [];
+  console.log('[admin-seo-sync] Service account can access sites:', siteEntries.map(s => s.siteUrl));
+
+  // Pick the best matching site URL
+  const preferredUrls = [
+    'https://welevelup.org/',
+    'sc-domain:welevelup.org',
+    'https://www.welevelup.org/',
+  ];
+  let siteUrl = siteEntries.find(s => preferredUrls.includes(s.siteUrl))?.siteUrl || siteEntries[0]?.siteUrl;
+  if (!siteUrl) throw new Error('Service account has no GSC properties. Add it to the property in Google Search Console.');
+
+  console.log('[admin-seo-sync] Using site URL:', siteUrl);
+  const encodedSite = encodeURIComponent(siteUrl);
+
   const queryGSC = async (dimensions: string[], rowLimit = 20) => {
     const res = await fetch(
-      'https://www.googleapis.com/webmasters/v3/sites/https%3A%2F%2Fwelevelup.org%2F/searchAnalytics/query',
+      `https://www.googleapis.com/webmasters/v3/sites/${encodedSite}/searchAnalytics/query`,
       {
         method: 'POST',
         headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
@@ -123,7 +145,8 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
   const pageRows = await queryGSC(['page'], 5);
   const deviceRows = await queryGSC(['device'], 10);
   const countryRows = await queryGSC(['country'], 10);
-  const searchTypeRows = await queryGSC(['searchType'], 10);
+  // searchAppearance is a valid GSC dimension (not searchType)
+  const searchAppearanceRows = await queryGSC(['searchAppearance'], 10);
 
   const topKeywords = keywordRows.map((r: any) => ({
     query: r.keys[0],

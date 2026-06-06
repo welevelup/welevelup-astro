@@ -153,7 +153,12 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
       body: JSON.stringify({
         dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
         dimensions: [{ name: 'pagePath' }],
-        metrics: [{ name: 'totalUsers' }, { name: 'sessions' }],
+        metrics: [
+          { name: 'totalUsers' },
+          { name: 'sessions' },
+          { name: 'averageSessionDuration' },
+          { name: 'bounceRate' },
+        ],
         orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
         limit: 10,
       }),
@@ -165,9 +170,12 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   }
   const pagesData = await pagesRes.json();
   const topPages = (pagesData.rows || []).map((r: any) => ({
-    page: r.dimensionValues[0].value,
+    path: r.dimensionValues[0].value,
     users: parseInt(r.metricValues[0].value, 10),
     sessions: parseInt(r.metricValues[1].value, 10),
+    avgDuration: Math.round(parseFloat(r.metricValues[2].value || '0')),
+    bounceRate: Math.round(parseFloat(r.metricValues[3].value || '0') * 100) / 100,
+    conversionRate: 0,
   }));
 
   // Run report for traffic sources

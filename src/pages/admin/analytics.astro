@@ -23,12 +23,12 @@ const displayData = gaData ? {
   lastUpdated: gaData.lastSync || new Date().toISOString(),
   updateFrequency: "Manual — click 'Refresh Data' to sync from Google Analytics 4",
   overview: {
-    users: gaData.users || 0,
-    sessions: gaData.sessions || 0,
-    avgSessionDuration: gaData.avgSessionDuration || 0,
-    bounceRate: gaData.bounceRate || 0,
-    conversionRate: gaData.conversionRate || 0,
-    revenue: gaData.revenue || 0
+    users: Number(gaData.users) || 0,
+    sessions: Number(gaData.sessions) || 0,
+    avgSessionDuration: Number(gaData.avgSessionDuration) || 0,
+    bounceRate: Number(gaData.bounceRate) || 0,
+    conversionRate: Number(gaData.conversionRate) || 0,
+    revenue: Number(gaData.revenue) || 0
   },
   monthlyComparison: [
     { month: "Previous", users: Math.round((gaData.users || 0) * 0.92), sessions: Math.round((gaData.sessions || 0) * 0.92), revenue: Math.round((gaData.revenue || 0) * 0.92) },

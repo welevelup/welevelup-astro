@@ -84,6 +84,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { email, password } = req.body ?? {};
 
+  console.log('[login] body type:', typeof req.body, 'email:', email, 'email type:', typeof email, 'pass len:', password?.length);
+  console.log('[login] expected email:', ADMIN_EMAIL, 'match:', email?.trim() === ADMIN_EMAIL);
+
   if (email?.trim() === ADMIN_EMAIL && password?.trim() === ADMIN_PASSWORD) {
     const token = await createSession(email);
     res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);

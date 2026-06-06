@@ -36,13 +36,8 @@ function checkRateLimit(ip: string): boolean {
 
 async function createSession(email: string): Promise<string> {
   const token = randomBytes(32).toString('hex');
-  const ttl = 7 * 24 * 60 * 60; // 7 days in seconds
-  await redisCommand('SET', [
-    `session:${token}`,
-    JSON.stringify({ email }),
-    'EX',
-    ttl,
-  ]);
+  const ttl = 7 * 24 * 60 * 60;
+  await redisCommand('SET', [`session:${token}`, JSON.stringify({ email }), 'EX', ttl]);
   return token;
 }
 
@@ -82,11 +77,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(429).json({ error: 'Too many attempts. Try again in 15 minutes.' });
   }
 
-  // Manually parse body to handle cases where Vercel doesn't auto-parse
+  // Parse body — handle both pre-parsed (Vercel) and raw stream
   let email: string | undefined;
   let password: string | undefined;
 
-  if (req.body && typeof req.body === 'object') {
+  if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
     email = req.body.email;
     password = req.body.password;
   } else {
@@ -103,15 +98,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
   }
 
-  function normalize(s: string): string {
-    return s.normalize('NFC').replace(/[​-‍﻿ ]/g, '').trim();
-  }
+  const e = (email ?? '').trim();
+  const p = (password ?? '').trim();
 
-  if (normalize(email || '') === normalize(ADMIN_EMAIL) && normalize(password || '') === normalize(ADMIN_PASSWORD)) {
-    const token = await createSession(email!);
+  if (e === ADMIN_EMAIL && p === ADMIN_PASSWORD) {
+    const token = await createSession(e);
     res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);
     return res.status(200).json({ ok: true });
   }
 
-  return res.status(401).json({ error: 'Invalid credentials' });
+  return res.status(401).json({
+    error: 'Invalid credentials',
+    debug: {
+      bodyType: typeof req.body,
+      emailReceived: JSON.stringify(e),
+      emailExpected: JSON.stringify(ADMIN_EMAIL),
+      emailMatch: e === ADMIN_EMAIL,
+      passLenReceived: p.length,
+      passLenExpected: ADMIN_PASSWORD.length,
+      passMatch: p === ADMIN_PASSWORD,
+    }
+  });
 }

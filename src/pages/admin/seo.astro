@@ -447,17 +447,25 @@ const displayData = seoData ? {
 
   <script>
     const html = document.documentElement;
-    const theme = localStorage.getItem('admin-theme') || 'dark';
-    if (theme === 'light') html.classList.add('light-mode');
+    function applyTheme(t) {
+      if (t === 'light') {
+        html.classList.add('light-mode');
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = '☀️';
+      } else {
+        html.classList.remove('light-mode');
+        const btn = document.getElementById('theme-btn');
+        if (btn) btn.textContent = '🌙';
+      }
+    }
+    applyTheme(localStorage.getItem('admin-theme') || 'dark');
 
     document.getElementById('theme-btn')?.addEventListener('click', () => {
-      if (html.classList.toggle('light-mode')) {
-        localStorage.setItem('admin-theme', 'light');
-        document.getElementById('theme-btn').textContent = '☀️';
-      } else {
-        localStorage.setItem('admin-theme', 'dark');
-        document.getElementById('theme-btn').textContent = '🌙';
-      }
+      const isLight = html.classList.toggle('light-mode');
+      const next = isLight ? 'light' : 'dark';
+      localStorage.setItem('admin-theme', next);
+      const btn = document.getElementById('theme-btn');
+      if (btn) btn.textContent = isLight ? '☀️' : '🌙';
     });
 
     document.getElementById('refresh-btn')?.addEventListener('click', async () => {

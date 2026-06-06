@@ -187,8 +187,8 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
   const typeMap: { [key: string]: string } = {
     'WEB': 'Web Results', 'IMAGE': 'Image Results', 'VIDEO': 'Video', 'NEWS': 'News'
   };
-  const totalImp = searchTypeRows.reduce((s, r: any) => s + r.impressions, 0);
-  const searchAppearance = searchTypeRows.map((r: any) => ({
+  const totalImp = searchAppearanceRows.reduce((s, r: any) => s + r.impressions, 0);
+  const searchAppearance = searchAppearanceRows.map((r: any) => ({
     type: typeMap[r.keys[0]] || r.keys[0],
     count: r.impressions,
     percentage: totalImp > 0 ? Math.round((r.impressions / totalImp) * 100) : 0,

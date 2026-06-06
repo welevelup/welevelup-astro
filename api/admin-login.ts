@@ -70,8 +70,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+  const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || '').trim();
+  const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || '').trim();
 
   if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
     return res.status(500).json({ error: 'Server configuration error' });
@@ -84,7 +84,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const { email, password } = req.body ?? {};
 
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+  if (email?.trim() === ADMIN_EMAIL && password?.trim() === ADMIN_PASSWORD) {
     const token = await createSession(email);
     res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);
     return res.status(200).json({ ok: true });

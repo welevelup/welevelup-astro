@@ -528,8 +528,14 @@ const displayData = gaData ? {
     });
 
     document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      await fetch('/api/admin-login', { method: 'DELETE' });
-      location.href = '/admin';
+      try {
+        await fetch('/api/admin-login', { method: 'DELETE' });
+      } catch (e) {
+        console.error('Logout error:', e);
+      }
+      setTimeout(() => {
+        location.href = '/admin/login';
+      }, 100);
     });
   </script>
 </body>

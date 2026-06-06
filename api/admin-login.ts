@@ -82,13 +82,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(429).json({ error: 'Too many attempts. Try again in 15 minutes.' });
   }
 
-  const { email, password } = req.body ?? {};
+  // Manually parse body to handle cases where Vercel doesn't auto-parse
+  let email: string | undefined;
+  let password: string | undefined;
 
-  console.log('[login] body type:', typeof req.body, 'email:', email, 'email type:', typeof email, 'pass len:', password?.length);
-  console.log('[login] expected email:', ADMIN_EMAIL, 'match:', email?.trim() === ADMIN_EMAIL);
+  if (req.body && typeof req.body === 'object') {
+    email = req.body.email;
+    password = req.body.password;
+  } else {
+    try {
+      let rawBody = '';
+      for await (const chunk of req as any) {
+        rawBody += chunk;
+      }
+      const parsed = JSON.parse(rawBody);
+      email = parsed.email;
+      password = parsed.password;
+    } catch {
+      return res.status(400).json({ error: 'Invalid request body' });
+    }
+  }
 
-  if (email?.trim() === ADMIN_EMAIL && password?.trim() === ADMIN_PASSWORD) {
-    const token = await createSession(email);
+  function normalize(s: string): string {
+    return s.normalize('NFC').replace(/[​-‍﻿ ]/g, '').trim();
+  }
+
+  if (normalize(email || '') === normalize(ADMIN_EMAIL) && normalize(password || '') === normalize(ADMIN_PASSWORD)) {
+    const token = await createSession(email!);
     res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);
     return res.status(200).json({ ok: true });
   }

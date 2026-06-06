@@ -286,9 +286,28 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   };
 }
 
+async function verifySession(req: VercelRequest): Promise<boolean> {
+  const cookies = req.headers.cookie ?? '';
+  const match = cookies.match(/admin_session=([^;]+)/);
+  if (!match) return false;
+  const token = match[1];
+  const url = process.env.UPSTASH_REDIS_REST_URL || '';
+  const tok = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  if (!url || !tok) return false;
+  const r = await fetch(`${url}/get/session:${token}`, {
+    headers: { Authorization: `Bearer ${tok}` },
+  });
+  const data = await r.json() as { result: string | null };
+  return !!data.result;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  if (!await verifySession(req)) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {

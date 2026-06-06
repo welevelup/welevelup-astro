@@ -200,20 +200,14 @@ async function verifySession(req: VercelRequest): Promise<boolean> {
   const match = cookies.match(/admin_session=([^;]+)/);
   if (!match) return false;
   const token = match[1];
-  const url = cleanEnvVar(process.env.UPSTASH_REDIS_REST_URL || '');
-  const tok = cleanEnvVar(process.env.UPSTASH_REDIS_REST_TOKEN || '');
+  const url = process.env.UPSTASH_REDIS_REST_URL || '';
+  const tok = process.env.UPSTASH_REDIS_REST_TOKEN || '';
   if (!url || !tok) return false;
-  try {
-    const r = await fetch(`${url}/v2/pipeline`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify([['GET', `session:${token}`]]),
-    });
-    const data = await r.json() as Array<{ result: string | null }>;
-    return !!data[0]?.result;
-  } catch {
-    return false;
-  }
+  const r = await fetch(`${url}/get/session:${token}`, {
+    headers: { Authorization: `Bearer ${tok}` },
+  });
+  const data = await r.json() as { result: string | null };
+  return !!data.result;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

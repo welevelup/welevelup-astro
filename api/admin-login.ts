@@ -1,45 +1,23 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { randomBytes } from 'crypto';
 
-function cleanEnvVar(value: string): string {
-  if (!value) return '';
-  let cleaned = value
-    .replace(/^["'\n\r]+/, '')
-    .replace(/["'\n\r]+$/, '')
-    .trim();
-  if (cleaned.includes('UPSTASH_')) {
-    const urlMatch = cleaned.match(/https:\/\/[a-z0-9-]+\.upstash\.io/);
-    if (urlMatch) return urlMatch[0];
-    const tokenMatch = cleaned.match(/[a-zA-Z0-9]+$/);
-    if (tokenMatch) return tokenMatch[0];
-  }
-  return cleaned;
-}
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || '';
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || '';
 
 async function redisSet(key: string, value: string, ttl: number) {
-  const url = cleanEnvVar(process.env.UPSTASH_REDIS_REST_URL || '');
-  const token = cleanEnvVar(process.env.UPSTASH_REDIS_REST_TOKEN || '');
-  if (!url || !token) throw new Error('Redis not configured');
-  const res = await fetch(`${url}/v2/pipeline`, {
+  await fetch(`${REDIS_URL}/v2/pipeline`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify([['SET', key, value, 'EX', ttl]]),
   });
-  if (!res.ok) throw new Error(`Redis error: ${res.status}`);
-  return res.json();
 }
 
 async function redisDel(key: string) {
-  const url = cleanEnvVar(process.env.UPSTASH_REDIS_REST_URL || '');
-  const token = cleanEnvVar(process.env.UPSTASH_REDIS_REST_TOKEN || '');
-  if (!url || !token) throw new Error('Redis not configured');
-  const res = await fetch(`${url}/v2/pipeline`, {
+  await fetch(`${REDIS_URL}/v2/pipeline`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
     body: JSON.stringify([['DEL', key]]),
   });
-  if (!res.ok) throw new Error(`Redis error: ${res.status}`);
-  return res.json();
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -67,6 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let email = '';
   let password = '';
 
+  // Use pre-parsed body if available, otherwise read stream
   if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
     email = String(req.body.email ?? '');
     password = String(req.body.password ?? '');

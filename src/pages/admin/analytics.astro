@@ -248,26 +248,26 @@ const displayData = gaData ? {
           <div class="stat-card">
             <div class="stat-label">Sessions</div>
             <div class="stat-value">{displayData.overview.sessions.toLocaleString()}</div>
-            <div class="stat-change">Avg: {(displayData.overview.sessions / displayData.overview.users).toFixed(1)} per user</div>
+            <div class="stat-change">Avg: {(Number(displayData.overview.sessions) / Number(displayData.overview.users) || 0).toFixed(1)} per user</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Avg Session Duration</div>
-            <div class="stat-value">{displayData.overview.avgSessionDuration.toFixed(0)}s</div>
+            <div class="stat-value">{Number(displayData.overview.avgSessionDuration).toFixed(0)}s</div>
             <div class="stat-change"><span class="change-up">Strong engagement</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Bounce Rate</div>
-            <div class="stat-value">{displayData.overview.bounceRate.toFixed(1)}%</div>
+            <div class="stat-value">{Number(displayData.overview.bounceRate).toFixed(1)}%</div>
             <div class="stat-change">Good for nonprofit</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Conversion Rate</div>
-            <div class="stat-value"><span class="change-up">{displayData.overview.conversionRate.toFixed(1)}%</span></div>
-            <div class="stat-change">{displayData.overview.conversionRate}% → Donation</div>
+            <div class="stat-value"><span class="change-up">{Number(displayData.overview.conversionRate).toFixed(1)}%</span></div>
+            <div class="stat-change">{Number(displayData.overview.conversionRate).toFixed(1)}% → Donation</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Revenue This Month</div>
-            <div class="stat-value">£{displayData.overview.revenue.toFixed(2)}</div>
+            <div class="stat-value">£{Number(displayData.overview.revenue).toFixed(2)}</div>
             <div class="stat-change">From organic traffic</div>
           </div>
         </div>
@@ -292,9 +292,9 @@ const displayData = gaData ? {
                   <td style="font-weight: 600;">{t.source}</td>
                   <td>{t.users}</td>
                   <td>{t.sessions}</td>
-                  <td>{(t.sessions * displayData.overview.avgSessionDuration / t.sessions).toFixed(0)}s</td>
-                  <td>{t.bounceRate.toFixed(1)}%</td>
-                  <td>£{t.sessionValue.toFixed(2)}</td>
+                  <td>{(Number(t.sessions) * Number(displayData.overview.avgSessionDuration) / Number(t.sessions) || 0).toFixed(0)}s</td>
+                  <td>{Number(t.bounceRate || 0).toFixed(1)}%</td>
+                  <td>£{Number(t.sessionValue || 0).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -320,7 +320,7 @@ const displayData = gaData ? {
                     <td style="font-weight: 600;">{d.type}</td>
                     <td>{d.users}</td>
                     <td>{d.sessions}</td>
-                    <td>{d.bounceRate.toFixed(1)}%</td>
+                    <td>{Number(d.bounceRate || 0).toFixed(1)}%</td>
                   </tr>
                 ))}
               </tbody>
@@ -344,7 +344,7 @@ const displayData = gaData ? {
                     <td style="font-weight: 600;">{g.country}</td>
                     <td>{g.users}</td>
                     <td>{g.sessions}</td>
-                    <td>{g.conversionRate.toFixed(1)}%</td>
+                    <td>{Number(g.conversionRate || 0).toFixed(1)}%</td>
                   </tr>
                 ))}
               </tbody>
@@ -372,9 +372,9 @@ const displayData = gaData ? {
                   <td style="font-weight: 600; font-family: monospace; font-size: 12px;">{p.path}</td>
                   <td>{p.users}</td>
                   <td>{p.sessions}</td>
-                  <td>{p.avgDuration.toFixed(0)}s</td>
-                  <td>{p.bounceRate.toFixed(1)}%</td>
-                  <td style="color: var(--accent); font-weight: 600;">{p.conversionRate.toFixed(1)}%</td>
+                  <td>{Number(p.avgDuration || 0).toFixed(0)}s</td>
+                  <td>{Number(p.bounceRate || 0).toFixed(1)}%</td>
+                  <td style="color: var(--accent); font-weight: 600;">{Number(p.conversionRate || 0).toFixed(1)}%</td>
                 </tr>
               ))}
             </tbody>
@@ -389,9 +389,9 @@ const displayData = gaData ? {
               <div class="bar-row">
                 <div class="bar-label">{step.step}</div>
                 <div class="bar-track">
-                  <div class="bar-fill" style={`width: ${step.conversionRate}%`}></div>
+                  <div class="bar-fill" style={`width: ${Number(step.conversionRate || 0)}%`}></div>
                 </div>
-                <div class="bar-value">{step.users} users ({step.conversionRate.toFixed(1)}%)</div>
+                <div class="bar-value">{step.users} users ({Number(step.conversionRate || 0).toFixed(1)}%)</div>
               </div>
             ))}
           </div>

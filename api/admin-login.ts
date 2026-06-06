@@ -1,14 +1,8 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { randomBytes } from 'crypto';
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
 const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL || '';
 const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || '';
-
-if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
-  throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD env vars are required');
-}
 
 async function redisCommand(command: string, args: (string | number)[] = []): Promise<any> {
   const url = new URL(UPSTASH_REDIS_REST_URL);
@@ -74,6 +68,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const ADMIN_EMAIL = process.env.ADMIN_EMAIL || '';
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
+
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    return res.status(500).json({ error: 'Server configuration error' });
   }
 
   const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0] || req.socket.remoteAddress || 'unknown';

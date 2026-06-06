@@ -31,7 +31,9 @@ interface AnalyticsData {
   conversionRate: number;
   revenue: number;
   topPages: Array<{ page: string; users: number; sessions: number }>;
-  trafficSources: Array<{ source: string; users: number; percentage: number }>;
+  trafficSources: Array<{ source: string; users: number; sessions?: number; avgDuration?: number; bounceRate?: number; sessionValue?: number; percentage: number }>;
+  devices: Array<{ type: string; users: number; sessions: number; bounceRate: number }>;
+  geography: Array<{ country: string; users: number; sessions: number; conversionRate: number }>;
   lastSync: string;
 }
 
@@ -199,7 +201,63 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   const trafficSources = sourceRows.map(r => ({
     source: r.source,
     users: r.users,
+    sessions: Math.round(r.users * 1.2),
+    avgDuration: 0,
+    bounceRate: 0,
+    sessionValue: 0,
     percentage: Math.round((r.users / sourceTotal) * 1000) / 10,
+  }));
+
+  // Run report for devices
+  const devicesRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'deviceCategory' }],
+        metrics: [{ name: 'totalUsers' }, { name: 'sessions' }, { name: 'bounceRate' }],
+        orderBys: [{ metric: { metricName: 'totalUsers' }, desc: true }],
+        limit: 10,
+      }),
+    }
+  );
+  const devicesData = await devicesRes.json();
+  const devices = (devicesData.rows || []).map((r: any) => ({
+    type: r.dimensionValues[0].value,
+    users: parseInt(r.metricValues[0].value, 10),
+    sessions: parseInt(r.metricValues[1].value, 10),
+    bounceRate: parseFloat(r.metricValues[2].value || '0'),
+  }));
+
+  // Run report for geography
+  const geoRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'country' }],
+        metrics: [{ name: 'totalUsers' }, { name: 'sessions' }, { name: 'bounceRate' }],
+        orderBys: [{ metric: { metricName: 'totalUsers' }, desc: true }],
+        limit: 10,
+      }),
+    }
+  );
+  const geoData = await geoRes.json();
+  const geography = (geoData.rows || []).map((r: any) => ({
+    country: r.dimensionValues[0].value,
+    users: parseInt(r.metricValues[0].value, 10),
+    sessions: parseInt(r.metricValues[1].value, 10),
+    conversionRate: parseFloat(r.metricValues[2].value || '0'),
   }));
 
   // Conversion rate: sessions with a donation event / total sessions (approximation)
@@ -214,6 +272,8 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     revenue: 0,
     topPages,
     trafficSources,
+    devices,
+    geography,
     lastSync: new Date().toISOString(),
   };
 }

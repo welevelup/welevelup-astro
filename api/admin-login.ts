@@ -1,17 +1,23 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { randomBytes } from 'crypto';
 
-async function redisPipeline(commands: (string | number)[][]) {
-  const url = process.env.UPSTASH_REDIS_REST_URL || '';
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
-  if (!url || !token) throw new Error('Redis not configured');
-  const res = await fetch(`${url}/v2/pipeline`, {
+const REDIS_URL = process.env.UPSTASH_REDIS_REST_URL || '';
+const REDIS_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+
+async function redisSet(key: string, value: string, ttl: number) {
+  await fetch(`${REDIS_URL}/v2/pipeline`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(commands),
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify([['SET', key, value, 'EX', ttl]]),
   });
-  if (!res.ok) throw new Error(`Redis error: ${res.status}`);
-  return res.json();
+}
+
+async function redisDel(key: string) {
+  await fetch(`${REDIS_URL}/v2/pipeline`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${REDIS_TOKEN}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify([['DEL', key]]),
+  });
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -19,7 +25,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
       const cookies = req.headers.cookie ?? '';
       const match = cookies.match(/admin_session=([^;]+)/);
-      if (match?.[1]) await redisPipeline([['DEL', `session:${match[1]}`]]);
+      if (match?.[1]) await redisDel(`session:${match[1]}`);
     } catch { /* ignore */ }
     res.setHeader('Set-Cookie', 'admin_session=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Strict');
     return res.status(200).json({ ok: true });
@@ -39,6 +45,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   let email = '';
   let password = '';
 
+  // Use pre-parsed body if available, otherwise read stream
   if (req.body && typeof req.body === 'object' && !Buffer.isBuffer(req.body)) {
     email = String(req.body.email ?? '');
     password = String(req.body.password ?? '');
@@ -51,16 +58,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const parsed = JSON.parse(raw);
       email = String(parsed.email ?? '');
       password = String(parsed.password ?? '');
-    } catch {
+    } catch (e) {
       return res.status(400).json({ error: 'Invalid request body' });
     }
   }
 
   if (email.trim() === ADMIN_EMAIL && password.trim() === ADMIN_PASSWORD) {
     const token = randomBytes(32).toString('hex');
-    const ttl = 7 * 24 * 60 * 60;
-    await redisPipeline([['SET', `session:${token}`, JSON.stringify({ email: ADMIN_EMAIL }), 'EX', ttl]]);
-    res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${ttl}`);
+    await redisSet(`session:${token}`, JSON.stringify({ email: ADMIN_EMAIL }), 7 * 24 * 60 * 60);
+    res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${7 * 24 * 60 * 60}`);
     return res.status(200).json({ ok: true });
   }
 

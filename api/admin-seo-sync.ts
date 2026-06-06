@@ -228,8 +228,8 @@ async function verifySession(req: VercelRequest): Promise<boolean> {
   const match = cookies.match(/admin_session=([^;]+)/);
   if (!match) return false;
   const token = match[1];
-  const url = process.env.UPSTASH_REDIS_REST_URL || '';
-  const tok = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  const url = cleanEnvVar(process.env.UPSTASH_REDIS_REST_URL || '');
+  const tok = cleanEnvVar(process.env.UPSTASH_REDIS_REST_TOKEN || '');
   if (!url || !tok) return false;
   try {
     const r = await fetch(`${url}/v2/pipeline`, {

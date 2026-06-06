@@ -458,7 +458,7 @@ const displayData = seoData ? {
         if (btn) btn.textContent = '🌙';
       }
     }
-    applyTheme(localStorage.getItem('admin-theme') || 'dark');
+    applyTheme(localStorage.getItem('admin-theme') || 'light');
 
     document.getElementById('theme-btn')?.addEventListener('click', () => {
       const isLight = html.classList.toggle('light-mode');

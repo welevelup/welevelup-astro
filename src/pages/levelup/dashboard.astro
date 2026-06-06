@@ -792,7 +792,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
       if (btn) btn.textContent = '🌙';
     }
   }
-  applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+  applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 
   document.getElementById('theme-btn')?.addEventListener('click', () => {
     const isLight = html.classList.toggle('light-mode');

@@ -185,7 +185,15 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
   }));
 
   const typeMap: { [key: string]: string } = {
-    'WEB': 'Web Results', 'IMAGE': 'Image Results', 'VIDEO': 'Video', 'NEWS': 'News'
+    'WEB': 'Web Results',
+    'IMAGE': 'Image Results',
+    'VIDEO': 'Video',
+    'NEWS': 'News',
+    'TRANSLATED_RESULT': 'Translated Results',
+    'RICH_CARD': 'Rich Card',
+    'AMP_BLUE_LINK': 'AMP Page',
+    'AMP_TOP_STORIES': 'AMP Top Stories',
+    'SUBSCRIBED_CONTENT': 'Subscribed Content',
   };
   const totalImp = searchAppearanceRows.reduce((s, r: any) => s + r.impressions, 0);
   const searchAppearance = searchAppearanceRows.map((r: any) => ({

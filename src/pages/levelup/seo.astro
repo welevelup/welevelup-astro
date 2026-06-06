@@ -198,21 +198,21 @@ const displayData = seoData ? {
   </style>
 </head>
 <body>
-  <nav aria-label="Admin navigation">
+  <nav>
     <div class="nav-brand">Level Up · Admin</div>
     <div class="nav-right">
-      <button class="refresh-btn" id="refresh-btn" aria-label="Refresh SEO data now">Refresh Data</button>
-      <button id="theme-btn" aria-label="Toggle light/dark theme">🌙</button>
-      <button class="logout-btn" id="logout-btn" aria-label="Sign out">Sign out</button>
+      <button class="refresh-btn" id="refresh-btn">Refresh Data</button>
+      <button id="theme-btn">🌙</button>
+      <button class="logout-btn" id="logout-btn">Sign out</button>
     </div>
   </nav>
 
   <div class="layout">
-    <aside class="sidebar" aria-label="Sidebar navigation">
+    <div class="sidebar">
       <a href="/levelup/dashboard" class="sidebar-item">Donations</a>
-      <a href="/levelup/seo" class="sidebar-item active" aria-current="page">SEO</a>
+      <a href="/levelup/seo" class="sidebar-item active">SEO</a>
       <a href="/levelup/analytics" class="sidebar-item">Analytics</a>
-    </aside>
+    </div>
 
     <div class="content">
       <main>
@@ -459,7 +459,6 @@ const displayData = seoData ? {
       }
     }
     applyTheme(localStorage.getItem('admin-theme') || 'light');
-    if (!localStorage.getItem('admin-theme')) localStorage.setItem('admin-theme', 'light');
 
     document.getElementById('theme-btn')?.addEventListener('click', () => {
       const isLight = html.classList.toggle('light-mode');
@@ -485,7 +484,7 @@ const displayData = seoData ? {
       }
     });
 
-    let inactivityTimer = null;
+    let inactivityTimer: NodeJS.Timeout | null = null;
     const INACTIVITY_TIMEOUT = 5 * 60 * 1000;
 
     function resetInactivityTimer() {

@@ -24,11 +24,12 @@ function getRedis(): Redis {
 }
 
 interface AnalyticsData {
-  totalUsers: number;
-  totalSessions: number;
-  avgDuration: number;
+  users: number;
+  sessions: number;
+  avgSessionDuration: number;
   bounceRate: number;
   conversionRate: number;
+  revenue: number;
   topPages: Array<{ page: string; users: number; sessions: number }>;
   trafficSources: Array<{ source: string; users: number; percentage: number }>;
   lastSync: string;
@@ -205,11 +206,12 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   const conversionRate = totalSessions > 0 ? Math.round((88 / totalSessions) * 1000) / 10 : 0;
 
   return {
-    totalUsers,
-    totalSessions,
-    avgDuration,
+    users: totalUsers,
+    sessions: totalSessions,
+    avgSessionDuration: avgDuration,
     bounceRate,
     conversionRate,
+    revenue: 0,
     topPages,
     trafficSources,
     lastSync: new Date().toISOString(),

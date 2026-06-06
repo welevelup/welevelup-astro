@@ -1063,7 +1063,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
   });
 
   // ── INACTIVITY TIMEOUT ────────────────────────────────────
-  let inactivityTimer: NodeJS.Timeout | null = null;
+  let inactivityTimer = null;
   const INACTIVITY_TIMEOUT = 5 * 60 * 1000; // 5 minutes
 
   function resetInactivityTimer() {

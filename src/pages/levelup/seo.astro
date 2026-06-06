@@ -484,7 +484,7 @@ const displayData = seoData ? {
       }
     });
 
-    let inactivityTimer: NodeJS.Timeout | null = null;
+    let inactivityTimer = null;
     const INACTIVITY_TIMEOUT = 5 * 60 * 1000;
 
     function resetInactivityTimer() {

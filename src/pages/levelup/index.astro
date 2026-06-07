@@ -1,4 +1,9 @@
 ---
 export const prerender = false;
-return Astro.redirect('/levelup/dashboard');
+import { isAuthenticated } from '../../lib/admin-auth';
+
+if (await isAuthenticated(Astro.request)) {
+  return Astro.redirect('/levelup/dashboard');
+}
+return Astro.redirect('/levelup/login');
 ---

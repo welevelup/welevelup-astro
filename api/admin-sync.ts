@@ -199,18 +199,10 @@ async function verifySession(req: VercelRequest): Promise<boolean> {
   const cookies = req.headers.cookie ?? '';
   const match = cookies.match(/admin_session=([^;]+)/);
   if (!match) return false;
-  const token = match[1];
-  const url = cleanEnvVar(process.env.UPSTASH_REDIS_REST_URL || '');
-  const tok = cleanEnvVar(process.env.UPSTASH_REDIS_REST_TOKEN || '');
-  if (!url || !tok) return false;
   try {
-    const r = await fetch(`${url}/v2/pipeline`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify([['GET', `session:${token}`]]),
-    });
-    const data = await r.json() as Array<{ result: string | null }>;
-    return !!data[0]?.result;
+    const redis = getRedis();
+    const session = await redis.get(`session:${match[1]}`);
+    return !!session;
   } catch {
     return false;
   }

@@ -268,8 +268,33 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     conversionRate: parseFloat(r.metricValues[2].value || '0'),
   }));
 
-  // Conversion rate: sessions with a donation event / total sessions (approximation)
-  const conversionRate = totalSessions > 0 ? Math.round((88 / totalSessions) * 1000) / 10 : 0;
+  // Conversion rate: sessions with a donation event / total sessions
+  // Query GA4 for donation conversion events
+  let donationCount = 0;
+  try {
+    const conversionRes = await fetch(
+      `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+          metrics: [{ name: 'eventCount' }],
+          dimensionFilter: { filter: { fieldName: 'eventName', stringFilter: { matchType: 'EXACT', value: 'donation' } } },
+        }),
+      }
+    );
+    if (conversionRes.ok) {
+      const convData = await conversionRes.json();
+      donationCount = parseInt(convData.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
+    }
+  } catch (e) {
+    console.warn('[admin-analytics-sync] Could not query donation events:', e);
+  }
+  const conversionRate = totalSessions > 0 ? Math.round((donationCount / totalSessions) * 1000) / 10 : 0;
 
   return {
     users: totalUsers,

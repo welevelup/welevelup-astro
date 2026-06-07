@@ -224,7 +224,9 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
 export const POST: APIRoute = async ({ request }) => {
   const cronSecret = process.env.CRON_SECRET;
   const isCron = cronSecret && request.headers.get('authorization') === `Bearer ${cronSecret}`;
-  if (!isCron && !(await isAuthenticated(request))) {
+  const isVercelCron = request.headers.get('x-vercel-cron') === 'true';
+
+  if (!isCron && !isVercelCron && !(await isAuthenticated(request))) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 

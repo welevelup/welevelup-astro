@@ -1093,7 +1093,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
     if (inactivityTimer) clearTimeout(inactivityTimer);
     try {
-      await fetch('/api/admin-login', { method: 'DELETE' });
+      await fetch('/api/admin-auth', { method: 'DELETE' });
     } catch (e) {
       console.error('Logout error:', e);
     }

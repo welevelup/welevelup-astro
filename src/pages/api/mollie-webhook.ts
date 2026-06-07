@@ -4,10 +4,11 @@ import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
 import { sendDonationConfirmation, sendFailedPaymentNotice, sendSubscriptionSuspended } from '../../lib/email';
 
 export const prerender = false;
+export const csrfProtection = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const apiKey = import.meta.env.MOLLIE_API_KEY;
-  const webhookSecret = import.meta.env.MOLLIE_WEBHOOK_SECRET;
+  const apiKey = process.env.MOLLIE_API_KEY;
+  const webhookSecret = process.env.MOLLIE_WEBHOOK_SECRET;
 
   // Verify the shared secret passed as a query param in MOLLIE_WEBHOOK_URL.
   // Rejects any request that doesn't know the secret — guards against arbitrary
@@ -125,7 +126,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     console.log(`[webhook] meta keys=${meta ? Object.keys(meta).join(',') : 'null'}`);
-    console.log(`[webhook] RESEND_KEY=${!!import.meta.env.RESEND_API_KEY}`);
+    console.log(`[webhook] RESEND_KEY=${!!process.env.RESEND_API_KEY}`);
 
     // For old GiveWP subscriptions metadata is missing — fall back to the
     // Mollie customer object to get the donor's email address.
@@ -142,12 +143,12 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // Fire GA4 Measurement Protocol purchase event (server-side backup —
-    // catches conversions where the donor closed the tab before reaching /thank-you).
-    const ga4MeasurementId = import.meta.env.GA4_MEASUREMENT_ID;
-    const ga4ApiSecret = import.meta.env.GA4_MEASUREMENT_PROTOCOL_SECRET;
+    const ga4MeasurementId = process.env.GA4_MEASUREMENT_ID;
+    const ga4ApiSecret = process.env.GA4_MEASUREMENT_PROTOCOL_SECRET;
     if (ga4MeasurementId && ga4ApiSecret) {
       const amountValue = parseFloat(meta?.amount || payment.amount.value);
+      const isRecurring = meta?.type === 'recurring' || seq === 'first' || seq === 'recurring';
+      const eventName = isRecurring ? 'donation_recurring' : 'donation_one_time';
       fetch(
         `https://www.google-analytics.com/mp/collect?measurement_id=${ga4MeasurementId}&api_secret=${ga4ApiSecret}`,
         {
@@ -155,17 +156,13 @@ export const POST: APIRoute = async ({ request }) => {
           body: JSON.stringify({
             client_id: 'mollie-webhook',
             events: [{
-              name: 'purchase',
+              name: eventName,
               params: {
                 currency: 'GBP',
                 value: amountValue,
                 transaction_id: paymentId,
-                items: [{
-                  item_id: meta?.type === 'recurring' ? 'monthly-donation' : 'one-time-donation',
-                  item_name: meta?.type === 'recurring' ? 'Level Up Monthly Donation' : 'Level Up Donation',
-                  price: amountValue,
-                  quantity: 1,
-                }],
+                donation_type: isRecurring ? 'monthly' : 'one-time',
+                gift_aid: meta?.giftAid === 'true',
               },
             }],
           }),
@@ -224,7 +221,7 @@ export const POST: APIRoute = async ({ request }) => {
       amount: { currency: 'GBP', value: parseFloat(amount).toFixed(2) },
       interval: '1 month',
       description: `Level Up — Monthly donation (£${amount}/month)`,
-      webhookUrl: import.meta.env.MOLLIE_WEBHOOK_URL,
+      webhookUrl: process.env.MOLLIE_WEBHOOK_URL,
       metadata: { source: 'astro', donorEmail: meta.donorEmail },
     });
 

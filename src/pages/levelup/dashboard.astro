@@ -607,9 +607,9 @@ const donationsJSON = JSON.stringify(donations ?? null);
           <div class="stat-sub">Recurring donors</div>
         </div>
         <div class="stat-card" role="listitem">
-          <div class="stat-label">New This Month</div>
+          <div class="stat-label" id="stat-new-label">New This Month</div>
           <div class="stat-value" id="stat-new">—</div>
-          <div class="stat-sub">First-time donors</div>
+          <div class="stat-sub" id="stat-new-sub">Subscriber change</div>
         </div>
       </div>
 
@@ -830,12 +830,17 @@ const donationsJSON = JSON.stringify(donations ?? null);
     if (!d) {
       set('stat-month', '—'); set('stat-year', '—');
       set('stat-subs', '—'); set('stat-new', '—');
+      set('stat-new-label', 'New This Month');
       return;
     }
+    const prevMonthDate = new Date();
+    prevMonthDate.setMonth(prevMonthDate.getMonth() - 1);
+    const monthName = prevMonthDate.toLocaleString('en-GB', { month: 'long' });
     set('stat-month', fmt(d.totalMonth));
     set('stat-year',  fmt(d.totalYear));
     set('stat-subs',  fmtNum(d.activeSubscribers));
     set('stat-new',   fmtNum(d.newThisMonth));
+    set('stat-new-label', 'New in ' + monthName);
   }
 
   // ── MULTI-LINE CHART ──────────────────────────────────────

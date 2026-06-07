@@ -1,9 +1,18 @@
 import type { APIRoute } from 'astro';
 import { checkCredentials, createSessionCookie, clearSessionCookie } from '../../lib/admin-auth';
+import { isRateLimited } from '../../lib/ratelimit';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
+  if (await isRateLimited(`admin-login:${ip}`)) {
+    return new Response(JSON.stringify({ error: 'Too many attempts. Try again later.' }), {
+      status: 429,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   let email = '';
   let password = '';
 

@@ -5,9 +5,9 @@ import { createMollieClient, SequenceType } from '@mollie/api-client';
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const apiKey = import.meta.env.MOLLIE_API_KEY;
-  const siteUrl = import.meta.env.PUBLIC_SITE_URL;
-  const webhookUrl = import.meta.env.MOLLIE_WEBHOOK_URL;
+  const apiKey = process.env.MOLLIE_API_KEY;
+  const siteUrl = process.env.PUBLIC_SITE_URL;
+  const webhookUrl = process.env.MOLLIE_WEBHOOK_URL;
 
   const json = (data: unknown, status = 200) =>
     new Response(JSON.stringify(data), {
@@ -34,8 +34,14 @@ export const POST: APIRoute = async ({ request }) => {
   const { amount, recurring, donorName = '', donorEmail = '', giftAid = false } = body;
 
   const amountNum = parseFloat(amount ?? '');
-  if (!Number.isFinite(amountNum) || amountNum < 1) {
-    return json({ error: 'Amount must be at least £1' }, 400);
+  if (!Number.isFinite(amountNum) || amountNum < 1 || amountNum > 10000) {
+    return json({ error: 'Amount must be between £1 and £10,000' }, 400);
+  }
+  if (donorName && donorName.length > 200) {
+    return json({ error: 'Name too long' }, 400);
+  }
+  if (donorEmail && donorEmail.length > 320) {
+    return json({ error: 'Email too long' }, 400);
   }
   if (recurring && (!donorName || !donorEmail)) {
     return json({ error: 'Name and email are required for recurring donations' }, 400);

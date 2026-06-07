@@ -1,7 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
 
-const ADMIN_EMAIL = 'catalina@welevelup.org';
-const ADMIN_PASSWORD = 'catalina';
 const COOKIE_NAME = 'admin_session';
 const TTL_SECONDS = 7 * 24 * 60 * 60; // 7 days
 
@@ -12,7 +10,10 @@ function getSecret(): Uint8Array {
 }
 
 export function checkCredentials(email: string, password: string): boolean {
-  return email === ADMIN_EMAIL && password === ADMIN_PASSWORD;
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminEmail || !adminPassword) return false;
+  return email === adminEmail && password === adminPassword;
 }
 
 export async function createSessionCookie(): Promise<string> {

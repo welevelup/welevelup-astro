@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { Redis } from '@upstash/redis';
+import { isAuthenticated } from '../../lib/admin-auth';
 
 export const prerender = false;
 
@@ -221,6 +222,12 @@ async function fetchPayPalPayments(year: number): Promise<Donation[]> {
 }
 
 export const POST: APIRoute = async ({ request }) => {
+  const cronSecret = process.env.CRON_SECRET;
+  const isCron = cronSecret && request.headers.get('authorization') === `Bearer ${cronSecret}`;
+  if (!isCron && !(await isAuthenticated(request))) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+  }
+
   try {
     console.log('[admin-sync] === SYNC START ===');
     const year = new Date().getFullYear();

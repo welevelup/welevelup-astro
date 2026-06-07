@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
+import { isAuthenticated } from './lib/admin-auth';
 
-export const onRequest = defineMiddleware((context, next) => {
+export const onRequest = defineMiddleware(async (context, next) => {
   const { pathname } = context.url;
 
   if (pathname.startsWith('/admin/login') || pathname.startsWith('/levelup/login') || pathname.startsWith('/api/')) {
@@ -8,9 +9,7 @@ export const onRequest = defineMiddleware((context, next) => {
   }
 
   if (pathname.startsWith('/admin') || pathname.startsWith('/levelup')) {
-    const cookies = context.request.headers.get('cookie') ?? '';
-    const match = cookies.match(/admin_session=([^;]+)/);
-    if (!match) {
+    if (!(await isAuthenticated(context.request))) {
       return context.redirect('/levelup/login');
     }
   }

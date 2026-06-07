@@ -1,63 +1,55 @@
-import type { APIRoute } from 'astro';
-import { isRateLimited } from '../../../lib/ratelimit';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createMollieClient } from '@mollie/api-client';
-import { verifyToken } from '../../../lib/token';
+import { createHmac, timingSafeEqual } from 'crypto';
 
-export const prerender = false;
+function verifyToken<T = Record<string, unknown>>(token: string, secret: string): (T & { exp: number }) | null {
+  const parts = token.split('.');
+  if (parts.length !== 2) return null;
+  const [data, sig] = parts;
+  try {
+    const expected = createHmac('sha256', secret).update(data).digest('base64url');
+    if (!timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+  } catch {
+    return null;
+  }
+  try {
+    const payload = JSON.parse(Buffer.from(data, 'base64url').toString()) as T & { exp: number };
+    if (payload.exp < Date.now()) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
 
-export const POST: APIRoute = async ({ request }) => {
-  const json = (data: unknown, status = 200) =>
-    new Response(JSON.stringify(data), {
-      status,
-      headers: { 'Content-Type': 'application/json' },
-    });
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const apiKey = import.meta.env.MOLLIE_API_KEY;
-  const secret = import.meta.env.PORTAL_SECRET;
+  const apiKey = process.env.MOLLIE_API_KEY;
+  const secret = process.env.PORTAL_SECRET;
 
   if (!apiKey || !secret) {
-    return json({ error: 'Server misconfigured' }, 500);
+    console.error('[cancel] missing env vars');
+    return res.status(500).json({ error: 'Server misconfigured' });
   }
 
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown';
-  if (await isRateLimited(`cancel:${ip}`)) {
-    return json({ error: 'Too many requests' }, 429);
-  }
-
-  let token: string | undefined;
-  let subscriptionId: string | undefined;
-  try {
-    const body = await request.json();
-    token = typeof body.token === 'string' ? body.token : undefined;
-    subscriptionId = typeof body.subscriptionId === 'string' ? body.subscriptionId : undefined;
-  } catch {
-    return json({ error: 'Invalid request body' }, 400);
-  }
+  const body = req.body as { token?: string; subscriptionId?: string };
+  const token = typeof body?.token === 'string' ? body.token : undefined;
+  const subscriptionId = typeof body?.subscriptionId === 'string' ? body.subscriptionId : undefined;
 
   if (!token || !subscriptionId) {
-    return json({ error: 'Missing token or subscriptionId' }, 400);
+    return res.status(400).json({ error: 'Missing token or subscriptionId' });
   }
 
   const payload = verifyToken<{ email: string; mollieCustomerId: string }>(token, secret);
-  if (!payload) {
-    return json({ error: 'Invalid or expired link' }, 401);
-  }
-
-  const { mollieCustomerId } = payload;
+  if (!payload) return res.status(401).json({ error: 'Invalid or expired link' });
 
   try {
     const mollie = createMollieClient({ apiKey });
-    // Fetch first — Mollie returns 404 if subscriptionId doesn't belong to this
-    // customer, so this acts as an ownership check before we cancel anything.
-    await mollie.customerSubscriptions.get(subscriptionId, { customerId: mollieCustomerId });
-    await mollie.customerSubscriptions.cancel(subscriptionId, { customerId: mollieCustomerId });
-    return json({ ok: true });
-  } catch (err: unknown) {
-    const status = (err as { status?: number })?.status;
-    if (status === 404 || status === 422) {
-      return json({ error: 'Subscription not found' }, 404);
-    }
+    await mollie.customerSubscriptions.cancel(subscriptionId, { customerId: payload.mollieCustomerId });
+    console.log(`[cancel] cancelled subscription ${subscriptionId} for ${payload.email}`);
+    return res.status(200).json({ ok: true });
+  } catch (err) {
     console.error('[cancel] Mollie error', err);
-    return json({ error: 'Failed to cancel subscription' }, 500);
+    return res.status(500).json({ error: 'Failed to cancel subscription' });
   }
-};
+}

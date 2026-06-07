@@ -26,11 +26,20 @@ const fallbackData = {
   keywords: [],
   pages: [],
   searchAppearance: [],
-  geography: [],
+  geography: [] as any,
   keywordMovement: [],
   monthlyTrend: [],
   devices: []
 };
+
+const countryNames: Record<string, string> = {
+  gbr: 'United Kingdom', usa: 'United States', deu: 'Germany', grc: 'Greece', irl: 'Ireland',
+  idn: 'Indonesia', jpn: 'Japan', vnm: 'Vietnam', aus: 'Australia', bra: 'Brazil',
+  fra: 'France', esp: 'Spain', ita: 'Italy', nld: 'Netherlands', bel: 'Belgium',
+  can: 'Canada', aus: 'Australia', nzl: 'New Zealand', ind: 'India', mex: 'Mexico'
+};
+
+const mapCountryCode = (code: string) => countryNames[code.toLowerCase()] || code.toUpperCase();
 
 const displayData = seoData ? {
   period: "Last 28 days",
@@ -46,7 +55,7 @@ const displayData = seoData ? {
   keywords: seoData.topKeywords || [],
   pages: seoData.topPages || [],
   searchAppearance: seoData.searchAppearance || [],
-  geography: seoData.geography || [],
+  geography: (seoData.geography || []).map((g: any) => ({ ...g, countryName: mapCountryCode(g.country) })),
   keywordMovement: (seoData.topKeywords || []).map((k: any) => ({ query: k.query, movement: k.change > 0 ? 'down' : 'up', change: k.change, newPosition: k.position })),
   monthlyTrend: [],
   devices: seoData.devices || []
@@ -384,9 +393,9 @@ const displayData = seoData ? {
               </tr>
             </thead>
             <tbody>
-              {displayData.geography.map((g: any) => (
+              {displayData.geography.slice(0, 5).map((g: any) => (
                 <tr>
-                  <td style="font-weight: 600;">{g.country}</td>
+                  <td style="font-weight: 600;">{g.countryName || g.country}</td>
                   <td>{g.impressions.toLocaleString()}</td>
                   <td>{g.clicks}</td>
                   <td>{g.ctr.toFixed(2)}%</td>

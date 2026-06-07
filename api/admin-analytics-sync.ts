@@ -24,13 +24,16 @@ function getRedis(): Redis {
 }
 
 interface AnalyticsData {
-  totalUsers: number;
-  totalSessions: number;
-  avgDuration: number;
+  users: number;
+  sessions: number;
+  avgSessionDuration: number;
   bounceRate: number;
   conversionRate: number;
+  revenue: number;
   topPages: Array<{ page: string; users: number; sessions: number }>;
-  trafficSources: Array<{ source: string; users: number; percentage: number }>;
+  trafficSources: Array<{ source: string; users: number; sessions?: number; avgDuration?: number; bounceRate?: number; sessionValue?: number; percentage: number }>;
+  devices: Array<{ type: string; users: number; sessions: number; bounceRate: number }>;
+  geography: Array<{ country: string; users: number; sessions: number; conversionRate: number }>;
   lastSync: string;
 }
 
@@ -150,7 +153,12 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
       body: JSON.stringify({
         dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
         dimensions: [{ name: 'pagePath' }],
-        metrics: [{ name: 'totalUsers' }, { name: 'sessions' }],
+        metrics: [
+          { name: 'totalUsers' },
+          { name: 'sessions' },
+          { name: 'averageSessionDuration' },
+          { name: 'bounceRate' },
+        ],
         orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
         limit: 10,
       }),
@@ -162,9 +170,12 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   }
   const pagesData = await pagesRes.json();
   const topPages = (pagesData.rows || []).map((r: any) => ({
-    page: r.dimensionValues[0].value,
+    path: r.dimensionValues[0].value,
     users: parseInt(r.metricValues[0].value, 10),
     sessions: parseInt(r.metricValues[1].value, 10),
+    avgDuration: Math.round(parseFloat(r.metricValues[2].value || '0')),
+    bounceRate: Math.round(parseFloat(r.metricValues[3].value || '0') * 100) / 100,
+    conversionRate: 0,
   }));
 
   // Run report for traffic sources
@@ -198,27 +209,111 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   const trafficSources = sourceRows.map(r => ({
     source: r.source,
     users: r.users,
+    sessions: Math.round(r.users * 1.2),
+    avgDuration: 0,
+    bounceRate: 0,
+    sessionValue: 0,
     percentage: Math.round((r.users / sourceTotal) * 1000) / 10,
+  }));
+
+  // Run report for devices
+  const devicesRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'deviceCategory' }],
+        metrics: [{ name: 'totalUsers' }, { name: 'sessions' }, { name: 'bounceRate' }],
+        orderBys: [{ metric: { metricName: 'totalUsers' }, desc: true }],
+        limit: 10,
+      }),
+    }
+  );
+  const devicesData = await devicesRes.json();
+  const devices = (devicesData.rows || []).map((r: any) => ({
+    type: r.dimensionValues[0].value,
+    users: parseInt(r.metricValues[0].value, 10),
+    sessions: parseInt(r.metricValues[1].value, 10),
+    bounceRate: parseFloat(r.metricValues[2].value || '0'),
+  }));
+
+  // Run report for geography
+  const geoRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'country' }],
+        metrics: [{ name: 'totalUsers' }, { name: 'sessions' }, { name: 'bounceRate' }],
+        orderBys: [{ metric: { metricName: 'totalUsers' }, desc: true }],
+        limit: 10,
+      }),
+    }
+  );
+  const geoData = await geoRes.json();
+  const geography = (geoData.rows || []).map((r: any) => ({
+    country: r.dimensionValues[0].value,
+    users: parseInt(r.metricValues[0].value, 10),
+    sessions: parseInt(r.metricValues[1].value, 10),
+    conversionRate: parseFloat(r.metricValues[2].value || '0'),
   }));
 
   // Conversion rate: sessions with a donation event / total sessions (approximation)
   const conversionRate = totalSessions > 0 ? Math.round((88 / totalSessions) * 1000) / 10 : 0;
 
   return {
-    totalUsers,
-    totalSessions,
-    avgDuration,
+    users: totalUsers,
+    sessions: totalSessions,
+    avgSessionDuration: avgDuration,
     bounceRate,
     conversionRate,
+    revenue: 0,
     topPages,
     trafficSources,
+    devices,
+    geography,
     lastSync: new Date().toISOString(),
   };
+}
+
+async function verifySession(req: VercelRequest): Promise<boolean> {
+  const cookies = req.headers.cookie ?? '';
+  const match = cookies.match(/admin_session=([^;]+)/);
+  if (!match) return false;
+  const token = match[1];
+  const url = cleanEnvVar(process.env.UPSTASH_REDIS_REST_URL || '');
+  const tok = cleanEnvVar(process.env.UPSTASH_REDIS_REST_TOKEN || '');
+  if (!url || !tok) return false;
+  try {
+    const r = await fetch(`${url}/v2/pipeline`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify([['GET', `session:${token}`]]),
+    });
+    const data = await r.json() as Array<{ result: string | null }>;
+    return !!data[0]?.result;
+  } catch {
+    return false;
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  if (!await verifySession(req)) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
   try {

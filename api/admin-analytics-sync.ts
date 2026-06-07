@@ -268,11 +268,11 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     conversionRate: parseFloat(r.metricValues[2].value || '0'),
   }));
 
-  // Conversion rate: sessions with a donation event / total sessions
-  // Query GA4 for donation conversion events
-  let donationCount = 0;
+  // Conversion rate: track both 'donation' (preferred) and 'purchase' (fallback) events
+  let conversionCount = 0;
   try {
-    const conversionRes = await fetch(
+    // Try 'donation' event first (new conversion event)
+    const donationRes = await fetch(
       `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
       {
         method: 'POST',
@@ -287,14 +287,38 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
         }),
       }
     );
-    if (conversionRes.ok) {
-      const convData = await conversionRes.json();
-      donationCount = parseInt(convData.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
+    if (donationRes.ok) {
+      const donationData = await donationRes.json();
+      conversionCount = parseInt(donationData.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
+    }
+
+    // If no donation events, fall back to 'purchase' event
+    if (conversionCount === 0) {
+      const purchaseRes = await fetch(
+        `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+            metrics: [{ name: 'eventCount' }],
+            dimensionFilter: { filter: { fieldName: 'eventName', stringFilter: { matchType: 'EXACT', value: 'purchase' } } },
+          }),
+        }
+      );
+      if (purchaseRes.ok) {
+        const purchaseData = await purchaseRes.json();
+        conversionCount = parseInt(purchaseData.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
+        console.log('[admin-analytics-sync] Using purchase event as fallback (set up donation event to prioritize it)');
+      }
     }
   } catch (e) {
-    console.warn('[admin-analytics-sync] Could not query donation events:', e);
+    console.warn('[admin-analytics-sync] Could not query conversion events:', e);
   }
-  const conversionRate = totalSessions > 0 ? Math.round((donationCount / totalSessions) * 1000) / 10 : 0;
+  const conversionRate = totalSessions > 0 ? Math.round((conversionCount / totalSessions) * 1000) / 10 : 0;
 
   return {
     users: totalUsers,

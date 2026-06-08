@@ -1056,7 +1056,9 @@ const donationsJSON = JSON.stringify(donations ?? null);
     style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
     document.head.appendChild(style);
     try {
-      const res = await fetch('/api/admin-sync', { method: 'POST' });
+      // Get token from localStorage or URL params
+      const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('admin_token') || '';
+      const res = await fetch(`/api/admin-sync${token ? `?token=${encodeURIComponent(token)}` : ''}`, { method: 'POST' });
       if (res.ok) {
         showToast('Sync complete — reloading…', 'success');
         setTimeout(() => location.reload(), 1200);

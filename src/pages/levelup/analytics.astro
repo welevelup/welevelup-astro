@@ -524,7 +524,8 @@ const displayData = gaData ? {
       btn.disabled = true;
       btn.textContent = 'Syncing...';
       try {
-        const res = await fetch('/api/admin-analytics-sync', { method: 'POST' });
+        const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('admin_token') || '';
+        const res = await fetch(`/api/admin-analytics-sync${token ? `?token=${encodeURIComponent(token)}` : ''}`, { method: 'POST' });
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.error || 'Sync failed');
         location.reload();

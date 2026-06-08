@@ -297,10 +297,12 @@ export const prerender = false;
 
         if (res.ok) {
           const data = await res.json();
-          // Store token in localStorage AND pass in URL for server-side validation
+          // Store token in localStorage AND as cookie for server-side validation
           if (data.token) {
             localStorage.setItem('admin_token', data.token);
-            console.log('[login] Session token stored, redirecting to dashboard');
+            // Set cookie so middleware can validate on all pages
+            document.cookie = `admin_session=${data.token}; path=/; max-age=86400; samesite=lax`;
+            console.log('[login] Session token stored in localStorage and cookie');
             // Redirect to dashboard with token in URL
             window.location.href = `/levelup/dashboard?token=${encodeURIComponent(data.token)}`;
           }

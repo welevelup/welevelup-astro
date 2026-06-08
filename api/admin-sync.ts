@@ -215,7 +215,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Check for Vercel Cron header (can be 'true', '1', or just present)
   const isVercelCron = !!req.headers['x-vercel-cron'];
-  if (!isVercelCron && !await verifySession(req)) {
+
+  // Check for token in URL query param
+  const url = new URL(req.url || '', 'http://localhost');
+  const urlToken = url.searchParams.get('token');
+
+  let isAuthenticated = isVercelCron || await verifySession(req);
+
+  // If no session cookie, check if token is valid in Redis
+  if (!isAuthenticated && urlToken) {
+    try {
+      const redis = getRedis();
+      const session = await redis.get(`session:${urlToken}`);
+      isAuthenticated = !!session;
+    } catch (err) {
+      console.error('[admin-sync] Redis check failed:', err);
+    }
+  }
+
+  if (!isAuthenticated) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

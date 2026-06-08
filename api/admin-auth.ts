@@ -50,7 +50,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       const token = await createSession();
-      return res.status(200).json({ ok: true, token }).setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`);
+      res.setHeader('Set-Cookie', `admin_session=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=86400`);
+      return res.status(200).json({ ok: true, token });
     } catch (err) {
       console.error('[admin-auth] Login error:', err);
       return res.status(500).json({ error: 'Login failed' });

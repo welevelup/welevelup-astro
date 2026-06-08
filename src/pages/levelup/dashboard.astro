@@ -2,6 +2,11 @@
 export const prerender = false;
 import { getAdminData } from '../../lib/admin-data';
 
+// Token can come from URL param (after login) or we check if client has it
+const urlToken = Astro.url.searchParams.get('token');
+// Pass token to client-side JavaScript for storage and API calls
+const tokenForClient = urlToken || '';
+
 let donations = null;
 let lastSync = null;
 
@@ -575,8 +580,8 @@ const donationsJSON = JSON.stringify(donations ?? null);
 <div class="layout">
   <aside class="sidebar" aria-label="Sidebar navigation">
     <a href="/levelup/dashboard" class="sidebar-item active" aria-current="page">Donations</a>
-    <a href="/levelup/seo" class="sidebar-item">SEO</a>
-    <a href="/levelup/analytics" class="sidebar-item">Analytics</a>
+    <a href={`/levelup/seo${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">SEO</a>
+    <a href={`/levelup/analytics${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">Analytics</a>
   </aside>
 
   <div class="content">
@@ -1051,7 +1056,9 @@ const donationsJSON = JSON.stringify(donations ?? null);
     style.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
     document.head.appendChild(style);
     try {
-      const res = await fetch('/api/admin-sync', { method: 'POST' });
+      // Get token from localStorage or URL params
+      const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('admin_token') || '';
+      const res = await fetch(`/api/admin-sync${token ? `?token=${encodeURIComponent(token)}` : ''}`, { method: 'POST' });
       if (res.ok) {
         showToast('Sync complete — reloading…', 'success');
         setTimeout(() => location.reload(), 1200);
@@ -1093,7 +1100,7 @@ const donationsJSON = JSON.stringify(donations ?? null);
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
     if (inactivityTimer) clearTimeout(inactivityTimer);
     try {
-      await fetch('/api/admin-login', { method: 'DELETE' });
+      await fetch('/api/admin-auth', { method: 'DELETE' });
     } catch (e) {
       console.error('Logout error:', e);
     }

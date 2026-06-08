@@ -49,6 +49,9 @@ const slugMeta: Record<string, { title: string; description: string }> = {
 };
 
 const { file } = Astro.props;
+if (!file) {
+  return Astro.redirect('/404');
+}
 const rawHtml = readFileSync(file, 'utf-8');
 const { headInner, bodyClass, mainContent } = extract(rawHtml);
 const meta = slugMeta[Astro.params.slug ?? ''] ?? {};

@@ -28,6 +28,11 @@
       "permanent": true
     },
     {
+      "source": "/active-campaigns/nomorelyes",
+      "destination": "/active-campaigns/nomorelyes-2",
+      "permanent": true
+    },
+    {
       "source": "/active-campaigns/pregancy-in-prison",
       "destination": "/active-campaigns/pregnancy-in-prison",
       "permanent": true

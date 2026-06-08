@@ -10,14 +10,17 @@
     "preview": "astro preview",
     "astro": "astro"
   },
+  "overrides": {
+    "undici": "^7.0.0"
+  },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.2",
-    "@astrojs/vercel": "^10.0.7",
+    "@astrojs/vercel": "^10.0.8",
     "@mollie/api-client": "^4.5.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
-    "@vercel/node": "^5.8.8",
-    "astro": "^6.3.8",
+    "@vercel/node": "^4.0.0",
+    "astro": "^6.4.4",
     "jose": "^6.2.3",
     "recharts": "^3.8.1",
     "resend": "^6.12.0",

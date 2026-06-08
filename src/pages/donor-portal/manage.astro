@@ -8,8 +8,8 @@ import { verifyToken } from '../../lib/token';
 import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
 
 const token = Astro.url.searchParams.get('token') ?? '';
-const secret = import.meta.env.PORTAL_SECRET ?? '';
-const apiKey = import.meta.env.MOLLIE_API_KEY ?? '';
+const secret = process.env.PORTAL_SECRET ?? '';
+const apiKey = process.env.MOLLIE_API_KEY ?? '';
 
 interface TokenPayload { email: string; mollieCustomerId: string }
 
@@ -111,9 +111,9 @@ const invalid = !payload;
 <script define:vars={{ token }}>
   document.querySelectorAll('.cancel-btn').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      const button = btn as HTMLButtonElement;
+      const button = btn;
       const subscriptionId = button.dataset.subId;
-      const statusEl = button.nextElementSibling as HTMLParagraphElement;
+      const statusEl = button.nextElementSibling;
 
       if (!confirm('Are you sure you want to cancel your monthly donation to Level Up?')) return;
 

@@ -10,7 +10,7 @@ function getRatelimit(): Ratelimit | null {
   if (!url || !token) return null;
   _rl = new Ratelimit({
     redis: new Redis({ url, token }),
-    limiter: Ratelimit.slidingWindow(5, '15 m'),
+    limiter: Ratelimit.slidingWindow(20, '15 m'),
     prefix: 'lu:rl',
   });
   return _rl;

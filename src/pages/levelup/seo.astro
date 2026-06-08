@@ -3,6 +3,10 @@ import { Redis } from '@upstash/redis';
 
 export const prerender = false;
 
+// Get token from URL for passing to other pages
+const urlToken = Astro.url.searchParams.get('token');
+const tokenForClient = urlToken || '';
+
 const getRedis = () => {
   const url = process.env.UPSTASH_REDIS_REST_URL || '';
   const token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
@@ -26,11 +30,20 @@ const fallbackData = {
   keywords: [],
   pages: [],
   searchAppearance: [],
-  geography: [],
+  geography: [] as any,
   keywordMovement: [],
   monthlyTrend: [],
   devices: []
 };
+
+const countryNames: Record<string, string> = {
+  gbr: 'United Kingdom', usa: 'United States', deu: 'Germany', grc: 'Greece', irl: 'Ireland',
+  idn: 'Indonesia', jpn: 'Japan', vnm: 'Vietnam', aus: 'Australia', bra: 'Brazil',
+  fra: 'France', esp: 'Spain', ita: 'Italy', nld: 'Netherlands', bel: 'Belgium',
+  can: 'Canada', aus: 'Australia', nzl: 'New Zealand', ind: 'India', mex: 'Mexico'
+};
+
+const mapCountryCode = (code: string) => countryNames[code.toLowerCase()] || code.toUpperCase();
 
 const displayData = seoData ? {
   period: "Last 28 days",
@@ -46,7 +59,7 @@ const displayData = seoData ? {
   keywords: seoData.topKeywords || [],
   pages: seoData.topPages || [],
   searchAppearance: seoData.searchAppearance || [],
-  geography: seoData.geography || [],
+  geography: (seoData.geography || []).map((g: any) => ({ ...g, countryName: mapCountryCode(g.country) })),
   keywordMovement: (seoData.topKeywords || []).map((k: any) => ({ query: k.query, movement: k.change > 0 ? 'down' : 'up', change: k.change, newPosition: k.position })),
   monthlyTrend: [],
   devices: seoData.devices || []
@@ -209,9 +222,9 @@ const displayData = seoData ? {
 
   <div class="layout">
     <div class="sidebar">
-      <a href="/levelup/dashboard" class="sidebar-item">Donations</a>
-      <a href="/levelup/seo" class="sidebar-item active">SEO</a>
-      <a href="/levelup/analytics" class="sidebar-item">Analytics</a>
+      <a href={`/levelup/dashboard${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">Donations</a>
+      <a href={`/levelup/seo${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item active">SEO</a>
+      <a href={`/levelup/analytics${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">Analytics</a>
     </div>
 
     <div class="content">
@@ -384,9 +397,9 @@ const displayData = seoData ? {
               </tr>
             </thead>
             <tbody>
-              {displayData.geography.map((g: any) => (
+              {displayData.geography.slice(0, 5).map((g: any) => (
                 <tr>
-                  <td style="font-weight: 600;">{g.country}</td>
+                  <td style="font-weight: 600;">{g.countryName || g.country}</td>
                   <td>{g.impressions.toLocaleString()}</td>
                   <td>{g.clicks}</td>
                   <td>{g.ctr.toFixed(2)}%</td>
@@ -473,7 +486,8 @@ const displayData = seoData ? {
       btn.disabled = true;
       btn.textContent = 'Syncing...';
       try {
-        const res = await fetch('/api/admin-seo-sync', { method: 'POST' });
+        const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('admin_token') || '';
+        const res = await fetch(`/api/admin-seo-sync${token ? `?token=${encodeURIComponent(token)}` : ''}`, { method: 'POST' });
         const data = await res.json();
         if (!res.ok || !data.ok) throw new Error(data.error || 'Sync failed');
         location.reload();

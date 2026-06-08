@@ -312,7 +312,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!await verifySession(req)) {
+  // Check for token in URL query param
+  const url = new URL(req.url || '', 'http://localhost');
+  const urlToken = url.searchParams.get('token');
+  const hasSession = await verifySession(req);
+
+  let isAuthenticated = hasSession;
+
+  // If no session cookie, check if token is valid in Redis
+  if (!isAuthenticated && urlToken) {
+    try {
+      const redis = getRedis();
+      const session = await redis.get(`session:${urlToken}`);
+      isAuthenticated = !!session;
+    } catch (err) {
+      console.error('[admin-analytics-sync] Redis check failed:', err);
+    }
+  }
+
+  if (!isAuthenticated) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -327,7 +345,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (serviceAccountKey) {
       console.log('[admin-analytics-sync] GOOGLE_SERVICE_ACCOUNT_KEY found — fetching live data');
       analyticsData = await fetchGA4Data(serviceAccountKey);
-      console.log('[admin-analytics-sync] Fetched GA4 data:', analyticsData.users, 'users');
+      console.log('[admin-analytics-sync] Fetched GA4 data:', analyticsData.totalUsers, 'users');
     } else {
       console.log('[admin-analytics-sync] No GOOGLE_SERVICE_ACCOUNT_KEY — returning cached Redis data');
       const cached = await redis.get<AnalyticsData>('admin:analytics');

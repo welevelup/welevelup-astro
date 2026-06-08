@@ -199,15 +199,13 @@ async function verifySession(req: VercelRequest): Promise<boolean> {
   const cookies = req.headers.cookie ?? '';
   const match = cookies.match(/admin_session=([^;]+)/);
   if (!match) return false;
-  const token = match[1];
-  const url = process.env.UPSTASH_REDIS_REST_URL || '';
-  const tok = process.env.UPSTASH_REDIS_REST_TOKEN || '';
-  if (!url || !tok) return false;
-  const r = await fetch(`${url}/get/session:${token}`, {
-    headers: { Authorization: `Bearer ${tok}` },
-  });
-  const data = await r.json() as { result: string | null };
-  return !!data.result;
+  try {
+    const redis = getRedis();
+    const session = await redis.get(`session:${match[1]}`);
+    return !!session;
+  } catch {
+    return false;
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -215,7 +213,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!await verifySession(req)) {
+  // Check for Vercel Cron header (can be 'true', '1', or just present)
+  const isVercelCron = !!req.headers['x-vercel-cron'];
+
+  // Check for token in URL query param
+  const url = new URL(req.url || '', 'http://localhost');
+  const urlToken = url.searchParams.get('token');
+
+  let isAuthenticated = isVercelCron || await verifySession(req);
+
+  // If no session cookie, check if token is valid in Redis
+  if (!isAuthenticated && urlToken) {
+    try {
+      const redis = getRedis();
+      const session = await redis.get(`session:${urlToken}`);
+      isAuthenticated = !!session;
+    } catch (err) {
+      console.error('[admin-sync] Redis check failed:', err);
+    }
+  }
+
+  if (!isAuthenticated) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

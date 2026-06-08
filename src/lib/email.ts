@@ -4,8 +4,17 @@ const FROM = 'Level Up <no-reply@welevelup.org>';
 const LOGO_URL = 'https://welevelup.org/images/logo-email.png';
 const SITE_URL = 'https://welevelup.org';
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function getResend() {
-  const key = import.meta.env.RESEND_API_KEY;
+  const key = process.env.RESEND_API_KEY;
   if (!key) throw new Error('RESEND_API_KEY not configured');
   return new Resend(key);
 }
@@ -103,7 +112,7 @@ export async function sendDonationConfirmation({
   giftAid: boolean;
 }): Promise<void> {
   const resend = getResend();
-  const firstName = name ? name.split(' ')[0] : '';
+  const firstName = escapeHtml(name ? name.split(' ')[0] : '');
   const greeting = firstName ? `${firstName},` : 'Thank you,';
   const typeLabel = recurring ? 'monthly donation' : 'donation';
 
@@ -204,7 +213,7 @@ export async function sendFailedPaymentNotice({
   amount: string;
 }): Promise<void> {
   const resend = getResend();
-  const firstName = name ? name.split(' ')[0] : '';
+  const firstName = escapeHtml(name ? name.split(' ')[0] : '');
   const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
 
   const html = baseTemplate(`
@@ -238,7 +247,7 @@ export async function sendSubscriptionSuspended({
   amount: string;
 }): Promise<void> {
   const resend = getResend();
-  const firstName = name ? name.split(' ')[0] : '';
+  const firstName = escapeHtml(name ? name.split(' ')[0] : '');
   const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
 
   const html = baseTemplate(`

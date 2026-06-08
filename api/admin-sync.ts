@@ -213,7 +213,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const isVercelCron = req.headers['x-vercel-cron'] === 'true';
+  // Check for Vercel Cron header (can be 'true', '1', or just present)
+  const isVercelCron = !!req.headers['x-vercel-cron'];
   if (!isVercelCron && !await verifySession(req)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }

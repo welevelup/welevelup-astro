@@ -304,18 +304,13 @@ if (hasSession) {
 
         if (res.ok) {
           const data = await res.json();
-          // Set cookie client-side since Vercel doesn't allow Set-Cookie headers
+          // Store token in localStorage AND pass in URL for server-side validation
           if (data.token) {
-            // Set cookie with minimal restrictions to ensure it's saved
-            const expiryDate = new Date();
-            expiryDate.setTime(expiryDate.getTime() + (86400 * 1000)); // 24 hours
-            document.cookie = `admin_session=${data.token}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax`;
-            console.log('[login] Session cookie set, redirecting to dashboard');
+            localStorage.setItem('admin_token', data.token);
+            console.log('[login] Session token stored, redirecting to dashboard');
+            // Redirect to dashboard with token in URL
+            window.location.href = `/levelup/dashboard?token=${encodeURIComponent(data.token)}`;
           }
-          // Small delay to ensure cookie is saved before navigation
-          setTimeout(() => {
-            window.location.href = '/levelup/dashboard';
-          }, 100);
         } else {
           const data = await res.json().catch(() => ({}));
           errorText.textContent = data.error ?? 'Invalid credentials';

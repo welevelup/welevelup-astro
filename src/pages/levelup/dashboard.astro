@@ -2,6 +2,11 @@
 export const prerender = false;
 import { getAdminData } from '../../lib/admin-data';
 
+// Token can come from URL param (after login) or we check if client has it
+const urlToken = Astro.url.searchParams.get('token');
+// Pass token to client-side JavaScript for storage and API calls
+const tokenForClient = urlToken || '';
+
 let donations = null;
 let lastSync = null;
 

@@ -59,7 +59,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   } else if (req.method === 'DELETE') {
     // Logout
     try {
-      return res.status(200).json({ ok: true }).setHeader('Set-Cookie', 'admin_session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0');
+      res.setHeader('Set-Cookie', 'admin_session=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0');
+      return res.status(200).json({ ok: true });
     } catch (err) {
       console.error('[admin-auth] Logout error:', err);
       return res.status(500).json({ error: 'Logout failed' });

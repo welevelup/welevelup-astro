@@ -108,6 +108,47 @@ async function sendDonationConfirmation({
   });
 }
 
+async function sendGA4Event({
+  paymentId, amount, currency, recurring,
+}: {
+  paymentId: string; amount: string; currency: string; recurring: boolean;
+}) {
+  const measurementId = process.env.GA4_MEASUREMENT_ID;
+  const apiSecret = process.env.GA4_API_SECRET;
+  if (!measurementId || !apiSecret) {
+    console.log('[webhook] GA4 env vars missing, skipping');
+    return;
+  }
+
+  try {
+    await fetch('https://www.google-analytics.com/mp/collect', {
+      method: 'POST',
+      body: JSON.stringify({
+        api_secret: apiSecret,
+        measurement_id: measurementId,
+        events: [{
+          name: 'purchase',
+          params: {
+            currency: currency,
+            value: parseFloat(amount),
+            transaction_id: paymentId,
+            items: [{
+              item_id: recurring ? 'monthly_donation' : 'one_time_donation',
+              item_name: recurring ? 'Monthly Donation' : 'One-time Donation',
+              price: parseFloat(amount),
+              quantity: 1,
+            }]
+          }
+        }]
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    console.log('[webhook] ✅ GA4 event sent');
+  } catch (err) {
+    console.error('[webhook] GA4 fetch failed:', err);
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method not allowed');
 
@@ -157,6 +198,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error('[webhook] email FAILED:', emailErr);
       }
     }
+
+    await sendGA4Event({
+      paymentId,
+      amount: meta?.amount || payment.amount.value,
+      currency: payment.amount.currency || 'GBP',
+      recurring: meta?.type === 'recurring',
+    });
 
     if (seq !== 'first' || !meta || meta.type !== 'recurring') return res.status(200).send('OK');
 

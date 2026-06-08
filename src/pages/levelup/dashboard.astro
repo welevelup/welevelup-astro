@@ -580,8 +580,8 @@ const donationsJSON = JSON.stringify(donations ?? null);
 <div class="layout">
   <aside class="sidebar" aria-label="Sidebar navigation">
     <a href="/levelup/dashboard" class="sidebar-item active" aria-current="page">Donations</a>
-    <a href="/levelup/seo" class="sidebar-item">SEO</a>
-    <a href="/levelup/analytics" class="sidebar-item">Analytics</a>
+    <a href={`/levelup/seo${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">SEO</a>
+    <a href={`/levelup/analytics${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">Analytics</a>
   </aside>
 
   <div class="content">

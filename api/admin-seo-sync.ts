@@ -249,7 +249,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  if (!await verifySession(req)) {
+  // Check for token in URL query param
+  const url = new URL(req.url || '', 'http://localhost');
+  const urlToken = url.searchParams.get('token');
+  const hasSession = await verifySession(req);
+
+  let isAuthenticated = hasSession;
+
+  // If no session cookie, check if token is valid in Redis
+  if (!isAuthenticated && urlToken) {
+    try {
+      const redis = getRedis();
+      const session = await redis.get(`session:${urlToken}`);
+      isAuthenticated = !!session;
+    } catch (err) {
+      console.error('[admin-seo-sync] Redis check failed:', err);
+    }
+  }
+
+  if (!isAuthenticated) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 

@@ -1,12 +1,5 @@
 ---
 export const prerender = false;
-
-// If already authenticated (has session cookie), redirect to dashboard
-const cookies = Astro.request.headers.get('cookie') ?? '';
-const hasSession = /admin_session=([^;]+)/.test(cookies);
-if (hasSession) {
-  return Astro.redirect('/levelup/dashboard');
-}
 ---
 <!DOCTYPE html>
 <html lang="en">

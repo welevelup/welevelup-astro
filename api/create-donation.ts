@@ -36,7 +36,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const mollie = createMollieClient({ apiKey });
   const formattedAmount = amountNum.toFixed(2);
-  const redirectUrl = `${siteUrl.replace(/\\n/g, '').trim().replace(/\/$/, '')}/donate/thank-you`;
+  const baseUrl = siteUrl.replace(/\\n/g, '').trim().replace(/\/$/, '');
+  const donationType = recurring ? 'monthly' : 'one-time';
 
   try {
     if (recurring) {
@@ -48,7 +49,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const payment = await mollie.payments.create({
         amount: { currency: 'GBP', value: formattedAmount },
         description: `Level Up — Monthly donation (£${formattedAmount}/month)`,
-        redirectUrl,
+        redirectUrl: `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`,
         webhookUrl,
         customerId: customer.id,
         sequenceType: SequenceType.first,
@@ -61,13 +62,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           source: 'astro',
         },
       });
-      return res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
+      res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
+      return res.status(200).json({
+        checkoutUrl: payment.getCheckoutUrl(),
+        paymentToken: payment.id
+      });
     }
 
     const payment = await mollie.payments.create({
       amount: { currency: 'GBP', value: formattedAmount },
       description: `Level Up — Donation (£${formattedAmount})`,
-      redirectUrl,
+      redirectUrl: `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`,
       webhookUrl,
       metadata: {
         type: 'one-time',
@@ -78,7 +83,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         source: 'astro',
       },
     });
-    return res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
+    res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
+    return res.status(200).json({
+      checkoutUrl: payment.getCheckoutUrl(),
+      paymentToken: payment.id
+    });
   } catch (err) {
     console.error('[create-donation] Mollie error', err);
     return res.status(500).json({ error: 'Failed to create payment' });

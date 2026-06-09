@@ -345,7 +345,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (serviceAccountKey) {
       console.log('[admin-analytics-sync] GOOGLE_SERVICE_ACCOUNT_KEY found — fetching live data');
       analyticsData = await fetchGA4Data(serviceAccountKey);
-      console.log('[admin-analytics-sync] Fetched GA4 data:', analyticsData.totalUsers, 'users');
+      console.log('[admin-analytics-sync] Fetched GA4 data:', analyticsData.users, 'users');
     } else {
       console.log('[admin-analytics-sync] No GOOGLE_SERVICE_ACCOUNT_KEY — returning cached Redis data');
       const cached = await redis.get<AnalyticsData>('admin:analytics');

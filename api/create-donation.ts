@@ -39,6 +39,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const formattedAmount = amountNum.toFixed(2);
   const baseUrl = siteUrl.replace(/\\n/g, '').trim().replace(/\/$/, '');
   const donationType = recurring ? 'monthly' : 'one-time';
+  const redirectUrl = `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`;
+
+  console.log('[create-donation]', {
+    siteUrl: siteUrl,
+    baseUrl: baseUrl,
+    formattedAmount: formattedAmount,
+    donationType: donationType,
+    redirectUrl: redirectUrl,
+    webhookUrl: webhookUrl
+  });
 
   try {
     if (recurring) {
@@ -50,7 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const payment = await mollie.payments.create({
         amount: { currency: 'GBP', value: formattedAmount },
         description: `Level Up — Monthly donation (£${formattedAmount}/month)`,
-        redirectUrl: `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`,
+        redirectUrl: redirectUrl,
         webhookUrl,
         customerId: customer.id,
         sequenceType: SequenceType.first,
@@ -75,7 +85,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const payment = await mollie.payments.create({
       amount: { currency: 'GBP', value: formattedAmount },
       description: `Level Up — Donation (£${formattedAmount})`,
-      redirectUrl: `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`,
+      redirectUrl: redirectUrl,
       webhookUrl,
       metadata: {
         type: 'one-time',

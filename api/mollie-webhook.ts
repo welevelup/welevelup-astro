@@ -180,38 +180,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const apiKey = process.env.MOLLIE_API_KEY;
   const webhookUrl = process.env.MOLLIE_WEBHOOK_URL;
+  const webhookSecret = process.env.MOLLIE_WEBHOOK_SECRET;
 
   if (!apiKey || !webhookUrl) {
     console.error('[webhook] missing env vars');
     return res.status(500).send('Server misconfigured');
   }
 
-  console.log('[webhook] === WEBHOOK START ===');
+  // Verify webhook signature BEFORE processing
+  const signature = req.headers['x-mollie-signature'] as string | undefined;
+  console.log('[webhook] Headers received:', Object.keys(req.headers));
+  console.log('[webhook] Signature header present?', !!signature, 'value:', signature?.slice(0, 30));
 
-  // Parse the webhook body
-  let body = req.body;
-  if (typeof req.body === 'string') {
-    try {
-      body = JSON.parse(req.body);
-    } catch (e) {
-      console.error('[webhook] Failed to parse JSON body');
-      return res.status(400).send('Invalid JSON');
+  // Use raw body for signature verification to match Mollie's calculation
+  // Mollie calculates signature on the exact bytes sent, not on parsed JSON
+  let bodyString = '';
+  if ((req as any).rawBody) {
+    bodyString = (req as any).rawBody;
+    console.log('[webhook] Using rawBody for signature verification');
+  } else if (typeof req.body === 'string') {
+    bodyString = req.body;
+    console.log('[webhook] Using string body for signature verification');
+  } else {
+    // Fallback: stringify the parsed body (may fail if formatting doesn't match)
+    bodyString = JSON.stringify(req.body);
+    console.log('[webhook] Using stringified parsed body (may fail)');
+  }
+
+  console.log('[webhook] Body for signature:', bodyString.slice(0, 100));
+
+  // Verify webhook signature BEFORE processing
+  if (webhookSecret) {
+    if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
+      console.error('[webhook] Invalid or missing signature');
+      return res.status(401).send('Unauthorized');
     }
+  } else {
+    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured');
   }
 
-  const { id } = body as { id?: string };
-  console.log('[webhook] Received webhook for id:', id);
+  const { id, resource } = req.body as { id?: string; resource?: string };
+  if (!id) return res.status(400).send('Missing id');
 
-  if (!id) {
-    console.error('[webhook] Missing id in webhook body');
-    return res.status(400).send('Missing id');
-  }
-
-  console.log('[webhook] Full body:', JSON.stringify(body, null, 2));
-
-  // Skip signature verification (Mollie not sending it)
-  // Instead, verify the payment exists and is paid by calling Mollie API
-  console.log('[webhook] ✅ Skipping signature check - verifying payment by API instead');
+  console.log(`[webhook] Received event: resource=${resource}, id=${id}`);
+  console.log(`[webhook] Full body:`, JSON.stringify(req.body, null, 2));
 
   // Detect resource type by ID prefix if resource is undefined
   const isPayment = resource === 'payment' || (id?.startsWith('tr_'));

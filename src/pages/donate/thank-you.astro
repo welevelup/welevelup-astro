@@ -69,6 +69,17 @@ if (amountNum <= 0) {
 
   <script is:inline>
     (function () {
+      // Validate that user completed Mollie payment (has token in sessionStorage)
+      const paymentToken = sessionStorage.getItem('paymentToken');
+      if (!paymentToken) {
+        // No token = didn't come from donation form, redirect
+        window.location.href = '/donate';
+        return;
+      }
+
+      // Clear token after showing thank-you page
+      sessionStorage.removeItem('paymentToken');
+
       const params = new URLSearchParams(window.location.search);
       const amount = parseFloat(params.get('amount') || '0');
       const isMonthly = params.get('type') === 'monthly';

@@ -62,7 +62,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           source: 'astro',
         },
       });
-      return res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
+      return res.status(200).json({
+        checkoutUrl: payment.getCheckoutUrl(),
+        paymentToken: payment.id
+      });
     }
 
     const payment = await mollie.payments.create({
@@ -79,7 +82,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         source: 'astro',
       },
     });
-    return res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
+    return res.status(200).json({
+      checkoutUrl: payment.getCheckoutUrl(),
+      paymentToken: payment.id
+    });
   } catch (err) {
     console.error('[create-donation] Mollie error', err);
     return res.status(500).json({ error: 'Failed to create payment' });

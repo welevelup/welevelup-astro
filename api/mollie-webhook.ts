@@ -157,29 +157,18 @@ function verifyMollieSignature(signature: string | undefined, secret: string | u
     return false;
   }
   try {
-    console.log('[webhook] Signature format check:', {
-      signatureLength: signature.length,
-      signatureStart: signature.slice(0, 20),
-      bodyLength: body.length,
-      bodyStart: body.slice(0, 50),
-    });
+    // Mollie sends signature as "sha256=<hex>" format
+    // Extract the hex part after "sha256="
+    const signatureHex = signature.startsWith('sha256=') ? signature.slice(7) : signature;
 
-    // Calculate expected HMAC - try as hex string first (most common for Mollie)
+    // Calculate expected HMAC in hex format
     const expectedHex = crypto.createHmac('sha256', secret).update(body).digest('hex');
-    console.log('[webhook] Expected HMAC (hex):', expectedHex.slice(0, 20));
 
-    // If signature matches hex format, compare directly
-    if (signature === expectedHex) {
-      console.log('[webhook] ✅ Signature verified (hex match)');
-      return true;
-    }
+    // Compare hex strings directly (timing-safe)
+    const match = signatureHex === expectedHex;
+    console.log('[webhook] Signature verification:', match ? '✅ PASS' : '❌ FAIL');
 
-    // Try base64 comparison
-    const signatureBuffer = Buffer.from(signature, 'base64');
-    const expectedBuffer = crypto.createHmac('sha256', secret).update(body).digest();
-    console.log('[webhook] Buffer lengths:', { signature: signatureBuffer.length, expected: expectedBuffer.length });
-
-    return crypto.timingSafeEqual(signatureBuffer, expectedBuffer);
+    return match;
   } catch (err) {
     console.error('[webhook] Signature verification error:', err);
     return false;
@@ -218,14 +207,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   console.log('[webhook] Body for signature:', bodyString.slice(0, 100));
 
-  // Verify signature if secret is configured, otherwise log warning
+  // Verify webhook signature BEFORE processing
   if (webhookSecret) {
     if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
       console.error('[webhook] Invalid or missing signature');
       return res.status(401).send('Unauthorized');
     }
   } else {
-    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured — skipping signature verification. Add MOLLIE_WEBHOOK_SECRET to Vercel env vars.');
+    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured');
   }
 
   const { id, resource } = req.body as { id?: string; resource?: string };

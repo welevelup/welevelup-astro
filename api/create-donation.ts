@@ -3,16 +3,33 @@ import { createMollieClient, SequenceType } from '@mollie/api-client';
 import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  console.log('[create-donation] === START ===');
+
+  if (req.method !== 'POST') {
+    console.log('[create-donation] Method not POST:', req.method);
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
   const apiKey = process.env.MOLLIE_API_KEY;
   const siteUrl = process.env.PUBLIC_SITE_URL;
   const webhookUrl = process.env.MOLLIE_WEBHOOK_URL;
 
+  console.log('[create-donation] Env vars:', {
+    apiKey: apiKey ? apiKey.slice(0, 10) + '...' : 'MISSING',
+    siteUrl,
+    webhookUrl
+  });
+
   if (!apiKey || !siteUrl || !webhookUrl) {
-    console.error('[create-donation] missing env vars');
+    console.error('[create-donation] ❌ MISSING ENV VARS:', {
+      apiKey: !!apiKey,
+      siteUrl: !!siteUrl,
+      webhookUrl: !!webhookUrl
+    });
     return res.status(500).json({ error: 'Mollie env vars not configured' });
   }
+
+  console.log('[create-donation] ✅ Env vars present');
 
   const body = req.body as {
     amount?: string;

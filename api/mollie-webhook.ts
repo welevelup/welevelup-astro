@@ -189,6 +189,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Verify webhook signature BEFORE processing
   const signature = req.headers['x-mollie-signature'] as string | undefined;
+  console.log('[webhook] Headers received:', Object.keys(req.headers));
+  console.log('[webhook] Signature header present?', !!signature, 'value:', signature?.slice(0, 30));
 
   // Use raw body for signature verification to match Mollie's calculation
   // Mollie calculates signature on the exact bytes sent, not on parsed JSON

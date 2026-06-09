@@ -11,9 +11,22 @@ const { headInner, bodyClass } = extract(homeRaw);
 const amount = Astro.url.searchParams.get('amount') || '0';
 const type = Astro.url.searchParams.get('type') || 'one-time';
 
+console.log('[thank-you] Page loaded:', { amount, type, cookies: Astro.request.headers.get('cookie')?.slice(0, 50) });
+
 // Basic validation: if no amount, redirect to donation page
 const amountNum = parseFloat(amount);
 if (amountNum <= 0) {
+  console.log('[thank-you] Redirecting: amount invalid', amountNum);
+  return Astro.redirect('/donate');
+}
+
+// Verify payment cookie (set by create-donation.ts after creating payment)
+const cookies = Astro.request.headers.get('cookie') || '';
+const hasPaymentCookie = cookies.includes('paymentId=');
+console.log('[thank-you] Payment cookie check:', { hasPaymentCookie, cookieContent: cookies.slice(0, 100) });
+
+if (!hasPaymentCookie) {
+  console.log('[thank-you] Redirecting: no payment cookie (direct access attempt)');
   return Astro.redirect('/donate');
 }
 ---

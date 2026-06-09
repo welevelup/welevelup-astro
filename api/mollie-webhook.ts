@@ -266,6 +266,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (shouldEmail && meta) {
       try {
+        console.log(`[webhook] 📧 sending email to ${meta.donorEmail}, name=${meta.donorName}, amount=${meta.amount}`);
         await sendDonationConfirmation({
           to: meta.donorEmail,
           name: meta.donorName || '',
@@ -275,8 +276,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
         console.log(`[webhook] ✅ email sent to ${meta.donorEmail}`);
       } catch (emailErr) {
-        console.error('[webhook] ⚠️  email FAILED (non-blocking):', emailErr instanceof Error ? emailErr.message : String(emailErr));
+        console.error('[webhook] ⚠️  email FAILED:', emailErr instanceof Error ? emailErr.message : String(emailErr));
+        console.error('[webhook] email error stack:', emailErr);
       }
+    } else {
+      console.log(`[webhook] ⏭️  skipping email: shouldEmail=${shouldEmail}, meta=${!!meta}, donorEmail=${meta?.donorEmail}`);
     }
 
     await sendGA4Event({

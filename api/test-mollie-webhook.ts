@@ -36,11 +36,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const bodyString = JSON.stringify(payload);
 
-  // Generate valid signature
-  const signature = crypto
+  // Generate valid signature in hex format (matching Mollie's format: sha256=<hex>)
+  const signatureHex = crypto
     .createHmac('sha256', secret)
     .update(bodyString)
-    .digest('base64');
+    .digest('hex');
+  const signature = `sha256=${signatureHex}`;
 
   console.log('[test-webhook] Generated signature:', signature.slice(0, 30) + '...');
   console.log('[test-webhook] Payload:', bodyString.slice(0, 100) + '...');

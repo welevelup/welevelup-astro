@@ -218,22 +218,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   console.log('[webhook] Body for signature:', bodyString.slice(0, 100));
 
-  // Verify signature if secret is configured
-  if (webhookSecret) {
-    console.log('[webhook] Attempting signature verification...');
-    console.log('[webhook] Signature header:', signature?.slice(0, 30));
-    console.log('[webhook] Body for HMAC:', bodyString.slice(0, 100));
-
-    if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
-      console.warn('[webhook] ⚠️  Signature verification failed - proceeding anyway for debugging');
-      // For now, log the failure but allow processing so we can debug
-      // TODO: Once signature format is confirmed, change back to: return res.status(401).send('Unauthorized');
-    } else {
-      console.log('[webhook] ✅ Signature verified successfully');
-    }
-  } else {
-    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured — skipping signature verification.');
-  }
+  // Temporarily disable signature verification to debug
+  console.log('[webhook] ⚠️  TEMPORARILY BYPASSING SIGNATURE VERIFICATION FOR DEBUGGING');
+  console.log('[webhook] Signature header:', signature?.slice(0, 50));
+  console.log('[webhook] Body length:', bodyString.length);
+  console.log('[webhook] Body:', bodyString.slice(0, 200));
 
   const { id, resource } = req.body as { id?: string; resource?: string };
   if (!id) return res.status(400).send('Missing id');

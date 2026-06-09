@@ -484,6 +484,10 @@ const { headInner, bodyClass } = extract(homeRaw);
         throw new Error(data.error || 'Something went wrong. Please try again.');
       }
 
+      // Save validation token before redirecting to Mollie
+      if (data.validationToken) {
+        sessionStorage.setItem('levelup_payment_token', data.validationToken);
+      }
       window.location.href = data.checkoutUrl;
     } catch (err) {
       errorEl.textContent = err instanceof Error ? err.message : 'Something went wrong. Please try again.';

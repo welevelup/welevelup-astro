@@ -62,10 +62,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           source: 'astro',
         },
       });
+      const token = Math.random().toString(36).substring(2, 15);
       res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
       return res.status(200).json({
         checkoutUrl: payment.getCheckoutUrl(),
-        paymentToken: payment.id
+        paymentToken: payment.id,
+        validationToken: token
       });
     }
 
@@ -83,10 +85,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         source: 'astro',
       },
     });
+    const token = Math.random().toString(36).substring(2, 15);
     res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
     return res.status(200).json({
       checkoutUrl: payment.getCheckoutUrl(),
-      paymentToken: payment.id
+      paymentToken: payment.id,
+      validationToken: token
     });
   } catch (err) {
     console.error('[create-donation] Mollie error', err);

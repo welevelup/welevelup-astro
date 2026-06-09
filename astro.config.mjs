@@ -8,6 +8,11 @@ export default defineConfig({
   adapter: vercel(),
   site: 'https://welevelup.org',
   trailingSlash: 'never',
+  vite: {
+    build: {
+      cssMinify: false,
+    },
+  },
   integrations: [sitemap({
     filter: (page) => ![
       // Transactional / auth pages

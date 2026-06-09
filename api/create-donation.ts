@@ -62,6 +62,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           source: 'astro',
         },
       });
+      res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
       return res.status(200).json({
         checkoutUrl: payment.getCheckoutUrl(),
         paymentToken: payment.id
@@ -82,6 +83,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         source: 'astro',
       },
     });
+    res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
     return res.status(200).json({
       checkoutUrl: payment.getCheckoutUrl(),
       paymentToken: payment.id

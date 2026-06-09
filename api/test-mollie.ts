@@ -17,19 +17,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const mollie = createMollieClient({ apiKey });
 
-    // Test 1: Get profiles (works with restricted keys)
-    const profiles = await mollie.profiles.page();
-    const profileList = Array.from(profiles);
-    if (!profileList.length) {
-      return res.status(500).json({
-        status: 'error',
-        message: 'No profiles found in Mollie account',
-      });
-    }
-
-    const profile = profileList[0];
-
-    // Test 2: Try to create a test payment
+    // Create a test payment (works with restricted API keys)
     const testPayment = await mollie.payments.create({
       amount: { currency: 'GBP', value: '0.01' },
       description: 'TEST: Mollie credential verification',
@@ -45,11 +33,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       status: 'success',
       message: '✅ Mollie credentials working',
       details: {
-        profileId: profile.id,
-        profileName: profile.name,
         testPaymentId: testPayment.id,
         testPaymentStatus: testPayment.status,
+        testPaymentUrl: testPayment.getCheckoutUrl(),
+        amount: testPayment.amount.value,
+        currency: testPayment.amount.currency,
         apiKeyFormat: apiKey.substring(0, 20) + '...',
+        webhookUrl: process.env.MOLLIE_WEBHOOK_URL || 'not configured',
       },
     });
   } catch (err) {

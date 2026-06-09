@@ -179,7 +179,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Verify webhook signature BEFORE processing
   const signature = req.headers['x-mollie-signature'] as string | undefined;
-  const bodyString = JSON.stringify(req.body);
+
+  // Use raw body for signature verification to match Mollie's calculation
+  // Mollie calculates signature on the exact bytes sent, not on parsed JSON
+  let bodyString = '';
+  if ((req as any).rawBody) {
+    bodyString = (req as any).rawBody;
+    console.log('[webhook] Using rawBody for signature verification');
+  } else if (typeof req.body === 'string') {
+    bodyString = req.body;
+    console.log('[webhook] Using string body for signature verification');
+  } else {
+    // Fallback: stringify the parsed body (may fail if formatting doesn't match)
+    bodyString = JSON.stringify(req.body);
+    console.log('[webhook] Using stringified parsed body (may fail)');
+  }
+
+  console.log('[webhook] Body for signature:', bodyString.slice(0, 100));
 
   // Verify signature if secret is configured, otherwise log warning
   if (webhookSecret) {

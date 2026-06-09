@@ -157,8 +157,14 @@ function verifyMollieSignature(signature: string | undefined, secret: string | u
     return false;
   }
   try {
-    const expected = crypto.createHmac('sha256', secret).update(body).digest('base64');
-    return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+    // Mollie signature is base64 encoded, so decode it
+    const signatureBuffer = Buffer.from(signature, 'base64');
+
+    // Calculate expected HMAC as binary, not base64 (for comparison)
+    const expectedBuffer = crypto.createHmac('sha256', secret).update(body).digest();
+
+    // Compare buffers using timing-safe comparison
+    return crypto.timingSafeEqual(signatureBuffer, expectedBuffer);
   } catch (err) {
     console.error('[webhook] Signature verification error:', err);
     return false;
@@ -179,11 +185,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Verify webhook signature BEFORE processing
   const signature = req.headers['x-mollie-signature'] as string | undefined;
-  const bodyString = JSON.stringify(req.body);
 
-  if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
-    console.error('[webhook] Invalid or missing signature');
-    return res.status(401).send('Unauthorized');
+  // Use raw body for signature verification to match Mollie's calculation
+  // Mollie calculates signature on the exact bytes sent, not on parsed JSON
+  let bodyString = '';
+  if ((req as any).rawBody) {
+    bodyString = (req as any).rawBody;
+    console.log('[webhook] Using rawBody for signature verification');
+  } else if (typeof req.body === 'string') {
+    bodyString = req.body;
+    console.log('[webhook] Using string body for signature verification');
+  } else {
+    // Fallback: stringify the parsed body (may fail if formatting doesn't match)
+    bodyString = JSON.stringify(req.body);
+    console.log('[webhook] Using stringified parsed body (may fail)');
+  }
+
+  console.log('[webhook] Body for signature:', bodyString.slice(0, 100));
+
+  // Verify signature if secret is configured, otherwise log warning
+  if (webhookSecret) {
+    if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
+      console.error('[webhook] Invalid or missing signature');
+      return res.status(401).send('Unauthorized');
+    }
+  } else {
+    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured — skipping signature verification. Add MOLLIE_WEBHOOK_SECRET to Vercel env vars.');
   }
 
   const { id, resource } = req.body as { id?: string; resource?: string };

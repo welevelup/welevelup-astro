@@ -5,6 +5,7 @@
       "schedule": "0 9 * * 2"
     }
   ],
+  "_comment": "CSP cache fix 2026-06-09 22:52",
   "redirects": [
     {
       "source": "/:path*",

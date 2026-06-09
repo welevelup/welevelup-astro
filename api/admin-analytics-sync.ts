@@ -126,6 +126,7 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
           { name: 'sessions' },
           { name: 'averageSessionDuration' },
           { name: 'bounceRate' },
+          { name: 'purchaseRevenue' },
         ],
       }),
     }
@@ -140,6 +141,7 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   const totalSessions = parseInt(overviewRow[1]?.value || '0', 10);
   const avgDuration = Math.round(parseFloat(overviewRow[2]?.value || '0'));
   const bounceRate = Math.round(parseFloat(overviewRow[3]?.value || '0') * 100) / 100;
+  const revenue = Math.round(parseFloat(overviewRow[4]?.value || '0') * 100) / 100;
 
   // Run report for top pages
   const pagesRes = await fetch(
@@ -277,7 +279,7 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     avgSessionDuration: avgDuration,
     bounceRate,
     conversionRate,
-    revenue: 0,
+    revenue,
     topPages,
     trafficSources,
     devices,

@@ -62,7 +62,11 @@ const { headInner, bodyClass } = extract(homeRaw);
       const params = new URLSearchParams(window.location.search);
       const amount = parseFloat(params.get('amount') || '0');
       const isMonthly = params.get('type') === 'monthly';
-      if (amount <= 0) return;
+      if (amount <= 0) {
+        // No valid amount = not from a completed payment, redirect to donation page
+        window.location.href = '/donate';
+        return;
+      }
       function fireEvent() {
         if (typeof gtag !== 'function') return;
         gtag('event', 'purchase', {

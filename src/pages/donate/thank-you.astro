@@ -79,8 +79,13 @@ if (!hasPaymentCookie) {
 
   <script is:inline>
     (function () {
-      // Replace history entry so back button goes to donate, not thank-you
-      window.history.replaceState({}, document.title, window.location.href);
+      // Intercept back button to go to /donate instead of Mollie
+      window.addEventListener('popstate', () => {
+        window.location.href = '/donate';
+      });
+
+      // Push a new history entry so back button triggers popstate
+      window.history.pushState({ isThankYou: true }, document.title, window.location.href);
 
       const params = new URLSearchParams(window.location.search);
       const amount = parseFloat(params.get('amount') || '0');

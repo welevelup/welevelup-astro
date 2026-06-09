@@ -162,11 +162,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { id, resource } = req.body as { id?: string; resource?: string };
   if (!id) return res.status(400).send('Missing id');
 
-  console.log(`[webhook] Received ${resource} event: ${id}`);
+  console.log(`[webhook] Received event: resource=${resource}, id=${id}`);
+  console.log(`[webhook] Full body:`, JSON.stringify(req.body, null, 2));
 
-  // Only handle payment events; ignore subscription/order/event webhooks
-  if (resource !== 'payment') {
-    console.log(`[webhook] Ignoring ${resource} webhook`);
+  // Detect resource type by ID prefix if resource is undefined
+  const isPayment = resource === 'payment' || (id?.startsWith('tr_'));
+  const isSubscription = resource === 'subscription' || (id?.startsWith('sub_'));
+
+  if (!isPayment && !isSubscription) {
+    console.log(`[webhook] Ignoring unknown resource type: ${resource}`);
+    return res.status(200).send('OK');
+  }
+
+  if (isSubscription) {
+    console.log(`[webhook] Ignoring subscription event: ${id}`);
     return res.status(200).send('OK');
   }
 

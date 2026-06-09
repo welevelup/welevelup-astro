@@ -181,9 +181,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const signature = req.headers['x-mollie-signature'] as string | undefined;
   const bodyString = JSON.stringify(req.body);
 
-  if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
-    console.error('[webhook] Invalid or missing signature');
-    return res.status(401).send('Unauthorized');
+  // Verify signature if secret is configured, otherwise log warning
+  if (webhookSecret) {
+    if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
+      console.error('[webhook] Invalid or missing signature');
+      return res.status(401).send('Unauthorized');
+    }
+  } else {
+    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured — skipping signature verification. Add MOLLIE_WEBHOOK_SECRET to Vercel env vars.');
   }
 
   const { id, resource } = req.body as { id?: string; resource?: string };

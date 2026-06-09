@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createMollieClient, SequenceType } from '@mollie/api-client';
+import crypto from 'crypto';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -38,6 +39,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const formattedAmount = amountNum.toFixed(2);
   const baseUrl = siteUrl.replace(/\\n/g, '').trim().replace(/\/$/, '');
   const donationType = recurring ? 'monthly' : 'one-time';
+  const redirectUrl = `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`;
+
+  console.log('[create-donation]', {
+    siteUrl: siteUrl,
+    baseUrl: baseUrl,
+    formattedAmount: formattedAmount,
+    donationType: donationType,
+    redirectUrl: redirectUrl,
+    webhookUrl: webhookUrl
+  });
 
   try {
     if (recurring) {
@@ -49,7 +60,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const payment = await mollie.payments.create({
         amount: { currency: 'GBP', value: formattedAmount },
         description: `Level Up — Monthly donation (£${formattedAmount}/month)`,
-        redirectUrl: `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`,
+        redirectUrl: redirectUrl,
         webhookUrl,
         customerId: customer.id,
         sequenceType: SequenceType.first,
@@ -62,17 +73,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           source: 'astro',
         },
       });
+      const token = crypto.randomBytes(16).toString('hex');
       res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
       return res.status(200).json({
         checkoutUrl: payment.getCheckoutUrl(),
-        paymentToken: payment.id
+        paymentToken: payment.id,
+        validationToken: token
       });
     }
 
     const payment = await mollie.payments.create({
       amount: { currency: 'GBP', value: formattedAmount },
       description: `Level Up — Donation (£${formattedAmount})`,
-      redirectUrl: `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`,
+      redirectUrl: redirectUrl,
       webhookUrl,
       metadata: {
         type: 'one-time',
@@ -83,10 +96,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         source: 'astro',
       },
     });
+    const token = crypto.randomBytes(16).toString('hex');
     res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
     return res.status(200).json({
       checkoutUrl: payment.getCheckoutUrl(),
-      paymentToken: payment.id
+      paymentToken: payment.id,
+      validationToken: token
     });
   } catch (err) {
     console.error('[create-donation] Mollie error', err);

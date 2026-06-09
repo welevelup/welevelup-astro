@@ -4,7 +4,6 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
-import { getPaymentStatus } from '../../lib/mollie-helper';
 
 const { headInner, bodyClass } = extract(homeRaw);
 
@@ -17,27 +16,6 @@ const amountNum = parseFloat(amount);
 if (amountNum <= 0) {
   return Astro.redirect('/donate');
 }
-
-// Get paymentId from cookie (set when creating donation)
-const paymentIdCookie = Astro.cookies.get('paymentId')?.value;
-if (!paymentIdCookie) {
-  return Astro.redirect('/donate');
-}
-
-// Validate payment status server-side
-try {
-  const payment = await getPaymentStatus(paymentIdCookie);
-  // Only show thank-you if payment is paid
-  if (payment.status !== 'paid') {
-    return Astro.redirect('/donate');
-  }
-} catch (err) {
-  // If we can't verify, redirect to safety
-  return Astro.redirect('/donate');
-}
-
-// Clear the cookie after validation
-Astro.cookies.delete('paymentId');
 ---
 <Layout
   headHtml={headInner}
@@ -91,6 +69,14 @@ Astro.cookies.delete('paymentId');
 
   <script is:inline>
     (function () {
+      // Intercept back button to go to /donate instead of Mollie
+      window.addEventListener('popstate', () => {
+        window.location.href = '/donate';
+      });
+
+      // Push a new history entry so back button triggers popstate
+      window.history.pushState({ isThankYou: true }, document.title, window.location.href);
+
       const params = new URLSearchParams(window.location.search);
       const amount = parseFloat(params.get('amount') || '0');
       const isMonthly = params.get('type') === 'monthly';

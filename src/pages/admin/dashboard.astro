@@ -1,6 +1,30 @@
 ---
 export const prerender = false;
 import { getAdminData } from '../../lib/admin-data';
+import { Redis } from '@upstash/redis';
+
+// Verify admin session before rendering sensitive data
+const cookies = Astro.request.headers.get('cookie') ?? '';
+const sessionMatch = cookies.match(/admin_session=([^;]+)/);
+
+if (!sessionMatch) {
+  return Astro.redirect('/admin/login');
+}
+
+try {
+  const url = process.env.UPSTASH_REDIS_REST_URL || '';
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  if (url && token) {
+    const redis = new Redis({ url, token });
+    const session = await redis.get(`session:${sessionMatch[1]}`);
+    if (!session) {
+      return Astro.redirect('/admin/login');
+    }
+  }
+} catch (err) {
+  console.error('[dashboard] Session validation error:', err);
+  return Astro.redirect('/admin/login');
+}
 
 let donations = null;
 let lastSync = null;

@@ -157,13 +157,28 @@ function verifyMollieSignature(signature: string | undefined, secret: string | u
     return false;
   }
   try {
-    // Mollie signature is base64 encoded, so decode it
+    console.log('[webhook] Signature format check:', {
+      signatureLength: signature.length,
+      signatureStart: signature.slice(0, 20),
+      bodyLength: body.length,
+      bodyStart: body.slice(0, 50),
+    });
+
+    // Calculate expected HMAC - try as hex string first (most common for Mollie)
+    const expectedHex = crypto.createHmac('sha256', secret).update(body).digest('hex');
+    console.log('[webhook] Expected HMAC (hex):', expectedHex.slice(0, 20));
+
+    // If signature matches hex format, compare directly
+    if (signature === expectedHex) {
+      console.log('[webhook] ✅ Signature verified (hex match)');
+      return true;
+    }
+
+    // Try base64 comparison
     const signatureBuffer = Buffer.from(signature, 'base64');
-
-    // Calculate expected HMAC as binary, not base64 (for comparison)
     const expectedBuffer = crypto.createHmac('sha256', secret).update(body).digest();
+    console.log('[webhook] Buffer lengths:', { signature: signatureBuffer.length, expected: expectedBuffer.length });
 
-    // Compare buffers using timing-safe comparison
     return crypto.timingSafeEqual(signatureBuffer, expectedBuffer);
   } catch (err) {
     console.error('[webhook] Signature verification error:', err);

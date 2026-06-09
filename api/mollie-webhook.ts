@@ -207,11 +207,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   console.log('[webhook] Body for signature:', bodyString.slice(0, 100));
 
-  // Temporarily disable signature verification to debug
-  console.log('[webhook] ⚠️  TEMPORARILY BYPASSING SIGNATURE VERIFICATION FOR DEBUGGING');
-  console.log('[webhook] Signature header:', signature?.slice(0, 50));
-  console.log('[webhook] Body length:', bodyString.length);
-  console.log('[webhook] Body:', bodyString.slice(0, 200));
+  // Verify webhook signature BEFORE processing
+  if (webhookSecret) {
+    if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
+      console.error('[webhook] Invalid or missing signature');
+      return res.status(401).send('Unauthorized');
+    }
+  } else {
+    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured');
+  }
 
   const { id, resource } = req.body as { id?: string; resource?: string };
   if (!id) return res.status(400).send('Missing id');

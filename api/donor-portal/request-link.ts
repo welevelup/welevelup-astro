@@ -1,13 +1,14 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createMollieClient } from '@mollie/api-client';
-import { createHmac } from 'crypto';
+import { createHmac, randomBytes } from 'crypto';
 import { Resend } from 'resend';
 
 const FROM = 'Level Up <no-reply@welevelup.org>';
 const SITE_URL = 'https://welevelup.org';
 
 function createToken(payload: Record<string, unknown>, secret: string, ttlMs = 3_600_000): string {
-  const data = Buffer.from(JSON.stringify({ ...payload, exp: Date.now() + ttlMs })).toString('base64url');
+  const nonce = randomBytes(16).toString('hex');
+  const data = Buffer.from(JSON.stringify({ ...payload, nonce, exp: Date.now() + ttlMs })).toString('base64url');
   const sig = createHmac('sha256', secret).update(data).digest('base64url');
   return `${data}.${sig}`;
 }

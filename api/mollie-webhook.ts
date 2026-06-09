@@ -193,9 +193,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           recurring: meta.type === 'recurring',
           giftAid: meta.giftAid === 'true',
         });
-        console.log(`[webhook] email sent to ${meta.donorEmail}`);
+        console.log(`[webhook] ✅ email sent to ${meta.donorEmail}`);
       } catch (emailErr) {
-        console.error('[webhook] email FAILED:', emailErr);
+        console.error('[webhook] ⚠️  email FAILED (non-blocking):', emailErr instanceof Error ? emailErr.message : String(emailErr));
       }
     }
 

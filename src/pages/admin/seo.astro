@@ -1,7 +1,14 @@
 ---
 import { Redis } from '@upstash/redis';
+import { verifyAdminSession } from '../../lib/verify-admin-session';
 
 export const prerender = false;
+
+// Verify admin session before rendering
+const cookies = Astro.request.headers.get('cookie') ?? '';
+if (!(await verifyAdminSession(cookies))) {
+  return Astro.redirect('/admin/login');
+}
 
 const getRedis = () => {
   const url = process.env.UPSTASH_REDIS_REST_URL || '';

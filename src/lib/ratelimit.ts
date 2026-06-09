@@ -21,6 +21,14 @@ function getRatelimit(): Ratelimit | null {
 export async function isRateLimited(identifier: string): Promise<boolean> {
   const rl = getRatelimit();
   if (!rl) return false;
+
+  // Validate identifier: alphanumeric, underscore, dash only. Max 64 chars.
+  // Prevents abuse from user-controlled input
+  if (!/^[a-zA-Z0-9_-]{1,64}$/.test(identifier)) {
+    console.warn('[ratelimit] Invalid identifier format:', identifier);
+    return false;
+  }
+
   const { success } = await rl.limit(identifier);
   return !success;
 }

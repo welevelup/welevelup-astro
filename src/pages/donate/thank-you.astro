@@ -1,5 +1,4 @@
 ---
-export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
@@ -15,15 +14,6 @@ const type = Astro.url.searchParams.get('type') || 'one-time';
 // Basic validation: if no amount, redirect to donation page
 const amountNum = parseFloat(amount);
 if (amountNum <= 0) {
-  return Astro.redirect('/donate');
-}
-
-// Server-side: Check for payment cookie (set by create-donation.ts)
-const cookies = Astro.request.headers.get('cookie') || '';
-const hasPaymentCookie = cookies.includes('paymentId=');
-
-// If no payment cookie, this is a direct access attempt - redirect
-if (!hasPaymentCookie) {
   return Astro.redirect('/donate');
 }
 ---

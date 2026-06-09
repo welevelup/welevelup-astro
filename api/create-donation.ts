@@ -41,13 +41,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const donationType = recurring ? 'monthly' : 'one-time';
   const redirectUrl = `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`;
 
-  console.log('[create-donation]', {
+  console.log('[create-donation] Creating payment with:', {
     siteUrl: siteUrl,
     baseUrl: baseUrl,
     formattedAmount: formattedAmount,
     donationType: donationType,
     redirectUrl: redirectUrl,
-    webhookUrl: webhookUrl
+    webhookUrl: webhookUrl,
+    donorEmail: donorEmail ? donorEmail.slice(0, 10) + '...' : 'none'
   });
 
   try {

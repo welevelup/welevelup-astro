@@ -31,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       message: '✅ Test email sent',
       details: {
         to: testEmail,
-        resendId: result.id,
+        result: result,
         resendApiKeyConfigured: !!resendApiKey,
       },
     });

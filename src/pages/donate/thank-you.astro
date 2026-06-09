@@ -69,6 +69,9 @@ if (amountNum <= 0) {
 
   <script is:inline>
     (function () {
+      // Replace history entry so back button goes to donate, not thank-you
+      window.history.replaceState({}, document.title, window.location.href);
+
       const params = new URLSearchParams(window.location.search);
       const amount = parseFloat(params.get('amount') || '0');
       const isMonthly = params.get('type') === 'monthly';

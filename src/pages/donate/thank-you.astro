@@ -3,9 +3,40 @@ import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
+import { getPaymentStatus } from '../../lib/mollie-helper';
 import homeRaw from '../../_clone/index.html?raw';
 
 const { headInner, bodyClass } = extract(homeRaw);
+
+// Get payment details from URL
+const paymentId = Astro.url.searchParams.get('paymentId');
+const amount = Astro.url.searchParams.get('amount') || '0';
+const type = Astro.url.searchParams.get('type') || 'one-time';
+
+let isValidPayment = false;
+let paymentStatus = 'unknown';
+let errorMessage = '';
+
+if (paymentId) {
+  try {
+    const payment = await getPaymentStatus(paymentId);
+    paymentStatus = payment.status;
+    isValidPayment = payment.status === 'paid';
+
+    if (!isValidPayment) {
+      errorMessage = 'Your payment has not been completed. Please try again.';
+    }
+  } catch (err) {
+    errorMessage = 'We could not verify your payment. Please contact support if you have questions.';
+  }
+} else {
+  errorMessage = 'No payment information found. Please make a donation.';
+}
+
+// If payment is not valid, redirect to donation page
+if (!isValidPayment) {
+  return Astro.redirect('/donate');
+}
 ---
 <Layout
   headHtml={headInner}
@@ -63,33 +94,6 @@ const { headInner, bodyClass } = extract(homeRaw);
       const amount = parseFloat(params.get('amount') || '0');
       const isMonthly = params.get('type') === 'monthly';
 
-      // Validate amount exists and is positive
-      if (amount <= 0) {
-        window.location.href = '/donate';
-        return;
-      }
-
-      // Optional: Add a small delay to allow webhook to process
-      // This ensures GA4 event is sent before thank-you page loads
-      const validatePayment = async () => {
-        // If paymentId is provided, validate it
-        const paymentId = params.get('paymentId');
-        if (paymentId) {
-          try {
-            const res = await fetch(`/api/validate-payment?paymentId=${paymentId}`);
-            if (!res.ok) {
-              window.location.href = '/donate';
-              return;
-            }
-          } catch (err) {
-            console.error('Payment validation failed:', err);
-            // Continue anyway - don't break the experience
-          }
-        }
-      };
-
-      // Validate asynchronously but don't block rendering
-      validatePayment().catch(() => {});
       function fireEvent() {
         if (typeof gtag !== 'function') return;
         gtag('event', 'purchase', {

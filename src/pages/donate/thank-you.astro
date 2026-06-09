@@ -1,4 +1,5 @@
 ---
+export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
@@ -17,9 +18,14 @@ if (amountNum <= 0) {
   return Astro.redirect('/donate');
 }
 
-// Prevent direct access - only show after Mollie redirect
-// Client-side validation will check sessionStorage
-const validationToken = Math.random().toString(36).substring(2, 15);
+// Server-side: Check for payment cookie (set by create-donation.ts)
+const cookies = Astro.request.headers.get('cookie') || '';
+const hasPaymentCookie = cookies.includes('paymentId=');
+
+// If no payment cookie, this is a direct access attempt - redirect
+if (!hasPaymentCookie) {
+  return Astro.redirect('/donate');
+}
 ---
 <Layout
   headHtml={headInner}
@@ -73,15 +79,6 @@ const validationToken = Math.random().toString(36).substring(2, 15);
 
   <script is:inline>
     (function () {
-      // Security: only allow access after a valid payment
-      const paymentToken = sessionStorage.getItem('levelup_payment_token');
-      if (!paymentToken) {
-        window.location.href = '/donate';
-        return;
-      }
-      // Clear token after validation
-      sessionStorage.removeItem('levelup_payment_token');
-
       // Replace history entry so back button goes to donate, not thank-you
       window.history.replaceState({}, document.title, window.location.href);
 

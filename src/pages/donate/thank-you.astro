@@ -62,11 +62,34 @@ const { headInner, bodyClass } = extract(homeRaw);
       const params = new URLSearchParams(window.location.search);
       const amount = parseFloat(params.get('amount') || '0');
       const isMonthly = params.get('type') === 'monthly';
+
+      // Validate amount exists and is positive
       if (amount <= 0) {
-        // No valid amount = not from a completed payment, redirect to donation page
         window.location.href = '/donate';
         return;
       }
+
+      // Optional: Add a small delay to allow webhook to process
+      // This ensures GA4 event is sent before thank-you page loads
+      const validatePayment = async () => {
+        // If paymentId is provided, validate it
+        const paymentId = params.get('paymentId');
+        if (paymentId) {
+          try {
+            const res = await fetch(`/api/validate-payment?paymentId=${paymentId}`);
+            if (!res.ok) {
+              window.location.href = '/donate';
+              return;
+            }
+          } catch (err) {
+            console.error('Payment validation failed:', err);
+            // Continue anyway - don't break the experience
+          }
+        }
+      };
+
+      // Validate asynchronously but don't block rendering
+      validatePayment().catch(() => {});
       function fireEvent() {
         if (typeof gtag !== 'function') return;
         gtag('event', 'purchase', {

@@ -159,9 +159,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).send('Server misconfigured');
   }
 
-  const paymentId = req.body?.id as string | undefined;
-  if (!paymentId) return res.status(400).send('Missing payment id');
+  const { id, resource } = req.body as { id?: string; resource?: string };
+  if (!id) return res.status(400).send('Missing id');
 
+  console.log(`[webhook] Received ${resource} event: ${id}`);
+
+  // Only handle payment events; ignore subscription/order/event webhooks
+  if (resource !== 'payment') {
+    console.log(`[webhook] Ignoring ${resource} webhook`);
+    return res.status(200).send('OK');
+  }
+
+  const paymentId = id;
   const mollie = createMollieClient({ apiKey });
 
   try {

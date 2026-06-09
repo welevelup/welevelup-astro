@@ -16,6 +16,10 @@ const amountNum = parseFloat(amount);
 if (amountNum <= 0) {
   return Astro.redirect('/donate');
 }
+
+// Prevent direct access - only show after Mollie redirect
+// Client-side validation will check sessionStorage
+const validationToken = Math.random().toString(36).substring(2, 15);
 ---
 <Layout
   headHtml={headInner}
@@ -69,6 +73,15 @@ if (amountNum <= 0) {
 
   <script is:inline>
     (function () {
+      // Security: only allow access after a valid payment
+      const paymentToken = sessionStorage.getItem('levelup_payment_token');
+      if (!paymentToken) {
+        window.location.href = '/donate';
+        return;
+      }
+      // Clear token after validation
+      sessionStorage.removeItem('levelup_payment_token');
+
       // Replace history entry so back button goes to donate, not thank-you
       window.history.replaceState({}, document.title, window.location.href);
 

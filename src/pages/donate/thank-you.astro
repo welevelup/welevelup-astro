@@ -3,38 +3,17 @@ import Layout from '../../layouts/Layout.astro';
 import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
-import { getPaymentStatus } from '../../lib/mollie-helper';
 import homeRaw from '../../_clone/index.html?raw';
 
 const { headInner, bodyClass } = extract(homeRaw);
 
 // Get payment details from URL
-const paymentId = Astro.url.searchParams.get('paymentId');
 const amount = Astro.url.searchParams.get('amount') || '0';
 const type = Astro.url.searchParams.get('type') || 'one-time';
 
-let isValidPayment = false;
-let paymentStatus = 'unknown';
-let errorMessage = '';
-
-if (paymentId) {
-  try {
-    const payment = await getPaymentStatus(paymentId);
-    paymentStatus = payment.status;
-    isValidPayment = payment.status === 'paid';
-
-    if (!isValidPayment) {
-      errorMessage = 'Your payment has not been completed. Please try again.';
-    }
-  } catch (err) {
-    errorMessage = 'We could not verify your payment. Please contact support if you have questions.';
-  }
-} else {
-  errorMessage = 'No payment information found. Please make a donation.';
-}
-
-// If payment is not valid, redirect to donation page
-if (!isValidPayment) {
+// Basic validation: if no amount, redirect to donation page
+const amountNum = parseFloat(amount);
+if (amountNum <= 0) {
   return Astro.redirect('/donate');
 }
 ---

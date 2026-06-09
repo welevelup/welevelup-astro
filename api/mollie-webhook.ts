@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
 import { Resend } from 'resend';
+import crypto from 'crypto';
 
 const FROM = 'Level Up <no-reply@welevelup.org>';
 const LOGO_URL = 'https://levelup.yourmovement.org/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBc01XIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--899d9333f326b8d370f2acf06f7fe589aef9efd5/image.png';
@@ -72,7 +73,8 @@ async function sendDonationConfirmation({
   if (!key) throw new Error('RESEND_API_KEY not configured');
   const resend = new Resend(key);
 
-  const firstName = name ? name.split(' ')[0] : '';
+  const safeName = name?.replace(/[\r\n]+/g, ' ').trim() || '';
+  const firstName = safeName ? safeName.split(' ')[0] : '';
   const greeting = firstName ? `${firstName},` : 'Thank you,';
   const typeLabel = recurring ? 'monthly donation' : 'donation';
 
@@ -149,14 +151,39 @@ async function sendGA4Event({
   }
 }
 
+function verifyMollieSignature(signature: string | undefined, secret: string | undefined, body: string): boolean {
+  if (!signature || !secret) {
+    console.error('[webhook] Missing signature or secret');
+    return false;
+  }
+  try {
+    const expected = crypto.createHmac('sha256', secret).update(body).digest('base64');
+    return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected));
+  } catch (err) {
+    console.error('[webhook] Signature verification error:', err);
+    return false;
+  }
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).send('Method not allowed');
 
   const apiKey = process.env.MOLLIE_API_KEY;
   const webhookUrl = process.env.MOLLIE_WEBHOOK_URL;
+  const webhookSecret = process.env.MOLLIE_WEBHOOK_SECRET;
+
   if (!apiKey || !webhookUrl) {
     console.error('[webhook] missing env vars');
     return res.status(500).send('Server misconfigured');
+  }
+
+  // Verify webhook signature BEFORE processing
+  const signature = req.headers['x-mollie-signature'] as string | undefined;
+  const bodyString = JSON.stringify(req.body);
+
+  if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
+    console.error('[webhook] Invalid or missing signature');
+    return res.status(401).send('Unauthorized');
   }
 
   const { id, resource } = req.body as { id?: string; resource?: string };

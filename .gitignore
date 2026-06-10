@@ -19,3 +19,6 @@ credential.json
 .claude/
 scripts/backups/
 .env*.local
+
+# Audience source data — personal data, NEVER commit (public repo)
+data/

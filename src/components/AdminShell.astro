@@ -2,11 +2,13 @@
 // Shared admin shell: header + nav + theme + slot + shared styles.
 // Pages pass the active tab, their sync endpoint, the token and last-sync time.
 export interface Props {
-  active: 'donations' | 'website' | 'search';
+  active: 'donations' | 'website' | 'search' | 'audience';
   title: string;
   subtitle: string;
   token: string;
-  syncEndpoint: string;
+  // Pages without a server sync endpoint (e.g. Audience, refreshed by a local
+  // script) omit this — the Refresh button is hidden when it's absent.
+  syncEndpoint?: string;
   lastSync: string | null;
 }
 
@@ -17,6 +19,7 @@ const tabs = [
   { id: 'donations', label: 'Donations', href: `/levelup/dashboard${q}` },
   { id: 'website', label: 'Website', href: `/levelup/analytics${q}` },
   { id: 'search', label: 'Google Search', href: `/levelup/seo${q}` },
+  { id: 'audience', label: 'Audience', href: `/levelup/audience${q}` },
 ];
 
 const fmtDate = (s: string | null) =>
@@ -377,12 +380,14 @@ const fmtDate = (s: string | null) =>
       <div class="brand">Level Up · <b>Admin</b></div>
       <div class="bar-actions">
         <span class="last-updated">Last updated: {fmtDate(lastSync)}</span>
-        <button class="btn btn-primary" id="refresh-btn" data-endpoint={syncEndpoint} aria-label="Refresh data from source">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="refresh-icon">
-            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-          </svg>
-          <span id="refresh-label">Refresh data</span>
-        </button>
+        {syncEndpoint && (
+          <button class="btn btn-primary" id="refresh-btn" data-endpoint={syncEndpoint} aria-label="Refresh data from source">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="refresh-icon">
+              <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+            <span id="refresh-label">Refresh data</span>
+          </button>
+        )}
         <button class="icon-btn" id="theme-btn" aria-label="Toggle light or dark theme">🌙</button>
         <button class="btn btn-ghost" id="logout-btn" aria-label="Sign out">Sign out</button>
       </div>

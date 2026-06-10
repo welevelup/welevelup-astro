@@ -4,6 +4,7 @@ const KEYS = {
   donations: 'admin:donations',
   analytics: 'admin:analytics',
   seo: 'admin:seo',
+  audience: 'admin:audience',
   lastSync: 'admin:lastSync',
 };
 
@@ -134,6 +135,28 @@ export interface SeoData {
   };
 }
 
+// Audience map data. Written by scripts/sync-audience-data.ts — district-level
+// aggregates only (no full postcodes, no PII). All fields optional so the page
+// tolerates older cached payloads.
+export interface AudienceDistrict {
+  district: string;
+  lat: number | null;
+  lng: number | null;
+  total: number;
+  bySource: Record<string, number>;
+  topSource: string;
+}
+
+export interface AudienceData {
+  districts?: AudienceDistrict[];
+  bySource?: Array<{ source: string; count: number }>;
+  monthly?: Array<{ month: string; count: number }>;
+  totalPeople?: number;
+  totalDistricts?: number;
+  geocodedPct?: number;
+  lastSync?: string;
+}
+
 export interface AdminData {
   donations: DonationData | null;
   analytics: AnalyticsData | null;
@@ -150,6 +173,11 @@ export async function getAdminData(): Promise<AdminData> {
     redis.get<string>(KEYS.lastSync),
   ]);
   return { donations, analytics, seo, lastSync };
+}
+
+export async function getAudienceData(): Promise<AudienceData | null> {
+  const redis = getRedis();
+  return redis.get<AudienceData>(KEYS.audience);
 }
 
 export async function saveDonationData(data: DonationData): Promise<void> {

@@ -1,0 +1,321 @@
+---
+export const prerender = false;
+import 'leaflet/dist/leaflet.css';
+import AdminShell from '../../components/AdminShell.astro';
+import { monthlyBarChart } from '../../lib/admin-charts';
+import { fmtNum } from '../../lib/admin-format';
+import type { AudienceData, AudienceDistrict } from '../../lib/admin-data';
+import { Redis } from '@upstash/redis';
+
+const urlToken = Astro.url.searchParams.get('token') || '';
+
+const getRedis = () => {
+  const url = process.env.UPSTASH_REDIS_REST_URL || '';
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  if (!url || !token) throw new Error('Redis not configured');
+  return new Redis({ url, token });
+};
+
+let audience: AudienceData | null = null;
+try {
+  const redis = getRedis();
+  audience = await redis.get<AudienceData>('admin:audience');
+} catch (err) {
+  console.error('Failed to fetch audience data from Redis:', err);
+}
+
+const districts: AudienceDistrict[] = audience?.districts ?? [];
+const bySource = audience?.bySource ?? [];
+const monthly = audience?.monthly ?? [];
+const totalPeople = audience?.totalPeople ?? 0;
+const totalDistricts = audience?.totalDistricts ?? districts.length;
+const geocodedPct = audience?.geocodedPct ?? 0;
+
+const hasData = districts.length > 0;
+
+// ── Fixed, legible palette. Sources are assigned a colour deterministically by
+// alphabetical order so the map, legend and popups always agree. ──
+const PALETTE = ['#0C0A3E', '#5B4FCF', '#A89CED', '#15803D', '#B45309', '#BE185D'];
+const FALLBACK_COLOR = 'rgba(12,10,62,0.35)';
+const sourceNames = [...new Set(bySource.map((s) => s.source))].sort((a, b) =>
+  a.localeCompare(b)
+);
+const sourceColors: Record<string, string> = {};
+sourceNames.forEach((s, i) => {
+  sourceColors[s] = PALETTE[i] ?? FALLBACK_COLOR;
+});
+
+// ── KPIs ──
+const topSource = bySource.length ? bySource[0] : null;
+const lastMonth = monthly.length ? monthly[monthly.length - 1] : null;
+const lastMonthLabel = lastMonth
+  ? new Date(lastMonth.month + '-01T00:00:00Z').toLocaleString('en-GB', {
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    })
+  : '';
+
+// ── Top 15 areas table ──
+const topAreas = districts.slice(0, 15);
+
+// ── Growth chart (monthly signups) ──
+const chart = monthly.length
+  ? monthlyBarChart(
+      monthly.map((m) => ({ month: m.month, value: m.count })),
+      { ariaLabel: 'New supporters added per month over the last 36 months', color: '#5B4FCF', valueLabel: 'people' }
+    )
+  : '';
+
+// Data injected for the client map — district-level aggregates only, no PII.
+const mapPayload = JSON.stringify({ districts, sourceColors, fallbackColor: FALLBACK_COLOR });
+---
+<AdminShell
+  active="audience"
+  title="Audience"
+  subtitle="Where Level Up's supporters live across the UK, coloured by the campaign that brought them in. Areas are grouped by postcode district — no individual addresses are stored."
+  token={urlToken}
+  lastSync={audience?.lastSync ?? null}
+>
+  {!hasData && (
+    <div class="empty">
+      <strong>No audience data yet</strong>
+      Run <code style="font-family:monospace;background:var(--chip-bg);padding:1px 5px;border-radius:4px">scripts/sync-audience-data.ts</code> locally to build the map.
+      It reads the supporter and geocoded-postcode CSVs, groups people by postcode area
+      (so no individual addresses are stored), and uploads the result.
+    </div>
+  )}
+
+  {hasData && (
+    <>
+      <!-- KPIs -->
+      <section class="section">
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">
+              Total audience mapped
+              <span class="tip" tabindex="0" role="note" aria-label="What total audience mapped means">ⓘ<span class="tip-text">Supporters we could place on the map. Areas are grouped by postcode district — no full postcodes are stored.</span></span>
+            </div>
+            <div class="kpi-value">{fmtNum(totalPeople)}</div>
+            <div class="kpi-desc">{geocodedPct}% of supporters had a usable postcode area.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">
+              Areas
+              <span class="tip" tabindex="0" role="note" aria-label="What areas means">ⓘ<span class="tip-text">Distinct postcode districts (the part before the space, e.g. “E8”) with at least one supporter.</span></span>
+            </div>
+            <div class="kpi-value">{fmtNum(totalDistricts)}</div>
+            <div class="kpi-desc">Postcode districts with supporters.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Top campaign source</div>
+            <div class="kpi-value" style="font-size:24px">{topSource ? topSource.source : '—'}</div>
+            <div class="kpi-desc">{topSource ? `${fmtNum(topSource.count)} supporters` : 'No source data yet.'}</div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Newest signups</div>
+            <div class="kpi-value">{lastMonth ? fmtNum(lastMonth.count) : '—'}</div>
+            <div class="kpi-desc">{lastMonthLabel ? `Added in ${lastMonthLabel}.` : 'No dated signups yet.'}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAP -->
+      <section class="section">
+        <div class="section-title">Where supporters live</div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div id="audience-map" style="height:520px;width:100%;background:var(--bg)"></div>
+        </div>
+        <!-- Source filter legend (toggles markers per campaign) -->
+        <div class="chart-legend" id="source-legend" style="margin-top:14px">
+          {sourceNames.map((s) => (
+            <label class="legend-item" style="cursor:pointer;user-select:none">
+              <input type="checkbox" class="src-toggle" value={s} checked style="accent-color:var(--violet)" />
+              <span class="legend-swatch" style={`background:${sourceColors[s]}`}></span>
+              {s}
+            </label>
+          ))}
+        </div>
+        <p class="kpi-desc" style="margin-top:8px">Each circle is a postcode area. Bigger circles mean more supporters; the colour is the campaign that brought in the most people there. Tick or untick a campaign to filter the map.</p>
+      </section>
+
+      <!-- GROWTH CHART -->
+      {monthly.length > 0 && (
+        <section class="section">
+          <div class="section-title">New supporters per month</div>
+          <div class="card">
+            <Fragment set:html={chart} />
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>People added each month</span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- TOP AREAS TABLE -->
+      <section class="section">
+        <div class="section-title">Top 15 areas</div>
+        {topAreas.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Area <span class="tip" tabindex="0" role="note" aria-label="What area means">ⓘ<span class="tip-text">Postcode district — the part before the space (e.g. “E8”). No full postcodes are stored.</span></span></th>
+                  <th scope="col" class="num">People</th>
+                  <th scope="col">Top campaign source</th>
+                </tr>
+              </thead>
+              <tbody>
+                {topAreas.map((d) => (
+                  <tr>
+                    <td style="font-weight:600">{d.district}</td>
+                    <td class="num">{fmtNum(d.total)}</td>
+                    <td>
+                      <span class="legend-item" style="font-weight:600">
+                        <span class="legend-swatch" style={`background:${sourceColors[d.topSource] ?? FALLBACK_COLOR}`}></span>
+                        {d.topSource}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty">No areas to show yet.</div>
+        )}
+      </section>
+
+      <!-- Aggregated, PII-free data for the client-side map -->
+      <script type="application/json" id="audience-data" set:html={mapPayload}></script>
+    </>
+  )}
+</AdminShell>
+
+<script>
+  // Leaflet is imported here so Astro/Vite bundles it from node_modules → served
+  // from 'self', satisfying the site CSP (script-src 'self'). Map tiles come from
+  // CartoDB over https, allowed by img-src 'self' data: https:.
+  import L from 'leaflet';
+
+  interface District {
+    district: string;
+    lat: number | null;
+    lng: number | null;
+    total: number;
+    bySource: Record<string, number>;
+    topSource: string;
+  }
+  interface MapPayload {
+    districts: District[];
+    sourceColors: Record<string, string>;
+    fallbackColor: string;
+  }
+
+  function initAudienceMap() {
+    const el = document.getElementById('audience-map');
+    const dataEl = document.getElementById('audience-data');
+    if (!el || !dataEl || !dataEl.textContent) return;
+
+    let payload: MapPayload;
+    try {
+      payload = JSON.parse(dataEl.textContent) as MapPayload;
+    } catch {
+      return;
+    }
+    const { districts, sourceColors, fallbackColor } = payload;
+    const escapeHtml = (s: string) =>
+      String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    const map = L.map(el, { scrollWheelZoom: true, attributionControl: true }).setView([54.5, -3], 6);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19,
+    }).addTo(map);
+
+    // Radius scales with sqrt(count) so area, not radius, reflects volume.
+    const radiusFor = (count: number) => {
+      const r = Math.sqrt(count) * 2.2;
+      return Math.max(4, Math.min(22, r));
+    };
+
+    // Track markers per source so the legend checkboxes can toggle them.
+    const markersBySource: Record<string, ReturnType<typeof L.circleMarker>[]> = {};
+
+    for (const d of districts) {
+      if (d.lat == null || d.lng == null) continue;
+      const color = sourceColors[d.topSource] ?? fallbackColor;
+      const marker = L.circleMarker([d.lat, d.lng], {
+        radius: radiusFor(d.total),
+        color: '#FFFFFF',
+        weight: 1,
+        fillColor: color,
+        fillOpacity: 0.78,
+      });
+
+      const breakdown = Object.entries(d.bySource)
+        .sort((a, b) => b[1] - a[1])
+        .map(([src, n]) => {
+          const swatch = sourceColors[src] ?? fallbackColor;
+          return `<div style="display:flex;align-items:center;gap:6px;margin-top:3px"><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:${swatch}"></span><span>${escapeHtml(src)}</span><span style="margin-left:auto;font-variant-numeric:tabular-nums">${n}</span></div>`;
+        })
+        .join('');
+
+      marker.bindPopup(
+        `<div style="font-family:'DM Sans',system-ui,sans-serif;min-width:160px">
+           <div style="font-weight:700;font-size:14px;margin-bottom:2px">${escapeHtml(d.district)}</div>
+           <div style="font-size:12px;color:#5B4FCF;font-weight:600;margin-bottom:6px">${d.total} supporters</div>
+           ${breakdown}
+         </div>`
+      );
+
+      const key = d.topSource;
+      (markersBySource[key] ||= []).push(marker);
+      marker.addTo(map);
+    }
+
+    // Source filter checkboxes — toggle the markers whose dominant source matches.
+    const toggles = document.querySelectorAll<HTMLInputElement>('.src-toggle');
+    toggles.forEach((cb) => {
+      cb.addEventListener('change', () => {
+        const markers = markersBySource[cb.value] || [];
+        markers.forEach((m) => {
+          if (cb.checked) m.addTo(map);
+          else map.removeLayer(m);
+        });
+      });
+    });
+
+    // Leaflet needs a size recalc once the container is laid out.
+    setTimeout(() => map.invalidateSize(), 0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAudienceMap);
+  } else {
+    initAudienceMap();
+  }
+</script>
+
+<style>
+  /* Leaflet popups/controls inherit the light theme; keep them legible in dark mode too. */
+  :global(.leaflet-popup-content-wrapper),
+  :global(.leaflet-popup-tip) {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow);
+  }
+  :global(.leaflet-container) {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--bg);
+  }
+  :global(.leaflet-control-attribution) {
+    background: rgba(255, 255, 255, 0.7);
+    font-size: 10px;
+  }
+</style>

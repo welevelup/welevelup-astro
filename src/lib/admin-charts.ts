@@ -61,6 +61,53 @@ export function dailyBarChart(
 }
 
 /**
+ * Single-series monthly bar chart (e.g. new audience signups per month).
+ * Data months are 'YYYY-MM'; bars are labelled by month, with year markers on Januarys.
+ */
+export function monthlyBarChart(
+  data: Array<{ month: string; value: number }>,
+  opts: { ariaLabel: string; color?: string; valueLabel?: string }
+): string {
+  if (!data || data.length === 0) return '';
+  const W = 820, H = 240, PL = 40, PR = 16, PT = 16, PB = 34;
+  const gW = W - PL - PR, gH = H - PT - PB;
+  const color = opts.color || '#5B4FCF';
+  const max = Math.max(...data.map((d) => d.value), 1);
+  const n = data.length;
+  const slot = gW / n;
+  const bw = Math.max(2, slot * 0.62);
+  const yOf = (v: number) => PT + gH - (v / max) * gH;
+
+  const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const mNum = (m: string) => parseInt((m || '').slice(5), 10);
+  const mLabel = (m: string) => monthNames[mNum(m)] || (m || '').slice(5);
+  // Show a label roughly every ~Math.ceil(n/8) months to avoid crowding, plus first/last.
+  const step = Math.max(1, Math.ceil(n / 8));
+
+  let bars = '', xlabels = '';
+  data.forEach((d, i) => {
+    const x = PL + i * slot + (slot - bw) / 2;
+    const y = yOf(d.value);
+    const h = PT + gH - y;
+    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="1.5" fill="${color}"><title>${esc(mLabel(d.month))} ${esc((d.month || '').slice(0, 4))}: ${d.value} ${esc(opts.valueLabel || '')}</title></rect>`;
+    const showLabel = i === 0 || i === n - 1 || i % step === 0;
+    if (showLabel) {
+      const label = mNum(d.month) === 1 ? (d.month || '').slice(0, 4) : mLabel(d.month);
+      xlabels += `<text x="${(x + bw / 2).toFixed(1)}" y="${H - 10}" font-size="10" fill="var(--text-3)" text-anchor="middle" font-family="DM Sans,sans-serif">${esc(label)}</text>`;
+    }
+  });
+
+  const maxLineY = yOf(max);
+  let axis = '';
+  axis += `<line x1="${PL}" y1="${(PT + gH).toFixed(1)}" x2="${W - PR}" y2="${(PT + gH).toFixed(1)}" stroke="var(--border)" stroke-width="1"/>`;
+  axis += `<line x1="${PL}" y1="${maxLineY.toFixed(1)}" x2="${W - PR}" y2="${maxLineY.toFixed(1)}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>`;
+  axis += `<text x="${PL - 6}" y="${(maxLineY + 4).toFixed(1)}" font-size="10" fill="var(--text-3)" text-anchor="end" font-family="DM Sans,sans-serif">${max}</text>`;
+  axis += `<text x="${PL - 6}" y="${(PT + gH + 4).toFixed(1)}" font-size="10" fill="var(--text-3)" text-anchor="end" font-family="DM Sans,sans-serif">0</text>`;
+
+  return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="img" aria-label="${esc(opts.ariaLabel)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(opts.ariaLabel)}</title>${axis}${bars}${xlabels}</svg>`;
+}
+
+/**
  * Two-series daily chart: impressions as a tinted area behind, clicks as a line in front.
  */
 export function impressionsClicksChart(

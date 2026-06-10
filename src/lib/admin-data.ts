@@ -35,6 +35,39 @@ function getRedis(): Redis {
   return new Redis({ url, token });
 }
 
+export interface MonthlyTotal {
+  month: string;
+  total: number;
+  monthly_donations: number;
+  one_off_donations: number;
+  active_subscribers: number;
+  mollie_count: number;
+  gocardless_count: number;
+  paypal_count: number;
+  failed_payments: number;
+  failed_amount: number;
+  failed_mollie: number;
+  failed_gocardless: number;
+  failed_paypal: number;
+  cancelled: number;
+  cancelled_amount: number;
+  cancelled_mollie: number;
+  cancelled_gocardless: number;
+  cancelled_paypal: number;
+  total_lost: number;
+}
+
+// Derived donor insights. All optional so pages tolerate older cached payloads.
+export interface DonorInsights {
+  mrr: number;
+  avgMonthlyGift: number;
+  avgOneOffGift: number;
+  splitPct: { recurring: number; oneOff: number };
+  giftSizeBuckets: Array<{ bucket: string; count: number; amount: number }>;
+  subscriberFlows: Array<{ month: string; joined: number; churned: number; net: number }>;
+  repeatOneOffDonors: number;
+}
+
 export interface DonationData {
   totalMonth: number;
   totalYear: number;
@@ -42,21 +75,63 @@ export interface DonationData {
   newThisMonth: number;
   cancelledThisMonth: number;
   byGateway: { mollie: number; gocardless: number; paypal: number };
-  recentDonations: Array<{ date: string; amount: number; currency: string; type: string; gateway: string }>;
-  monthlyTotals: Array<{ month: string; total: number }>;
+  recentDonations: Array<{ date: string; amount: number; currency: string; type: string; gateway: string; status?: string }>;
+  cancelledSubscriptions?: Array<{ date: string; amount: number; currency: string; gateway: string; payer: string }>;
+  failedTransactions?: Array<{ date: string; amount: number; currency: string; gateway: string; payer: string }>;
+  monthlyTotals: MonthlyTotal[];
+  donorInsights?: DonorInsights;
 }
 
+// Shapes below mirror what the sync endpoints write. All newer fields are optional
+// so pages can tolerate older cached payloads without crashing.
 export interface AnalyticsData {
-  sessionsThisWeek: number;
-  sessionsPrevWeek: number;
-  topPages: Array<{ path: string; sessions: number }>;
-  byChannel: Array<{ channel: string; sessions: number }>;
-  topCountries: Array<{ country: string; sessions: number }>;
+  users?: number;
+  sessions?: number;
+  avgSessionDuration?: number;
+  bounceRate?: number;
+  conversionRate?: number;
+  donationEvents?: number;
+  revenue?: number;
+  topPages?: Array<{ path: string; users: number; sessions: number; avgDuration: number; bounceRate: number }>;
+  trafficSources?: Array<{ source: string; users: number; sessions: number; avgDuration: number; bounceRate: number; percentage: number }>;
+  devices?: Array<{ type: string; users: number; sessions: number; bounceRate: number }>;
+  geography?: Array<{ country: string; users: number; sessions: number; bounceRate: number }>;
+  daily?: Array<{ date: string; sessions: number; users: number }>;
+  prevUsers?: number;
+  prevSessions?: number;
+  prevRevenue?: number;
+  prevDonationEvents?: number;
+  lastSync?: string;
+  // Newer cross-cut insight fields (optional for cache tolerance).
+  donationsByChannel?: Array<{ channel: string; donations: number; revenue: number }>;
+  funnel?: { sessions: number; donateViews: number; donations: number };
+  landingPages?: Array<{ landingPage: string; sessions: number; users: number }>;
+  newVsReturning?: { new: number; returning: number };
 }
 
 export interface SeoData {
-  topQueries: Array<{ query: string; clicks: number; impressions: number; position: number }>;
-  topPages: Array<{ page: string; clicks: number; impressions: number }>;
+  topKeywords?: Array<{ query: string; clicks: number; impressions: number; position: number; ctr: number; change: number | null }>;
+  topPages?: Array<{ url: string; clicks: number; impressions: number; position: number; ctr: number }>;
+  devices?: Array<{ device: string; clicks: number; impressions: number; ctr: number }>;
+  geography?: Array<{ country: string; clicks: number; impressions: number; ctr: number }>;
+  searchAppearance?: Array<{ type: string; count: number; percentage: number }>;
+  daily?: Array<{ date: string; clicks: number; impressions: number }>;
+  totalClicks?: number;
+  totalImpressions?: number;
+  avgPosition?: number;
+  avgCtr?: number;
+  prevTotalClicks?: number;
+  prevTotalImpressions?: number;
+  prevAvgPosition?: number;
+  prevAvgCtr?: number;
+  lastSync?: string;
+  // Newer actionable insight fields (optional for cache tolerance).
+  opportunities?: Array<{ query: string; impressions: number; clicks: number; ctr: number; position: number }>;
+  positionBuckets?: Array<{ bucket: string; impressions: number; pct: number }>;
+  gainedLost?: {
+    gained: Array<{ query: string; clicks: number }>;
+    lost: Array<{ query: string; clicks: number }>;
+  };
 }
 
 export interface AdminData {

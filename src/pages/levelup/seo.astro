@@ -1,11 +1,12 @@
 ---
+export const prerender = false;
+import AdminShell from '../../components/AdminShell.astro';
+import { impressionsClicksChart } from '../../lib/admin-charts';
+import { fmtNum, computeDelta, computePointDelta } from '../../lib/admin-format';
+import type { SeoData } from '../../lib/admin-data';
 import { Redis } from '@upstash/redis';
 
-export const prerender = false;
-
-// Get token from URL for passing to other pages
-const urlToken = Astro.url.searchParams.get('token');
-const tokenForClient = urlToken || '';
+const urlToken = Astro.url.searchParams.get('token') || '';
 
 const getRedis = () => {
   const url = process.env.UPSTASH_REDIS_REST_URL || '';
@@ -14,522 +15,376 @@ const getRedis = () => {
   return new Redis({ url, token });
 };
 
-let seoData: any = null;
+let seo: SeoData | null = null;
 try {
   const redis = getRedis();
-  seoData = await redis.get('admin:seo');
+  seo = await redis.get<SeoData>('admin:seo');
 } catch (err) {
   console.error('Failed to fetch SEO data from Redis:', err);
 }
-
-const fallbackData = {
-  period: "Last 28 days",
-  lastUpdated: new Date().toISOString(),
-  updateFrequency: "Manual — click 'Refresh Data' to sync from Google Search Console",
-  overview: { totalImpressions: 0, totalClicks: 0, averageCTR: 0, averagePosition: 0, improvementFromLastMonth: { ctr: 0, position: 0 } },
-  keywords: [],
-  pages: [],
-  searchAppearance: [],
-  geography: [] as any,
-  keywordMovement: [],
-  monthlyTrend: [],
-  devices: []
-};
 
 const countryNames: Record<string, string> = {
   gbr: 'United Kingdom', usa: 'United States', deu: 'Germany', grc: 'Greece', irl: 'Ireland',
   idn: 'Indonesia', jpn: 'Japan', vnm: 'Vietnam', aus: 'Australia', bra: 'Brazil',
   fra: 'France', esp: 'Spain', ita: 'Italy', nld: 'Netherlands', bel: 'Belgium',
-  can: 'Canada', aus: 'Australia', nzl: 'New Zealand', ind: 'India', mex: 'Mexico'
+  can: 'Canada', nzl: 'New Zealand', ind: 'India', mex: 'Mexico',
+};
+const mapCountry = (c: string) => countryNames[(c || '').toLowerCase()] || (c || '').toUpperCase();
+const shortPath = (url: string) => {
+  try { return new URL(url).pathname || '/'; } catch { return url; }
 };
 
-const mapCountryCode = (code: string) => countryNames[code.toLowerCase()] || code.toUpperCase();
+const hasData = !!seo && (seo.totalImpressions != null || (seo.topKeywords?.length ?? 0) > 0);
 
-const displayData = seoData ? {
-  period: "Last 28 days",
-  lastUpdated: seoData.lastSync || new Date().toISOString(),
-  updateFrequency: "Manual — click 'Refresh Data' to sync from Google Search Console",
-  overview: {
-    totalImpressions: seoData.totalImpressions || 0,
-    totalClicks: seoData.totalClicks || 0,
-    averageCTR: seoData.avgCtr || 0,
-    averagePosition: seoData.avgPosition || 0,
-    improvementFromLastMonth: { ctr: 0.8, position: 0.3 }
-  },
-  keywords: seoData.topKeywords || [],
-  pages: seoData.topPages || [],
-  searchAppearance: seoData.searchAppearance || [],
-  geography: (seoData.geography || []).map((g: any) => ({ ...g, countryName: mapCountryCode(g.country) })),
-  keywordMovement: (seoData.topKeywords || []).map((k: any) => ({ query: k.query, movement: k.change > 0 ? 'down' : 'up', change: k.change, newPosition: k.position })),
-  monthlyTrend: [],
-  devices: seoData.devices || []
-} : fallbackData;
+const clicks = seo?.totalClicks ?? 0;
+const impressions = seo?.totalImpressions ?? 0;
+const ctr = seo?.avgCtr ?? 0;
+const position = seo?.avgPosition ?? 0;
+
+const dClicks = computeDelta(seo?.totalClicks, seo?.prevTotalClicks);
+const dImpr = computeDelta(seo?.totalImpressions, seo?.prevTotalImpressions);
+const dCtr = computeDelta(seo?.avgCtr, seo?.prevAvgCtr);
+// Position: lower is better, point delta in ranking places.
+const dPos = computePointDelta(seo?.avgPosition, seo?.prevAvgPosition, true);
+
+const daily = seo?.daily ?? [];
+const chart = daily.length
+  ? impressionsClicksChart(daily, 'Clicks and impressions per day over the last 28 days')
+  : '';
+
+const keywords = seo?.topKeywords ?? [];
+const pages = seo?.topPages ?? [];
+const devices = seo?.devices ?? [];
+const geography = (seo?.geography ?? []).slice(0, 5);
+const appearance = seo?.searchAppearance ?? [];
+const maxAppearance = appearance.reduce((m, a) => Math.max(m, a.count || 0), 1);
+
+// ── ACTIONABLE OPPORTUNITIES (optional — tolerate older cached payloads) ──
+const opportunities = seo?.opportunities ?? [];
+const positionBuckets = seo?.positionBuckets ?? [];
+const top3Bucket = positionBuckets.find((b) => b.bucket === 'Top 3');
+const gained = seo?.gainedLost?.gained ?? [];
+const lost = seo?.gainedLost?.lost ?? [];
+const hasInsights = opportunities.length > 0 || positionBuckets.length > 0 || gained.length > 0 || lost.length > 0;
+// Colours for the 100% stacked position bar (best → worst).
+const posBucketColors: Record<string, string> = {
+  'Top 3': '#15803D',
+  '4–10': '#5B4FCF',
+  '11–20': '#A89CED',
+  '20+': 'rgba(12,10,62,0.18)',
+};
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SEO Dashboard — Level Up Admin</title>
-  <meta name="robots" content="noindex, nofollow" />
-  <style>
-    :root {
-      --bg-primary: #0C0A3E;
-      --bg-secondary: #13114a;
-      --text-primary: #EEEBD3;
-      --text-secondary: #999999;
-      --text-tertiary: rgba(238,235,211,0.4);
-      --accent: #CCFF33;
-      --border: rgba(255,255,255,0.06);
-      --good: #4ADE80;
-      --warning: #FBBF24;
-      --danger: #F87171;
-    }
-    :root.light-mode {
-      --bg-primary: #FFFFFF;
-      --bg-secondary: #F9F9F9;
-      --text-primary: #1A1A1A;
-      --text-secondary: #666666;
-      --text-tertiary: #888888;
-      --accent: #8B7EBD;
-      --border: rgba(0,0,0,0.1);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .layout { display: flex; flex: 1; }
-    .sidebar {
-      width: 240px;
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border);
-      padding: 24px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sidebar-item {
-      padding: 12px 20px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-left: 3px solid transparent;
-      display: block;
-    }
-    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
-    .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
-    .content { flex: 1; display: flex; flex-direction: column; }
-    nav {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-    }
-    .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
-    .nav-right { display: flex; align-items: center; gap: 20px; }
-    .refresh-btn { background: var(--accent); color: var(--bg-primary); border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; }
-    .refresh-btn:hover { opacity: 0.85; }
-    .logout-btn { background: none; border: 1px solid var(--text-secondary); color: var(--text-secondary); border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; }
-    main { max-width: 1400px; margin: 0 auto; padding: 40px 32px; flex: 1; }
-    h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-    .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
-    .subtitle { font-size: 12px; color: var(--text-secondary); }
-    .update-info { font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
-    }
-    .stat-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-    }
-    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
-    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
-    .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
-    .stat-change { font-size: 11px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
-    .change-up { color: var(--good); }
-    .change-down { color: var(--danger); }
-    .section { margin-bottom: 50px; }
-    .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
-    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); }
-    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    tr:last-child td { border-bottom: none; }
-    .good { color: #4ADE80; font-weight: 600; }
-    .fair { color: #FBBF24; }
-    .poor { color: #F87171; }
-    .movement-up { color: #4ADE80; }
-    .movement-down { color: #F87171; }
-    .movement-stable { color: #999999; }
-    .bar-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
-    .bar-label { font-size: 12px; width: 120px; flex-shrink: 0; }
-    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
-    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
-    .bar-value { font-size: 12px; width: 80px; text-align: right; flex-shrink: 0; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    @media (max-width: 1024px) { .grid-2 { grid-template-columns: 1fr; } }
-    @media (max-width: 768px) {
-      .sidebar { width: 100%; padding: 12px 0; gap: 4px; }
-      .sidebar-item { padding: 10px 16px; font-size: 12px; }
-      .layout { flex-direction: column; }
-      nav { padding: 0 16px; height: auto; flex-wrap: wrap; }
-      .nav-brand { font-size: 10px; }
-      .nav-right { gap: 10px; flex-wrap: wrap; width: 100%; padding-top: 8px; }
-      main { padding: 24px 16px; max-width: 100%; }
-      h1 { font-size: 20px; }
-      .stats-grid { grid-template-columns: 1fr; gap: 12px; }
-      .stat-card { padding: 16px; }
-      .stat-label { font-size: 10px; }
-      .stat-value { font-size: 20px; }
-      .section-title { font-size: 12px; }
-      table { font-size: 12px; }
-      th, td { padding: 8px 12px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .grid-3 { grid-template-columns: 1fr; }
-      .bar-row { gap: 8px; }
-      .bar-label { width: 100px; font-size: 11px; }
-      .bar-value { width: 70px; font-size: 11px; }
-      .refresh-btn { padding: 6px 12px; font-size: 11px; }
-      .logout-btn { padding: 6px 12px; font-size: 11px; }
-    }
-
-    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
-  </style>
-</head>
-<body>
-  <nav>
-    <div class="nav-brand">Level Up · Admin</div>
-    <div class="nav-right">
-      <button class="refresh-btn" id="refresh-btn">Refresh Data</button>
-      <button id="theme-btn">🌙</button>
-      <button class="logout-btn" id="logout-btn">Sign out</button>
+<AdminShell
+  active="search"
+  title="Google Search"
+  subtitle="How people find Level Up on Google — last 28 days."
+  token={urlToken}
+  syncEndpoint="/api/admin-seo-sync"
+  lastSync={seo?.lastSync ?? null}
+>
+  {!hasData && (
+    <div class="empty">
+      <strong>No data yet</strong>
+      Press “Refresh data” to pull the latest from Google Search Console.
     </div>
-  </nav>
+  )}
 
-  <div class="layout">
-    <div class="sidebar">
-      <a href={`/levelup/dashboard${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">Donations</a>
-      <a href={`/levelup/seo${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item active">SEO</a>
-      <a href={`/levelup/analytics${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">Analytics</a>
-    </div>
+  {hasData && (
+    <>
+      <!-- KPIs -->
+      <section class="section">
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Clicks</div>
+            <div class="kpi-value">{fmtNum(clicks)}</div>
+            <div class="kpi-desc">Visits to the site straight from Google.</div>
+            <div class="kpi-foot">
+              {dClicks && <span class={`delta ${dClicks.positive ? 'pos' : 'neg'}`}>{dClicks.arrow} {Math.abs(dClicks.pct)}%</span>}
+              {dClicks && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
 
-    <div class="content">
-      <main>
-        <div class="header-row">
-          <div>
-            <h1>SEO Dashboard</h1>
-            <p class="subtitle">Search Engine Optimization metrics for welevelup.org</p>
-            <p class="update-info">Period: {displayData.period}<br/>Last updated: {new Date(displayData.lastUpdated).toLocaleString()}<br/>{displayData.updateFrequency}</p>
+          <div class="kpi">
+            <div class="kpi-label">Impressions <span class="tip" tabindex="0" role="note" aria-label="What impressions means">ⓘ<span class="tip-text">Times Level Up appeared in Google results — whether or not anyone clicked.</span></span></div>
+            <div class="kpi-value">{fmtNum(impressions)}</div>
+            <div class="kpi-desc">Times Level Up showed up in Google results.</div>
+            <div class="kpi-foot">
+              {dImpr && <span class={`delta ${dImpr.positive ? 'pos' : 'neg'}`}>{dImpr.arrow} {Math.abs(dImpr.pct)}%</span>}
+              {dImpr && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Average CTR <span class="tip" tabindex="0" role="note" aria-label="What average CTR means">ⓘ<span class="tip-text">Of every 100 people who saw you in Google, how many clicked.</span></span></div>
+            <div class="kpi-value">{ctr.toFixed(2)}%</div>
+            <div class="kpi-desc">Share of people who clicked after seeing you.</div>
+            <div class="kpi-foot">
+              {dCtr && <span class={`delta ${dCtr.positive ? 'pos' : 'neg'}`}>{dCtr.arrow} {Math.abs(dCtr.pct)}%</span>}
+              {dCtr && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Average position <span class="tip" tabindex="0" role="note" aria-label="What average position means">ⓘ<span class="tip-text">Your average ranking in Google results — lower is better (1 is the top).</span></span></div>
+            <div class="kpi-value">#{position.toFixed(1)}</div>
+            <div class="kpi-desc">Your typical ranking in Google — lower is better.</div>
+            <div class="kpi-foot">
+              {dPos && dPos.value !== 0 && <span class={`delta ${dPos.positive ? 'pos' : 'neg'}`}>{dPos.arrow} {dPos.value}</span>}
+              {dPos && dPos.value !== 0 && <span class="delta-note">places vs previous 28 days</span>}
+            </div>
           </div>
         </div>
+      </section>
 
-        <!-- OVERVIEW STATS -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Total Impressions</div>
-            <div class="stat-value">{displayData.overview.totalImpressions.toLocaleString()}</div>
-            <div class="stat-change">From last month: <span class="change-up">+{displayData.overview.improvementFromLastMonth.position}%</span></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Total Clicks</div>
-            <div class="stat-value">{displayData.overview.totalClicks.toLocaleString()}</div>
-            <div class="stat-change">Avg CTR: <span class="good">{displayData.overview.averageCTR.toFixed(2)}%</span></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Average Position</div>
-            <div class="stat-value">#{displayData.overview.averagePosition.toFixed(1)}</div>
-            <div class="stat-change">Target: #3 or better</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">CTR Improvement</div>
-            <div class="stat-value"><span class="good">+{displayData.overview.improvementFromLastMonth.ctr}%</span></div>
-            <div class="stat-change">vs last month</div>
-          </div>
-        </div>
+      <!-- OPPORTUNITIES -->
+      <section class="section">
+        <div class="section-title">Opportunities</div>
+        <p class="kpi-desc" style="margin-bottom:12px;max-width:70ch">
+          Search terms where Level Up almost ranks — improving these pages could win clicks without ads.
+        </p>
+        {hasInsights ? (
+          <>
+            {opportunities.length ? (
+              <div class="table-wrap">
+                <table class="data">
+                  <thead>
+                    <tr>
+                      <th scope="col">Search term</th>
+                      <th scope="col" class="num"><span class="th-tip">Seen <span class="tip" tabindex="0" role="note" aria-label="What seen means">ⓘ<span class="tip-text">Times Level Up appeared in Google results for this term (impressions).</span></span></span></th>
+                      <th scope="col" class="num">Clicks</th>
+                      <th scope="col" class="num"><span class="th-tip">Position <span class="tip" tabindex="0" role="note" aria-label="What position means">ⓘ<span class="tip-text">Average Google ranking for this term — lower is better. These sit just below the top.</span></span></span></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {opportunities.map((o) => (
+                      <tr>
+                        <td style="font-weight:600">{o.query}</td>
+                        <td class="num">{fmtNum(o.impressions)}</td>
+                        <td class="num">{fmtNum(o.clicks)}</td>
+                        <td class="num">#{Number(o.position).toFixed(1)}</td>
+                        <td><span class="chip chip-new">fix candidate</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div class="empty">No near-miss search terms right now.</div>
+            )}
 
-        <!-- TOP KEYWORDS -->
-        <div class="section">
-          <div class="section-title">Top Keywords (5 Tracked)</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Query</th>
-                <th>Impressions</th>
-                <th>Clicks</th>
-                <th>CTR</th>
-                <th>Avg Position</th>
-                <th>Change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayData.keywords.map((k: any) => (
-                <tr>
-                  <td style="font-weight: 600;">{k.query}</td>
-                  <td>{k.impressions.toLocaleString()}</td>
-                  <td>{k.clicks}</td>
-                  <td class={k.ctr > 10 ? 'good' : k.ctr > 3 ? 'fair' : 'poor'}>{k.ctr.toFixed(2)}%</td>
-                  <td>#{k.position.toFixed(1)}</td>
-                  <td class={k.change > 0 ? 'change-down' : 'change-up'}>{k.change > 0 ? '+' : ''}{k.change.toFixed(1)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- TOP PAGES -->
-        <div class="section">
-          <div class="section-title">Top Pages</div>
-          <table>
-            <thead>
-              <tr>
-                <th>URL</th>
-                <th>Impressions</th>
-                <th>Clicks</th>
-                <th>CTR</th>
-                <th>Avg Pos</th>
-                <th>Organic Traffic</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayData.pages.map((p: any) => (
-                <tr>
-                  <td style="font-weight: 600; font-family: monospace; font-size: 12px;">{p.url}</td>
-                  <td>{p.impressions.toLocaleString()}</td>
-                  <td>{p.clicks}</td>
-                  <td>{p.ctr.toFixed(2)}%</td>
-                  <td>#{p.position.toFixed(1)}</td>
-                  <td><strong>{p.traffic}</strong></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- GRID: KEYWORDS MOVEMENT + DEVICES -->
-        <div class="grid-2">
-          <div class="section">
-            <div class="section-title">Keywords Moving (Up/Down)</div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Query</th>
-                  <th>Movement</th>
-                  <th>Position</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayData.keywordMovement.map((k: any) => (
-                  <tr>
-                    <td style="font-weight: 600;">{k.query}</td>
-                    <td class={`movement-${k.movement}`}>{k.movement === 'up' ? '↑' : k.movement === 'down' ? '↓' : '→'} {Math.abs(k.change).toFixed(1)}</td>
-                    <td>#{k.newPosition.toFixed(1)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div class="section">
-            <div class="section-title">Traffic by Device</div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Device</th>
-                  <th>Impressions</th>
-                  <th>Clicks</th>
-                  <th>CTR</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayData.devices.map((d: any) => (
-                  <tr>
-                    <td style="font-weight: 600;">{d.device}</td>
-                    <td>{d.impressions.toLocaleString()}</td>
-                    <td>{d.clicks}</td>
-                    <td>{d.ctr.toFixed(2)}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- SEARCH APPEARANCE -->
-        <div class="section">
-          <div class="section-title">Search Appearance Distribution</div>
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
-            {displayData.searchAppearance.map((s: any) => (
-              <div class="bar-row">
-                <div class="bar-label">{s.type}</div>
-                <div class="bar-track">
-                  <div class="bar-fill" style={`width: ${s.percentage}%`}></div>
+            <!-- POSITION BUCKETS (100% stacked) -->
+            {positionBuckets.length > 0 && (
+              <div class="card" style="margin-top:16px">
+                <div class="section-title" style="margin-bottom:10px">
+                  How visible you are
+                  <span class="tip" tabindex="0" role="note" aria-label="What this bar means">ⓘ<span class="tip-text">Share of the times you appear in Google, split by how high you rank.</span></span>
                 </div>
-                <div class="bar-value">{s.count} ({s.percentage}%)</div>
+                {top3Bucket && (
+                  <div class="kpi-desc" style="margin-bottom:12px">
+                    You appear in the top 3 results <strong style="color:var(--text)">{top3Bucket.pct}%</strong> of the time.
+                  </div>
+                )}
+                <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+                  {positionBuckets.map((b) => (
+                    b.pct > 0 && (
+                      <span style={`width:${b.pct}%;background:${posBucketColors[b.bucket] || 'var(--violet-soft)'}`} title={`${b.bucket}: ${b.pct}%`}></span>
+                    )
+                  ))}
+                </div>
+                <div class="chart-legend" style="margin-top:12px">
+                  {positionBuckets.map((b) => (
+                    <span class="legend-item"><span class="legend-swatch" style={`background:${posBucketColors[b.bucket] || 'var(--violet-soft)'}`}></span>{b.bucket} {b.pct}%</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- GAINED / LOST -->
+            {(gained.length > 0 || lost.length > 0) && (
+              <div class="grid-2" style="margin-top:16px">
+                <div class="card">
+                  <div class="section-title" style="margin-bottom:12px;color:var(--pos)">New search terms <span class="tip" tabindex="0" role="note" aria-label="What new search terms means">ⓘ<span class="tip-text">Terms people now find you for that didn't show up in the previous 28 days.</span></span></div>
+                  {gained.length ? gained.map((g) => (
+                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border)">
+                      <span style="font-weight:600">{g.query}</span>
+                      <span style="color:var(--text-2);font-variant-numeric:tabular-nums">{fmtNum(g.clicks)} clicks</span>
+                    </div>
+                  )) : <div class="kpi-desc">No new terms this period.</div>}
+                </div>
+                <div class="card">
+                  <div class="section-title" style="margin-bottom:12px;color:var(--neg)">Lost search terms <span class="tip" tabindex="0" role="note" aria-label="What lost search terms means">ⓘ<span class="tip-text">Terms you used to show up for that have dropped out in the last 28 days.</span></span></div>
+                  {lost.length ? lost.map((l) => (
+                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border)">
+                      <span style="font-weight:600">{l.query}</span>
+                      <span style="color:var(--text-2);font-variant-numeric:tabular-nums">{fmtNum(l.clicks)} clicks</span>
+                    </div>
+                  )) : <div class="kpi-desc">No lost terms this period.</div>}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load opportunities.</div>
+        )}
+      </section>
+
+      <!-- CHART -->
+      <section class="section">
+        <div class="section-title">Clicks &amp; impressions per day</div>
+        <div class="card">
+          {chart ? <Fragment set:html={chart} /> : <div class="kpi-desc">No daily data in this period yet.</div>}
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>Clicks</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>Impressions</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOP SEARCH TERMS -->
+      <section class="section">
+        <div class="section-title">Top search terms</div>
+        {keywords.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Search term</th>
+                  <th scope="col" class="num">Clicks from Google</th>
+                  <th scope="col" class="num">Impressions</th>
+                  <th scope="col" class="num">CTR</th>
+                  <th scope="col" class="num"><span class="th-tip">Avg. position <span class="tip" tabindex="0" role="note" aria-label="What average position means">ⓘ<span class="tip-text">Average Google ranking for this term — lower is better.</span></span></span></th>
+                  <th scope="col" class="num"><span class="th-tip">Change <span class="tip" tabindex="0" role="note" aria-label="What change means">ⓘ<span class="tip-text">Ranking places gained (▲) or lost (▼) vs the previous 28 days.</span></span></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {keywords.map((k) => (
+                  <tr>
+                    <td style="font-weight:600">{k.query}</td>
+                    <td class="num">{fmtNum(k.clicks)}</td>
+                    <td class="num">{fmtNum(k.impressions)}</td>
+                    <td class="num">{Number(k.ctr).toFixed(2)}%</td>
+                    <td class="num">#{Number(k.position).toFixed(1)}</td>
+                    <td class="num">
+                      {k.change == null ? (
+                        <span class="chip chip-new">new</span>
+                      ) : k.change === 0 ? (
+                        <span style="color:var(--text-3)">—</span>
+                      ) : (
+                        <span class={`delta ${k.change > 0 ? 'pos' : 'neg'}`}>{k.change > 0 ? '▲' : '▼'} {Math.abs(k.change).toFixed(1)}</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No search terms yet</strong>Press “Refresh data” to load them.</div>
+        )}
+      </section>
+
+      <!-- TOP PAGES -->
+      <section class="section">
+        <div class="section-title">Top pages in Google</div>
+        {pages.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Page</th>
+                  <th scope="col" class="num">Clicks from Google</th>
+                  <th scope="col" class="num">Impressions</th>
+                  <th scope="col" class="num">CTR</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pages.map((p) => (
+                  <tr>
+                    <td style="font-weight:600">{shortPath(p.url)}</td>
+                    <td class="num">{fmtNum(p.clicks)}</td>
+                    <td class="num">{fmtNum(p.impressions)}</td>
+                    <td class="num">{Number(p.ctr).toFixed(2)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No pages yet</strong>Press “Refresh data” to load them.</div>
+        )}
+      </section>
+
+      <!-- DEVICES + COUNTRIES -->
+      <div class="grid-2">
+        <section class="section">
+          <div class="section-title">Devices</div>
+          {devices.length ? (
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr><th scope="col">Device</th><th scope="col" class="num">Clicks</th><th scope="col" class="num">Impressions</th><th scope="col" class="num">CTR</th></tr>
+                </thead>
+                <tbody>
+                  {devices.map((d) => (
+                    <tr>
+                      <td style="font-weight:600">{d.device}</td>
+                      <td class="num">{fmtNum(d.clicks)}</td>
+                      <td class="num">{fmtNum(d.impressions)}</td>
+                      <td class="num">{Number(d.ctr).toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div class="empty">No device data yet.</div>
+          )}
+        </section>
+
+        <section class="section">
+          <div class="section-title">Top countries</div>
+          {geography.length ? (
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr><th scope="col">Country</th><th scope="col" class="num">Clicks</th><th scope="col" class="num">Impressions</th><th scope="col" class="num">CTR</th></tr>
+                </thead>
+                <tbody>
+                  {geography.map((g) => (
+                    <tr>
+                      <td style="font-weight:600">{mapCountry(g.country)}</td>
+                      <td class="num">{fmtNum(g.clicks)}</td>
+                      <td class="num">{fmtNum(g.impressions)}</td>
+                      <td class="num">{Number(g.ctr).toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div class="empty">No country data yet.</div>
+          )}
+        </section>
+      </div>
+
+      <!-- SEARCH APPEARANCE (only when more than one type) -->
+      {appearance.length > 1 && (
+        <section class="section">
+          <div class="section-title">How you appear in search</div>
+          <div class="card">
+            {appearance.map((a) => (
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                <span style="width:140px;font-size:13px;flex-shrink:0">{a.type}</span>
+                <span class="minibar" style="flex:1">
+                  <span class="minibar-track"><span class="minibar-fill" style={`width:${Math.round((a.count / maxAppearance) * 100)}%`}></span></span>
+                  <span class="minibar-val">{fmtNum(a.count)}</span>
+                </span>
               </div>
             ))}
           </div>
-        </div>
-
-        <!-- GEOGRAPHIC BREAKDOWN -->
-        <div class="section">
-          <div class="section-title">Top Countries</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Country</th>
-                <th>Impressions</th>
-                <th>Clicks</th>
-                <th>CTR</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayData.geography.slice(0, 5).map((g: any) => (
-                <tr>
-                  <td style="font-weight: 600;">{g.countryName || g.country}</td>
-                  <td>{g.impressions.toLocaleString()}</td>
-                  <td>{g.clicks}</td>
-                  <td>{g.ctr.toFixed(2)}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- RECOMMENDATIONS -->
-        <div class="section">
-          <div class="section-title">Action Items</div>
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">🎯 Homepage CTR</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">3,976 impressions but 3.22% CTR. Optimize meta description and title tag to match user intent better.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">📈 "Pregnancy in Prison"</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">9 impressions at position #18.9 with 0 clicks. Move to #5-10 and CTR could 10x. Build more content around this topic.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">✅ Featured Snippets</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">You own 2 featured snippets (#1.5 position). Answer FAQ-style questions in campaign pages to win more.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">📱 Mobile Optimization</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Mobile CTR (5.37%) is lower than desktop (5.95%). Check mobile UX on /campaign and /petition pages.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- GLOSSARY -->
-        <div class="section">
-          <div class="section-title">SEO Metrics Glossary</div>
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">IMPRESSIONS</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Number of times your site appeared in Google results. More impressions = more visibility.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">CLICKS</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Actual visits from Google search. This is real traffic to your site.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">CTR (Click-Through Rate)</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">% of people who clicked your link (clicks ÷ impressions × 100). Higher is better. 22% = excellent, 3% = average.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">AVERAGE POSITION</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Your ranking in Google (#1 = best, #11+ = page 2). Move from #18 to #5 = huge traffic jump.</p>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  </div>
-
-  <script>
-    const html = document.documentElement;
-    function applyTheme(t) {
-      if (t === 'light') {
-        html.classList.add('light-mode');
-        const btn = document.getElementById('theme-btn');
-        if (btn) btn.textContent = '☀️';
-      } else {
-        html.classList.remove('light-mode');
-        const btn = document.getElementById('theme-btn');
-        if (btn) btn.textContent = '🌙';
-      }
-    }
-    applyTheme(localStorage.getItem('admin-theme') || 'light');
-
-    document.getElementById('theme-btn')?.addEventListener('click', () => {
-      const isLight = html.classList.toggle('light-mode');
-      const next = isLight ? 'light' : 'dark';
-      localStorage.setItem('admin-theme', next);
-      const btn = document.getElementById('theme-btn');
-      if (btn) btn.textContent = isLight ? '☀️' : '🌙';
-    });
-
-    document.getElementById('refresh-btn')?.addEventListener('click', async () => {
-      const btn = document.getElementById('refresh-btn');
-      btn.disabled = true;
-      btn.textContent = 'Syncing...';
-      try {
-        const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('admin_token') || '';
-        const res = await fetch(`/api/admin-seo-sync${token ? `?token=${encodeURIComponent(token)}` : ''}`, { method: 'POST' });
-        const data = await res.json();
-        if (!res.ok || !data.ok) throw new Error(data.error || 'Sync failed');
-        location.reload();
-      } catch (e) {
-        alert('Sync error: ' + e.message);
-        btn.textContent = 'Refresh Data';
-        btn.disabled = false;
-      }
-    });
-
-    let inactivityTimer = null;
-    const INACTIVITY_TIMEOUT = 5 * 60 * 1000;
-
-    function resetInactivityTimer() {
-      if (inactivityTimer) clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(async () => {
-        try {
-          await fetch('/api/admin-login', { method: 'DELETE' });
-        } catch (e) {
-          console.error('Auto-logout error:', e);
-        }
-        location.href = '/levelup/login';
-      }, INACTIVITY_TIMEOUT);
-    }
-
-    ['mousedown', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {
-      document.addEventListener(event, resetInactivityTimer, true);
-    });
-
-    resetInactivityTimer();
-
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      if (inactivityTimer) clearTimeout(inactivityTimer);
-      try {
-        await fetch('/api/admin-login', { method: 'DELETE' });
-      } catch (e) {
-        console.error('Logout error:', e);
-      }
-      setTimeout(() => {
-        location.href = '/levelup/login';
-      }, 100);
-    });
-  </script>
-</body>
-</html>
+        </section>
+      )}
+    </>
+  )}
+</AdminShell>

@@ -261,7 +261,114 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       ? `${now.getFullYear() - 1}-12`
       : `${now.getFullYear()}-${String(now.getMonth()).padStart(2, '0')}`;
 
+    // ── DONOR INSIGHTS (derived from `donations`, no extra API calls) ──
+    // Only paid GBP donations count toward giving figures (mirrors monthlyTotals).
+    const paidGbp = donations.filter(d => d.status === 'paid' && d.currency === 'GBP');
+    const monthKey = (d: Donation) => (d.date && d.date.length >= 7 ? d.date.slice(0, 7) : '');
+    const subKeyOf = (d: Donation) => d.subscription_id || d.payer?.email || d.id;
+
+    // Sorted list of distinct months present (chronological), last 12.
+    const allMonths = Array.from(new Set(paidGbp.map(monthKey).filter(Boolean))).sort();
+    const last12Months = allMonths.slice(-12);
+
+    // The last COMPLETE month is the most recent month that is not the current month.
+    const lastCompleteMonth = allMonths.filter(m => m !== currentMonth).slice(-1)[0] || '';
+
+    // Recurring donations of the last complete month: sum the most recent gift of each
+    // active subscriber → expected monthly recurring revenue (MRR).
+    const lastMonthRecurring = paidGbp.filter(d => d.type === 'recurring' && monthKey(d) === lastCompleteMonth);
+    const mrrBySub = new Map<string, { date: string; amount: number }>();
+    for (const d of lastMonthRecurring) {
+      const key = subKeyOf(d);
+      const prev = mrrBySub.get(key);
+      if (!prev || new Date(d.date).getTime() > new Date(prev.date).getTime()) {
+        mrrBySub.set(key, { date: d.date, amount: d.amount });
+      }
+    }
+    const mrr = Math.round(Array.from(mrrBySub.values()).reduce((s, v) => s + v.amount, 0) * 100) / 100;
+
+    const lastMonthMonthlyDonations = lastMonthRecurring.reduce((s, d) => s + d.amount, 0);
+    const lastMonthActiveSubs = mrrBySub.size;
+    const avgMonthlyGift = lastMonthActiveSubs > 0
+      ? Math.round((lastMonthMonthlyDonations / lastMonthActiveSubs) * 100) / 100
+      : 0;
+
+    const oneOffYear = paidGbp.filter(d => d.type === 'oneoff');
+    const avgOneOffGift = oneOffYear.length > 0
+      ? Math.round((oneOffYear.reduce((s, d) => s + d.amount, 0) / oneOffYear.length) * 100) / 100
+      : 0;
+
+    // Recurring vs one-off split (year, by amount).
+    const recurringYearAmount = paidGbp.filter(d => d.type === 'recurring').reduce((s, d) => s + d.amount, 0);
+    const oneOffYearAmount = oneOffYear.reduce((s, d) => s + d.amount, 0);
+    const splitTotal = recurringYearAmount + oneOffYearAmount || 1;
+    const splitPct = {
+      recurring: Math.round((recurringYearAmount / splitTotal) * 100),
+      oneOff: Math.round((oneOffYearAmount / splitTotal) * 100),
+    };
+
+    // Gift-size buckets across ALL paid donations of the year.
+    const bucketDefs: Array<{ bucket: string; test: (a: number) => boolean }> = [
+      { bucket: '<£5', test: a => a < 5 },
+      { bucket: '£5–10', test: a => a >= 5 && a < 10 },
+      { bucket: '£10–25', test: a => a >= 10 && a < 25 },
+      { bucket: '£25–50', test: a => a >= 25 && a < 50 },
+      { bucket: '£50+', test: a => a >= 50 },
+    ];
+    const giftSizeBuckets = bucketDefs.map(({ bucket, test }) => {
+      const hits = paidGbp.filter(d => test(d.amount));
+      return {
+        bucket,
+        count: hits.length,
+        amount: Math.round(hits.reduce((s, d) => s + d.amount, 0) * 100) / 100,
+      };
+    });
+
+    // Subscriber flows per month: compare Sets of recurring subscriber keys between
+    // consecutive months → joined / churned / net.
+    const subSetByMonth = new Map<string, Set<string>>();
+    for (const d of paidGbp) {
+      if (d.type !== 'recurring') continue;
+      const m = monthKey(d);
+      if (!m) continue;
+      if (!subSetByMonth.has(m)) subSetByMonth.set(m, new Set<string>());
+      subSetByMonth.get(m)!.add(subKeyOf(d));
+    }
+    const subscriberFlows = last12Months.map((m, idx) => {
+      const cur = subSetByMonth.get(m) || new Set<string>();
+      const prevMonthKey = idx > 0 ? last12Months[idx - 1] : '';
+      const prevSet = (prevMonthKey && subSetByMonth.get(prevMonthKey)) || new Set<string>();
+      let joined = 0, churned = 0;
+      if (idx === 0) {
+        // No comparison month available; treat all current as the baseline (no churn).
+        return { month: m, joined: 0, churned: 0, net: 0 };
+      }
+      for (const k of cur) if (!prevSet.has(k)) joined++;
+      for (const k of prevSet) if (!cur.has(k)) churned++;
+      return { month: m, joined, churned, net: joined - churned };
+    });
+
+    // Repeat one-off donors: payers (email, else name) with 2+ one-off gifts this year.
+    const oneOffByPayer = new Map<string, number>();
+    for (const d of oneOffYear) {
+      const payerKey = (d.payer?.email || d.payer?.name || '').trim().toLowerCase();
+      if (!payerKey) continue;
+      oneOffByPayer.set(payerKey, (oneOffByPayer.get(payerKey) || 0) + 1);
+    }
+    const repeatOneOffDonors = Array.from(oneOffByPayer.values()).filter(c => c >= 2).length;
+
+    const donorInsights = {
+      mrr,
+      avgMonthlyGift,
+      avgOneOffGift,
+      splitPct,
+      giftSizeBuckets,
+      subscriberFlows,
+      repeatOneOffDonors,
+    };
+
     const donationData = {
+      donorInsights,
       totalMonth: donations.filter(d => {
         const dDate = new Date(d.date);
         return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();

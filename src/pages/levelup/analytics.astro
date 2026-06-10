@@ -1,11 +1,12 @@
 ---
+export const prerender = false;
+import AdminShell from '../../components/AdminShell.astro';
+import { dailyBarChart } from '../../lib/admin-charts';
+import { fmtNum, fmtMoney, fmtDuration, computeDelta } from '../../lib/admin-format';
+import type { AnalyticsData } from '../../lib/admin-data';
 import { Redis } from '@upstash/redis';
 
-export const prerender = false;
-
-// Get token from URL for passing to other pages
-const urlToken = Astro.url.searchParams.get('token');
-const tokenForClient = urlToken || '';
+const urlToken = Astro.url.searchParams.get('token') || '';
 
 const getRedis = () => {
   const url = process.env.UPSTASH_REDIS_REST_URL || '';
@@ -14,564 +15,394 @@ const getRedis = () => {
   return new Redis({ url, token });
 };
 
-let gaData: any = null;
+let ga: AnalyticsData | null = null;
 try {
   const redis = getRedis();
-  gaData = await redis.get('admin:analytics');
+  ga = await redis.get<AnalyticsData>('admin:analytics');
 } catch (err) {
   console.error('Failed to fetch analytics data from Redis:', err);
 }
 
-const displayData = gaData ? {
-  period: "Last 30 days",
-  lastUpdated: gaData.lastSync || new Date().toISOString(),
-  updateFrequency: "Manual — click 'Refresh Data' to sync from Google Analytics 4",
-  overview: {
-    users: Number(gaData.users) || 0,
-    sessions: Number(gaData.sessions) || 0,
-    avgSessionDuration: Number(gaData.avgSessionDuration) || 0,
-    bounceRate: Number(gaData.bounceRate) || 0,
-    conversionRate: Number(gaData.conversionRate) || 0,
-    revenue: Number(gaData.revenue) || 0
-  },
-  monthlyComparison: [
-    { month: "Previous", users: Math.round((gaData.users || 0) * 0.92), sessions: Math.round((gaData.sessions || 0) * 0.92), revenue: Math.round((gaData.revenue || 0) * 0.92) },
-    { month: "Current", users: gaData.users || 0, sessions: gaData.sessions || 0, revenue: gaData.revenue || 0 }
-  ],
-  trafficSources: gaData.trafficSources || [],
-  devices: gaData.devices || [],
-  topPages: gaData.topPages || [],
-  conversionFunnel: [
-    { step: "Homepage", users: gaData.users || 0, conversionRate: 100 },
-    { step: "Campaign page", users: Math.round((gaData.users || 0) * 0.27), conversionRate: 26.7 },
-    { step: "Donate page", users: Math.round((gaData.users || 0) * 0.11), conversionRate: 11.4 },
-    { step: "Completed donation", users: Math.round((gaData.users || 0) * 0.08), conversionRate: 8.2 }
-  ],
-  userBehavior: (gaData.topPages || []).slice(0, 5).map((p: any) => ({ path: p.path, exitRate: p.bounceRate, timeOnPage: p.avgDuration })),
-  geography: gaData.geography || [],
-  audienceInsights: {
-    newVsReturning: [
-      { type: "New users", count: Math.round((gaData.users || 0) * 0.63), percentage: 63, bounceRate: 35.2 },
-      { type: "Returning users", count: Math.round((gaData.users || 0) * 0.37), percentage: 37, bounceRate: 27.1 }
-    ],
-    engagement: [
-      { metric: "Highly engaged (3+ pages)", users: Math.round((gaData.users || 0) * 0.42), percentage: 42 },
-      { metric: "Moderately engaged (2 pages)", users: Math.round((gaData.users || 0) * 0.27), percentage: 27 },
-      { metric: "Low engagement (1 page)", users: Math.round((gaData.users || 0) * 0.31), percentage: 31 }
-    ]
-  }
-} : {
-  period: "Last 30 days",
-  lastUpdated: new Date().toISOString(),
-  updateFrequency: "Manual — click 'Refresh Data' to sync from Google Analytics 4",
-  overview: { users: 0, sessions: 0, avgSessionDuration: 0, bounceRate: 0, conversionRate: 0, revenue: 0 },
-  monthlyComparison: [],
-  trafficSources: [],
-  devices: [],
-  topPages: [],
-  conversionFunnel: [],
-  userBehavior: [],
-  geography: [],
-  audienceInsights: { newVsReturning: [], engagement: [] }
+const hasData = !!ga && (ga.users != null || (ga.daily?.length ?? 0) > 0);
+
+const users = ga?.users ?? 0;
+const sessions = ga?.sessions ?? 0;
+const avgDuration = ga?.avgSessionDuration ?? 0;
+const donationEvents = ga?.donationEvents ?? 0;
+const revenue = ga?.revenue ?? 0;
+const conversionRate = ga?.conversionRate ?? 0;
+
+const dUsers = computeDelta(ga?.users, ga?.prevUsers);
+const dDonations = computeDelta(ga?.donationEvents, ga?.prevDonationEvents);
+const dRevenue = computeDelta(ga?.revenue, ga?.prevRevenue);
+
+const daily = ga?.daily ?? [];
+const chart = daily.length
+  ? dailyBarChart(daily.map((d) => ({ date: d.date, value: d.users })), {
+      ariaLabel: 'Website visitors per day over the last 28 days',
+      color: '#5B4FCF',
+      valueLabel: 'visitors',
+    })
+  : '';
+
+// Plain-English names + tooltips per channel.
+const channelMeta: Record<string, string> = {
+  'Organic Search': 'Found you on Google',
+  Direct: 'Typed the address or used a bookmark',
+  'Organic Social': 'Came from social media',
+  Referral: 'Linked from another website',
+  Email: 'Came from one of your emails',
+  'Paid Search': 'Clicked a paid Google ad',
+  Unassigned: "Google couldn't tell where they came from",
 };
+
+const sources = (ga?.trafficSources ?? []).slice().sort((a, b) => (b.users || 0) - (a.users || 0));
+const totalSourceUsers = sources.reduce((s, c) => s + (c.users || 0), 0) || 1;
+const topPages = ga?.topPages ?? [];
+const devices = ga?.devices ?? [];
+const totalDeviceUsers = devices.reduce((s, d) => s + (d.users || 0), 0) || 1;
+const geography = (ga?.geography ?? []).slice(0, 5);
+const totalGeoUsers = geography.reduce((s, g) => s + (g.users || 0), 0) || 1;
+const shortPath = (p: string) => p || '/';
+
+// ── DONATION-LINKED INSIGHTS (optional — tolerate older cached payloads) ──
+const donationsByChannel = (ga?.donationsByChannel ?? [])
+  .slice()
+  .sort((a, b) => (b.donations || 0) - (a.donations || 0));
+const hasChannelData = donationsByChannel.length > 0;
+
+const funnel = ga?.funnel ?? null;
+// Conversion percentages between funnel steps.
+const funnelPct = funnel
+  ? {
+      toDonatePage: funnel.sessions > 0 ? Math.round((funnel.donateViews / funnel.sessions) * 1000) / 10 : 0,
+      toDonation: funnel.donateViews > 0 ? Math.round((funnel.donations / funnel.donateViews) * 1000) / 10 : 0,
+    }
+  : null;
+// Relative widths for the funnel blocks (largest step = 100%).
+const funnelMax = funnel ? Math.max(funnel.sessions, funnel.donateViews, funnel.donations, 1) : 1;
+
+const landingPages = ga?.landingPages ?? [];
+const nvr = ga?.newVsReturning ?? null;
+const nvrTotal = nvr ? (nvr.new + nvr.returning) || 1 : 1;
+const nvrNewPct = nvr ? Math.round((nvr.new / nvrTotal) * 100) : 0;
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Analytics Dashboard — Level Up Admin</title>
-  <meta name="robots" content="noindex, nofollow" />
-  <style>
-    :root {
-      --bg-primary: #0C0A3E;
-      --bg-secondary: #13114a;
-      --text-primary: #EEEBD3;
-      --text-secondary: #999999;
-      --text-tertiary: rgba(238,235,211,0.4);
-      --accent: #CCFF33;
-      --border: rgba(255,255,255,0.06);
-      --good: #4ADE80;
-      --warning: #FBBF24;
-      --danger: #F87171;
-    }
-    :root.light-mode {
-      --bg-primary: #FFFFFF;
-      --bg-secondary: #F9F9F9;
-      --text-primary: #1A1A1A;
-      --text-secondary: #666666;
-      --text-tertiary: #888888;
-      --accent: #8B7EBD;
-      --border: rgba(0,0,0,0.1);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .layout { display: flex; flex: 1; }
-    .sidebar {
-      width: 240px;
-      background: var(--bg-secondary);
-      border-right: 1px solid var(--border);
-      padding: 24px 0;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .sidebar-item {
-      padding: 12px 20px;
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.2s;
-      border-left: 3px solid transparent;
-      display: block;
-    }
-    .sidebar-item:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
-    .sidebar-item.active { background: rgba(204,255,51,0.1); color: var(--accent); border-left-color: var(--accent); }
-    .content { flex: 1; display: flex; flex-direction: column; }
-    nav {
-      background: var(--bg-secondary);
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 56px;
-    }
-    .nav-brand { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
-    .nav-right { display: flex; align-items: center; gap: 20px; }
-    .refresh-btn { background: var(--accent); color: var(--bg-primary); border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; font-weight: 700; cursor: pointer; }
-    .refresh-btn:hover { opacity: 0.85; }
-    .logout-btn { background: none; border: 1px solid var(--text-secondary); color: var(--text-secondary); border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; }
-    main { max-width: 1400px; margin: 0 auto; padding: 40px 32px; flex: 1; }
-    h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-    .header-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
-    .subtitle { font-size: 12px; color: var(--text-secondary); }
-    .update-info { font-size: 11px; color: var(--text-tertiary); margin-top: 8px; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 40px;
-    }
-    .stat-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-    }
-    .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 12px; }
-    .stat-value { font-size: 28px; font-weight: 800; color: var(--accent); }
-    .stat-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
-    .stat-change { font-size: 11px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border); }
-    .change-up { color: var(--good); }
-    .change-down { color: var(--danger); }
-    .section { margin-bottom: 50px; }
-    .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 16px; }
-    table { width: 100%; border-collapse: collapse; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-    th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); padding: 12px 20px; border-bottom: 1px solid var(--border); }
-    td { padding: 12px 20px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    tr:last-child td { border-bottom: none; }
-    .bar-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
-    .bar-label { font-size: 12px; width: 140px; flex-shrink: 0; }
-    .bar-track { flex: 1; background: var(--border); border-radius: 4px; height: 24px; overflow: hidden; }
-    .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
-    .bar-value { font-size: 12px; width: 100px; text-align: right; flex-shrink: 0; }
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    @media (max-width: 1024px) { .grid-2 { grid-template-columns: 1fr; } .grid-3 { grid-template-columns: 1fr; } }
-    @media (max-width: 768px) {
-      .sidebar { width: 100%; padding: 12px 0; gap: 4px; }
-      .sidebar-item { padding: 10px 16px; font-size: 12px; }
-      .layout { flex-direction: column; }
-      nav { padding: 0 16px; height: auto; flex-wrap: wrap; }
-      .nav-brand { font-size: 10px; }
-      .nav-right { gap: 10px; flex-wrap: wrap; width: 100%; padding-top: 8px; }
-      main { padding: 24px 16px; max-width: 100%; }
-      h1 { font-size: 20px; }
-      .stats-grid { grid-template-columns: 1fr; gap: 12px; }
-      .stat-card { padding: 16px; }
-      .stat-label { font-size: 10px; }
-      .stat-value { font-size: 20px; }
-      .section-title { font-size: 12px; }
-      table { font-size: 12px; }
-      th, td { padding: 8px 12px; }
-      .grid-2 { grid-template-columns: 1fr; }
-      .grid-3 { grid-template-columns: 1fr; }
-      .bar-row { gap: 8px; }
-      .bar-label { width: 100px; font-size: 11px; }
-      .bar-value { width: 70px; font-size: 11px; }
-      .refresh-btn { padding: 6px 12px; font-size: 11px; }
-      .logout-btn { padding: 6px 12px; font-size: 11px; }
-    }
-
-    #theme-btn { cursor: pointer; padding: 4px 8px; background: none; border: none; font-size: 16px; }
-  </style>
-</head>
-<body>
-  <nav>
-    <div class="nav-brand">Level Up · Admin</div>
-    <div class="nav-right">
-      <button class="refresh-btn" id="refresh-btn">Refresh Data</button>
-      <button id="theme-btn">🌙</button>
-      <button class="logout-btn" id="logout-btn">Sign out</button>
+<AdminShell
+  active="website"
+  title="Website"
+  subtitle="Who visits welevelup.org and what they do — last 28 days."
+  token={urlToken}
+  syncEndpoint="/api/admin-analytics-sync"
+  lastSync={ga?.lastSync ?? null}
+>
+  {!hasData && (
+    <div class="empty">
+      <strong>No data yet</strong>
+      Press “Refresh data” to pull the latest from Google Analytics.
     </div>
-  </nav>
+  )}
 
-  <div class="layout">
-    <div class="sidebar">
-      <a href={`/levelup/dashboard${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">Donations</a>
-      <a href={`/levelup/seo${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item">SEO</a>
-      <a href={`/levelup/analytics${tokenForClient ? `?token=${tokenForClient}` : ''}`} class="sidebar-item active">Analytics</a>
-    </div>
+  {hasData && (
+    <>
+      <!-- KPIs -->
+      <section class="section">
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Visitors</div>
+            <div class="kpi-value">{fmtNum(users)}</div>
+            <div class="kpi-desc">People who visited the website.</div>
+            <div class="kpi-foot">
+              {dUsers && <span class={`delta ${dUsers.positive ? 'pos' : 'neg'}`}>{dUsers.arrow} {Math.abs(dUsers.pct)}%</span>}
+              {dUsers && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
 
-    <div class="content">
-      <main>
-        <div class="header-row">
-          <div>
-            <h1>Analytics Dashboard</h1>
-            <p class="subtitle">Website traffic, user behavior & conversion metrics for welevelup.org</p>
-            <p class="update-info">Period: {displayData.period}<br/>Last updated: {displayData.lastUpdated}<br/>{displayData.updateFrequency}</p>
+          <div class="kpi">
+            <div class="kpi-label">Sessions <span class="tip" tabindex="0" role="note" aria-label="What sessions means">ⓘ<span class="tip-text">A session is one visit. One person can have several sessions.</span></span></div>
+            <div class="kpi-value">{fmtNum(sessions)}</div>
+            <div class="kpi-desc">Total visits, including return trips.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Avg. time on site</div>
+            <div class="kpi-value">{fmtDuration(avgDuration)}</div>
+            <div class="kpi-desc">How long the average visit lasts (minutes:seconds).</div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Donations made online</div>
+            <div class="kpi-value">{fmtNum(donationEvents)}</div>
+            <div class="kpi-desc">Completed donations Google tracked on the site.</div>
+            <div class="kpi-foot">
+              {dDonations && <span class={`delta ${dDonations.positive ? 'pos' : 'neg'}`}>{dDonations.arrow} {Math.abs(dDonations.pct)}%</span>}
+              {dDonations && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Donation revenue tracked</div>
+            <div class="kpi-value">{fmtMoney(revenue)}</div>
+            <div class="kpi-desc">Tracked by Google — bank totals live in Donations.</div>
+            <div class="kpi-foot">
+              {dRevenue && <span class={`delta ${dRevenue.positive ? 'pos' : 'neg'}`}>{dRevenue.arrow} {Math.abs(dRevenue.pct)}%</span>}
+              {dRevenue && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Conversion rate <span class="tip" tabindex="0" role="note" aria-label="What conversion rate means">ⓘ<span class="tip-text">Of every 100 visits, how many end in a donation.</span></span></div>
+            <div class="kpi-value">{conversionRate.toFixed(2)}%</div>
+            <div class="kpi-desc">Share of visits that end in a donation.</div>
           </div>
         </div>
+      </section>
 
-        <!-- KEY METRICS -->
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">Organic Users</div>
-            <div class="stat-value">{displayData.overview.users.toLocaleString()}</div>
-            <div class="stat-change"><span class="change-up">+8.8%</span> vs May</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Sessions</div>
-            <div class="stat-value">{displayData.overview.sessions.toLocaleString()}</div>
-            <div class="stat-change">Avg: {(Number(displayData.overview.sessions) / Number(displayData.overview.users) || 0).toFixed(1)} per user</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Avg Session Duration</div>
-            <div class="stat-value">{Number(displayData.overview.avgSessionDuration).toFixed(0)}s</div>
-            <div class="stat-change"><span class="change-up">Strong engagement</span></div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Bounce Rate</div>
-            <div class="stat-value">{Number(displayData.overview.bounceRate).toFixed(1)}%</div>
-            <div class="stat-change">Good for nonprofit</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Conversion Rate</div>
-            <div class="stat-value"><span class="change-up">{Number(displayData.overview.conversionRate).toFixed(1)}%</span></div>
-            <div class="stat-change">{Number(displayData.overview.conversionRate).toFixed(1)}% → Donation</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Revenue This Month</div>
-            <div class="stat-value">£{Number(displayData.overview.revenue).toFixed(2)}</div>
-            <div class="stat-change">From organic traffic</div>
-          </div>
-        </div>
-
-        <!-- TRAFFIC SOURCES -->
-        <div class="section">
-          <div class="section-title">Traffic by Source</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Source</th>
-                <th>Users</th>
-                <th>Sessions</th>
-                <th>Avg Duration</th>
-                <th>Bounce Rate</th>
-                <th>Session Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayData.trafficSources.map(t => (
-                <tr>
-                  <td style="font-weight: 600;">{t.source}</td>
-                  <td>{t.users}</td>
-                  <td>{t.sessions}</td>
-                  <td>{(Number(t.sessions) * Number(displayData.overview.avgSessionDuration) / Number(t.sessions) || 0).toFixed(0)}s</td>
-                  <td>{Number(t.bounceRate || 0).toFixed(1)}%</td>
-                  <td>£{Number(t.sessionValue || 0).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- DEVICES + GEOGRAPHY -->
-        <div class="grid-2">
-          <div class="section">
-            <div class="section-title">Traffic by Device</div>
-            <table>
+      <!-- WHAT BRINGS DONATIONS -->
+      <section class="section">
+        <div class="section-title">What brings donations</div>
+        {hasChannelData ? (
+          <div class="table-wrap">
+            <table class="data">
               <thead>
                 <tr>
-                  <th>Device</th>
-                  <th>Users</th>
-                  <th>Sessions</th>
-                  <th>Bounce Rate</th>
+                  <th scope="col">Channel <span class="tip" tabindex="0" role="note" aria-label="What channel means">ⓘ<span class="tip-text">How donors arrived at the site before giving — e.g. Google search, social media, a link.</span></span></th>
+                  <th scope="col" class="num">Donations</th>
+                  <th scope="col" class="num">Revenue tracked</th>
                 </tr>
               </thead>
               <tbody>
-                {displayData.devices.map(d => (
-                  <tr>
-                    <td style="font-weight: 600;">{d.type}</td>
-                    <td>{d.users}</td>
-                    <td>{d.sessions}</td>
-                    <td>{Number(d.bounceRate || 0).toFixed(1)}%</td>
-                  </tr>
-                ))}
+                {donationsByChannel.map((c, i) => {
+                  const note = channelMeta[c.channel];
+                  return (
+                    <tr style={i === 0 ? 'background:color-mix(in srgb, var(--violet) 8%, transparent)' : ''}>
+                      <td style="font-weight:600">
+                        {c.channel}
+                        {note && <span class="tip" tabindex="0" role="note" aria-label={`What ${c.channel} means`} style="margin-left:5px">ⓘ<span class="tip-text">{note}</span></span>}
+                        {i === 0 && <span class="chip chip-lime" style="margin-left:6px">top</span>}
+                      </td>
+                      <td class="num" style="font-weight:700">{fmtNum(c.donations)}</td>
+                      <td class="num">{fmtMoney(c.revenue)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to see which channels bring donations.</div>
+        )}
+      </section>
 
-          <div class="section">
-            <div class="section-title">Top Countries</div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Country</th>
-                  <th>Users</th>
-                  <th>Sessions</th>
-                  <th>Conversion</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayData.geography.slice(0, 5).map(g => (
-                  <tr>
-                    <td style="font-weight: 600;">{g.country}</td>
-                    <td>{g.users}</td>
-                    <td>{g.sessions}</td>
-                    <td>{Number(g.conversionRate || 0).toFixed(1)}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TOP LANDING PAGES -->
-        <div class="section">
-          <div class="section-title">Top Landing Pages (Conversions)</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Page</th>
-                <th>Users</th>
-                <th>Sessions</th>
-                <th>Avg Duration</th>
-                <th>Bounce Rate</th>
-                <th>Conversion</th>
-              </tr>
-            </thead>
-            <tbody>
-              {displayData.topPages.map(p => (
-                <tr>
-                  <td style="font-weight: 600; font-family: monospace; font-size: 12px;">{p.path}</td>
-                  <td>{p.users}</td>
-                  <td>{p.sessions}</td>
-                  <td>{Number(p.avgDuration || 0).toFixed(0)}s</td>
-                  <td>{Number(p.bounceRate || 0).toFixed(1)}%</td>
-                  <td style="color: var(--accent); font-weight: 600;">{Number(p.conversionRate || 0).toFixed(1)}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <!-- CONVERSION FUNNEL -->
-        <div class="section">
-          <div class="section-title">Donation Conversion Funnel</div>
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
-            {displayData.conversionFunnel.map((step, i) => (
-              <div class="bar-row">
-                <div class="bar-label">{step.step}</div>
-                <div class="bar-track">
-                  <div class="bar-fill" style={`width: ${Number(step.conversionRate || 0)}%`}></div>
+      <!-- DONATION FUNNEL -->
+      {funnel && funnelPct && (
+        <section class="section">
+          <div class="section-title">From visit to donation</div>
+          <div class="card">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Visited the site</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.sessions)}</span>
                 </div>
-                <div class="bar-value">{step.users} users ({Number(step.conversionRate || 0).toFixed(1)}%)</div>
+                <div style="height:34px;border-radius:8px;background:#0C0A3E;width:100%"></div>
               </div>
-            ))}
-          </div>
-          <p style="margin-top: 16px; font-size: 12px; color: var(--text-tertiary);">Each step shows % of total users that reached that point. Goal: increase conversion rate from 8.2% to 12%.</p>
-        </div>
-
-        <!-- NEW VS RETURNING + ENGAGEMENT -->
-        <div class="grid-2">
-          <div class="section">
-            <div class="section-title">New vs Returning Users</div>
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
-              {displayData.audienceInsights.newVsReturning.map(n => (
-                <div class="bar-row">
-                  <div class="bar-label">{n.type}</div>
-                  <div class="bar-track">
-                    <div class="bar-fill" style={`width: ${n.percentage}%`}></div>
-                  </div>
-                  <div class="bar-value">{n.count} ({n.percentage}%)</div>
+              <div class="kpi-desc" style="text-align:center">↓ {funnelPct.toDonatePage}% went on to see the donate page</div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Saw the donate page</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.donateViews)}</span>
                 </div>
-              ))}
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="section-title">User Engagement Level</div>
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px;">
-              {displayData.audienceInsights.engagement.map(e => (
-                <div class="bar-row">
-                  <div class="bar-label">{e.metric}</div>
-                  <div class="bar-track">
-                    <div class="bar-fill" style={`width: ${e.percentage}%`}></div>
-                  </div>
-                  <div class="bar-value">{e.users} users ({e.percentage}%)</div>
+                <div style={`height:34px;border-radius:8px;background:#5B4FCF;width:${Math.max(8, Math.round((funnel.donateViews / funnelMax) * 100))}%`}></div>
+              </div>
+              <div class="kpi-desc" style="text-align:center">↓ {funnelPct.toDonation}% of those went on to donate</div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Donated</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.donations)}</span>
                 </div>
-              ))}
+                <div style={`height:34px;border-radius:8px;background:#A89CED;width:${Math.max(6, Math.round((funnel.donations / funnelMax) * 100))}%`}></div>
+              </div>
             </div>
           </div>
-        </div>
+        </section>
+      )}
 
-        <!-- INSIGHTS & RECOMMENDATIONS -->
-        <div class="section">
-          <div class="section-title">Key Insights & Recommendations</div>
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">🔗 Direct Traffic Dominates</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">63% of users come directly (email/social). Maintain that momentum with regular campaigns.</p>
+      <!-- WHERE PEOPLE LAND FIRST -->
+      <section class="section">
+        <div class="section-title">Where people land first <span class="tip" tabindex="0" role="note" aria-label="What landing page means">ⓘ<span class="tip-text">The first page each visitor lands on when they arrive at the site.</span></span></div>
+        {landingPages.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">First page</th>
+                  <th scope="col" class="num">Sessions</th>
+                  <th scope="col" class="num">Visitors</th>
+                </tr>
+              </thead>
+              <tbody>
+                {landingPages.map((p) => (
+                  <tr>
+                    <td style="font-weight:600">{shortPath(p.landingPage)}</td>
+                    <td class="num">{fmtNum(p.sessions)}</td>
+                    <td class="num">{fmtNum(p.users)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load landing pages.</div>
+        )}
+      </section>
+
+      <!-- NEW vs RETURNING -->
+      {nvr && (nvr.new > 0 || nvr.returning > 0) && (
+        <section class="section">
+          <div class="section-title">New vs returning visitors <span class="tip" tabindex="0" role="note" aria-label="What new vs returning means">ⓘ<span class="tip-text">New visitors have not been to the site before; returning visitors have been here previously.</span></span></div>
+          <div class="card">
+            <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+              <span style={`width:${nvrNewPct}%;background:#5B4FCF`} title={`New ${nvrNewPct}%`}></span>
+              <span style={`width:${100 - nvrNewPct}%;background:#A89CED`} title={`Returning ${100 - nvrNewPct}%`}></span>
             </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">💚 Donate Page Converts</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">15.4% conversion rate on /donate/. Lower bounce (18.6%). This page works — promote it more.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">📱 Mobile Engagement Strong</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">53% traffic from mobile. Avg 95s duration = good engagement. No mobile UX issues detected.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">🎯 Campaign Pages Convert</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Pregnancy-in-Prison and Petition pages have 12%+ conversion. These are your best performers.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">⚠️ Homepage Bounce High</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Homepage: 29.3% bounce, 9.2% conversion. Improve CTAs and navigation to campaign pages.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); margin-bottom: 8px;">🌍 UK Dominates, US 2nd</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">41% UK, 27% USA. Consider geo-targeted campaigns for other English-speaking countries.</p>
+            <div class="chart-legend" style="margin-top:12px">
+              <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>New {fmtNum(nvr.new)} ({nvrNewPct}%)</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>Returning {fmtNum(nvr.returning)} ({100 - nvrNewPct}%)</span>
             </div>
           </div>
-        </div>
+        </section>
+      )}
 
-        <!-- GLOSSARY -->
-        <div class="section">
-          <div class="section-title">Analytics Glossary</div>
-          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">USERS</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Unique visitors to your site in the period. Higher is better for reaching new people.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">SESSIONS</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">User visits/interactions. More sessions per user = stronger engagement and repeat visits.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">BOUNCE RATE</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">% of users who left without taking action. Lower = better. 32% is good for nonprofits.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">AVG SESSION DURATION</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">How long users stay. 103s = very engaged. Mobile users spend less time (normal).</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">CONVERSION RATE</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">% of users who donate (or complete desired action). 8.2% is strong for nonprofits.</p>
-            </div>
-            <div>
-              <h4 style="color: var(--accent); font-size: 12px; font-weight: 700; margin-bottom: 8px;">SESSION VALUE</h4>
-              <p style="color: var(--text-secondary); font-size: 13px;">Average donation per session. Google organic = £1.17/session. Direct = £0.30/session.</p>
-            </div>
+      <!-- CHART -->
+      <section class="section">
+        <div class="section-title">Visitors per day</div>
+        <div class="card">
+          {chart ? <Fragment set:html={chart} /> : <div class="kpi-desc">No daily data in this period yet.</div>}
+        </div>
+      </section>
+
+      <!-- TRAFFIC SOURCES -->
+      <section class="section">
+        <div class="section-title">Where visitors come from</div>
+        {sources.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Source</th>
+                  <th scope="col" class="num">Visitors</th>
+                  <th scope="col" class="num">Sessions</th>
+                  <th scope="col">% of total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sources.map((c) => {
+                  const pct = Math.round(((c.users || 0) / totalSourceUsers) * 100);
+                  const note = channelMeta[c.source];
+                  return (
+                    <tr>
+                      <td style="font-weight:600">
+                        {c.source}
+                        {note && <span class="tip" tabindex="0" role="note" aria-label={`What ${c.source} means`} style="margin-left:5px">ⓘ<span class="tip-text">{note}</span></span>}
+                      </td>
+                      <td class="num">{fmtNum(c.users)}</td>
+                      <td class="num">{fmtNum(c.sessions)}</td>
+                      <td>
+                        <span class="minibar">
+                          <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                          <span class="minibar-val">{pct}%</span>
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-        </div>
-      </main>
-    </div>
-  </div>
+        ) : (
+          <div class="empty"><strong>No source data yet</strong>Press “Refresh data” to load it.</div>
+        )}
+      </section>
 
-  <script>
-    const html = document.documentElement;
-    function applyTheme(t) {
-      if (t === 'light') {
-        html.classList.add('light-mode');
-        const btn = document.getElementById('theme-btn');
-        if (btn) btn.textContent = '☀️';
-      } else {
-        html.classList.remove('light-mode');
-        const btn = document.getElementById('theme-btn');
-        if (btn) btn.textContent = '🌙';
-      }
-    }
-    applyTheme(localStorage.getItem('admin-theme') || 'light');
+      <!-- TOP PAGES -->
+      <section class="section">
+        <div class="section-title">Top pages</div>
+        {topPages.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Page</th>
+                  <th scope="col" class="num">Visitors</th>
+                  <th scope="col" class="num">Sessions</th>
+                  <th scope="col" class="num">Avg. time</th>
+                  <th scope="col" class="num"><span class="th-tip">Bounce <span class="tip" tabindex="0" role="note" aria-label="What bounce means">ⓘ<span class="tip-text">Left without doing anything — lower is better.</span></span></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {topPages.map((p) => (
+                  <tr>
+                    <td style="font-weight:600">{shortPath(p.path)}</td>
+                    <td class="num">{fmtNum(p.users)}</td>
+                    <td class="num">{fmtNum(p.sessions)}</td>
+                    <td class="num">{fmtDuration(p.avgDuration)}</td>
+                    <td class="num">{Number(p.bounceRate).toFixed(1)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No page data yet</strong>Press “Refresh data” to load it.</div>
+        )}
+      </section>
 
-    document.getElementById('theme-btn')?.addEventListener('click', () => {
-      const isLight = html.classList.toggle('light-mode');
-      const next = isLight ? 'light' : 'dark';
-      localStorage.setItem('admin-theme', next);
-      const btn = document.getElementById('theme-btn');
-      if (btn) btn.textContent = isLight ? '☀️' : '🌙';
-    });
+      <!-- DEVICES + COUNTRIES -->
+      <div class="grid-2">
+        <section class="section">
+          <div class="section-title">Devices</div>
+          {devices.length ? (
+            <div class="card">
+              {devices.map((d) => {
+                const pct = Math.round(((d.users || 0) / totalDeviceUsers) * 100);
+                return (
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                    <span style="width:90px;font-size:13px;flex-shrink:0;text-transform:capitalize">{d.type}</span>
+                    <span class="minibar" style="flex:1">
+                      <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                      <span class="minibar-val">{pct}%</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="empty">No device data yet.</div>
+          )}
+        </section>
 
-    document.getElementById('refresh-btn')?.addEventListener('click', async () => {
-      const btn = document.getElementById('refresh-btn');
-      btn.disabled = true;
-      btn.textContent = 'Syncing...';
-      try {
-        const token = new URLSearchParams(window.location.search).get('token') || localStorage.getItem('admin_token') || '';
-        const res = await fetch(`/api/admin-analytics-sync${token ? `?token=${encodeURIComponent(token)}` : ''}`, { method: 'POST' });
-        const data = await res.json();
-        if (!res.ok || !data.ok) throw new Error(data.error || 'Sync failed');
-        location.reload();
-      } catch (e) {
-        alert('Sync error: ' + e.message);
-        btn.textContent = 'Refresh Data';
-        btn.disabled = false;
-      }
-    });
-
-    let inactivityTimer = null;
-    const INACTIVITY_TIMEOUT = 5 * 60 * 1000;
-
-    function resetInactivityTimer() {
-      if (inactivityTimer) clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(async () => {
-        try {
-          await fetch('/api/admin-auth', { method: 'DELETE' });
-        } catch (e) {
-          console.error('Auto-logout error:', e);
-        }
-        location.href = '/levelup/login';
-      }, INACTIVITY_TIMEOUT);
-    }
-
-    ['mousedown', 'keydown', 'click', 'scroll', 'touchstart'].forEach(event => {
-      document.addEventListener(event, resetInactivityTimer, true);
-    });
-
-    resetInactivityTimer();
-
-    document.getElementById('logout-btn')?.addEventListener('click', async () => {
-      if (inactivityTimer) clearTimeout(inactivityTimer);
-      try {
-        await fetch('/api/admin-auth', { method: 'DELETE' });
-      } catch (e) {
-        console.error('Logout error:', e);
-      }
-      setTimeout(() => {
-        location.href = '/levelup/login';
-      }, 100);
-    });
-  </script>
-</body>
-</html>
+        <section class="section">
+          <div class="section-title">Top countries</div>
+          {geography.length ? (
+            <div class="card">
+              {geography.map((g) => {
+                const pct = Math.round(((g.users || 0) / totalGeoUsers) * 100);
+                return (
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                    <span style="width:130px;font-size:13px;flex-shrink:0">{g.country}</span>
+                    <span class="minibar" style="flex:1">
+                      <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                      <span class="minibar-val">{pct}%</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="empty">No country data yet.</div>
+          )}
+        </section>
+      </div>
+    </>
+  )}
+</AdminShell>

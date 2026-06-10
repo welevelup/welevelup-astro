@@ -1,12 +1,28 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createMollieClient, SequenceType } from '@mollie/api-client';
+import { Redis } from '@upstash/redis';
 import crypto from 'crypto';
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  console.log('[create-donation] === START ===');
+// Maps an opaque, short-lived reference (safe to put in a URL) to the Mollie
+// payment id. The thank-you page reads `?ref=` and resolves it server-side to
+// look up the real payment status. This replaces the old paymentId cookie,
+// which was lost on Mollie's cross-site redirect (especially in in-app
+// browsers) and stranded donors back on /donate.
+const REF_TTL_SECONDS = 3600;
 
+async function storePaymentRef(ref: string, paymentId: string): Promise<void> {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) {
+    console.warn('[create-donation] Redis not configured — skipping ref store');
+    return;
+  }
+  const redis = new Redis({ url, token });
+  await redis.set(`donation:${ref}`, paymentId, { ex: REF_TTL_SECONDS });
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
-    console.log('[create-donation] Method not POST:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -14,22 +30,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const siteUrl = process.env.PUBLIC_SITE_URL;
   const webhookUrl = process.env.MOLLIE_WEBHOOK_URL;
 
-  console.log('[create-donation] Env vars:', {
-    apiKey: apiKey ? apiKey.slice(0, 10) + '...' : 'MISSING',
-    siteUrl,
-    webhookUrl
-  });
-
   if (!apiKey || !siteUrl || !webhookUrl) {
-    console.error('[create-donation] ❌ MISSING ENV VARS:', {
+    console.error('[create-donation] missing env vars', {
       apiKey: !!apiKey,
       siteUrl: !!siteUrl,
-      webhookUrl: !!webhookUrl
+      webhookUrl: !!webhookUrl,
     });
     return res.status(500).json({ error: 'Mollie env vars not configured' });
   }
-
-  console.log('[create-donation] ✅ Env vars present');
 
   const body = req.body as {
     amount?: string;
@@ -54,31 +62,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const mollie = createMollieClient({ apiKey });
   const formattedAmount = amountNum.toFixed(2);
-  const baseUrl = siteUrl.replace(/\\n/g, '').trim().replace(/\/$/, '');
+  // Strip any stray whitespace (incl. real newlines) and a trailing slash.
+  const baseUrl = siteUrl.replace(/\s+/g, '').replace(/\/$/, '');
   const donationType = recurring ? 'monthly' : 'one-time';
-  const redirectUrl = `${baseUrl}/donate/thank-you?amount=${formattedAmount}&type=${donationType}`;
-
-  console.log('[create-donation] Creating payment with:', {
-    siteUrl: siteUrl,
-    baseUrl: baseUrl,
-    formattedAmount: formattedAmount,
-    donationType: donationType,
-    redirectUrl: redirectUrl,
-    webhookUrl: webhookUrl,
-    donorEmail: donorEmail ? donorEmail.slice(0, 10) + '...' : 'none'
-  });
+  const ref = crypto.randomBytes(16).toString('hex');
+  const redirectUrl = `${baseUrl}/donate/thank-you?ref=${ref}&amount=${formattedAmount}&type=${donationType}`;
 
   try {
+    let payment;
     if (recurring) {
       const customer = await mollie.customers.create({
         name: donorName,
         email: donorEmail,
         metadata: { source: 'astro' },
       });
-      const payment = await mollie.payments.create({
+      payment = await mollie.payments.create({
         amount: { currency: 'GBP', value: formattedAmount },
         description: `Level Up — Monthly donation (£${formattedAmount}/month)`,
-        redirectUrl: redirectUrl,
+        redirectUrl,
         webhookUrl,
         customerId: customer.id,
         sequenceType: SequenceType.first,
@@ -91,36 +92,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           source: 'astro',
         },
       });
-      const token = crypto.randomBytes(16).toString('hex');
-      res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
-      return res.status(200).json({
-        checkoutUrl: payment.getCheckoutUrl(),
-        paymentToken: payment.id,
-        validationToken: token
+    } else {
+      payment = await mollie.payments.create({
+        amount: { currency: 'GBP', value: formattedAmount },
+        description: `Level Up — Donation (£${formattedAmount})`,
+        redirectUrl,
+        webhookUrl,
+        metadata: {
+          type: 'one-time',
+          amount: formattedAmount,
+          donorEmail: donorEmail || null,
+          donorName: donorName || null,
+          giftAid: String(giftAid),
+          source: 'astro',
+        },
       });
     }
 
-    const payment = await mollie.payments.create({
-      amount: { currency: 'GBP', value: formattedAmount },
-      description: `Level Up — Donation (£${formattedAmount})`,
-      redirectUrl: redirectUrl,
-      webhookUrl,
-      metadata: {
-        type: 'one-time',
-        amount: formattedAmount,
-        donorEmail: donorEmail || null,
-        donorName: donorName || null,
-        giftAid: String(giftAid),
-        source: 'astro',
-      },
-    });
-    const token = crypto.randomBytes(16).toString('hex');
-    res.setHeader('Set-Cookie', `paymentId=${payment.id}; Path=/; Max-Age=3600; HttpOnly`);
-    return res.status(200).json({
-      checkoutUrl: payment.getCheckoutUrl(),
-      paymentToken: payment.id,
-      validationToken: token
-    });
+    // Persist ref -> paymentId so the thank-you page can verify real status.
+    // Never block the checkout on this: if Redis is down the donor still pays,
+    // the webhook still emails them, and the thank-you page degrades to a
+    // neutral confirmation instead of stranding them.
+    try {
+      await storePaymentRef(ref, payment.id);
+    } catch (refErr) {
+      console.error('[create-donation] failed to store payment ref:', refErr);
+    }
+
+    return res.status(200).json({ checkoutUrl: payment.getCheckoutUrl() });
   } catch (err) {
     console.error('[create-donation] Mollie error', err);
     return res.status(500).json({ error: 'Failed to create payment' });

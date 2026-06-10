@@ -237,52 +237,92 @@ Propuesta: crear rama `fix/mollie-production` desde **`main`** (para conservar l
 
 # FASE 2 — AUDITORÍA COMPLETA DEL SITIO
 
-> Recon inicial hecho en vivo + análisis de código. Esta fase se profundiza tras estabilizar Mollie, pero los hallazgos críticos de seguridad de abajo **deberían entrar junto con el fix de Fase 1** porque comparten archivos.
+> Auditoría completa hecha en vivo (`curl` solo-lectura contra producción) + análisis de código y de `public/`/`dist/`. Fecha: 2026-06-10.
 
-## CRÍTICO
+## ✅ YA RESUELTO (desplegado en Fase 1 — PR #81)
 
-### S-1 · Endpoint público filtra secretos de pago — `/api/check-config`
-**EN VIVO:** `https://welevelup.org/api/check-config` responde **sin auth**:
-```json
-{"mollie":{"apiKey":"live_uvdBw...","isLive":true},
- "webhook":{"secret":"CMSFk33A8x... (32 chars)"},
- "env":{"PUBLIC_SITE_URL":"https://welevelup.org","RESEND_API_KEY":"✅ SET"}}
-```
-Expone el **prefijo de la API key LIVE de Mollie**, el **prefijo y longitud del webhook secret**, y el inventario de variables presentes. Es reconocimiento directo para un atacante. **Archivo:** `api/check-config.ts`. **Fix:** eliminar (staging ya lo borró). **Severidad: CRÍTICA.**
+| ID | Hallazgo | Estado |
+|----|----------|--------|
+| S-1 | `/api/check-config` filtraba prefijo de API key LIVE + webhook secret | ✅ Eliminado — `curl` da **404** |
+| S-2 | `test-mollie-webhook` / `test-webhook-signature` / `test-webhook-status` permitían forjar webhooks firmados | ✅ Eliminados — **404** |
+| S-4 | `validate-payment` enumeraba estado de pagos sin rate limit | ✅ Eliminado — **404** |
 
-### S-2 · Endpoints de test que reenvían webhooks firmados al handler real
-`/api/test-mollie-webhook` y `/api/test-webhook-signature` (**públicos, POST**) generan una **firma HMAC válida** con el secret del servidor y la **POSTean al webhook real** con un `paymentId` arbitrario. **EN VIVO:** `/api/test-webhook-status` confirma estar activo y filtra `secret_prefix`. Permiten a un anónimo **forzar ejecuciones del webhook** (emails, eventos GA4, lógica de suscripción) y enumerar el comportamiento de verificación. **Archivos:** `api/test-mollie-webhook.ts`, `api/test-webhook-signature.ts`, `api/test-webhook-status.ts`. **Fix:** eliminar (staging ya). **Severidad: CRÍTICA.**
+## ✅ LO QUE ESTÁ BIEN (sin acción)
+
+- **Headers de seguridad:** todos presentes y fuertes — `HSTS max-age=31536000; preload`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`, CSP con `frame-ancestors 'none'` y `object-src 'none'`. Sin fuga de `X-Powered-By`.
+- **Accesibilidad (base sólida):** `<html lang="en-GB">`, **un solo `<h1>`** por página, **todas las imágenes con `alt`** (homepage 10/10), landmark `<main id="main-content">`, formulario de donación con **11 inputs / 11 labels**, `fieldset/legend`, radios accesibles con `:focus-within` visible. Contraste lima `#CCFF33` sobre navy `#0C0A3E` = alto (correcto).
+- **Sin secretos hardcodeados** en `src/`/`api/` y **ninguna `import.meta.env` no-`PUBLIC_`** expuesta al cliente.
+- **`robots.txt`** sensato; **sitemap** (41 URLs) **no** filtra staging, `thank-you`, `donor-portal` ni proposals; `/404` devuelve **404 real** (no soft-404).
 
 ## ALTO
 
-### S-3 · `npm audit`: 5 high + 4 moderate
+### MIG-1 · Dumps de WordPress servidos en producción (`public/wp-*`)
+**EN VIVO:** `https://welevelup.org/wp-json` devuelve **JSON real estilo WP REST API**: `{"name":"We Level Up",...,"namespaces":["give-api/...","oembed/1.0"],"page_on_front":1818}`. Origen: carpetas estáticas copiadas en la migración:
 ```
-high     tar              (path traversal / arbitrary file write)  → vía @mapbox/node-pre-gyp
-high     path-to-regexp   (ReDoS backtracking)                     → vía @vercel/routing-utils → @astrojs/vercel
-high     @astrojs/vercel / @vercel/routing-utils
-moderate esbuild          (dev server SSRF — solo dev)
-moderate ajv (ReDoS), @vercel/node, @vercel/static-config
+public/wp-content   → 91 MB   (imágenes WP, ver PERF-1)
+public/wp-json      → 3.7 MB  (respuestas cacheadas de la REST API de WP)
+public/wp-includes  → 340 KB  (jQuery, jquery-migrate, dashicons, datepicker, hoverIntent — puro cruft)
 ```
-La mayoría son **transitivas del toolchain de build** (`@vercel/*`, `esbuild` solo afecta al dev server). Riesgo en producción **bajo-medio**, pero conviene `npm audit fix` y subir `@astrojs/vercel` a una versión parcheada. **Plan:** `npm audit fix`; si requiere mayor, probar `@astrojs/vercel` última en una rama y verificar build. **Severidad: ALTA (mayormente build-time).**
+**Por qué importa:** (1) `wp-json`/`wp-includes` **identifican el sitio como WordPress** → atraen bots y escáneres que prueban exploits de WP/plugins; (2) `wp-json` **filtra IDs internos viejos** (`page_on_front:1818`); (3) son 100% inútiles en un sitio Astro. **Fix:** eliminar `public/wp-includes/` y `public/wp-json/` por completo; mantener solo las imágenes de `public/wp-content/uploads/` que se usan (ver MIG-2). **Severidad: ALTA.**
 
-### S-4 · `validate-payment` sin rate limiting expone estado de pagos
-`/api/validate-payment?paymentId=tr_...` (GET público) devuelve estado/monto de cualquier `paymentId`. Sin rate limit permite enumeración. Hoy la página ni lo usa. **Fix:** eliminar (staging ya) o añadir rate limit + no usarlo sin la cookie/token del propio pago. **Severidad: ALTA.**
+### MIG-2 · OG image de la página de donación está rota (404)
+**EN VIVO:** `donate.astro:15` declara `ogImage="/wp-content/uploads/2023/05/Level-Up-OG.png"` → **404**. La **página de donación — la que genera ingresos —** no muestra imagen al compartirse en Facebook/WhatsApp/Twitter. Otras OG sí cargan (NML11-2.webp, we-protect-us-2.webp → 200), así que es **inconsistente**: las imágenes referenciadas pero no copiadas a `public/wp-content/uploads/` dan 404. **Fix:** crear/copiar `Level-Up-OG.png` (o apuntar a una OG existente en `public/images/`), y auditar las ~13 `ogImage=` de `src/pages/` para confirmar que todas resuelven 200. **Severidad: ALTA (conversión/redes).**
 
 ### SEO-1 · `staging.welevelup.org` es totalmente indexable
-**EN VIVO:** `staging.welevelup.org/robots.txt` = `Allow: /`, **sin `noindex`**, y su `Sitemap:` apunta a `https://welevelup.org/...`. Riesgo de **contenido duplicado** y de que Google indexe el entorno de pruebas. **Fix:** en staging, servir `X-Robots-Tag: noindex` (o `robots.txt` con `Disallow: /`) y/o proteger con auth básica. **Severidad: ALTA (SEO).**
+**EN VIVO:** `staging.welevelup.org/robots.txt` = `Allow: /`, **sin `noindex`**, y su `Sitemap:` apunta a `https://welevelup.org/...`. Riesgo de **contenido duplicado** en Google. **Fix:** servir `X-Robots-Tag: noindex` en staging (header en su `vercel.json`/deployment) o protegerlo con auth. **Severidad: ALTA (SEO).** *(Nota: la rama git `staging` fue borrada del remoto; staging.welevelup.org corre un deployment de Vercel separado — revisar su config ahí.)*
+
+### DEP-1 · `npm audit`: 5 high + 4 moderate
+```
+high     tar              (path traversal)          → vía @mapbox/node-pre-gyp
+high     path-to-regexp   (ReDoS)                   → vía @vercel/routing-utils → @astrojs/vercel
+high     @astrojs/vercel / @vercel/routing-utils
+moderate esbuild (dev server SSRF — solo dev), ajv, @vercel/node, @vercel/static-config
+```
+**Transitivas del toolchain de build** (`@vercel/*`, `esbuild` solo dev). Riesgo en runtime de prod **bajo**. **Fix:** `npm audit fix`; si pide major, probar `@astrojs/vercel` última en rama + verificar build. **Severidad: ALTA (mayormente build-time).**
 
 ## MEDIO
 
-- **SEC-headers:** la mayoría están y bien (`HSTS preload`, `X-Frame-Options: DENY`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors 'none'`). **Observación:** la CSP de prod incluye `'unsafe-inline'` **y** `'unsafe-eval'` en `script-src` (necesario por scripts inline de Astro, pero debilita XSS-hardening). Plan a futuro: mover a CSP con nonce. **Severidad: MEDIA.**
-- **SEO-2 · Redirects WP→Astro:** `vercel.json` tiene una tabla **extensa y buena** de 301 desde URLs WordPress (`/category/*`, `/tag/*`, `/author/*`, `/wp-admin*`, slugs viejos…). Falta verificar contra el **sitemap viejo de WP** las URLs con tráfico real que aún den 404. **Pendiente Fase 2:** crawl de 404s con datos de Search Console. **Severidad: MEDIA.**
-- **MIG-1 · Restos WordPress:** referencias a rutas `/wp-content/uploads/...` siguen usándose como assets (p.ej. `ogImage` en `donate.astro`). Verificar que existan en `public/` y no apunten al WP viejo. **Pendiente:** grep en `dist/` tras build + revisar imágenes huérfanas. **Severidad: MEDIA.**
+### PERF-1 · `public/wp-content` = 91 MB → `dist/client` = 102 MB
+Las imágenes heredadas de WP se sirven tal cual: variantes múltiples (`-scaled`, `-768x511`, `-300x200`), PNGs grandes (capturas de pantalla), sin pipeline de optimización. **Impacto:** deploy pesado y LCP alto en páginas con estas imágenes. **Fix:** pasar imágenes clave por `astro:assets` (`<Image>` con `srcset`/AVIF/WebP) o, mínimo, comprimir y purgar las no usadas. Cruzar las referencias reales (`grep wp-content src/`) contra `public/wp-content/uploads/` y **borrar las huérfanas**. **Severidad: MEDIA.**
 
-## BAJO / PENDIENTE DE PROFUNDIZAR (Fase 2 completa)
+### SEO-2 · URLs viejas de WP dan 404 en vez de 301 (pérdida de link equity)
+**EN VIVO** (destino final siguiendo redirects):
+```
+/feed                 → 404      (RSS viejo — probable tráfico/suscriptores)
+/comments/feed        → 404
+/2024/05/<post>       → 404      (permalinks con fecha — patrón WP común)
+/wp-content/uploads/2023/05/Level-Up-OG.png → 404
+/?p=123  /?page_id=42 → 200      (sirven la HOME → soft-duplicado, no 301)
+```
+`vercel.json` ya cubre **muchísimas** URLs (`/category/*`, `/tag/*`, `/author/*`, slugs viejos…), pero faltan: `/feed`, archivos por fecha, y los `?p=`/`?page_id=` que deberían 301 a su destino o devolver 410. **Acción recomendada:** exportar de **Google Search Console** las URLs indexadas con impresiones que hoy dan 404 y añadir 301 puntuales. **Severidad: MEDIA.**
 
-- **A11y** del flujo de donación: el formulario usa `fieldset/legend`, inputs con `label`, radios accesibles con focus visible — buena base. Falta auditar contraste (`#CCFF33` sobre `#0C0A3E`), `aria-live` en errores, y navegación por teclado completa en el retorno.
-- **Rendimiento:** Astro `output: server` con `cssMinify: false` (desactivado a propósito por corrupción de esbuild — commit `8c7e45b`). Revisar si se puede re-activar con la versión parcheada de esbuild. Auditar imágenes (srcset/lazy) heredadas de WP y `font-display`.
-- **Sitemap:** `/sitemap-index.xml` existe y filtra páginas transaccionales/proposals correctamente (`astro.config.mjs`). Validar que no liste URLs rotas.
-- **Formularios:** `contact.ts` usa Turnstile (opcional) + rate limit Upstash. Validar sanitización server-side.
+### FORM-1 · Rate limit del formulario de contacto es inefectivo en serverless
+`api/contact.ts:4-16` usa un `Map` en memoria para rate limiting. En Vercel cada invocación puede caer en una **instancia distinta** (o cold start), así que el contador no persiste → el límite de 5/15min **no se aplica de forma fiable**. Ya existe `src/lib/ratelimit.ts` (Upstash Redis) usado en otros sitios. **Fix:** reemplazar el `Map` por `isRateLimited()` de Upstash. **Severidad: MEDIA.** *(Validación de input y Turnstile opcional están OK; riesgo de inyección en email bajo — es texto plano a su propio buzón.)*
+
+### SEC-1 · CSP con `'unsafe-inline'` + `'unsafe-eval'`
+`script-src` incluye ambos (necesario por scripts inline de Astro + Mollie). Debilita la protección anti-XSS. **Fix (largo plazo):** migrar a CSP con **nonce** por request. **Severidad: MEDIA.**
+
+## BAJO
+
+- **MIG-3:** `src/_clone/` = 13 MB de HTML crudo de WP en el repo. **No** se envía a `dist/client` (solo se inlinea en SSR vía `?raw`), pero infla el repo y el bundle del servidor. Evaluar reducir.
+- **SEO-3:** algunos paths inexistentes hacen `302` antes del `404` (un salto extra). Menor.
+- **MIG-4:** `wp-json` filtra IDs internos viejos (cosmético; se elimina con MIG-1).
+
+## PLAN DE IMPLEMENTACIÓN PRIORIZADO (Fase 2)
+
+**Tanda A — Rápida y de alto impacto (1 PR, bajo riesgo):**
+1. Arreglar OG image de `donate.astro` (MIG-2) + auditar las ~13 `ogImage=`.
+2. Borrar `public/wp-includes/` y `public/wp-json/` (MIG-1).
+3. `noindex` en staging (SEO-1).
+
+**Tanda B — Limpieza WP + perf (1 PR, riesgo medio, requiere verificar imágenes usadas):**
+4. Purgar imágenes huérfanas de `public/wp-content/uploads/` y optimizar las usadas (PERF-1).
+5. Añadir 301/410 para `/feed`, archivos por fecha y `?p=` según Search Console (SEO-2).
+
+**Tanda C — Hardening (1 PR):**
+6. Rate limit de contacto vía Upstash (FORM-1).
+7. `npm audit fix` + bump `@astrojs/vercel` (DEP-1).
+8. (Opcional, largo plazo) CSP con nonce (SEC-1).
 
 ---
 
@@ -315,3 +355,31 @@ La mayoría son **transitivas del toolchain de build** (`@vercel/*`, `esbuild` s
 2. Tras verificar en staging con el checklist de abajo → **PR `staging` → `main`** (prod).
 
 > Recomendación de timing: desplegar el fix un día de bajo tráfico de donaciones y monitorear las primeras transacciones en los logs de Vercel + dashboard de Mollie.
+
+---
+
+## FASE 2 — IMPLEMENTACIÓN (rama `fix/phase2-cleanup`)
+
+Build ✅ y typecheck ✅ pasando. Alcance decidido por **evidencia** (no romper páginas en producción).
+
+### ✅ Hecho en esta tanda
+
+| ID | Cambio | Archivos |
+|----|--------|----------|
+| MIG-2 | **OG image branded generada** (1200×630, navy+lima) y conectada como default. Antes el default y `/donate` apuntaban a un PNG 404 → sharing roto en TODO el sitio. | `scripts/generate-og.mjs`, `public/images/og-default.jpg`, `src/layouts/Layout.astro`, `src/pages/donate.astro` |
+| MIG-1 | **`public/wp-json/` eliminado** (127 archivos, 3.7MB). Quita el fingerprint de WP-REST-API y la fuga de IDs internos. | `public/wp-json/**` |
+| SEO-1 | **`noindex` para hosts no-producción** (staging, *.vercel.app) vía `X-Robots-Tag` en middleware. | `src/middleware.ts` |
+| SEO-2 | **301 para URLs WP viejas:** `/feed`, `/comments/feed`, archivos por fecha `/AAAA/MM/*` → `/blog`. | `vercel.json` |
+| FORM-1 | **Rate limit de contacto migrado a Upstash Redis** (el `Map` en memoria no funciona en serverless). | `api/contact.ts` |
+
+### ⏸️ Deferido CONSCIENTEMENTE (con razón, no por olvido)
+
+| ID | Por qué NO se hizo aquí | Recomendación |
+|----|--------------------------|---------------|
+| MIG-1 (`wp-includes/`) | **jQuery se invoca en 11 páginas clonadas** (incl. home). Borrarlo las rompería. | Migrar esas páginas fuera del clon WP, luego borrar. |
+| PERF-1 (91MB imágenes) | **No hay imágenes huérfanas** (solo 2, ~0MB). Las 184 están en uso; solo 7 superan 1920px (3MB). Recomprimir 184 a ciegas degrada calidad sin diff revisable. | Migrar a `astro:assets <Image>` (srcset/AVIF) por página, con revisión visual. PR dedicado. |
+| DEP-1 (`npm audit`) | `npm audit fix` sin `--force` **no arregla nada** (los high requieren majors de `@astrojs/vercel` que pueden romper el build). El advisory de `ws` viene de `@vercel/functions` pero **no es alcanzable** en el path del webhook (no abre WebSockets). | PR dedicado: subir `@astrojs/vercel` y verificar build. |
+| SEC-1 (CSP nonce) | Migrar de `unsafe-inline`/`unsafe-eval` a nonce requiere tocar cada script inline (Astro + Mollie + GA + Pixel). Grande y arriesgado. | Esfuerzo separado, con pruebas de que nada se rompe. |
+
+### Pendiente de TI (operativo, fuera del código)
+- **SEO-1 staging:** `staging.welevelup.org` corre un deployment Vercel separado (la rama git `staging` fue borrada). El `noindex` por host aplicará cuando ese deployment corra este código; si el entorno staging ya no se usa, **considera eliminar el dominio/deployment** en Vercel.

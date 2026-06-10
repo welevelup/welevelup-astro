@@ -383,6 +383,31 @@
       "permanent": true
     },
     {
+      "source": "/feed",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/feed/(.*)",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/comments/feed",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/comments/feed/(.*)",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/:year(\\d{4})/:month(\\d{2})/:rest*",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
       "source": "/wp-admin(.*)",
       "destination": "/",
       "permanent": false

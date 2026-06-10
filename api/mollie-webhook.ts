@@ -166,7 +166,9 @@ function getRedis(): Redis | null {
 
 // Idempotency guard. Returns true if this caller won the claim (first to act).
 // If Redis is unavailable we return true (best-effort: never block a real email).
-async function claimOnce(redis: Redis | null, key: string, ttlSeconds = 86400): Promise<boolean> {
+// 90-day TTL: a payment's webhook can re-fire long after the charge (e.g. on
+// refund or chargeback), and we must never re-send the thank-you for it.
+async function claimOnce(redis: Redis | null, key: string, ttlSeconds = 90 * 86400): Promise<boolean> {
   if (!redis) return true;
   const result = await redis.set(key, '1', { nx: true, ex: ttlSeconds });
   return result === 'OK';
@@ -192,7 +194,11 @@ async function processPayment(paymentId: string, apiKey: string, webhookUrl: str
     meta = payment.metadata as Record<string, string>;
   }
 
-  const shouldEmail = (seq === 'oneoff' || seq === 'first') && !!meta?.donorEmail;
+  // A webhook can re-fire for an old payment when it gets refunded or charged
+  // back — its status stays "paid", so never thank a refunded payment.
+  const refunded = parseFloat((payment as { amountRefunded?: { value?: string } }).amountRefunded?.value ?? '0') > 0;
+
+  const shouldEmail = !refunded && (seq === 'oneoff' || seq === 'first') && !!meta?.donorEmail;
 
   if (shouldEmail && meta) {
     // Claim before sending so concurrent/duplicate webhooks can't double-send.

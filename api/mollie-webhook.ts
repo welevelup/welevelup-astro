@@ -1,7 +1,12 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createMollieClient, SubscriptionStatus } from '@mollie/api-client';
 import { Resend } from 'resend';
-import crypto from 'crypto';
+import { Redis } from '@upstash/redis';
+import { waitUntil } from '@vercel/functions';
+
+// Give the background work (Mollie API calls + email + GA4) room to finish
+// after we've already ACKed Mollie with a 200.
+export const config = { maxDuration: 30 };
 
 const FROM = 'Level Up <no-reply@welevelup.org>';
 const LOGO_URL = 'https://levelup.yourmovement.org/rails/active_storage/blobs/eyJfcmFpbHMiOnsibWVzc2FnZSI6IkJBaHBBc01XIiwiZXhwIjpudWxsLCJwdXIiOiJibG9iX2lkIn19--899d9333f326b8d370f2acf06f7fe589aef9efd5/image.png';
@@ -116,7 +121,8 @@ async function sendGA4Event({
   paymentId: string; amount: string; currency: string; recurring: boolean;
 }) {
   const measurementId = process.env.GA4_MEASUREMENT_ID;
-  const apiSecret = process.env.GA4_API_SECRET;
+  // The .env example documents GA4_MEASUREMENT_PROTOCOL_SECRET; accept either name.
+  const apiSecret = process.env.GA4_API_SECRET || process.env.GA4_MEASUREMENT_PROTOCOL_SECRET;
   if (!measurementId || !apiSecret) {
     console.log('[webhook] GA4 env vars missing, skipping');
     return;
@@ -151,122 +157,51 @@ async function sendGA4Event({
   }
 }
 
-function verifyMollieSignature(signature: string | undefined, secret: string | undefined, body: string): boolean {
-  if (!signature || !secret) {
-    console.error('[webhook] Missing signature or secret');
-    return false;
-  }
-  try {
-    // Mollie sends signature as "sha256=<hex>" format
-    // Extract the hex part after "sha256="
-    const signatureHex = signature.startsWith('sha256=') ? signature.slice(7) : signature;
-
-    // Calculate expected HMAC in hex format
-    const expectedHex = crypto.createHmac('sha256', secret).update(body).digest('hex');
-
-    // Compare hex strings directly (timing-safe)
-    const match = signatureHex === expectedHex;
-    console.log('[webhook] Signature verification:', match ? '✅ PASS' : '❌ FAIL');
-
-    return match;
-  } catch (err) {
-    console.error('[webhook] Signature verification error:', err);
-    return false;
-  }
+function getRedis(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  return new Redis({ url, token });
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  if (req.method !== 'POST') return res.status(405).send('Method not allowed');
+// Idempotency guard. Returns true if this caller won the claim (first to act).
+// If Redis is unavailable we return true (best-effort: never block a real email).
+async function claimOnce(redis: Redis | null, key: string, ttlSeconds = 86400): Promise<boolean> {
+  if (!redis) return true;
+  const result = await redis.set(key, '1', { nx: true, ex: ttlSeconds });
+  return result === 'OK';
+}
 
-  const apiKey = process.env.MOLLIE_API_KEY;
-  const webhookUrl = process.env.MOLLIE_WEBHOOK_URL;
-  const webhookSecret = process.env.MOLLIE_WEBHOOK_SECRET;
-
-  if (!apiKey || !webhookUrl) {
-    console.error('[webhook] missing env vars');
-    return res.status(500).send('Server misconfigured');
-  }
-
-  // Verify webhook signature BEFORE processing
-  const signature = req.headers['x-mollie-signature'] as string | undefined;
-  console.log('[webhook] Headers received:', Object.keys(req.headers));
-  console.log('[webhook] Signature header present?', !!signature, 'value:', signature?.slice(0, 30));
-
-  // Use raw body for signature verification to match Mollie's calculation
-  // Mollie calculates signature on the exact bytes sent, not on parsed JSON
-  let bodyString = '';
-  if ((req as any).rawBody) {
-    bodyString = (req as any).rawBody;
-    console.log('[webhook] Using rawBody for signature verification');
-  } else if (typeof req.body === 'string') {
-    bodyString = req.body;
-    console.log('[webhook] Using string body for signature verification');
-  } else {
-    // Fallback: stringify the parsed body (may fail if formatting doesn't match)
-    bodyString = JSON.stringify(req.body);
-    console.log('[webhook] Using stringified parsed body (may fail)');
-  }
-
-  console.log('[webhook] Body for signature:', bodyString.slice(0, 100));
-
-  // Verify webhook signature if available
-  // Note: Mollie may not always send X-Mollie-Signature header
-  // We rely on API verification (mollie.payments.get) for security instead
-  if (webhookSecret && signature) {
-    if (!verifyMollieSignature(signature, webhookSecret, bodyString)) {
-      console.warn('[webhook] ⚠️  Signature verification failed, but will proceed with API verification');
-    }
-  }
-  if (!webhookSecret) {
-    console.warn('[webhook] ⚠️  MOLLIE_WEBHOOK_SECRET not configured (relying on API verification)');
-  }
-
-  const { id, resource } = req.body as { id?: string; resource?: string };
-  if (!id) return res.status(400).send('Missing id');
-
-  console.log(`[webhook] Received event: resource=${resource}, id=${id}`);
-  console.log(`[webhook] Full body:`, JSON.stringify(req.body, null, 2));
-
-  // Detect resource type by ID prefix if resource is undefined
-  const isPayment = resource === 'payment' || (id?.startsWith('tr_'));
-  const isSubscription = resource === 'subscription' || (id?.startsWith('sub_'));
-
-  if (!isPayment && !isSubscription) {
-    console.log(`[webhook] Ignoring unknown resource type: ${resource}`);
-    return res.status(200).send('OK');
-  }
-
-  if (isSubscription) {
-    console.log(`[webhook] Ignoring subscription event: ${id}`);
-    return res.status(200).send('OK');
-  }
-
-  const paymentId = id;
+// All the heavy work, run AFTER we've already returned 200 to Mollie.
+async function processPayment(paymentId: string, apiKey: string, webhookUrl: string) {
   const mollie = createMollieClient({ apiKey });
+  const redis = getRedis();
 
-  try {
-    const payment = await mollie.payments.get(paymentId);
-    const seq = payment.sequenceType;
-    const status = payment.status;
-    console.log(`[webhook] id=${paymentId} status=${status} seq=${seq}`);
+  // Authoritative status comes from the Mollie API, not the (untrusted) body.
+  const payment = await mollie.payments.get(paymentId);
+  const seq = payment.sequenceType;
+  const status = payment.status;
+  console.log(`[webhook] id=${paymentId} status=${status} seq=${seq}`);
 
-    if (status !== 'paid') return res.status(200).send('OK');
+  if (status !== 'paid') return;
 
-    let meta: Record<string, string> | null = null;
-    if (payment.metadata && typeof payment.metadata === 'string') {
-      try { meta = JSON.parse(payment.metadata); } catch { meta = null; }
-    } else if (payment.metadata && typeof payment.metadata === 'object') {
-      meta = payment.metadata as Record<string, string>;
-    }
+  let meta: Record<string, string> | null = null;
+  if (payment.metadata && typeof payment.metadata === 'string') {
+    try { meta = JSON.parse(payment.metadata); } catch { meta = null; }
+  } else if (payment.metadata && typeof payment.metadata === 'object') {
+    meta = payment.metadata as Record<string, string>;
+  }
 
-    console.log(`[webhook] meta=${JSON.stringify(meta)}`);
+  const shouldEmail = (seq === 'oneoff' || seq === 'first') && !!meta?.donorEmail;
 
-    const shouldEmail = (seq === 'oneoff' || seq === 'first') && !!meta?.donorEmail;
-    console.log(`[webhook] shouldEmail=${shouldEmail} email=${meta?.donorEmail ?? 'none'}`);
-
-    if (shouldEmail && meta) {
+  if (shouldEmail && meta) {
+    // Claim before sending so concurrent/duplicate webhooks can't double-send.
+    const emailKey = `webhook:emailed:${paymentId}`;
+    const won = await claimOnce(redis, emailKey);
+    if (!won) {
+      console.log(`[webhook] email already sent for ${paymentId}, skipping`);
+    } else {
       try {
-        console.log(`[webhook] 📧 sending email to ${meta.donorEmail}, name=${meta.donorName}, amount=${meta.amount}`);
         await sendDonationConfirmation({
           to: meta.donorEmail,
           name: meta.donorName || '',
@@ -276,49 +211,78 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
         console.log(`[webhook] ✅ email sent to ${meta.donorEmail}`);
       } catch (emailErr) {
-        console.error('[webhook] ⚠️  email FAILED:', emailErr instanceof Error ? emailErr.message : String(emailErr));
-        console.error('[webhook] email error stack:', emailErr);
+        // Release the claim so a later legitimate redelivery can retry.
+        if (redis) { try { await redis.del(emailKey); } catch { /* noop */ } }
+        console.error('[webhook] ⚠️ email FAILED:', emailErr instanceof Error ? emailErr.message : String(emailErr));
       }
-    } else {
-      console.log(`[webhook] ⏭️  skipping email: shouldEmail=${shouldEmail}, meta=${!!meta}, donorEmail=${meta?.donorEmail}`);
     }
-
-    await sendGA4Event({
-      paymentId,
-      amount: meta?.amount || payment.amount.value,
-      currency: payment.amount.currency || 'GBP',
-      recurring: meta?.type === 'recurring',
-    });
-
-    if (seq !== 'first' || !meta || meta.type !== 'recurring') return res.status(200).send('OK');
-
-    const customerId = payment.customerId;
-    if (!customerId) return res.status(200).send('OK');
-
-    const existing = await mollie.customerSubscriptions.page({ customerId });
-    const duplicate = Array.from(existing as Iterable<{ status: string; id: string }>).find(
-      (s) => s.status === SubscriptionStatus.active || s.status === SubscriptionStatus.pending
-    );
-
-    if (duplicate) {
-      console.log(`[webhook] subscription already exists: ${duplicate.id}`);
-      return res.status(200).send('OK');
-    }
-
-    const amount = meta.amount ?? payment.amount.value;
-    const subscription = await mollie.customerSubscriptions.create({
-      customerId,
-      amount: { currency: 'GBP', value: parseFloat(amount).toFixed(2) },
-      interval: '1 month',
-      description: `Level Up — Monthly donation (£${amount}/month)`,
-      webhookUrl,
-      metadata: { source: 'astro', donorEmail: meta.donorEmail },
-    });
-
-    console.log(`[webhook] subscription created: ${subscription.id} for ${customerId}`);
-    return res.status(200).send('OK');
-  } catch (err) {
-    console.error('[webhook] error:', err);
-    return res.status(500).send('Error');
   }
+
+  // GA4: transaction_id dedupes downstream — fire once per processed webhook.
+  await sendGA4Event({
+    paymentId,
+    amount: meta?.amount || payment.amount.value,
+    currency: payment.amount.currency || 'GBP',
+    recurring: meta?.type === 'recurring',
+  });
+
+  // Create the recurring subscription only on the first payment of a recurring flow.
+  if (seq !== 'first' || !meta || meta.type !== 'recurring') return;
+
+  const customerId = payment.customerId;
+  if (!customerId) return;
+
+  const existing = await mollie.customerSubscriptions.page({ customerId });
+  const duplicate = Array.from(existing as Iterable<{ status: string; id: string }>).find(
+    (s) => s.status === SubscriptionStatus.active || s.status === SubscriptionStatus.pending
+  );
+  if (duplicate) {
+    console.log(`[webhook] subscription already exists: ${duplicate.id}`);
+    return;
+  }
+
+  const amount = meta.amount ?? payment.amount.value;
+  const subscription = await mollie.customerSubscriptions.create({
+    customerId,
+    amount: { currency: 'GBP', value: parseFloat(amount).toFixed(2) },
+    interval: '1 month',
+    description: `Level Up — Monthly donation (£${amount}/month)`,
+    webhookUrl,
+    metadata: { source: 'astro', donorEmail: meta.donorEmail },
+  });
+  console.log(`[webhook] subscription created: ${subscription.id} for ${customerId}`);
+}
+
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'POST') return res.status(405).send('Method not allowed');
+
+  const apiKey = process.env.MOLLIE_API_KEY;
+  const webhookUrl = process.env.MOLLIE_WEBHOOK_URL;
+  if (!apiKey || !webhookUrl) {
+    console.error('[webhook] missing env vars');
+    return res.status(500).send('Server misconfigured');
+  }
+
+  const { id, resource } = req.body as { id?: string; resource?: string };
+  if (!id) return res.status(400).send('Missing id');
+
+  const isPayment = resource === 'payment' || id.startsWith('tr_');
+
+  // ACK Mollie IMMEDIATELY. This is the core fix: responding 200 fast keeps
+  // Mollie from entering its multi-hour retry backoff, which was the cause of
+  // confirmations and emails arriving hours late.
+  res.status(200).send('OK');
+
+  // Subscription/renewal events and unknown resources need no work here.
+  if (!isPayment) {
+    console.log(`[webhook] no-op for resource=${resource} id=${id}`);
+    return;
+  }
+
+  // Do the real work in the background; waitUntil keeps the function alive.
+  waitUntil(
+    processPayment(id, apiKey, webhookUrl).catch((err) => {
+      console.error('[webhook] background processing failed:', err);
+    })
+  );
 }

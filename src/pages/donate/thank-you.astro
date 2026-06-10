@@ -4,31 +4,57 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
+import { createMollieClient } from '@mollie/api-client';
+import { Redis } from '@upstash/redis';
 
 const { headInner, bodyClass } = extract(homeRaw);
 
-// Get payment details from URL
-const amount = Astro.url.searchParams.get('amount') || '0';
-const type = Astro.url.searchParams.get('type') || 'one-time';
+// `ref` is an opaque token set by create-donation.ts and mapped to the Mollie
+// payment id in Redis. We resolve it server-side to verify the REAL payment
+// status, instead of trusting a cookie (which was lost on Mollie's cross-site
+// redirect and stranded donors back on /donate).
+const ref = Astro.url.searchParams.get('ref') || '';
+const amountParam = Astro.url.searchParams.get('amount') || '';
+const typeParam = Astro.url.searchParams.get('type') || 'one-time';
 
-console.log('[thank-you] Page loaded:', { amount, type, cookies: Astro.request.headers.get('cookie')?.slice(0, 50) });
+type DonationStatus = 'paid' | 'pending' | 'failed' | 'unknown';
+let status: DonationStatus = 'unknown';
+let displayAmount = amountParam;
 
-// Basic validation: if no amount, redirect to donation page
-const amountNum = parseFloat(amount);
-if (amountNum <= 0) {
-  console.log('[thank-you] Redirecting: amount invalid', amountNum);
-  return Astro.redirect('/donate');
+if (/^[a-f0-9]{32}$/.test(ref)) {
+  try {
+    const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+    const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+    const apiKey = process.env.MOLLIE_API_KEY;
+    if (redisUrl && redisToken && apiKey) {
+      const redis = new Redis({ url: redisUrl, token: redisToken });
+      const paymentId = await redis.get(`donation:${ref}`);
+      if (paymentId && typeof paymentId === 'string') {
+        const mollie = createMollieClient({ apiKey });
+        const payment = await mollie.payments.get(paymentId);
+        displayAmount = payment.amount?.value || displayAmount;
+        if (payment.status === 'paid') status = 'paid';
+        else if (payment.status === 'open' || payment.status === 'pending') status = 'pending';
+        else status = 'failed'; // failed, canceled, expired
+      }
+    }
+  } catch (err) {
+    // Redis or Mollie hiccup: never strand the donor — fall back to a neutral
+    // confirmation (we just don't fire analytics for an unverified donation).
+    console.error('[thank-you] status check failed:', err instanceof Error ? err.message : String(err));
+    status = 'unknown';
+  }
 }
 
-// Verify payment cookie (set by create-donation.ts after creating payment)
-const cookies = Astro.request.headers.get('cookie') || '';
-const hasPaymentCookie = cookies.includes('paymentId=');
-console.log('[thank-you] Payment cookie check:', { hasPaymentCookie, cookieContent: cookies.slice(0, 100) });
+const isMonthly = typeParam === 'monthly';
 
-if (!hasPaymentCookie) {
-  console.log('[thank-you] Redirecting: no payment cookie (direct access attempt)');
-  return Astro.redirect('/donate');
-}
+const COPY: Record<DonationStatus, { label: string; heading: string }> = {
+  paid:    { label: 'Donation received', heading: 'Thank you<br/>for standing<br/>with us.' },
+  pending: { label: 'Payment processing', heading: 'Almost<br/>there.' },
+  failed:  { label: 'Payment not completed', heading: "Something<br/>went wrong." },
+  unknown: { label: 'Thank you', heading: 'Thank you<br/>for standing<br/>with us.' },
+};
+const copy = COPY[status];
 ---
 <Layout
   headHtml={headInner}
@@ -41,38 +67,58 @@ if (!hasPaymentCookie) {
 
   <main class="lu-thanks" id="main-content">
     <div class="lu-thanks__hero">
-      <p class="lu-thanks__label">Donation received</p>
-      <h1 class="lu-thanks__heading">Thank you<br/>for standing<br/>with us.</h1>
+      <p class="lu-thanks__label">{copy.label}</p>
+      <h1 class="lu-thanks__heading" set:html={copy.heading} />
     </div>
 
     <div class="lu-thanks__body">
-      <div class="lu-thanks__message">
-        <p>Your donation is being processed. You'll receive a confirmation email shortly.</p>
-        <p>If you set up a monthly donation, your subscription starts once this first payment clears — usually within minutes for cards.</p>
-      </div>
+      {status === 'failed' ? (
+        <div class="lu-thanks__message">
+          <p>Your payment wasn't completed, so you haven't been charged.</p>
+          <p>If that wasn't intentional, you can try again — it only takes a moment.</p>
+          <div class="lu-thanks__actions">
+            <a href="/donate" class="lu-thanks__btn-primary">Try again →</a>
+            <a href="/" class="lu-thanks__btn-secondary">Back to home</a>
+          </div>
+          <p class="lu-thanks__contact">Need a hand? <a href="mailto:hello@welevelup.org">hello@welevelup.org</a></p>
+        </div>
+      ) : (
+        <>
+          <div class="lu-thanks__message">
+            {status === 'pending' ? (
+              <p>Your payment is being confirmed. As soon as it clears you'll receive a confirmation email — usually within minutes for cards.</p>
+            ) : (
+              <p>Your donation is being processed. You'll receive a confirmation email shortly.</p>
+            )}
+            {isMonthly && (
+              <p>Your monthly donation starts once this first payment clears, and you can manage or cancel it any time.</p>
+            )}
+          </div>
 
-      <div class="lu-thanks__impact">
-        <p class="lu-thanks__impact-label">Your donation powers</p>
-        <ul class="lu-thanks__list">
-          <li>Campaigns for abortion decriminalisation in England and Wales</li>
-          <li>Ending the imprisonment of pregnant women</li>
-          <li>Dignified media coverage of domestic abuse deaths</li>
-          <li>Community bystander training — We Protect Us</li>
-        </ul>
-      </div>
+          <div class="lu-thanks__impact">
+            <p class="lu-thanks__impact-label">Your donation powers</p>
+            <ul class="lu-thanks__list">
+              <li>Campaigns for abortion decriminalisation in England and Wales</li>
+              <li>Ending the imprisonment of pregnant women</li>
+              <li>Dignified media coverage of domestic abuse deaths</li>
+              <li>Community bystander training — We Protect Us</li>
+            </ul>
+          </div>
 
-      <div class="lu-thanks__actions">
-        <a href="/active-campaigns/" class="lu-thanks__btn-primary">See our campaigns →</a>
-        <a href="/" class="lu-thanks__btn-secondary">Back to home</a>
-      </div>
+          <div class="lu-thanks__actions">
+            <a href="/active-campaigns/" class="lu-thanks__btn-primary">See our campaigns →</a>
+            <a href="/" class="lu-thanks__btn-secondary">Back to home</a>
+          </div>
 
-      <p class="lu-thanks__contact">Questions? <a href="mailto:hello@welevelup.org">hello@welevelup.org</a></p>
+          <p class="lu-thanks__contact">Questions? <a href="mailto:hello@welevelup.org">hello@welevelup.org</a></p>
+        </>
+      )}
     </div>
   </main>
 
   <Footer />
 
-  {import.meta.env.PUBLIC_META_PIXEL_ID && (
+  {status === 'paid' && import.meta.env.PUBLIC_META_PIXEL_ID && (
     <script>
       if (typeof fbq !== 'undefined') {
         fbq('track', 'Donate');
@@ -80,19 +126,18 @@ if (!hasPaymentCookie) {
     </script>
   )}
 
-  <script is:inline>
+  <script is:inline define:vars={{ status, displayAmount, isMonthly }}>
     (function () {
-      // Intercept back button to go to /donate instead of Mollie
+      // Send the back button to /donate instead of back into the Mollie flow.
       window.addEventListener('popstate', () => {
         window.location.href = '/donate';
       });
-
-      // Push a new history entry so back button triggers popstate
       window.history.pushState({ isThankYou: true }, document.title, window.location.href);
 
-      const params = new URLSearchParams(window.location.search);
-      const amount = parseFloat(params.get('amount') || '0');
-      const isMonthly = params.get('type') === 'monthly';
+      // Only fire the purchase conversion for a server-verified PAID donation.
+      if (status !== 'paid') return;
+      const amount = parseFloat(displayAmount || '0');
+      if (amount <= 0) return;
 
       function fireEvent() {
         if (typeof gtag !== 'function') return;

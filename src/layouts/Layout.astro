@@ -24,7 +24,10 @@ const {
 } = Astro.props;
 
 const siteBase = 'https://welevelup.org';
-const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
+// Normalise the path so /page and /page/ never produce two different
+// canonicals (Google indexed both during the WP→Astro migration).
+const normalisedPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const canonicalUrl = ogUrl ?? (siteBase + normalisedPath);
 ---
 <!doctype html>
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">

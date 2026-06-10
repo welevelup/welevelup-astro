@@ -248,15 +248,27 @@ async function processPayment(paymentId: string, apiKey: string, webhookUrl: str
   }
 
   const amount = meta.amount ?? payment.amount.value;
+
+  // CRITICAL: set startDate one interval in the FUTURE. The donor already paid
+  // the first month via this initial payment; without startDate Mollie charges
+  // the subscription's first cycle TODAY too, double-charging them on signup.
+  // Anchor the first recurring charge one month out (clamp day to 28 so months
+  // with fewer days never skip a cycle).
+  const next = new Date(payment.paidAt ?? payment.createdAt ?? new Date().toISOString());
+  next.setUTCMonth(next.getUTCMonth() + 1);
+  if (next.getUTCDate() > 28) next.setUTCDate(28);
+  const startDate = next.toISOString().slice(0, 10);
+
   const subscription = await mollie.customerSubscriptions.create({
     customerId,
     amount: { currency: 'GBP', value: parseFloat(amount).toFixed(2) },
     interval: '1 month',
+    startDate,
     description: `Level Up — Monthly donation (£${amount}/month)`,
     webhookUrl,
     metadata: { source: 'astro', donorEmail: meta.donorEmail },
   });
-  console.log(`[webhook] subscription created: ${subscription.id} for ${customerId}`);
+  console.log(`[webhook] subscription created: ${subscription.id} for ${customerId}, first recurring charge ${startDate}`);
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {

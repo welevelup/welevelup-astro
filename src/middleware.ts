@@ -2,11 +2,23 @@ import { defineMiddleware } from 'astro:middleware';
 import { isAuthenticated } from './lib/admin-auth';
 import { Redis } from '@upstash/redis';
 
+// Only the canonical production host should be indexable. Any other host
+// (staging.welevelup.org, *.vercel.app previews) gets a noindex header so
+// Google can't index a duplicate of the site.
+const CANONICAL_HOST = 'welevelup.org';
+
+function applyNoindex(host: string, response: Response): Response {
+  if (host !== CANONICAL_HOST) {
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+  }
+  return response;
+}
+
 export const onRequest = defineMiddleware(async (context, next) => {
-  const { pathname, searchParams } = context.url;
+  const { pathname, searchParams, hostname } = context.url;
 
   if (pathname.startsWith('/admin/login') || pathname.startsWith('/levelup/login') || pathname.startsWith('/api/')) {
-    return next();
+    return applyNoindex(hostname, await next());
   }
 
   if (pathname.startsWith('/admin') || pathname.startsWith('/levelup')) {
@@ -37,5 +49,5 @@ export const onRequest = defineMiddleware(async (context, next) => {
     }
   }
 
-  return next();
+  return applyNoindex(hostname, await next());
 });

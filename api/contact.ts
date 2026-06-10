@@ -1,18 +1,28 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Resend } from 'resend';
+import { Redis } from '@upstash/redis';
 
-const rateLimit = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_SECONDS = 15 * 60;
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimit.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimit.set(ip, { count: 1, resetAt: now + 15 * 60 * 1000 });
+// Rate limit via Upstash Redis. An in-memory Map does NOT work on Vercel:
+// each invocation can hit a different (or cold) instance, so the counter never
+// accumulates. Redis is shared across instances. Fails open if Redis is
+// unconfigured (local dev) — never blocks a legitimate message.
+async function isRateLimited(ip: string): Promise<boolean> {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return false;
+  try {
+    const redis = new Redis({ url, token });
+    const key = `contact:rl:${ip}`;
+    const count = await redis.incr(key);
+    if (count === 1) await redis.expire(key, RATE_LIMIT_WINDOW_SECONDS);
+    return count > RATE_LIMIT_MAX;
+  } catch (err) {
+    console.error('[contact] rate limit check failed:', err);
     return false;
   }
-  if (entry.count >= 5) return true;
-  entry.count++;
-  return false;
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -28,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ? req.headers['x-forwarded-for'][0]
         : null) ?? 'unknown';
 
-  if (isRateLimited(ip.trim())) return res.status(429).json({ error: 'Too many requests' });
+  if (await isRateLimited(ip.trim())) return res.status(429).json({ error: 'Too many requests' });
 
   const body = req.body as Record<string, unknown>;
   const name = String(body?.name ?? '').trim();

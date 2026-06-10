@@ -58,6 +58,21 @@ const devices = seo?.devices ?? [];
 const geography = (seo?.geography ?? []).slice(0, 5);
 const appearance = seo?.searchAppearance ?? [];
 const maxAppearance = appearance.reduce((m, a) => Math.max(m, a.count || 0), 1);
+
+// ── ACTIONABLE OPPORTUNITIES (optional — tolerate older cached payloads) ──
+const opportunities = seo?.opportunities ?? [];
+const positionBuckets = seo?.positionBuckets ?? [];
+const top3Bucket = positionBuckets.find((b) => b.bucket === 'Top 3');
+const gained = seo?.gainedLost?.gained ?? [];
+const lost = seo?.gainedLost?.lost ?? [];
+const hasInsights = opportunities.length > 0 || positionBuckets.length > 0 || gained.length > 0 || lost.length > 0;
+// Colours for the 100% stacked position bar (best → worst).
+const posBucketColors: Record<string, string> = {
+  'Top 3': '#15803D',
+  '4–10': '#5B4FCF',
+  '11–20': '#A89CED',
+  '20+': 'rgba(12,10,62,0.18)',
+};
 ---
 <AdminShell
   active="search"
@@ -119,6 +134,99 @@ const maxAppearance = appearance.reduce((m, a) => Math.max(m, a.count || 0), 1);
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- OPPORTUNITIES -->
+      <section class="section">
+        <div class="section-title">Opportunities</div>
+        <p class="kpi-desc" style="margin-bottom:12px;max-width:70ch">
+          Search terms where Level Up almost ranks — improving these pages could win clicks without ads.
+        </p>
+        {hasInsights ? (
+          <>
+            {opportunities.length ? (
+              <div class="table-wrap">
+                <table class="data">
+                  <thead>
+                    <tr>
+                      <th scope="col">Search term</th>
+                      <th scope="col" class="num"><span class="th-tip">Seen <span class="tip" tabindex="0" role="note" aria-label="What seen means">ⓘ<span class="tip-text">Times Level Up appeared in Google results for this term (impressions).</span></span></span></th>
+                      <th scope="col" class="num">Clicks</th>
+                      <th scope="col" class="num"><span class="th-tip">Position <span class="tip" tabindex="0" role="note" aria-label="What position means">ⓘ<span class="tip-text">Average Google ranking for this term — lower is better. These sit just below the top.</span></span></span></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {opportunities.map((o) => (
+                      <tr>
+                        <td style="font-weight:600">{o.query}</td>
+                        <td class="num">{fmtNum(o.impressions)}</td>
+                        <td class="num">{fmtNum(o.clicks)}</td>
+                        <td class="num">#{Number(o.position).toFixed(1)}</td>
+                        <td><span class="chip chip-new">fix candidate</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div class="empty">No near-miss search terms right now.</div>
+            )}
+
+            <!-- POSITION BUCKETS (100% stacked) -->
+            {positionBuckets.length > 0 && (
+              <div class="card" style="margin-top:16px">
+                <div class="section-title" style="margin-bottom:10px">
+                  How visible you are
+                  <span class="tip" tabindex="0" role="note" aria-label="What this bar means">ⓘ<span class="tip-text">Share of the times you appear in Google, split by how high you rank.</span></span>
+                </div>
+                {top3Bucket && (
+                  <div class="kpi-desc" style="margin-bottom:12px">
+                    You appear in the top 3 results <strong style="color:var(--text)">{top3Bucket.pct}%</strong> of the time.
+                  </div>
+                )}
+                <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+                  {positionBuckets.map((b) => (
+                    b.pct > 0 && (
+                      <span style={`width:${b.pct}%;background:${posBucketColors[b.bucket] || 'var(--violet-soft)'}`} title={`${b.bucket}: ${b.pct}%`}></span>
+                    )
+                  ))}
+                </div>
+                <div class="chart-legend" style="margin-top:12px">
+                  {positionBuckets.map((b) => (
+                    <span class="legend-item"><span class="legend-swatch" style={`background:${posBucketColors[b.bucket] || 'var(--violet-soft)'}`}></span>{b.bucket} {b.pct}%</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- GAINED / LOST -->
+            {(gained.length > 0 || lost.length > 0) && (
+              <div class="grid-2" style="margin-top:16px">
+                <div class="card">
+                  <div class="section-title" style="margin-bottom:12px;color:var(--pos)">New search terms <span class="tip" tabindex="0" role="note" aria-label="What new search terms means">ⓘ<span class="tip-text">Terms people now find you for that didn't show up in the previous 28 days.</span></span></div>
+                  {gained.length ? gained.map((g) => (
+                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border)">
+                      <span style="font-weight:600">{g.query}</span>
+                      <span style="color:var(--text-2);font-variant-numeric:tabular-nums">{fmtNum(g.clicks)} clicks</span>
+                    </div>
+                  )) : <div class="kpi-desc">No new terms this period.</div>}
+                </div>
+                <div class="card">
+                  <div class="section-title" style="margin-bottom:12px;color:var(--neg)">Lost search terms <span class="tip" tabindex="0" role="note" aria-label="What lost search terms means">ⓘ<span class="tip-text">Terms you used to show up for that have dropped out in the last 28 days.</span></span></div>
+                  {lost.length ? lost.map((l) => (
+                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border)">
+                      <span style="font-weight:600">{l.query}</span>
+                      <span style="color:var(--text-2);font-variant-numeric:tabular-nums">{fmtNum(l.clicks)} clicks</span>
+                    </div>
+                  )) : <div class="kpi-desc">No lost terms this period.</div>}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load opportunities.</div>
+        )}
       </section>
 
       <!-- CHART -->

@@ -1,7 +1,7 @@
 ---
 export const prerender = false;
 import AdminShell from '../../components/AdminShell.astro';
-import { stackedMonthlyChart } from '../../lib/admin-charts';
+import { stackedMonthlyChart, joinedChurnedChart } from '../../lib/admin-charts';
 import { fmtMoney, fmtMoney0, fmtNum, fmtDay, computeDelta } from '../../lib/admin-format';
 import { getAdminData } from '../../lib/admin-data';
 import type { DonationData, MonthlyTotal } from '../../lib/admin-data';
@@ -71,6 +71,21 @@ const failed = donations?.failedTransactions ?? [];
 // newest-first month rows for the table
 const monthlyDesc = [...monthly].reverse();
 const mLabel = (m: string) => (m || '').slice(0, 7);
+
+// ── DONOR INSIGHTS (optional — tolerate older cached payloads) ──
+const insights = donations?.donorInsights ?? null;
+const flows = insights?.subscriberFlows ?? [];
+const lastFlow = flows.length ? flows[flows.length - 1] : null;
+const flowChart = flows.length
+  ? joinedChurnedChart(flows, 'New vs lost monthly donors over the last 12 months')
+  : '';
+const buckets = insights?.giftSizeBuckets ?? [];
+const maxBucketCount = buckets.reduce((m, b) => Math.max(m, b.count || 0), 1);
+const topBucket = buckets.reduce<{ bucket: string; count: number } | null>(
+  (best, b) => (!best || b.count > best.count ? { bucket: b.bucket, count: b.count } : best),
+  null
+);
+const split = insights?.splitPct ?? null;
 ---
 <AdminShell
   active="donations"
@@ -134,6 +149,94 @@ const mLabel = (m: string) => (m || '').slice(0, 7);
           </div>
         </div>
       </section>
+
+      <!-- DONOR INSIGHTS -->
+      {insights ? (
+        <section class="section">
+          <div class="section-title">Donor insights</div>
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="kpi-label">Expected monthly income <span class="tip" tabindex="0" role="note" aria-label="What expected monthly income means">ⓘ<span class="tip-text">The total you can expect each month from current recurring donors (their most recent gift, last full month). Also called MRR.</span></span></div>
+              <div class="kpi-value" style="font-size:28px">{fmtMoney(insights.mrr)}</div>
+              <div class="kpi-desc">From people giving every month.</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Average monthly gift <span class="tip" tabindex="0" role="note" aria-label="What average monthly gift means">ⓘ<span class="tip-text">Recurring money received last full month, divided by the number of monthly donors.</span></span></div>
+              <div class="kpi-value" style="font-size:28px">{fmtMoney(insights.avgMonthlyGift)}</div>
+              <div class="kpi-desc">Typical size of a monthly donation.</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">New donors last month <span class="tip" tabindex="0" role="note" aria-label="What new donors last month means">ⓘ<span class="tip-text">Monthly donors who started giving last month and weren't there the month before.</span></span></div>
+              <div class="kpi-value" style="font-size:28px;color:var(--pos)">{lastFlow ? `+${fmtNum(lastFlow.joined)}` : '—'}</div>
+              <div class="kpi-desc">People who started giving monthly.</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Lost donors last month <span class="tip" tabindex="0" role="note" aria-label="What lost donors last month means">ⓘ<span class="tip-text">Monthly donors who were giving the month before but stopped last month.</span></span></div>
+              <div class="kpi-value" style="font-size:28px;color:var(--neg)">{lastFlow ? fmtNum(lastFlow.churned) : '—'}</div>
+              <div class="kpi-desc">People who stopped giving monthly.</div>
+            </div>
+          </div>
+
+          <!-- JOINED vs CHURNED CHART -->
+          {flowChart && (
+            <div class="card" style="margin-top:16px">
+              <div class="section-title" style="margin-bottom:8px">New vs lost monthly donors</div>
+              <Fragment set:html={flowChart} />
+              <div class="chart-legend">
+                <span class="legend-item"><span class="legend-swatch" style="background:#15803D"></span>Joined</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#B91C1C"></span>Lost</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>Net change</span>
+              </div>
+            </div>
+          )}
+
+          <!-- GIFT SIZE + SPLIT -->
+          <div class="grid-2" style="margin-top:16px">
+            <div class="card">
+              <div class="section-title" style="margin-bottom:12px">How much people give</div>
+              {topBucket && topBucket.count > 0 && (
+                <div class="kpi-desc" style="margin-bottom:12px">Most people give <strong style="color:var(--text)">{topBucket.bucket}</strong>.</div>
+              )}
+              {buckets.map((b) => {
+                const pct = Math.round(((b.count || 0) / maxBucketCount) * 100);
+                return (
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+                    <span style="width:72px;font-size:13px;flex-shrink:0;font-weight:600">{b.bucket}</span>
+                    <span class="minibar" style="flex:1">
+                      <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                      <span class="minibar-val">{fmtNum(b.count)}</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div class="card">
+              <div class="section-title" style="margin-bottom:12px">Recurring vs one-off <span class="tip" tabindex="0" role="note" aria-label="What recurring vs one-off means">ⓘ<span class="tip-text">Share of this year's money from monthly donors versus single gifts.</span></span></div>
+              {split ? (
+                <>
+                  <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+                    <span style={`width:${split.recurring}%;background:#0C0A3E`} title={`Recurring ${split.recurring}%`}></span>
+                    <span style={`width:${split.oneOff}%;background:#A89CED`} title={`One-off ${split.oneOff}%`}></span>
+                  </div>
+                  <div class="chart-legend" style="margin-top:12px">
+                    <span class="legend-item"><span class="legend-swatch" style="background:#0C0A3E"></span>Recurring {split.recurring}%</span>
+                    <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>One-off {split.oneOff}%</span>
+                  </div>
+                  <div class="kpi-desc" style="margin-top:10px">Average one-off gift: <strong style="color:var(--text)">{fmtMoney(insights.avgOneOffGift)}</strong> · {fmtNum(insights.repeatOneOffDonors)} people gave more than once.</div>
+                </>
+              ) : (
+                <div class="kpi-desc">No split data yet.</div>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section class="section">
+          <div class="section-title">Donor insights</div>
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load donor insights.</div>
+        </section>
+      )}
 
       <!-- 12-MONTH CHART -->
       <section class="section">

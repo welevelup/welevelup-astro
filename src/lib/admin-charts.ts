@@ -154,3 +154,59 @@ export function stackedMonthlyChart(
 
   return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="img" aria-label="${esc(ariaLabel)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(ariaLabel)}</title>${axis}${bars}${xlabels}</svg>`;
 }
+
+/**
+ * Diverging monthly bar chart: donors joined (green, up) vs churned (red, down),
+ * with a net line drawn across the months. Built for subscriber flow insights.
+ */
+export function joinedChurnedChart(
+  data: Array<{ month: string; joined: number; churned: number; net: number }>,
+  ariaLabel: string
+): string {
+  if (!data || data.length === 0) return '';
+  const W = 820, H = 260, PL = 36, PR = 16, PT = 20, PB = 28;
+  const gW = W - PL - PR, gH = H - PT - PB;
+  const green = '#15803D';
+  const red = '#B91C1C';
+  const netColor = '#5B4FCF';
+  const n = data.length;
+  const slot = gW / n;
+  const bw = Math.max(4, slot * 0.5);
+
+  const maxUp = Math.max(...data.map((d) => d.joined), 1);
+  const maxDown = Math.max(...data.map((d) => d.churned), 1);
+  const maxMag = Math.max(maxUp, maxDown);
+  // Zero line sits in the middle; bars grow up (joined) and down (churned).
+  const zeroY = PT + gH / 2;
+  const halfH = gH / 2;
+  const upH = (v: number) => (v / maxMag) * halfH;
+
+  const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const mLabel = (m: string) => monthNames[parseInt((m || '').slice(5), 10)] || (m || '').slice(5);
+
+  let bars = '', xlabels = '';
+  data.forEach((d, i) => {
+    const cx = PL + i * slot + slot / 2;
+    const x = cx - bw / 2;
+    const jh = upH(d.joined);
+    const ch = upH(d.churned);
+    bars += `<rect x="${x.toFixed(1)}" y="${(zeroY - jh).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, jh).toFixed(1)}" rx="1.5" fill="${green}"><title>${esc(mLabel(d.month))}: ${d.joined} joined</title></rect>`;
+    bars += `<rect x="${x.toFixed(1)}" y="${zeroY.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, ch).toFixed(1)}" rx="1.5" fill="${red}"><title>${esc(mLabel(d.month))}: ${d.churned} lost</title></rect>`;
+    xlabels += `<text x="${cx.toFixed(1)}" y="${H - 8}" font-size="10" fill="var(--text-3)" text-anchor="middle" font-family="DM Sans,sans-serif">${esc(mLabel(d.month))}</text>`;
+  });
+
+  // Net line across the months.
+  const netPts = data.map((d, i) => {
+    const cx = PL + i * slot + slot / 2;
+    const y = zeroY - upH(d.net);
+    return `${cx.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const netLine = `<polyline points="${netPts}" fill="none" stroke="${netColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>`;
+
+  let axis = '';
+  axis += `<line x1="${PL}" y1="${zeroY.toFixed(1)}" x2="${W - PR}" y2="${zeroY.toFixed(1)}" stroke="var(--border)" stroke-width="1"/>`;
+  axis += `<text x="${PL - 6}" y="${(PT + 4).toFixed(1)}" font-size="10" fill="${green}" text-anchor="end" font-family="DM Sans,sans-serif">+${maxMag}</text>`;
+  axis += `<text x="${PL - 6}" y="${(PT + gH).toFixed(1)}" font-size="10" fill="${red}" text-anchor="end" font-family="DM Sans,sans-serif">-${maxMag}</text>`;
+
+  return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="img" aria-label="${esc(ariaLabel)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(ariaLabel)}</title>${axis}${bars}${netLine}${xlabels}</svg>`;
+}

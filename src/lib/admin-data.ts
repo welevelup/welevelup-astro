@@ -57,6 +57,17 @@ export interface MonthlyTotal {
   total_lost: number;
 }
 
+// Derived donor insights. All optional so pages tolerate older cached payloads.
+export interface DonorInsights {
+  mrr: number;
+  avgMonthlyGift: number;
+  avgOneOffGift: number;
+  splitPct: { recurring: number; oneOff: number };
+  giftSizeBuckets: Array<{ bucket: string; count: number; amount: number }>;
+  subscriberFlows: Array<{ month: string; joined: number; churned: number; net: number }>;
+  repeatOneOffDonors: number;
+}
+
 export interface DonationData {
   totalMonth: number;
   totalYear: number;
@@ -68,6 +79,7 @@ export interface DonationData {
   cancelledSubscriptions?: Array<{ date: string; amount: number; currency: string; gateway: string; payer: string }>;
   failedTransactions?: Array<{ date: string; amount: number; currency: string; gateway: string; payer: string }>;
   monthlyTotals: MonthlyTotal[];
+  donorInsights?: DonorInsights;
 }
 
 // Shapes below mirror what the sync endpoints write. All newer fields are optional
@@ -90,6 +102,11 @@ export interface AnalyticsData {
   prevRevenue?: number;
   prevDonationEvents?: number;
   lastSync?: string;
+  // Newer cross-cut insight fields (optional for cache tolerance).
+  donationsByChannel?: Array<{ channel: string; donations: number; revenue: number }>;
+  funnel?: { sessions: number; donateViews: number; donations: number };
+  landingPages?: Array<{ landingPage: string; sessions: number; users: number }>;
+  newVsReturning?: { new: number; returning: number };
 }
 
 export interface SeoData {
@@ -108,6 +125,13 @@ export interface SeoData {
   prevAvgPosition?: number;
   prevAvgCtr?: number;
   lastSync?: string;
+  // Newer actionable insight fields (optional for cache tolerance).
+  opportunities?: Array<{ query: string; impressions: number; clicks: number; ctr: number; position: number }>;
+  positionBuckets?: Array<{ bucket: string; impressions: number; pct: number }>;
+  gainedLost?: {
+    gained: Array<{ query: string; clicks: number }>;
+    lost: Array<{ query: string; clicks: number }>;
+  };
 }
 
 export interface AdminData {

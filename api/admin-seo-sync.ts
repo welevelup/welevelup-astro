@@ -39,6 +39,12 @@ interface SEOData {
   prevAvgPosition: number;
   prevAvgCtr: number;
   lastSync: string;
+  opportunities: Array<{ query: string; impressions: number; clicks: number; ctr: number; position: number }>;
+  positionBuckets: Array<{ bucket: string; impressions: number; pct: number }>;
+  gainedLost: {
+    gained: Array<{ query: string; clicks: number }>;
+    lost: Array<{ query: string; clicks: number }>;
+  };
 }
 
 async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
@@ -247,6 +253,50 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
   const cur = summarise(dailyRows);
   const prev = summarise(prevDailyRows);
 
+  // ── OPPORTUNITIES: 100 queries (28d), keep near-miss rankings (pos 4–20) ──
+  // Terms where Level Up almost ranks — improving these pages can win clicks.
+  const oppRows = await queryGSC(['query'], 100);
+  const opportunities = oppRows
+    .filter((r: any) => r.position >= 4 && r.position <= 20)
+    .sort((a: any, b: any) => b.impressions - a.impressions)
+    .slice(0, 10)
+    .map((r: any) => ({
+      query: r.keys[0],
+      impressions: r.impressions,
+      clicks: r.clicks,
+      ctr: Math.round(r.ctr * 10000) / 100,
+      position: Math.round(r.position * 10) / 10,
+    }));
+
+  // ── POSITION BUCKETS: share of impressions by ranking band (from the 100 query rows) ──
+  const oppTotalImp = oppRows.reduce((s: number, r: any) => s + r.impressions, 0) || 1;
+  const posBucketDefs: Array<{ bucket: string; test: (p: number) => boolean }> = [
+    { bucket: 'Top 3', test: p => p <= 3 },
+    { bucket: '4–10', test: p => p > 3 && p <= 10 },
+    { bucket: '11–20', test: p => p > 10 && p <= 20 },
+    { bucket: '20+', test: p => p > 20 },
+  ];
+  const positionBuckets = posBucketDefs.map(({ bucket, test }) => {
+    const imp = oppRows.filter((r: any) => test(r.position)).reduce((s: number, r: any) => s + r.impressions, 0);
+    return { bucket, impressions: imp, pct: Math.round((imp / oppTotalImp) * 100) };
+  });
+
+  // ── GAINED / LOST search terms vs the previous period ──
+  // prevPosByQuery already holds the previous-period query set. Compare against the
+  // current 100-query set: new terms (gained) and disappeared terms (lost).
+  const curQuerySet = new Set<string>(oppRows.map((r: any) => r.keys[0]));
+  const gained = oppRows
+    .filter((r: any) => !prevPosByQuery.has(r.keys[0]))
+    .sort((a: any, b: any) => b.clicks - a.clicks)
+    .slice(0, 5)
+    .map((r: any) => ({ query: r.keys[0], clicks: r.clicks }));
+  const lost = prevKeywordRows
+    .filter((r: any) => !curQuerySet.has(r.keys[0]))
+    .sort((a: any, b: any) => b.clicks - a.clicks)
+    .slice(0, 5)
+    .map((r: any) => ({ query: r.keys[0], clicks: r.clicks }));
+  const gainedLost = { gained, lost };
+
   const daily = dailyRows
     .map((r: any) => ({ date: r.keys[0], clicks: r.clicks, impressions: r.impressions }))
     .sort((a: any, b: any) => a.date.localeCompare(b.date));
@@ -267,6 +317,9 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
     prevAvgPosition: prev.avgPos,
     prevAvgCtr: prev.ctr,
     lastSync: new Date().toISOString(),
+    opportunities,
+    positionBuckets,
+    gainedLost,
   };
 }
 

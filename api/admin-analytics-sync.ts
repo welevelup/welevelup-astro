@@ -41,6 +41,10 @@ interface AnalyticsData {
   prevRevenue: number;
   prevDonationEvents: number;
   lastSync: string;
+  donationsByChannel: Array<{ channel: string; donations: number; revenue: number }>;
+  funnel: { sessions: number; donateViews: number; donations: number };
+  landingPages: Array<{ landingPage: string; sessions: number; users: number }>;
+  newVsReturning: { new: number; returning: number };
 }
 
 async function getAccessToken(serviceAccountKey: string): Promise<string> {
@@ -385,6 +389,123 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     prevDonationEvents = parseInt(prevEventsData.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
   }
 
+  // ── DONATIONS BY CHANNEL (purchase events + revenue per channel) ──
+  // Most actionable table: which channel actually brings donors.
+  let donationsByChannel: Array<{ channel: string; donations: number; revenue: number }> = [];
+  const channelRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'sessionDefaultChannelGrouping' }],
+        metrics: [{ name: 'eventCount' }, { name: 'purchaseRevenue' }],
+        dimensionFilter: {
+          filter: { fieldName: 'eventName', stringFilter: { value: 'purchase' } },
+        },
+        orderBys: [{ metric: { metricName: 'eventCount' }, desc: true }],
+        limit: 15,
+      }),
+    }
+  );
+  if (channelRes.ok) {
+    const channelData = await channelRes.json();
+    donationsByChannel = (channelData.rows || []).map((r: any) => ({
+      channel: r.dimensionValues[0].value,
+      donations: parseInt(r.metricValues[0]?.value || '0', 10),
+      revenue: Math.round(parseFloat(r.metricValues[1]?.value || '0') * 100) / 100,
+    }));
+  } else {
+    console.error('[admin-analytics-sync] GA4 channel error:', (await channelRes.text()).slice(0, 200));
+  }
+
+  // ── FUNNEL: sessions → saw the donate page → donated ──
+  // Step 2: sessions that viewed a /donate page (excluding the thank-you page).
+  let donateViews = 0;
+  const donateRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'pagePath' }],
+        metrics: [{ name: 'sessions' }],
+        dimensionFilter: {
+          andGroup: {
+            expressions: [
+              { filter: { fieldName: 'pagePath', stringFilter: { matchType: 'CONTAINS', value: '/donate' } } },
+              { notExpression: { filter: { fieldName: 'pagePath', stringFilter: { matchType: 'CONTAINS', value: 'thank' } } } },
+            ],
+          },
+        },
+      }),
+    }
+  );
+  if (donateRes.ok) {
+    const donateData = await donateRes.json();
+    donateViews = (donateData.rows || []).reduce(
+      (s: number, r: any) => s + parseInt(r.metricValues[0]?.value || '0', 10), 0
+    );
+  } else {
+    console.error('[admin-analytics-sync] GA4 donate-page error:', (await donateRes.text()).slice(0, 200));
+  }
+  const funnel = { sessions: totalSessions, donateViews, donations: donationEvents };
+
+  // ── LANDING PAGES: where people enter the site ──
+  let landingPages: Array<{ landingPage: string; sessions: number; users: number }> = [];
+  const landingRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'landingPage' }],
+        metrics: [{ name: 'sessions' }, { name: 'totalUsers' }],
+        orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+        limit: 10,
+      }),
+    }
+  );
+  if (landingRes.ok) {
+    const landingData = await landingRes.json();
+    landingPages = (landingData.rows || []).map((r: any) => ({
+      landingPage: r.dimensionValues[0].value || '/',
+      sessions: parseInt(r.metricValues[0]?.value || '0', 10),
+      users: parseInt(r.metricValues[1]?.value || '0', 10),
+    }));
+  } else {
+    console.error('[admin-analytics-sync] GA4 landing error:', (await landingRes.text()).slice(0, 200));
+  }
+
+  // ── NEW vs RETURNING visitors ──
+  let newVsReturning = { new: 0, returning: 0 };
+  const nvrRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'newVsReturning' }],
+        metrics: [{ name: 'totalUsers' }],
+      }),
+    }
+  );
+  if (nvrRes.ok) {
+    const nvrData = await nvrRes.json();
+    for (const r of (nvrData.rows || [])) {
+      const label = (r.dimensionValues[0]?.value || '').toLowerCase();
+      const val = parseInt(r.metricValues[0]?.value || '0', 10);
+      if (label === 'new') newVsReturning.new = val;
+      else if (label === 'returning') newVsReturning.returning = val;
+    }
+  } else {
+    console.error('[admin-analytics-sync] GA4 newVsReturning error:', (await nvrRes.text()).slice(0, 200));
+  }
+
   return {
     users: totalUsers,
     sessions: totalSessions,
@@ -403,6 +524,10 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     prevRevenue,
     prevDonationEvents,
     lastSync: new Date().toISOString(),
+    donationsByChannel,
+    funnel,
+    landingPages,
+    newVsReturning,
   };
 }
 

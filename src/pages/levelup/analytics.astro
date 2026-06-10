@@ -64,6 +64,28 @@ const totalDeviceUsers = devices.reduce((s, d) => s + (d.users || 0), 0) || 1;
 const geography = (ga?.geography ?? []).slice(0, 5);
 const totalGeoUsers = geography.reduce((s, g) => s + (g.users || 0), 0) || 1;
 const shortPath = (p: string) => p || '/';
+
+// ── DONATION-LINKED INSIGHTS (optional — tolerate older cached payloads) ──
+const donationsByChannel = (ga?.donationsByChannel ?? [])
+  .slice()
+  .sort((a, b) => (b.donations || 0) - (a.donations || 0));
+const hasChannelData = donationsByChannel.length > 0;
+
+const funnel = ga?.funnel ?? null;
+// Conversion percentages between funnel steps.
+const funnelPct = funnel
+  ? {
+      toDonatePage: funnel.sessions > 0 ? Math.round((funnel.donateViews / funnel.sessions) * 1000) / 10 : 0,
+      toDonation: funnel.donateViews > 0 ? Math.round((funnel.donations / funnel.donateViews) * 1000) / 10 : 0,
+    }
+  : null;
+// Relative widths for the funnel blocks (largest step = 100%).
+const funnelMax = funnel ? Math.max(funnel.sessions, funnel.donateViews, funnel.donations, 1) : 1;
+
+const landingPages = ga?.landingPages ?? [];
+const nvr = ga?.newVsReturning ?? null;
+const nvrTotal = nvr ? (nvr.new + nvr.returning) || 1 : 1;
+const nvrNewPct = nvr ? Math.round((nvr.new / nvrTotal) * 100) : 0;
 ---
 <AdminShell
   active="website"
@@ -134,6 +156,122 @@ const shortPath = (p: string) => p || '/';
           </div>
         </div>
       </section>
+
+      <!-- WHAT BRINGS DONATIONS -->
+      <section class="section">
+        <div class="section-title">What brings donations</div>
+        {hasChannelData ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Channel <span class="tip" tabindex="0" role="note" aria-label="What channel means">ⓘ<span class="tip-text">How donors arrived at the site before giving — e.g. Google search, social media, a link.</span></span></th>
+                  <th scope="col" class="num">Donations</th>
+                  <th scope="col" class="num">Revenue tracked</th>
+                </tr>
+              </thead>
+              <tbody>
+                {donationsByChannel.map((c, i) => {
+                  const note = channelMeta[c.channel];
+                  return (
+                    <tr style={i === 0 ? 'background:color-mix(in srgb, var(--violet) 8%, transparent)' : ''}>
+                      <td style="font-weight:600">
+                        {c.channel}
+                        {note && <span class="tip" tabindex="0" role="note" aria-label={`What ${c.channel} means`} style="margin-left:5px">ⓘ<span class="tip-text">{note}</span></span>}
+                        {i === 0 && <span class="chip chip-lime" style="margin-left:6px">top</span>}
+                      </td>
+                      <td class="num" style="font-weight:700">{fmtNum(c.donations)}</td>
+                      <td class="num">{fmtMoney(c.revenue)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to see which channels bring donations.</div>
+        )}
+      </section>
+
+      <!-- DONATION FUNNEL -->
+      {funnel && funnelPct && (
+        <section class="section">
+          <div class="section-title">From visit to donation</div>
+          <div class="card">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Visited the site</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.sessions)}</span>
+                </div>
+                <div style="height:34px;border-radius:8px;background:#0C0A3E;width:100%"></div>
+              </div>
+              <div class="kpi-desc" style="text-align:center">↓ {funnelPct.toDonatePage}% went on to see the donate page</div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Saw the donate page</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.donateViews)}</span>
+                </div>
+                <div style={`height:34px;border-radius:8px;background:#5B4FCF;width:${Math.max(8, Math.round((funnel.donateViews / funnelMax) * 100))}%`}></div>
+              </div>
+              <div class="kpi-desc" style="text-align:center">↓ {funnelPct.toDonation}% of those went on to donate</div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Donated</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.donations)}</span>
+                </div>
+                <div style={`height:34px;border-radius:8px;background:#A89CED;width:${Math.max(6, Math.round((funnel.donations / funnelMax) * 100))}%`}></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- WHERE PEOPLE LAND FIRST -->
+      <section class="section">
+        <div class="section-title">Where people land first <span class="tip" tabindex="0" role="note" aria-label="What landing page means">ⓘ<span class="tip-text">The first page each visitor lands on when they arrive at the site.</span></span></div>
+        {landingPages.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">First page</th>
+                  <th scope="col" class="num">Sessions</th>
+                  <th scope="col" class="num">Visitors</th>
+                </tr>
+              </thead>
+              <tbody>
+                {landingPages.map((p) => (
+                  <tr>
+                    <td style="font-weight:600">{shortPath(p.landingPage)}</td>
+                    <td class="num">{fmtNum(p.sessions)}</td>
+                    <td class="num">{fmtNum(p.users)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load landing pages.</div>
+        )}
+      </section>
+
+      <!-- NEW vs RETURNING -->
+      {nvr && (nvr.new > 0 || nvr.returning > 0) && (
+        <section class="section">
+          <div class="section-title">New vs returning visitors <span class="tip" tabindex="0" role="note" aria-label="What new vs returning means">ⓘ<span class="tip-text">New visitors have not been to the site before; returning visitors have been here previously.</span></span></div>
+          <div class="card">
+            <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+              <span style={`width:${nvrNewPct}%;background:#5B4FCF`} title={`New ${nvrNewPct}%`}></span>
+              <span style={`width:${100 - nvrNewPct}%;background:#A89CED`} title={`Returning ${100 - nvrNewPct}%`}></span>
+            </div>
+            <div class="chart-legend" style="margin-top:12px">
+              <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>New {fmtNum(nvr.new)} ({nvrNewPct}%)</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>Returning {fmtNum(nvr.returning)} ({100 - nvrNewPct}%)</span>
+            </div>
+          </div>
+        </section>
+      )}
 
       <!-- CHART -->
       <section class="section">

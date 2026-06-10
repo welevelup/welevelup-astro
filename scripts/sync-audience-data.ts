@@ -176,14 +176,50 @@ interface AudienceData {
   lastSync: string;
 }
 
-function getRedis(): Redis {
+// Two ways to persist the aggregate, tried in order:
+//  1. Direct Redis write — needs UPSTASH_REDIS_REST_URL/TOKEN in .env.local.
+//  2. Authenticated upload to the live site's /api/admin-audience-sync —
+//     needs ADMIN_EMAIL/ADMIN_PASSWORD in .env.local (Vercel marks the
+//     Upstash vars as Sensitive, so `vercel env pull` leaves them empty;
+//     the admin credentials are the practical local path).
+function getRedisOrNull(): Redis | null {
   const url = (process.env.UPSTASH_REDIS_REST_URL || '').trim();
   const token = (process.env.UPSTASH_REDIS_REST_TOKEN || '').trim();
-  if (!url || !token) {
-    console.error('Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN in .env.local');
+  if (!url || !token) return null;
+  return new Redis({ url, token });
+}
+
+async function uploadViaApi(payload: AudienceData): Promise<void> {
+  const baseUrl = (process.env.AUDIENCE_SYNC_BASE_URL || 'https://welevelup.org').replace(/\/$/, '');
+  const email = (process.env.ADMIN_EMAIL || '').trim();
+  const password = (process.env.ADMIN_PASSWORD || '').trim();
+  if (!email || !password) {
+    console.error(
+      'No persistence path available. Add either UPSTASH_REDIS_REST_URL/TOKEN ' +
+      'or ADMIN_EMAIL/ADMIN_PASSWORD to .env.local'
+    );
     process.exit(1);
   }
-  return new Redis({ url, token });
+
+  const loginRes = await fetch(`${baseUrl}/api/admin-auth`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!loginRes.ok) throw new Error(`Login failed: HTTP ${loginRes.status}`);
+  const { token } = (await loginRes.json()) as { token?: string };
+  if (!token) throw new Error('Login response had no token');
+
+  const uploadRes = await fetch(`${baseUrl}/api/admin-audience-sync?token=${encodeURIComponent(token)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!uploadRes.ok) {
+    const text = await uploadRes.text();
+    throw new Error(`Upload failed: HTTP ${uploadRes.status} — ${text.slice(0, 200)}`);
+  }
+  console.log(`Uploaded via ${baseUrl}/api/admin-audience-sync`);
 }
 
 async function main() {
@@ -294,11 +330,16 @@ async function main() {
     lastSync: new Date().toISOString(),
   };
 
-  const redis = getRedis();
-  await redis.set('admin:audience', payload);
+  const redis = getRedisOrNull();
+  if (redis) {
+    await redis.set('admin:audience', payload);
+    console.log('Saved directly to Redis (admin:audience).');
+  } else {
+    await uploadViaApi(payload);
+  }
 
   // ── Summary (NO personal data, NO full postcodes) ──
-  console.log('Audience data synced to Redis (admin:audience).');
+  console.log('Audience data synced (admin:audience).');
   console.log(`  People (district-mapped): ${districtAggs.reduce((s, d) => s + d.total, 0)}`);
   console.log(`  People (total rows seen): ${totalPeople}`);
   console.log(`  Districts on map:         ${districtAggs.length}`);

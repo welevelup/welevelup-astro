@@ -1,0 +1,485 @@
+---
+// Shared admin shell: header + nav + theme + slot + shared styles.
+// Pages pass the active tab, their sync endpoint, the token and last-sync time.
+export interface Props {
+  active: 'donations' | 'website' | 'search';
+  title: string;
+  subtitle: string;
+  token: string;
+  syncEndpoint: string;
+  lastSync: string | null;
+}
+
+const { active, title, subtitle, token, syncEndpoint, lastSync } = Astro.props;
+
+const q = token ? `?token=${encodeURIComponent(token)}` : '';
+const tabs = [
+  { id: 'donations', label: 'Donations', href: `/levelup/dashboard${q}` },
+  { id: 'website', label: 'Website', href: `/levelup/analytics${q}` },
+  { id: 'search', label: 'Google Search', href: `/levelup/seo${q}` },
+];
+
+const fmtDate = (s: string | null) =>
+  s ? new Date(s).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' }) : 'Never';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} — Level Up Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style is:global>
+    :root {
+      /* Light theme — default (owner preference) */
+      --bg: #FAF9F4;
+      --surface: #FFFFFF;
+      --border: rgba(12,10,62,0.08);
+      --shadow: 0 1px 2px rgba(12,10,62,0.04), 0 4px 16px rgba(12,10,62,0.04);
+      --navy: #0C0A3E;
+      --text: #0C0A3E;
+      --text-2: rgba(12,10,62,0.6);
+      --text-3: rgba(12,10,62,0.42);
+      --lime: #CCFF33;
+      --violet: #5B4FCF;
+      --violet-soft: #A89CED;
+      --pos: #15803D;
+      --neg: #B91C1C;
+      --amber: #B45309;
+      --amber-bg: #FEF3C7;
+      --zebra: rgba(12,10,62,0.025);
+      --hover: rgba(12,10,62,0.04);
+      --chip-bg: rgba(12,10,62,0.05);
+    }
+    :root.dark {
+      --bg: #0C0A3E;
+      --surface: #13114a;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.25);
+      --navy: #0C0A3E;
+      --text: #EEEBD3;
+      --text-2: rgba(238,235,211,0.62);
+      --text-3: rgba(238,235,211,0.4);
+      --lime: #CCFF33;
+      --violet: #A89CED;
+      --violet-soft: #6f63c9;
+      --pos: #4ADE80;
+      --neg: #F87171;
+      --amber: #FBBF24;
+      --amber-bg: rgba(251,191,36,0.12);
+      --zebra: rgba(255,255,255,0.03);
+      --hover: rgba(255,255,255,0.05);
+      --chip-bg: rgba(255,255,255,0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+    .topbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 56px;
+    }
+    .brand {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text);
+      white-space: nowrap;
+    }
+    .brand b { color: var(--violet); }
+    .bar-actions { display: flex; align-items: center; gap: 10px; }
+    .last-updated { font-size: 11px; color: var(--text-3); white-space: nowrap; }
+    .btn {
+      font-family: inherit;
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: opacity 0.15s, background 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--violet); color: #fff; }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    .btn-ghost { background: none; border: 1px solid var(--border); color: var(--text-2); }
+    .btn-ghost:hover { background: var(--hover); }
+    .icon-btn {
+      background: none; border: 1px solid var(--border); color: var(--text-2);
+      border-radius: 6px; width: 34px; height: 34px; cursor: pointer; font-size: 15px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .icon-btn:hover { background: var(--hover); }
+
+    /* ── TABS ── */
+    .tabs {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      gap: 4px;
+    }
+    .tab {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-2);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab:hover { color: var(--text); }
+    .tab.active { color: var(--text); border-bottom-color: var(--violet); }
+
+    /* ── MAIN ── */
+    main { max-width: 1280px; margin: 0 auto; padding: 32px 24px 64px; flex: 1; width: 100%; }
+    .page-head { margin-bottom: 24px; }
+    .page-head h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; }
+    .page-head p { font-size: 14px; color: var(--text-2); margin-top: 6px; max-width: 60ch; }
+
+    .section { margin-bottom: 32px; }
+    .section-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-2); margin-bottom: 12px;
+    }
+
+    /* ── KPI CARDS ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .kpi-label {
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--text-2);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .kpi-value { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .kpi-desc { font-size: 12px; color: var(--text-3); line-height: 1.4; }
+    .kpi-foot { margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .kpi-link { font-size: 12px; font-weight: 600; color: var(--violet); text-decoration: none; }
+    .kpi-link:hover { text-decoration: underline; }
+
+    /* ── DELTA CHIP ── */
+    .delta {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 11px; font-weight: 700;
+      padding: 2px 7px; border-radius: 6px;
+      font-variant-numeric: tabular-nums;
+    }
+    .delta.pos { color: var(--pos); background: color-mix(in srgb, var(--pos) 12%, transparent); }
+    .delta.neg { color: var(--neg); background: color-mix(in srgb, var(--neg) 12%, transparent); }
+    .delta-note { font-size: 11px; color: var(--text-3); }
+
+    /* ── TOOLTIP (CSS only, hover + focus) ── */
+    .tip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 15px; height: 15px;
+      border-radius: 50%;
+      background: var(--chip-bg);
+      color: var(--text-2);
+      font-size: 10px; font-weight: 700;
+      cursor: help;
+      outline: none;
+      vertical-align: middle;
+    }
+    .tip:focus-visible { box-shadow: 0 0 0 2px var(--violet); }
+    .tip .tip-text {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: 240px;
+      background: var(--navy);
+      color: #EEEBD3;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      text-transform: none;
+      letter-spacing: normal;
+      padding: 8px 10px;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s;
+      z-index: 30;
+      pointer-events: none;
+      text-align: left;
+    }
+    .tip .tip-text::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--navy);
+    }
+    .tip:hover .tip-text,
+    .tip:focus .tip-text,
+    .tip:focus-visible .tip-text { opacity: 1; visibility: visible; }
+
+    /* ── CARD / CHART ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .chart-svg { width: 100%; height: auto; display: block; }
+    .chart-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-2); font-weight: 600; }
+    .legend-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+    /* ── TABLES ── */
+    .table-wrap {
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+    table.data { width: 100%; border-collapse: collapse; }
+    table.data th {
+      text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.04em; color: var(--text-2);
+      padding: 11px 16px; border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    table.data td {
+      padding: 11px 16px; font-size: 13px; color: var(--text);
+      border-bottom: 1px solid var(--border); white-space: nowrap;
+    }
+    table.data tbody tr:last-child td { border-bottom: none; }
+    table.data tbody tr:nth-child(even) td { background: var(--zebra); }
+    table.data tbody tr:hover td { background: var(--hover); }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .th-tip { display: inline-flex; align-items: center; gap: 4px; }
+
+    /* ── INLINE MINI-BAR ── */
+    .minibar { display: inline-flex; align-items: center; gap: 8px; min-width: 120px; }
+    .minibar-track { flex: 1; height: 6px; border-radius: 3px; background: var(--chip-bg); overflow: hidden; }
+    .minibar-fill { height: 100%; border-radius: 3px; background: var(--violet); }
+    .minibar-val { font-size: 12px; color: var(--text-2); font-variant-numeric: tabular-nums; min-width: 42px; text-align: right; }
+
+    /* ── CHIPS / BADGES ── */
+    .chip {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 6px; letter-spacing: 0.02em;
+    }
+    .chip-new { background: var(--violet); color: #fff; }
+    .chip-lime { background: var(--navy); color: var(--lime); }
+
+    /* ── CALLOUT ── */
+    .callout {
+      background: var(--amber-bg);
+      border: 1px solid color-mix(in srgb, var(--amber) 30%, transparent);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      color: var(--amber);
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-top: 12px;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty {
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 40px 20px;
+      text-align: center;
+      color: var(--text-2);
+      font-size: 13px;
+    }
+    .empty strong { display: block; font-size: 15px; color: var(--text); margin-bottom: 6px; }
+
+    /* ── GRID HELPERS ── */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; font-weight: 600; box-shadow: var(--shadow);
+      transform: translateY(80px); opacity: 0;
+      transition: transform 0.3s, opacity 0.3s; z-index: 99;
+      max-width: calc(100vw - 32px);
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { border-left-color: var(--neg); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 768px) {
+      .topbar-inner { padding: 0 14px; }
+      .last-updated { display: none; }
+      main { padding: 24px 14px 48px; }
+      .page-head h1 { font-size: 21px; }
+      .kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .kpi-value { font-size: 26px; }
+      .tabs { padding: 0 14px; overflow-x: auto; }
+    }
+    @media (max-width: 480px) {
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Level Up · <b>Admin</b></div>
+      <div class="bar-actions">
+        <span class="last-updated">Last updated: {fmtDate(lastSync)}</span>
+        <button class="btn btn-primary" id="refresh-btn" data-endpoint={syncEndpoint} aria-label="Refresh data from source">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="refresh-icon">
+            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+          <span id="refresh-label">Refresh data</span>
+        </button>
+        <button class="icon-btn" id="theme-btn" aria-label="Toggle light or dark theme">🌙</button>
+        <button class="btn btn-ghost" id="logout-btn" aria-label="Sign out">Sign out</button>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Dashboard sections">
+      {tabs.map((t) => (
+        <a href={t.href} class={`tab${t.id === active ? ' active' : ''}`} aria-current={t.id === active ? 'page' : undefined}>{t.label}</a>
+      ))}
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-head">
+      <h1>{title}</h1>
+      <p>{subtitle}</p>
+    </div>
+    <slot />
+  </main>
+
+  <script>
+    // ── Theme (light default; persisted as lu-theme) ──
+    const root = document.documentElement;
+    const THEME_KEY = 'lu-theme';
+    function applyTheme(t: string) {
+      const btn = document.getElementById('theme-btn');
+      if (t === 'dark') {
+        root.classList.add('dark');
+        if (btn) btn.textContent = '☀️';
+      } else {
+        root.classList.remove('dark');
+        if (btn) btn.textContent = '🌙';
+      }
+    }
+    applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+    document.getElementById('theme-btn')?.addEventListener('click', () => {
+      const next = root.classList.contains('dark') ? 'light' : 'dark';
+      localStorage.setItem(THEME_KEY, next);
+      applyTheme(next);
+    });
+
+    // ── Toast ──
+    function showToast(msg: string, type?: string) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.className = 'toast ' + (type === 'error' ? 'error ' : '') + 'show';
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    // ── Refresh (per-page endpoint via data attribute) ──
+    const refreshBtn = document.getElementById('refresh-btn') as HTMLButtonElement | null;
+    refreshBtn?.addEventListener('click', async () => {
+      const endpoint = refreshBtn.dataset.endpoint || '';
+      const icon = document.getElementById('refresh-icon');
+      const label = document.getElementById('refresh-label');
+      refreshBtn.disabled = true;
+      if (icon) (icon as unknown as HTMLElement).style.animation = 'spin 1s linear infinite';
+      if (label) label.textContent = 'Refreshing…';
+      try {
+        const token = new URLSearchParams(window.location.search).get('token')
+          || localStorage.getItem('admin_token') || '';
+        const res = await fetch(`${endpoint}${token ? `?token=${encodeURIComponent(token)}` : ''}`, { method: 'POST' });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.ok === false) throw new Error(data.error || `Failed (${res.status})`);
+        showToast('Data refreshed — reloading…');
+        setTimeout(() => location.reload(), 1000);
+      } catch (e: any) {
+        showToast('Refresh failed: ' + (e?.message || 'error'), 'error');
+        refreshBtn.disabled = false;
+        if (icon) (icon as unknown as HTMLElement).style.animation = '';
+        if (label) label.textContent = 'Refresh data';
+      }
+    });
+
+    // ── Logout + inactivity (preserve existing DELETE /api/admin-auth pattern) ──
+    let inactivityTimer: ReturnType<typeof setTimeout> | null = null;
+    const INACTIVITY_TIMEOUT = 5 * 60 * 1000;
+    function resetInactivity() {
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(async () => {
+        try { await fetch('/api/admin-auth', { method: 'DELETE' }); } catch {}
+        location.href = '/levelup/login';
+      }, INACTIVITY_TIMEOUT);
+    }
+    ['mousedown', 'keydown', 'click', 'scroll', 'touchstart'].forEach((ev) =>
+      document.addEventListener(ev, resetInactivity, true)
+    );
+    resetInactivity();
+    document.getElementById('logout-btn')?.addEventListener('click', async () => {
+      if (inactivityTimer) clearTimeout(inactivityTimer);
+      try { await fetch('/api/admin-auth', { method: 'DELETE' }); } catch {}
+      setTimeout(() => { location.href = '/levelup/login'; }, 100);
+    });
+
+    // ── Persist token from URL into localStorage (keeps refresh working after nav) ──
+    const urlToken = new URLSearchParams(window.location.search).get('token');
+    if (urlToken) localStorage.setItem('admin_token', urlToken);
+  </script>
+</body>
+</html>

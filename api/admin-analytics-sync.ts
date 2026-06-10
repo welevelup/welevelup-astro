@@ -29,11 +29,17 @@ interface AnalyticsData {
   avgSessionDuration: number;
   bounceRate: number;
   conversionRate: number;
+  donationEvents: number;
   revenue: number;
-  topPages: Array<{ page: string; users: number; sessions: number }>;
-  trafficSources: Array<{ source: string; users: number; sessions?: number; avgDuration?: number; bounceRate?: number; sessionValue?: number; percentage: number }>;
+  topPages: Array<{ path: string; users: number; sessions: number; avgDuration: number; bounceRate: number }>;
+  trafficSources: Array<{ source: string; users: number; sessions: number; avgDuration: number; bounceRate: number; percentage: number }>;
   devices: Array<{ type: string; users: number; sessions: number; bounceRate: number }>;
-  geography: Array<{ country: string; users: number; sessions: number; conversionRate: number }>;
+  geography: Array<{ country: string; users: number; sessions: number; bounceRate: number }>;
+  daily: Array<{ date: string; sessions: number; users: number }>;
+  prevUsers: number;
+  prevSessions: number;
+  prevRevenue: number;
+  prevDonationEvents: number;
   lastSync: string;
 }
 
@@ -108,7 +114,14 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
   const endDate = new Date();
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 28);
+  // Previous 28-day window (days -56..-29) for period-over-period deltas.
+  const prevEndDate = new Date();
+  prevEndDate.setDate(prevEndDate.getDate() - 29);
+  const prevStartDate = new Date();
+  prevStartDate.setDate(prevStartDate.getDate() - 56);
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
+  // GA4 returns 'date' as 'YYYYMMDD'; normalise to 'YYYY-MM-DD'.
+  const normDate = (d: string) => (d && d.length === 8 ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : d);
 
   // Run report for overview metrics
   const overviewRes = await fetch(
@@ -177,7 +190,6 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     sessions: parseInt(r.metricValues[1].value, 10),
     avgDuration: Math.round(parseFloat(r.metricValues[2].value || '0')),
     bounceRate: Math.round(parseFloat(r.metricValues[3].value || '0') * 100) / 100,
-    conversionRate: 0,
   }));
 
   // Run report for traffic sources
@@ -192,7 +204,12 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
       body: JSON.stringify({
         dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
         dimensions: [{ name: 'sessionDefaultChannelGrouping' }],
-        metrics: [{ name: 'totalUsers' }],
+        metrics: [
+          { name: 'totalUsers' },
+          { name: 'sessions' },
+          { name: 'averageSessionDuration' },
+          { name: 'bounceRate' },
+        ],
         orderBys: [{ metric: { metricName: 'totalUsers' }, desc: true }],
         limit: 10,
       }),
@@ -203,18 +220,20 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     throw new Error(`GA4 sources error: ${text.slice(0, 200)}`);
   }
   const sourcesData = await sourcesRes.json();
-  const sourceRows: Array<{ source: string; users: number }> = (sourcesData.rows || []).map((r: any) => ({
+  const sourceRows = (sourcesData.rows || []).map((r: any) => ({
     source: r.dimensionValues[0].value,
     users: parseInt(r.metricValues[0].value, 10),
+    sessions: parseInt(r.metricValues[1].value, 10),
+    avgDuration: Math.round(parseFloat(r.metricValues[2].value || '0')),
+    bounceRate: Math.round(parseFloat(r.metricValues[3].value || '0') * 100) / 100,
   }));
-  const sourceTotal = sourceRows.reduce((s, r) => s + r.users, 0) || 1;
-  const trafficSources = sourceRows.map(r => ({
+  const sourceTotal = sourceRows.reduce((s: number, r: any) => s + r.users, 0) || 1;
+  const trafficSources = sourceRows.map((r: any) => ({
     source: r.source,
     users: r.users,
-    sessions: Math.round(r.users * 1.2),
-    avgDuration: 0,
-    bounceRate: 0,
-    sessionValue: 0,
+    sessions: r.sessions,
+    avgDuration: r.avgDuration,
+    bounceRate: r.bounceRate,
     percentage: Math.round((r.users / sourceTotal) * 1000) / 10,
   }));
 
@@ -267,11 +286,104 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     country: r.dimensionValues[0].value,
     users: parseInt(r.metricValues[0].value, 10),
     sessions: parseInt(r.metricValues[1].value, 10),
-    conversionRate: parseFloat(r.metricValues[2].value || '0'),
+    bounceRate: Math.round(parseFloat(r.metricValues[2].value || '0') * 100) / 100,
   }));
 
-  // Conversion rate: sessions with a donation event / total sessions (approximation)
-  const conversionRate = totalSessions > 0 ? Math.round((88 / totalSessions) * 1000) / 10 : 0;
+  // Real donation conversions: count of 'purchase' events in the period.
+  const eventsRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'eventName' }],
+        metrics: [{ name: 'eventCount' }],
+        dimensionFilter: {
+          filter: { fieldName: 'eventName', stringFilter: { value: 'purchase' } },
+        },
+      }),
+    }
+  );
+  let donationEvents = 0;
+  if (eventsRes.ok) {
+    const eventsData = await eventsRes.json();
+    donationEvents = parseInt(eventsData.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
+  } else {
+    console.error('[admin-analytics-sync] GA4 events error:', (await eventsRes.text()).slice(0, 200));
+  }
+  const conversionRate = totalSessions > 0 ? Math.round((donationEvents / totalSessions) * 100 * 100) / 100 : 0;
+
+  // Daily series for the current 28-day window.
+  const dailyRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(startDate), endDate: fmt(endDate) }],
+        dimensions: [{ name: 'date' }],
+        metrics: [{ name: 'sessions' }, { name: 'totalUsers' }],
+        orderBys: [{ dimension: { dimensionName: 'date' }, desc: false }],
+      }),
+    }
+  );
+  let daily: Array<{ date: string; sessions: number; users: number }> = [];
+  if (dailyRes.ok) {
+    const dailyData = await dailyRes.json();
+    daily = (dailyData.rows || []).map((r: any) => ({
+      date: normDate(r.dimensionValues[0].value),
+      sessions: parseInt(r.metricValues[0].value, 10),
+      users: parseInt(r.metricValues[1].value, 10),
+    }));
+  } else {
+    console.error('[admin-analytics-sync] GA4 daily error:', (await dailyRes.text()).slice(0, 200));
+  }
+
+  // Previous-period overview for deltas (users, sessions, revenue, donation events).
+  const prevOverviewRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(prevStartDate), endDate: fmt(prevEndDate) }],
+        metrics: [{ name: 'totalUsers' }, { name: 'sessions' }, { name: 'purchaseRevenue' }],
+      }),
+    }
+  );
+  let prevUsers = 0, prevSessions = 0, prevRevenue = 0;
+  if (prevOverviewRes.ok) {
+    const prevData = await prevOverviewRes.json();
+    const prevRow = prevData.rows?.[0]?.metricValues || [];
+    prevUsers = parseInt(prevRow[0]?.value || '0', 10);
+    prevSessions = parseInt(prevRow[1]?.value || '0', 10);
+    prevRevenue = Math.round(parseFloat(prevRow[2]?.value || '0') * 100) / 100;
+  } else {
+    console.error('[admin-analytics-sync] GA4 prev overview error:', (await prevOverviewRes.text()).slice(0, 200));
+  }
+
+  // Previous-period donation events.
+  const prevEventsRes = await fetch(
+    `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`,
+    {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dateRanges: [{ startDate: fmt(prevStartDate), endDate: fmt(prevEndDate) }],
+        dimensions: [{ name: 'eventName' }],
+        metrics: [{ name: 'eventCount' }],
+        dimensionFilter: {
+          filter: { fieldName: 'eventName', stringFilter: { value: 'purchase' } },
+        },
+      }),
+    }
+  );
+  let prevDonationEvents = 0;
+  if (prevEventsRes.ok) {
+    const prevEventsData = await prevEventsRes.json();
+    prevDonationEvents = parseInt(prevEventsData.rows?.[0]?.metricValues?.[0]?.value || '0', 10);
+  }
 
   return {
     users: totalUsers,
@@ -279,11 +391,17 @@ async function fetchGA4Data(serviceAccountKey: string): Promise<AnalyticsData> {
     avgSessionDuration: avgDuration,
     bounceRate,
     conversionRate,
+    donationEvents,
     revenue,
     topPages,
     trafficSources,
     devices,
     geography,
+    daily,
+    prevUsers,
+    prevSessions,
+    prevRevenue,
+    prevDonationEvents,
     lastSync: new Date().toISOString(),
   };
 }

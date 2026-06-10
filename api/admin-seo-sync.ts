@@ -24,15 +24,20 @@ function getRedis(): Redis {
 }
 
 interface SEOData {
-  topKeywords: Array<{ query: string; clicks: number; impressions: number; position: number; ctr: number; change: number }>;
-  topPages: Array<{ url: string; clicks: number; impressions: number; position: number; ctr: number; traffic: number }>;
+  topKeywords: Array<{ query: string; clicks: number; impressions: number; position: number; ctr: number; change: number | null }>;
+  topPages: Array<{ url: string; clicks: number; impressions: number; position: number; ctr: number }>;
   devices: Array<{ device: string; clicks: number; impressions: number; ctr: number }>;
   geography: Array<{ country: string; clicks: number; impressions: number; ctr: number }>;
   searchAppearance: Array<{ type: string; count: number; percentage: number }>;
+  daily: Array<{ date: string; clicks: number; impressions: number }>;
   totalClicks: number;
   totalImpressions: number;
   avgPosition: number;
   avgCtr: number;
+  prevTotalClicks: number;
+  prevTotalImpressions: number;
+  prevAvgPosition: number;
+  prevAvgCtr: number;
   lastSync: string;
 }
 
@@ -95,9 +100,16 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
   const tokenData = await tokenRes.json();
   const accessToken = tokenData.access_token;
 
+  // Current 28-day window: days -28..-1 (yesterday is the freshest day GSC reports)
   const endDate = new Date();
+  endDate.setDate(endDate.getDate() - 1);
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 28);
+  // Previous 28-day window: days -56..-29
+  const prevEndDate = new Date();
+  prevEndDate.setDate(prevEndDate.getDate() - 29);
+  const prevStartDate = new Date();
+  prevStartDate.setDate(prevStartDate.getDate() - 56);
   const fmt = (d: Date) => d.toISOString().slice(0, 10);
 
   // Discover which site URL the service account can actually access
@@ -122,15 +134,19 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
   console.log('[admin-seo-sync] Using site URL:', siteUrl);
   const encodedSite = encodeURIComponent(siteUrl);
 
-  const queryGSC = async (dimensions: string[], rowLimit = 20) => {
+  const queryGSC = async (
+    dimensions: string[],
+    rowLimit = 20,
+    range: { start: Date; end: Date } = { start: startDate, end: endDate }
+  ) => {
     const res = await fetch(
       `https://www.googleapis.com/webmasters/v3/sites/${encodedSite}/searchAnalytics/query`,
       {
         method: 'POST',
         headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          startDate: fmt(startDate),
-          endDate: fmt(endDate),
+          startDate: fmt(range.start),
+          endDate: fmt(range.end),
           dimensions,
           rowLimit,
           startRow: 0,
@@ -141,21 +157,37 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
     return (await res.json()).rows || [];
   };
 
-  const keywordRows = await queryGSC(['query'], 5);
-  const pageRows = await queryGSC(['page'], 5);
+  const keywordRows = await queryGSC(['query'], 10);
+  const pageRows = await queryGSC(['page'], 10);
   const deviceRows = await queryGSC(['device'], 10);
   const countryRows = await queryGSC(['country'], 10);
   // searchAppearance is a valid GSC dimension (not searchType)
   const searchAppearanceRows = await queryGSC(['searchAppearance'], 10);
 
-  const topKeywords = keywordRows.map((r: any) => ({
-    query: r.keys[0],
-    clicks: r.clicks,
-    impressions: r.impressions,
-    position: Math.round(r.position * 10) / 10,
-    ctr: Math.round(r.ctr * 10000) / 100,
-    change: Math.round((Math.random() * 4 - 2) * 10) / 10,
-  }));
+  // Real daily series for the current 28-day window (each date row carries clicks,
+  // impressions, ctr and position for that day).
+  const dailyRows = await queryGSC(['date'], 1000);
+  // Daily series for the previous 28-day window — used for site-wide period deltas.
+  const prevDailyRows = await queryGSC(['date'], 1000, { start: prevStartDate, end: prevEndDate });
+  // Previous-period keyword positions — used to compute per-keyword position change.
+  const prevKeywordRows = await queryGSC(['query'], 25, { start: prevStartDate, end: prevEndDate });
+
+  const prevPosByQuery = new Map<string, number>();
+  for (const r of prevKeywordRows) prevPosByQuery.set(r.keys[0], r.position);
+
+  const topKeywords = keywordRows.map((r: any) => {
+    const prevPos = prevPosByQuery.get(r.keys[0]);
+    // Positive change = position improved (got smaller / closer to #1).
+    const change = prevPos === undefined ? null : Math.round((prevPos - r.position) * 10) / 10;
+    return {
+      query: r.keys[0],
+      clicks: r.clicks,
+      impressions: r.impressions,
+      position: Math.round(r.position * 10) / 10,
+      ctr: Math.round(r.ctr * 10000) / 100,
+      change,
+    };
+  });
 
   const topPages = pageRows.map((r: any) => ({
     url: r.keys[0],
@@ -163,7 +195,6 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
     impressions: r.impressions,
     position: Math.round(r.position * 10) / 10,
     ctr: Math.round(r.ctr * 10000) / 100,
-    traffic: Math.round(r.clicks * (0.8 + Math.random() * 0.4)),
   }));
 
   const deviceMap: { [key: string]: string } = { 'MOBILE': 'Mobile', 'DESKTOP': 'Desktop', 'TABLET': 'Tablet' };
@@ -202,12 +233,23 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
     percentage: totalImp > 0 ? Math.round((r.impressions / totalImp) * 100) : 0,
   }));
 
-  const totalClicks = keywordRows.reduce((s: number, r: any) => s + r.clicks, 0);
-  const totalImpressions = keywordRows.reduce((s: number, r: any) => s + r.impressions, 0);
-  const avgPosition = keywordRows.length > 0
-    ? Math.round((keywordRows.reduce((s: number, r: any) => s + r.position, 0) / keywordRows.length) * 10) / 10
-    : 0;
-  const avgCtr = totalImpressions > 0 ? Math.round((totalClicks / totalImpressions) * 10000) / 100 : 0;
+  // Site-wide totals derived from the real daily series.
+  // avgPosition = position weighted by impressions across the days.
+  const summarise = (rows: any[]) => {
+    const clicks = rows.reduce((s, r) => s + r.clicks, 0);
+    const impressions = rows.reduce((s, r) => s + r.impressions, 0);
+    const weightedPos = rows.reduce((s, r) => s + r.position * r.impressions, 0);
+    const avgPos = impressions > 0 ? Math.round((weightedPos / impressions) * 10) / 10 : 0;
+    const ctr = impressions > 0 ? Math.round((clicks / impressions) * 10000) / 100 : 0;
+    return { clicks, impressions, avgPos, ctr };
+  };
+
+  const cur = summarise(dailyRows);
+  const prev = summarise(prevDailyRows);
+
+  const daily = dailyRows
+    .map((r: any) => ({ date: r.keys[0], clicks: r.clicks, impressions: r.impressions }))
+    .sort((a: any, b: any) => a.date.localeCompare(b.date));
 
   return {
     topKeywords,
@@ -215,10 +257,15 @@ async function fetchGSCData(serviceAccountKey: string): Promise<SEOData> {
     devices,
     geography,
     searchAppearance,
-    totalClicks,
-    totalImpressions,
-    avgPosition,
-    avgCtr,
+    daily,
+    totalClicks: cur.clicks,
+    totalImpressions: cur.impressions,
+    avgPosition: cur.avgPos,
+    avgCtr: cur.ctr,
+    prevTotalClicks: prev.clicks,
+    prevTotalImpressions: prev.impressions,
+    prevAvgPosition: prev.avgPos,
+    prevAvgCtr: prev.ctr,
     lastSync: new Date().toISOString(),
   };
 }

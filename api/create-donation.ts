@@ -21,6 +21,36 @@ async function storePaymentRef(ref: string, paymentId: string): Promise<void> {
   await redis.set(`donation:${ref}`, paymentId, { ex: REF_TTL_SECONDS });
 }
 
+function getRedis(): Redis | null {
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  return new Redis({ url, token });
+}
+
+// Reuse ONE Mollie customer per email instead of creating a new one on every
+// recurring donation. Without this, a donor ends up with many customer records
+// for the same email, scattering their subscriptions so the donor portal can't
+// find them. Cached in Redis (email → customerId); falls back to creating a new
+// customer if Redis is unavailable, so checkout never breaks.
+async function getOrCreateCustomerId(
+  mollie: ReturnType<typeof createMollieClient>,
+  name: string,
+  email: string,
+): Promise<string> {
+  const redis = getRedis();
+  const key = `mollie:customer:${email.toLowerCase()}`;
+  if (redis) {
+    try {
+      const existing = await redis.get<string>(key);
+      if (existing) return existing;
+    } catch { /* fall through to create */ }
+  }
+  const customer = await mollie.customers.create({ name, email, metadata: { source: 'astro' } });
+  if (redis) { try { await redis.set(key, customer.id); } catch { /* noop */ } }
+  return customer.id;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -71,17 +101,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     let payment;
     if (recurring) {
-      const customer = await mollie.customers.create({
-        name: donorName,
-        email: donorEmail,
-        metadata: { source: 'astro' },
-      });
+      const customerId = await getOrCreateCustomerId(mollie, donorName, donorEmail);
       payment = await mollie.payments.create({
         amount: { currency: 'GBP', value: formattedAmount },
         description: `Level Up — Monthly donation (£${formattedAmount}/month)`,
         redirectUrl,
         webhookUrl,
-        customerId: customer.id,
+        customerId,
         sequenceType: SequenceType.first,
         metadata: {
           type: 'recurring',

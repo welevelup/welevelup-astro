@@ -39,23 +39,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const mollie = createMollieClient({ apiKey });
     let cursor: string | undefined;
-    let customerId: string | undefined;
+    // A donor can have MULTIPLE Mollie customer records under the same email
+    // (one was created per donation). Collect them ALL — otherwise the portal
+    // only sees the subscriptions under whichever record happened to be first
+    // and wrongly tells the donor they have no active donations.
+    const customerIds: string[] = [];
 
     do {
       const page = await mollie.customers.page({ from: cursor, limit: 250 });
       const list = Array.from(page as Iterable<{ id: string; email: string; metadata?: Record<string, string> | null }>);
-      const match = list.find((c) => c.email?.toLowerCase() === email);
-      if (match) {
-        customerId = match.id;
-        break;
+      for (const c of list) {
+        if (c.email?.toLowerCase() === email) customerIds.push(c.id);
       }
       cursor = (page as unknown as { nextPageCursor?: string }).nextPageCursor ?? undefined;
     } while (cursor);
 
-    console.log(`[request-link] lookup for ${email} → customerId=${customerId ?? 'not found'}`);
-    if (!customerId) return ok();
+    console.log(`[request-link] lookup for ${email} → ${customerIds.length} customer record(s)`);
+    if (customerIds.length === 0) return ok();
 
-    const token = createToken({ email, mollieCustomerId: customerId }, secret);
+    const token = createToken({ email, customerIds }, secret);
     const url = `${siteUrl}/donor-portal/manage?token=${token}`;
 
     const resend = new Resend(resendKey);

@@ -11,9 +11,15 @@ const token = Astro.url.searchParams.get('token') ?? '';
 const secret = process.env.PORTAL_SECRET ?? '';
 const apiKey = process.env.MOLLIE_API_KEY ?? '';
 
-interface TokenPayload { email: string; mollieCustomerId: string }
+interface TokenPayload { email: string; customerIds?: string[]; mollieCustomerId?: string }
 
 const payload = secret ? verifyToken<TokenPayload>(token, secret) : null;
+
+// Support both the new multi-customer token and any old single-customer token
+// still in flight (links live 1h).
+const customerIds = payload
+  ? (payload.customerIds ?? (payload.mollieCustomerId ? [payload.mollieCustomerId] : []))
+  : [];
 
 let subscriptions: Array<{
   id: string;
@@ -21,17 +27,23 @@ let subscriptions: Array<{
   status: string;
   nextPaymentDate?: string | null;
   description: string;
+  customerId: string;
 }> = [];
 
 let loadError = false;
 
-if (payload && apiKey) {
+if (payload && apiKey && customerIds.length) {
   try {
     const mollie = createMollieClient({ apiKey });
-    const page = await mollie.customerSubscriptions.page({ customerId: payload.mollieCustomerId });
-    subscriptions = Array.from(page as Iterable<typeof subscriptions[number]>).filter(
-      (s) => s.status === SubscriptionStatus.active || s.status === SubscriptionStatus.pending
-    );
+    // Aggregate active subscriptions across every customer record for this email.
+    for (const cid of customerIds) {
+      const page = await mollie.customerSubscriptions.page({ customerId: cid });
+      for (const s of Array.from(page as Iterable<Omit<typeof subscriptions[number], 'customerId'>>)) {
+        if (s.status === SubscriptionStatus.active || s.status === SubscriptionStatus.pending) {
+          subscriptions.push({ ...s, customerId: cid });
+        }
+      }
+    }
   } catch {
     loadError = true;
   }
@@ -91,6 +103,7 @@ const invalid = !payload;
                 <button
                   class="cancel-btn"
                   data-sub-id={sub.id}
+                  data-customer-id={sub.customerId}
                   style="background:transparent;border:2px solid #0C0A3E;color:#0C0A3E;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:10px 20px;cursor:pointer;font-family:inherit;"
                 >Cancel donation</button>
                 <p class="cancel-status" hidden style="margin:8px 0 0;font-size:14px;"></p>
@@ -113,6 +126,7 @@ const invalid = !payload;
     btn.addEventListener('click', async () => {
       const button = btn;
       const subscriptionId = button.dataset.subId;
+      const customerId = button.dataset.customerId;
       const statusEl = button.nextElementSibling;
 
       if (!confirm('Are you sure you want to cancel your monthly donation to Level Up?')) return;
@@ -124,7 +138,7 @@ const invalid = !payload;
         const res = await fetch('/api/donor-portal/cancel', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token, subscriptionId }),
+          body: JSON.stringify({ token, subscriptionId, customerId }),
         });
         if (!res.ok) throw new Error();
         window.location.href = '/donor-portal/cancelled';

@@ -265,7 +265,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Only paid GBP donations count toward giving figures (mirrors monthlyTotals).
     const paidGbp = donations.filter(d => d.status === 'paid' && d.currency === 'GBP');
     const monthKey = (d: Donation) => (d.date && d.date.length >= 7 ? d.date.slice(0, 7) : '');
-    const subKeyOf = (d: Donation) => d.subscription_id || d.payer?.email || d.id;
+    // Donor identity: email FIRST — it is the only key stable across a donor's
+    // first payment (Mollie first payments carry no subscription_id) and their
+    // later renewals (which do). Keying by subscription_id first made the same
+    // person look like one donor "lost" plus one donor "joined" between months.
+    // Fallbacks: subscription_id (GoCardless exposes no email), then payment id.
+    const subKeyOf = (d: Donation) =>
+      (d.payer?.email || '').trim().toLowerCase() || d.subscription_id || d.id;
 
     // Sorted list of distinct months present (chronological), last 12.
     const allMonths = Array.from(new Set(paidGbp.map(monthKey).filter(Boolean))).sort();
@@ -334,9 +340,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!subSetByMonth.has(m)) subSetByMonth.set(m, new Set<string>());
       subSetByMonth.get(m)!.add(subKeyOf(d));
     }
-    const subscriberFlows = last12Months.map((m, idx) => {
+    // The month in progress is always mid-collection — most subscriptions just
+    // haven't charged yet — so comparing it to a full month fabricates churn
+    // (donors look "lost" when they are merely not-yet-billed). Flows therefore
+    // only ever compare COMPLETE months; the current month is excluded entirely.
+    const completeMonths = last12Months.filter(m => m !== currentMonth);
+    const subscriberFlows = completeMonths.map((m, idx) => {
       const cur = subSetByMonth.get(m) || new Set<string>();
-      const prevMonthKey = idx > 0 ? last12Months[idx - 1] : '';
+      const prevMonthKey = idx > 0 ? completeMonths[idx - 1] : '';
       const prevSet = (prevMonthKey && subSetByMonth.get(prevMonthKey)) || new Set<string>();
       let joined = 0, churned = 0;
       if (idx === 0) {
@@ -367,8 +378,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       repeatOneOffDonors,
     };
 
+    // "Raised this month" is month-to-date, so its only honest comparison is
+    // the PREVIOUS month cut at the same day — never the previous month's full
+    // total (which made every mid-month look like a collapse).
+    const dayOfMonth = now.getDate();
+    const prevMonthToDate = Math.round(
+      paidGbp
+        .filter(d => monthKey(d) === prevMonth && parseInt(d.date.slice(8, 10) || '0', 10) <= dayOfMonth)
+        .reduce((s, d) => s + d.amount, 0) * 100
+    ) / 100;
+
     const donationData = {
       donorInsights,
+      prevMonthToDate,
       totalMonth: donations.filter(d => {
         const dDate = new Date(d.date);
         return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();

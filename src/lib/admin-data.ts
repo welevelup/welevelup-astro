@@ -70,6 +70,9 @@ export interface DonorInsights {
 }
 
 export interface DonationData {
+  /** Previous month's takings cut at today's day-of-month — the honest
+   *  comparison for the in-progress "raised this month" figure. */
+  prevMonthToDate?: number;
   totalMonth: number;
   totalYear: number;
   activeSubscribers: number;

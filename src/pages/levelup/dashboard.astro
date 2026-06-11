@@ -199,6 +199,13 @@ const split = insights?.splitPct ?? null;
               <div class="kpi-value" style="font-size:28px;color:var(--neg)">{lastFlow ? fmtNum(lastFlow.churned) : '—'}</div>
               <div class="kpi-desc">People who stopped giving monthly.</div>
             </div>
+            {insights.otherRecurring && insights.otherRecurring.total > 0 && (
+              <div class="kpi">
+                <div class="kpi-label">Other recurring donors <span class="tip" tabindex="0" role="note" aria-label="What other recurring donors means">ⓘ<span class="tip-text">People giving on their own rhythm — quarterly or yearly. They're not part of the monthly numbers, but their gifts count in revenue.</span></span></div>
+                <div class="kpi-value" style="font-size:28px">{fmtNum(insights.otherRecurring.total)}</div>
+                <div class="kpi-desc">{insights.otherRecurring.quarterly} quarterly · {insights.otherRecurring.yearly} yearly</div>
+              </div>
+            )}
           </div>
 
           <!-- JOINED vs CHURNED CHART -->

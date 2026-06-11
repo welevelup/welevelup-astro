@@ -29,8 +29,22 @@ const monthly: MonthlyTotal[] = donations?.monthlyTotals ?? [];
 const curMonth = monthly[monthly.length - 1];
 const prevMonth = monthly[monthly.length - 2];
 
-const dMonthMoney = computeDelta(curMonth?.total, prevMonth?.total);
-const newSubs = curMonth && prevMonth ? curMonth.active_subscribers - prevMonth.active_subscribers : null;
+// The month in progress is mid-collection (most subscriptions haven't billed
+// yet), so it must never be compared against a full month:
+//  - money: month-to-date vs the SAME point of last month (prevMonthToDate),
+//  - donor counts: only ever the last two COMPLETE months.
+const nowKey = new Date().toISOString().slice(0, 7);
+const completeRows = monthly.filter((m) => (m.month || '').slice(0, 7) !== nowKey);
+const lastComplete = completeRows[completeRows.length - 1];
+const prevComplete = completeRows[completeRows.length - 2];
+
+const prevMTD = donations?.prevMonthToDate;
+const dMonthMoney = prevMTD != null && prevMTD > 0 ? computeDelta(curMonth?.total, prevMTD) : null;
+
+const monthShort = (k?: string) =>
+  k ? new Date(k.slice(0, 7) + '-15T00:00:00Z').toLocaleString('en-GB', { month: 'short' }) : '';
+const newSubs =
+  lastComplete && prevComplete ? lastComplete.active_subscribers - prevComplete.active_subscribers : null;
 
 // Cross-data glance numbers.
 const visitors28 = analytics?.users ?? null;
@@ -74,7 +88,8 @@ const mLabel = (m: string) => (m || '').slice(0, 7);
 
 // ── DONOR INSIGHTS (optional — tolerate older cached payloads) ──
 const insights = donations?.donorInsights ?? null;
-const flows = insights?.subscriberFlows ?? [];
+// Guard against stale cached payloads that still include the in-progress month.
+const flows = (insights?.subscriberFlows ?? []).filter((f) => (f.month || '').slice(0, 7) !== nowKey);
 const lastFlow = flows.length ? flows[flows.length - 1] : null;
 const flowChart = flows.length
   ? joinedChurnedChart(flows, 'New vs lost monthly donors over the last 12 months')
@@ -113,20 +128,22 @@ const split = insights?.splitPct ?? null;
             <div class="kpi-value">{fmtMoney(curMonth?.total ?? donations?.totalMonth ?? 0)}</div>
             <div class="kpi-desc">Total received so far this month.</div>
             <div class="kpi-foot">
-              {dMonthMoney && <span class={`delta ${dMonthMoney.positive ? 'pos' : 'neg'}`}>{dMonthMoney.arrow} {Math.abs(dMonthMoney.pct)}%</span>}
-              {dMonthMoney && <span class="delta-note">vs last month</span>}
+              {dMonthMoney && <span class={`delta ${dMonthMoney.positive ? 'pos' : 'neg'}`}>{dMonthMoney.arrow} {Math.round(Math.abs(dMonthMoney.pct))}%</span>}
+              {dMonthMoney && <span class="delta-note">vs same point last month</span>}
             </div>
           </div>
 
           <div class="kpi">
-            <div class="kpi-label">Active monthly donors</div>
-            <div class="kpi-value">{fmtNum(donations?.activeSubscribers ?? curMonth?.active_subscribers ?? 0)}</div>
-            <div class="kpi-desc">People giving on a recurring basis.</div>
+            <div class="kpi-label">Active monthly donors <span class="tip" tabindex="0" role="note" aria-label="How active monthly donors are counted">ⓘ<span class="tip-text">Counted over complete months only — the current month is still collecting, so most donors simply haven't been billed yet.</span></span></div>
+            <div class="kpi-value">{fmtNum(donations?.activeSubscribers ?? lastComplete?.active_subscribers ?? 0)}</div>
+            <div class="kpi-desc">People who gave monthly in {monthShort(lastComplete?.month) || 'the last full month'}.</div>
             <div class="kpi-foot">
               {newSubs != null && newSubs !== 0 && (
-                <span class={`delta ${newSubs > 0 ? 'pos' : 'neg'}`}>{newSubs > 0 ? '▲' : '▼'} {Math.abs(newSubs)}</span>
+                <span class={`delta ${newSubs > 0 ? 'pos' : 'neg'}`}>{newSubs > 0 ? '▲' : '▼'} {Math.abs(Math.round(newSubs))}</span>
               )}
-              {newSubs != null && <span class="delta-note">vs last month</span>}
+              {newSubs != null && prevComplete && (
+                <span class="delta-note">{monthShort(lastComplete?.month)} vs {monthShort(prevComplete?.month)}</span>
+              )}
             </div>
           </div>
 
@@ -166,12 +183,12 @@ const split = insights?.splitPct ?? null;
               <div class="kpi-desc">Typical size of a monthly donation.</div>
             </div>
             <div class="kpi">
-              <div class="kpi-label">New donors last month <span class="tip" tabindex="0" role="note" aria-label="What new donors last month means">ⓘ<span class="tip-text">Monthly donors who started giving last month and weren't there the month before.</span></span></div>
+              <div class="kpi-label">New donors ({monthShort(lastFlow?.month) || 'last full month'}) <span class="tip" tabindex="0" role="note" aria-label="What new donors means">ⓘ<span class="tip-text">Monthly donors who gave in the last complete month but not the month before. One-off donations are never counted here.</span></span></div>
               <div class="kpi-value" style="font-size:28px;color:var(--pos)">{lastFlow ? `+${fmtNum(lastFlow.joined)}` : '—'}</div>
               <div class="kpi-desc">People who started giving monthly.</div>
             </div>
             <div class="kpi">
-              <div class="kpi-label">Lost donors last month <span class="tip" tabindex="0" role="note" aria-label="What lost donors last month means">ⓘ<span class="tip-text">Monthly donors who were giving the month before but stopped last month.</span></span></div>
+              <div class="kpi-label">Lost donors ({monthShort(lastFlow?.month) || 'last full month'}) <span class="tip" tabindex="0" role="note" aria-label="What lost donors means">ⓘ<span class="tip-text">Monthly donors who gave the month before but not in the last complete month. The in-progress month is never compared — donors there mostly just haven't been billed yet.</span></span></div>
               <div class="kpi-value" style="font-size:28px;color:var(--neg)">{lastFlow ? fmtNum(lastFlow.churned) : '—'}</div>
               <div class="kpi-desc">People who stopped giving monthly.</div>
             </div>

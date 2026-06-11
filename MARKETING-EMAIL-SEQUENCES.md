@@ -1,6 +1,12 @@
-# Secuencias de email — de firmante a donante mensual
+# Secuencias de email — onboarding de firmantes NUEVOS
 
-Copia lista para enviar. La lógica: **pides poco (£3/mes), atado a la causa que YA les importó.** Segmenta por la campaña con la que entraron (tienes 7 segmentos; aquí los 2 grandes + plantilla genérica + upgrade + recuperación).
+> ⚠️ **Política del plan v2 (la comunidad está sobre-emailiada):** estas secuencias se
+> envían **SOLO a quien acaba de firmar** (automatización de bienvenida, una vez en la
+> vida), **NUNCA como blast a la lista existente.** Las únicas excepciones hacia la base
+> actual son transaccionales: recuperación de pagos caídos (sección E) y el informe de
+> impacto trimestral.
+
+Copia lista para enviar. La lógica: **pides poco (£3/mes), atado a la causa que YA les importó.**
 
 > Etiqueta todos los enlaces con UTM (ver MARKETING-UTM-GUIDE.md). Manda desde tu herramienta de email habitual (Brevo/Mailchimp/etc.), no desde el sitio.
 

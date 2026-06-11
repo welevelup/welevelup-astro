@@ -75,6 +75,8 @@ export interface DonorInsights {
     reason: 'failed' | 'cancelled' | 'no_charge';
   }>;
   lostDonorsMonth?: string;
+  /** Quarterly/yearly givers — excluded from monthly counts, shown separately. */
+  otherRecurring?: { total: number; quarterly: number; yearly: number };
   repeatOneOffDonors: number;
 }
 

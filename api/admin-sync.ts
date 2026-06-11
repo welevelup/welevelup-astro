@@ -447,6 +447,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       for (const row of lostDonorsDetail) delete row._cust;
     }
 
+    // Donors giving on their own rhythm (quarterly/yearly). Excluded from the
+    // monthly counts by design — surfaced separately so they stay visible.
+    const otherRecurringByKey = new Map<string, 'quarterly' | 'yearly'>();
+    for (const d of paidGbp) {
+      if (d.type !== 'recurring' || !isNonMonthly(d)) continue;
+      otherRecurringByKey.set(subKeyOf(d), /quarterly/i.test(d.description || '') ? 'quarterly' : 'yearly');
+    }
+    const otherKinds = Array.from(otherRecurringByKey.values());
+    const otherRecurring = {
+      total: otherRecurringByKey.size,
+      quarterly: otherKinds.filter(v => v === 'quarterly').length,
+      yearly: otherKinds.filter(v => v === 'yearly').length,
+    };
+
     const donorInsights = {
       mrr,
       avgMonthlyGift,
@@ -457,6 +471,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       repeatOneOffDonors,
       lostDonorsDetail,
       lostDonorsMonth: lostMonth,
+      otherRecurring,
     };
 
     // "Raised this month" is month-to-date, so its only honest comparison is

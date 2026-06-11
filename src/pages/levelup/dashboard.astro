@@ -91,6 +91,13 @@ const insights = donations?.donorInsights ?? null;
 // Guard against stale cached payloads that still include the in-progress month.
 const flows = (insights?.subscriberFlows ?? []).filter((f) => (f.month || '').slice(0, 7) !== nowKey);
 const lastFlow = flows.length ? flows[flows.length - 1] : null;
+const lostDetail = insights?.lostDonorsDetail ?? [];
+const lostMonthName = monthShort(insights?.lostDonorsMonth) || monthShort(lastFlow?.month);
+const REASON_CHIP: Record<string, { label: string; cls: string }> = {
+  failed: { label: 'Payment failed — fixable', cls: 'chip-warn' },
+  cancelled: { label: 'Cancelled', cls: 'chip-bad' },
+  no_charge: { label: 'No charge made', cls: 'chip-muted' },
+};
 const flowChart = flows.length
   ? joinedChurnedChart(flows, 'New vs lost monthly donors over the last 12 months')
   : '';
@@ -204,6 +211,40 @@ const split = insights?.splitPct ?? null;
                 <span class="legend-item"><span class="legend-swatch" style="background:#B91C1C"></span>Lost</span>
                 <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>Net change</span>
               </div>
+            </div>
+          )}
+
+          <!-- WHO STOPPED GIVING (detail behind the lost number) -->
+          {lostDetail.length > 0 && (
+            <div class="card" style="margin-top:16px">
+              <div class="section-title" style="margin-bottom:4px">Who stopped giving in {lostMonthName}</div>
+              <div class="kpi-desc" style="margin-bottom:12px">
+                “Payment failed” usually means an expired card — these donors often come back with one friendly email.
+                “No charge made” usually means a cancelled subscription.
+              </div>
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Provider</th>
+                    <th style="text-align:right">Monthly gift</th>
+                    <th>What happened</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lostDetail.map((l) => {
+                    const chip = REASON_CHIP[l.reason] ?? REASON_CHIP.no_charge;
+                    return (
+                      <tr>
+                        <td>{l.donor}</td>
+                        <td style="text-transform:capitalize">{l.gateway}</td>
+                        <td style="text-align:right">{l.amount ? fmtMoney(l.amount) : '—'}</td>
+                        <td><span class={`chip ${chip.cls}`}>{chip.label}</span></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           )}
 

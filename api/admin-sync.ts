@@ -32,6 +32,9 @@ interface Donation {
   type: 'recurring' | 'oneoff';
   status: 'paid' | 'cancelled' | 'failed';
   subscription_id?: string;
+  /** Mollie customer id — used to resolve donor identity for display, since
+   *  Mollie's payments LIST endpoint doesn't embed customer details. */
+  customer_id?: string;
   payer?: { name?: string; email?: string };
 }
 
@@ -75,7 +78,7 @@ async function fetchMolliePayments(year: number): Promise<Donation[]> {
         donations.push({
           id: p.id, date: paidAt, amount: parseFloat(amount.value), currency: amount.currency || 'EUR',
           gateway: 'mollie', type: isSub ? 'recurring' : 'oneoff',
-          status: 'paid', subscription_id: subId,
+          status: 'paid', subscription_id: subId, customer_id: p.customerId || undefined,
           payer: { name: customer.name, email: customer.email },
         });
       }
@@ -378,6 +381,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     let lostDonorsDetail: Array<{
       donor: string; gateway: string; amount: number; lastGift: string;
       reason: 'failed' | 'cancelled' | 'no_charge';
+      _cust?: string;
     }> = [];
     if (lostMonth && lostPrevMonth) {
       const curSet = subSetByMonth.get(lostMonth) || new Set<string>();
@@ -405,10 +409,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           amount: g?.amount || 0,
           lastGift: (g?.date || '').slice(0, 10),
           reason: failedKeys.has(k) ? 'failed' : cancelledKeys.has(k) ? 'cancelled' : 'no_charge',
+          _cust: g?.customer_id,
         });
       }
       lostDonorsDetail.sort((a, b) => b.amount - a.amount);
       lostDonorsDetail = lostDonorsDetail.slice(0, 25);
+
+      // Mollie's payments LIST endpoint doesn't embed customer details, so
+      // legacy donors surfaced as bare refs ("19", "sub_xxx"). Resolve the
+      // real email/name from the customer record — bounded to the ≤25 rows
+      // we actually display.
+      const mollieApiKey = process.env.MOLLIE_API_KEY;
+      if (mollieApiKey) {
+        for (const row of lostDonorsDetail) {
+          if (row.gateway !== 'mollie' || row.donor.includes('@') || !row._cust) continue;
+          try {
+            const c = await fetchJson(`https://api.mollie.com/v2/customers/${row._cust}`, {
+              headers: { Authorization: `Bearer ${mollieApiKey}` },
+            });
+            row.donor = c.email || c.name || row.donor;
+          } catch { /* keep the ref rather than fail the sync */ }
+        }
+      }
+      for (const row of lostDonorsDetail) delete row._cust;
     }
 
     const donorInsights = {

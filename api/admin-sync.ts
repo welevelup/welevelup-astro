@@ -35,6 +35,8 @@ interface Donation {
   /** Mollie customer id — used to resolve donor identity for display, since
    *  Mollie's payments LIST endpoint doesn't embed customer details. */
   customer_id?: string;
+  /** Raw provider description — used to spot quarterly/yearly givers. */
+  description?: string;
   payer?: { name?: string; email?: string };
 }
 
@@ -68,7 +70,11 @@ async function fetchMolliePayments(year: number): Promise<Donation[]> {
         const customer = p._embedded?.customer || {};
         // Skip Mollie-PayPal duplicates (matches Python script)
         if (p.method === 'paypal') continue;
-        if (p.status !== 'paid') continue;
+        // Keep paid charges AND failed/expired attempts: without the failures,
+        // the lost-donor reason detection could never say "payment failed" for
+        // Mollie donors (everything showed as "no charge made").
+        if (p.status !== 'paid' && p.status !== 'failed' && p.status !== 'expired') continue;
+        const rowStatus: Donation['status'] = p.status === 'paid' ? 'paid' : 'failed';
         // Detect subscription from description (matches detect_subscription_from_text)
         const desc = (p.description || '').toLowerCase();
         const isSub = desc.includes('monthly') || desc.includes('subscription') || !!p.subscriptionId;
@@ -78,7 +84,8 @@ async function fetchMolliePayments(year: number): Promise<Donation[]> {
         donations.push({
           id: p.id, date: paidAt, amount: parseFloat(amount.value), currency: amount.currency || 'EUR',
           gateway: 'mollie', type: isSub ? 'recurring' : 'oneoff',
-          status: 'paid', subscription_id: subId, customer_id: p.customerId || undefined,
+          status: rowStatus, subscription_id: subId, customer_id: p.customerId || undefined,
+          description: p.description || undefined,
           payer: { name: customer.name, email: customer.email },
         });
       }
@@ -255,7 +262,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log('[admin-sync] PayPal:', donations.filter(d => d.gateway === 'paypal').length);
 
     donations.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    const total = donations.reduce((sum, d) => sum + d.amount, 0);
+    // Money figures only ever count successful charges — `donations` also
+    // carries failed/cancelled attempts for the churn-reason detection.
+    const total = donations.filter(d => d.status === 'paid').reduce((sum, d) => sum + d.amount, 0);
     const now = new Date();
 
     // Calculate month keys for current and previous month
@@ -275,6 +284,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Fallbacks: subscription_id (GoCardless exposes no email), then payment id.
     const subKeyOf = (d: Donation) =>
       (d.payer?.email || '').trim().toLowerCase() || d.subscription_id || d.id;
+    // Quarterly/yearly givers are NOT monthly donors: they naturally skip
+    // months, so counting them in month-over-month donor math fabricates
+    // "lost" donors (and "new" ones whenever they reappear).
+    const isNonMonthly = (d: Donation) => /quarterly|yearly|annual/i.test(d.description || '');
 
     // Sorted list of distinct months present (chronological), last 12.
     const allMonths = Array.from(new Set(paidGbp.map(monthKey).filter(Boolean))).sort();
@@ -285,7 +298,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Recurring donations of the last complete month: sum the most recent gift of each
     // active subscriber → expected monthly recurring revenue (MRR).
-    const lastMonthRecurring = paidGbp.filter(d => d.type === 'recurring' && monthKey(d) === lastCompleteMonth);
+    const lastMonthRecurring = paidGbp.filter(d => d.type === 'recurring' && !isNonMonthly(d) && monthKey(d) === lastCompleteMonth);
     const mrrBySub = new Map<string, { date: string; amount: number }>();
     for (const d of lastMonthRecurring) {
       const key = subKeyOf(d);
@@ -337,7 +350,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // consecutive months → joined / churned / net.
     const subSetByMonth = new Map<string, Set<string>>();
     for (const d of paidGbp) {
-      if (d.type !== 'recurring') continue;
+      if (d.type !== 'recurring' || isNonMonthly(d)) continue;
       const m = monthKey(d);
       if (!m) continue;
       if (!subSetByMonth.has(m)) subSetByMonth.set(m, new Set<string>());
@@ -461,16 +474,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       prevMonthToDate,
       totalMonth: donations.filter(d => {
         const dDate = new Date(d.date);
-        return dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
+        return d.status === 'paid' && dDate.getMonth() === now.getMonth() && dDate.getFullYear() === now.getFullYear();
       }).reduce((s, d) => s + d.amount, 0),
       totalYear: total,
       activeSubscribers: 0, // Will be set from monthlyTotals below
       newThisMonth: 0, // Will be calculated below
       cancelledThisMonth: donations.filter(d => d.status === 'cancelled').length,
       byGateway: {
-        mollie: donations.filter(d => d.gateway === 'mollie').reduce((s, d) => s + d.amount, 0),
-        gocardless: donations.filter(d => d.gateway === 'gocardless').reduce((s, d) => s + d.amount, 0),
-        paypal: donations.filter(d => d.gateway === 'paypal').reduce((s, d) => s + d.amount, 0),
+        mollie: donations.filter(d => d.gateway === 'mollie' && d.status === 'paid').reduce((s, d) => s + d.amount, 0),
+        gocardless: donations.filter(d => d.gateway === 'gocardless' && d.status === 'paid').reduce((s, d) => s + d.amount, 0),
+        paypal: donations.filter(d => d.gateway === 'paypal' && d.status === 'paid').reduce((s, d) => s + d.amount, 0),
       },
       recentDonations: donations.slice(0, 10).map(d => ({
         date: d.date, amount: d.amount, currency: d.currency,
@@ -513,11 +526,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             existing.total += d.amount;
             if (d.type === 'recurring') {
               existing.monthly_donations += d.amount;
-              const subKey = d.subscription_id || d.payer?.email || d.id;
-              existing.active_subscribers.add(subKey);
-              if (d.gateway === 'mollie') existing.mollie_subs.add(subKey);
-              else if (d.gateway === 'gocardless') existing.gocardless_subs.add(subKey);
-              else if (d.gateway === 'paypal') existing.paypal_subs.add(subKey);
+              // Donor COUNTS only include true monthly givers (same identity
+              // key as the flows, email-first); quarterly/yearly money still
+              // lands in monthly_donations above.
+              if (!isNonMonthly(d)) {
+                const subKey = subKeyOf(d);
+                existing.active_subscribers.add(subKey);
+                if (d.gateway === 'mollie') existing.mollie_subs.add(subKey);
+                else if (d.gateway === 'gocardless') existing.gocardless_subs.add(subKey);
+                else if (d.gateway === 'paypal') existing.paypal_subs.add(subKey);
+              }
             } else {
               existing.one_off_donations += d.amount;
             }

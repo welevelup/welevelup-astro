@@ -368,6 +368,49 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     const repeatOneOffDonors = Array.from(oneOffByPayer.values()).filter(c => c >= 2).length;
 
+    // Per-donor detail behind the "lost donors" number for the most recent
+    // complete month: who stopped, and HOW. A failed charge usually means an
+    // expired card (recoverable with one email); no charge at all usually
+    // means a cancelled subscription. Admin-only data — the dashboard already
+    // shows payer emails for failed/cancelled payments.
+    const lostMonth = completeMonths[completeMonths.length - 1] || '';
+    const lostPrevMonth = completeMonths[completeMonths.length - 2] || '';
+    let lostDonorsDetail: Array<{
+      donor: string; gateway: string; amount: number; lastGift: string;
+      reason: 'failed' | 'cancelled' | 'no_charge';
+    }> = [];
+    if (lostMonth && lostPrevMonth) {
+      const curSet = subSetByMonth.get(lostMonth) || new Set<string>();
+      const prevSet = subSetByMonth.get(lostPrevMonth) || new Set<string>();
+      // Most recent recurring gift per donor in the previous month → gateway/amount.
+      const lastGiftByKey = new Map<string, Donation>();
+      for (const d of paidGbp) {
+        if (d.type !== 'recurring' || monthKey(d) !== lostPrevMonth) continue;
+        const k = subKeyOf(d);
+        const prev = lastGiftByKey.get(k);
+        if (!prev || d.date > prev.date) lastGiftByKey.set(k, d);
+      }
+      const failedKeys = new Set(
+        donations.filter(d => d.status === 'failed' && d.type === 'recurring' && monthKey(d) === lostMonth).map(subKeyOf)
+      );
+      const cancelledKeys = new Set(
+        donations.filter(d => d.status === 'cancelled' && d.type === 'recurring' && monthKey(d) === lostMonth).map(subKeyOf)
+      );
+      for (const k of prevSet) {
+        if (curSet.has(k)) continue;
+        const g = lastGiftByKey.get(k);
+        lostDonorsDetail.push({
+          donor: g?.payer?.email || g?.payer?.name || k,
+          gateway: g?.gateway || 'unknown',
+          amount: g?.amount || 0,
+          lastGift: (g?.date || '').slice(0, 10),
+          reason: failedKeys.has(k) ? 'failed' : cancelledKeys.has(k) ? 'cancelled' : 'no_charge',
+        });
+      }
+      lostDonorsDetail.sort((a, b) => b.amount - a.amount);
+      lostDonorsDetail = lostDonorsDetail.slice(0, 25);
+    }
+
     const donorInsights = {
       mrr,
       avgMonthlyGift,
@@ -376,6 +419,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       giftSizeBuckets,
       subscriberFlows,
       repeatOneOffDonors,
+      lostDonorsDetail,
+      lostDonorsMonth: lostMonth,
     };
 
     // "Raised this month" is month-to-date, so its only honest comparison is

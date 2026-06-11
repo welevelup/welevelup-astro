@@ -66,6 +66,15 @@ export interface DonorInsights {
   splitPct: { recurring: number; oneOff: number };
   giftSizeBuckets: Array<{ bucket: string; count: number; amount: number }>;
   subscriberFlows: Array<{ month: string; joined: number; churned: number; net: number }>;
+  /** Per-donor detail behind "lost donors" for the last complete month. */
+  lostDonorsDetail?: Array<{
+    donor: string;
+    gateway: string;
+    amount: number;
+    lastGift: string;
+    reason: 'failed' | 'cancelled' | 'no_charge';
+  }>;
+  lostDonorsMonth?: string;
   repeatOneOffDonors: number;
 }
 

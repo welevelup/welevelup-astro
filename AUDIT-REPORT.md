@@ -50,9 +50,9 @@ git diff origin/main..staging --stat   (resumen)
 
 | Variable | Requerida por | ¿Definida en prod? |
 |----------|--------------|--------------------|
-| `MOLLIE_API_KEY` | create-donation, webhook, validate | ✅ `live_uvdBw...` (LIVE, correcto) |
+| `MOLLIE_API_KEY` | create-donation, webhook, validate | ✅ `live_•••••...` (LIVE, correcto) |
 | `MOLLIE_WEBHOOK_URL` | create-donation, webhook | ✅ `https://welevelup.org/api/mollie-webhook?v=2` |
-| `MOLLIE_WEBHOOK_SECRET` | webhook, test-* | ✅ `CMSFk33A8x...` (32 chars) |
+| `MOLLIE_WEBHOOK_SECRET` | webhook, test-* | ✅ `••••••••••...` (32 chars) |
 | `PUBLIC_SITE_URL` | create-donation, sitemap | ✅ `https://welevelup.org` |
 | `RESEND_API_KEY` | webhook (email) | ✅ SET |
 | `GA4_MEASUREMENT_ID` | webhook (GA4) | ✅ SET |
@@ -170,7 +170,7 @@ Ya con un `id` inexistente (un solo `payments.get` fallido) tarda ~0.8s. Con un 
 
 Verificado en vivo vía `/api/check-config`:
 ```json
-"mollie": { "apiKey": "live_uvdBw...", "isLive": true, "keyType": "🔴 LIVE" }
+"mollie": { "apiKey": "live_•••••...", "isLive": true, "keyType": "🔴 LIVE" }
 ```
 Producción usa `live_`. Correcto. **No se cruzaron las keys.** (El problema es que este dato es público — ver S-1 en Fase 2).
 

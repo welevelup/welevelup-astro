@@ -6,6 +6,7 @@ import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 import { createMollieClient } from '@mollie/api-client';
 import { Redis } from '@upstash/redis';
+import MonthlyAsk from '../../components/MonthlyAsk.astro';
 
 const { headInner, bodyClass } = extract(homeRaw);
 
@@ -104,6 +105,13 @@ const copy = COPY[status];
               <li>Community bystander training — We Protect Us</li>
             </ul>
           </div>
+
+          {status === 'paid' && !isMonthly && (
+            <MonthlyAsk
+              heading="Could you make this monthly?"
+              body="You just made a one-off gift — thank you. Turning it into £3 a month keeps every campaign going all year, not just today."
+            />
+          )}
 
           <div class="lu-thanks__actions">
             <a href="/active-campaigns/" class="lu-thanks__btn-primary">See our campaigns →</a>

@@ -1,0 +1,88 @@
+---
+/**
+ * Reusable "become a monthly donor" prompt.
+ *
+ * Designed to drop onto the highest-intent moment (the donation thank-you for a
+ * one-off gift, or a campaign page). The ask is deliberately small (£3/month)
+ * and framed around continuity of impact — the pattern that converts warm
+ * supporters best. Matches the Level Up palette (navy / lime / cream).
+ *
+ * Props let each placement frame the ask around its own campaign.
+ */
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  body?: string;
+  ctaLabel?: string;
+  /** Link to the donation form, pre-set to monthly. UTM-tagged so the
+   *  dashboard can attribute upgrades to this prompt. */
+  href?: string;
+}
+
+const {
+  eyebrow = 'Make it monthly',
+  heading = 'Turn your support into lasting change',
+  body = 'A small monthly gift keeps our campaigns going all year — not just today. £3 a month funds the work behind every win.',
+  ctaLabel = 'Give £3 a month →',
+  href = '/donate?frequency=monthly&utm_source=site&utm_medium=monthly_ask&utm_campaign=upgrade',
+} = Astro.props;
+---
+<aside class="lu-monthlyask" aria-label="Become a monthly donor">
+  <p class="lu-monthlyask__eyebrow">{eyebrow}</p>
+  <h2 class="lu-monthlyask__heading">{heading}</h2>
+  <p class="lu-monthlyask__body">{body}</p>
+  <a class="lu-monthlyask__cta" href={href}>{ctaLabel}</a>
+</aside>
+
+<style>
+  .lu-monthlyask {
+    background: #0C0A3E;
+    padding: 36px 32px;
+    margin: 40px 0;
+    text-align: center;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+  .lu-monthlyask__eyebrow {
+    margin: 0 0 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #CCFF33;
+  }
+  .lu-monthlyask__heading {
+    margin: 0 0 12px;
+    font-size: clamp(22px, 4vw, 30px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #EEEBD3;
+  }
+  .lu-monthlyask__body {
+    margin: 0 auto 24px;
+    max-width: 420px;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(238, 235, 211, 0.75);
+  }
+  .lu-monthlyask__cta {
+    display: inline-block;
+    background: #CCFF33;
+    color: #0C0A3E;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    padding: 16px 32px;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .lu-monthlyask__cta:hover {
+    background: #EEEBD3;
+    transform: translateY(-1px);
+  }
+  .lu-monthlyask__cta:focus-visible {
+    outline: 3px solid #CCFF33;
+    outline-offset: 3px;
+  }
+</style>

@@ -1,0 +1,390 @@
+---
+export const prerender = false;
+import AdminShell from '../../components/AdminShell.astro';
+import { impressionsClicksChart } from '../../lib/admin-charts';
+import { fmtNum, computeDelta, computePointDelta } from '../../lib/admin-format';
+import type { SeoData } from '../../lib/admin-data';
+import { Redis } from '@upstash/redis';
+
+const urlToken = Astro.url.searchParams.get('token') || '';
+
+const getRedis = () => {
+  const url = process.env.UPSTASH_REDIS_REST_URL || '';
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  if (!url || !token) throw new Error('Redis not configured');
+  return new Redis({ url, token });
+};
+
+let seo: SeoData | null = null;
+try {
+  const redis = getRedis();
+  seo = await redis.get<SeoData>('admin:seo');
+} catch (err) {
+  console.error('Failed to fetch SEO data from Redis:', err);
+}
+
+const countryNames: Record<string, string> = {
+  gbr: 'United Kingdom', usa: 'United States', deu: 'Germany', grc: 'Greece', irl: 'Ireland',
+  idn: 'Indonesia', jpn: 'Japan', vnm: 'Vietnam', aus: 'Australia', bra: 'Brazil',
+  fra: 'France', esp: 'Spain', ita: 'Italy', nld: 'Netherlands', bel: 'Belgium',
+  can: 'Canada', nzl: 'New Zealand', ind: 'India', mex: 'Mexico',
+};
+const mapCountry = (c: string) => countryNames[(c || '').toLowerCase()] || (c || '').toUpperCase();
+const shortPath = (url: string) => {
+  try { return new URL(url).pathname || '/'; } catch { return url; }
+};
+
+const hasData = !!seo && (seo.totalImpressions != null || (seo.topKeywords?.length ?? 0) > 0);
+
+const clicks = seo?.totalClicks ?? 0;
+const impressions = seo?.totalImpressions ?? 0;
+const ctr = seo?.avgCtr ?? 0;
+const position = seo?.avgPosition ?? 0;
+
+const dClicks = computeDelta(seo?.totalClicks, seo?.prevTotalClicks);
+const dImpr = computeDelta(seo?.totalImpressions, seo?.prevTotalImpressions);
+const dCtr = computeDelta(seo?.avgCtr, seo?.prevAvgCtr);
+// Position: lower is better, point delta in ranking places.
+const dPos = computePointDelta(seo?.avgPosition, seo?.prevAvgPosition, true);
+
+const daily = seo?.daily ?? [];
+const chart = daily.length
+  ? impressionsClicksChart(daily, 'Clicks and impressions per day over the last 28 days')
+  : '';
+
+const keywords = seo?.topKeywords ?? [];
+const pages = seo?.topPages ?? [];
+const devices = seo?.devices ?? [];
+const geography = (seo?.geography ?? []).slice(0, 5);
+const appearance = seo?.searchAppearance ?? [];
+const maxAppearance = appearance.reduce((m, a) => Math.max(m, a.count || 0), 1);
+
+// ── ACTIONABLE OPPORTUNITIES (optional — tolerate older cached payloads) ──
+const opportunities = seo?.opportunities ?? [];
+const positionBuckets = seo?.positionBuckets ?? [];
+const top3Bucket = positionBuckets.find((b) => b.bucket === 'Top 3');
+const gained = seo?.gainedLost?.gained ?? [];
+const lost = seo?.gainedLost?.lost ?? [];
+const hasInsights = opportunities.length > 0 || positionBuckets.length > 0 || gained.length > 0 || lost.length > 0;
+// Colours for the 100% stacked position bar (best → worst).
+const posBucketColors: Record<string, string> = {
+  'Top 3': '#15803D',
+  '4–10': '#5B4FCF',
+  '11–20': '#A89CED',
+  '20+': 'rgba(12,10,62,0.18)',
+};
+---
+<AdminShell
+  active="search"
+  title="Google Search"
+  subtitle="How people find Level Up on Google — last 28 days."
+  token={urlToken}
+  syncEndpoint="/api/admin-seo-sync"
+  lastSync={seo?.lastSync ?? null}
+>
+  {!hasData && (
+    <div class="empty">
+      <strong>No data yet</strong>
+      Press “Refresh data” to pull the latest from Google Search Console.
+    </div>
+  )}
+
+  {hasData && (
+    <>
+      <!-- KPIs -->
+      <section class="section">
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Clicks</div>
+            <div class="kpi-value">{fmtNum(clicks)}</div>
+            <div class="kpi-desc">Visits to the site straight from Google.</div>
+            <div class="kpi-foot">
+              {dClicks && <span class={`delta ${dClicks.positive ? 'pos' : 'neg'}`}>{dClicks.arrow} {Math.abs(dClicks.pct)}%</span>}
+              {dClicks && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Impressions <span class="tip" tabindex="0" role="note" aria-label="What impressions means">ⓘ<span class="tip-text">Times Level Up appeared in Google results — whether or not anyone clicked.</span></span></div>
+            <div class="kpi-value">{fmtNum(impressions)}</div>
+            <div class="kpi-desc">Times Level Up showed up in Google results.</div>
+            <div class="kpi-foot">
+              {dImpr && <span class={`delta ${dImpr.positive ? 'pos' : 'neg'}`}>{dImpr.arrow} {Math.abs(dImpr.pct)}%</span>}
+              {dImpr && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Average CTR <span class="tip" tabindex="0" role="note" aria-label="What average CTR means">ⓘ<span class="tip-text">Of every 100 people who saw you in Google, how many clicked.</span></span></div>
+            <div class="kpi-value">{ctr.toFixed(2)}%</div>
+            <div class="kpi-desc">Share of people who clicked after seeing you.</div>
+            <div class="kpi-foot">
+              {dCtr && <span class={`delta ${dCtr.positive ? 'pos' : 'neg'}`}>{dCtr.arrow} {Math.abs(dCtr.pct)}%</span>}
+              {dCtr && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Average position <span class="tip" tabindex="0" role="note" aria-label="What average position means">ⓘ<span class="tip-text">Your average ranking in Google results — lower is better (1 is the top).</span></span></div>
+            <div class="kpi-value">#{position.toFixed(1)}</div>
+            <div class="kpi-desc">Your typical ranking in Google — lower is better.</div>
+            <div class="kpi-foot">
+              {dPos && dPos.value !== 0 && <span class={`delta ${dPos.positive ? 'pos' : 'neg'}`}>{dPos.arrow} {dPos.value}</span>}
+              {dPos && dPos.value !== 0 && <span class="delta-note">places vs previous 28 days</span>}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- OPPORTUNITIES -->
+      <section class="section">
+        <div class="section-title">Opportunities</div>
+        <p class="kpi-desc" style="margin-bottom:12px;max-width:70ch">
+          Search terms where Level Up almost ranks — improving these pages could win clicks without ads.
+        </p>
+        {hasInsights ? (
+          <>
+            {opportunities.length ? (
+              <div class="table-wrap">
+                <table class="data">
+                  <thead>
+                    <tr>
+                      <th scope="col">Search term</th>
+                      <th scope="col" class="num"><span class="th-tip">Seen <span class="tip" tabindex="0" role="note" aria-label="What seen means">ⓘ<span class="tip-text">Times Level Up appeared in Google results for this term (impressions).</span></span></span></th>
+                      <th scope="col" class="num">Clicks</th>
+                      <th scope="col" class="num"><span class="th-tip">Position <span class="tip" tabindex="0" role="note" aria-label="What position means">ⓘ<span class="tip-text">Average Google ranking for this term — lower is better. These sit just below the top.</span></span></span></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {opportunities.map((o) => (
+                      <tr>
+                        <td style="font-weight:600">{o.query}</td>
+                        <td class="num">{fmtNum(o.impressions)}</td>
+                        <td class="num">{fmtNum(o.clicks)}</td>
+                        <td class="num">#{Number(o.position).toFixed(1)}</td>
+                        <td><span class="chip chip-new">fix candidate</span></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <div class="empty">No near-miss search terms right now.</div>
+            )}
+
+            <!-- POSITION BUCKETS (100% stacked) -->
+            {positionBuckets.length > 0 && (
+              <div class="card" style="margin-top:16px">
+                <div class="section-title" style="margin-bottom:10px">
+                  How visible you are
+                  <span class="tip" tabindex="0" role="note" aria-label="What this bar means">ⓘ<span class="tip-text">Share of the times you appear in Google, split by how high you rank.</span></span>
+                </div>
+                {top3Bucket && (
+                  <div class="kpi-desc" style="margin-bottom:12px">
+                    You appear in the top 3 results <strong style="color:var(--text)">{top3Bucket.pct}%</strong> of the time.
+                  </div>
+                )}
+                <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+                  {positionBuckets.map((b) => (
+                    b.pct > 0 && (
+                      <span style={`width:${b.pct}%;background:${posBucketColors[b.bucket] || 'var(--violet-soft)'}`} title={`${b.bucket}: ${b.pct}%`}></span>
+                    )
+                  ))}
+                </div>
+                <div class="chart-legend" style="margin-top:12px">
+                  {positionBuckets.map((b) => (
+                    <span class="legend-item"><span class="legend-swatch" style={`background:${posBucketColors[b.bucket] || 'var(--violet-soft)'}`}></span>{b.bucket} {b.pct}%</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <!-- GAINED / LOST -->
+            {(gained.length > 0 || lost.length > 0) && (
+              <div class="grid-2" style="margin-top:16px">
+                <div class="card">
+                  <div class="section-title" style="margin-bottom:12px;color:var(--pos)">New search terms <span class="tip" tabindex="0" role="note" aria-label="What new search terms means">ⓘ<span class="tip-text">Terms people now find you for that didn't show up in the previous 28 days.</span></span></div>
+                  {gained.length ? gained.map((g) => (
+                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border)">
+                      <span style="font-weight:600">{g.query}</span>
+                      <span style="color:var(--text-2);font-variant-numeric:tabular-nums">{fmtNum(g.clicks)} clicks</span>
+                    </div>
+                  )) : <div class="kpi-desc">No new terms this period.</div>}
+                </div>
+                <div class="card">
+                  <div class="section-title" style="margin-bottom:12px;color:var(--neg)">Lost search terms <span class="tip" tabindex="0" role="note" aria-label="What lost search terms means">ⓘ<span class="tip-text">Terms you used to show up for that have dropped out in the last 28 days.</span></span></div>
+                  {lost.length ? lost.map((l) => (
+                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--border)">
+                      <span style="font-weight:600">{l.query}</span>
+                      <span style="color:var(--text-2);font-variant-numeric:tabular-nums">{fmtNum(l.clicks)} clicks</span>
+                    </div>
+                  )) : <div class="kpi-desc">No lost terms this period.</div>}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load opportunities.</div>
+        )}
+      </section>
+
+      <!-- CHART -->
+      <section class="section">
+        <div class="section-title">Clicks &amp; impressions per day</div>
+        <div class="card">
+          {chart ? <Fragment set:html={chart} /> : <div class="kpi-desc">No daily data in this period yet.</div>}
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>Clicks</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>Impressions</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TOP SEARCH TERMS -->
+      <section class="section">
+        <div class="section-title">Top search terms</div>
+        {keywords.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Search term</th>
+                  <th scope="col" class="num">Clicks from Google</th>
+                  <th scope="col" class="num">Impressions</th>
+                  <th scope="col" class="num">CTR</th>
+                  <th scope="col" class="num"><span class="th-tip">Avg. position <span class="tip" tabindex="0" role="note" aria-label="What average position means">ⓘ<span class="tip-text">Average Google ranking for this term — lower is better.</span></span></span></th>
+                  <th scope="col" class="num"><span class="th-tip">Change <span class="tip" tabindex="0" role="note" aria-label="What change means">ⓘ<span class="tip-text">Ranking places gained (▲) or lost (▼) vs the previous 28 days.</span></span></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {keywords.map((k) => (
+                  <tr>
+                    <td style="font-weight:600">{k.query}</td>
+                    <td class="num">{fmtNum(k.clicks)}</td>
+                    <td class="num">{fmtNum(k.impressions)}</td>
+                    <td class="num">{Number(k.ctr).toFixed(2)}%</td>
+                    <td class="num">#{Number(k.position).toFixed(1)}</td>
+                    <td class="num">
+                      {k.change == null ? (
+                        <span class="chip chip-new">new</span>
+                      ) : k.change === 0 ? (
+                        <span style="color:var(--text-3)">—</span>
+                      ) : (
+                        <span class={`delta ${k.change > 0 ? 'pos' : 'neg'}`}>{k.change > 0 ? '▲' : '▼'} {Math.abs(k.change).toFixed(1)}</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No search terms yet</strong>Press “Refresh data” to load them.</div>
+        )}
+      </section>
+
+      <!-- TOP PAGES -->
+      <section class="section">
+        <div class="section-title">Top pages in Google</div>
+        {pages.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Page</th>
+                  <th scope="col" class="num">Clicks from Google</th>
+                  <th scope="col" class="num">Impressions</th>
+                  <th scope="col" class="num">CTR</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pages.map((p) => (
+                  <tr>
+                    <td style="font-weight:600">{shortPath(p.url)}</td>
+                    <td class="num">{fmtNum(p.clicks)}</td>
+                    <td class="num">{fmtNum(p.impressions)}</td>
+                    <td class="num">{Number(p.ctr).toFixed(2)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No pages yet</strong>Press “Refresh data” to load them.</div>
+        )}
+      </section>
+
+      <!-- DEVICES + COUNTRIES -->
+      <div class="grid-2">
+        <section class="section">
+          <div class="section-title">Devices</div>
+          {devices.length ? (
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr><th scope="col">Device</th><th scope="col" class="num">Clicks</th><th scope="col" class="num">Impressions</th><th scope="col" class="num">CTR</th></tr>
+                </thead>
+                <tbody>
+                  {devices.map((d) => (
+                    <tr>
+                      <td style="font-weight:600">{d.device}</td>
+                      <td class="num">{fmtNum(d.clicks)}</td>
+                      <td class="num">{fmtNum(d.impressions)}</td>
+                      <td class="num">{Number(d.ctr).toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div class="empty">No device data yet.</div>
+          )}
+        </section>
+
+        <section class="section">
+          <div class="section-title">Top countries</div>
+          {geography.length ? (
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr><th scope="col">Country</th><th scope="col" class="num">Clicks</th><th scope="col" class="num">Impressions</th><th scope="col" class="num">CTR</th></tr>
+                </thead>
+                <tbody>
+                  {geography.map((g) => (
+                    <tr>
+                      <td style="font-weight:600">{mapCountry(g.country)}</td>
+                      <td class="num">{fmtNum(g.clicks)}</td>
+                      <td class="num">{fmtNum(g.impressions)}</td>
+                      <td class="num">{Number(g.ctr).toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div class="empty">No country data yet.</div>
+          )}
+        </section>
+      </div>
+
+      <!-- SEARCH APPEARANCE (only when more than one type) -->
+      {appearance.length > 1 && (
+        <section class="section">
+          <div class="section-title">How you appear in search</div>
+          <div class="card">
+            {appearance.map((a) => (
+              <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                <span style="width:140px;font-size:13px;flex-shrink:0">{a.type}</span>
+                <span class="minibar" style="flex:1">
+                  <span class="minibar-track"><span class="minibar-fill" style={`width:${Math.round((a.count / maxAppearance) * 100)}%`}></span></span>
+                  <span class="minibar-val">{fmtNum(a.count)}</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  )}
+</AdminShell>

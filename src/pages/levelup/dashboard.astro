@@ -1,0 +1,488 @@
+---
+export const prerender = false;
+import AdminShell from '../../components/AdminShell.astro';
+import { stackedMonthlyChart, joinedChurnedChart } from '../../lib/admin-charts';
+import { fmtMoney, fmtMoney0, fmtNum, fmtDay, computeDelta } from '../../lib/admin-format';
+import { getAdminData } from '../../lib/admin-data';
+import type { DonationData, MonthlyTotal } from '../../lib/admin-data';
+
+const urlToken = Astro.url.searchParams.get('token') || '';
+
+let donations: DonationData | null = null;
+let analytics: any = null;
+let seo: any = null;
+let lastSync: string | null = null;
+try {
+  const data = await getAdminData();
+  donations = data.donations;
+  analytics = data.analytics;
+  seo = data.seo;
+  lastSync = data.lastSync;
+} catch (error) {
+  console.error('Failed to load admin data:', error);
+}
+
+const hasData = !!donations;
+const monthly: MonthlyTotal[] = donations?.monthlyTotals ?? [];
+
+// This month / previous month (chronological order: oldest..newest).
+const curMonth = monthly[monthly.length - 1];
+const prevMonth = monthly[monthly.length - 2];
+
+// The month in progress is mid-collection (most subscriptions haven't billed
+// yet), so it must never be compared against a full month:
+//  - money: month-to-date vs the SAME point of last month (prevMonthToDate),
+//  - donor counts: only ever the last two COMPLETE months.
+const nowKey = new Date().toISOString().slice(0, 7);
+const completeRows = monthly.filter((m) => (m.month || '').slice(0, 7) !== nowKey);
+const lastComplete = completeRows[completeRows.length - 1];
+const prevComplete = completeRows[completeRows.length - 2];
+
+const prevMTD = donations?.prevMonthToDate;
+const dMonthMoney = prevMTD != null && prevMTD > 0 ? computeDelta(curMonth?.total, prevMTD) : null;
+
+const monthShort = (k?: string) =>
+  k ? new Date(k.slice(0, 7) + '-15T00:00:00Z').toLocaleString('en-GB', { month: 'short' }) : '';
+const newSubs =
+  lastComplete && prevComplete ? lastComplete.active_subscribers - prevComplete.active_subscribers : null;
+
+// Cross-data glance numbers.
+const visitors28 = analytics?.users ?? null;
+const googleClicks28 = seo?.totalClicks ?? null;
+
+// 12-month stacked chart (recurring + one-off).
+const chart = monthly.length
+  ? stackedMonthlyChart(
+      monthly.map((m) => ({ month: m.month, monthly: m.monthly_donations || 0, oneoff: m.one_off_donations || 0 })),
+      'Monthly donation revenue split into recurring and one-off gifts'
+    )
+  : '';
+
+// Money lost this month.
+const lostThisMonth = curMonth
+  ? {
+      failedCount: curMonth.failed_payments || 0,
+      failedAmount: curMonth.failed_amount || 0,
+      cancelledCount: curMonth.cancelled || 0,
+      cancelledAmount: curMonth.cancelled_amount || 0,
+      totalLost: curMonth.total_lost || 0,
+    }
+  : null;
+const anyLost = !!lostThisMonth && lostThisMonth.totalLost > 0;
+
+const byGateway = donations?.byGateway ?? { mollie: 0, gocardless: 0, paypal: 0 };
+const gatewayTotal = (byGateway.mollie || 0) + (byGateway.gocardless || 0) + (byGateway.paypal || 0) || 1;
+const gateways = [
+  { label: 'Mollie', value: byGateway.mollie || 0 },
+  { label: 'GoCardless', value: byGateway.gocardless || 0 },
+  { label: 'PayPal', value: byGateway.paypal || 0 },
+];
+
+const recent = donations?.recentDonations ?? [];
+const cancelled = donations?.cancelledSubscriptions ?? [];
+const failed = donations?.failedTransactions ?? [];
+
+// newest-first month rows for the table
+const monthlyDesc = [...monthly].reverse();
+const mLabel = (m: string) => (m || '').slice(0, 7);
+
+// ── DONOR INSIGHTS (optional — tolerate older cached payloads) ──
+const insights = donations?.donorInsights ?? null;
+// Guard against stale cached payloads that still include the in-progress month.
+const flows = (insights?.subscriberFlows ?? []).filter((f) => (f.month || '').slice(0, 7) !== nowKey);
+const lastFlow = flows.length ? flows[flows.length - 1] : null;
+const lostDetail = insights?.lostDonorsDetail ?? [];
+const lostMonthName = monthShort(insights?.lostDonorsMonth) || monthShort(lastFlow?.month);
+const REASON_CHIP: Record<string, { label: string; cls: string }> = {
+  failed: { label: 'Payment failed — fixable', cls: 'chip-warn' },
+  cancelled: { label: 'Cancelled', cls: 'chip-bad' },
+  no_charge: { label: 'No charge made', cls: 'chip-muted' },
+};
+const flowChart = flows.length
+  ? joinedChurnedChart(flows, 'New vs lost monthly donors over the last 12 months')
+  : '';
+const buckets = insights?.giftSizeBuckets ?? [];
+const maxBucketCount = buckets.reduce((m, b) => Math.max(m, b.count || 0), 1);
+const topBucket = buckets.reduce<{ bucket: string; count: number } | null>(
+  (best, b) => (!best || b.count > best.count ? { bucket: b.bucket, count: b.count } : best),
+  null
+);
+const split = insights?.splitPct ?? null;
+---
+<AdminShell
+  active="donations"
+  title="Donations"
+  subtitle="Money raised across Mollie, GoCardless and PayPal — welevelup.org."
+  token={urlToken}
+  syncEndpoint="/api/admin-sync"
+  lastSync={lastSync}
+>
+  {!hasData && (
+    <div class="empty">
+      <strong>No data yet</strong>
+      Press “Refresh data” to pull the latest from your payment providers.
+    </div>
+  )}
+
+  {hasData && (
+    <>
+      <!-- THIS MONTH AT A GLANCE (cross-data) -->
+      <section class="section">
+        <div class="section-title">This month at a glance</div>
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Raised this month</div>
+            <div class="kpi-value">{fmtMoney(curMonth?.total ?? donations?.totalMonth ?? 0)}</div>
+            <div class="kpi-desc">Total received so far this month.</div>
+            <div class="kpi-foot">
+              {dMonthMoney && <span class={`delta ${dMonthMoney.positive ? 'pos' : 'neg'}`}>{dMonthMoney.arrow} {Math.round(Math.abs(dMonthMoney.pct))}%</span>}
+              {dMonthMoney && <span class="delta-note">vs same point last month</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Active monthly donors <span class="tip" tabindex="0" role="note" aria-label="How active monthly donors are counted">ⓘ<span class="tip-text">Counted over complete months only — the current month is still collecting, so most donors simply haven't been billed yet.</span></span></div>
+            <div class="kpi-value">{fmtNum(donations?.activeSubscribers ?? lastComplete?.active_subscribers ?? 0)}</div>
+            <div class="kpi-desc">People who gave monthly in {monthShort(lastComplete?.month) || 'the last full month'}.</div>
+            <div class="kpi-foot">
+              {newSubs != null && newSubs !== 0 && (
+                <span class={`delta ${newSubs > 0 ? 'pos' : 'neg'}`}>{newSubs > 0 ? '▲' : '▼'} {Math.abs(Math.round(newSubs))}</span>
+              )}
+              {newSubs != null && prevComplete && (
+                <span class="delta-note">{monthShort(lastComplete?.month)} vs {monthShort(prevComplete?.month)}</span>
+              )}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Website visitors (28d)</div>
+            <div class="kpi-value">{visitors28 == null ? '—' : fmtNum(visitors28)}</div>
+            <div class="kpi-desc">People who visited the website.</div>
+            <div class="kpi-foot">
+              <a class="kpi-link" href={`/levelup/analytics${urlToken ? `?token=${encodeURIComponent(urlToken)}` : ''}`}>view →</a>
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Google clicks (28d)</div>
+            <div class="kpi-value">{googleClicks28 == null ? '—' : fmtNum(googleClicks28)}</div>
+            <div class="kpi-desc">Visits straight from Google search.</div>
+            <div class="kpi-foot">
+              <a class="kpi-link" href={`/levelup/seo${urlToken ? `?token=${encodeURIComponent(urlToken)}` : ''}`}>view →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DONOR INSIGHTS -->
+      {insights ? (
+        <section class="section">
+          <div class="section-title">Donor insights</div>
+          <div class="kpi-grid">
+            <div class="kpi">
+              <div class="kpi-label">Expected monthly income <span class="tip" tabindex="0" role="note" aria-label="What expected monthly income means">ⓘ<span class="tip-text">The total you can expect each month from current recurring donors (their most recent gift, last full month). Also called MRR.</span></span></div>
+              <div class="kpi-value" style="font-size:28px">{fmtMoney(insights.mrr)}</div>
+              <div class="kpi-desc">From people giving every month.</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Average monthly gift <span class="tip" tabindex="0" role="note" aria-label="What average monthly gift means">ⓘ<span class="tip-text">Recurring money received last full month, divided by the number of monthly donors.</span></span></div>
+              <div class="kpi-value" style="font-size:28px">{fmtMoney(insights.avgMonthlyGift)}</div>
+              <div class="kpi-desc">Typical size of a monthly donation.</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">New donors ({monthShort(lastFlow?.month) || 'last full month'}) <span class="tip" tabindex="0" role="note" aria-label="What new donors means">ⓘ<span class="tip-text">Monthly donors who gave in the last complete month but not the month before. One-off donations are never counted here.</span></span></div>
+              <div class="kpi-value" style="font-size:28px;color:var(--pos)">{lastFlow ? `+${fmtNum(lastFlow.joined)}` : '—'}</div>
+              <div class="kpi-desc">People who started giving monthly.</div>
+            </div>
+            <div class="kpi">
+              <div class="kpi-label">Lost donors ({monthShort(lastFlow?.month) || 'last full month'}) <span class="tip" tabindex="0" role="note" aria-label="What lost donors means">ⓘ<span class="tip-text">Monthly donors who gave the month before but not in the last complete month. The in-progress month is never compared — donors there mostly just haven't been billed yet.</span></span></div>
+              <div class="kpi-value" style="font-size:28px;color:var(--neg)">{lastFlow ? fmtNum(lastFlow.churned) : '—'}</div>
+              <div class="kpi-desc">People who stopped giving monthly.</div>
+            </div>
+            {insights.otherRecurring && insights.otherRecurring.total > 0 && (
+              <div class="kpi">
+                <div class="kpi-label">Other recurring donors <span class="tip" tabindex="0" role="note" aria-label="What other recurring donors means">ⓘ<span class="tip-text">People giving on their own rhythm — quarterly or yearly. They're not part of the monthly numbers, but their gifts count in revenue.</span></span></div>
+                <div class="kpi-value" style="font-size:28px">{fmtNum(insights.otherRecurring.total)}</div>
+                <div class="kpi-desc">{insights.otherRecurring.quarterly} quarterly · {insights.otherRecurring.yearly} yearly</div>
+              </div>
+            )}
+          </div>
+
+          <!-- JOINED vs CHURNED CHART -->
+          {flowChart && (
+            <div class="card" style="margin-top:16px">
+              <div class="section-title" style="margin-bottom:8px">New vs lost monthly donors</div>
+              <Fragment set:html={flowChart} />
+              <div class="chart-legend">
+                <span class="legend-item"><span class="legend-swatch" style="background:#15803D"></span>Joined</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#B91C1C"></span>Lost</span>
+                <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>Net change</span>
+              </div>
+            </div>
+          )}
+
+          <!-- WHO STOPPED GIVING (detail behind the lost number) -->
+          {lostDetail.length > 0 && (
+            <div class="card" style="margin-top:16px">
+              <div class="section-title" style="margin-bottom:4px">Who stopped giving in {lostMonthName}</div>
+              <div class="kpi-desc" style="margin-bottom:12px">
+                “Payment failed” usually means an expired card — these donors often come back with one friendly email.
+                “No charge made” usually means a cancelled subscription.
+              </div>
+              <table class="data">
+                <thead>
+                  <tr>
+                    <th>Donor</th>
+                    <th>Provider</th>
+                    <th style="text-align:right">Monthly gift</th>
+                    <th>What happened</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {lostDetail.map((l) => {
+                    const chip = REASON_CHIP[l.reason] ?? REASON_CHIP.no_charge;
+                    return (
+                      <tr>
+                        <td>{l.donor}</td>
+                        <td style="text-transform:capitalize">{l.gateway}</td>
+                        <td style="text-align:right">{l.amount ? fmtMoney(l.amount) : '—'}</td>
+                        <td><span class={`chip ${chip.cls}`}>{chip.label}</span></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <!-- GIFT SIZE + SPLIT -->
+          <div class="grid-2" style="margin-top:16px">
+            <div class="card">
+              <div class="section-title" style="margin-bottom:12px">How much people give</div>
+              {topBucket && topBucket.count > 0 && (
+                <div class="kpi-desc" style="margin-bottom:12px">Most people give <strong style="color:var(--text)">{topBucket.bucket}</strong>.</div>
+              )}
+              {buckets.map((b) => {
+                const pct = Math.round(((b.count || 0) / maxBucketCount) * 100);
+                return (
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+                    <span style="width:72px;font-size:13px;flex-shrink:0;font-weight:600">{b.bucket}</span>
+                    <span class="minibar" style="flex:1">
+                      <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                      <span class="minibar-val">{fmtNum(b.count)}</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div class="card">
+              <div class="section-title" style="margin-bottom:12px">Recurring vs one-off <span class="tip" tabindex="0" role="note" aria-label="What recurring vs one-off means">ⓘ<span class="tip-text">Share of this year's money from monthly donors versus single gifts.</span></span></div>
+              {split ? (
+                <>
+                  <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+                    <span style={`width:${split.recurring}%;background:#0C0A3E`} title={`Recurring ${split.recurring}%`}></span>
+                    <span style={`width:${split.oneOff}%;background:#A89CED`} title={`One-off ${split.oneOff}%`}></span>
+                  </div>
+                  <div class="chart-legend" style="margin-top:12px">
+                    <span class="legend-item"><span class="legend-swatch" style="background:#0C0A3E"></span>Recurring {split.recurring}%</span>
+                    <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>One-off {split.oneOff}%</span>
+                  </div>
+                  <div class="kpi-desc" style="margin-top:10px">Average one-off gift: <strong style="color:var(--text)">{fmtMoney(insights.avgOneOffGift)}</strong> · {fmtNum(insights.repeatOneOffDonors)} people gave more than once.</div>
+                </>
+              ) : (
+                <div class="kpi-desc">No split data yet.</div>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section class="section">
+          <div class="section-title">Donor insights</div>
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load donor insights.</div>
+        </section>
+      )}
+
+      <!-- 12-MONTH CHART -->
+      <section class="section">
+        <div class="section-title">Donations over the last 12 months</div>
+        <div class="card">
+          {chart ? <Fragment set:html={chart} /> : <div class="kpi-desc">No monthly data yet.</div>}
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-swatch" style="background:#0C0A3E"></span>Recurring (monthly)</span>
+            <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>One-off</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- MONEY LOST THIS MONTH -->
+      <section class="section">
+        <div class="section-title">Money lost this month</div>
+        <div class="card">
+          <div style="display:flex;gap:32px;flex-wrap:wrap">
+            <div>
+              <div class="kpi-label">Failed payments</div>
+              <div class="kpi-value" style="font-size:26px">{fmtMoney(lostThisMonth?.failedAmount ?? 0)}</div>
+              <div class="kpi-desc">{fmtNum(lostThisMonth?.failedCount ?? 0)} payment(s)</div>
+            </div>
+            <div>
+              <div class="kpi-label">Cancelled</div>
+              <div class="kpi-value" style="font-size:26px">{fmtMoney(lostThisMonth?.cancelledAmount ?? 0)}</div>
+              <div class="kpi-desc">{fmtNum(lostThisMonth?.cancelledCount ?? 0)} subscription(s)</div>
+            </div>
+          </div>
+          {anyLost && (
+            <div class="callout">
+              <span>⚠️</span>
+              <span>Usually an expired card — consider emailing these donors.</span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <!-- GATEWAY BREAKDOWN -->
+      <section class="section">
+        <div class="section-title">Revenue by provider (year to date)</div>
+        <div class="kpi-grid">
+          {gateways.map((g) => {
+            const pct = Math.round((g.value / gatewayTotal) * 100);
+            return (
+              <div class="kpi">
+                <div class="kpi-label">{g.label}</div>
+                <div class="kpi-value" style="font-size:26px">{fmtMoney(g.value)}</div>
+                <div class="kpi-desc">{pct}% of total raised</div>
+                <span class="minibar" style="margin-top:8px">
+                  <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                  <span class="minibar-val">{pct}%</span>
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      <!-- MONTHLY TABLE (full) -->
+      <section class="section">
+        <div class="section-title">Month-by-month</div>
+        {monthlyDesc.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col" class="num">Monthly donors</th>
+                  <th scope="col" class="num">Recurring £</th>
+                  <th scope="col" class="num">One-off £</th>
+                  <th scope="col" class="num">Total £</th>
+                  <th scope="col" class="num">Failed</th>
+                  <th scope="col" class="num">Cancelled</th>
+                  <th scope="col" class="num">Lost £</th>
+                </tr>
+              </thead>
+              <tbody>
+                {monthlyDesc.map((m) => (
+                  <tr>
+                    <td style="font-weight:600">{mLabel(m.month)}</td>
+                    <td class="num">{fmtNum(m.active_subscribers)}</td>
+                    <td class="num">{fmtMoney(m.monthly_donations)}</td>
+                    <td class="num">{fmtMoney(m.one_off_donations)}</td>
+                    <td class="num" style="font-weight:700">{fmtMoney(m.total)}</td>
+                    <td class="num">{fmtNum(m.failed_payments)}</td>
+                    <td class="num">{fmtNum(m.cancelled)}</td>
+                    <td class="num" style={m.total_lost > 0 ? 'color:var(--neg);font-weight:600' : ''}>{fmtMoney(m.total_lost)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No monthly data yet</strong>Press “Refresh data” to load it.</div>
+        )}
+      </section>
+
+      <!-- RECENT DONATIONS -->
+      <section class="section">
+        <div class="section-title">Recent donations</div>
+        {recent.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col" class="num">Amount</th>
+                  <th scope="col">Provider</th>
+                  <th scope="col">Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recent.map((d) => (
+                  <tr>
+                    <td>{fmtDay(d.date)}</td>
+                    <td class="num" style="font-weight:700">{fmtMoney(d.amount, d.currency)}</td>
+                    <td style="text-transform:capitalize">{d.gateway}</td>
+                    <td>{d.type === 'recurring' ? <span class="chip chip-lime">Recurring</span> : <span style="color:var(--text-3)">One-off</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty">No recent donations yet.</div>
+        )}
+      </section>
+
+      <!-- CANCELLED + FAILED -->
+      <div class="grid-2">
+        <section class="section">
+          <div class="section-title">Cancelled subscriptions</div>
+          {cancelled.length ? (
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr><th scope="col">Date</th><th scope="col" class="num">Amount</th><th scope="col">Provider</th><th scope="col">Donor</th></tr>
+                </thead>
+                <tbody>
+                  {cancelled.map((d) => (
+                    <tr>
+                      <td>{fmtDay(d.date)}</td>
+                      <td class="num">{fmtMoney(d.amount, d.currency)}</td>
+                      <td style="text-transform:capitalize">{d.gateway}</td>
+                      <td style="color:var(--text-2)">{d.payer || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div class="empty">No cancelled subscriptions.</div>
+          )}
+        </section>
+
+        <section class="section">
+          <div class="section-title">Failed transactions</div>
+          {failed.length ? (
+            <div class="table-wrap">
+              <table class="data">
+                <thead>
+                  <tr><th scope="col">Date</th><th scope="col" class="num">Amount</th><th scope="col">Provider</th><th scope="col">Donor</th></tr>
+                </thead>
+                <tbody>
+                  {failed.map((d) => (
+                    <tr>
+                      <td>{fmtDay(d.date)}</td>
+                      <td class="num" style="color:var(--neg)">{fmtMoney(d.amount, d.currency)}</td>
+                      <td style="text-transform:capitalize">{d.gateway}</td>
+                      <td style="color:var(--text-2)">{d.payer || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div class="empty">No failed transactions.</div>
+          )}
+        </section>
+      </div>
+    </>
+  )}
+</AdminShell>

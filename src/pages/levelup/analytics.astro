@@ -1,0 +1,408 @@
+---
+export const prerender = false;
+import AdminShell from '../../components/AdminShell.astro';
+import { dailyBarChart } from '../../lib/admin-charts';
+import { fmtNum, fmtMoney, fmtDuration, computeDelta } from '../../lib/admin-format';
+import type { AnalyticsData } from '../../lib/admin-data';
+import { Redis } from '@upstash/redis';
+
+const urlToken = Astro.url.searchParams.get('token') || '';
+
+const getRedis = () => {
+  const url = process.env.UPSTASH_REDIS_REST_URL || '';
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN || '';
+  if (!url || !token) throw new Error('Redis not configured');
+  return new Redis({ url, token });
+};
+
+let ga: AnalyticsData | null = null;
+try {
+  const redis = getRedis();
+  ga = await redis.get<AnalyticsData>('admin:analytics');
+} catch (err) {
+  console.error('Failed to fetch analytics data from Redis:', err);
+}
+
+const hasData = !!ga && (ga.users != null || (ga.daily?.length ?? 0) > 0);
+
+const users = ga?.users ?? 0;
+const sessions = ga?.sessions ?? 0;
+const avgDuration = ga?.avgSessionDuration ?? 0;
+const donationEvents = ga?.donationEvents ?? 0;
+const revenue = ga?.revenue ?? 0;
+const conversionRate = ga?.conversionRate ?? 0;
+
+const dUsers = computeDelta(ga?.users, ga?.prevUsers);
+const dDonations = computeDelta(ga?.donationEvents, ga?.prevDonationEvents);
+const dRevenue = computeDelta(ga?.revenue, ga?.prevRevenue);
+
+const daily = ga?.daily ?? [];
+const chart = daily.length
+  ? dailyBarChart(daily.map((d) => ({ date: d.date, value: d.users })), {
+      ariaLabel: 'Website visitors per day over the last 28 days',
+      color: '#5B4FCF',
+      valueLabel: 'visitors',
+    })
+  : '';
+
+// Plain-English names + tooltips per channel.
+const channelMeta: Record<string, string> = {
+  'Organic Search': 'Found you on Google',
+  Direct: 'Typed the address or used a bookmark',
+  'Organic Social': 'Came from social media',
+  Referral: 'Linked from another website',
+  Email: 'Came from one of your emails',
+  'Paid Search': 'Clicked a paid Google ad',
+  Unassigned: "Google couldn't tell where they came from",
+};
+
+const sources = (ga?.trafficSources ?? []).slice().sort((a, b) => (b.users || 0) - (a.users || 0));
+const totalSourceUsers = sources.reduce((s, c) => s + (c.users || 0), 0) || 1;
+const topPages = ga?.topPages ?? [];
+const devices = ga?.devices ?? [];
+const totalDeviceUsers = devices.reduce((s, d) => s + (d.users || 0), 0) || 1;
+const geography = (ga?.geography ?? []).slice(0, 5);
+const totalGeoUsers = geography.reduce((s, g) => s + (g.users || 0), 0) || 1;
+const shortPath = (p: string) => p || '/';
+
+// ── DONATION-LINKED INSIGHTS (optional — tolerate older cached payloads) ──
+const donationsByChannel = (ga?.donationsByChannel ?? [])
+  .slice()
+  .sort((a, b) => (b.donations || 0) - (a.donations || 0));
+const hasChannelData = donationsByChannel.length > 0;
+
+const funnel = ga?.funnel ?? null;
+// Conversion percentages between funnel steps.
+const funnelPct = funnel
+  ? {
+      toDonatePage: funnel.sessions > 0 ? Math.round((funnel.donateViews / funnel.sessions) * 1000) / 10 : 0,
+      toDonation: funnel.donateViews > 0 ? Math.round((funnel.donations / funnel.donateViews) * 1000) / 10 : 0,
+    }
+  : null;
+// Relative widths for the funnel blocks (largest step = 100%).
+const funnelMax = funnel ? Math.max(funnel.sessions, funnel.donateViews, funnel.donations, 1) : 1;
+
+const landingPages = ga?.landingPages ?? [];
+const nvr = ga?.newVsReturning ?? null;
+const nvrTotal = nvr ? (nvr.new + nvr.returning) || 1 : 1;
+const nvrNewPct = nvr ? Math.round((nvr.new / nvrTotal) * 100) : 0;
+---
+<AdminShell
+  active="website"
+  title="Website"
+  subtitle="Who visits welevelup.org and what they do — last 28 days."
+  token={urlToken}
+  syncEndpoint="/api/admin-analytics-sync"
+  lastSync={ga?.lastSync ?? null}
+>
+  {!hasData && (
+    <div class="empty">
+      <strong>No data yet</strong>
+      Press “Refresh data” to pull the latest from Google Analytics.
+    </div>
+  )}
+
+  {hasData && (
+    <>
+      <!-- KPIs -->
+      <section class="section">
+        <div class="kpi-grid">
+          <div class="kpi">
+            <div class="kpi-label">Visitors</div>
+            <div class="kpi-value">{fmtNum(users)}</div>
+            <div class="kpi-desc">People who visited the website.</div>
+            <div class="kpi-foot">
+              {dUsers && <span class={`delta ${dUsers.positive ? 'pos' : 'neg'}`}>{dUsers.arrow} {Math.abs(dUsers.pct)}%</span>}
+              {dUsers && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Sessions <span class="tip" tabindex="0" role="note" aria-label="What sessions means">ⓘ<span class="tip-text">A session is one visit. One person can have several sessions.</span></span></div>
+            <div class="kpi-value">{fmtNum(sessions)}</div>
+            <div class="kpi-desc">Total visits, including return trips.</div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Avg. time on site</div>
+            <div class="kpi-value">{fmtDuration(avgDuration)}</div>
+            <div class="kpi-desc">How long the average visit lasts (minutes:seconds).</div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Donations made online</div>
+            <div class="kpi-value">{fmtNum(donationEvents)}</div>
+            <div class="kpi-desc">Completed donations Google tracked on the site.</div>
+            <div class="kpi-foot">
+              {dDonations && <span class={`delta ${dDonations.positive ? 'pos' : 'neg'}`}>{dDonations.arrow} {Math.abs(dDonations.pct)}%</span>}
+              {dDonations && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Donation revenue tracked</div>
+            <div class="kpi-value">{fmtMoney(revenue)}</div>
+            <div class="kpi-desc">Tracked by Google — bank totals live in Donations.</div>
+            <div class="kpi-foot">
+              {dRevenue && <span class={`delta ${dRevenue.positive ? 'pos' : 'neg'}`}>{dRevenue.arrow} {Math.abs(dRevenue.pct)}%</span>}
+              {dRevenue && <span class="delta-note">vs previous 28 days</span>}
+            </div>
+          </div>
+
+          <div class="kpi">
+            <div class="kpi-label">Conversion rate <span class="tip" tabindex="0" role="note" aria-label="What conversion rate means">ⓘ<span class="tip-text">Of every 100 visits, how many end in a donation.</span></span></div>
+            <div class="kpi-value">{conversionRate.toFixed(2)}%</div>
+            <div class="kpi-desc">Share of visits that end in a donation.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHAT BRINGS DONATIONS -->
+      <section class="section">
+        <div class="section-title">What brings donations</div>
+        {hasChannelData ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Channel <span class="tip" tabindex="0" role="note" aria-label="What channel means">ⓘ<span class="tip-text">How donors arrived at the site before giving — e.g. Google search, social media, a link.</span></span></th>
+                  <th scope="col" class="num">Donations</th>
+                  <th scope="col" class="num">Revenue tracked</th>
+                </tr>
+              </thead>
+              <tbody>
+                {donationsByChannel.map((c, i) => {
+                  const note = channelMeta[c.channel];
+                  return (
+                    <tr style={i === 0 ? 'background:color-mix(in srgb, var(--violet) 8%, transparent)' : ''}>
+                      <td style="font-weight:600">
+                        {c.channel}
+                        {note && <span class="tip" tabindex="0" role="note" aria-label={`What ${c.channel} means`} style="margin-left:5px">ⓘ<span class="tip-text">{note}</span></span>}
+                        {i === 0 && <span class="chip chip-lime" style="margin-left:6px">top</span>}
+                      </td>
+                      <td class="num" style="font-weight:700">{fmtNum(c.donations)}</td>
+                      <td class="num">{fmtMoney(c.revenue)}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to see which channels bring donations.</div>
+        )}
+      </section>
+
+      <!-- DONATION FUNNEL -->
+      {funnel && funnelPct && (
+        <section class="section">
+          <div class="section-title">From visit to donation</div>
+          <div class="card">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Visited the site</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.sessions)}</span>
+                </div>
+                <div style="height:34px;border-radius:8px;background:#0C0A3E;width:100%"></div>
+              </div>
+              <div class="kpi-desc" style="text-align:center">↓ {funnelPct.toDonatePage}% went on to see the donate page</div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Saw the donate page</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.donateViews)}</span>
+                </div>
+                <div style={`height:34px;border-radius:8px;background:#5B4FCF;width:${Math.max(8, Math.round((funnel.donateViews / funnelMax) * 100))}%`}></div>
+              </div>
+              <div class="kpi-desc" style="text-align:center">↓ {funnelPct.toDonation}% of those went on to donate</div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+                  <span style="font-weight:600">Donated</span>
+                  <span style="font-variant-numeric:tabular-nums">{fmtNum(funnel.donations)}</span>
+                </div>
+                <div style={`height:34px;border-radius:8px;background:#A89CED;width:${Math.max(6, Math.round((funnel.donations / funnelMax) * 100))}%`}></div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- WHERE PEOPLE LAND FIRST -->
+      <section class="section">
+        <div class="section-title">Where people land first <span class="tip" tabindex="0" role="note" aria-label="What landing page means">ⓘ<span class="tip-text">The first page each visitor lands on when they arrive at the site.</span></span></div>
+        {landingPages.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">First page</th>
+                  <th scope="col" class="num">Sessions</th>
+                  <th scope="col" class="num">Visitors</th>
+                </tr>
+              </thead>
+              <tbody>
+                {landingPages.map((p) => (
+                  <tr>
+                    <td style="font-weight:600">{shortPath(p.landingPage)}</td>
+                    <td class="num">{fmtNum(p.sessions)}</td>
+                    <td class="num">{fmtNum(p.users)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No data yet</strong>Press “Refresh data” to load landing pages.</div>
+        )}
+      </section>
+
+      <!-- NEW vs RETURNING -->
+      {nvr && (nvr.new > 0 || nvr.returning > 0) && (
+        <section class="section">
+          <div class="section-title">New vs returning visitors <span class="tip" tabindex="0" role="note" aria-label="What new vs returning means">ⓘ<span class="tip-text">New visitors have not been to the site before; returning visitors have been here previously.</span></span></div>
+          <div class="card">
+            <div style="display:flex;height:28px;border-radius:8px;overflow:hidden;border:1px solid var(--border)">
+              <span style={`width:${nvrNewPct}%;background:#5B4FCF`} title={`New ${nvrNewPct}%`}></span>
+              <span style={`width:${100 - nvrNewPct}%;background:#A89CED`} title={`Returning ${100 - nvrNewPct}%`}></span>
+            </div>
+            <div class="chart-legend" style="margin-top:12px">
+              <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>New {fmtNum(nvr.new)} ({nvrNewPct}%)</span>
+              <span class="legend-item"><span class="legend-swatch" style="background:#A89CED"></span>Returning {fmtNum(nvr.returning)} ({100 - nvrNewPct}%)</span>
+            </div>
+          </div>
+        </section>
+      )}
+
+      <!-- CHART -->
+      <section class="section">
+        <div class="section-title">Visitors per day</div>
+        <div class="card">
+          {chart ? <Fragment set:html={chart} /> : <div class="kpi-desc">No daily data in this period yet.</div>}
+        </div>
+      </section>
+
+      <!-- TRAFFIC SOURCES -->
+      <section class="section">
+        <div class="section-title">Where visitors come from</div>
+        {sources.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Source</th>
+                  <th scope="col" class="num">Visitors</th>
+                  <th scope="col" class="num">Sessions</th>
+                  <th scope="col">% of total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sources.map((c) => {
+                  const pct = Math.round(((c.users || 0) / totalSourceUsers) * 100);
+                  const note = channelMeta[c.source];
+                  return (
+                    <tr>
+                      <td style="font-weight:600">
+                        {c.source}
+                        {note && <span class="tip" tabindex="0" role="note" aria-label={`What ${c.source} means`} style="margin-left:5px">ⓘ<span class="tip-text">{note}</span></span>}
+                      </td>
+                      <td class="num">{fmtNum(c.users)}</td>
+                      <td class="num">{fmtNum(c.sessions)}</td>
+                      <td>
+                        <span class="minibar">
+                          <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                          <span class="minibar-val">{pct}%</span>
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No source data yet</strong>Press “Refresh data” to load it.</div>
+        )}
+      </section>
+
+      <!-- TOP PAGES -->
+      <section class="section">
+        <div class="section-title">Top pages</div>
+        {topPages.length ? (
+          <div class="table-wrap">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th scope="col">Page</th>
+                  <th scope="col" class="num">Visitors</th>
+                  <th scope="col" class="num">Sessions</th>
+                  <th scope="col" class="num">Avg. time</th>
+                  <th scope="col" class="num"><span class="th-tip">Bounce <span class="tip" tabindex="0" role="note" aria-label="What bounce means">ⓘ<span class="tip-text">Left without doing anything — lower is better.</span></span></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {topPages.map((p) => (
+                  <tr>
+                    <td style="font-weight:600">{shortPath(p.path)}</td>
+                    <td class="num">{fmtNum(p.users)}</td>
+                    <td class="num">{fmtNum(p.sessions)}</td>
+                    <td class="num">{fmtDuration(p.avgDuration)}</td>
+                    <td class="num">{Number(p.bounceRate).toFixed(1)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div class="empty"><strong>No page data yet</strong>Press “Refresh data” to load it.</div>
+        )}
+      </section>
+
+      <!-- DEVICES + COUNTRIES -->
+      <div class="grid-2">
+        <section class="section">
+          <div class="section-title">Devices</div>
+          {devices.length ? (
+            <div class="card">
+              {devices.map((d) => {
+                const pct = Math.round(((d.users || 0) / totalDeviceUsers) * 100);
+                return (
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                    <span style="width:90px;font-size:13px;flex-shrink:0;text-transform:capitalize">{d.type}</span>
+                    <span class="minibar" style="flex:1">
+                      <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                      <span class="minibar-val">{pct}%</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="empty">No device data yet.</div>
+          )}
+        </section>
+
+        <section class="section">
+          <div class="section-title">Top countries</div>
+          {geography.length ? (
+            <div class="card">
+              {geography.map((g) => {
+                const pct = Math.round(((g.users || 0) / totalGeoUsers) * 100);
+                return (
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+                    <span style="width:130px;font-size:13px;flex-shrink:0">{g.country}</span>
+                    <span class="minibar" style="flex:1">
+                      <span class="minibar-track"><span class="minibar-fill" style={`width:${pct}%`}></span></span>
+                      <span class="minibar-val">{pct}%</span>
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div class="empty">No country data yet.</div>
+          )}
+        </section>
+      </div>
+    </>
+  )}
+</AdminShell>

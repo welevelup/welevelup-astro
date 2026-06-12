@@ -251,7 +251,8 @@
     z-index: 200;
     box-shadow: 0 12px 32px rgba(0,0,0,0.12);
   }
-  .lu-nav-group:hover > .lu-nav-drop { display: block; }
+  .lu-nav-group:hover > .lu-nav-drop,
+  .lu-nav-group:focus-within > .lu-nav-drop { display: block; }
   .lu-nav-drop > a {
     display: block;
     padding: 12px 20px;
@@ -366,25 +367,58 @@
   }
 
   @media (max-width: 900px) {
+    /* ── Option C: Split Accent mobile nav ── */
+    .lu-nav {
+      background: #fff !important;
+      border-bottom: 1px solid rgba(12,10,62,0.10) !important;
+      border-left: 4px solid #CCFF33 !important;
+    }
     .lu-nav-toggle { display: flex; }
     .lu-nav-top {
-      padding: 16px 16px;
+      padding: 10px 16px;
     }
-    .lu-nav-logo img { height: 28px; }
-    .lu-nav-ctas { margin-right: 84px; }
     .lu-nav-logo-full { display: none !important; }
     .lu-nav-logo-icon-bg { display: flex !important; align-items: center; }
-    .lu-nav-logo-icon { display: block !important; height: 36px !important; width: 36px !important; object-fit: cover !important; object-position: center !important; }
+    .lu-nav-logo-icon {
+      display: block !important;
+      height: 30px !important;
+      width: 30px !important;
+      object-fit: cover !important;
+      object-position: center !important;
+    }
+    .lu-nav-logo::after {
+      content: 'Level Up';
+      font: 800 15px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-left: 8px;
+    }
+    .lu-nav-ctas { margin-right: 52px; }
     .lu-nav-donate {
-      padding: 10px 14px;
-      font-size: 13px;
-      border-radius: 4px;
       background: #0C0A3E !important;
       color: #CCFF33 !important;
+      font-size: 12px !important;
+      padding: 9px 16px !important;
+      border-radius: 2px !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+    .lu-nav-donate:hover {
+      background: #1a1660 !important;
+      transform: none !important;
+      box-shadow: none !important;
     }
     .lu-nav-join {
       display: none !important;
     }
+    .lu-nav-toggle {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      top: 13px;
+    }
+    .lu-nav-toggle span { background: #0C0A3E !important; }
     .lu-nav-bar { display: none; }
     .lu-nav-bar.open {
       display: block;

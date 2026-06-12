@@ -18,19 +18,32 @@ const {
   title,
   description,
   ogUrl,
-  ogImage = 'https://welevelup.org/wp-content/uploads/2023/05/Level-Up-OG.png',
+  ogImage = 'https://welevelup.org/images/og-default.jpg',
   ogType = 'website',
   noindex = false,
 } = Astro.props;
 
 const siteBase = 'https://welevelup.org';
-const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
+// Normalise the path so /page and /page/ never produce two different
+// canonicals (Google indexed both during the WP→Astro migration).
+const normalisedPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const canonicalUrl = ogUrl ?? (siteBase + normalisedPath);
 ---
 <!doctype html>
 <html lang="en-GB" prefix="og: https://ogp.me/ns#">
   <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8TZND7F4D9"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "G-8TZND7F4D9");
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://connect.facebook.net" />
+    <link rel="dns-prefetch" href="https://www.facebook.com" />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     <Fragment set:html={headHtml} />
     <style is:global>
@@ -128,7 +141,7 @@ const canonicalUrl = ogUrl ?? (siteBase + Astro.url.pathname);
 
     <!-- Meta Pixel — only fires after explicit cookie consent -->
     <script is:inline>
-      if (typeof window !== 'undefined' && localStorage.getItem('lu_cookie_consent') === 'accepted') {
+      if (typeof window !== 'undefined' && localStorage.getItem('lu_cookie_consent') === 'accepted' && !window.location.pathname.startsWith('/donor-portal')) {
         !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
         fbq('init', '1862990614381002');
         fbq('track', 'PageView');

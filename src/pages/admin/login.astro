@@ -1,0 +1,329 @@
+---
+export const prerender = false;
+
+// If already authenticated (has session cookie), redirect to dashboard
+const cookies = Astro.request.headers.get('cookie') ?? '';
+const hasSession = /admin_session=([^;]+)/.test(cookies);
+if (hasSession) {
+  return Astro.redirect('/admin/dashboard');
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Login — Level Up</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0C0A3E;
+      --bg-secondary: #13114a;
+      --bg-card: #1a1860;
+      --text-primary: #EEEBD3;
+      --text-secondary: #9997b8;
+      --accent: #CCFF33;
+      --accent-dark: #b8e620;
+      --border: rgba(255, 255, 255, 0.08);
+      --danger: #F87171;
+      --input-bg: rgba(255, 255, 255, 0.05);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --input-focus: rgba(204, 255, 51, 0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* subtle grid texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(204,255,51,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(204,255,51,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(204,255,51,0.05);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+
+    .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--bg-primary);
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--input-focus);
+    }
+
+    input::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.5;
+    }
+
+    .error-msg {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: rgba(248, 113, 113, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--danger);
+      margin-bottom: 20px;
+    }
+
+    .error-msg.visible {
+      display: flex;
+    }
+
+    .error-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--accent);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      opacity: 0.88;
+    }
+
+    .submit-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(12, 10, 62, 0.3);
+      border-top-color: var(--bg-primary);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      display: none;
+    }
+
+    .submit-btn.loading .spinner { display: block; }
+    .submit-btn.loading .btn-text { display: none; }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 36px 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-mark">L</div>
+      <span class="logo-text">Level Up Admin</span>
+    </div>
+
+    <h1>Sign in</h1>
+    <p class="subtitle">Access the admin dashboard</p>
+
+    <div class="error-msg" id="error-msg" role="alert">
+      <span class="error-icon">&#9888;</span>
+      <span id="error-text">Invalid credentials</span>
+    </div>
+
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          
+          autocomplete="email"
+          required
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <div class="spinner"></div>
+        <span class="btn-text">Sign in</span>
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const btn = document.getElementById('submit-btn');
+    const errorMsg = document.getElementById('error-msg');
+    const errorText = document.getElementById('error-text');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      // Hide previous error
+      errorMsg.classList.remove('visible');
+
+      // Show loading state
+      btn.classList.add('loading');
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/admin-auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+
+        if (res.ok) {
+          window.location.href = '/admin/dashboard';
+        } else {
+          const data = await res.json().catch(() => ({}));
+          errorText.textContent = data.error ?? 'Invalid credentials';
+          errorMsg.classList.add('visible');
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+        }
+      } catch {
+        errorText.textContent = 'Connection error. Please try again.';
+        errorMsg.classList.add('visible');
+      } finally {
+        btn.classList.remove('loading');
+        btn.disabled = false;
+      }
+    });
+
+    // Focus password field on load since email is pre-filled
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('password').focus();
+    });
+  </script>
+</body>
+</html>

@@ -12,7 +12,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   bodyClass={bodyClass}
   title="Support Level Up | Donate to Feminist Campaigns in the UK"
   description="Support Level Up's feminist campaigns for gender justice — from abortion rights to ending pregnancy in prison. Every pound funds real change."
-  ogImage="/wp-content/uploads/2023/05/Level-Up-OG.png"
+  ogImage="https://welevelup.org/images/og-default.jpg"
 >
   <Nav />
 
@@ -484,6 +484,10 @@ const { headInner, bodyClass } = extract(homeRaw);
         throw new Error(data.error || 'Something went wrong. Please try again.');
       }
 
+      // Save validation token before redirecting to Mollie
+      if (data.validationToken) {
+        sessionStorage.setItem('levelup_payment_token', data.validationToken);
+      }
       window.location.href = data.checkoutUrl;
     } catch (err) {
       errorEl.textContent = err instanceof Error ? err.message : 'Something went wrong. Please try again.';

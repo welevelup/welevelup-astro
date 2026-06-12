@@ -8,7 +8,12 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{"type": "host", "value": "www.welevelup.org"}],
+      "has": [
+        {
+          "type": "host",
+          "value": "www.welevelup.org"
+        }
+      ],
       "destination": "https://welevelup.org/:path*",
       "permanent": true
     },
@@ -21,6 +26,41 @@
       "source": "/toolkit",
       "destination": "https://piptoolkit.squarespace.com",
       "permanent": false
+    },
+    {
+      "source": "/petition/stop-sending-pregnant-women-to-prison",
+      "destination": "https://levelup.yourmovement.org/p/pregnancy-in-prison",
+      "permanent": true
+    },
+    {
+      "source": "/petition/nomorelyes-take-toxic-hair-relaxers-off-the-shelves",
+      "destination": "https://levelup.yourmovement.org/p/no-more-lyes",
+      "permanent": true
+    },
+    {
+      "source": "/petition/ipso-dignity-for-dead-women",
+      "destination": "https://levelup.yourmovement.org/p/dignity-for-dead-women",
+      "permanent": true
+    },
+    {
+      "source": "/petition/petition-premier-league-violence",
+      "destination": "https://levelup.yourmovement.org/p/sexual-violence-in-football",
+      "permanent": true
+    },
+    {
+      "source": "/petition/premier-league-and-fa",
+      "destination": "https://levelup.yourmovement.org/p/sexual-violence-in-football",
+      "permanent": true
+    },
+    {
+      "source": "/petition/islington-council-fund-holloway-womens-centre",
+      "destination": "https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre",
+      "permanent": true
+    },
+    {
+      "source": "/petition",
+      "destination": "/active-campaigns",
+      "permanent": true
     },
     {
       "source": "/petition/(.*)",
@@ -416,6 +456,41 @@
       "source": "/wp-admin(.*)",
       "destination": "/",
       "permanent": false
+    },
+    {
+      "source": "/campaign-category/(.*)",
+      "destination": "/active-campaigns",
+      "permanent": true
+    },
+    {
+      "source": "/platform-category/(.*)",
+      "destination": "/press",
+      "permanent": true
+    },
+    {
+      "source": "/eventbrite_category/(.*)",
+      "destination": "/active-campaigns/we-protect-us",
+      "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/abortion-story-(.*)",
+      "destination": "/active-campaigns/abortion-is-healthcare",
+      "permanent": true
+    },
+    {
+      "source": "/search/(.*)",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/10000-supporting-you-xx",
+      "destination": "/",
+      "permanent": true
     }
   ],
   "rewrites": [],

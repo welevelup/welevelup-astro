@@ -398,6 +398,11 @@
       "permanent": true
     },
     {
+      "source": "/(.*)/feed",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
       "source": "/comments/feed/(.*)",
       "destination": "/blog",
       "permanent": true

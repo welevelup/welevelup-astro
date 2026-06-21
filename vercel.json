@@ -553,6 +553,26 @@
       "permanent": true
     },
     {
+      "source": "/wp-json/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/press-posts/:path*",
+      "destination": "/press",
+      "permanent": true
+    },
+    {
+      "source": "/30807-2",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/feed",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
       "source": "/our-team2",
       "destination": "/about-us",
       "permanent": true

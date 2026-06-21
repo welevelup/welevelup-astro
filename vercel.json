@@ -548,6 +548,21 @@
       "permanent": true
     },
     {
+      "source": "/wp-includes/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/our-team2",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)/feed/:rest*",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
       "source": "/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf",
       "destination": "/active-campaigns/media-guidelines-domestic-abuse",
       "permanent": true
@@ -573,7 +588,7 @@
       "permanent": true
     },
     {
-      "source": "/wp-admin(.*)",
+      "source": "/wp-admin/:path*",
       "destination": "/",
       "permanent": false
     },

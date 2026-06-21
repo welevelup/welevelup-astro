@@ -473,6 +473,16 @@
       "permanent": true
     },
     {
+      "source": "/nomorelyes-open-letter-to-loreal",
+      "destination": "/active-campaigns/nomorelyes-open-letter",
+      "permanent": true
+    },
+    {
+      "source": "/what-we-are-proud-of",
+      "destination": "/our-impact",
+      "permanent": true
+    },
+    {
       "source": "/abortion-media-guidelines",
       "destination": "/active-campaigns/media-guidelines-domestic-abuse",
       "permanent": true

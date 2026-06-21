@@ -423,6 +423,91 @@
       "permanent": true
     },
     {
+      "source": "/resource-category/:path*",
+      "destination": "/resources",
+      "permanent": true
+    },
+    {
+      "source": "/media-type-category/:path*",
+      "destination": "/resources",
+      "permanent": true
+    },
+    {
+      "source": "/page/:path*",
+      "destination": "/blog",
+      "permanent": true
+    },
+    {
+      "source": "/citation/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/wp/v2/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/decisionmakers",
+      "destination": "/active-campaigns/sexual-violence-in-football",
+      "permanent": true
+    },
+    {
+      "source": "/football-call",
+      "destination": "/active-campaigns/sexual-violence-in-football",
+      "permanent": true
+    },
+    {
+      "source": "/eventbrite-event",
+      "destination": "/active-campaigns/we-protect-us",
+      "permanent": true
+    },
+    {
+      "source": "/testimonials",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/nomorelyes-relaxer-info-kit",
+      "destination": "/resources/nomorelyes",
+      "permanent": true
+    },
+    {
+      "source": "/abortion-media-guidelines",
+      "destination": "/active-campaigns/media-guidelines-domestic-abuse",
+      "permanent": true
+    },
+    {
+      "source": "/active-campaigns/template-for-archive-2",
+      "destination": "/active-campaigns",
+      "permanent": true
+    },
+    {
+      "source": "/wpsd-thank-you",
+      "destination": "/donate/thank-you",
+      "permanent": true
+    },
+    {
+      "source": "/wymp",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/wymp_zip",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/we-are-with-you",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/30799-2",
+      "destination": "/",
+      "permanent": true
+    },
+    {
       "source": "/feed",
       "destination": "/blog",
       "permanent": true

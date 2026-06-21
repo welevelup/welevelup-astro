@@ -543,6 +543,16 @@
       "permanent": true
     },
     {
+      "source": "/wp-content/uploads/2025/08/Media-Guidelines-V2-1-1.pdf",
+      "destination": "/active-campaigns/media-guidelines-domestic-abuse",
+      "permanent": true
+    },
+    {
+      "source": "/wp-content/uploads/2025/08/Final-LU-AAFDA-families-report-1.pdf",
+      "destination": "/resources/media-guidelines",
+      "permanent": true
+    },
+    {
       "source": "/wp-content/uploads/:path*",
       "destination": "/resources",
       "permanent": true

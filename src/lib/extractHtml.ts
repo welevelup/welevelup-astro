@@ -123,9 +123,7 @@ function stripDuplicateHeadTags(raw: string): string {
     // Strip render-blocking Google Fonts <link> tags from WP plugins (Inter, Montserrat, Sora — not used by Astro UI)
     .replace(/<link\b[^>]*href="[^"]*fonts\.googleapis\.com[^"]*"[^>]*\/?>/gi, '')
     // Strip WP plugin stylesheets
-    .replace(/<link\b[^>]*rel=["']stylesheet["'][^>]*href="[^"]*wp-content[^"]*"[^>]*\/?>/gi, '')
-    // Strip Yoast/RankMath JSON-LD — our Astro pages emit clean JSON-LD without &amp; URL encoding
-    .replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+    .replace(/<link\b[^>]*rel=["']stylesheet["'][^>]*href="[^"]*wp-content[^"]*"[^>]*\/?>/gi, '');
 }
 
 export function extract(rawHtml: string): ExtractedHtml {

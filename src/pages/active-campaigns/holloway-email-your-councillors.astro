@@ -1,0 +1,499 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import { ISLINGTON_WARDS } from '../../lib/islington-wards';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+
+const CAMPAIGN_CC = 'hello@welevelup.org';
+---
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Email Your Islington Councillors | Finish Holloway Women's Centre | Level Up"
+  description="Enter your postcode to find your Islington ward councillors and send them an email calling on Islington Council to finish the Holloway Women's Centre."
+  ogImage="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png"
+>
+  <script type="application/ld+json" set:html={JSON.stringify([
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Campaigns", "item": "https://welevelup.org/active-campaigns" },
+      { "@type": "ListItem", "position": 3, "name": "Finish Holloway Women's Centre", "item": "https://welevelup.org/active-campaigns/islington-council-finish-holloway-womens-centre" },
+      { "@type": "ListItem", "position": 4, "name": "Email Your Councillors", "item": "https://welevelup.org/active-campaigns/holloway-email-your-councillors" }
+    ]}
+  ])} />
+  <Nav />
+
+  <!-- HERO -->
+  <section class="ct-hero">
+    <div class="ct-hero-inner">
+      <span class="ct-label">Finish Holloway Women's Centre</span>
+      <h1 class="ct-title">Email your<br/>Islington councillors</h1>
+      <p class="ct-tagline">Your three ward councillors work for you. Enter your postcode, and in under two minutes you can tell them to make Islington Council keep its promise: open the Holloway Women's Centre.</p>
+    </div>
+  </section>
+
+  <!-- STEP 1: FIND -->
+  <section class="ct-section ct-section--cream">
+    <div class="ct-content">
+      <div class="ct-card">
+        <span class="ct-step">Step 1</span>
+        <h2>Find your councillors</h2>
+        <form id="ct-find-form" class="ct-form" novalidate>
+          <div class="ct-form-row">
+            <div class="ct-form-field">
+              <label class="ct-form-label" for="ct-first-name">First name</label>
+              <input id="ct-first-name" class="ct-form-input" type="text" name="first_name" placeholder="Your first name" autocomplete="given-name" required />
+            </div>
+            <div class="ct-form-field">
+              <label class="ct-form-label" for="ct-last-name">Last name</label>
+              <input id="ct-last-name" class="ct-form-input" type="text" name="last_name" placeholder="Your last name" autocomplete="family-name" required />
+            </div>
+          </div>
+          <div class="ct-form-row">
+            <div class="ct-form-field">
+              <label class="ct-form-label" for="ct-email">Email address</label>
+              <input id="ct-email" class="ct-form-input" type="email" name="email" placeholder="hello@example.com" autocomplete="email" required />
+            </div>
+            <div class="ct-form-field">
+              <label class="ct-form-label" for="ct-postcode">Postcode</label>
+              <input id="ct-postcode" class="ct-form-input" type="text" name="postcode" placeholder="e.g. N7 6PA" autocomplete="postal-code" required />
+            </div>
+          </div>
+          <!-- Honeypot: hidden from real users, bots fill it. -->
+          <div class="ct-hp" aria-hidden="true">
+            <label>Website<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+          </div>
+          <div class="ct-form-check">
+            <input type="checkbox" id="ct-updates" name="keep_me_updated" class="ct-check-input" />
+            <label for="ct-updates" class="ct-check-label">Keep me updated on this campaign and Level Up news</label>
+          </div>
+          <button type="submit" class="ct-form-submit" id="ct-find-btn">
+            Find my councillors <span aria-hidden="true">→</span>
+          </button>
+          <p class="ct-form-error" id="ct-find-error" role="alert" style="display:none;"></p>
+          <p class="ct-form-note">Your details are stored securely by Level Up so we can track the campaign's reach. We will never share your personal data with third parties.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- STEP 2: WRITE & SEND -->
+  <section class="ct-section ct-section--white" id="ct-step2" style="display:none;">
+    <div class="ct-content">
+      <div class="ct-ward-banner">
+        <span class="ct-step ct-step--light">Step 2</span>
+        <h2 id="ct-ward-heading">Your ward</h2>
+        <p class="ct-ward-sub">These are your three ward councillors. Your email goes to all of them, from your own email address.</p>
+        <div class="ct-councillors" id="ct-councillors"></div>
+      </div>
+
+      <div class="ct-card">
+        <h2>Your email</h2>
+        <p class="ct-edit-hint">We've written a starting point — personal emails carry far more weight, so edit it and add why this matters to you.</p>
+        <div class="ct-form-field">
+          <label class="ct-form-label" for="ct-subject">Subject</label>
+          <input id="ct-subject" class="ct-form-input" type="text" />
+        </div>
+        <div class="ct-form-field">
+          <label class="ct-form-label" for="ct-body">Message</label>
+          <textarea id="ct-body" class="ct-form-input ct-form-textarea" rows="18"></textarea>
+        </div>
+        <div class="ct-actions">
+          <a href="#" class="ct-form-submit" id="ct-send-btn">Send email <span aria-hidden="true">→</span></a>
+          <button type="button" class="ct-btn-secondary" id="ct-copy-btn">Copy email text</button>
+          <button type="button" class="ct-btn-secondary" id="ct-copy-addr-btn">Copy addresses</button>
+        </div>
+        <p class="ct-form-note">"Send email" opens your email app with everything filled in — the email is sent from your address, with Level Up (<span id="ct-cc-note"></span>) in copy so we can track responses. If nothing opens, use the copy buttons and paste into your email instead.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAMPAIGN LINK -->
+  <section class="ct-cta">
+    <h2>New to the campaign?</h2>
+    <p>Holloway Women's Centre is built but standing empty. Read why we're calling on Islington Council to open it.</p>
+    <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ct-cta-btn">About the campaign</a>
+  </section>
+
+  <Footer />
+
+  <script is:inline id="ct-ward-data" type="application/json" set:html={JSON.stringify({ wards: ISLINGTON_WARDS, cc: CAMPAIGN_CC })} />
+
+  <script is:inline>
+    (function () {
+      const DATA = JSON.parse(document.getElementById('ct-ward-data').textContent);
+      const WARDS = DATA.wards;
+      const CC = DATA.cc;
+
+      const form = document.getElementById('ct-find-form');
+      const findBtn = document.getElementById('ct-find-btn');
+      const errEl = document.getElementById('ct-find-error');
+      const step2 = document.getElementById('ct-step2');
+
+      document.getElementById('ct-cc-note').textContent = CC;
+
+      function normalise(name) {
+        return name
+          .toLowerCase()
+          .replace(/&/g, 'and')
+          .replace(/[^a-z0-9 ]/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      function findWard(adminWard) {
+        const target = normalise(adminWard);
+        return WARDS.find((w) => normalise(w.name) === target) || null;
+      }
+
+      function surname(fullName) {
+        const parts = fullName.split(' ');
+        return parts[parts.length - 1];
+      }
+
+      function buildEmail(ward, firstName, lastName, postcode) {
+        const greeting = ward.councillors
+          .map((c) => 'Cllr ' + surname(c.name))
+          .join(', ')
+          .replace(/, ([^,]*)$/, ' and $1');
+        const subject = "Please make sure the Holloway Women's Centre opens";
+        const body = [
+          'Dear ' + greeting + ',',
+          '',
+          "I live in " + ward.name + " ward and I'm writing to ask you, as my councillors, to make sure Islington Council keeps its promise to deliver the Holloway Women's Centre.",
+          '',
+          "When Holloway prison closed in 2016, Peabody promised a women's centre on the site. Ten years on, the building is finished but standing empty — while women in our borough face violence, trauma, poverty and homelessness without the support they need. Specialist women's charities, spearheaded by Treasures Foundation, are ready to run services from the building. The council needs to make sure it can open.",
+          '',
+          "Holloway is a historic site for women — the suffragettes were held there. Opening a women's centre in its place would be a powerful symbol of progress and a real alternative to crisis and criminalisation for women in Islington.",
+          '',
+          'As my ward councillors, I am asking you to:',
+          '1. Press for a clear, public timeline for opening the Holloway Women\'s Centre.',
+          '2. Support the funding needed so specialist services can start operating.',
+          '3. Make sure Peabody and the council honour the original commitment.',
+          '',
+          'I would welcome a reply setting out what you will do to make this happen.',
+          '',
+          'Yours sincerely,',
+          firstName + ' ' + lastName,
+          postcode,
+        ].join('\n');
+        return { subject, body };
+      }
+
+      function showError(msg) {
+        errEl.textContent = msg;
+        errEl.style.display = 'block';
+      }
+
+      function renderCouncillors(ward) {
+        document.getElementById('ct-ward-heading').textContent = 'Your ward: ' + ward.name;
+        const wrap = document.getElementById('ct-councillors');
+        wrap.innerHTML = '';
+        ward.councillors.forEach((c) => {
+          const card = document.createElement('div');
+          card.className = 'ct-councillor';
+          const name = document.createElement('span');
+          name.className = 'ct-councillor-name';
+          name.textContent = 'Cllr ' + c.name;
+          const party = document.createElement('span');
+          party.className = 'ct-councillor-party';
+          party.textContent = c.party;
+          const email = document.createElement('span');
+          email.className = 'ct-councillor-email';
+          email.textContent = c.email.toLowerCase();
+          card.appendChild(name);
+          card.appendChild(party);
+          card.appendChild(email);
+          wrap.appendChild(card);
+        });
+      }
+
+      function storeSignup(payload) {
+        // Fire-and-forget: storage problems must never block the user.
+        try {
+          fetch('/api/councillor-tool', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          }).catch(() => {});
+        } catch (_) {}
+      }
+
+      let currentWard = null;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        errEl.style.display = 'none';
+
+        const firstName = document.getElementById('ct-first-name').value.trim();
+        const lastName = document.getElementById('ct-last-name').value.trim();
+        const email = document.getElementById('ct-email').value.trim();
+        const postcode = document.getElementById('ct-postcode').value.trim().toUpperCase();
+
+        if (!firstName || !lastName || !email || !postcode) {
+          showError('Please fill in your name, email and postcode.');
+          return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          showError('Please enter a valid email address.');
+          return;
+        }
+
+        findBtn.disabled = true;
+        findBtn.textContent = 'Looking up your ward…';
+
+        try {
+          const res = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(postcode));
+          if (!res.ok) {
+            showError("We couldn't find that postcode. Please check it and try again.");
+            return;
+          }
+          const data = await res.json();
+          const district = data.result && data.result.admin_district;
+          const adminWard = data.result && data.result.admin_ward;
+
+          if (district !== 'Islington') {
+            showError('That postcode is in ' + (district || 'another borough') + '. This tool is for Islington residents — but you can still support the campaign by sharing it.');
+            return;
+          }
+
+          const ward = findWard(adminWard || '');
+          if (!ward) {
+            showError("We found your postcode but couldn't match your ward (" + adminWard + '). Please email hello@welevelup.org so we can fix this.');
+            return;
+          }
+
+          currentWard = ward;
+          storeSignup({
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            postcode: postcode,
+            ward: ward.name,
+            keep_me_updated: document.getElementById('ct-updates').checked,
+            website: form.querySelector('input[name="website"]').value,
+          });
+
+          renderCouncillors(ward);
+          const tpl = buildEmail(ward, firstName, lastName, postcode);
+          document.getElementById('ct-subject').value = tpl.subject;
+          document.getElementById('ct-body').value = tpl.body;
+
+          step2.style.display = 'block';
+          step2.scrollIntoView({ behavior: 'smooth' });
+        } catch (err) {
+          showError('Something went wrong looking up your postcode. Please try again.');
+        } finally {
+          findBtn.disabled = false;
+          findBtn.innerHTML = 'Find my councillors <span aria-hidden="true">→</span>';
+        }
+      });
+
+      document.getElementById('ct-send-btn').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!currentWard) return;
+        const to = currentWard.councillors.map((c) => c.email.toLowerCase()).join(',');
+        const subject = document.getElementById('ct-subject').value;
+        const body = document.getElementById('ct-body').value;
+        window.location.href =
+          'mailto:' + to +
+          '?cc=' + encodeURIComponent(CC) +
+          '&subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(body);
+      });
+
+      function flash(btn, text) {
+        const prev = btn.textContent;
+        btn.textContent = text;
+        setTimeout(() => { btn.textContent = prev; }, 1600);
+      }
+
+      document.getElementById('ct-copy-btn').addEventListener('click', (e) => {
+        const subject = document.getElementById('ct-subject').value;
+        const body = document.getElementById('ct-body').value;
+        navigator.clipboard.writeText('Subject: ' + subject + '\n\n' + body).then(() => flash(e.target, 'Copied!'));
+      });
+
+      document.getElementById('ct-copy-addr-btn').addEventListener('click', (e) => {
+        if (!currentWard) return;
+        const to = currentWard.councillors.map((c) => c.email.toLowerCase()).join(', ');
+        navigator.clipboard.writeText(to + ', ' + CC).then(() => flash(e.target, 'Copied!'));
+      });
+    })();
+  </script>
+
+  <style>
+    .ct-hero {
+      background: #0C0A3E;
+      padding: 140px 24px 80px;
+      text-align: center;
+    }
+    .ct-hero-inner { max-width: 780px; margin: 0 auto; }
+    .ct-label {
+      display: inline-block;
+      font: 700 12px/1 'DM Sans', sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #CCFF33;
+      border: 1px solid rgba(204, 255, 51, 0.4);
+      border-radius: 100px;
+      padding: 8px 16px;
+      margin-bottom: 24px;
+    }
+    .ct-title {
+      font: 800 clamp(40px, 7vw, 68px)/0.95 'DM Sans', sans-serif !important;
+      letter-spacing: -0.04em !important;
+      color: #EEEBD3 !important;
+      margin: 0 0 20px !important;
+    }
+    .ct-tagline {
+      font: 400 18px/1.55 'DM Sans', sans-serif !important;
+      color: rgba(238, 235, 211, 0.75) !important;
+      max-width: 560px;
+      margin: 0 auto !important;
+    }
+    .ct-section { padding: 72px 24px; }
+    .ct-section--cream { background: #EEEBD3; }
+    .ct-section--white { background: #fff; }
+    .ct-content { max-width: 720px; margin: 0 auto; }
+    .ct-card {
+      background: #fff;
+      border: 1px solid rgba(12, 10, 62, 0.1);
+      border-radius: 16px;
+      padding: 36px 32px;
+      box-shadow: 0 8px 32px rgba(12, 10, 62, 0.07);
+    }
+    .ct-section--white .ct-card { background: #EEEBD3; box-shadow: none; }
+    .ct-step {
+      display: inline-block;
+      font: 700 11px/1 'DM Sans', sans-serif;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0C0A3E;
+      background: #CCFF33;
+      border-radius: 100px;
+      padding: 7px 14px;
+      margin-bottom: 14px;
+    }
+    .ct-card h2, .ct-ward-banner h2 {
+      font: 800 30px/1.05 'DM Sans', sans-serif !important;
+      letter-spacing: -0.03em !important;
+      color: #0C0A3E !important;
+      margin: 0 0 20px !important;
+    }
+    .ct-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .ct-form-field { margin-bottom: 16px; }
+    .ct-form-label {
+      display: block;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      margin-bottom: 8px;
+    }
+    .ct-form-input {
+      width: 100%;
+      box-sizing: border-box;
+      font: 400 16px/1.4 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      background: #fff;
+      border: 1px solid rgba(12, 10, 62, 0.22);
+      border-radius: 10px;
+      padding: 13px 14px;
+      transition: border-color 0.15s ease;
+    }
+    .ct-form-input:focus { outline: none; border-color: #0C0A3E; }
+    .ct-form-textarea { resize: vertical; min-height: 320px; }
+    .ct-hp { position: absolute; left: -9999px; height: 0; overflow: hidden; }
+    .ct-form-check { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 20px; }
+    .ct-check-input { margin-top: 3px; accent-color: #0C0A3E; }
+    .ct-check-label { font: 400 14px/1.45 'DM Sans', sans-serif; color: rgba(12, 10, 62, 0.8); }
+    .ct-form-submit {
+      display: inline-block;
+      font: 700 16px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      background: #CCFF33;
+      border: none;
+      border-radius: 100px;
+      padding: 16px 28px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .ct-form-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(12, 10, 62, 0.18); }
+    .ct-form-submit:disabled { opacity: 0.6; cursor: wait; transform: none; }
+    .ct-btn-secondary {
+      font: 700 15px/1 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      background: transparent;
+      border: 1.5px solid #0C0A3E;
+      border-radius: 100px;
+      padding: 14px 22px;
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+    .ct-btn-secondary:hover { background: rgba(12, 10, 62, 0.06); }
+    .ct-form-error {
+      font: 700 14px/1.45 'DM Sans', sans-serif;
+      color: #B3261E;
+      background: rgba(179, 38, 30, 0.07);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 14px 0 0;
+    }
+    .ct-form-note {
+      font: 400 13px/1.5 'DM Sans', sans-serif;
+      color: rgba(12, 10, 62, 0.55);
+      margin: 16px 0 0;
+    }
+    .ct-ward-banner { margin-bottom: 32px; }
+    .ct-ward-sub { font: 400 16px/1.5 'DM Sans', sans-serif; color: rgba(12, 10, 62, 0.7); margin: 0 0 20px; }
+    .ct-councillors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .ct-councillor {
+      background: #0C0A3E;
+      border-radius: 12px;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .ct-councillor-name { font: 700 15px/1.25 'DM Sans', sans-serif; color: #EEEBD3; }
+    .ct-councillor-party { font: 700 11px/1 'DM Sans', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #CCFF33; }
+    .ct-councillor-email { font: 400 12px/1.35 'DM Sans', sans-serif; color: rgba(238, 235, 211, 0.65); word-break: break-all; }
+    .ct-edit-hint { font: 400 15px/1.5 'DM Sans', sans-serif; color: rgba(12, 10, 62, 0.7); margin: 0 0 18px; }
+    .ct-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }
+    .ct-cta { background: #0C0A3E; padding: 72px 24px; text-align: center; }
+    .ct-cta h2 {
+      font: 800 34px/0.95 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 0 14px !important;
+    }
+    .ct-cta p {
+      font: 400 16px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(238, 235, 211, 0.6) !important;
+      max-width: 440px;
+      margin: 0 auto 28px !important;
+    }
+    .ct-cta-btn {
+      display: inline-block;
+      font: 700 15px/1 'DM Sans', sans-serif;
+      color: #CCFF33;
+      border: 1.5px solid #CCFF33;
+      border-radius: 100px;
+      padding: 15px 26px;
+      text-decoration: none;
+      transition: background 0.12s ease;
+    }
+    .ct-cta-btn:hover { background: rgba(204, 255, 51, 0.1); }
+    @media (max-width: 640px) {
+      .ct-hero { padding: 120px 20px 60px; }
+      .ct-section { padding: 48px 18px; }
+      .ct-card { padding: 26px 20px; }
+      .ct-form-row { grid-template-columns: 1fr; gap: 0; }
+      .ct-councillors { grid-template-columns: 1fr; }
+      .ct-actions .ct-form-submit, .ct-actions .ct-btn-secondary { width: 100%; text-align: center; box-sizing: border-box; }
+    }
+  </style>
+</Layout>

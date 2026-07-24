@@ -100,14 +100,6 @@ const { headInner, bodyClass } = extract(homeRaw);
             </label>
           </fieldset>
 
-          <div class="lu-donate__field lu-donate__field--giftaid">
-            <p class="lu-donate__giftaid-title">Gift Aid (UK taxpayers)</p>
-            <label class="lu-donate__giftaid-label">
-              <input type="checkbox" name="giftAid" class="lu-donate__giftaid-check" />
-              <span>I am a UK taxpayer and want Level Up to claim Gift Aid on this donation — at no extra cost to me, it increases the value by 25%.</span>
-            </label>
-          </div>
-
           <p class="lu-donate__error" id="donate-error" role="alert" hidden></p>
 
           <p class="lu-donate__cancel-note" id="cancel-note" hidden>Cancel anytime by emailing <a href="mailto:hello@welevelup.org">hello@welevelup.org</a> — no fuss.</p>
@@ -357,37 +349,6 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin-bottom: 20px;
   }
   .lu-donate__submit:hover { background: #A89CED; color: #0C0A3E; }
-  .lu-donate__field--giftaid {
-    border: 1px solid rgba(12,10,62,0.12);
-    padding: 16px;
-    margin: 0 0 24px;
-    background: #fff;
-    border-radius: 0;
-  }
-  .lu-donate__giftaid-title {
-    font: 600 13px/1 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin: 0 0 12px;
-  }
-  .lu-donate__giftaid-label {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    cursor: pointer;
-  }
-  .lu-donate__giftaid-check {
-    margin-top: 3px;
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    accent-color: #0C0A3E;
-  }
-  .lu-donate__giftaid-label span {
-    font: 400 13px/1.6 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.75);
-  }
   .lu-donate__cancel-note {
     font: 400 13px/1.5 'DM Sans', sans-serif;
     color: rgba(12,10,62,0.6);
@@ -475,7 +436,6 @@ const { headInner, bodyClass } = extract(homeRaw);
           recurring: freq === 'monthly',
           donorName,
           donorEmail,
-          giftAid: (form.querySelector('input[name="giftAid"]') as HTMLInputElement)?.checked ?? false,
         }),
       });
 

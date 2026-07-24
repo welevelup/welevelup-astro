@@ -102,11 +102,15 @@ const CAMPAIGN_CC = 'hello@welevelup.org';
           <textarea id="ct-body" class="ct-form-input ct-form-textarea" rows="18"></textarea>
         </div>
         <div class="ct-actions">
-          <a href="#" class="ct-form-submit" id="ct-send-btn">Send email <span aria-hidden="true">→</span></a>
+          <a href="#" class="ct-form-submit" id="ct-send-gmail" target="_blank" rel="noopener">Send with Gmail <span aria-hidden="true">→</span></a>
+          <a href="#" class="ct-form-submit" id="ct-send-outlook" target="_blank" rel="noopener">Send with Outlook <span aria-hidden="true">→</span></a>
+          <a href="#" class="ct-btn-secondary" id="ct-send-btn">Other email app</a>
+        </div>
+        <div class="ct-actions">
           <button type="button" class="ct-btn-secondary" id="ct-copy-btn">Copy email text</button>
           <button type="button" class="ct-btn-secondary" id="ct-copy-addr-btn">Copy addresses</button>
         </div>
-        <p class="ct-form-note">"Send email" opens your email app with everything filled in — the email is sent from your address, with Level Up (<span id="ct-cc-note"></span>) in copy so we can track responses. If nothing opens, use the copy buttons and paste into your email instead.</p>
+        <p class="ct-form-note">Each button opens your own email with everything filled in — the email is sent from your address, with Level Up (<span id="ct-cc-note"></span>) in copy so we can track responses. If nothing opens, use the copy buttons and paste into your email instead.</p>
       </div>
     </div>
   </section>
@@ -292,17 +296,51 @@ const CAMPAIGN_CC = 'hello@welevelup.org';
         }
       });
 
+      function draft() {
+        return {
+          to: currentWard ? currentWard.councillors.map((c) => c.email.toLowerCase()).join(',') : '',
+          subject: document.getElementById('ct-subject').value,
+          body: document.getElementById('ct-body').value,
+        };
+      }
+
+      // Gmail/Outlook web compose links work even when no default mail app is
+      // set (common on iPhones) — on mobile they deep-link into the apps.
+      document.getElementById('ct-send-gmail').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!currentWard) return;
+        const d = draft();
+        window.open(
+          'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(d.to) +
+          '&cc=' + encodeURIComponent(CC) +
+          '&su=' + encodeURIComponent(d.subject) +
+          '&body=' + encodeURIComponent(d.body),
+          '_blank', 'noopener'
+        );
+      });
+
+      document.getElementById('ct-send-outlook').addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!currentWard) return;
+        const d = draft();
+        window.open(
+          'https://outlook.live.com/mail/0/deeplink/compose?to=' + encodeURIComponent(d.to) +
+          '&cc=' + encodeURIComponent(CC) +
+          '&subject=' + encodeURIComponent(d.subject) +
+          '&body=' + encodeURIComponent(d.body),
+          '_blank', 'noopener'
+        );
+      });
+
       document.getElementById('ct-send-btn').addEventListener('click', (e) => {
         e.preventDefault();
         if (!currentWard) return;
-        const to = currentWard.councillors.map((c) => c.email.toLowerCase()).join(',');
-        const subject = document.getElementById('ct-subject').value;
-        const body = document.getElementById('ct-body').value;
+        const d = draft();
         window.location.href =
-          'mailto:' + to +
+          'mailto:' + d.to +
           '?cc=' + encodeURIComponent(CC) +
-          '&subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(body);
+          '&subject=' + encodeURIComponent(d.subject) +
+          '&body=' + encodeURIComponent(d.body);
       });
 
       function flash(btn, text) {
@@ -424,6 +462,9 @@ const CAMPAIGN_CC = 'hello@welevelup.org';
     .ct-form-submit:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(12, 10, 62, 0.18); }
     .ct-form-submit:disabled { opacity: 0.6; cursor: wait; transform: none; }
     .ct-btn-secondary {
+      display: inline-block;
+      text-decoration: none;
+      text-align: center;
       font: 700 15px/1 'DM Sans', sans-serif;
       color: #0C0A3E;
       background: transparent;

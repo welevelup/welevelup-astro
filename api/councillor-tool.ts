@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
-import { verifyAdminSession } from '../src/lib/verify-admin-session';
 
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_SECONDS = 15 * 60;
@@ -11,6 +10,23 @@ function getRedis(): Redis | null {
   const token = process.env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
   return new Redis({ url, token });
+}
+
+// api/ functions must stay self-contained: importing from ../src breaks
+// Vercel's function bundling (FUNCTION_INVOCATION_FAILED), so the admin
+// session check is inlined here — same pattern as admin-sync.ts.
+async function verifyAdminSession(cookies: string): Promise<boolean> {
+  const sessionMatch = cookies.match(/admin_session=([^;]+)/);
+  if (!sessionMatch) return false;
+  const redis = getRedis();
+  if (!redis) return false;
+  try {
+    const session = await redis.get(`session:${sessionMatch[1]}`);
+    return !!session;
+  } catch (err) {
+    console.error('[councillor-tool] session check failed:', err);
+    return false;
+  }
 }
 
 // Rate limit via Upstash Redis (shared across Vercel instances). Fails open

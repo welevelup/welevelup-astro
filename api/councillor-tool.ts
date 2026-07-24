@@ -39,6 +39,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     try {
       const raw = await redis.lrange(SIGNUPS_KEY, 0, -1);
       const signups = raw.map((r) => (typeof r === 'string' ? JSON.parse(r) : r));
+      if (req.query.format === 'csv') {
+        const cols = ['first_name', 'last_name', 'email', 'postcode', 'ward', 'keep_me_updated', 'created_at'];
+        const esc = (v: unknown) => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+        const csv = [cols.join(',')]
+          .concat(signups.map((s: Record<string, unknown>) => cols.map((c) => esc(s[c])).join(',')))
+          .join('\n');
+        res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+        res.setHeader('Content-Disposition', 'attachment; filename="councillor-signups.csv"');
+        return res.status(200).send(csv);
+      }
       return res.status(200).json({ count: signups.length, signups });
     } catch (err) {
       console.error('[councillor-tool] export failed:', err);

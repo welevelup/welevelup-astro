@@ -74,10 +74,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     recurring?: boolean;
     donorName?: string;
     donorEmail?: string;
-    giftAid?: boolean;
   };
 
-  const { amount, recurring, donorName = '', donorEmail = '', giftAid = false } = body ?? {};
+  const { amount, recurring, donorName = '', donorEmail = '' } = body ?? {};
 
   const amountNum = parseFloat(amount ?? '');
   if (!Number.isFinite(amountNum) || amountNum < 1) {
@@ -114,7 +113,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           amount: formattedAmount,
           donorEmail,
           donorName,
-          giftAid: String(giftAid),
           source: 'astro',
         },
       });
@@ -129,7 +127,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           amount: formattedAmount,
           donorEmail: donorEmail || null,
           donorName: donorName || null,
-          giftAid: String(giftAid),
           source: 'astro',
         },
       });

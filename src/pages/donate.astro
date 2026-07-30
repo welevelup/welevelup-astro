@@ -18,40 +18,6 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   <main class="lu-donate" id="main-content">
 
-    <!-- HERO -->
-    <section class="lu-donate__hero">
-      <div class="lu-donate__hero-inner">
-        <span class="lu-donate__hero-label">Support the work</span>
-        <h1 class="lu-donate__hero-title">Every campaign started<br/>with someone like you</h1>
-        <p class="lu-donate__hero-sub">Level Up is a UK-based feminist campaigning organisation building people-powered movements. We run on small, regular donations from people who believe in gender justice.</p>
-      </div>
-    </section>
-
-    <!-- IMPACT STATS -->
-    <section class="lu-donate__impact">
-      <div class="lu-donate__impact-inner">
-        <h2 class="lu-donate__impact-title">Supported by people like you, Level Up has…</h2>
-        <div class="lu-donate__impact-grid">
-          <div class="lu-donate__impact-item">
-            <span class="lu-donate__impact-icon">01</span>
-            <p>Changed sentencing policy to prevent pregnant women going to prison</p>
-          </div>
-          <div class="lu-donate__impact-item">
-            <span class="lu-donate__impact-icon">02</span>
-            <p>Pushed the Premier League to issue consent training for football clubs</p>
-          </div>
-          <div class="lu-donate__impact-item">
-            <span class="lu-donate__impact-icon">03</span>
-            <p>Changed how the media reports on domestic homicide — ending victim-blaming headlines</p>
-          </div>
-          <div class="lu-donate__impact-item">
-            <span class="lu-donate__impact-icon">04</span>
-            <p>Trained 413 people in bystander intervention to interrupt harassment and violence</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- DONATE FORM -->
     <section class="lu-donate__form-section">
       <div class="lu-donate__form-wrap">
@@ -100,14 +66,6 @@ const { headInner, bodyClass } = extract(homeRaw);
             </label>
           </fieldset>
 
-          <div class="lu-donate__field lu-donate__field--giftaid">
-            <p class="lu-donate__giftaid-title">Gift Aid (UK taxpayers)</p>
-            <label class="lu-donate__giftaid-label">
-              <input type="checkbox" name="giftAid" class="lu-donate__giftaid-check" />
-              <span>I am a UK taxpayer and want Level Up to claim Gift Aid on this donation — at no extra cost to me, it increases the value by 25%.</span>
-            </label>
-          </div>
-
           <p class="lu-donate__error" id="donate-error" role="alert" hidden></p>
 
           <p class="lu-donate__cancel-note" id="cancel-note" hidden>Cancel anytime by emailing <a href="mailto:hello@welevelup.org">hello@welevelup.org</a> — no fuss.</p>
@@ -132,79 +90,6 @@ const { headInner, bodyClass } = extract(homeRaw);
 <style is:global>
   .lu-donate {
     font-family: 'DM Sans', system-ui, sans-serif;
-  }
-
-  /* HERO */
-  .lu-donate__hero {
-    background: #0C0A3E;
-    padding: 80px 24px 64px;
-    text-align: center;
-  }
-  .lu-donate__hero-inner {
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  .lu-donate__hero-label {
-    display: block;
-    font: 600 11px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #A89CED;
-    margin-bottom: 24px;
-  }
-  .lu-donate__hero-title {
-    font: 800 clamp(36px, 7vw, 56px)/0.95 'DM Sans', sans-serif;
-    color: #CCFF33 !important;
-    letter-spacing: -0.04em;
-    margin: 0 0 24px;
-  }
-  .lu-donate__hero-sub {
-    font: 400 18px/1.6 'DM Sans', sans-serif;
-    color: rgba(238, 235, 211, 0.7);
-    max-width: 560px;
-    margin: 0 auto;
-  }
-
-  /* IMPACT */
-  .lu-donate__impact {
-    background: #EEEBD3;
-    padding: 64px 24px;
-  }
-  .lu-donate__impact-inner {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-  .lu-donate__impact-title {
-    font: 700 22px/1.3 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    margin: 0 0 40px;
-    text-align: center;
-  }
-  .lu-donate__impact-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-  .lu-donate__impact-item {
-    background: #fff;
-    padding: 28px 24px;
-    border-left: 3px solid #A89CED;
-  }
-  .lu-donate__impact-icon {
-    display: block;
-    font: 800 13px/1 'DM Sans', sans-serif;
-    color: #A89CED;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 12px;
-  }
-  .lu-donate__impact-item p {
-    font: 400 15px/1.6 'DM Sans', sans-serif;
-    color: rgba(12, 10, 62, 0.8);
-    margin: 0;
-  }
-  @media (max-width: 600px) {
-    .lu-donate__impact-grid { grid-template-columns: 1fr; }
   }
 
   /* FORM SECTION */
@@ -357,37 +242,6 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin-bottom: 20px;
   }
   .lu-donate__submit:hover { background: #A89CED; color: #0C0A3E; }
-  .lu-donate__field--giftaid {
-    border: 1px solid rgba(12,10,62,0.12);
-    padding: 16px;
-    margin: 0 0 24px;
-    background: #fff;
-    border-radius: 0;
-  }
-  .lu-donate__giftaid-title {
-    font: 600 13px/1 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin: 0 0 12px;
-  }
-  .lu-donate__giftaid-label {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    cursor: pointer;
-  }
-  .lu-donate__giftaid-check {
-    margin-top: 3px;
-    flex-shrink: 0;
-    width: 18px;
-    height: 18px;
-    accent-color: #0C0A3E;
-  }
-  .lu-donate__giftaid-label span {
-    font: 400 13px/1.6 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.75);
-  }
   .lu-donate__cancel-note {
     font: 400 13px/1.5 'DM Sans', sans-serif;
     color: rgba(12,10,62,0.6);
@@ -475,7 +329,6 @@ const { headInner, bodyClass } = extract(homeRaw);
           recurring: freq === 'monthly',
           donorName,
           donorEmail,
-          giftAid: (form.querySelector('input[name="giftAid"]') as HTMLInputElement)?.checked ?? false,
         }),
       });
 

@@ -73,7 +73,7 @@ Login → Token in localStorage + URL → Navigate pages (token stays in URL) �
 
 ```
 ADMIN_EMAIL=tech@welevelup.org
-ADMIN_PASSWORD=LevelUp2026!
+ADMIN_PASSWORD=[set in Vercel dashboard — never commit this value]
 UPSTASH_REDIS_REST_URL=https://[...].upstash.io
 UPSTASH_REDIS_REST_TOKEN=[token]
 MOLLIE_API_KEY=live_[key] (production) or test_[key] (staging)

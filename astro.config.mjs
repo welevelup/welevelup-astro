@@ -42,6 +42,8 @@ export default defineConfig({
       'https://welevelup.org/how-we-choose-our-campaigns',
       'https://welevelup.org/the-griefs-left-unattended',
       'https://welevelup.org/why-expanding-criminalisation-is-a-feminist-issue',
+      // Not publicly launched yet — team testing only
+      'https://welevelup.org/active-campaigns/holloway-email-your-councillors',
       // Old WP pages being redirected to new Astro equivalents
       'https://welevelup.org/all-resources',
       'https://welevelup.org/ddw-resources',

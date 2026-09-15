@@ -28,6 +28,11 @@
       "permanent": false
     },
     {
+      "source": "/holloway",
+      "destination": "/active-campaigns/islington-council-finish-holloway-womens-centre",
+      "permanent": true
+    },
+    {
       "source": "/petition/stop-sending-pregnant-women-to-prison",
       "destination": "https://levelup.yourmovement.org/p/pregnancy-in-prison",
       "permanent": true

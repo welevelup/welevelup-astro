@@ -203,14 +203,10 @@ const CAMPAIGN_CC = 'hello@welevelup.org';
           const name = document.createElement('span');
           name.className = 'ct-councillor-name';
           name.textContent = 'Cllr ' + c.name;
-          const party = document.createElement('span');
-          party.className = 'ct-councillor-party';
-          party.textContent = c.party;
           const email = document.createElement('span');
           email.className = 'ct-councillor-email';
           email.textContent = c.email.toLowerCase();
           card.appendChild(name);
-          card.appendChild(party);
           card.appendChild(email);
           wrap.appendChild(card);
         });
@@ -504,7 +500,6 @@ const CAMPAIGN_CC = 'hello@welevelup.org';
       gap: 6px;
     }
     :global(.ct-councillor-name) { font: 700 15px/1.25 'DM Sans', sans-serif; color: #EEEBD3; }
-    :global(.ct-councillor-party) { font: 700 11px/1 'DM Sans', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #CCFF33; }
     :global(.ct-councillor-email) { font: 400 12px/1.35 'DM Sans', sans-serif; color: rgba(238, 235, 211, 0.65); word-break: break-all; }
     .ct-edit-hint { font: 400 15px/1.5 'DM Sans', sans-serif; color: rgba(12, 10, 62, 0.7); margin: 0 0 18px; }
     .ct-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }

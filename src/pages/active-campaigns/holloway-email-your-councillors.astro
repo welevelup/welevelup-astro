@@ -492,7 +492,10 @@ const CAMPAIGN_CC = 'hello@welevelup.org';
     .ct-ward-banner { margin-bottom: 32px; }
     .ct-ward-sub { font: 400 16px/1.5 'DM Sans', sans-serif; color: rgba(12, 10, 62, 0.7); margin: 0 0 20px; }
     .ct-councillors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-    .ct-councillor {
+    /* Cards below are built at runtime via document.createElement, so they never
+       get Astro's scoped data-astro-cid attribute — :global() is required or
+       these rules silently never match and the spans collapse together. */
+    :global(.ct-councillor) {
       background: #0C0A3E;
       border-radius: 12px;
       padding: 18px 16px;
@@ -500,9 +503,9 @@ const CAMPAIGN_CC = 'hello@welevelup.org';
       flex-direction: column;
       gap: 6px;
     }
-    .ct-councillor-name { font: 700 15px/1.25 'DM Sans', sans-serif; color: #EEEBD3; }
-    .ct-councillor-party { font: 700 11px/1 'DM Sans', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #CCFF33; }
-    .ct-councillor-email { font: 400 12px/1.35 'DM Sans', sans-serif; color: rgba(238, 235, 211, 0.65); word-break: break-all; }
+    :global(.ct-councillor-name) { font: 700 15px/1.25 'DM Sans', sans-serif; color: #EEEBD3; }
+    :global(.ct-councillor-party) { font: 700 11px/1 'DM Sans', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: #CCFF33; }
+    :global(.ct-councillor-email) { font: 400 12px/1.35 'DM Sans', sans-serif; color: rgba(238, 235, 211, 0.65); word-break: break-all; }
     .ct-edit-hint { font: 400 15px/1.5 'DM Sans', sans-serif; color: rgba(12, 10, 62, 0.7); margin: 0 0 18px; }
     .ct-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }
     .ct-cta { background: #0C0A3E; padding: 72px 24px; text-align: center; }

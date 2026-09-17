@@ -103,22 +103,16 @@ export async function sendDonationConfirmation({
   name,
   amount,
   recurring,
-  giftAid,
 }: {
   to: string;
   name: string;
   amount: string;
   recurring: boolean;
-  giftAid: boolean;
 }): Promise<void> {
   const resend = getResend();
   const firstName = escapeHtml(name ? name.split(' ')[0] : '');
   const greeting = firstName ? `${firstName},` : 'Thank you,';
   const typeLabel = recurring ? 'monthly donation' : 'donation';
-
-  const giftAidNote = giftAid
-    ? `<p style="margin:16px 0;font-size:14px;background:#f9ffe0;border-left:3px solid #CCFF33;padding:10px 14px;color:#333;"><strong>Gift Aid registered.</strong> We will claim an additional 25p for every £1 you donate at no extra cost to you.</p>`
-    : '';
 
   const portalNote = recurring
     ? `<p style="margin:24px 0 0;font-size:14px;color:#555;">To manage or cancel your monthly donation, visit your <a href="${SITE_URL}/donor-portal" style="color:#5b4fcf;">donor portal</a> or email <a href="mailto:hello@welevelup.org" style="color:#5b4fcf;">hello@welevelup.org</a>.</p>`
@@ -134,8 +128,6 @@ export async function sendDonationConfirmation({
       <li style="margin-bottom:8px;">Dignified media coverage of domestic abuse deaths</li>
       <li style="margin-bottom:8px;">Community bystander training — We Protect Us</li>
     </ul>
-
-    ${giftAidNote}
 
     ${ctaButton(SITE_URL, 'Visit our website')}
 

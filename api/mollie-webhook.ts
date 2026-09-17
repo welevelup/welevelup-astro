@@ -70,9 +70,9 @@ function ctaButton(href: string, label: string): string {
 }
 
 async function sendDonationConfirmation({
-  to, name, amount, recurring, giftAid,
+  to, name, amount, recurring,
 }: {
-  to: string; name: string; amount: string; recurring: boolean; giftAid: boolean;
+  to: string; name: string; amount: string; recurring: boolean;
 }) {
   const key = process.env.RESEND_API_KEY;
   if (!key) throw new Error('RESEND_API_KEY not configured');
@@ -82,10 +82,6 @@ async function sendDonationConfirmation({
   const firstName = safeName ? safeName.split(' ')[0] : '';
   const greeting = firstName ? `${firstName},` : 'Thank you,';
   const typeLabel = recurring ? 'monthly donation' : 'donation';
-
-  const giftAidNote = giftAid
-    ? `<p style="margin:16px 0;font-size:14px;background:#f9ffe0;border-left:3px solid #CCFF33;padding:10px 14px;color:#333;"><strong>Gift Aid registered.</strong> We will claim an additional 25p for every £1 you donate at no extra cost to you.</p>`
-    : '';
 
   const portalNote = recurring
     ? `<p style="margin:24px 0 0;font-size:14px;color:#555;">To manage or cancel your monthly donation, visit your <a href="${SITE_URL}/donor-portal" style="color:#5b4fcf;">donor portal</a> or email <a href="mailto:hello@welevelup.org" style="color:#5b4fcf;">hello@welevelup.org</a>.</p>`
@@ -100,7 +96,6 @@ async function sendDonationConfirmation({
       <li style="margin-bottom:8px;">Dignified media coverage of domestic abuse deaths</li>
       <li style="margin-bottom:8px;">Community bystander training — We Protect Us</li>
     </ul>
-    ${giftAidNote}
     ${ctaButton(SITE_URL, 'Visit our website')}
     <p style="margin:24px 0 8px;">In solidarity,</p>
     <p style="margin:0;">Level Up</p>
@@ -213,7 +208,6 @@ async function processPayment(paymentId: string, apiKey: string, webhookUrl: str
           name: meta.donorName || '',
           amount: meta.amount || payment.amount.value,
           recurring: meta.type === 'recurring',
-          giftAid: meta.giftAid === 'true',
         });
         console.log(`[webhook] ✅ email sent to ${meta.donorEmail}`);
       } catch (emailErr) {

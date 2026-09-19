@@ -28,6 +28,7 @@ export default defineConfig({
       'https://welevelup.org/resources/proposal-a',
       'https://welevelup.org/resources/proposal-b',
       'https://welevelup.org/resources/proposal-c',
+      'https://welevelup.org/styleguide',
       // Petition pages — all redirect to yourmovement.org
       'https://welevelup.org/petition/abortion-is-healthcare',
       'https://welevelup.org/petition/dignity-for-dead-women',

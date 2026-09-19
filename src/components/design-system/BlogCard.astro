@@ -1,0 +1,46 @@
+---
+interface Props {
+  variant?: 'featured-navy' | 'secondary-white';
+  title: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  href: string;
+}
+const { variant = 'secondary-white', title, excerpt, author, date, href } = Astro.props;
+const bg = variant === 'featured-navy' ? 'navy' : 'off-white';
+const titleColor = variant === 'featured-navy' ? 'off-white' : 'navy';
+const bodyColor = variant === 'featured-navy' ? 'off-white' : 'navy';
+---
+
+<a href={href} class="ds-card ds-blog-card" style={`background: var(--color-${bg}); color: var(--color-${bodyColor});`}>
+  <h3 class="ds-blog-card-title" style={`color: var(--color-${titleColor});`}>{title}</h3>
+  <p class="ds-blog-card-excerpt">{excerpt}</p>
+  <p class="ds-blog-card-meta">{author} &middot; {date}</p>
+</a>
+
+<style>
+  .ds-card {
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    display: block;
+    text-decoration: none;
+  }
+  .ds-blog-card-title {
+    font-family: var(--font-headline);
+    font-size: var(--text-subheadline);
+    margin: 0 0 var(--space-3);
+  }
+  .ds-blog-card-excerpt {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    margin: 0 0 var(--space-3);
+  }
+  .ds-blog-card-meta {
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin: 0;
+  }
+</style>

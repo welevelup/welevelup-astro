@@ -1,0 +1,24 @@
+---
+// 3-column variant for boxes like petitions, per the style guide's "Grids" page.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`ds-grid-3 ${className}`}>
+  <slot />
+</div>
+
+<style>
+  .ds-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+  @media (max-width: 768px) {
+    .ds-grid-3 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

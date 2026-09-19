@@ -1,0 +1,26 @@
+---
+// "Highlight box": Electric Yellow block behind Deep Navy text (CLAUDE.md
+// Typography). Used on the caps Headline when a section has BOTH a caps
+// headline and a sentence-case Subheadline; used on a caps Label when a
+// section has NEITHER. That's an authoring rule — this component just
+// renders the box.
+import type { BgColor, TextColor } from '../../lib/brand-colors';
+
+interface Props<Bg extends BgColor = 'electric-yellow'> {
+  bg?: Bg;
+  text?: TextColor<Bg>;
+  class?: string;
+}
+const { bg = 'electric-yellow', text = 'navy', class: className = '' } = Astro.props as Props;
+---
+
+<span class={`ds-highlight ${className}`} style={`background: var(--color-${bg}); color: var(--color-${text});`}>
+  <slot />
+</span>
+
+<style>
+  .ds-highlight {
+    display: inline-block;
+    padding: 0.15em 0.4em;
+  }
+</style>

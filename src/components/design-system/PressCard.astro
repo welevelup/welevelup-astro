@@ -1,0 +1,45 @@
+---
+interface Props {
+  outlet: string;
+  headline: string;
+  href: string;
+  date: string;
+}
+const { outlet, headline, href, date } = Astro.props;
+---
+
+<a href={href} target="_blank" rel="noopener" class="ds-card ds-press-card">
+  <span class="ds-press-card-outlet">{outlet}</span>
+  <h3 class="ds-press-card-headline">{headline}</h3>
+  <span class="ds-press-card-date">{date}</span>
+</a>
+
+<style>
+  .ds-card {
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    display: block;
+    text-decoration: none;
+    background: var(--color-off-white);
+    color: var(--color-navy);
+    border: 1px solid rgba(12, 10, 62, 0.12);
+  }
+  .ds-press-card-outlet {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--text-label);
+    opacity: 0.7;
+  }
+  .ds-press-card-headline {
+    font-family: var(--font-headline);
+    font-size: var(--text-subheadline);
+    margin: var(--space-2) 0;
+  }
+  .ds-press-card-date {
+    font-family: var(--font-body);
+    font-size: var(--text-label);
+    opacity: 0.6;
+  }
+</style>

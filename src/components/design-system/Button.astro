@@ -1,0 +1,44 @@
+---
+import type { BgColor, TextColor } from '../../lib/brand-colors';
+
+interface Props<Bg extends BgColor = BgColor> {
+  bg: Bg;
+  text: TextColor<Bg>;
+  href?: string;
+  label: string;
+  class?: string;
+}
+const { bg, text, href, label, class: className = '' } = Astro.props as Props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag
+  class={`ds-button ${className}`}
+  style={`background: var(--color-${bg}); color: var(--color-${text});`}
+  {...href ? { href } : {}}
+>
+  {label}
+</Tag>
+
+<style>
+  .ds-button {
+    /* Square-cornered solid block, Corsia sentence-case label — per CLAUDE.md Components. */
+    font-family: var(--font-headline);
+    font-size: var(--text-body);
+    display: inline-block;
+    padding: var(--space-3) var(--space-6);
+    border-radius: 0;
+    border: none;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+  }
+  .ds-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
+  }
+  .ds-button:focus-visible {
+    outline: 3px solid var(--color-navy);
+    outline-offset: 2px;
+  }
+</style>

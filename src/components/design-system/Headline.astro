@@ -1,0 +1,26 @@
+---
+import type { ColorName } from '../../lib/brand-colors';
+
+interface Props {
+  as?: 'h1' | 'h2' | 'h3';
+  color?: ColorName;
+  class?: string;
+}
+const { as: Tag = 'h1', color = 'navy', class: className = '' } = Astro.props;
+---
+
+<Tag class={`ds-headline ${className}`} style={`color: var(--color-${color});`}>
+  <slot />
+</Tag>
+
+<style>
+  .ds-headline {
+    font-family: var(--font-headline);
+    text-transform: uppercase;
+    font-size: var(--text-headline);
+    line-height: 0.95;
+    margin: 0;
+    /* Style guide: keep headlines to 3 lines max / ~6 words — an authoring
+       guideline, not something CSS can enforce. */
+  }
+</style>

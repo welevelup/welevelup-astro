@@ -1,0 +1,43 @@
+---
+import { BRAND_COLORS, type BgColor } from '../../lib/brand-colors';
+import { TEXTURE_FOR_BG } from '../../lib/texture';
+
+interface Props {
+  bg: BgColor;
+  class?: string;
+}
+
+const { bg, class: className = '' } = Astro.props;
+const bgHex = BRAND_COLORS[bg];
+const texture = TEXTURE_FOR_BG[bg];
+---
+
+<section class={`ds-section ${className}`} data-section-bg={bg} style={`--section-bg: ${bgHex}; --section-texture: url('${texture}');`}>
+  <div class="ds-section-inner">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .ds-section {
+    background-color: var(--section-bg);
+    position: relative;
+    padding-block: var(--space-12);
+  }
+  .ds-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--section-texture);
+    background-repeat: repeat;
+    background-size: 900px auto;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .ds-section-inner {
+    position: relative;
+    max-width: var(--container-max);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+</style>

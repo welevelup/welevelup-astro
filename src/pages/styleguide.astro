@@ -1,0 +1,130 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { BRAND_COLORS, ALLOWED_PAIRINGS, LARGE_TEXT_ONLY_PAIRINGS, type BgColor } from '../lib/brand-colors';
+import Section from '../components/design-system/Section.astro';
+import Headline from '../components/design-system/Headline.astro';
+import Subheadline from '../components/design-system/Subheadline.astro';
+import Label from '../components/design-system/Label.astro';
+import Highlight from '../components/design-system/Highlight.astro';
+import Button from '../components/design-system/Button.astro';
+import AltButton from '../components/design-system/AltButton.astro';
+import Header from '../components/design-system/Header.astro';
+import Footer from '../components/design-system/Footer.astro';
+import Ticker from '../components/design-system/Ticker.astro';
+import PetitionCard from '../components/design-system/PetitionCard.astro';
+import BlogCard from '../components/design-system/BlogCard.astro';
+import ActionCard from '../components/design-system/ActionCard.astro';
+import PressCard from '../components/design-system/PressCard.astro';
+import Collage from '../components/design-system/Collage.astro';
+
+const LARGE_ONLY = new Set(LARGE_TEXT_ONLY_PAIRINGS.map(([bg, text]) => `${bg}:${text}`));
+const BG_COLORS = Object.keys(ALLOWED_PAIRINGS) as BgColor[];
+---
+
+<Layout headHtml="" title="Style Guide (internal) | Level Up" noindex={true}>
+  <main>
+    <Section bg="navy">
+      <Label color="electric-yellow">2026 Brand Refresh</Label>
+      <Headline color="off-white">Style guide</Headline>
+      <p style="color: var(--color-off-white); font-family: var(--font-body); max-width: 60ch;">
+        Internal reference for the design-system tokens and components built in Step 1.
+        Not linked from anywhere on the live site — noindex, excluded from the sitemap.
+      </p>
+    </Section>
+
+    <Section bg="off-white">
+      <Subheadline>Colour &amp; allowed pairings</Subheadline>
+      <div class="sg-swatch-grid">
+        {BG_COLORS.map((bg) => (
+          <div class="sg-swatch" style={`background: ${BRAND_COLORS[bg]};`}>
+            <p class="sg-swatch-name">{bg}<br /><code>{BRAND_COLORS[bg]}</code></p>
+            {ALLOWED_PAIRINGS[bg].map((text) => {
+              const isLargeOnly = LARGE_ONLY.has(`${bg}:${text}`);
+              return (
+                <p style={`color: ${BRAND_COLORS[text]}; font-size: ${isLargeOnly ? '1.5rem' : '1rem'}; font-weight: 700;`}>
+                  {text} text {isLargeOnly ? '(large only)' : '(large & small)'}
+                </p>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section bg="off-white">
+      <Subheadline>Type</Subheadline>
+      <Headline>Headline in Corsia Display</Headline>
+      <Subheadline>Subheadline in Corsia Display, sentence case</Subheadline>
+      <p style="font-family: var(--font-body); font-size: var(--text-body);">Body copy in DM Sans, sentence case.</p>
+      <p style="font-family: var(--font-body); font-size: var(--text-body); font-weight: 700;">Bold body copy in DM Sans.</p>
+      <Label>Label in DM Sans caps</Label>
+      <p><Highlight><Label color="navy">Label</Label></Highlight></p>
+      <p><Highlight><Headline as="h3">Headline</Headline></Highlight></p>
+    </Section>
+
+    <Section bg="off-white">
+      <Subheadline>Buttons</Subheadline>
+      <div class="sg-button-row">
+        <Button bg="navy" text="electric-yellow" label="Button" />
+        <Button bg="navy" text="gentle-lilac" label="Button" />
+        <Button bg="navy" text="off-white" label="Button" />
+        <Button bg="electric-yellow" text="navy" label="Button" />
+        <Button bg="electric-yellow" text="loud-lilac" label="Button" />
+        <Button bg="loud-lilac" text="electric-yellow" label="Button" />
+        <Button bg="loud-lilac" text="off-white" label="Button" />
+        <Button bg="gentle-lilac" text="navy" label="Button" />
+        <Button bg="off-white" text="navy" label="Button" />
+        <Button bg="pale-yellow" text="navy" label="Button" />
+      </div>
+      <p><AltButton href="#" label="Alt button" /></p>
+    </Section>
+
+    <Section bg="off-white">
+      <Subheadline>Cards</Subheadline>
+      <div class="sg-card-grid">
+        <PetitionCard variant="featured" bg="navy" text="off-white" buttonBg="electric-yellow" buttonText="navy" title="Petition (featured)" body="Sample petition card body copy." href="#" />
+        <PetitionCard variant="secondary" bg="off-white" text="navy" buttonBg="navy" buttonText="electric-yellow" title="Petition (secondary)" body="Sample petition card body copy." href="#" />
+        <BlogCard variant="featured-navy" title="Blog card (featured navy)" excerpt="Sample excerpt text." author="Level Up" date="2026-09-19" href="#" />
+        <BlogCard variant="secondary-white" title="Blog card (secondary white)" excerpt="Sample excerpt text." author="Level Up" date="2026-09-19" href="#" />
+        <ActionCard bg="loud-lilac" text="off-white" buttonBg="electric-yellow" buttonText="navy" label="Take action" title="Action card" href="#" />
+        <PressCard outlet="The Guardian" headline="Press card headline" date="2026-09-19" href="#" />
+      </div>
+    </Section>
+
+    <Header heroBg="navy" />
+    <Footer />
+
+    <Ticker items={['Level Up', 'Reproductive justice', 'Feminist campaigns']} />
+
+    <Section bg="off-white">
+      <Subheadline>Texture on each section colour</Subheadline>
+      <div class="sg-texture-grid">
+        {BG_COLORS.map((bg) => (
+          <div class="sg-texture-cell">
+            <Section bg={bg}><p style="height: 80px;"></p></Section>
+            <p class="sg-swatch-name">{bg}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section bg="off-white">
+      <Subheadline>Collages</Subheadline>
+      <div class="sg-collage-grid">
+        <Collage index={1} /><Collage index={2} /><Collage index={3} />
+        <Collage index={4} /><Collage index={5} /><Collage index={6} />
+      </div>
+    </Section>
+  </main>
+</Layout>
+
+<style>
+  .sg-swatch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-4); }
+  .sg-swatch { border-radius: var(--radius-card); padding: var(--space-4); }
+  .sg-swatch-name { font-family: var(--font-body); font-weight: 700; margin: 0 0 var(--space-2); }
+  .sg-button-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .sg-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-4); }
+  .sg-texture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-4); }
+  .sg-texture-cell :global(.ds-section) { padding-block: 0; }
+  .sg-collage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-4); }
+</style>

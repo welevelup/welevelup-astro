@@ -1,0 +1,42 @@
+---
+import type { BgColor, TextColor } from '../../lib/brand-colors';
+import Button from './Button.astro';
+
+interface Props<Bg extends BgColor = BgColor> {
+  bg: Bg;
+  text: TextColor<Bg>;
+  buttonBg: Bg;
+  buttonText: TextColor<Bg>;
+  label: string;
+  title: string;
+  href: string;
+}
+const { bg, text, buttonBg, buttonText, label, title, href } = Astro.props as Props;
+---
+
+<article class="ds-card ds-action-card" style={`background: var(--color-${bg}); color: var(--color-${text});`}>
+  <span class="ds-action-card-label">{label}</span>
+  <h3 class="ds-action-card-title">{title}</h3>
+  <Button bg={buttonBg} text={buttonText} href={href} label="Take action" />
+</article>
+
+<style>
+  .ds-card {
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+  }
+  .ds-action-card-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--text-label);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+  .ds-action-card-title {
+    font-family: var(--font-headline);
+    font-size: var(--text-subheadline);
+    margin: 0 0 var(--space-4);
+  }
+</style>

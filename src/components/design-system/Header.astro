@@ -1,0 +1,98 @@
+---
+// New design-system Header — logo/nav colour swaps with the hero background.
+// Does NOT replace src/components/Nav.astro, which legacy pages still use.
+import type { BgColor } from '../../lib/brand-colors';
+import logoNavyLime from '../../assets/brand/logos/logo-navy-lime.svg';
+import logoLimeNavy from '../../assets/brand/logos/logo-lime-navy.svg';
+import logoNavyOffwhite from '../../assets/brand/logos/logo-navy-offwhite.svg';
+import logoOffwhite from '../../assets/brand/logos/logo-offwhite.svg';
+
+interface Props {
+  heroBg: BgColor;
+}
+const { heroBg } = Astro.props;
+
+// Pick a logo lockup readable against the given hero background.
+const LOGO_FOR_BG: Record<BgColor, ImageMetadata> = {
+  navy: logoNavyOffwhite,
+  'loud-lilac': logoNavyOffwhite,
+  'gentle-lilac': logoNavyLime,
+  'electric-yellow': logoNavyLime,
+  'off-white': logoNavyLime,
+  'pale-yellow': logoNavyLime,
+  white: logoNavyLime,
+};
+const logo = LOGO_FOR_BG[heroBg];
+const isDark = heroBg === 'navy' || heroBg === 'loud-lilac';
+---
+
+<header class={`ds-header ${isDark ? 'ds-header--dark' : 'ds-header--light'}`}>
+  <a href="/" class="ds-header-logo">
+    <img src={logo.src} alt="Level Up" height="32" />
+  </a>
+  <nav class="ds-header-nav" aria-label="Main navigation">
+    <a href="/about-us">About</a>
+    <a href="/active-campaigns">Campaigns</a>
+    <a href="/blog">Blog</a>
+    <a href="/donate">Donate</a>
+  </nav>
+  <button class="ds-header-burger" aria-label="Open menu" aria-expanded="false" data-ds-header-toggle>
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-ds-header-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const header = btn.closest('.ds-header');
+      const nav = header?.querySelector<HTMLElement>('.ds-header-nav');
+      if (!nav) return;
+      const open = nav.classList.toggle('ds-header-nav--open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+</script>
+
+<style>
+  .ds-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-4) var(--space-4);
+    max-width: var(--container-max);
+    margin-inline: auto;
+  }
+  .ds-header--dark { color: var(--color-off-white); }
+  .ds-header--light { color: var(--color-navy); }
+  .ds-header-nav { display: flex; gap: var(--space-6); font-family: var(--font-body); font-weight: 700; }
+  .ds-header-nav a { color: inherit; text-decoration: none; }
+  .ds-header-burger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  .ds-header-burger span {
+    width: 22px;
+    height: 2px;
+    background: currentColor;
+  }
+  @media (max-width: 768px) {
+    .ds-header-nav { display: none; }
+    .ds-header-nav--open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: inherit;
+      padding: var(--space-4);
+      gap: var(--space-3);
+    }
+    .ds-header-burger { display: flex; }
+    .ds-header { position: relative; }
+  }
+</style>

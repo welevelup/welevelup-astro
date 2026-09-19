@@ -1,0 +1,64 @@
+/* 2026 brand refresh design tokens.
+   Colour hexes must stay in sync with src/lib/brand-colors.ts (kept as plain
+   CSS custom properties here since Astro's global <style> can't import a .ts
+   module; scripts/check-contrast.mjs is the single script that reads the .ts
+   file, so that stays canonical for anything computed). */
+
+@font-face {
+  font-family: 'Corsia Display';
+  src: url('/fonts/corsia-display-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/dm-sans-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/dm-sans-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* colour */
+  --color-navy: #0c0a3e;
+  --color-off-white: #fffdf0;
+  --color-gentle-lilac: #a89ced;
+  --color-loud-lilac: #4930d9;
+  --color-electric-yellow: #ccff33;
+  --color-pale-yellow: #fcf9d8;
+  --color-white: #ffffff;
+
+  /* type families */
+  --font-headline: 'Corsia Display', ui-sans-serif, sans-serif;
+  --font-body: 'DM Sans', ui-sans-serif, sans-serif;
+
+  /* fluid type scale */
+  --text-label: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem);
+  --text-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-subheadline: clamp(1.5rem, 1.2rem + 1.5vw, 2.25rem);
+  --text-headline: clamp(2.25rem, 1.5rem + 3.75vw, 5rem);
+
+  /* spacing (4px base scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* container + grid */
+  --container-max: 1200px;
+  --grid-25-cols: 2fr 5fr;
+  --radius-button: 6px;
+  --radius-card: 12px;
+}

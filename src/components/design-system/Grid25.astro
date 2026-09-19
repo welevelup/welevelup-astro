@@ -1,0 +1,27 @@
+---
+// Roughly 2:5 two-column grid per the style guide's "Grids" page.
+// Collapses to one left-aligned column on mobile.
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`ds-grid-25 ${className}`}>
+  <slot name="narrow" />
+  <slot name="wide" />
+</div>
+
+<style>
+  .ds-grid-25 {
+    display: grid;
+    grid-template-columns: var(--grid-25-cols);
+    gap: var(--space-8);
+    text-align: left;
+  }
+  @media (max-width: 768px) {
+    .ds-grid-25 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

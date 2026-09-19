@@ -1,0 +1,52 @@
+---
+import type { BgColor } from '../../lib/brand-colors';
+
+interface Props {
+  bg: BgColor;
+  imageSrc: string;
+  imageAlt: string;
+}
+const { bg, imageSrc, imageAlt } = Astro.props;
+---
+
+<div class="ds-split-hero" style={`background: var(--color-${bg});`}>
+  <div class="ds-split-hero-copy">
+    <slot />
+  </div>
+  <div class="ds-split-hero-image">
+    <img src={imageSrc} alt={imageAlt} />
+  </div>
+</div>
+
+<style>
+  .ds-split-hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    min-height: 480px;
+  }
+  .ds-split-hero-copy {
+    padding: var(--space-12) var(--space-8);
+  }
+  .ds-split-hero-image {
+    height: 100%;
+    /* Angled photo edge per the style guide's collage/hero direction. */
+    clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
+    overflow: hidden;
+  }
+  .ds-split-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  @media (max-width: 768px) {
+    .ds-split-hero {
+      grid-template-columns: 1fr;
+    }
+    .ds-split-hero-image {
+      clip-path: none;
+      min-height: 320px;
+    }
+  }
+</style>

@@ -8,7 +8,8 @@
     "build": "astro build",
     "build:vercel": "vercel build && node scripts/fix-vercel-routes.mjs",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:contrast": "node scripts/check-contrast.mjs"
   },
   "overrides": {
     "undici": "^7.0.0"

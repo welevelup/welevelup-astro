@@ -1,0 +1,24 @@
+---
+import type { ColorName } from '../../lib/brand-colors';
+
+interface Props {
+  color?: ColorName;
+  class?: string;
+}
+const { color = 'navy', class: className = '' } = Astro.props;
+---
+
+<span class={`ds-label ${className}`} style={`color: var(--color-${color});`}>
+  <slot />
+</span>
+
+<style>
+  .ds-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--text-label);
+    display: inline-block;
+  }
+</style>

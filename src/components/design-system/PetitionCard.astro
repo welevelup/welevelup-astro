@@ -1,0 +1,52 @@
+---
+import type { BgColor, TextColor } from '../../lib/brand-colors';
+import Button from './Button.astro';
+
+interface Props<Bg extends BgColor = BgColor> {
+  variant?: 'featured' | 'secondary';
+  bg: Bg;
+  text: TextColor<Bg>;
+  buttonBg: Bg;
+  buttonText: TextColor<Bg>;
+  title: string;
+  body: string;
+  href: string;
+}
+const {
+  variant = 'secondary',
+  bg,
+  text,
+  buttonBg,
+  buttonText,
+  title,
+  body,
+  href,
+} = Astro.props as Props;
+---
+
+<article class={`ds-card ds-petition-card ds-petition-card--${variant}`} style={`background: var(--color-${bg}); color: var(--color-${text});`}>
+  <h3 class="ds-card-title">{title}</h3>
+  <p class="ds-card-body">{body}</p>
+  <Button bg={buttonBg} text={buttonText} href={href} label="Sign the petition" />
+</article>
+
+<style>
+  .ds-card {
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+  }
+  .ds-petition-card--featured {
+    padding: var(--space-8);
+  }
+  .ds-card-title {
+    /* Corsia sentence case, per CLAUDE.md: "Buttons and card titles use Corsia sentence case." */
+    font-family: var(--font-headline);
+    font-size: var(--text-subheadline);
+    margin: 0 0 var(--space-3);
+  }
+  .ds-card-body {
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    margin: 0 0 var(--space-4);
+  }
+</style>

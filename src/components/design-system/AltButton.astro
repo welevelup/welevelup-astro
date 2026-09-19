@@ -1,0 +1,44 @@
+---
+// Underlined text link + arrow icon — used instead of a solid Button when
+// buttons have already been used a lot nearby (style guide "Components" page).
+import type { ColorName } from '../../lib/brand-colors';
+import arrow from '../../assets/brand/logos/arrow.svg';
+
+interface Props {
+  text?: ColorName;
+  href?: string;
+  label: string;
+  class?: string;
+}
+const { text = 'navy', href, label, class: className = '' } = Astro.props;
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class={`ds-alt-button ${className}`} style={`color: var(--color-${text});`} {...href ? { href } : {}}>
+  <span class="ds-alt-button-label">{label}</span>
+  <img src={arrow.src} alt="" width="18" height="10" class="ds-alt-button-arrow" />
+</Tag>
+
+<style>
+  .ds-alt-button {
+    /* Corsia text with an Electric Yellow underline bar, per CLAUDE.md Components. */
+    font-family: var(--font-headline);
+    font-size: var(--text-body);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .ds-alt-button-label {
+    text-decoration: none;
+    box-shadow: 0 2px 0 0 var(--color-electric-yellow);
+    padding-bottom: 2px;
+  }
+  .ds-alt-button-arrow {
+    filter: none;
+  }
+</style>

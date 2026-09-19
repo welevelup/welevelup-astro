@@ -22,3 +22,6 @@ scripts/backups/
 
 # Audience source data — personal data, NEVER commit (public repo)
 data/
+
+# Raw brand-refresh mockup JPGs — 1.5-18MB each, kept locally only
+docs/brand/mockups/

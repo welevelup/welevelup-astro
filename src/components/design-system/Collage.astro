@@ -1,0 +1,26 @@
+---
+import collage01 from '../../assets/brand/collages/collage-01.png';
+import collage02 from '../../assets/brand/collages/collage-02.png';
+import collage03 from '../../assets/brand/collages/collage-03.png';
+import collage04 from '../../assets/brand/collages/collage-04.png';
+import collage05 from '../../assets/brand/collages/collage-05.png';
+import collage06 from '../../assets/brand/collages/collage-06.png';
+
+const COLLAGES = [collage01, collage02, collage03, collage04, collage05, collage06];
+
+interface Props {
+  index: 1 | 2 | 3 | 4 | 5 | 6;
+  class?: string;
+}
+const { index, class: className = '' } = Astro.props;
+const collage = COLLAGES[index - 1];
+---
+
+<img src={collage.src} width={collage.width} height={collage.height} alt="" class={`ds-collage ${className}`} loading="lazy" />
+
+<style>
+  .ds-collage {
+    max-width: 100%;
+    height: auto;
+  }
+</style>

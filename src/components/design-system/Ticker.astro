@@ -1,0 +1,45 @@
+---
+import type { BgColor, TextColor } from '../../lib/brand-colors';
+
+interface Props<Bg extends BgColor = 'electric-yellow'> {
+  bg?: Bg;
+  text?: TextColor<Bg>;
+  items: string[];
+}
+const { bg = 'electric-yellow', text = 'navy', items } = Astro.props as Props;
+// Duplicate items so the marquee loops seamlessly.
+const loop = [...items, ...items];
+---
+
+<div class="ds-ticker" style={`background: var(--color-${bg}); color: var(--color-${text});`}>
+  <div class="ds-ticker-track">
+    {loop.map((item) => <span class="ds-ticker-item">{item}</span>)}
+  </div>
+</div>
+
+<style>
+  .ds-ticker {
+    overflow: hidden;
+    white-space: nowrap;
+    padding-block: var(--space-3);
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .ds-ticker-track {
+    display: inline-flex;
+    animation: ds-ticker-scroll 24s linear infinite;
+  }
+  .ds-ticker-item {
+    padding-inline: var(--space-6);
+  }
+  @keyframes ds-ticker-scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ds-ticker-track {
+      animation: none;
+    }
+  }
+</style>

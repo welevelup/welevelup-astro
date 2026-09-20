@@ -1,0 +1,241 @@
+---
+// Reusable campaign-page template (Step 2 brief, section B). Built once here
+// so Step 3 can apply it to every other campaign page. Each content section
+// is an optional slot — "sections that have no content for a campaign are
+// left out" (Step 3's own instruction) applies from day one.
+import Header from './Header.astro';
+import SplitHero from './SplitHero.astro';
+import Section from './Section.astro';
+import Grid25 from './Grid25.astro';
+import Headline from './Headline.astro';
+import Label from './Label.astro';
+import Button from './Button.astro';
+import ActionCard from './ActionCard.astro';
+import PressCard from './PressCard.astro';
+import Collage from './Collage.astro';
+import Timeline from './Timeline.astro';
+import Footer from './Footer.astro';
+
+interface Stat {
+  value: string;
+  caption: string;
+}
+interface ActionItem {
+  title: string;
+  description: string;
+  href: string;
+}
+interface TimelineItem {
+  year: string;
+  highlight?: boolean;
+  bodyHtml: string;
+}
+interface RelatedPost {
+  tag: string;
+  title: string;
+  href: string;
+}
+interface PressItem {
+  outlet: string;
+  headline: string;
+  href: string;
+  date: string;
+}
+
+interface Props {
+  name: string;
+  intro: string;
+  petitionHref: string;
+  imageSrc: string;
+  imageAlt: string;
+  stats?: Stat[];
+  aimLead?: string;
+  timelineItems?: TimelineItem[];
+  actions?: ActionItem[];
+  relatedPosts?: RelatedPost[];
+  mediaCoverage?: PressItem[];
+  /** "Support this campaign" final CTA — Sign the petition + Donate. */
+  showSupportCta?: boolean;
+  collageIndex?: 1 | 2 | 3 | 4 | 5 | 6;
+}
+
+const {
+  name,
+  intro,
+  petitionHref,
+  imageSrc,
+  imageAlt,
+  stats,
+  aimLead,
+  timelineItems,
+  actions,
+  relatedPosts,
+  mediaCoverage,
+  showSupportCta = false,
+  collageIndex = 5,
+} = Astro.props;
+---
+
+<Header heroBg="loud-lilac" />
+
+<SplitHero bg="loud-lilac" imageSrc={imageSrc} imageAlt={imageAlt}>
+  <Headline color="off-white">{name}</Headline>
+  <p style="color: var(--color-off-white); max-width: 46ch;">{intro}</p>
+  <Button bg="electric-yellow" text="navy" href={petitionHref} label="Sign the petition" />
+</SplitHero>
+
+{stats && stats.length > 0 && (
+  <Section bg="electric-yellow">
+    <div class="ct-stats">
+      {stats.map((s) => (
+        <div class="ct-stat">
+          <span class="ct-stat-value">{s.value}</span>
+          <span class="ct-stat-caption">{s.caption}</span>
+        </div>
+      ))}
+    </div>
+  </Section>
+)}
+
+{aimLead && (
+  <Section bg="off-white">
+    <Grid25>
+      <Fragment slot="narrow"><Headline as="h2">Aim</Headline></Fragment>
+      <Fragment slot="wide"><slot name="aim" /></Fragment>
+    </Grid25>
+  </Section>
+)}
+
+<Section bg="pale-yellow">
+  <Grid25>
+    <Fragment slot="narrow"><Headline as="h2">Why</Headline></Fragment>
+    <Fragment slot="wide"><slot name="why" /></Fragment>
+  </Grid25>
+</Section>
+
+<Section bg="off-white">
+  <Grid25>
+    <Fragment slot="narrow"><slot name="story-heading" /></Fragment>
+    <Fragment slot="wide"><slot name="story" /></Fragment>
+  </Grid25>
+</Section>
+
+{timelineItems && timelineItems.length > 0 && (
+  <Section bg="pale-yellow">
+    <Label color="navy">The journey so far</Label>
+    <Headline as="h2">The journey so far</Headline>
+    <div class="ct-timeline-wrap"><Timeline items={timelineItems} barColor="loud-lilac" /></div>
+  </Section>
+)}
+
+{actions && actions.length > 0 && (
+  <Section bg="gentle-lilac">
+    <Grid25>
+      <Fragment slot="narrow">
+        <Label color="navy">Take action</Label>
+        <Headline as="h2">How you can help</Headline>
+        <Collage index={collageIndex} />
+      </Fragment>
+      <Fragment slot="wide">
+        <div class="ct-actions">
+          {actions.map((a) => (
+            <ActionCard bg="navy" text="off-white" title={a.title} description={a.description} href={a.href} />
+          ))}
+        </div>
+      </Fragment>
+    </Grid25>
+  </Section>
+)}
+
+{relatedPosts && relatedPosts.length > 0 && (
+  <Section bg="navy">
+    <Label color="electric-yellow">From the blog</Label>
+    <div class="ct-related-grid">
+      {relatedPosts.map((p) => (
+        <a href={p.href} class="ct-related-card">
+          <span class="ct-related-tag">{p.tag}</span>
+          <span class="ct-related-title">{p.title}</span>
+          <span class="ct-related-read">Read &rarr;</span>
+        </a>
+      ))}
+    </div>
+  </Section>
+)}
+
+{mediaCoverage && mediaCoverage.length > 0 && (
+  <Section bg="off-white">
+    <Label color="navy">In the press</Label>
+    <Headline as="h2">Media coverage</Headline>
+    <div class="ct-media-grid">
+      {mediaCoverage.map((item) => (
+        <PressCard outlet={item.outlet} headline={item.headline} href={item.href} date={item.date} />
+      ))}
+    </div>
+    <p class="ct-media-more"><a href="/press">View all press coverage &rarr;</a></p>
+  </Section>
+)}
+
+{showSupportCta && (
+  <Section bg="navy">
+    <div class="ct-support-cta">
+      <Headline as="h2" color="off-white">Support this campaign</Headline>
+      <div class="ct-support-cta-actions">
+        <Button bg="electric-yellow" text="navy" href={petitionHref} label="Sign the petition" />
+        <Button bg="off-white" text="navy" href="/donate" label="Donate" />
+      </div>
+    </div>
+  </Section>
+)}
+
+<Section bg="navy">
+  <div class="ct-join-cta">
+    <Headline as="h2" color="off-white">Join the Level Up community</Headline>
+    <p style="color: var(--color-off-white); max-width: 480px; margin-inline: auto;">Campaign updates, event invitations, and feminist thinking.</p>
+    <Button bg="gentle-lilac" text="navy" href="https://levelup.yourmovement.org/p/join-us" label="Join us" />
+  </div>
+</Section>
+
+<Footer bg="loud-lilac" />
+
+<style>
+  .ct-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-6);
+    text-align: center;
+  }
+  .ct-stat { display: flex; flex-direction: column; gap: var(--space-2); }
+  .ct-stat-value { font-family: var(--font-headline); font-size: var(--text-headline); color: var(--color-navy); line-height: 1; }
+  .ct-stat-caption { font-family: var(--font-body); color: var(--color-navy); }
+  .ct-actions { display: flex; flex-direction: column; gap: var(--space-4); }
+  .ct-timeline-wrap { margin-top: var(--space-8); }
+  .ct-related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+  .ct-related-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    text-decoration: none;
+    color: var(--color-off-white);
+    background: rgba(255, 253, 240, 0.08);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+  }
+  .ct-related-tag { font-family: var(--font-body); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--text-label); color: var(--color-electric-yellow); }
+  .ct-related-title { font-family: var(--font-headline); font-size: var(--text-subheadline); }
+  .ct-related-read { font-family: var(--font-body); font-weight: 700; }
+  .ct-media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+  .ct-media-more { margin-top: var(--space-4); }
+  .ct-media-more a { color: var(--color-navy); font-weight: 700; text-decoration: none; }
+  .ct-support-cta, .ct-join-cta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+  .ct-support-cta-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; justify-content: center; }
+</style>

@@ -1,6 +1,7 @@
 ---
 import type { BgColor, TextColor } from '../../lib/brand-colors';
 import Button from './Button.astro';
+import AltButton from './AltButton.astro';
 
 interface Props<Bg extends BgColor = BgColor> {
   variant?: 'featured' | 'secondary';
@@ -11,6 +12,13 @@ interface Props<Bg extends BgColor = BgColor> {
   title: string;
   body: string;
   href: string;
+  /** Optional second CTA ("Learn more") — the mockup shows this as a plain
+      text link next to the solid button, in the card's own text colour. */
+  secondaryHref?: string;
+  secondaryLabel?: string;
+  /** Featured cards in the mockup have a real photo above the title. */
+  imageSrc?: string;
+  imageAlt?: string;
 }
 const {
   variant = 'secondary',
@@ -21,22 +29,43 @@ const {
   title,
   body,
   href,
+  secondaryHref,
+  secondaryLabel = 'Learn more',
+  imageSrc,
+  imageAlt = '',
 } = Astro.props as Props;
 ---
 
 <article class={`ds-card ds-petition-card ds-petition-card--${variant}`} style={`background: var(--color-${bg}); color: var(--color-${text});`}>
+  {imageSrc && <img src={imageSrc} alt={imageAlt} class="ds-petition-card-image" loading="lazy" />}
   <h3 class="ds-card-title">{title}</h3>
   <p class="ds-card-body">{body}</p>
-  <Button bg={buttonBg} text={buttonText} href={href} label="Sign the petition" />
+  <div class="ds-petition-card-actions">
+    <Button bg={buttonBg} text={buttonText} href={href} label="Sign the petition" />
+    {secondaryHref && <AltButton text={text} href={secondaryHref} label={secondaryLabel} />}
+  </div>
 </article>
 
 <style>
   .ds-card {
     border-radius: var(--radius-card);
     padding: var(--space-6);
+    overflow: hidden;
   }
   .ds-petition-card--featured {
     padding: var(--space-8);
+  }
+  .ds-petition-card-image {
+    width: calc(100% + 2 * var(--space-8));
+    margin: calc(-1 * var(--space-8)) calc(-1 * var(--space-8)) var(--space-6);
+    display: block;
+    max-width: none;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+  .ds-petition-card--secondary .ds-petition-card-image {
+    width: calc(100% + 2 * var(--space-6));
+    margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-4);
   }
   .ds-card-title {
     /* Corsia sentence case, per CLAUDE.md: "Buttons and card titles use Corsia sentence case." */
@@ -48,5 +77,10 @@ const {
     font-family: var(--font-body);
     font-size: var(--text-body);
     margin: 0 0 var(--space-4);
+  }
+  .ds-petition-card-actions {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
   }
 </style>

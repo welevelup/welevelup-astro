@@ -1,0 +1,85 @@
+---
+// New component (not in the original Step 1/2 spec — added because the real
+// #NoMoreLyes page has a substantial 2021-2026 campaign timeline that isn't
+// covered by any existing design-system component). Follows CLAUDE.md's own
+// Timeline quality rule verbatim: "Timelines use one colour for the bar,
+// dark text on light backgrounds, and text never overlaps the year
+// markers." Content for each node comes through numbered slots
+// (item-0, item-1, ...) so arbitrary real rich text/links/images/embeds for
+// that year can be preserved exactly rather than flattened into a string prop.
+interface Item {
+  year: string;
+  highlight?: boolean;
+  /** Trusted, page-authored HTML (verbatim real copy) — not user input. */
+  bodyHtml: string;
+}
+interface Props {
+  items: Item[];
+  barColor?: 'navy' | 'loud-lilac';
+}
+const { items, barColor = 'loud-lilac' } = Astro.props;
+---
+
+<div class="ds-timeline" style={`--timeline-bar: var(--color-${barColor});`}>
+  {items.map((item) => (
+    <div class={`ds-timeline-node ${item.highlight ? 'ds-timeline-node--highlight' : ''}`}>
+      <div class="ds-timeline-marker">
+        <span class="ds-timeline-dot" />
+        <span class="ds-timeline-year">{item.year}</span>
+      </div>
+      <div class="ds-timeline-body" set:html={item.bodyHtml} />
+    </div>
+  ))}
+</div>
+
+<style>
+  .ds-timeline {
+    position: relative;
+    padding-left: var(--space-8);
+  }
+  .ds-timeline::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--timeline-bar);
+  }
+  .ds-timeline-node {
+    position: relative;
+    margin-bottom: var(--space-12);
+  }
+  .ds-timeline-node:last-child { margin-bottom: 0; }
+  .ds-timeline-marker {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+  .ds-timeline-dot {
+    position: absolute;
+    left: calc(-1 * var(--space-8) + 2px);
+    top: 6px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--timeline-bar);
+  }
+  .ds-timeline-year {
+    font-family: var(--font-headline);
+    font-size: var(--text-subheadline);
+    color: var(--color-navy);
+    /* Own line from the body text below it — never overlaps, per CLAUDE.md. */
+    display: block;
+  }
+  .ds-timeline-body {
+    color: var(--color-navy);
+    font-family: var(--font-body);
+    max-width: 68ch;
+  }
+  .ds-timeline-body :global(p) { margin: 0 0 var(--space-3); }
+  .ds-timeline-body :global(a) { color: var(--color-loud-lilac); }
+  .ds-timeline-body :global(img) { max-width: 100%; border-radius: var(--radius-card); margin: var(--space-2) 0; }
+  .ds-timeline-node--highlight .ds-timeline-dot { background: var(--color-electric-yellow); }
+</style>

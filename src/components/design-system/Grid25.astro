@@ -8,8 +8,8 @@ const { class: className = '' } = Astro.props;
 ---
 
 <div class={`ds-grid-25 ${className}`}>
-  <slot name="narrow" />
-  <slot name="wide" />
+  <div class="ds-grid-25-narrow"><slot name="narrow" /></div>
+  <div class="ds-grid-25-wide"><slot name="wide" /></div>
 </div>
 
 <style>
@@ -18,6 +18,12 @@ const { class: className = '' } = Astro.props;
     grid-template-columns: var(--grid-25-cols);
     gap: var(--space-8);
     text-align: left;
+  }
+  /* Each slot is wrapped in its own div so multiple child elements passed
+     into one slot (e.g. a Headline + a Collage) stay together as a single
+     grid column instead of each becoming its own auto-placed grid cell. */
+  .ds-grid-25-narrow, .ds-grid-25-wide {
+    min-width: 0;
   }
   @media (max-width: 768px) {
     .ds-grid-25 {

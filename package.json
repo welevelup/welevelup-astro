@@ -30,6 +30,7 @@
     "tabulator-tables": "^6.4.0"
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.21"
+    "@types/leaflet": "^1.9.21",
+    "playwright": "^1.63.0"
   }
 }

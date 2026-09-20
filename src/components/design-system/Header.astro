@@ -2,6 +2,7 @@
 // New design-system Header — logo/nav colour swaps with the hero background.
 // Does NOT replace src/components/Nav.astro, which legacy pages still use.
 import type { BgColor } from '../../lib/brand-colors';
+import Button from './Button.astro';
 import logoNavyLime from '../../assets/brand/logos/logo-navy-lime.svg';
 import logoLimeNavy from '../../assets/brand/logos/logo-lime-navy.svg';
 import logoNavyOffwhite from '../../assets/brand/logos/logo-navy-offwhite.svg';
@@ -24,6 +25,14 @@ const LOGO_FOR_BG: Record<BgColor, ImageMetadata> = {
 };
 const logo = LOGO_FOR_BG[heroBg];
 const isDark = heroBg === 'navy' || heroBg === 'loud-lilac';
+
+// Donate + Join us pills, matching the mockup exactly on each hero background.
+// On Loud Lilac, "Join us" as Gentle Lilac is DEVIATIONS.md #2 — the mockup's
+// own choice, which breaks the guide's "Gentle Lilac only with Navy or
+// off-white" rule; followed here per the brief's "follow the mockup" tie-break.
+const donateBg = 'electric-yellow' as const;
+const joinBg = heroBg === 'loud-lilac' || heroBg === 'navy' ? ('gentle-lilac' as const) : ('navy' as const);
+const joinText = joinBg === 'gentle-lilac' ? ('navy' as const) : ('electric-yellow' as const);
 ---
 
 <header class={`ds-header ${isDark ? 'ds-header--dark' : 'ds-header--light'}`}>
@@ -34,7 +43,8 @@ const isDark = heroBg === 'navy' || heroBg === 'loud-lilac';
     <a href="/about-us">About</a>
     <a href="/active-campaigns">Campaigns</a>
     <a href="/blog">Blog</a>
-    <a href="/donate">Donate</a>
+    <Button bg={donateBg} text="navy" href="/donate" label="Donate" class="ds-header-pill" />
+    <Button bg={joinBg} text={joinText} href="https://levelup.yourmovement.org/p/join-us" label="Join us" class="ds-header-pill" />
   </nav>
   <button class="ds-header-burger" aria-label="Open menu" aria-expanded="false" data-ds-header-toggle>
     <span></span><span></span><span></span>
@@ -64,8 +74,9 @@ const isDark = heroBg === 'navy' || heroBg === 'loud-lilac';
   }
   .ds-header--dark { color: var(--color-off-white); }
   .ds-header--light { color: var(--color-navy); }
-  .ds-header-nav { display: flex; gap: var(--space-6); font-family: var(--font-body); font-weight: 700; }
+  .ds-header-nav { display: flex; align-items: center; gap: var(--space-6); font-family: var(--font-body); font-weight: 700; }
   .ds-header-nav a { color: inherit; text-decoration: none; }
+  .ds-header-nav :global(.ds-header-pill) { padding: var(--space-2) var(--space-4); font-size: var(--text-label); }
   .ds-header-burger {
     display: none;
     flex-direction: column;

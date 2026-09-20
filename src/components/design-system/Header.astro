@@ -267,8 +267,8 @@ interface Props {
     left: 0;
     background: var(--color-white);
     border: 1px solid rgba(12,10,62,0.12);
-    min-width: 240px;
-    padding: var(--space-3) 0;
+    min-width: 280px;
+    padding: var(--space-4) 0;
     z-index: 200;
     box-shadow: 0 12px 32px rgba(0,0,0,0.12);
   }
@@ -279,20 +279,21 @@ interface Props {
   }
   .ds-header-drop > a {
     display: block;
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-4) var(--space-6);
     font-family: var(--font-headline);
     font-weight: 400;
     font-size: 0.95rem;
-    color: var(--color-loud-lilac);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--color-navy);
     text-decoration: none;
-    letter-spacing: 0;
   }
-  .ds-header-drop > a:hover { color: var(--color-navy); background: rgba(12,10,62,0.04); }
+  .ds-header-drop > a:hover { color: var(--color-loud-lilac); background: rgba(12,10,62,0.04); }
 
-  .ds-header-mega { min-width: 900px; left: -120px; padding: 0; }
+  .ds-header-mega { min-width: 960px; left: -120px; padding: 0; }
   .ds-header-mega-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
   .ds-header-mega-grid--2 { grid-template-columns: repeat(2, 1fr); }
-  .ds-header-mega-col { padding: var(--space-5) var(--space-4); border-right: 1px solid rgba(12,10,62,0.07); border-bottom: 1px solid rgba(12,10,62,0.07); border-top: 2px solid transparent; transition: border-color 0.15s ease; }
+  .ds-header-mega-col { padding: var(--space-6) var(--space-5); border-right: 1px solid rgba(12,10,62,0.07); border-bottom: 1px solid rgba(12,10,62,0.07); border-top: 2px solid transparent; transition: border-color 0.15s ease; }
   .ds-header-mega-col:hover { border-top-color: var(--color-electric-yellow); }
   .ds-header-mega-col:nth-child(3n) { border-right: none; }
   .ds-header-mega-col:nth-child(n+4) { border-bottom: none; }
@@ -302,16 +303,17 @@ interface Props {
     font-family: var(--font-headline);
     font-weight: 400;
     font-size: 1.05rem;
-    letter-spacing: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
     color: var(--color-navy) !important;
     display: block !important;
-    margin-bottom: var(--space-3) !important;
+    margin-bottom: var(--space-4) !important;
     padding: 0 !important;
   }
   .ds-header-mega-title:hover { color: var(--color-loud-lilac) !important; }
   .ds-header-mega-col a {
     display: block;
-    padding: var(--space-1) 0;
+    padding: var(--space-2) 0;
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 0.75rem;

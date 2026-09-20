@@ -35,6 +35,11 @@ interface RelatedPost {
   title: string;
   href: string;
 }
+interface Demand {
+  num: string;
+  title: string;
+  description: string;
+}
 interface PressItem {
   outlet: string;
   headline: string;
@@ -50,6 +55,10 @@ interface Props {
   imageAlt: string;
   stats?: Stat[];
   aimLead?: string;
+  /** A distinct real content pattern (pregnancy-in-prison): a numbered list
+      of specific asks, shown on Navy right after the Aim section. */
+  demandsIntro?: string;
+  demands?: Demand[];
   timelineItems?: TimelineItem[];
   actions?: ActionItem[];
   relatedPosts?: RelatedPost[];
@@ -67,6 +76,8 @@ const {
   imageAlt,
   stats,
   aimLead,
+  demandsIntro,
+  demands,
   timelineItems,
   actions,
   relatedPosts,
@@ -103,6 +114,22 @@ const {
       <Fragment slot="narrow"><Headline as="h2">Aim</Headline></Fragment>
       <Fragment slot="wide"><slot name="aim" /></Fragment>
     </Grid25>
+  </Section>
+)}
+
+{demands && demands.length > 0 && (
+  <Section bg="navy">
+    <Headline as="h2" color="off-white">Aim</Headline>
+    {demandsIntro && <p style="color: var(--color-off-white); max-width: 60ch;">{demandsIntro}</p>}
+    <div class="ct-demands">
+      {demands.map((d) => (
+        <div class="ct-demand">
+          <span class="ct-demand-num">{d.num}</span>
+          <h3 class="ct-demand-title">{d.title}</h3>
+          <p class="ct-demand-desc">{d.description}</p>
+        </div>
+      ))}
+    </div>
   </Section>
 )}
 
@@ -208,6 +235,15 @@ const {
   .ct-stat-value { font-family: var(--font-headline); font-size: var(--text-headline); color: var(--color-navy); line-height: 1; }
   .ct-stat-caption { font-family: var(--font-body); color: var(--color-navy); }
   .ct-actions { display: flex; flex-direction: column; gap: var(--space-4); }
+  .ct-demands {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-8);
+  }
+  .ct-demand-num { font-family: var(--font-headline); font-size: var(--text-subheadline); color: var(--color-electric-yellow); display: block; margin-bottom: var(--space-2); }
+  .ct-demand-title { font-family: var(--font-headline); font-size: var(--text-body); color: var(--color-off-white); margin: 0 0 var(--space-2); }
+  .ct-demand-desc { font-family: var(--font-body); color: var(--color-off-white); opacity: 0.85; margin: 0; }
   .ct-timeline-wrap { margin-top: var(--space-8); }
   .ct-related-grid {
     display: grid;

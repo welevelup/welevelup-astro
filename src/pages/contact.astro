@@ -1,20 +1,23 @@
 ---
+/**
+ * Contact — rebuilt on the design system (Section/Grid25/Headline).
+ * Real content and the working /api/contact form handler preserved
+ * verbatim — see .bak-pre-step2 for the original.
+ */
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/design-system/Header.astro';
+import Section from '../components/design-system/Section.astro';
+import Grid25 from '../components/design-system/Grid25.astro';
+import Headline from '../components/design-system/Headline.astro';
+import Label from '../components/design-system/Label.astro';
+import Button from '../components/design-system/Button.astro';
 import Footer from '../components/design-system/Footer.astro';
-import { extract } from '../lib/extractHtml';
-import homeRaw from '../_clone/index.html?raw';
-const { headInner, bodyClass } = extract(homeRaw);
-const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
 ---
 <Layout
-  headHtml={cleanHead}
-  bodyClass={bodyClass}
+  headHtml=""
   title="Contact Level Up"
   description="Get in touch with Level Up. We'd love to hear from you. Email us at hello@welevelup.org or send a message via our contact form."
 >
-  <Header />
-
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "ContactPage",
@@ -36,19 +39,18 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
     }
   })} />
 
-  <section class="ct-hero">
-    <div class="ct-hero-inner">
-      <span class="ct-label">Get in touch</span>
-      <h1 class="ct-title">Contact Level Up</h1>
-      <p class="ct-subtitle">We're a UK-based feminist campaigning organisation working to end bodily and systemic violence. If you're a journalist, supporter, potential partner, or someone with a campaign idea — we'd love to hear from you.</p>
-    </div>
-  </section>
+  <Header heroBg="navy" />
 
-  <section class="ct-content">
-    <div class="ct-grid">
-      <!-- FORM -->
-      <div class="ct-form-wrap">
-        <h2>Send us a message</h2>
+  <Section bg="navy">
+    <Label color="gentle-lilac">Get in touch</Label>
+    <Headline color="electric-yellow">Contact Level Up</Headline>
+    <p style="color: var(--color-off-white); opacity: 0.85; max-width: 56ch;">We're a UK-based feminist campaigning organisation working to end bodily and systemic violence. If you're a journalist, supporter, potential partner, or someone with a campaign idea — we'd love to hear from you.</p>
+  </Section>
+
+  <Section bg="pale-yellow">
+    <Grid25>
+      <Fragment slot="wide">
+        <h2 class="ct-form-heading">Send us a message</h2>
         <form class="ct-form" id="ct-form">
           <label>
             <span>Name</span>
@@ -66,240 +68,173 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
             <span>Message</span>
             <textarea name="message" rows="6" required></textarea>
           </label>
-          <button type="button" id="ct-submit">Send message</button>
+          <button type="button" id="ct-submit" class="ct-submit">Send message</button>
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
-        <script>
-          const btn = document.getElementById('ct-submit');
-          const form = document.getElementById('ct-form');
-          const status = document.getElementById('ct-status');
-          btn?.addEventListener('click', async () => {
-            const name = form.querySelector('[name=name]').value.trim();
-            const email = form.querySelector('[name=email]').value.trim();
-            const message = form.querySelector('[name=message]').value.trim();
-            if (!name || !email || !message) {
-              status.textContent = 'Name, email and message are required.';
-              status.className = 'ct-status ct-status--err';
-              return;
-            }
-            const subject = (form.querySelector('[name=subject]')?.value ?? '');
-            btn.textContent = 'Sending…';
-            btn.disabled = true;
-            status.textContent = '';
-            status.className = 'ct-status';
-            try {
-              const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, message, subject }) });
-              let json = {};
-              try { json = await res.json(); } catch(_) {}
-              if (res.ok) {
-                status.textContent = "Message sent — we'll be in touch soon!";
-                status.className = 'ct-status ct-status--ok';
-                form.reset();
-                status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-              } else {
-                status.textContent = json.error || 'Something went wrong. Please email us directly.';
-                status.className = 'ct-status ct-status--err';
-              }
-            } catch {
-              status.textContent = 'Something went wrong. Please email hello@welevelup.org';
-              status.className = 'ct-status ct-status--err';
-            }
-            btn.textContent = 'Send message';
-            btn.disabled = false;
-          });
-        </script>
-      </div>
+      </Fragment>
 
-      <!-- INFO -->
-      <div class="ct-info">
-        <div class="ct-info-block">
-          <h3>For media enquiries</h3>
-          <a href="mailto:media@welevelup.org">media@welevelup.org</a>
-        </div>
-        <div class="ct-info-block">
-          <h3>Got a campaign idea, or just want to say hi?</h3>
-          <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
-        </div>
-        <div class="ct-info-block">
-          <h3>Work with us</h3>
-          <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
-        </div>
-        <div class="ct-info-block">
-          <h3>Address</h3>
-          <p>3rd Floor 86 – 90 Paul Street<br/>London<br/>EC2A 4NE</p>
-        </div>
-        <div class="ct-info-block">
-          <h3>Follow us</h3>
-          <div class="ct-social">
-            <a href="https://www.facebook.com/levelupaction" target="_blank" rel="noopener">Facebook</a>
-            <a href="https://twitter.com/we_level_up" target="_blank" rel="noopener">Twitter/X</a>
-            <a href="https://www.instagram.com/welevelup" target="_blank" rel="noopener">Instagram</a>
-            <a href="https://www.tiktok.com/@levelupactionuk" target="_blank" rel="noopener">TikTok</a>
+      <Fragment slot="narrow">
+        <div class="ct-info">
+          <div class="ct-info-block">
+            <p class="ct-info-label">For media enquiries</p>
+            <a href="mailto:media@welevelup.org">media@welevelup.org</a>
+          </div>
+          <div class="ct-info-block">
+            <p class="ct-info-label">Got a campaign idea, or just want to say hi?</p>
+            <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
+          </div>
+          <div class="ct-info-block">
+            <p class="ct-info-label">Work with us</p>
+            <a href="mailto:hello@welevelup.org">hello@welevelup.org</a>
+          </div>
+          <div class="ct-info-block">
+            <p class="ct-info-label">Address</p>
+            <p class="ct-info-text">3rd Floor 86 – 90 Paul Street<br/>London<br/>EC2A 4NE</p>
+          </div>
+          <div class="ct-info-block">
+            <p class="ct-info-label">Follow us</p>
+            <div class="ct-social">
+              <a href="https://www.facebook.com/levelupaction" target="_blank" rel="noopener">Facebook</a>
+              <a href="https://twitter.com/we_level_up" target="_blank" rel="noopener">Twitter/X</a>
+              <a href="https://www.instagram.com/welevelup" target="_blank" rel="noopener">Instagram</a>
+              <a href="https://www.tiktok.com/@levelupactionuk" target="_blank" rel="noopener">TikTok</a>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </Fragment>
+    </Grid25>
+  </Section>
 
-  <section class="ct-cta">
-    <h2>Join the Level Up community</h2>
-    <p>Campaign updates, event invitations, and feminist thinking.</p>
-    <a href="https://levelup.yourmovement.org/p/join-us" class="ct-cta-btn" target="_blank" rel="noopener">Join us</a>
-  </section>
+  <Section bg="navy">
+    <div class="ct-cta">
+      <Headline as="h2" color="electric-yellow">Join the Level Up community</Headline>
+      <p style="color: var(--color-off-white); opacity: 0.75; max-width: 480px; margin-inline: auto;">Campaign updates, event invitations, and feminist thinking.</p>
+      <Button bg="electric-yellow" text="navy" href="https://levelup.yourmovement.org/p/join-us" label="Join us" />
+    </div>
+  </Section>
 
   <Footer bg="navy" />
 </Layout>
 
-<style is:global>
-  .ct-hero {
-    background: #0C0A3E;
-    padding: 80px 24px 64px;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .ct-hero-inner { max-width: 900px; margin: 0 auto; }
-  .ct-label {
-    font: 600 12px/1 'DM Sans';
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #A89CED;
-    display: block;
-    margin-bottom: 12px;
-  }
-  .ct-title {
-    font: 800 clamp(40px, 8vw, 72px)/0.9 'DM Sans';
-    color: #CCFF33 !important;
-    letter-spacing: -0.04em;
-    margin: 0 0 16px;
-  }
-  .ct-subtitle {
-    font: 400 18px/1.5 'DM Sans';
-    color: rgba(238,235,211,0.6);
-  }
+<script>
+  const btn = document.getElementById('ct-submit');
+  const form = document.getElementById('ct-form') as HTMLFormElement;
+  const status = document.getElementById('ct-status') as HTMLElement;
+  btn?.addEventListener('click', async () => {
+    const name = (form.querySelector('[name=name]') as HTMLInputElement).value.trim();
+    const email = (form.querySelector('[name=email]') as HTMLInputElement).value.trim();
+    const message = (form.querySelector('[name=message]') as HTMLTextAreaElement).value.trim();
+    if (!name || !email || !message) {
+      status.textContent = 'Name, email and message are required.';
+      status.className = 'ct-status ct-status--err';
+      return;
+    }
+    const subject = (form.querySelector('[name=subject]') as HTMLInputElement)?.value ?? '';
+    const originalLabel = btn.textContent;
+    btn.textContent = 'Sending…';
+    (btn as HTMLButtonElement).setAttribute('disabled', 'true');
+    status.textContent = '';
+    status.className = 'ct-status';
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, message, subject }) });
+      let json: any = {};
+      try { json = await res.json(); } catch (_) {}
+      if (res.ok) {
+        status.textContent = "Message sent — we'll be in touch soon!";
+        status.className = 'ct-status ct-status--ok';
+        form.reset();
+        status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else {
+        status.textContent = json.error || 'Something went wrong. Please email us directly.';
+        status.className = 'ct-status ct-status--err';
+      }
+    } catch {
+      status.textContent = 'Something went wrong. Please email hello@welevelup.org';
+      status.className = 'ct-status ct-status--err';
+    }
+    btn.textContent = originalLabel;
+    btn.removeAttribute('disabled');
+  });
+</script>
 
-  .ct-content {
-    background: #EEEBD3;
-    padding: 64px 24px;
-    font-family: 'DM Sans', sans-serif;
+<style>
+  .ct-form-heading {
+    font-family: var(--font-headline);
+    font-size: var(--text-subheadline);
+    color: var(--color-navy);
+    margin: 0 0 var(--space-6);
   }
-  .ct-grid {
-    max-width: 900px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: 64px;
-  }
-
-  .ct-form-wrap h2 {
-    font: 800 28px/1.1 'DM Sans';
-    color: #0C0A3E;
-    letter-spacing: -0.03em;
-    margin: 0 0 32px;
-  }
-  .ct-form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  .ct-form label {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
+  .ct-form { display: flex; flex-direction: column; gap: var(--space-5); }
+  .ct-form label { display: flex; flex-direction: column; gap: var(--space-2); }
   .ct-form label span {
-    font: 600 12px/1 'DM Sans';
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-label);
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(12,10,62,0.5);
+    letter-spacing: 0.06em;
+    color: var(--color-navy);
+    opacity: 0.6;
   }
   .ct-form input, .ct-form textarea {
-    font: 400 16px/1.4 'DM Sans';
-    padding: 14px 16px;
-    border: 2px solid rgba(12,10,62,0.12);
-    background: #fff;
-    color: #0C0A3E;
-    transition: border-color 0.15s;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid rgba(12,10,62,0.15);
+    background: var(--color-white);
+    color: var(--color-navy);
   }
   .ct-form input:focus, .ct-form textarea:focus {
-    outline: 3px solid #CCFF33;
+    outline: 3px solid var(--color-navy);
     outline-offset: 2px;
-    border-color: #CCFF33 !important;
+    border-color: var(--color-navy);
   }
-  .ct-form button {
-    font: 900 14px/1 'DM Sans';
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    background: #CCFF33;
-    color: #0C0A3E;
+  .ct-submit {
+    font-family: var(--font-headline);
+    font-size: var(--text-body);
+    background: var(--color-electric-yellow);
+    color: var(--color-navy);
     border: none;
-    padding: 18px 36px;
+    padding: var(--space-3) var(--space-6);
     cursor: pointer;
-    transition: all 0.15s;
     align-self: flex-start;
+    transition: transform 0.15s ease, opacity 0.15s ease;
   }
-  .ct-form button:hover { background: #0C0A3E; color: #CCFF33 !important; }
+  .ct-submit:hover { transform: translateY(-1px); opacity: 0.92; }
+  .ct-submit:disabled { opacity: 0.6; cursor: default; transform: none; }
 
-  .ct-info { display: flex; flex-direction: column; gap: 32px; }
-  .ct-info-block h3 {
-    font: 700 14px/1 'DM Sans';
+  .ct-status { font-family: var(--font-body); font-size: 0.9375rem; padding: var(--space-3) var(--space-4); margin: 0; display: none; }
+  .ct-status--ok { display: block; background: var(--color-electric-yellow); color: var(--color-navy); border-left: 4px solid var(--color-navy); }
+  .ct-status--err { display: block; background: #ffe0e0; color: #8b0000; border-left: 4px solid #8b0000; }
+
+  .ct-info { display: flex; flex-direction: column; gap: var(--space-6); }
+  .ct-info-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: var(--text-label);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #0C0A3E;
-    margin: 0 0 10px;
+    letter-spacing: 0.05em;
+    color: var(--color-navy);
+    margin: 0 0 var(--space-2);
   }
   .ct-info-block a {
-    font: 500 16px/1.4 'DM Sans';
-    color: #0C0A3E;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-navy);
     text-decoration: underline;
-    text-decoration-color: #A89CED;
+    text-decoration-color: var(--color-loud-lilac);
     text-underline-offset: 3px;
   }
-  .ct-info-block a:hover { text-decoration-color: #CCFF33 !important; }
-  .ct-info-block p {
-    font: 400 16px/1.6 'DM Sans';
-    color: rgba(12,10,62,0.7);
-    margin: 0;
-  }
-  .ct-social { display: flex; gap: 16px; }
+  .ct-info-text { font-family: var(--font-body); color: var(--color-navy); opacity: 0.8; margin: 0; }
+  .ct-social { display: flex; flex-wrap: wrap; gap: var(--space-4); }
   .ct-social a {
-    font: 600 13px/1 'DM Sans';
-    color: #0C0A3E;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--color-navy);
     text-decoration: none;
-    border-bottom: 2px solid #A89CED;
+    border-bottom: 2px solid var(--color-loud-lilac);
     padding-bottom: 2px;
   }
-  .ct-social a:hover { border-bottom-color: #CCFF33 !important; }
 
-  .ct-status {
-    font: 500 15px/1.5 'DM Sans';
-    padding: 14px 16px;
-    margin: 0;
-    display: none;
-  }
-  .ct-status--ok {
-    display: block;
-    background: #CCFF33;
-    color: #0C0A3E;
-    border-left: 4px solid #0C0A3E;
-  }
-  .ct-status--err {
-    display: block;
-    background: #ffe0e0;
-    color: #8b0000;
-    border-left: 4px solid #8b0000;
-  }
-
-  .ct-cta {
-    background: #0C0A3E;
-    padding: 80px 24px;
-    text-align: center;
-    font-family: 'DM Sans';
-  }
-  .ct-cta h2 { font: 800 40px/0.9 'DM Sans'; color: #CCFF33 !important; letter-spacing: -0.04em; margin: 0 0 16px; }
-  .ct-cta p { font: 400 17px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 440px; margin: 0 auto 32px; }
-  .ct-cta-btn { display: inline-block; background: #CCFF33; color: #0C0A3E; font: 700 14px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 18px 40px; text-decoration: none; }
-  .ct-cta-btn:hover { background: #fff; }
-
-  @media (max-width: 768px) {
-    .ct-grid { grid-template-columns: 1fr; gap: 40px; }
-  }
+  .ct-cta { text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
 </style>

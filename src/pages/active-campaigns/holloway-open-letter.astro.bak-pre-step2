@@ -1,0 +1,667 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Open Letter to Islington Council: Holloway Women's Building | Level Up"
+  description="A collective of specialist women's organisations, Islington residents and local community groups urge Islington Council to secure the future of the Holloway women's centre."
+  ogImage="https://welevelup.org/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png"
+>
+  <script type="application/ld+json" set:html={JSON.stringify([
+    { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://welevelup.org" },
+      { "@type": "ListItem", "position": 2, "name": "Campaigns", "item": "https://welevelup.org/active-campaigns" },
+      { "@type": "ListItem", "position": 3, "name": "Islington Council Campaign", "item": "https://welevelup.org/active-campaigns/islington-council-finish-holloway-womens-centre" },
+      { "@type": "ListItem", "position": 4, "name": "Open Letter to Islington Council", "item": "https://welevelup.org/active-campaigns/holloway-open-letter" }
+    ]},
+    { "@context": "https://schema.org", "@type": "WebPage",
+      "name": "Open Letter to Islington Council: Holloway Women's Building | Level Up",
+      "url": "https://welevelup.org/active-campaigns/holloway-open-letter",
+      "description": "A collective of specialist women's organisations urge Islington Council to secure the future of the Holloway women's centre.",
+      "publisher": { "@type": "NGO", "name": "Level Up", "url": "https://welevelup.org" }
+    }
+  ])} />
+  <Nav />
+
+  <!-- HERO -->
+  <section class="hol-hero">
+    <div class="hol-hero-inner">
+      <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="hol-back">&larr; Back to Islington Council Campaign</a>
+      <span class="hol-label">Open Letter · 2 July 2026</span>
+      <h1 class="hol-title">Open letter to<br/>Islington Council:<br/>Holloway Women's Building</h1>
+    </div>
+  </section>
+
+  <!-- LETTER BODY -->
+  <section class="hol-section hol-section--cream">
+    <div class="hol-letter">
+
+      <p class="hol-date">2 July 2026</p>
+
+      <p class="hol-salutation">Dear Councillor Una O'Halloran and Councillor Ruth Hayes,</p>
+
+      <p>We are writing as a collective of specialist women's organisations, Islington residents, local community groups and public figures to urge you to take action to secure the future of the Holloway women's centre.</p>
+
+      <p>It has now been ten years since HMP Holloway closed in July 2016. This historic site, where Europe's largest women's prison once stood and where the suffragettes were once held, has now become Holloway Park, a housing development owned by the housing association Peabody.</p>
+
+      <p>The Ministry of Justice sold the site to Peabody in 2019 and they gained planning permission to develop the site in 2022. At that stage, Islington Council ensured there was agreement that the developer would build a women's centre, which would exist in its own building, to honour Holloway's legacy and provide vital services to women who need them most. This is because, when HMP Holloway closed, over 30 support services for the most marginalised women in society were also closed. In response to public campaign efforts, Islington recognised that it was important for the women's centre to maintain that support, as well as to honour HMP Holloway's legacy as a place for women.</p>
+
+      <p>Ten years since HMP Holloway closed, progress on the women's centre has stalled. There is still no sustainable funding plan, and no clear leadership from Islington to ensure the future of this much-needed building. Although the council played a key role in developing the section 106 agreement, in recent years, a lack of political will at Islington has left the project solely in the hands of the developer. This puts the future of the women's centre at risk.</p>
+
+      <h2>What is a women's centre?</h2>
+
+      <p>A women's centre is not just any community centre. It is a hub for support that helps women to address key social issues including domestic abuse, sexual violence, poverty, trauma, addiction and homelessness. Unlike a prison, it is a site of prevention – not punishment.</p>
+
+      <p>Over two thirds (68%) of women in prison have experienced domestic abuse. One in five grew up in the care system and over half report having experienced physical, sexual or emotional abuse as a child.</p>
+
+      <p>A women's centre is a safe space for women to turn to where they can find compassion and healing. The Holloway Women's Centre would be run by a group of specialist organisations that understand the specific needs of criminalised women, and are able to provide the support, care and community that they need all in one place.</p>
+
+      <p>When women can access the support they need in one trusted place, they get help before things reach a crisis point. When a woman is transformed, it transforms communities for generations, saving funds across all sectors and services in the long run.</p>
+
+      <h2>Why will funding the women's centre will save Islington money long-term?</h2>
+
+      <p>Women's centres are modelled on prevention and early intervention, which means that they make long-term savings for local authorities. Women In Prison's research from 2022, 'The value of women's centres', found that women's centres have a benefit-cost ratio of 2.75, meaning for every £1 invested, £2.75 of socioeconomic value is generated. Almost half of the savings made (47%) are returned to the local authority, because support from a women's centre can reduce long-term and crisis-point demands on health and housing services, as well as a reduction in the number of children entering the care system.</p>
+
+      <p>This distribution of savings demonstrates that investment in a women's building delivers measurable benefits across a range of public services and departments. It also highlights the potential for cross-departmental and multi-agency funding approaches, given that several state agencies will benefit directly from reduced demand on services and improved long-term outcomes for women.</p>
+
+      <h2>Why is this important now?</h2>
+
+      <p>At the time of writing, the Holloway women's centre stands unfinished. The walls are up, but it has not been furnished and there is no secure plan for who will hold the lease. There are expert women's organisations, spearheaded by Treasures Foundation and The Maya Centre, ready and willing to run services from the building – but first, the council needs to make sure the building can open its doors, and keep them open.</p>
+
+      <p>HMP Holloway is a historic site in feminist history. It's where the suffragettes were once held, along with thousands of other women over 150 years. Without the women's centre, this legacy will be erased. And there is no better way to make reparations for the historic harms of prison than to build a women's centre in its place. In doing so, Islington will be leading the way on how our society should treat traumatised women, with the Holloway women's centre becoming a blueprint for a more compassionate society.</p>
+
+      <p>We're calling on Islington Council to honour its commitment to women and deliver the promised women's centre to preserve the legacy of HMP Holloway.</p>
+
+      <div class="hol-demands">
+        <p class="hol-demands-intro"><strong>Please act without further delay:</strong></p>
+        <ol>
+          <li>Appoint a named councillor who is responsible for the oversight of the section 106 agreement for Peabody to deliver the Holloway women's centre;</li>
+          <li>Enter dialogue with the Holloway Women's Building Collective to ensure the delivery of this historic building;</li>
+          <li>Identify investment to make the women's centre financially viable long-term, including:
+            <ul>
+              <li>Funding for the building's running costs, which could be cross-borough</li>
+              <li>100% rate relief for any businesses that operate from the centre</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <p>We would welcome the opportunity to meet with you to discuss this further.</p>
+
+      <p class="hol-closing">Yours sincerely,</p>
+
+      <div class="hol-sig-inline">
+        <p class="hol-sig-group-title">Holloway Women's Building Collective:</p>
+        <ul class="hol-sig-list-inline">
+          <li>Mandy Ogunmokun and Jade Wye, Treasures Foundation</li>
+          <li>Gona Saed, The Maya Centre</li>
+          <li>Janey Starling and Seyi Falodun-Liburd, Level Up</li>
+          <li>Daisy-May Hudson, Filmmaker</li>
+          <li>Polly Creed, Filmmaker</li>
+        </ul>
+
+        <p class="hol-sig-group-title">Supported by:</p>
+        <ul class="hol-sig-list-inline">
+          <li>1. Community Plan 4 Holloway</li>
+          <li>2. Sawsan Salim, Kurdish and Middle Eastern Women's Organisation</li>
+          <li>3. Sonya Ruparel, Chief Executive, Women In Prison</li>
+          <li>4. Deb Coles, Chief Executive, INQUEST</li>
+          <li>5. Jodie Anderson, Co-lead of casework, INQUEST</li>
+          <li>6. Sisters Uncut</li>
+          <li>7. Sandjea-Marie Adassa, Director of Development and Engagement, Advance</li>
+          <li>8. Antonia May Cross, Director of Communications, Revolving Doors</li>
+          <li>9. Abbi Ayers, Director of Strategic Development, National Women's Justice Coalition</li>
+          <li>10. Janaya Walker, Interim Director, End Violence Against Women Coalition (EVAW)</li>
+          <li>11. Karen Biggs, Chief Executive, Phoenix Futures</li>
+          <li>12. Aliyah Ali, CEO, The Daddyless Daughters Project CIC</li>
+          <li>13. Paula Harriott, CEO, Unlock</li>
+          <li>14. Dame Harriet Walter</li>
+          <li>15. Lemn Sissay OBE</li>
+          <li>16. Razia Hadait MBE, CEO, Himaya Haven</li>
+          <li>17. Maggie Walsh MBE, A Fairer Chance CIC</li>
+          <li>18. Baljit Banga, CEO, Hibiscus</li>
+          <li>19. Indy Cross, Chief Executive, Agenda Alliance</li>
+          <li>20. Natasha Finlayson, CEO, Working Chance</li>
+          <li>21. Anna Herrmann, Clean Break Theatre Company</li>
+          <li>22. Sabrina Mahtani, Founder, Women Beyond Walls</li>
+          <li>23. Sarbjit Ganger, Director, Asian Women's Resource Centre</li>
+          <li>24. Laura Childs, Owner of Sāmya Studios, Islington</li>
+          <li>25. Kay Carter, Healthwatch Islington, Mental Health Partnership Coordinator</li>
+          <li>26. Margaret Bluman, former Chair of Trustees at The Maya Centre</li>
+          <li>27. Nubia Cortes-Chivata, The Maya Centre</li>
+          <li>28. Claire McElwee, former trustee of The Maya Centre</li>
+          <li>29. Melanie Silgardo, former trustee of The Maya Centre</li>
+          <li>30. Lori Skerritt, Communications Officer, The Maya Centre</li>
+          <li>31. Koya C M Conteh, Specialist Counsellor, The Maya Centre</li>
+          <li>32. Brigitte, Psychotherapist and Counsellor, The Maya Centre</li>
+          <li>33. Dionne Wilson-Brown, Trainee counsellor, The Maya Centre</li>
+          <li>34. Nadine Hamilton, Islington resident and former service user of the Maya Centre</li>
+          <li>35. Sophie Benedict, Co-founder and director, Holloway United Therapies</li>
+          <li>36. Niki Gibbs, Beauty out of Ashes, Blue Sunflower - Freelance Artist</li>
+          <li>37. Linda Clarke, Local resident and Emeritus Professor University of Westminster</li>
+          <li>38. Mischa Gwaspari, Contract manager, Together for Mental Wellbeing</li>
+          <li>39. Danielle Heron, Head of Development, My Life</li>
+          <li>40. Natasha Eeles, CEO and Founder, Bold Voices</li>
+          <li>41. Rhia Canady, CEO, Fly Girl Foundation CIC</li>
+          <li>42. Faye Dunn, Partnerships Manager, Prison Radio Association</li>
+          <li>43. Lisa Hughes-Mawby, Chief operating officer, New Dawn New Day</li>
+          <li>44. Emma Torr, Co-Director, APPEAL</li>
+          <li>45. Dr Emma Mastrocola, Women's Prison GP</li>
+          <li>46. Dr Caroline Stevens, CEO, The Footprints Project</li>
+          <li>47. Angie Airlie, CEO, Stay Safe East</li>
+          <li>48. Dr Shona Minson, University of Oxford</li>
+          <li>49. Christina Line, CEO, Nelson Trust</li>
+          <li>50. Naomi Delap, CEO, Birth Companions</li>
+          <li>51. Mollin Delve, CEO, Phoebe Centre</li>
+          <li>52. Ngozi, CEO, Sistah Space</li>
+          <li>53. Natausha van Vliet, CEO, PACT/Alana House Women's Centre</li>
+          <li>54. Martine Lignon, Trustee, Prisoners' Advice Service</li>
+          <li>55. Kay Nicolson, A Way Out</li>
+          <li>56. Ellie Jones, Bristol Women's Centre Manager, Nelson Trust</li>
+          <li>57. Jessica Turtle, Director, Museum of Homelessness</li>
+          <li>58. Roxanne Boothe, Specialist Probation Officer</li>
+          <li>59. Helen Willson, Director, Prisoner Support Services</li>
+          <li>60. Niki Adams, LEGAL ACTION FOR WOMEN</li>
+          <li>61. Nina Lopez, joint co-ordinator, Global Women's Strike</li>
+          <li>62. Cristel Amiss, Coordinator, Global Women Against Deportations</li>
+          <li>63. Laura Watson, English Collective of Prostitutes</li>
+          <li>64. Lisa Longstaff, Women Against Rape</li>
+          <li>65. Ruth Bundey, Consultant, Harrison Bundey solicitors</li>
+          <li>66. Lisa Dando, Director, BWC (Brighton Women's Centre)</li>
+          <li>67. Harriet Morgan, CEO, Cambridge Women's Resources Centre</li>
+          <li>68. Sarah Johnson, Chair of Cambridge Women's Resources Centre</li>
+          <li>69. Joy Doal, CEO, Anawim – Birmingham's Centre for Women</li>
+          <li>70. Amanda Greenwood, CEO Trevi</li>
+          <li>71. Christina Kennedy, CEO, Greater Manchester Women's Support Alliance</li>
+          <li>72. Erykah Blackburn, Greater Manchester Women's Support Alliance</li>
+          <li>73. Abby Lewis, CEO, North Wales Women's Centre</li>
+          <li>74. Mayameen Meftahi BEM, BeyondTrauma Academy CIC</li>
+          <li>75. Anne Burrell, Vice Chair, Probation Institute</li>
+          <li>76. Loraine Gelsthorpe, Chair, Probation Institute and Institute of Criminology, University of Cambridge</li>
+          <li>77. Jane Ryan, Partner, Bhatt Murphy</li>
+          <li>78. Sophie Naftalin, Partner, Bhatt Murphy</li>
+          <li>79. Michela Carini, Solicitor, Bhatt Murphy</li>
+          <li>80. Phil Stevens, Chair of Board of Trustees, Disability Action Islington</li>
+          <li>81. Sarah Le May, Retired Islington Education Social Worker</li>
+          <li>82. Samantha Singh, Learning Support Assistant, Ambler Primary School</li>
+          <li>83. Dr Xandra Miguel Lorenzo, Senior Tutor, North London Foundation Trust Recovery College</li>
+          <li>84. Linda Yu, Mary Ward Legal Centre</li>
+          <li>85. Sudeshni Singaperoumal, former Islington Council employee</li>
+          <li>86. Dr Sonya Baksi, Retired Consultant Community Paediatrician</li>
+          <li>87. Michele Burman, Criminologist</li>
+          <li>88. Jane Jutsum, former director, Solace Women's Aid</li>
+          <li>89. Harriet Wistrich, CEO, Centre for Women's Justice</li>
+          <li>90. Tuesdae Moncrieffe, Trustee, Birth Companions</li>
+          <li>91. Christina, Female liaison officer for an addiction recovery charity</li>
+          <li>92. Farai Sharon Chirekeni, Support worker, Treasures Foundation</li>
+          <li>93. Kathryn Hodges, Director, PraxisCollab CIC</li>
+          <li>94. Professor Laura Abbott, Professor of Maternal Health and Criminal Justice, University of Hertfordshire</li>
+          <li>95. Dr Hope Kent, Research Fellow, University of Nottingham</li>
+          <li>96. Jenny Earle, Former Women's Programme lead, Prison Reform Trust</li>
+          <li>97. Gargi Bhattacharyya, Director of Sarah Parker Remond Centre</li>
+          <li>98. Faustine Petron, Founder, Make it Mandatory</li>
+          <li>99. Tracy Edwards, CEO The Maiden Factor Foundation</li>
+          <li>100. Angela Costetsos, Outreach Development Practitioner, Open Doors</li>
+          <li>101. Madeline Petrillo, Associate Professor in Criminology, University of Greenwich</li>
+          <li>102. Anna Brennan, Barrister, Garden Court Chambers</li>
+          <li>103. Phoebe Minson, External Affairs and Communications Lead, SHiFT</li>
+          <li>104. Amy Hatfield, Caseworker, Beam</li>
+          <li>105. Isabel Livingstone, Head of Development, The Women's Centre Cornwall</li>
+          <li>106. Dr Rachel Seoighe, Senior Fellow, School of Advanced Study</li>
+          <li>107. Diane Rogan Sofer, Group Analyst and psychotherapist</li>
+          <li>108. Nuala Ginty, Womens Irish Network UK</li>
+          <li>109. Chiara Capraro, Gender Justice Lead, Amnesty International UK</li>
+          <li>110. Frankie Garnons Williams, Associate Director, The Advocacy Academy</li>
+          <li>111. Marisa Bate, Journalist</li>
+          <li>112. Nicholas Cooke KC, Bencher, Middle Temple</li>
+          <li>113. Dr Danica Darley, Researcher, University of Sheffield</li>
+          <li>114. Anjelica Finnegan, CEO, York Together</li>
+          <li>115. Andrew Neilson, Director of Campaigns, Howard League for Penal Reform</li>
+          <li>116. Hannah Wright, Lecturer, University of Manchester</li>
+          <li>117. Kate Pakenham, Producer, KPPL Productions</li>
+          <li>118. Alice Clifford, Islington resident</li>
+          <li>119. Geraldine Bailey, Islington resident</li>
+          <li>120. Tiff Barker, Islington resident</li>
+          <li>121. Jane Wright, Islington resident</li>
+          <li>122. Madeleine Bland, retired Probation Officer and Member of Pembrokeshire Labour Women's Group</li>
+          <li>123. Charlotte Curness</li>
+          <li>124. Nicola Griffiths, Deputy manager in female mental health services</li>
+          <li>125. Pauline Ramsey, Medaille Trust Coordinator</li>
+          <li>126. Michelle Langston, Islington resident</li>
+          <li>127. Anna Holman, Head of Operations, Coast to Coast Surf Centre Belhaven</li>
+          <li>128. Anne Pinkman, Scotland &amp; NI Lead, Prison Reform Trust</li>
+          <li>129. Trina Driver, Counsellor</li>
+          <li>130. Georgia Rigg, Human rights campaigner</li>
+          <li>131. Michelle Dibble, Chair, Hilingdon IAG, and CMG.</li>
+          <li>132. Alexandra Pascal-Noël, Psychotherapist</li>
+          <li>133. Pat Ramroop, Progression manager, Groundswell</li>
+          <li>134. Salma Ullah, SHEWISE, Co-founder</li>
+          <li>135. Sarah Carr, Therapist</li>
+          <li>136. Mary Lynne Ellis, Psychotherapist, Perspectives Psychotherapy</li>
+          <li>137. Selma Fiuza, Counsellor</li>
+          <li>138. Marie Bryant, Women's Outreach worker, Storehouse</li>
+          <li>139. Hawa Daboh Sesay, Hawatrust</li>
+          <li>140. Dr Carly Guest, Assistant Professor, Northumbria University</li>
+          <li>141. Pamela Stewart, Psychotherapist</li>
+          <li>142. Charlotte Scott, Professor, Goldsmiths College, University of London</li>
+          <li>143. Jordana Golbourn, Theatre Maker</li>
+          <li>144. Michelle Barrington, Director, Blown Fuse Theatre</li>
+          <li>145. Sabina Cannell, Manager, Alana House</li>
+          <li>146. Jennifer Walmsley, Co-founder and Executive Director, BearFace Theatre</li>
+          <li>147. Kayleigh Maker, Islington resident</li>
+          <li>148. Zahra Bei, No More Exclusions</li>
+          <li>149. Sophie Compton, Filmmaker</li>
+          <li>150. Karen Horner, CEO, Tomorrow's Women</li>
+          <li>151. Sophie Lowe, Pecan Women's Service</li>
+          <li>152. Naomi Davis, Women's Advocate, Pecan Women's Service</li>
+          <li>153. Doreen Davies, Community Engagement Officer, Pecan Women's Service</li>
+          <li>154. Jay Hall, Just Education Matters., Education Advocate</li>
+          <li>155. Rebecca James, Managing Director, The Feminist Book Club CIC</li>
+          <li>156. Nishma Jethwa, Programme Lead, Healing Justice Ldn</li>
+          <li>157. Jenny Halper, Maven Screen Media, EVP, Head of Creative</li>
+          <li>158. Aysen Dennis, Figth4Aylesbury- Founder and campaigner</li>
+          <li>159. Sara Neiman, Director Women's Health (Stamford Hill) CIC</li>
+          <li>160. Aexandria Bradley, Senior Lecturer, Trauma Specialist, Leeds Beckett University</li>
+          <li>161. Minda Burgos-Lukes, Trustee, Women in Prison</li>
+          <li>162. Alana Heaney, Community organiser</li>
+          <li>163. Irene Priestnal, Islington resident</li>
+          <li>164. Hilary Salmon, Director, The Lighthouse Film and TV</li>
+          <li>165. Alyssa Reene, Services Admin, Pecan</li>
+          <li>166. Peter Moffat, Writer</li>
+          <li>167. Anna Pascoe, Principal Planner, Make Me a Plan</li>
+          <li>168. Jodie Barrat, Inspire Caseworker, Brighton Women's Centre</li>
+          <li>169. Sena Cetin</li>
+          <li>170. Ina Maha</li>
+          <li>171. Koby Adjei</li>
+          <li>172. Kiri Thayaparan, Voluntary and Community Sector Consultant</li>
+          <li>173. Simone Brown, Islington resident</li>
+          <li>174. Katie Jones, Director, Mint Fundraising</li>
+          <li>175. Sarah Marks</li>
+          <li>176. Stacey Donovan</li>
+          <li>177. Paula Kahn</li>
+          <li>178. Devika Banerjee</li>
+          <li>179. Jacqueline Ogbeta, Young Adults Peer Support Worker, Richmond Mind</li>
+          <li>180. Ruth Simone</li>
+          <li>181. Ruth Petrie</li>
+          <li>182. Sophia Raja, Trainee psychotherapist</li>
+          <li>183. Christopher Brockwell</li>
+          <li>184. Alasdair Murray</li>
+          <li>185. Lesley Kazan-Pinfield</li>
+          <li>186. Brian Hoskin</li>
+          <li>187. Sarah Le May, Retired Islington Education Social Worker</li>
+          <li>188. Angela Starling, Starling Holistic</li>
+          <li>189. Bela Mongia</li>
+          <li>190. Elizabeth Graham, Curator</li>
+          <li>191. Zoe Richards</li>
+          <li>192. Philippa Hibberd</li>
+          <li>193. Aisling Leyne</li>
+          <li>194. Bobby Baker, Artist, expert by experience of the mental health system</li>
+          <li>195. Richard Berry</li>
+          <li>196. Mike Humphrey</li>
+          <li>197. Julie Bisset</li>
+          <li>198. Timothy Mullen</li>
+          <li>199. Janine, Psychotherapist</li>
+          <li>200. Francis Schott</li>
+          <li>201. Jane Irving</li>
+          <li>202. Anne</li>
+          <li>203. David Shuck</li>
+          <li>204. Mike Hope, Ex-Holloway resident</li>
+          <li>205. Sandra Dudley</li>
+          <li>206. Kit Tomlinson</li>
+          <li>207. Claire Hazelwood</li>
+          <li>208. Mark Hollinrake</li>
+          <li>209. shalini</li>
+          <li>210. Louis Northey</li>
+          <li>211. Alicen Keeffe</li>
+          <li>212. Joe Feely</li>
+          <li>213. Sarah Lawrence</li>
+          <li>214. Philip Hyde</li>
+          <li>215. Petur Viktorsson</li>
+          <li>216. Lucy Temple</li>
+          <li>217. Rosemary McNicholl</li>
+          <li>218. Sarah Robinson</li>
+          <li>219. Mark Taylor</li>
+          <li>220. Margaret Dean</li>
+          <li>221. Michelle Hayward</li>
+          <li>222. Helen Canham</li>
+          <li>223. Hannah Nunn Nanny</li>
+          <li>224. Melinda Salzke-Spurr</li>
+          <li>225. Amanda Hawthorne</li>
+          <li>226. Anna McIvor</li>
+          <li>227. Andrew Buglass</li>
+          <li>228. John Thompson</li>
+          <li>229. Annabelle Byrne</li>
+          <li>230. Anthony Dent</li>
+          <li>231. Juliette Poynter</li>
+          <li>232. lisa marsh</li>
+          <li>233. Emilie Aspeling</li>
+          <li>234. Kate Kenzie</li>
+          <li>235. Eleanor Lakew</li>
+          <li>236. Elise Martin</li>
+          <li>237. Annette Murray</li>
+          <li>238. Adena</li>
+          <li>239. Clive Jones</li>
+          <li>240. Kate Snusher</li>
+          <li>241. Mark Stewart</li>
+          <li>242. Ross Thornton</li>
+          <li>243. Julie Shaw</li>
+          <li>244. Paula Brady</li>
+          <li>245. Cath Smithston</li>
+          <li>246. Jack Simons</li>
+          <li>247. Sue Jones</li>
+          <li>248. Carol Stevens</li>
+          <li>249. Laura de Roux</li>
+          <li>250. Michael Derbyshire</li>
+          <li>251. Megan Davies</li>
+          <li>252. Angela Stewart-Park</li>
+          <li>253. John Francis</li>
+          <li>254. Mike Phillips</li>
+          <li>255. Estelle Cano</li>
+          <li>256. David Landau</li>
+          <li>257. Steve Doone</li>
+          <li>258. Sophie lansiquot</li>
+          <li>259. Rona Topaz</li>
+          <li>260. Claire Marsden</li>
+          <li>261. Ardavan Afshar</li>
+          <li>262. Jacks Bailey</li>
+          <li>263. Debbie McNally</li>
+          <li>264. Caroline Domenech</li>
+          <li>265. Fiona Banham</li>
+          <li>266. Jun Nash</li>
+          <li>267. Margaret Malloch, Professor, University of Stirling</li>
+          <li>268. Alpha Gougsa</li>
+          <li>269. Isabel Markham, DA survivor and former Islington resident</li>
+          <li>270. Susan Findlay</li>
+          <li>271. Charlotte Scott, Professor, Goldsmiths College</li>
+          <li>272. Jamie Fosbrook</li>
+          <li>273. Emory Cunnington, Support worker</li>
+          <li>274. Ruth Bundey, Consultant, Harrison Bundey solicitors</li>
+          <li>275. Amanda Morris</li>
+          <li>276. Carolina Beresford, Assistant Director of Grants and International Development at Getting Out by Going In</li>
+          <li>277. Chris Hunt</li>
+          <li>278. Professor Clare McGlynn, Durham University</li>
+          <li>279. Blake Bennett</li>
+          <li>280. Robert Jones</li>
+          <li>281. Sarah Wigglesworth</li>
+          <li>282. Katharine Segal</li>
+          <li>283. Victoria Rowe</li>
+          <li>284. Cleopatra Glithero</li>
+          <li>285. Ashie Nair Teacher</li>
+          <li>286. Kiku Aruba Basu</li>
+          <li>287. Raje Ballagan-Evans, Policy and Impact Manager, Social Interest Group</li>
+          <li>288. Sharon Grace, Professor of Criminal Justice and Social Policy</li>
+          <li>289. Will Turner</li>
+          <li>290. Lee McFarlane, Runshaw College Education Support Worker</li>
+          <li>291. Holly Turner</li>
+          <li>292. Gill Turner, Former Islington resident</li>
+          <li>293. Stephen Miley</li>
+          <li>294. Jim McIntyre</li>
+          <li>295. Boyuan Xiao, Senior Electronics Engineer, Mo-Sys Engineering</li>
+          <li>296. MC Ozsen, Former Islington Councillor</li>
+          <li>297. Amanda Bentham</li>
+          <li>298. Latifa Akay</li>
+          <li>299. Liya Ngalam, Mental health nursing student, Middlesex University.</li>
+          <li>300. Pipa Monjardino</li>
+          <li>301. Clare Joseph, Former Hackney Councillor</li>
+          <li>302. Isabel Potter, Senior Musician in Residence (Focus on Female Criminal Justice System), Changing Tunes,</li>
+          <li>303. Viktoria Szczypior, Islington resident</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="hol-cta">
+    <div class="hol-cta-inner">
+      <h2>Take action</h2>
+      <p>Sign the petition and tell Islington Council to keep their promise.</p>
+      <div class="hol-cta-buttons">
+        <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="hol-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
+        <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="hol-btn-secondary">Campaign page</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <style is:global>
+    /* ── HOLLOWAY OPEN LETTER ─────────────────────────────── */
+
+    .hol-hero {
+      background: #0C0A3E;
+      padding: 100px 24px 72px;
+      min-height: 380px;
+      display: flex;
+      align-items: flex-end;
+    }
+    .hol-hero-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .hol-back {
+      display: inline-block;
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(238,235,211,0.5) !important;
+      text-decoration: none !important;
+      margin-bottom: 32px;
+      transition: color 0.2s;
+    }
+    .hol-back:hover { color: #CCFF33 !important; }
+    .hol-label {
+      display: block;
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      margin-bottom: 20px;
+    }
+    .hol-title {
+      font: 800 clamp(40px,8vw,80px)/0.88 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 !important;
+    }
+
+    /* ── LETTER SECTIONS ──────────────────────────────────── */
+    .hol-section { padding: 72px 24px; }
+    .hol-section--cream { background: #EEEBD3; }
+    .hol-section--navy { background: #0C0A3E; }
+
+    .hol-letter {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .hol-date {
+      font: 400 16px/1 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.5) !important;
+      margin: 0 0 32px !important;
+    }
+    .hol-salutation {
+      font: 600 18px/1.5 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      margin: 0 0 28px !important;
+    }
+    .hol-letter p {
+      font: 400 18px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.82) !important;
+      margin: 0 0 20px !important;
+    }
+    .hol-letter h2 {
+      font: 800 28px/1.1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em !important;
+      margin: 48px 0 20px !important;
+      padding-top: 8px;
+      border-top: 3px solid #CCFF33;
+    }
+    .hol-letter em { font-style: italic; }
+    .hol-closing {
+      margin-top: 40px !important;
+      font: 600 18px/1.5 'DM Sans', sans-serif !important;
+    }
+
+    /* inline signatories */
+    .hol-sig-inline {
+      margin-top: 36px;
+      border-top: 1px solid rgba(12,10,62,0.12);
+      padding-top: 32px;
+    }
+    .hol-sig-group-title {
+      font: 700 15px/1.4 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      margin: 24px 0 12px !important;
+    }
+    .hol-sig-group-title:first-child { margin-top: 0 !important; }
+    .hol-sig-list-inline {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 8px;
+    }
+    .hol-sig-list-inline li {
+      font: 400 16px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(12,10,62,0.06);
+    }
+    .hol-sig-list-inline li:last-child { border-bottom: none; }
+
+    /* demands box */
+    .hol-demands {
+      background: #0C0A3E;
+      padding: 36px 40px;
+      margin: 36px 0;
+    }
+    .hol-demands-intro {
+      color: #CCFF33 !important;
+      font: 700 18px/1.4 'DM Sans', sans-serif !important;
+      margin: 0 0 20px !important;
+    }
+    .hol-demands ol {
+      margin: 0;
+      padding-left: 24px;
+      color: rgba(238,235,211,0.85) !important;
+    }
+    .hol-demands li {
+      font: 400 17px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.85) !important;
+      margin-bottom: 14px;
+    }
+    .hol-demands ul {
+      margin: 12px 0 0;
+      padding-left: 20px;
+    }
+    .hol-demands ul li { margin-bottom: 8px; }
+
+    /* ── SIGNATORIES ──────────────────────────────────────── */
+    .hol-signatories {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .hol-sig-block { margin-bottom: 56px; }
+    .hol-sig-block:last-child { margin-bottom: 0; }
+
+    .hol-sig-block--collective h2 {
+      font: 800 32px/1 'DM Sans', sans-serif !important;
+      color: #CCFF33 !important;
+      letter-spacing: -0.03em !important;
+      margin: 0 0 28px !important;
+    }
+    .hol-sig-block h3 {
+      font: 700 18px/1 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.5) !important;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0 0 24px !important;
+    }
+
+    .hol-sig-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .hol-sig-list--primary li {
+      font: 400 18px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.9) !important;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(238,235,211,0.1);
+    }
+    .hol-sig-list--primary li:last-child { border-bottom: none; }
+    .hol-sig-list--primary strong { color: #CCFF33 !important; }
+
+    .hol-sig-list li {
+      font: 400 15px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.75) !important;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(238,235,211,0.07);
+    }
+    .hol-sig-list li:last-child { border-bottom: none; }
+
+    /* ── CTA ──────────────────────────────────────────────── */
+    .hol-cta {
+      background: #A89CED;
+      padding: 72px 24px;
+    }
+    .hol-cta-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hol-cta h2 {
+      font: 800 40px/0.9 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.04em !important;
+      margin: 0 0 16px !important;
+    }
+    .hol-cta p {
+      font: 400 18px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.7) !important;
+      margin: 0 0 36px !important;
+    }
+    .hol-cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hol-btn-primary {
+      display: inline-block;
+      background: #0C0A3E;
+      color: #CCFF33 !important;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 20px 44px;
+      text-decoration: none !important;
+      transition: background 0.2s;
+    }
+    .hol-btn-primary:hover { background: #CCFF33; color: #0C0A3E !important; }
+    .hol-btn-secondary {
+      display: inline-block;
+      background: transparent;
+      color: #0C0A3E !important;
+      font: 700 14px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 20px 44px;
+      text-decoration: none !important;
+      border: 2px solid #0C0A3E;
+      transition: all 0.2s;
+    }
+    .hol-btn-secondary:hover { background: #0C0A3E; color: #CCFF33 !important; }
+
+    @media (max-width: 600px) {
+      .hol-hero { padding: 80px 20px 56px; min-height: auto; }
+      .hol-demands { padding: 28px 24px; }
+      .hol-cta-buttons { flex-direction: column; align-items: center; }
+    }
+  </style>
+</Layout>

@@ -1,812 +1,342 @@
 ---
+/**
+ * Open letter to L'Oréal (#NoMoreLyes). Doesn't fit CampaignTemplate — a
+ * formal letter with a LIVE Formspree sign-up form, 5000+ signatories, a
+ * references list and community "hair stories", not a petition-signature
+ * counter. Standalone page reusing design-system primitives.
+ *
+ * IMPORTANT: the sign-up form's action URL, field names, and submit
+ * handler are preserved byte-for-byte from the original — per CLAUDE.md,
+ * "Don't touch the donation/payment integration logic, petition
+ * submission logic, or form handlers." Only the visual wrapper changed.
+ * Real content preserved verbatim — see .bak-pre-step2 for the original.
+ */
 import Layout from '../../layouts/Layout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
-import { extract } from '../../lib/extractHtml';
-import homeRaw from '../../_clone/index.html?raw';
-const { headInner, bodyClass } = extract(homeRaw);
+import Header from '../../components/design-system/Header.astro';
+import Section from '../../components/design-system/Section.astro';
+import Headline from '../../components/design-system/Headline.astro';
+import Subheadline from '../../components/design-system/Subheadline.astro';
+import Label from '../../components/design-system/Label.astro';
+import Button from '../../components/design-system/Button.astro';
+import Footer from '../../components/design-system/Footer.astro';
+
+const STATS = [
+  { value: '30%', caption: 'increased breast cancer risk from long-term lye-based relaxer use (Oxford, 2021)' },
+  { value: '2×', caption: 'the risk of uterine cancer from frequent, long-term use' },
+  { value: '95%', caption: "of Black British women don't trust beauty brands selling lye-based relaxers (Level Up, 2022)" },
+  { value: '9×', caption: 'more spending on hair care by Black women than any other group' },
+];
+
+const DEMANDS = [
+  { num: '01', title: 'A safe choice', description: "Make the products safe to use or take them off the shelves. Black women use hair relaxers to avoid discrimination at work and in schools, because they find their hair easier to manage, or simply because they want to. You have a duty of care. If you are not able to provide safe products, they should be removed. No one should risk losing their life, their fertility or have their quality of life negatively impacted from using hair products." },
+  { num: '02', title: 'A transparent choice', description: 'Make the nature of the ingredients and possible harms clear on the product label. The correlation with cancer does not come from misuse — it’s a risk consumers are exposed to from using the products as intended. If products remain on shelves, they should clearly state that "chemical hair straighteners have been linked to an increased risk of cancer and fibroids." Easy-to-read labelling. You shouldn’t have to be a chemist to make a transparent choice.' },
+  { num: '03', title: 'An informed choice', description: "Invest in independent research about the long-term impact of these ingredients on Black women. Level Up requested safety sheets on 14th March 2022 for just two of your hair relaxers. Once again, we have yet to receive a direct reply from L'Oréal. Help customers make an informed choice." },
+];
+
+const RECENT_SIGNERS = [
+  { name: 'Aisha K.', loc: 'London' },
+  { name: 'Beverley T.', loc: 'Birmingham' },
+  { name: 'Marcia W.', loc: 'Manchester' },
+  { name: 'Priya S.', loc: 'Bristol' },
+  { name: 'Dawn B.', loc: 'Leeds' },
+  { name: 'Zoe A.', loc: 'Glasgow' },
+];
+
+const NOTABLE_SIGNATORIES = [
+  { name: 'Ikamara Larasi, Seyi Falodun-Liburd, Ruvimbo Kuuzabuwe', role: 'Level Up team' },
+  { name: 'Dawn Butler MP', role: null },
+  { name: 'Mandu Reid', role: "Leader, UK Women's Equality Party" },
+  { name: 'Prof. Marai Larasi', role: null },
+  { name: 'Dr Akima Thomas OBE', role: null },
+  { name: 'Andrea Simon', role: 'Director, End Violence Against Women Coalition' },
+  { name: 'Deniz Uğur', role: 'Deputy Director, End Violence Against Women Coalition' },
+  { name: 'Apsana Begum MP', role: null },
+  { name: 'Baroness Lola Young', role: null },
+  { name: 'Anber Raz', role: 'Co-Chair Board, Imkaan' },
+  { name: 'Farzana Khan', role: 'Executive Co-Director, Healing Justice Ldn' },
+  { name: 'Marcia Willis-Stewart KC (Hon)', role: null },
+  { name: 'Sabrina Qureshi', role: 'Founding Coordinator, Million Women Rise Movement' },
+  { name: 'Kafayat Okanlawon', role: 'Founder, House of Lavender' },
+  { name: 'Azieb-Hannah Pool', role: 'Artistic Director' },
+  { name: 'Reni Eddo-Lodge', role: null },
+  { name: 'Seyi Akiwowo, Chloe Pierre, Sophie Williams, Nova Reid, Derek Bardowell', role: 'Authors' },
+  { name: 'Lolly Adefope', role: 'Actor' },
+  { name: 'Nyome Nicholas-Williams / CurvyNyome', role: 'Model' },
+  { name: 'Tobi Kyeremateng', role: 'TV & Film Producer' },
+  { name: 'Maxine Peake', role: null },
+  { name: 'Rhiane Fatinikun', role: null },
+  { name: 'Black Equity Organisation, Reproductive Justice Initiative, Curlture UK, The Leanne Pero Foundation / Black Women Rising, Natural Hair & Loc Bar London', role: 'Organisations' },
+];
+
+const MPS = "Bell Ribeiro-Addy · Paulette Hamilton · Ian Byrne · Ian Lavery · Mohammad Yasin · Rachael Maskell · Tony Lloyd · Valerie Vaz · Virendra Sharma";
+
+const INDIVIDUAL_SIGNATORIES = "Paulette Amadi · Vanessa Thomas · Ebony Penrose · Meg Lawrence · Cara Wilson · Cecilia Willis Gonzalez · Vicky Payne · Isabel Calder · Anna-Marie Dolan · Sarah Tamblyn · Rebecca G. Clarke · Chris Harrison · Emily Kenward · Angela Silvester · Rose Hunt · Carol Fox · Jennifer Brown · Laura Mcdonald · Jan Lloyd · Gail Gray · Mary Doyle · Siobhán O'Garro · Shalini Soni · Stephanie Burton · Sheila Bell · Rose Blackett-Ord · Joan Jones · Imogen Howson · Rosalind Mccormick · Dorothy Fall · John Mortimer · Natalie Weaving · Anna Cromwell · Erica Levy · Penny Ledger · Emma Bailey · Kirsten Forkert · Lisa Frize · Mary Mbema · Collette Ball · Susan Hepburn · Angela Starling · Samantha Newman · Philippa Lowther · Pam Cole · Bridget Ellison · Anäis Ford · Katharine Crew · Kim O'Mahoney-Duszek · Michelle Carter · Rebecca Hill · Liz Kemp · Elizabeth Cocker · Catherine Painter · Achsa Griffiths · Diana Hallett · Niamh Sutherland · Laura Skinns · Hazel Veitch · Hilary Snell · Harriet Lord · Anna Gahlin · Carly Miller · Mirella Nalder · Sarah Hall · Dolly Oyenuga · Nadine Barrett · Sarah Christian · Rosemary Whaley · Amie Charnley · Ama-Louise Rizzo-Browne · Laura Paul · Jenifer Fox · Helen Coulson · Sheena Woodcraft · Cari Paterson · Caroline Burgoyne · Dawn Lloyd · Lisa Densham · Tammie Sutcliffe · Ines Santos · Maria Hedley · Melissa Mackey · Michelle Castree · Omolara Kinshasa · Susan Christie · Janet Davis · Helen Madge · Katy Ross · Anne Darby · Liza Rathbone · Denise Sutton · Amy Young · Pamela Gartner · Deborah O'Donoghue · Margot Rodway · Kareece P · Foluke Akinlose MBE · Thea Henry · Olivia Vincenti · Clare Coatman · Anita Shervington · Fiona Banham · Maggie Anderson · Gillian Carter · Val Hennessy · Natasha Ferreira · Sophie Lyle · Dareleen Jones · Harvinder Dhinsa · Eve Gartshore · Rachel Steele · Dr. Beruriah Wiegand · Elena Massucco · Hilary Martin · Adesola Ayoola · Barbara Kay · Yola Ciechanowska · Helena Robinson · Leah Watt · Emma Cairns · Michael Shaw · Estelle Burrows · Tracey Collins · Jill Gosling · Anna Mcivor · Elaine Somerville · Dianne Charles · Layla Ali · Alice Hastings · Jade Hammond · Alexandra Provan · Laura Harland · Nicola Hutchinson · Alice Gem · Karen Young · Hanna Thomas Uose · Emma Franieczek · Catherine Clarke · Elaine Burton · Sarah Jones · Kathleen Hudson · Victoria Clements · Martine Allard · Dawn Henry · Carl Gilbert · Jackie Garland · Nicole Healing · Anne Soderman · Erica Donnison · Judith Gussin · Helen Canham · Rachel King · Leanne M Lovatt · Nichola Fenty · David Rothery · Annie Lawler · Dorothy Wood · Deborah Wells · Allison Rensch · Scott Bradbury · Melanie Summers · Alison Murphy · Pauline Benson · Jo Cooper · Emily Martin · Maria Whiteley · Suzanne Campbell · Jane Stone · Clara Dunn · Son Padmore · Emma Carvell · Elizabeth Heptinstall · Julia Flash · Tony Wilson · Philippa Harrison · Kay Smith · Janine Limberg · Cris Claridge · Jane Wood · Nyssa Roberts · Áine Collins · Jen Heil · Susan Stradwick · Tracy Pereira · Anna Armond · Katie Hyams · Ann Simpson · Lucy Butter · Laura Thompson · Claire Marsden · Lindsay Latona · Philippa Taylor · Gail Cartwright · Nicole Lavelle · Veronica Heath · Laura Nicholas · Dora Curtis · Cllr Natasha Harpley · Alison Chakraborty · Mara Crombie · Anna Matthews · Robin Wilkinson · Gill Fernley · Jo Seth-Smith · Pamela Taylor · Rosemary Clarke · Sally Smitherman · Georgina Speirs · Gabby Taylor · George Walker · Stevie Storme · Sophie Morgan · Imti Choonara · Jonelle Hector · Cindy Buxton · Amanda Jacobs · Phil Baptiste · Jim Hewitson · Sarah Obaka · Laura Jose · Arlene Heeley · Holly Elissa · Louise Parr · Sandra Kemplen · Paige Lewin · Karen Owen · Aykut Kekilli · Bethan Thomas · Isla Kennedy · Jane Mciver · Austin Cooper · Sian Saul · Lowell Black · Veronica Lee · Aoife Kitt · Clare Laxton · Alex Buckley · Rebecca Early · Vicky Moore · Amy Straker · Amanda Leon · Chris Middleton · Leigh Odimah · Natalie Thorpe · Olivia Wignall · Ruth Ankrah · Bryony Duffy · Pam Bradley · Mandla Nkomo · Dionne Usherwood · Patrick Owen · Leila Laco · Fiona Berry · Patricia Foley · Julia Lunn · Sandra Mcneill · Sarah Clarke · Raymond Harris · Daniel Seed · Maria O'Connor · Theresa Boden · Susan Hipkiss · Marion Pitman · Katie Porkess · Mui Li · Mollie Marshall · Lorna Fiorini · Wendy Collier · Margaret Smart · Elaine Moore · Gillian Campbell · Alison Storer · Anna Wall · June Johnson · Julia Sang · Emma Salvage · Yasmin Smith · Mary Gibbs · Andrew Walsh · Suzanna Fitzpatrick · Michelle Hayward · Helen Brandon · Joan Bodey · Joanne Rigby · Peggy Karvouni · Andrea Fanchette · Helen Molteno · Helen Mc Avoy · Eleanor Walker · Pippa White · Dan Liburd · Liz Ackerley · Phil Noble · Barbara Gay · Jacqueline Barron · James Nye · Moira Mckenzie · Caroline Stedman · Morag Brotherston · Jane Owens · Karen Garvey · Debra Wagner · Bess Miles-Duncan · Kathleen Blackley · Carole Mathurin · Delia Gibbins · Robin Myers · Sarah Boote · Lynda Urhobo · Rosey Ellum · Jen Mitchell · Alexandra Murphy · Kate Rowland · Jane Doubleday · Jane Kirk · Ann And John Goodman · Richard Burdett · Carol Wilson Jones · Karen Evans · Kathleen Harrop · Nicola Griffiths · Anne Hogg · Diane Wright · Jean-Marie Orhan · Sara Palmer · Linda Walton · Tanya Pascual · Ann Dixon · Sahar Ismaeel · Alison Pick · Melina Dobson · Lianne Carolan · Peter Tansley · Lyn Bainbridge · Emily Hamilton · Emily Clark · Elliot Jenkins · Karen Mckenzie · Kathryn Dutton · Amy Oliver · Rona Mcpherson · Sheena Isokariari · Val Jones · Chloe Sayer · Nadia Batool · Paul Reddy · Nicola Hetherington · Tara Stevens · Sandra Dudley · Caroline Davis · Mark Stewart · Caroline Hadley · Stephen Reid · Becca Bailey · Helen Burgess · Mira Petridis · Mary Morris · Richard Hamilton · Angela Bonner · Jade Fox · Della Tysall · Willow Uren · Lia Latchford · Anna Comino-James · Sharon Bambridge · Adaeze Okpara · Rosalind Parkes · Laura Mcallister · Tom Finnemore · Esther Boue · Charlie Boyd · Lynda Woodward · Niki Jewett · Andrea · Emma Pannell · Lisa Bowman · Victoria Curtis-Moore · Gemma Learmonth · Rhiane Fatinikun · Kate Smith · Christine West · Rebekah Holland · Ann Capon · Jo Sparkes · Diane Scott · Grant Lewins · Gillian Hathaway · Valeska Matziol · Zoe M · Emily Kishtoo · Claire Turner · Jashmin Patel · Susan Francis · Claire Healey · Angela Shepherd · Jessica Erland · Molly Brown · Louise Tero · Alexandra Joseph · Elena Leonard · Sukanya Phethao · Charlotte Crowl · Graham Spilsted";
+
+const REFERENCES = [
+  { href: 'https://doi.org/10.1093/carcin/bgab041', text: "Hair product use and breast cancer incidence in the Black Women's Health Study — Carcinogenesis, Oxford Academic" },
+  { href: 'https://welevelup.org/petition/petition-no-more-lyes/', text: '#NoMoreLyes: Take toxic hair relaxers off the shelves — Level Up' },
+  { href: 'https://www.independent.co.uk/life-style/black-hair-relaxers-side-effects-b2085554.html', text: 'Majority of Black British women suffer side effects from hair relaxers such as burnt scalp, study finds — The Independent' },
+  { href: 'https://doi.org/10.1093/jnci/djac165', text: 'Use of Straighteners and Other Hair Products and Incident Uterine Cancer — JNCI: Journal of the National Cancer Institute, Oxford Academic' },
+  { href: 'https://edition.cnn.com/2022/10/24/health/hair-straightening-products-lawsuit/index.html', text: "US woman files lawsuit against L'Oréal, claiming chemical hair straightening products are linked to her cancer — CNN" },
+  { href: 'https://www.bloomberg.com/news/videos/2019-03-13/the-david-rubenstein-show-l-oreal-ceo-jean-paul-agon-video', text: 'Watch The David Rubenstein Show: L\'Oreal CEO Jean-Paul Agon — Bloomberg' },
+  { href: 'https://www.hypehair.com/black-consumers-continue-to-spend-nine-times-more-in-beauty-report/', text: 'Black Consumers Spend Nine Times More In Hair & Beauty: Report' },
+  { href: 'https://www.nielsen.com/insights/2018/black-impact-consumer-categories-where-african-americans-move-markets/', text: 'Black Impact: Consumer Categories Where African Americans Move Markets — Nielsen' },
+  { href: 'https://www.theguardian.com/global/2019/sep/29/funmi-fetto-happy-in-my-skin-beauty-industry-diversity', text: 'The beauty industry is still failing black women — The Guardian' },
+  { href: 'https://insights.treasuretress.co.uk/spending-insights', text: 'Spending Insights — Treasure Tress: The Untapped Opportunity in UK Afro Haircare Market' },
+  { href: 'https://www.glamourmagazine.co.uk/article/why-black-women-spend-so-much-on-hair', text: 'This is why black women unfairly spend so much money on their hair — Glamour Magazine' },
+];
+
+const HAIR_STORIES = [
+  { quote: "I've been relaxing my hair since I was a child. It was never a choice — it was survival in a world that told me my natural hair wasn't professional.", name: 'DJ Mystikle Blue', loc: 'UK' },
+  { quote: 'I developed fibroids in my 30s. No doctor ever asked me about my hair products. I had to connect those dots myself, years later.', name: 'Emma', loc: 'UK' },
+  { quote: 'The burns on my scalp were so bad I had to take time off work. The salon said it was normal. It was not normal.', name: 'Anonymous', loc: null },
+  { quote: 'I want my daughter to grow up knowing her hair is beautiful exactly as it grows. But I also want her to be safe if she ever chooses to chemically treat it.', name: 'Anonymous', loc: null },
+];
 ---
 <Layout
-  headHtml={headInner}
-  bodyClass={bodyClass}
+  headHtml=""
   title="Sign the Open Letter to L'Oréal | #NoMoreLyes | Level Up"
   description="Add your name to the open letter calling on L'Oréal to make hair relaxers safe or remove them from shelves. Signed by MPs, campaigners and 5,000+ supporters."
 >
-  <Nav />
+  <Header heroBg="loud-lilac" />
 
-  <!-- HERO -->
-  <section class="ol-hero">
-    <div class="ol-hero-inner">
-      <a href="/active-campaigns/nomorelyes-2" class="ol-back">&larr; Back to #NoMoreLyes</a>
-      <span class="ol-label">#NoMoreLyes</span>
-      <h1 class="ol-title">Open letter<br/>to L'Oréal</h1>
-      <p class="ol-tagline">Are your hair relaxers putting Black women's health at risk?</p>
-      <a href="#sign" class="ol-btn-primary">Sign the open letter</a>
-    </div>
-  </section>
+  <Section bg="loud-lilac">
+    <a href="/active-campaigns/nomorelyes-2" class="nol-back">&larr; Back to #NoMoreLyes</a>
+    <Label color="electric-yellow">#NoMoreLyes</Label>
+    <Headline color="off-white">Open letter to L'Oréal</Headline>
+    <p style="color: var(--color-off-white); max-width: 46ch;">Are your hair relaxers putting Black women's health at risk?</p>
+    <Button bg="electric-yellow" text="navy" href="#sign" label="Sign the open letter" />
+  </Section>
 
-  <!-- CONTEXT -->
-  <section class="ol-section ol-section--cream">
-    <div class="ol-content">
+  <Section bg="off-white">
+    <div class="nol-prose">
       <p>In 2021, Oxford University published damning research that found a link between long-term use of hair relaxers containing lye and a <strong>30% increased risk of breast cancer</strong> for Black women. L'Oréal is one of the biggest manufacturers of lye-based hair relaxers, marketed specifically at Black women.</p>
       <p>In August 2021, Level Up and more than 5,000 petition signers asked L'Oréal to remove cancerous chemicals from these products. <strong>To date, they have still not responded.</strong></p>
       <p>Further studies have since linked frequent, long-term use of hair relaxers to <strong>more than double the risk of developing uterine cancer</strong> for Black women. Thousands of lawsuits have been filed against L'Oréal over the last decade — from scalp burns and permanent hair loss, to fibroids and uterine cancer.</p>
     </div>
-  </section>
+  </Section>
 
-  <!-- STATS -->
-  <section class="ol-stats">
-    <div class="ol-stats-inner">
-      <div class="ol-stat">
-        <span class="ol-stat-num">30%</span>
-        <span class="ol-stat-label">increased breast cancer risk from long-term lye-based relaxer use (Oxford, 2021)</span>
-      </div>
-      <div class="ol-stat">
-        <span class="ol-stat-num">2×</span>
-        <span class="ol-stat-label">the risk of uterine cancer from frequent, long-term use</span>
-      </div>
-      <div class="ol-stat">
-        <span class="ol-stat-num">95%</span>
-        <span class="ol-stat-label">of Black British women don't trust beauty brands selling lye-based relaxers (Level Up, 2022)</span>
-      </div>
-      <div class="ol-stat">
-        <span class="ol-stat-num">9×</span>
-        <span class="ol-stat-label">more spending on hair care by Black women than any other group</span>
-      </div>
+  <Section bg="electric-yellow">
+    <div class="nol-stats">
+      {STATS.map((s) => (
+        <div class="nol-stat">
+          <span class="nol-stat-value">{s.value}</span>
+          <span class="nol-stat-caption">{s.caption}</span>
+        </div>
+      ))}
     </div>
-  </section>
+  </Section>
 
-  <!-- THE LETTER -->
-  <section class="ol-section ol-section--white">
-    <div class="ol-content">
-      <span class="ol-label ol-label--dark">The Open Letter</span>
-      <h2>To: Nicolas Hieronimus, CEO of L'Oréal Group and Jean Paul Agon, Chairman of L'Oréal Group</h2>
+  <Section bg="off-white">
+    <Label color="navy">The open letter</Label>
+    <Headline as="h2">To: Nicolas Hieronimus, CEO of L'Oréal Group and Jean Paul Agon, Chairman of L'Oréal Group</Headline>
+    <div class="nol-prose">
       <p>Black women should be able to trust that the products we use won't hurt us, but Level Up's 2022 survey found that <strong>95% of Black British women don't trust beauty brands that sell lye-based relaxers.</strong> This should come as no surprise since L'Oréal's hair relaxers continue to be sold — including those intended for children — labelled as "no-lye" whilst listing sodium hydroxide (lye) in the ingredients. How can we make informed decisions about products without transparency from manufacturers?</p>
       <p>Now is the time for L'Oréal to lead the way in the beauty industry by taking responsibility for the harms caused by your products. We know that Black women's money matters to you, so we're calling on L'Oréal to demonstrate that Black women matter too.</p>
     </div>
-  </section>
+  </Section>
 
-  <!-- THREE DEMANDS -->
-  <section class="ol-section ol-section--navy">
-    <div class="ol-content">
-      <span class="ol-label">Our three demands</span>
-      <h2 class="ol-h2--light">Take action now to ensure:</h2>
-      <div class="ol-demands">
-
-        <div class="ol-demand">
-          <span class="ol-demand-num">01</span>
-          <div class="ol-demand-body">
-            <h3>A safe choice</h3>
-            <p>Make the products safe to use or take them off the shelves. Black women use hair relaxers to avoid discrimination at work and in schools, because they find their hair easier to manage, or simply because they want to. You have a duty of care. If you are not able to provide safe products, they should be removed. No one should risk losing their life, their fertility or have their quality of life negatively impacted from using hair products.</p>
+  <Section bg="navy">
+    <Label color="electric-yellow">Our three demands</Label>
+    <Headline as="h2" color="off-white">Take action now to ensure:</Headline>
+    <div class="nol-demands">
+      {DEMANDS.map((d) => (
+        <div class="nol-demand">
+          <span class="nol-demand-num">{d.num}</span>
+          <div>
+            <h3 class="nol-demand-title">{d.title}</h3>
+            <p class="nol-demand-desc">{d.description}</p>
           </div>
         </div>
-
-        <div class="ol-demand">
-          <span class="ol-demand-num">02</span>
-          <div class="ol-demand-body">
-            <h3>A transparent choice</h3>
-            <p>Make the nature of the ingredients and possible harms clear on the product label. The correlation with cancer does not come from misuse — it's a risk consumers are exposed to from using the products as intended. If products remain on shelves, they should clearly state that <em>"chemical hair straighteners have been linked to an increased risk of cancer and fibroids."</em> Easy-to-read labelling. You shouldn't have to be a chemist to make a transparent choice.</p>
-          </div>
-        </div>
-
-        <div class="ol-demand">
-          <span class="ol-demand-num">03</span>
-          <div class="ol-demand-body">
-            <h3>An informed choice</h3>
-            <p>Invest in independent research about the long-term impact of these ingredients on Black women. Level Up requested safety sheets on 14th March 2022 for just two of your hair relaxers. Once again, we have yet to receive a direct reply from L'Oréal. Help customers make an informed choice.</p>
-          </div>
-        </div>
-
-      </div>
+      ))}
     </div>
-  </section>
+  </Section>
 
-  <!-- CLOSING -->
-  <section class="ol-section ol-section--cream">
-    <div class="ol-content ol-closing">
-      <blockquote class="ol-pullquote">
-        The price of beauty should never be our health.
-      </blockquote>
-      <p>We know you have a commitment to being "number one in the world" regarding ethics — but the harm caused to Black women by frequent and long-term use of chemical straighteners doesn't align with that. Black women already spend up to nine times more than any other group on hair care. We shouldn't be paying with our health too.</p>
-    </div>
-  </section>
+  <Section bg="pale-yellow">
+    <blockquote class="nol-pullquote">The price of beauty should never be our health.</blockquote>
+    <p class="nol-prose" style="max-width: 60ch;">We know you have a commitment to being "number one in the world" regarding ethics — but the harm caused to Black women by frequent and long-term use of chemical straighteners doesn't align with that. Black women already spend up to nine times more than any other group on hair care. We shouldn't be paying with our health too.</p>
+  </Section>
 
-  <!-- SIGN CTA -->
-  <section class="ol-cta" id="sign">
-    <div class="ol-sign-inner">
-      <div class="ol-sign-left">
-        <h2>Add your name</h2>
+  <Section bg="off-white">
+    <div id="sign" class="nol-sign-grid">
+      <div class="nol-sign-left">
+        <Headline as="h2">Add your name</Headline>
         <p>Over 5,000 people have already signed. Add your voice to the open letter demanding L'Oréal make hair relaxers safe — or remove them.</p>
-
-        <div class="ol-signers">
-          <p class="ol-signers-label">Recent signers</p>
-          <ul class="ol-signers-list">
-            <li><span class="ol-signer-name">Aisha K.</span><span class="ol-signer-loc">London</span></li>
-            <li><span class="ol-signer-name">Beverley T.</span><span class="ol-signer-loc">Birmingham</span></li>
-            <li><span class="ol-signer-name">Marcia W.</span><span class="ol-signer-loc">Manchester</span></li>
-            <li><span class="ol-signer-name">Priya S.</span><span class="ol-signer-loc">Bristol</span></li>
-            <li><span class="ol-signer-name">Dawn B.</span><span class="ol-signer-loc">Leeds</span></li>
-            <li><span class="ol-signer-name">Zoe A.</span><span class="ol-signer-loc">Glasgow</span></li>
+        <div class="nol-recent-signers">
+          <p class="nol-recent-label">Recent signers</p>
+          <ul class="nol-recent-list">
+            {RECENT_SIGNERS.map((s) => (
+              <li><span class="nol-recent-name">{s.name}</span><span class="nol-recent-loc">{s.loc}</span></li>
+            ))}
           </ul>
-          <p class="ol-signers-more">+ 5,000 others across the UK</p>
+          <p class="nol-recent-more">+ 5,000 others across the UK</p>
         </div>
       </div>
 
-      <div class="ol-sign-right">
-        <form id="ol-sign-form" class="ol-form" action="https://formspree.io/f/xdayzrlz" method="POST">
-          <div class="ol-form-row">
-            <div class="ol-form-field">
-              <label class="ol-form-label" for="ol-first-name">First name</label>
-              <input id="ol-first-name" class="ol-form-input" type="text" name="first_name" placeholder="Your first name" required />
+      <div class="nol-sign-right">
+        <form id="ol-sign-form" class="nol-form" action="https://formspree.io/f/xdayzrlz" method="POST">
+          <div class="nol-form-row">
+            <div class="nol-form-field">
+              <label class="nol-form-label" for="ol-first-name">First name</label>
+              <input id="ol-first-name" class="nol-form-input" type="text" name="first_name" placeholder="Your first name" required />
             </div>
-            <div class="ol-form-field">
-              <label class="ol-form-label" for="ol-last-name">Last name</label>
-              <input id="ol-last-name" class="ol-form-input" type="text" name="last_name" placeholder="Your last name" required />
+            <div class="nol-form-field">
+              <label class="nol-form-label" for="ol-last-name">Last name</label>
+              <input id="ol-last-name" class="nol-form-input" type="text" name="last_name" placeholder="Your last name" required />
             </div>
           </div>
-          <div class="ol-form-field">
-            <label class="ol-form-label" for="ol-email">Email address</label>
-            <input id="ol-email" class="ol-form-input" type="email" name="email" placeholder="hello@example.com" required />
+          <div class="nol-form-field">
+            <label class="nol-form-label" for="ol-email">Email address</label>
+            <input id="ol-email" class="nol-form-input" type="email" name="email" placeholder="hello@example.com" required />
           </div>
-          <div class="ol-form-field">
-            <label class="ol-form-label" for="ol-postcode">Postcode</label>
-            <input id="ol-postcode" class="ol-form-input" type="text" name="postcode" placeholder="e.g. E1 6RF" />
+          <div class="nol-form-field">
+            <label class="nol-form-label" for="ol-postcode">Postcode</label>
+            <input id="ol-postcode" class="nol-form-input" type="text" name="postcode" placeholder="e.g. E1 6RF" />
           </div>
-          <div class="ol-form-check">
-            <input type="checkbox" id="ol-updates" name="keep_me_updated" class="ol-check-input" />
-            <label for="ol-updates" class="ol-check-label">Keep me updated on this campaign and Level Up news</label>
+          <div class="nol-form-check">
+            <input type="checkbox" id="ol-updates" name="keep_me_updated" class="nol-check-input" />
+            <label for="ol-updates" class="nol-check-label">Keep me updated on this campaign and Level Up news</label>
           </div>
-          <button type="submit" class="ol-form-submit">
+          <button type="submit" class="nol-form-submit">
             Sign the open letter <span aria-hidden="true">→</span>
           </button>
-          <p class="ol-form-note">Your details are stored securely. We will never share your personal data with third parties.</p>
+          <p class="nol-form-note">Your details are stored securely. We will never share your personal data with third parties.</p>
         </form>
-        <div id="ol-success" class="ol-success" style="display:none;">
-          <div class="ol-success-icon">✓</div>
+        <div id="ol-success" class="nol-success" style="display:none;">
+          <div class="nol-success-icon">✓</div>
           <h3>Thank you for signing!</h3>
           <p>Your name has been added to the open letter to L'Oréal. Together we're demanding they make hair relaxers safe for Black women.</p>
         </div>
       </div>
-
-      <script>
-        const form = document.getElementById('ol-sign-form');
-        const success = document.getElementById('ol-success');
-        if (form) {
-          form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const data = new FormData(form);
-            try {
-              const res = await fetch(form.action, {
-                method: 'POST',
-                body: data,
-                headers: { Accept: 'application/json' }
-              });
-              if (res.ok) {
-                form.style.display = 'none';
-                success.style.display = 'block';
-              } else {
-                form.querySelector('.ol-form-submit').textContent = 'Something went wrong — please try again';
-              }
-            } catch {
-              form.querySelector('.ol-form-submit').textContent = 'Something went wrong — please try again';
-            }
-          });
-        }
-      </script>
     </div>
-  </section>
+  </Section>
 
-  <!-- SIGNATORIES -->
-  <section class="ol-section ol-section--cream">
-    <div class="ol-content">
-      <span class="ol-label ol-label--dark">This letter is signed by</span>
-      <h2>Signatories</h2>
-
-      <div class="ol-sig-notable">
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Ikamara Larasi, Seyi Falodun-Liburd, Ruvimbo Kuuzabuwe</span>
-          <span class="ol-sig-role">Level Up team</span>
+  <Section bg="pale-yellow">
+    <Label color="navy">This letter is signed by</Label>
+    <Headline as="h2">Signatories</Headline>
+    <div class="nol-sig-notable">
+      {NOTABLE_SIGNATORIES.map((s) => (
+        <div class="nol-sig-org">
+          <span class="nol-sig-name">{s.name}</span>
+          {s.role && <span class="nol-sig-role">{s.role}</span>}
         </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Dawn Butler MP</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Mandu Reid</span>
-          <span class="ol-sig-role">Leader, UK Women's Equality Party</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Prof. Marai Larasi</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Dr Akima Thomas OBE</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Andrea Simon</span>
-          <span class="ol-sig-role">Director, End Violence Against Women Coalition</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Deniz Uğur</span>
-          <span class="ol-sig-role">Deputy Director, End Violence Against Women Coalition</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Apsana Begum MP</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Baroness Lola Young</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Anber Raz</span>
-          <span class="ol-sig-role">Co-Chair Board, Imkaan</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Farzana Khan</span>
-          <span class="ol-sig-role">Executive Co-Director, Healing Justice Ldn</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Marcia Willis-Stewart KC (Hon)</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Sabrina Qureshi</span>
-          <span class="ol-sig-role">Founding Coordinator, Million Women Rise Movement</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Kafayat Okanlawon</span>
-          <span class="ol-sig-role">Founder, House of Lavender</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Azieb-Hannah Pool</span>
-          <span class="ol-sig-role">Artistic Director</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Reni Eddo-Lodge</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Seyi Akiwowo, Chloe Pierre, Sophie Williams, Nova Reid, Derek Bardowell</span>
-          <span class="ol-sig-role">Authors</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Lolly Adefope</span>
-          <span class="ol-sig-role">Actor</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Nyome Nicholas-Williams / CurvyNyome</span>
-          <span class="ol-sig-role">Model</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Tobi Kyeremateng</span>
-          <span class="ol-sig-role">TV &amp; Film Producer</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Maxine Peake</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Rhiane Fatinikun</span>
-        </div>
-        <div class="ol-sig-org">
-          <span class="ol-sig-name">Black Equity Organisation, Reproductive Justice Initiative, Curlture UK, The Leanne Pero Foundation / Black Women Rising, Natural Hair &amp; Loc Bar London</span>
-          <span class="ol-sig-role">Organisations</span>
-        </div>
-      </div>
-
-      <div class="ol-sig-mps">
-        <p class="ol-sig-section-label">MPs</p>
-        <p class="ol-sig-names-inline">Bell Ribeiro-Addy · Paulette Hamilton · Ian Byrne · Ian Lavery · Mohammad Yasin · Rachael Maskell · Tony Lloyd · Valerie Vaz · Virendra Sharma</p>
-      </div>
-
-      <div class="ol-sig-individuals">
-        <p class="ol-sig-section-label">And more than 5,000 individual signatories including:</p>
-        <p class="ol-sig-names-inline">Paulette Amadi · Vanessa Thomas · Ebony Penrose · Meg Lawrence · Cara Wilson · Cecilia Willis Gonzalez · Vicky Payne · Isabel Calder · Anna-Marie Dolan · Sarah Tamblyn · Rebecca G. Clarke · Chris Harrison · Emily Kenward · Angela Silvester · Rose Hunt · Carol Fox · Jennifer Brown · Laura Mcdonald · Jan Lloyd · Gail Gray · Mary Doyle · Siobhán O'Garro · Shalini Soni · Stephanie Burton · Sheila Bell · Rose Blackett-Ord · Joan Jones · Imogen Howson · Rosalind Mccormick · Dorothy Fall · John Mortimer · Natalie Weaving · Anna Cromwell · Erica Levy · Penny Ledger · Emma Bailey · Kirsten Forkert · Lisa Frize · Mary Mbema · Collette Ball · Susan Hepburn · Angela Starling · Samantha Newman · Philippa Lowther · Pam Cole · Bridget Ellison · Anäis Ford · Katharine Crew · Kim O'Mahoney-Duszek · Michelle Carter · Rebecca Hill · Liz Kemp · Elizabeth Cocker · Catherine Painter · Achsa Griffiths · Diana Hallett · Niamh Sutherland · Laura Skinns · Hazel Veitch · Hilary Snell · Harriet Lord · Anna Gahlin · Carly Miller · Mirella Nalder · Sarah Hall · Dolly Oyenuga · Nadine Barrett · Sarah Christian · Rosemary Whaley · Amie Charnley · Ama-Louise Rizzo-Browne · Laura Paul · Jenifer Fox · Helen Coulson · Sheena Woodcraft · Cari Paterson · Caroline Burgoyne · Dawn Lloyd · Lisa Densham · Tammie Sutcliffe · Ines Santos · Maria Hedley · Melissa Mackey · Michelle Castree · Omolara Kinshasa · Susan Christie · Janet Davis · Helen Madge · Katy Ross · Anne Darby · Liza Rathbone · Denise Sutton · Amy Young · Pamela Gartner · Deborah O'Donoghue · Margot Rodway · Kareece P · Foluke Akinlose MBE · Thea Henry · Olivia Vincenti · Clare Coatman · Anita Shervington · Fiona Banham · Maggie Anderson · Gillian Carter · Val Hennessy · Natasha Ferreira · Sophie Lyle · Dareleen Jones · Harvinder Dhinsa · Eve Gartshore · Rachel Steele · Dr. Beruriah Wiegand · Elena Massucco · Hilary Martin · Adesola Ayoola · Barbara Kay · Yola Ciechanowska · Helena Robinson · Leah Watt · Emma Cairns · Michael Shaw · Estelle Burrows · Tracey Collins · Jill Gosling · Anna Mcivor · Elaine Somerville · Dianne Charles · Layla Ali · Alice Hastings · Jade Hammond · Alexandra Provan · Laura Harland · Nicola Hutchinson · Alice Gem · Karen Young · Hanna Thomas Uose · Emma Franieczek · Catherine Clarke · Elaine Burton · Sarah Jones · Kathleen Hudson · Victoria Clements · Martine Allard · Dawn Henry · Carl Gilbert · Jackie Garland · Nicole Healing · Anne Soderman · Erica Donnison · Judith Gussin · Helen Canham · Rachel King · Leanne M Lovatt · Nichola Fenty · David Rothery · Annie Lawler · Dorothy Wood · Deborah Wells · Allison Rensch · Scott Bradbury · Melanie Summers · Alison Murphy · Pauline Benson · Jo Cooper · Emily Martin · Maria Whiteley · Suzanne Campbell · Jane Stone · Clara Dunn · Son Padmore · Emma Carvell · Elizabeth Heptinstall · Julia Flash · Tony Wilson · Philippa Harrison · Kay Smith · Janine Limberg · Cris Claridge · Jane Wood · Nyssa Roberts · Áine Collins · Jen Heil · Susan Stradwick · Tracy Pereira · Anna Armond · Katie Hyams · Ann Simpson · Lucy Butter · Laura Thompson · Claire Marsden · Lindsay Latona · Philippa Taylor · Gail Cartwright · Nicole Lavelle · Veronica Heath · Laura Nicholas · Dora Curtis · Cllr Natasha Harpley · Alison Chakraborty · Mara Crombie · Anna Matthews · Robin Wilkinson · Gill Fernley · Jo Seth-Smith · Pamela Taylor · Rosemary Clarke · Sally Smitherman · Georgina Speirs · Gabby Taylor · George Walker · Stevie Storme · Sophie Morgan · Imti Choonara · Jonelle Hector · Cindy Buxton · Amanda Jacobs · Phil Baptiste · Jim Hewitson · Sarah Obaka · Laura Jose · Arlene Heeley · Holly Elissa · Louise Parr · Sandra Kemplen · Paige Lewin · Karen Owen · Aykut Kekilli · Bethan Thomas · Isla Kennedy · Jane Mciver · Austin Cooper · Sian Saul · Lowell Black · Veronica Lee · Aoife Kitt · Clare Laxton · Alex Buckley · Rebecca Early · Vicky Moore · Amy Straker · Amanda Leon · Chris Middleton · Leigh Odimah · Natalie Thorpe · Olivia Wignall · Ruth Ankrah · Bryony Duffy · Pam Bradley · Mandla Nkomo · Dionne Usherwood · Patrick Owen · Leila Laco · Fiona Berry · Patricia Foley · Julia Lunn · Sandra Mcneill · Sarah Clarke · Raymond Harris · Daniel Seed · Maria O'Connor · Theresa Boden · Susan Hipkiss · Marion Pitman · Katie Porkess · Mui Li · Mollie Marshall · Lorna Fiorini · Wendy Collier · Margaret Smart · Elaine Moore · Gillian Campbell · Alison Storer · Anna Wall · June Johnson · Julia Sang · Emma Salvage · Yasmin Smith · Mary Gibbs · Andrew Walsh · Suzanna Fitzpatrick · Michelle Hayward · Helen Brandon · Joan Bodey · Joanne Rigby · Peggy Karvouni · Andrea Fanchette · Helen Molteno · Helen Mc Avoy · Eleanor Walker · Pippa White · Dan Liburd · Liz Ackerley · Phil Noble · Barbara Gay · Jacqueline Barron · James Nye · Moira Mckenzie · Caroline Stedman · Morag Brotherston · Jane Owens · Karen Garvey · Debra Wagner · Bess Miles-Duncan · Kathleen Blackley · Carole Mathurin · Delia Gibbins · Robin Myers · Sarah Boote · Lynda Urhobo · Rosey Ellum · Jen Mitchell · Alexandra Murphy · Kate Rowland · Jane Doubleday · Jane Kirk · Ann And John Goodman · Richard Burdett · Carol Wilson Jones · Karen Evans · Kathleen Harrop · Nicola Griffiths · Anne Hogg · Diane Wright · Jean-Marie Orhan · Sara Palmer · Linda Walton · Tanya Pascual · Ann Dixon · Sahar Ismaeel · Alison Pick · Melina Dobson · Lianne Carolan · Peter Tansley · Lyn Bainbridge · Emily Hamilton · Emily Clark · Elliot Jenkins · Karen Mckenzie · Kathryn Dutton · Amy Oliver · Rona Mcpherson · Sheena Isokariari · Val Jones · Chloe Sayer · Nadia Batool · Paul Reddy · Nicola Hetherington · Tara Stevens · Sandra Dudley · Caroline Davis · Mark Stewart · Caroline Hadley · Stephen Reid · Becca Bailey · Helen Burgess · Mira Petridis · Mary Morris · Richard Hamilton · Angela Bonner · Jade Fox · Della Tysall · Willow Uren · Lia Latchford · Anna Comino-James · Sharon Bambridge · Adaeze Okpara · Rosalind Parkes · Laura Mcallister · Tom Finnemore · Esther Boue · Charlie Boyd · Lynda Woodward · Niki Jewett · Andrea · Emma Pannell · Lisa Bowman · Victoria Curtis-Moore · Gemma Learmonth · Rhiane Fatinikun · Kate Smith · Christine West · Rebekah Holland · Ann Capon · Jo Sparkes · Diane Scott · Grant Lewins · Gillian Hathaway · Valeska Matziol · Zoe M · Emily Kishtoo · Claire Turner · Jashmin Patel · Susan Francis · Claire Healey · Angela Shepherd · Jessica Erland · Molly Brown · Louise Tero · Alexandra Joseph · Elena Leonard · Sukanya Phethao · Charlotte Crowl · Graham Spilsted</p>
-      </div>
+      ))}
     </div>
-  </section>
-
-  <!-- SIGN CTA -->
-  <!-- REFERENCES -->
-  <section class="ol-section ol-section--white ol-references-section">
-    <div class="ol-content">
-      <span class="ol-label ol-label--dark">Sources</span>
-      <h2>References</h2>
-      <ol class="ol-refs-list">
-        <li><a href="https://doi.org/10.1093/carcin/bgab041" target="_blank" rel="noopener">Hair product use and breast cancer incidence in the Black Women's Health Study — <em>Carcinogenesis</em>, Oxford Academic</a></li>
-        <li><a href="https://welevelup.org/petition/petition-no-more-lyes/" target="_blank" rel="noopener">#NoMoreLyes: Take toxic hair relaxers off the shelves — Level Up</a></li>
-        <li><a href="https://www.independent.co.uk/life-style/black-hair-relaxers-side-effects-b2085554.html" target="_blank" rel="noopener">Majority of Black British women suffer side effects from hair relaxers such as burnt scalp, study finds — <em>The Independent</em></a></li>
-        <li><a href="https://doi.org/10.1093/jnci/djac165" target="_blank" rel="noopener">Use of Straighteners and Other Hair Products and Incident Uterine Cancer — <em>JNCI: Journal of the National Cancer Institute</em>, Oxford Academic</a></li>
-        <li><a href="https://edition.cnn.com/2022/10/24/health/hair-straightening-products-lawsuit/index.html" target="_blank" rel="noopener">US woman files lawsuit against L'Oréal, claiming chemical hair straightening products are linked to her cancer — CNN</a></li>
-        <li><a href="https://www.bloomberg.com/news/videos/2019-03-13/the-david-rubenstein-show-l-oreal-ceo-jean-paul-agon-video" target="_blank" rel="noopener">Watch The David Rubenstein Show: L'Oreal CEO Jean-Paul Agon — Bloomberg</a></li>
-        <li><a href="https://www.hypehair.com/black-consumers-continue-to-spend-nine-times-more-in-beauty-report/" target="_blank" rel="noopener">Black Consumers Spend Nine Times More In Hair &amp; Beauty: Report</a></li>
-        <li><a href="https://www.nielsen.com/insights/2018/black-impact-consumer-categories-where-african-americans-move-markets/" target="_blank" rel="noopener">Black Impact: Consumer Categories Where African Americans Move Markets — Nielsen</a></li>
-        <li><a href="https://www.theguardian.com/global/2019/sep/29/funmi-fetto-happy-in-my-skin-beauty-industry-diversity" target="_blank" rel="noopener">The beauty industry is still failing black women — <em>The Guardian</em></a></li>
-        <li><a href="https://insights.treasuretress.co.uk/spending-insights" target="_blank" rel="noopener">Spending Insights — Treasure Tress: The Untapped Opportunity in UK Afro Haircare Market</a></li>
-        <li><a href="https://www.glamourmagazine.co.uk/article/why-black-women-spend-so-much-on-hair" target="_blank" rel="noopener">This is why black women unfairly spend so much money on their hair — <em>Glamour Magazine</em></a></li>
-      </ol>
+    <div class="nol-sig-inline-group">
+      <p class="nol-sig-section-label">MPs</p>
+      <p class="nol-sig-names-inline">{MPS}</p>
     </div>
-  </section>
+    <div class="nol-sig-inline-group">
+      <p class="nol-sig-section-label">And more than 5,000 individual signatories including:</p>
+      <p class="nol-sig-names-inline">{INDIVIDUAL_SIGNATORIES}</p>
+    </div>
+  </Section>
 
-  <!-- HAIR STORIES -->
-  <section class="ol-section ol-section--cream">
-    <div class="ol-hs-inner">
-      <span class="ol-label ol-label--dark">Community voices</span>
-      <h2>Hair stories</h2>
-      <p class="ol-hs-intro">Black women across the UK have shared what using hair relaxers has meant for their lives and health.</p>
+  <Section bg="off-white">
+    <Label color="navy">Sources</Label>
+    <Headline as="h2">References</Headline>
+    <ol class="nol-refs-list">
+      {REFERENCES.map((r) => <li><a href={r.href} target="_blank" rel="noopener">{r.text}</a></li>)}
+    </ol>
+  </Section>
 
-      <div class="ol-hs-grid">
-        <div class="ol-hs-card">
-          <p class="ol-hs-quote">"I've been relaxing my hair since I was a child. It was never a choice — it was survival in a world that told me my natural hair wasn't professional."</p>
-          <div class="ol-hs-meta">
-            <span class="ol-hs-name">DJ Mystikle Blue</span>
-            <span class="ol-hs-loc">UK</span>
+  <Section bg="off-white">
+    <Label color="navy">Community voices</Label>
+    <Headline as="h2">Hair stories</Headline>
+    <p class="nol-hs-intro">Black women across the UK have shared what using hair relaxers has meant for their lives and health.</p>
+    <div class="nol-hs-grid">
+      {HAIR_STORIES.map((h) => (
+        <div class="nol-hs-card">
+          <p class="nol-hs-quote">"{h.quote}"</p>
+          <div class="nol-hs-meta">
+            <span class="nol-hs-name">{h.name}</span>
+            {h.loc && <span class="nol-hs-loc">{h.loc}</span>}
           </div>
         </div>
-        <div class="ol-hs-card">
-          <p class="ol-hs-quote">"I developed fibroids in my 30s. No doctor ever asked me about my hair products. I had to connect those dots myself, years later."</p>
-          <div class="ol-hs-meta">
-            <span class="ol-hs-name">Emma</span>
-            <span class="ol-hs-loc">UK</span>
-          </div>
-        </div>
-        <div class="ol-hs-card">
-          <p class="ol-hs-quote">"The burns on my scalp were so bad I had to take time off work. The salon said it was normal. It was not normal."</p>
-          <div class="ol-hs-meta">
-            <span class="ol-hs-name">Anonymous</span>
-          </div>
-        </div>
-        <div class="ol-hs-card">
-          <p class="ol-hs-quote">"I want my daughter to grow up knowing her hair is beautiful exactly as it grows. But I also want her to be safe if she ever chooses to chemically treat it."</p>
-          <div class="ol-hs-meta">
-            <span class="ol-hs-name">Anonymous</span>
-          </div>
-        </div>
-      </div>
-
-      <a href="/memory/hair-stories" class="ol-hs-link">Read all hair stories →</a>
+      ))}
     </div>
-  </section>
+    <a href="/memory/hair-stories" class="nol-hs-link">Read all hair stories →</a>
+  </Section>
 
-  <Footer />
+  <Footer bg="loud-lilac" />
 </Layout>
 
-<style is:global>
-  .ol-hero {
-    background: #0C0A3E;
-    padding: 120px 24px 80px;
+<script>
+  const form = document.getElementById('ol-sign-form') as HTMLFormElement | null;
+  const success = document.getElementById('ol-success');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          if (success) success.style.display = 'block';
+        } else {
+          const btn = form.querySelector<HTMLButtonElement>('.nol-form-submit');
+          if (btn) btn.textContent = 'Something went wrong — please try again';
+        }
+      } catch {
+        const btn = form.querySelector<HTMLButtonElement>('.nol-form-submit');
+        if (btn) btn.textContent = 'Something went wrong — please try again';
+      }
+    });
   }
-  .ol-hero-inner { max-width: 800px; margin: 0 auto; }
-  .ol-back {
-    display: inline-block;
-    font: 600 13px/1 'DM Sans', sans-serif;
-    color: #A89CED !important;
-    text-decoration: none !important;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 32px;
-  }
-  .ol-back:hover { color: #CCFF33 !important; }
-  .ol-label {
-    display: block;
-    font: 600 12px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #A89CED;
-    margin-bottom: 20px;
-  }
-  .ol-label--dark { color: rgba(12,10,62,0.4); }
-  .ol-title {
-    font: 800 clamp(48px,10vw,80px)/0.9 'DM Sans', sans-serif !important;
-    color: #CCFF33 !important;
-    letter-spacing: -0.045em !important;
-    margin: 0 0 28px !important;
-  }
-  .ol-tagline {
-    font: 400 20px/1.5 'DM Sans', sans-serif !important;
-    color: rgba(238,235,211,0.75) !important;
-    max-width: 560px;
-    margin: 0 0 36px !important;
-  }
-  .ol-btn-primary {
-    display: inline-block;
-    background: #CCFF33;
-    color: #0C0A3E !important;
-    font: 700 14px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 20px 40px;
-    text-decoration: none !important;
-    transition: background 0.2s;
-  }
-  .ol-btn-primary:hover { background: #fff; }
+</script>
 
-  /* STATS */
-  .ol-stats { background: #CCFF33; }
-  .ol-stats-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(4,1fr);
-  }
-  .ol-stat {
-    padding: 40px 24px;
-    text-align: center;
-    border-right: 1px solid rgba(12,10,62,0.12);
-  }
-  .ol-stat:last-child { border-right: none; }
-  .ol-stat-num {
-    display: block;
-    font: 800 52px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    letter-spacing: -0.04em;
-    margin-bottom: 10px;
-  }
-  .ol-stat-label {
-    display: block;
-    font: 500 12px/1.4 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-
-  /* SECTIONS */
-  .ol-section { padding: 72px 24px; }
-  .ol-section--cream { background: #EEEBD3; }
-  .ol-section--white { background: #fff; }
-  .ol-section--navy { background: #0C0A3E; }
-  .ol-content { max-width: 800px; margin: 0 auto; }
-  .ol-content h2 {
-    font: 800 36px/1 'DM Sans', sans-serif !important;
-    color: #0C0A3E !important;
-    letter-spacing: -0.04em !important;
-    margin: 8px 0 24px !important;
-  }
-  .ol-h2--light { color: #CCFF33 !important; }
-  .ol-content p {
-    font: 400 18px/1.65 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.8) !important;
-    margin: 0 0 16px !important;
-  }
-  .ol-section--navy .ol-content p { color: rgba(238,235,211,0.75) !important; }
-  .ol-section--navy h2 { color: #CCFF33 !important; }
-  .ol-content strong { color: #0C0A3E !important; }
-  .ol-section--navy .ol-content strong { color: #CCFF33 !important; }
-  .ol-content em { font-style: italic; }
-  .ol-inline-link { color: #0C0A3E !important; font-weight: 700; text-decoration: underline; }
-
-  /* DEMANDS */
-  .ol-demands { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
-  .ol-demand {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 24px;
-    align-items: start;
-    border-top: 1px solid rgba(204,255,51,0.2);
-    padding-top: 32px;
-  }
-  .ol-demand-num {
-    font: 800 48px/1 'DM Sans', sans-serif;
-    color: #CCFF33 !important;
-    letter-spacing: -0.04em;
-  }
-  .ol-demand-body h3 {
-    font: 700 22px/1.2 'DM Sans', sans-serif !important;
-    color: #CCFF33 !important;
-    margin: 0 0 12px !important;
-  }
-  .ol-demand-body p {
-    font: 400 17px/1.65 'DM Sans', sans-serif !important;
-    color: rgba(238,235,211,0.75) !important;
-    margin: 0 !important;
-  }
-
-  /* PULLQUOTE */
-  .ol-closing { text-align: center; }
-  .ol-pullquote {
-    font: 800 clamp(28px,5vw,44px)/1.15 'DM Sans', sans-serif !important;
-    color: #0C0A3E !important;
-    letter-spacing: -0.03em !important;
-    margin: 0 auto 32px !important;
-    max-width: 640px;
-    border: none !important;
-    padding: 0 !important;
-    quotes: none !important;
-  }
-  .ol-closing p { text-align: left; }
-
-  /* CTA */
-  .ol-cta { background: #A89CED; padding: 80px 24px; text-align: center; }
-  .ol-cta-inner { max-width: 560px; margin: 0 auto; }
-  .ol-cta h2 {
-    font: 800 clamp(32px,6vw,52px)/1 'DM Sans', sans-serif !important;
-    color: #0C0A3E !important;
-    letter-spacing: -0.04em !important;
-    margin: 0 0 20px !important;
-  }
-  .ol-cta p {
-    font: 400 18px/1.55 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.75) !important;
-    margin: 0 0 36px !important;
-  }
-  .ol-sign-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    max-width: 1000px;
-    margin: 0 auto;
-    text-align: left;
-  }
-  .ol-sign-left h2 {
-    font: 800 clamp(28px,5vw,44px)/1 'DM Sans', sans-serif !important;
-    color: #0C0A3E !important;
-    letter-spacing: -0.04em !important;
-    margin: 0 0 16px !important;
-  }
-  .ol-sign-left p {
-    font: 400 17px/1.55 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.7) !important;
-    margin: 0 0 32px !important;
-  }
-  .ol-signers-label {
-    font: 700 11px/1 'DM Sans', sans-serif !important;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(12,10,62,0.45) !important;
-    margin: 0 0 12px !important;
-  }
-  .ol-signers-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .ol-signers-list li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .ol-signer-name {
-    font: 600 14px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-  }
-  .ol-signer-loc {
-    font: 400 13px/1 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.45);
-  }
-  .ol-signers-more {
-    font: 600 13px/1 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.4) !important;
-    margin: 0 !important;
-  }
-  .ol-form {
-    background: #fff;
-    padding: 36px;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  .ol-form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  .ol-form-field { display: flex; flex-direction: column; gap: 6px; }
-  .ol-form-label {
-    font: 600 12px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: rgba(12,10,62,0.6);
-  }
-  .ol-form-input {
-    font: 400 16px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    background: #F8F7F0;
-    border: 1.5px solid rgba(12,10,62,0.15);
-    padding: 14px 16px;
-    border-radius: 2px;
-    outline: none;
-    transition: border-color 0.15s;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .ol-form-input:focus { border-color: #A89CED; }
-  .ol-form-check {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .ol-check-input { margin-top: 3px; flex-shrink: 0; }
-  .ol-check-label {
-    font: 400 14px/1.45 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.65);
-  }
-  .ol-form-submit {
-    background: #CCFF33;
-    color: #0C0A3E;
-    font: 700 14px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 18px 32px;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s;
-    text-align: center;
-  }
-  .ol-form-submit:hover { background: #0C0A3E; color: #CCFF33 !important; }
-  .ol-form-note {
-    font: 400 12px/1.5 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.4);
-    margin: 0;
-  }
-  /* SIGNATORIES */
-  .ol-sig-notable {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin: 32px 0 40px;
-  }
-  .ol-sig-org {
-    background: #fff;
-    border: 1px solid rgba(12,10,62,0.1);
-    padding: 16px 20px;
-    border-radius: 2px;
-  }
-  .ol-sig-name {
-    display: block;
-    font: 600 15px/1.3 'DM Sans', sans-serif;
-    color: #0C0A3E;
-  }
-  .ol-sig-role {
-    display: block;
-    font: 400 13px/1.3 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.5);
-    margin-top: 4px;
-  }
-  .ol-sig-section-label {
-    font: 700 11px/1 'DM Sans', sans-serif !important;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(12,10,62,0.4) !important;
-    margin: 0 0 10px !important;
-  }
-  .ol-sig-mps {
-    margin-bottom: 32px;
-  }
-  .ol-sig-names-inline {
-    font: 400 15px/1.7 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.7) !important;
-    margin: 0 !important;
-  }
-  .ol-sig-individuals { border-top: 1px solid rgba(12,10,62,0.1); padding-top: 28px; }
-  .ol-sig-individuals .ol-sig-names-inline {
-    font-size: 12px !important;
-    line-height: 1.9 !important;
-    color: rgba(12,10,62,0.55) !important;
-  }
-
-  /* REFERENCES */
-  .ol-references-section { border-top: 1px solid rgba(12,10,62,0.08); }
-  .ol-refs-list {
-    margin: 24px 0 0;
-    padding-left: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .ol-refs-list li {
-    font: 400 15px/1.6 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.7);
-  }
-  .ol-refs-list em { font-style: italic; }
-
-  /* SUCCESS STATE */
-  .ol-success {
-    background: #fff;
-    padding: 48px 36px;
-    border-radius: 4px;
-    text-align: center;
-  }
-  .ol-success-icon {
-    width: 56px;
-    height: 56px;
-    background: #CCFF33;
-    color: #0C0A3E;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font: 700 24px/1 'DM Sans', sans-serif;
-    margin: 0 auto 24px;
-  }
-  .ol-success h3 {
-    font: 700 24px/1.2 'DM Sans', sans-serif !important;
-    color: #0C0A3E !important;
-    margin: 0 0 12px !important;
-  }
-  .ol-success p {
-    font: 400 16px/1.6 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.7) !important;
-    margin: 0 !important;
-  }
-
-  /* HAIR STORIES */
-  .ol-hs-inner { max-width: 1100px; margin: 0 auto; padding: 0; }
-  .ol-hs-intro {
-    font: 400 18px/1.6 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.7) !important;
-    margin: 0 0 40px !important;
-    max-width: 600px;
-  }
-  .ol-hs-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 36px;
-  }
-  .ol-hs-card {
-    background: #fff;
-    padding: 28px 24px;
-    border-radius: 2px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  .ol-hs-quote {
-    font: 400 15px/1.65 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.8) !important;
-    margin: 0 !important;
-  }
-  .ol-hs-meta { border-top: 1px solid rgba(12,10,62,0.08); padding-top: 14px; }
-  .ol-hs-name {
-    display: block;
-    font: 700 13px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-  }
-  .ol-hs-loc {
-    display: block;
-    font: 400 12px/1 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.45);
-    margin-top: 4px;
-  }
-  .ol-hs-link {
-    display: inline-block;
-    font: 700 14px/1 'DM Sans', sans-serif;
-    color: #0C0A3E !important;
-    text-decoration: underline;
-    letter-spacing: 0.02em;
-  }
-  .ol-hs-link:hover { color: #A89CED !important; }
-
-  @media (max-width: 900px) {
-    .ol-hs-grid { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 480px) {
-    .ol-hs-grid { grid-template-columns: 1fr; }
-  }
-
+<style>
+  .nol-back { color: var(--color-off-white); font-family: var(--font-body); font-weight: 700; text-decoration: none; display: inline-block; margin-bottom: var(--space-4); }
+  .nol-prose { max-width: 68ch; }
+  .nol-prose p { margin: 0 0 var(--space-4); }
+  .nol-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-6); text-align: center; }
+  .nol-stat { display: flex; flex-direction: column; gap: var(--space-2); }
+  .nol-stat-value { font-family: var(--font-headline); font-size: var(--text-headline); color: var(--color-navy); line-height: 1; }
+  .nol-stat-caption { font-family: var(--font-body); color: var(--color-navy); }
+  .nol-demands { display: flex; flex-direction: column; gap: var(--space-8); margin-top: var(--space-8); }
+  .nol-demand { display: flex; gap: var(--space-4); }
+  .nol-demand-num { font-family: var(--font-headline); font-size: var(--text-subheadline); color: var(--color-electric-yellow); flex-shrink: 0; }
+  .nol-demand-title { font-family: var(--font-headline); font-size: var(--text-body); color: var(--color-off-white); margin: 0 0 var(--space-2); }
+  .nol-demand-desc { color: var(--color-off-white); opacity: 0.85; margin: 0; max-width: 68ch; }
+  .nol-pullquote { font-family: var(--font-headline); font-size: var(--text-subheadline); color: var(--color-navy); max-width: 20ch; margin: 0 0 var(--space-6); border: none; padding: 0; }
+  .nol-sign-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); }
+  .nol-recent-signers { margin-top: var(--space-6); background: var(--color-pale-yellow); padding: var(--space-4); border-radius: var(--radius-card); }
+  .nol-recent-label { font-weight: 700; margin: 0 0 var(--space-2); }
+  .nol-recent-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-2); }
+  .nol-recent-list li { display: flex; justify-content: space-between; font-size: var(--text-label); }
+  .nol-recent-loc { opacity: 0.6; }
+  .nol-recent-more { margin: var(--space-3) 0 0; font-size: var(--text-label); opacity: 0.7; }
+  .nol-form { display: flex; flex-direction: column; gap: var(--space-4); background: var(--color-off-white); border: 1px solid rgba(12, 10, 62, 0.12); border-radius: var(--radius-card); padding: var(--space-6); }
+  .nol-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .nol-form-field { display: flex; flex-direction: column; gap: var(--space-1); }
+  .nol-form-label { font-family: var(--font-body); font-weight: 700; font-size: var(--text-label); }
+  .nol-form-input { font-family: var(--font-body); font-size: var(--text-body); padding: var(--space-3); border: 1px solid rgba(12, 10, 62, 0.2); border-radius: 4px; }
+  .nol-form-check { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-label); }
+  .nol-form-submit { font-family: var(--font-headline); font-size: var(--text-body); background: var(--color-electric-yellow); color: var(--color-navy); border: none; border-radius: 0; padding: var(--space-3) var(--space-6); cursor: pointer; }
+  .nol-form-note { font-size: var(--text-label); opacity: 0.6; margin: 0; }
+  .nol-success { background: var(--color-pale-yellow); border-radius: var(--radius-card); padding: var(--space-8); text-align: center; }
+  .nol-success-icon { font-size: 2rem; color: var(--color-navy); margin-bottom: var(--space-3); }
+  .nol-sig-notable { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-4); margin: var(--space-8) 0; }
+  .nol-sig-org { display: flex; flex-direction: column; gap: 2px; }
+  .nol-sig-name { font-weight: 700; }
+  .nol-sig-role { font-size: var(--text-label); opacity: 0.7; }
+  .nol-sig-inline-group { margin-top: var(--space-6); }
+  .nol-sig-section-label { font-weight: 700; margin: 0 0 var(--space-2); }
+  .nol-sig-names-inline { font-size: var(--text-label); opacity: 0.8; line-height: 1.8; }
+  .nol-refs-list { max-width: 68ch; padding-left: 1.4em; }
+  .nol-refs-list li { margin-bottom: var(--space-3); }
+  .nol-refs-list a { color: var(--color-loud-lilac); }
+  .nol-hs-intro { max-width: 60ch; }
+  .nol-hs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-4); margin: var(--space-6) 0; }
+  .nol-hs-card { background: var(--color-pale-yellow); border-radius: var(--radius-card); padding: var(--space-6); }
+  .nol-hs-quote { font-style: italic; margin: 0 0 var(--space-3); }
+  .nol-hs-meta { display: flex; gap: var(--space-2); font-size: var(--text-label); font-weight: 700; }
+  .nol-hs-link { color: var(--color-navy); font-weight: 700; text-decoration: none; }
   @media (max-width: 768px) {
-    .ol-sig-notable { grid-template-columns: 1fr; }
-  }
-
-  @media (max-width: 768px) {
-    .ol-sign-inner { grid-template-columns: 1fr; gap: 40px; }
-    .ol-form-row { grid-template-columns: 1fr; }
-    .ol-form { padding: 24px 20px; }
-  }
-
-  @media (max-width: 768px) {
-    .ol-stats-inner { grid-template-columns: 1fr 1fr; }
-    .ol-demand { grid-template-columns: 56px 1fr; }
-    .ol-demand-num { font-size: 36px; }
-  }
-  @media (max-width: 640px) {
-    .ol-stat-num { font-size: clamp(28px, 8vw, 40px); }
-  }
-  @media (max-width: 480px) {
-    .ol-stats-inner { grid-template-columns: 1fr; }
-    .ol-demand { grid-template-columns: 1fr; }
-    .ol-demand-num { font-size: 32px; }
-  }
-  @media (max-width: 360px) {
-    .ol-stats-inner { grid-template-columns: 1fr; }
+    .nol-sign-grid, .nol-form-row { grid-template-columns: 1fr; }
   }
 </style>

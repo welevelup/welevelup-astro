@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -14,7 +14,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   description="Level Up's media guidelines help journalists report fatal domestic abuse with accuracy and dignity. Built around the AIDA framework, endorsed by IPSO and IMPRESS."
   ogImage="https://welevelup.org/wp-content/uploads/2025/08/Level-Up-at-IPSO-e1680513085600-800x418-1-e1769804722383.jpg"
 >
-  <Header heroBg="navy" />
+  <Nav />
 
   <script type="application/ld+json" set:html={JSON.stringify([
     {
@@ -192,7 +192,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   </main>
 
-  <Footer bg="navy" />
+  <Footer />
 
   <style is:global>
     .mg-hero {

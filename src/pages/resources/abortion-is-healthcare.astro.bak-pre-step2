@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -10,19 +10,19 @@ const { headInner, bodyClass } = extract(homeRaw);
 <Layout
   headHtml={headInner}
   bodyClass={bodyClass}
-  title="Dignity for Dead Women — Campaign Resources | Level Up"
-  description="Resources from Level Up's Dignity for Dead Women campaign — media guidelines for reporting on domestic homicide and victim-blaming coverage."
+  title="Abortion is Healthcare — Resources & Media Guidelines | Level Up"
+  description="Download Level Up's media guidelines and resources on abortion rights in the UK. Materials for journalists, activists, and supporters."
 >
-  <Header heroBg="off-white" />
+  <Nav />
 
   <script type="application/ld+json">{JSON.stringify({
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Dignity for Dead Women — Media Guidelines & Resources",
-    "description": "A curated collection of guidelines, research, and resources on responsible media reporting of domestic abuse deaths, compiled by Level Up's Dignity for Dead Women campaign.",
-    "url": "https://welevelup.org/resources/ddw",
+    "name": "Abortion Is Healthcare Resources",
+    "description": "A curated collection of research, media guidelines, reporting, and advocacy resources on abortion access, decriminalisation, and reproductive justice in the UK, compiled by Level Up's Abortion Is Healthcare campaign.",
+    "url": "https://welevelup.org/resources/abortion-is-healthcare",
     "publisher": { "@type": "Organization", "name": "Level Up", "url": "https://welevelup.org" },
-    "about": { "@type": "Thing", "name": "Media reporting of fatal domestic abuse" }
+    "about": { "@type": "Thing", "name": "Abortion access, decriminalisation, and reproductive healthcare in the UK" }
   })}</script>
 
   <script type="application/ld+json">{JSON.stringify({
@@ -31,33 +31,33 @@ const { headInner, bodyClass } = extract(homeRaw);
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "What is the Dignity for Dead Women campaign?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Dignity for Dead Women (DDW) is a Level Up campaign launched in 2018 to challenge harmful and inaccurate media reporting on fatal domestic abuse and domestic homicide. The campaign produced the UK's first media guidelines on how to report domestic abuse deaths, endorsed by both press regulators IPSO and IMPRESS. Level Up has since trained over 500 journalists using the AIDA framework — Accountability, Images, Dignity, Accuracy." }
+        "name": "Is abortion legal in England, Scotland and Wales?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Abortion is legal in England, Scotland and Wales up to 24 weeks under the 1967 Abortion Act, and beyond 24 weeks in limited circumstances. However, abortion remains in the criminal law: it is still technically a crime under the 1861 Offences Against the Person Act, meaning people can be — and have been — prosecuted for ending their own pregnancies. Decriminalisation campaigns argue that abortion should be treated as healthcare, not a criminal matter." }
       },
       {
         "@type": "Question",
-        "name": "Why does media reporting of domestic abuse deaths matter?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Every three days in the UK, a woman is killed by a partner or ex-partner. Media coverage frequently misrepresents these killings as isolated incidents or 'crimes of passion', rather than the predictable outcome of sustained coercive control. Irresponsible reporting reinforces myths that keep killing women and adds to the trauma of bereaved families. Level Up's research found that 2 in 3 families bereaved by domestic homicide had their grieving process negatively impacted by media coverage." }
+        "name": "What is the Abortion Is Healthcare campaign?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Abortion Is Healthcare is a campaign by feminist organisation Level Up calling for full decriminalisation of abortion in the UK and for media, policymakers, and the public to treat abortion as the healthcare matter it is. The campaign produced media guidelines with medical experts and abortion providers to help journalists report on abortion with accuracy, compassion, and sensitivity — and to stop framing it as a debate." }
       },
       {
         "@type": "Question",
-        "name": "What are the Level Up media guidelines?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Level Up's media guidelines provide journalists with evidence-based guidance on how to report fatal domestic abuse accurately, responsibly, and with dignity. They are built around the AIDA acronym: Accountability (name the perpetrator's choices), Images (choose photos that don't sexualise or criminalise the victim), Dignity (centre the victim's life, not just their death), and Accuracy (reflect the reality of coercive control). The guidelines are endorsed by IPSO and IMPRESS." }
+        "name": "Why are people being prosecuted for abortion in the UK?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Despite abortion being widely available through the NHS and licensed providers, the 1861 Offences Against the Person Act still criminalises self-managed abortion outside the legal framework. Prosecutions have increased in recent years, affecting people who ended pregnancies at home — often during the Covid-19 pandemic when home use of abortion pills was temporarily permitted. Campaigners and medical bodies argue these prosecutions are unjust and harmful." }
       },
       {
         "@type": "Question",
-        "name": "What is IPSO and why is it relevant to this campaign?",
-        "acceptedAnswer": { "@type": "Answer", "text": "IPSO (the Independent Press Standards Organisation) is the UK's main press regulator, whose Editor's Code of Practice is legally binding on member newsrooms. Level Up's Dignity for Dead Women campaign has lobbied IPSO since 2018 to introduce a specific clause on fatal domestic abuse reporting. In 2023, Level Up delivered a petition signed by over 26,700 people to IPSO headquarters, accompanied by a formal submission to the IPSO Editor's Code Committee review calling for a sub-clause to Clause 4." }
+        "name": "How does media coverage affect abortion access?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Media coverage of abortion shapes public opinion, influences policy, and can either reduce or reinforce stigma around an essential healthcare procedure. Research shows that inaccurate, sensationalised, or debate-framed coverage increases shame for people who have abortions and emboldens restrictive policy proposals. Level Up's Abortion Media Guidelines were created with journalists, medical experts, and abortion providers to promote accurate, compassionate reporting." }
       },
       {
         "@type": "Question",
-        "name": "What is the AIDA framework for reporting domestic abuse?",
-        "acceptedAnswer": { "@type": "Answer", "text": "AIDA stands for Accountability, Images, Dignity, and Accuracy — a four-point framework developed by Level Up to help journalists report fatal domestic abuse responsibly. Accountability means naming the perpetrator's choices as choices. Images means avoiding photos that sexualise victims or humanise perpetrators at the expense of victims. Dignity means focusing on the victim's life, relationships, and personhood. Accuracy means reflecting that domestic homicide is the outcome of sustained coercive control, not a spontaneous act of passion." }
+        "name": "What do the Level Up Abortion Media Guidelines recommend?",
+        "acceptedAnswer": { "@type": "Answer", "text": "The Level Up Abortion Media Guidelines, developed with Jade Hammond and Ikamara Larasi in partnership with medical experts and abortion providers, recommend that journalists treat abortion as a public health issue rather than a moral debate, use person-centred language, avoid false balance with anti-abortion voices, include medical expert perspectives, and be aware of the legal risks faced by people who share their abortion stories publicly." }
       },
       {
         "@type": "Question",
-        "name": "How can journalists access training on reporting fatal domestic abuse?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Level Up offers CPD-accredited training for journalists on reporting fatal domestic abuse, developed in partnership with domestic abuse training service AVA. Training sessions feature testimony from domestic abuse survivors and victims' families and are co-facilitated by award-winning journalist Helena Wadia. To book a training for yourself or your newsroom, contact mediasupport@welevelup.org. Level Up has trained over 500 journalists to date." }
+        "name": "What is decriminalisation of abortion and why does it matter?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Decriminalisation means removing abortion from criminal law entirely so that ending a pregnancy is treated as a healthcare decision rather than a potential crime. In the UK context, it would mean repealing the relevant sections of the 1861 Offences Against the Person Act. Decriminalisation does not mean removing any gestational limits or medical safeguards — it simply means that people cannot be jailed for decisions about their own pregnancies. The Royal College of Obstetricians and Gynaecologists and other medical bodies support decriminalisation." }
       }
     ]
   })}</script>
@@ -65,22 +65,22 @@ const { headInner, bodyClass } = extract(homeRaw);
   <section class="nr-hero" aria-labelledby="nr-hero-heading">
     <div class="nr-hero-inner">
       <div class="nr-hero-text">
-        <span class="nr-eyebrow">Dignity for Dead Women</span>
-        <h1 id="nr-hero-heading" class="nr-hero-title">Media Guidelines<br/>&amp; Resources</h1>
-        <p class="nr-hero-subtitle">Reporting guidance and research on media coverage of domestic abuse victims.</p>
+        <span class="nr-eyebrow">Abortion Is Healthcare</span>
+        <h1 id="nr-hero-heading" class="nr-hero-title">Research &amp;<br/>Resources</h1>
+        <p class="nr-hero-subtitle">Evidence, guidance, and media resources on abortion access and healthcare.</p>
       </div>
       <div class="nr-hero-image" aria-hidden="true">
-        <img src="/wp-content/uploads/2025/08/result-1-1.webp" alt="Dignity for Dead Women campaign — Level Up media guidelines for reporting fatal domestic abuse" loading="eager" />
+        <img src="/wp-content/uploads/2025/08/Screenshot-2024-06-04-at-22-1.webp" alt="Abortion Is Healthcare campaign — media guidelines and resources by Level Up" loading="eager" />
       </div>
     </div>
   </section>
 
   <section class="nr-intro" aria-label="About this resource collection">
     <div class="nr-intro-inner">
-      <p>In consultation with a coalition of domestic violence experts and victims' families, Level Up produced the UK's first media guidelines on how to report domestic abuse deaths. Endorsed by both press regulators IPSO and IMPRESS, the guidelines challenge headlines that frame femicide as "crimes of passion" rather than the predictable outcome of sustained coercive control.</p>
-      <p>Every three days in the UK, a woman is killed by a partner or ex-partner. Level Up's research found that 2 in 3 families bereaved by domestic homicide had their grieving process negatively impacted by irresponsible media coverage. We have compiled the key guidelines, research, academic evidence, and regulatory submissions from the Dignity for Dead Women campaign in one place.</p>
-      <p>Level Up has trained over 500 journalists using our AIDA framework — Accountability, Images, Dignity, Accuracy. If you come across relevant journalism, research, or guidance on this issue, please share it with us so we can add it to the collection.</p>
-      <a href="https://levelup.movement-action.org/p/dignity-for-dead-women" target="_blank" rel="noopener" class="nr-intro-btn">Sign the petition →</a>
+      <p>Prosecutions and investigations for ending a pregnancy are rising. News outlets play an important role in this, because media discourse shapes public opinion on abortion.</p>
+      <p>Journalists have the power to reduce shame and stigma, and build a society that shows compassion for people who need abortions. But some media outlets perpetuate harmful myths and stereotypes, and incite debate on an essential healthcare procedure.</p>
+      <p>Inspired by the work of Abortion Dream Team in Poland, Level Up worked with medical experts, abortion providers and journalists to create media guidelines for reporting on abortion in Britain. The guidelines share tips on how to report with accuracy, compassion, and sensitivity. Most importantly, they encourage journalists to treat abortion as a public health issue, not a debate.</p>
+      <a href="https://levelup.movement-action.org/p/abortion-is-healthcare" target="_blank" rel="noopener" class="nr-intro-btn">Sign the petition →</a>
     </div>
   </section>
 
@@ -88,17 +88,17 @@ const { headInner, bodyClass } = extract(homeRaw);
     <div class="nr-body-inner">
 
       <aside class="nr-sidebar" aria-label="Campaign info and actions">
-        <p class="nr-sidebar-campaign">Dignity for Dead Women</p>
-        <p class="nr-sidebar-desc">Level Up launched the Dignity for Dead Women campaign in 2018 to challenge irresponsible media reporting of fatal domestic abuse and demand that press regulators introduce enforceable guidelines protecting victims' dignity.</p>
+        <p class="nr-sidebar-campaign">Abortion Is Healthcare</p>
+        <p class="nr-sidebar-desc">Level Up's Abortion Is Healthcare campaign calls for full decriminalisation of abortion in the UK and works with journalists, medical experts, and abortion providers to promote accurate, compassionate media coverage.</p>
         <div class="nr-sidebar-stats">
-          <div class="nr-stat"><span class="nr-stat-num">4</span><span class="nr-stat-label">Resources</span></div>
-          <div class="nr-stat"><span class="nr-stat-num">500+</span><span class="nr-stat-label">Journalists trained</span></div>
+          <div class="nr-stat"><span class="nr-stat-num">1</span><span class="nr-stat-label">Resource</span></div>
+          <div class="nr-stat"><span class="nr-stat-num">2024</span><span class="nr-stat-label">Media guidelines published</span></div>
         </div>
         <hr class="nr-divider" />
         <nav class="nr-sidebar-actions" aria-label="Campaign actions">
-          <a href="https://levelup.movement-action.org/p/dignity-for-dead-women" target="_blank" rel="noopener" class="nr-action-link">Sign the petition →</a>
-          <a href="/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" target="_blank" rel="noopener" class="nr-action-link">Download media guidelines →</a>
-          <a href="/wp-content/uploads/2025/08/2023-Level-Up-IPSO-code-review-submission.pdf" target="_blank" rel="noopener" class="nr-action-link">IPSO submission →</a>
+          <a href="https://levelup.movement-action.org/p/abortion-is-healthcare" target="_blank" rel="noopener" class="nr-action-link">Sign the petition →</a>
+          <a href="/wp-content/uploads/2025/08/Abortion-Media-Guidelines.pdf" target="_blank" rel="noopener" class="nr-action-link">Download media guidelines →</a>
+          <a href="https://levelup.yourmovement.org/p/join-us" target="_blank" rel="noopener" class="nr-action-link">Join Level Up →</a>
         </nav>
       </aside>
 
@@ -106,57 +106,23 @@ const { headInner, bodyClass } = extract(homeRaw);
 
         <article class="nr-featured" aria-label="Featured resource">
           <span class="nr-featured-badge">Key Document</span>
-          <h2 class="nr-featured-title">Level Up Media Guidelines for Reporting Fatal Domestic Abuse</h2>
-          <p class="nr-featured-desc">The UK's first media guidelines on reporting domestic abuse deaths, endorsed by both IPSO and IMPRESS. Built around the AIDA framework — Accountability, Images, Dignity, Accuracy — and used in CPD-accredited training for over 500 journalists.</p>
-          <a href="/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" target="_blank" rel="noopener" class="nr-featured-btn">Download PDF →</a>
+          <h2 class="nr-featured-title">Abortion Media Guidelines</h2>
+          <p class="nr-featured-desc">Created by Level Up with Jade Hammond, Ikamara Larasi, medical experts, and abortion providers — guidelines for journalists on how to report abortion with accuracy, compassion, and sensitivity, treating it as a public health issue, not a debate.</p>
+          <a href="/wp-content/uploads/2025/08/Abortion-Media-Guidelines.pdf" target="_blank" rel="noopener" class="nr-featured-btn">Download PDF →</a>
         </article>
 
         <ol class="nr-list" aria-label="All campaign resources">
 
-          <li class="nr-resource-item" data-tags="guidance campaign" data-source="level-up" data-type="guidelines" data-topic="domestic-abuse media-reporting aida ddw journalism-standards">
+          <li class="nr-resource-item" data-tags="focused guidelines" data-source="level-up" data-type="guidelines" data-topic="media-guidelines abortion-access stigma">
             <span class="nr-item-num">01</span>
             <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Media Reporting</span><span class="nr-topic">AIDA Framework</span><span class="nr-topic">DDW Campaign</span><span class="nr-topic">Journalism Standards</span></div>
-              <h3 class="nr-item-title"><a href="/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" target="_blank" rel="noopener">Level Up Media Guidelines for Reporting Fatal Domestic Abuse (v2)</a></h3>
-              <p class="nr-item-meta">Level Up · 2022</p>
-              <p class="nr-item-abstract">The second edition of Level Up's landmark media guidelines — the UK's first evidence-based guidance for journalists on how to report domestic abuse deaths accurately and with dignity. Structured around the AIDA framework (Accountability, Images, Dignity, Accuracy), the guidelines are endorsed by both press regulators IPSO and IMPRESS, and have been distributed to every newsroom in the country. They form the basis of Level Up's CPD-accredited journalist training programme, attended by over 500 journalists to date.</p>
+              <div class="nr-item-tags"><span class="nr-topic">Media Guidelines</span><span class="nr-topic">Abortion Access</span><span class="nr-topic">Stigma</span></div>
+              <h3 class="nr-item-title"><a href="/wp-content/uploads/2025/08/Abortion-Media-Guidelines.pdf" target="_blank" rel="noopener">Abortion Media Guidelines</a></h3>
+              <p class="nr-item-meta">Jade Hammond &amp; Ikamara Larasi · Level Up · 2024</p>
+              <p class="nr-item-abstract">Level Up's Abortion Media Guidelines, produced with medical experts and abortion providers, offer practical recommendations for journalists covering abortion in Britain. The guidelines encourage reporting that treats abortion as a public health issue rather than a moral debate, uses person-centred language, avoids false balance, and recognises the legal risks for people who share their abortion experiences publicly. Inspired by the work of Abortion Dream Team in Poland, this is the first dedicated media guidance document of its kind for UK journalism.</p>
             </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Guidelines</span><a href="/wp-content/uploads/2025/08/Media-Guidelines-V2-1.pdf" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
+            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--focused">Our Campaign</span><a href="/wp-content/uploads/2025/08/Abortion-Media-Guidelines.pdf" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
           </li>
-
-          <li class="nr-resource-item" data-tags="campaign regulation" data-source="level-up" data-type="report" data-topic="domestic-abuse femicide bereaved-families media-reporting ddw">
-            <span class="nr-item-num">02</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Bereaved Families</span><span class="nr-topic">Media Reporting</span><span class="nr-topic">Femicide</span><span class="nr-topic">DDW Campaign</span></div>
-              <h3 class="nr-item-title"><a href="/wp-content/uploads/2025/08/Final-LU-AAFDA-families-report.pdf" target="_blank" rel="noopener">Families Report: The Impact of Media Reporting on Families Bereaved by Domestic Homicide</a></h3>
-              <p class="nr-item-meta">Level Up · 2020</p>
-              <p class="nr-item-abstract">Level Up's research into the impact of media reporting on families bereaved by domestic homicide, produced in collaboration with victims' families and the charity AAFDA. The report finds that 2 in 3 families who participated said their grieving process was negatively impacted by media coverage of their loved one's death. The findings were presented to IPSO's Head of Standards in February 2020 and form a central pillar of Level Up's campaign for regulatory change.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Report</span><a href="/wp-content/uploads/2025/08/Final-LU-AAFDA-families-report.pdf" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="academic" data-source="new-statesman" data-type="academic" data-topic="domestic-abuse femicide media-reporting coercive-control women">
-            <span class="nr-item-num">03</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">Domestic Abuse</span><span class="nr-topic">Femicide</span><span class="nr-topic">Media Reporting</span><span class="nr-topic">Coercive Control</span></div>
-              <h3 class="nr-item-title"><a href="https://onlinelibrary.wiley.com/doi/10.1111/newe.12336" target="_blank" rel="noopener">Dignity for Dead Women</a></h3>
-              <p class="nr-item-meta">Janey Starling, Jade Hammond · New Statesman · April 2023</p>
-              <p class="nr-item-abstract">The peer-reviewed academic article by Level Up's Janey Starling and Jade Hammond, published in the New Statesman, setting out the theoretical and evidential basis for the Dignity for Dead Women campaign. The piece argues that media reporting of domestic homicide is not merely a question of taste but of public health — that inaccurate, sensationalised coverage actively impedes societal understanding of coercive control and prevents the systemic change needed to save women's lives.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--academic">Academic</span><a href="https://onlinelibrary.wiley.com/doi/10.1111/newe.12336" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
-          <li class="nr-resource-item" data-tags="regulation campaign" data-source="level-up" data-type="regulation" data-topic="ipso regulation journalism-standards ddw media-reporting">
-            <span class="nr-item-num">04</span>
-            <div class="nr-item-body">
-              <div class="nr-item-tags"><span class="nr-topic">IPSO</span><span class="nr-topic">Regulation</span><span class="nr-topic">Journalism Standards</span><span class="nr-topic">DDW Campaign</span></div>
-              <h3 class="nr-item-title"><a href="/wp-content/uploads/2025/08/2023-Level-Up-IPSO-code-review-submission.pdf" target="_blank" rel="noopener">Level Up Submission to the 2023 IPSO Editor's Code Committee Review</a></h3>
-              <p class="nr-item-meta">Level Up · 2023</p>
-              <p class="nr-item-abstract">Level Up's formal submission to IPSO's 2023 Editor's Code Committee review, endorsed by the domestic abuse sector as a whole, calling for a specific sub-clause to be added to Clause 4 of the Editor's Code of Practice. The submission draws on Level Up's families research, the AIDA framework, and five years of campaign evidence to make the legal and ethical case for binding regulatory standards on reporting fatal domestic abuse. Accompanied by a petition of 26,703 signatures delivered to IPSO headquarters in March 2023.</p>
-            </div>
-            <div class="nr-item-end"><span class="nr-type-badge nr-type-badge--parliament">Regulation</span><a href="/wp-content/uploads/2025/08/2023-Level-Up-IPSO-code-review-submission.pdf" target="_blank" rel="noopener" class="nr-item-link" aria-label="Open resource">↗</a></div>
-          </li>
-
 
         </ol>
       </div>
@@ -171,7 +137,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

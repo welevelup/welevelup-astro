@@ -4,8 +4,8 @@
  * Replaces the clone's /blog page.
  */
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/design-system/Header.astro';
-import Footer from '../components/design-system/Footer.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -35,7 +35,7 @@ const posts = allPosts.filter((_, i) => i !== featuredIdx);
   description="Analysis, essays and feminist thinking from Level Up — on reproductive justice, gender-based violence, criminalisation, trans-inclusive feminism and more."
   ogImage="https://welevelup.org/wp-content/uploads/2025/07/level_up_new.webp"
 >
-  <Header heroBg="navy" />
+  <Nav />
 
   <section class="bl-hero">
     <div class="bl-inner">
@@ -86,7 +86,7 @@ const posts = allPosts.filter((_, i) => i !== featuredIdx);
     <a href="https://levelup.yourmovement.org/p/join-us" class="bl-cta-btn" target="_blank" rel="noopener">Join us</a>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

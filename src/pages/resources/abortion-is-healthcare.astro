@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Nav from '../../components/Nav.astro';
-import Footer from '../../components/Footer.astro';
+import Header from '../../components/design-system/Header.astro';
+import Footer from '../../components/design-system/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -13,7 +13,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="Abortion is Healthcare — Resources & Media Guidelines | Level Up"
   description="Download Level Up's media guidelines and resources on abortion rights in the UK. Materials for journalists, activists, and supporters."
 >
-  <Nav />
+  <Header heroBg="off-white" />
 
   <script type="application/ld+json">{JSON.stringify({
     "@context": "https://schema.org",
@@ -137,7 +137,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <Footer />
+  <Footer bg="navy" />
 </Layout>
 
 <style is:global>

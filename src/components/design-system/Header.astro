@@ -207,13 +207,12 @@ interface Props {
   .ds-header-bar > a,
   .ds-header-group > span {
     position: relative;
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 0.8rem;
+    font-family: var(--font-headline);
+    font-weight: 400;
+    font-size: 1.05rem;
     color: var(--color-navy);
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0;
     padding: var(--space-2) var(--space-3);
     cursor: pointer;
     white-space: nowrap;
@@ -251,12 +250,12 @@ interface Props {
     border-bottom: 1.5px solid currentColor;
     transform: rotate(45deg);
     transition: transform 0.18s ease;
-    margin-top: -2px;
+    margin-top: -4px;
   }
   .ds-header-group:hover .ds-header-chevron,
   .ds-header-group--open .ds-header-chevron {
     transform: rotate(-135deg);
-    margin-top: 2px;
+    margin-top: 0;
   }
 
   .ds-header-group { position: relative; }
@@ -338,7 +337,7 @@ interface Props {
   }
   .ds-header-toggle span { display: block; width: 22px; height: 2px; background: var(--color-navy); }
 
-  @media (max-width: 1080px) {
+  @media (max-width: 1220px) {
     .ds-header-bar { display: none; }
     .ds-header-toggle { display: flex; }
     .ds-header-ctas :global(.ds-header-pill) { padding: var(--space-1) var(--space-3); font-size: 0.7rem; }

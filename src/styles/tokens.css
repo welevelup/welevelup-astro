@@ -62,3 +62,11 @@
   --radius-button: 6px;
   --radius-card: 12px;
 }
+
+/* Plain text dropped into a slot (e.g. CampaignTemplate's Aim/Why/Story
+   paragraphs) has no class of its own to carry a font — without this,
+   it falls back to the browser's serif default instead of DM Sans.
+   Headline/Subheadline/Label already set Corsia explicitly and override this. */
+body {
+  font-family: var(--font-body);
+}

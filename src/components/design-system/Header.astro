@@ -21,7 +21,7 @@ interface Props {
 
     <nav class="ds-header-bar" id="ds-header-bar" aria-label="Main navigation">
       <div class="ds-header-group">
-        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">About Us</span>
+        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">About Us<i class="ds-header-chevron" aria-hidden="true"></i></span>
         <div class="ds-header-drop">
           <a href="/about-us">What we do</a>
           <a href="/who-we-are">Who we are</a>
@@ -31,7 +31,7 @@ interface Props {
       </div>
 
       <div class="ds-header-group">
-        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Campaigns</span>
+        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Campaigns<i class="ds-header-chevron" aria-hidden="true"></i></span>
         <div class="ds-header-drop ds-header-mega">
           <div class="ds-header-mega-grid">
             <div class="ds-header-mega-col">
@@ -72,7 +72,7 @@ interface Props {
       </div>
 
       <div class="ds-header-group">
-        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Community</span>
+        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Community<i class="ds-header-chevron" aria-hidden="true"></i></span>
         <div class="ds-header-drop ds-header-mega ds-header-mega--center">
           <div class="ds-header-mega-grid ds-header-mega-grid--2">
             <div class="ds-header-mega-col">
@@ -92,7 +92,7 @@ interface Props {
       </div>
 
       <div class="ds-header-group">
-        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Blog</span>
+        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Blog<i class="ds-header-chevron" aria-hidden="true"></i></span>
         <div class="ds-header-drop">
           <a href="/blog">All posts</a>
           <a href="/blog/if-you-like-us-cite-us">If you like us, cite us</a>
@@ -102,7 +102,7 @@ interface Props {
       </div>
 
       <div class="ds-header-group">
-        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Resources</span>
+        <span role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">Resources<i class="ds-header-chevron" aria-hidden="true"></i></span>
         <div class="ds-header-drop">
           <a href="/resources">All Resources</a>
           <a href="/resources/nomorelyes">#NoMoreLyes Info Kit</a>
@@ -112,11 +112,8 @@ interface Props {
         </div>
       </div>
 
-      <a href="/press">Press Coverage</a>
+      <a href="/press">Press</a>
       <a href="/contact">Contact</a>
-
-      <a href="https://levelup.yourmovement.org/p/join-us" class="ds-header-mobile-join" target="_blank" rel="noopener">Join Us</a>
-      <a href="/donate" class="ds-header-mobile-donate">Donate</a>
     </nav>
 
     <div class="ds-header-ctas">
@@ -209,6 +206,7 @@ interface Props {
   }
   .ds-header-bar > a,
   .ds-header-group > span {
+    position: relative;
     font-family: var(--font-body);
     font-weight: 700;
     font-size: 0.8rem;
@@ -219,11 +217,46 @@ interface Props {
     padding: var(--space-2) var(--space-3);
     cursor: pointer;
     white-space: nowrap;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .ds-header-bar > a::after,
+  .ds-header-group > span::after {
+    content: '';
+    position: absolute;
+    left: var(--space-3);
+    right: var(--space-3);
+    bottom: 4px;
+    height: 2px;
+    background: var(--color-electric-yellow);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.18s ease;
   }
   .ds-header-bar > a:hover,
-  .ds-header-group:hover > span {
+  .ds-header-group:hover > span,
+  .ds-header-group--open > span {
     color: var(--color-loud-lilac);
+  }
+  .ds-header-bar > a:hover::after,
+  .ds-header-group:hover > span::after,
+  .ds-header-group--open > span::after {
+    transform: scaleX(1);
+  }
+  .ds-header-chevron {
+    width: 6px;
+    height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.18s ease;
+    margin-top: -2px;
+  }
+  .ds-header-group:hover .ds-header-chevron,
+  .ds-header-group--open .ds-header-chevron {
+    transform: rotate(-135deg);
+    margin-top: 2px;
   }
 
   .ds-header-group { position: relative; }
@@ -260,7 +293,8 @@ interface Props {
   .ds-header-mega { min-width: 900px; left: -120px; padding: 0; }
   .ds-header-mega-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
   .ds-header-mega-grid--2 { grid-template-columns: repeat(2, 1fr); }
-  .ds-header-mega-col { padding: var(--space-5) var(--space-4); border-right: 1px solid rgba(12,10,62,0.07); border-bottom: 1px solid rgba(12,10,62,0.07); }
+  .ds-header-mega-col { padding: var(--space-5) var(--space-4); border-right: 1px solid rgba(12,10,62,0.07); border-bottom: 1px solid rgba(12,10,62,0.07); border-top: 2px solid transparent; transition: border-color 0.15s ease; }
+  .ds-header-mega-col:hover { border-top-color: var(--color-electric-yellow); }
   .ds-header-mega-col:nth-child(3n) { border-right: none; }
   .ds-header-mega-col:nth-child(n+4) { border-bottom: none; }
   .ds-header-mega--center { left: 50%; transform: translateX(-50%); min-width: 560px; }
@@ -292,8 +326,6 @@ interface Props {
 
   .ds-header-ctas { display: flex; gap: var(--space-2); align-items: center; flex-shrink: 0; }
   .ds-header-ctas :global(.ds-header-pill) { padding: var(--space-2) var(--space-4); font-size: 0.8rem; }
-  .ds-header-mobile-join,
-  .ds-header-mobile-donate { display: none; }
 
   .ds-header-toggle {
     display: none;
@@ -308,8 +340,8 @@ interface Props {
 
   @media (max-width: 1080px) {
     .ds-header-bar { display: none; }
-    .ds-header-ctas { display: none; }
     .ds-header-toggle { display: flex; }
+    .ds-header-ctas :global(.ds-header-pill) { padding: var(--space-1) var(--space-3); font-size: 0.7rem; }
 
     .ds-header-bar--open {
       display: flex;
@@ -343,18 +375,5 @@ interface Props {
     }
     .ds-header-bar--open .ds-header-mega-grid { grid-template-columns: 1fr !important; }
     .ds-header-bar--open .ds-header-mega-col { border: none; padding: var(--space-3) 0; }
-    .ds-header-mobile-join,
-    .ds-header-mobile-donate {
-      display: block;
-      text-align: center;
-      padding: var(--space-4);
-      font-family: var(--font-body);
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
-      margin-top: var(--space-3);
-    }
-    .ds-header-mobile-donate { background: var(--color-electric-yellow); color: var(--color-navy); }
-    .ds-header-mobile-join { background: var(--color-navy); color: var(--color-off-white); }
   }
 </style>

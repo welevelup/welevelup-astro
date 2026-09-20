@@ -1,7 +1,8 @@
 ---
 // Step 2 rebuild of /press on the design system. Real press data lives in
-// src/lib/press-items.ts (99 items, extracted verbatim from the pre-Step-2
-// page — see press.astro.bak-pre-step2 for the original hand-written markup).
+// src/lib/press-items.ts (101 items, extracted verbatim from the pre-Step-2
+// page — see press.astro.bak-pre-step2 for the original hand-written markup),
+// including each item's original campaign topic/tag and news image.
 import Layout from '../layouts/Layout.astro';
 import Section from '../components/design-system/Section.astro';
 import Header from '../components/design-system/Header.astro';
@@ -11,13 +12,25 @@ import Collage from '../components/design-system/Collage.astro';
 import PressCard from '../components/design-system/PressCard.astro';
 import { PRESS_ITEMS } from '../lib/press-items';
 
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const formatDate = (iso: string) => {
+  if (/^\d{4}$/.test(iso)) return iso;
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+};
+
+// Same topic order/labels as the original filter bar in press.astro.bak-pre-step2.
+const FILTERS = [
+  { topic: 'pregnancy-in-prison', label: 'Pregnancy in Prison' },
+  { topic: 'beauty', label: '#NoMoreLyes' },
+  { topic: 'football', label: 'Sexual Violence in Football' },
+  { topic: 'femicide', label: 'Domestic Abuse in Media' },
+  { topic: 'abortion', label: 'Abortion is Healthcare' },
+  { topic: 'other', label: 'Other' },
+].map((f) => ({ ...f, count: PRESS_ITEMS.filter((i) => i.topic === f.topic).length }));
 ---
 <Layout
   headHtml=""
   title="Level Up in the Press | Guardian, BBC, Channel 4 & More"
-  description="Level Up's feminist campaigns have been covered by The Guardian, BBC, Channel 4, The Times and 37 other outlets since 2018. 99 media appearances across 6 campaigns."
+  description="Level Up's feminist campaigns have been covered by The Guardian, BBC, Channel 4, The Times and dozens of other outlets since 2018."
 >
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -45,24 +58,102 @@ const formatDate = (iso: string) =>
 
   <Section bg="loud-lilac">
     <div class="press-hero">
-      <div class="press-hero-copy">
-        <Headline color="off-white">In the press</Headline>
-        <Collage index={1} class="press-hero-collage" />
-      </div>
-      <div class="press-hero-grid">
-        {PRESS_ITEMS.map((item) => (
-          <PressCard outlet={item.outlet} headline={item.headline} href={item.href} date={formatDate(item.date)} />
+      <Headline color="off-white">In the press</Headline>
+      <Collage index={1} class="press-hero-collage" />
+    </div>
+  </Section>
+
+  <Section bg="off-white">
+    <div class="press-filters" role="group" aria-label="Filter press coverage by campaign">
+      <p class="press-filters-label">Filter by campaign:</p>
+      <div class="press-filters-list">
+        <button class="press-filter is-active" data-filter="all" aria-pressed="true">All <span class="press-filter-count">{PRESS_ITEMS.length}</span></button>
+        {FILTERS.map((f) => (
+          <button class="press-filter" data-filter={f.topic} aria-pressed="false">{f.label} <span class="press-filter-count">{f.count}</span></button>
         ))}
       </div>
+    </div>
+
+    <div class="press-hero-grid" id="press-grid" aria-live="polite">
+      {PRESS_ITEMS.map((item) => (
+        <PressCard
+          outlet={item.outlet}
+          headline={item.headline}
+          href={item.href}
+          date={formatDate(item.date)}
+          image={item.image}
+          tag={item.tag}
+          topic={item.topic}
+        />
+      ))}
     </div>
   </Section>
 
   <Footer bg="loud-lilac" />
 </Layout>
 
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.press-filter');
+  const cards = document.querySelectorAll<HTMLElement>('#press-grid [data-topic]');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const filter = btn.dataset.filter;
+      buttons.forEach((b) => {
+        b.classList.remove('is-active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('is-active');
+      btn.setAttribute('aria-pressed', 'true');
+
+      cards.forEach((card) => {
+        const show = filter === 'all' || card.dataset.topic === filter;
+        card.hidden = !show;
+      });
+    });
+  });
+</script>
+
 <style>
-  .press-hero-copy { margin-bottom: var(--space-8); }
+  .press-hero { margin-bottom: var(--space-2); }
   .press-hero-collage { margin-top: var(--space-6); max-width: 280px; }
+
+  .press-filters { margin-bottom: var(--space-8); }
+  .press-filters-label {
+    font-family: var(--font-body);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: var(--text-label);
+    opacity: 0.6;
+    margin: 0 0 var(--space-3);
+  }
+  .press-filters-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .press-filter {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--color-navy);
+    background: var(--color-white);
+    border: 1px solid rgba(12,10,62,0.15);
+    padding: var(--space-2) var(--space-4);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .press-filter:hover { border-color: var(--color-loud-lilac); }
+  .press-filter.is-active {
+    background: var(--color-navy);
+    color: var(--color-off-white);
+    border-color: var(--color-navy);
+  }
+  .press-filter-count {
+    font-size: 0.7rem;
+    opacity: 0.65;
+  }
+
   .press-hero-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

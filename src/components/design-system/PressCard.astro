@@ -4,25 +4,53 @@ interface Props {
   headline: string;
   href: string;
   date: string;
+  image?: string | null;
+  tag?: string;
+  topic?: string;
 }
-const { outlet, headline, href, date } = Astro.props;
+const { outlet, headline, href, date, image, tag, topic } = Astro.props;
 ---
 
-<a href={href} target="_blank" rel="noopener" class="ds-card ds-press-card">
-  <span class="ds-press-card-outlet">{outlet}</span>
-  <h3 class="ds-press-card-headline">{headline}</h3>
-  <span class="ds-press-card-date">{date}</span>
+<a
+  href={href}
+  target="_blank"
+  rel="noopener"
+  class="ds-card ds-press-card"
+  data-topic={topic}
+>
+  {image && <div class="ds-press-card-img" style={`background-image:url('${image}')`} role="img" aria-hidden="true"></div>}
+  <div class="ds-press-card-body">
+    <span class="ds-press-card-outlet">{outlet}</span>
+    <h3 class="ds-press-card-headline">{headline}</h3>
+    <div class="ds-press-card-footer">
+      <span class="ds-press-card-date">{date}</span>
+      {tag && <span class="ds-press-card-tag">{tag}</span>}
+    </div>
+  </div>
 </a>
 
 <style>
   .ds-card {
     border-radius: var(--radius-card);
-    padding: var(--space-6);
-    display: block;
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
     background: var(--color-off-white);
     color: var(--color-navy);
     border: 1px solid rgba(12, 10, 62, 0.12);
+    overflow: hidden;
+  }
+  .ds-press-card-img {
+    aspect-ratio: 16/10;
+    background-size: cover;
+    background-position: center;
+  }
+  .ds-press-card-body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 1;
   }
   .ds-press-card-outlet {
     font-family: var(--font-body);
@@ -35,11 +63,28 @@ const { outlet, headline, href, date } = Astro.props;
   .ds-press-card-headline {
     font-family: var(--font-headline);
     font-size: var(--text-subheadline);
-    margin: var(--space-2) 0;
+    margin: 0;
+    flex: 1;
+  }
+  .ds-press-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
   }
   .ds-press-card-date {
     font-family: var(--font-body);
     font-size: var(--text-label);
     opacity: 0.6;
+  }
+  .ds-press-card-tag {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-loud-lilac);
+    white-space: nowrap;
   }
 </style>

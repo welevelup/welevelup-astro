@@ -4,8 +4,8 @@
  * Editorial dark-luxury aesthetic. Bento asymmetric grid. No external libraries.
  */
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/design-system/Header.astro';
-import Footer from '../components/design-system/Footer.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -16,7 +16,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="Memory Space | Stories of Resistance | Level Up"
   description="An archive of personal stories, solidarity messages, and voices of resistance. Abortion stories, hair stories, Holloway voices — told in their own words."
 >
-  <Header />
+  <Nav />
 
   <!-- ── HERO ─────────────────────────────────────────────── -->
   <section class="ms-hero" aria-labelledby="ms-hero-heading">
@@ -233,7 +233,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

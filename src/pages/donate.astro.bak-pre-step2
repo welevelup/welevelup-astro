@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/design-system/Header.astro';
-import Footer from '../components/design-system/Footer.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 
@@ -14,7 +14,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   description="Support Level Up's feminist campaigns for gender justice — from abortion rights to ending pregnancy in prison. Every pound funds real change."
   ogImage="https://welevelup.org/images/og-default.jpg"
 >
-  <Header />
+  <Nav />
 
   <main class="lu-donate" id="main-content">
 
@@ -126,7 +126,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   </main>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

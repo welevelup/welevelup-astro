@@ -6,8 +6,8 @@
  * with staggered counts, message cards as human artefacts.
  */
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -18,7 +18,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="Messages of Solidarity | Level Up"
   description="Read messages of solidarity from the Level Up community. No one faces gender injustice alone — here, every voice is seen."
 >
-  <Header />
+  <Nav />
 
   <!-- ── HERO ────────────────────────────────────────────────── -->
   <section class="sl-hero" aria-labelledby="sl-hero-heading">
@@ -308,7 +308,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 
   <style is:global>
     /* ── SOLIDARITY MESSAGES PAGE ──────────────────────────────

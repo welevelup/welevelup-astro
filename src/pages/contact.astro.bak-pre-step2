@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/design-system/Header.astro';
-import Footer from '../components/design-system/Footer.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -13,7 +13,7 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
   title="Contact Level Up"
   description="Get in touch with Level Up. We'd love to hear from you. Email us at hello@welevelup.org or send a message via our contact form."
 >
-  <Header />
+  <Nav />
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -147,7 +147,7 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
     <a href="https://levelup.yourmovement.org/p/join-us" class="ct-cta-btn" target="_blank" rel="noopener">Join us</a>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -12,7 +12,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="Holloway Voices | What the Women's Centre Would Mean | Level Up"
   description="Women, NHS workers and allies share what Holloway Women's Centre would mean to them. A promise made in 2016 — and still not kept. Add your voice to the campaign."
 >
-  <Header />
+  <Nav />
 
   <!-- HERO -->
   <section class="hws-hero">
@@ -275,7 +275,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

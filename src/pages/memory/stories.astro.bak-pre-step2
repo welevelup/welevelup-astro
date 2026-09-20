@@ -5,8 +5,8 @@
  * harassment, gender-based violence, and resistance.
  */
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -19,7 +19,7 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
   title="Voices from the Movement | Level Up"
   description="Personal accounts of sexism, racism, harassment, gender-based violence, and resistance — shared by the Level Up community."
 >
-  <Header />
+  <Nav />
 
   <!-- Back nav -->
   <div class="st-back-bar">
@@ -176,7 +176,7 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     </div>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

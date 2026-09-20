@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 import { createMollieClient } from '@mollie/api-client';
@@ -64,7 +64,7 @@ const copy = COPY[status];
   description="Thank you for supporting Level Up's feminist campaigns. Your contribution helps us fight for gender justice in the UK."
   noindex={true}
 >
-  <Header />
+  <Nav />
 
   <main class="lu-thanks" id="main-content">
     <div class="lu-thanks__hero">
@@ -124,7 +124,7 @@ const copy = COPY[status];
     </div>
   </main>
 
-  <Footer bg="navy" />
+  <Footer />
 
   {status === 'paid' && import.meta.env.PUBLIC_META_PIXEL_ID && (
     <script>

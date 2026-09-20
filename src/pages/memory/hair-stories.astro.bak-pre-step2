@@ -1,7 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -12,7 +12,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="Hair Stories | #NoMoreLyes | Level Up"
   description="Black women share what using hair relaxers has meant for their bodies, health and lives. Real voices demanding accountability from beauty brands."
 >
-  <Header />
+  <Nav />
 
   <!-- HERO -->
   <section class="hs-hero">
@@ -134,7 +134,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

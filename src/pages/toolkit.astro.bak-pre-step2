@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/design-system/Header.astro';
-import Footer from '../components/design-system/Footer.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
 import { extract } from '../lib/extractHtml';
 import homeRaw from '../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -13,7 +13,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="LU x DSC Legal Toolkit — Representing Pregnant Women in the Criminal Justice System"
   description="A free legal toolkit for practitioners representing pregnant women and mothers at every stage of the criminal justice process — from bail to sentencing, appeals, and prison law. Created by Doughty Street Chambers and Level Up."
 >
-  <Header />
+  <Nav />
 
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
@@ -376,7 +376,7 @@ const { headInner, bodyClass } = extract(homeRaw);
 
   </main>
 
-  <Footer bg="navy" />
+  <Footer />
 </Layout>
 
 <style is:global>

@@ -6,8 +6,8 @@
  * each story card a distinct visual treatment, not a uniform grid.
  */
 import Layout from '../../layouts/Layout.astro';
-import Header from '../../components/design-system/Header.astro';
-import Footer from '../../components/design-system/Footer.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
 import { extract } from '../../lib/extractHtml';
 import homeRaw from '../../_clone/index.html?raw';
 const { headInner, bodyClass } = extract(homeRaw);
@@ -18,7 +18,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   title="Abortion Stories | Memory Space | Level Up"
   description="Real abortion experiences told anonymously. These stories push back against shame and silence — because abortion is healthcare and your story belongs to you."
 >
-  <Header />
+  <Nav />
 
   <!-- ── HERO ─────────────────────────────────────────── -->
   <section class="as-hero">
@@ -363,7 +363,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     </div>
   </section>
 
-  <Footer bg="navy" />
+  <Footer />
 
   <style is:global>
     /* ═══════════════════════════════════════════════════════

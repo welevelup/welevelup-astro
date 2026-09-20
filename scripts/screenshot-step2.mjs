@@ -8,7 +8,7 @@ const OUT_DIR = process.env.SCREENSHOT_DIR || '/tmp/screenshots';
 const BASE_URL = process.env.SCREENSHOT_BASE_URL || 'http://localhost:4400';
 
 const pages = [
-  { path: '/index-v2', name: 'homepage' },
+  { path: '/', name: 'homepage' },
   { path: '/active-campaigns/nomorelyes-2', name: 'nomorelyes' },
   { path: '/press', name: 'press' },
 ];

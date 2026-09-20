@@ -1,1020 +1,217 @@
 ---
+// Homepage rebuild on the design system (Step 2). See docs/brand/DEVIATIONS.md
+// for the two mockup-vs-guide colour deviations this page ships with
+// deliberately. Previous version backed up at index.astro.bak-pre-step2.
 import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
-import { extract } from '../lib/extractHtml';
-import rawHtml from '../_clone/index.html?raw';
-import HeroFinal from '../components/HeroFinal.astro';
+import Section from '../components/design-system/Section.astro';
+import Grid25 from '../components/design-system/Grid25.astro';
+import Grid3 from '../components/design-system/Grid3.astro';
+import Headline from '../components/design-system/Headline.astro';
+import Subheadline from '../components/design-system/Subheadline.astro';
+import Label from '../components/design-system/Label.astro';
+import Highlight from '../components/design-system/Highlight.astro';
+import Button from '../components/design-system/Button.astro';
+import Header from '../components/design-system/Header.astro';
+import Footer from '../components/design-system/Footer.astro';
+import Ticker from '../components/design-system/Ticker.astro';
+import SplitHero from '../components/design-system/SplitHero.astro';
+import PetitionCard from '../components/design-system/PetitionCard.astro';
+import BlogCard from '../components/design-system/BlogCard.astro';
+import Collage from '../components/design-system/Collage.astro';
+import VideoEmbed from '../components/design-system/VideoEmbed.astro';
+import { CAMPAIGNS, FEATURED_CAMPAIGN, TICKER_CAMPAIGN } from '../lib/campaigns';
 
-const { headInner, bodyClass, mainContent } = extract(rawHtml);
-const headHtmlWithPreload = `<link rel="preload" as="image" href="/images/hero-banner.jpg" fetchpriority="high" />${headInner}`;
+const otherCampaigns = CAMPAIGNS.filter((c) => c !== FEATURED_CAMPAIGN);
+// Mockup shows 2 featured + 3 secondary petition cards. The "latest campaign"
+// panel above already spotlights FEATURED_CAMPAIGN, but it's still an active
+// petition, so it reappears here as one of the 2 featured cards rather than
+// inventing a 5th real campaign that doesn't exist in the content.
+const featuredRow = [FEATURED_CAMPAIGN, otherCampaigns[0]];
+const secondaryRow = otherCampaigns.slice(1, 4);
+
+function signatureLine(c: (typeof CAMPAIGNS)[number]): string {
+  return c.goal
+    ? `${c.signatures.toLocaleString('en-GB')} of ${c.goal.toLocaleString('en-GB')} signatures.`
+    : `${c.signatures.toLocaleString('en-GB')}+ signatures.`;
+}
+
+const blogModules = import.meta.glob('../content/blog/*.md', { eager: true }) as Record<
+  string,
+  { frontmatter: { title: string; author: string; date: string; excerpt: string } }
+>;
+const latestPosts = Object.entries(blogModules)
+  .map(([file, mod]) => ({ file, frontmatter: mod.frontmatter }))
+  .sort((a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime())
+  .slice(0, 3);
+const [featuredPost, ...secondaryPosts] = latestPosts;
+
+const tickerText = TICKER_CAMPAIGN
+  ? `${TICKER_CAMPAIGN.name} • ${TICKER_CAMPAIGN.signatures.toLocaleString('en-GB')} of ${TICKER_CAMPAIGN.goal?.toLocaleString('en-GB')} signatures • Help us reach our goal →`
+  : '';
 ---
-<Layout
-  headHtml={headHtmlWithPreload}
-  bodyClass={bodyClass}
-  title="Level Up | UK Feminist Campaigns for Gender Justice"
-  description="Level Up is a UK feminist campaigning organisation fighting for reproductive justice, an end to pregnancy in prison, and freedom from gender-based violence. Join us."
->
-  <Nav />
 
-  <!-- HERO BANNER -->
-  <HeroFinal />
+<Layout headHtml="" title="Level Up | We are a feminist community campaigning for gender justice in the UK" description="We run feminist campaigns and collective action to advance gender justice in the UK.">
+  <main>
+    <Header heroBg="gentle-lilac" />
 
-  <!-- Rest of content from Elementor clone -->
-
-  <!-- WHO WE ARE — Proposal A: Split layout -->
-  <section class="home-who">
-    <div class="home-who-inner">
-      <div class="home-who-left">
-        <h2>WHO<br/>WE<br/>ARE</h2>
+    <!-- HERO -->
+    <Section bg="gentle-lilac">
+      <div class="hp-hero">
+        <div class="hp-hero-copy">
+          <Headline>We are a feminist community</Headline>
+          <Subheadline as="h2">campaigning for gender justice in the UK.</Subheadline>
+        </div>
+        <Collage index={6} class="hp-hero-collage" />
       </div>
-      <div class="home-who-right">
-        <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – <a href="/what-we-are-proud-of">like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths</a>.</p>
-        <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through gathering with community like our <a href="/active-campaigns/we-protect-us">monthly workshops on bystander intervention and intervening in police violence.</a></p>
-        <p>Our movement includes feminists from a range of backgrounds and all genders, centering the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+    </Section>
+
+    <!-- LATEST CAMPAIGN -->
+    <SplitHero bg="loud-lilac" imageSrc={FEATURED_CAMPAIGN.imageSrc} imageAlt={FEATURED_CAMPAIGN.imageAlt}>
+      <Subheadline as="h2" color="off-white">Take action on our latest campaign:</Subheadline>
+      <p class="hp-campaign-highlight"><Highlight><Headline as="h3">{FEATURED_CAMPAIGN.tag}</Headline></Highlight></p>
+      <p class="hp-campaign-body" style="color: var(--color-off-white);">{FEATURED_CAMPAIGN.intro}</p>
+      <div class="hp-campaign-actions">
+        <!-- Mockup deviation #1: Sign the petition uses Gentle Lilac + navy here (allowed pairing) -->
+        <Button bg="gentle-lilac" text="navy" href={FEATURED_CAMPAIGN.petitionHref} label="Sign the petition" />
+        <Button bg="off-white" text="navy" href={FEATURED_CAMPAIGN.href} label="Read more" />
       </div>
-    </div>
-  </section>
+    </SplitHero>
 
+    <!-- TICKER -->
+    {tickerText && <Ticker bg="electric-yellow" text="navy" items={[tickerText]} />}
 
-  <!-- HOW COLLECTIVE CARE — Proposal B: Cinematic -->
-  <script type="application/ld+json" set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "name": "How Collective Care Can Change Society",
-    "description": "Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world. Talk from TEDxLondon, March 2023.",
-    "thumbnailUrl": "https://img.youtube.com/vi/xj-alDQD2fg/maxresdefault.jpg",
-    "uploadDate": "2023-03-01",
-    "embedUrl": "https://www.youtube.com/embed/xj-alDQD2fg",
-    "contentUrl": "https://www.youtube.com/watch?v=xj-alDQD2fg",
-    "publisher": {
-      "@type": "Organization",
-      "name": "Level Up",
-      "url": "https://welevelup.org"
-    }
-  })} />
-  <section class="home-video">
-    <div class="home-video-header">
-      <span class="home-video-tag">TedxLondon · March 2023</span>
-      <h2>How Collective Care<br/>Can Change Society</h2>
-      <p>Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world.</p>
-    </div>
-    <div class="home-video-player">
-      <iframe src="https://www.youtube.com/embed/xj-alDQD2fg?controls=1" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe>
-    </div>
-  </section>
+    <!-- WHO WE ARE -->
+    <Section bg="off-white">
+      <Grid25>
+        <Fragment slot="narrow">
+          <Headline as="h2">Who we are</Headline>
+          <Collage index={4} />
+        </Fragment>
+        <Fragment slot="wide">
+          <p>We create digital tools and campaigns that interrupt cultural moments to fight for gender justice – like flying a plane banner over a football match to break the silence around rape in sports, pushing ITV to drop plastic surgery adverts from Love Island and producing the UK's first media guidelines on reporting domestic abuse deaths.</p>
+          <p>We're working towards a world where people of all genders are loved and liberated from bodily and systemic violence. We do this in our campaign coalitions, and through gathering with community like our monthly workshops on bystander intervention and intervening in police violence.</p>
+          <p>Our movement includes feminists from a range of backgrounds and all genders, centring the voices and liberation of people who experience gender injustice: women, gender-nonconforming and trans people.</p>
+        </Fragment>
+      </Grid25>
+    </Section>
 
-  <!-- ISLINGTON COUNCIL BANNER -->
-  <section class="ic-banner">
-    <div class="ic-banner-content">
-      <span class="ic-banner-label">Featured Campaign</span>
-      <h2>Finish Holloway Women's Centre</h2>
-      <p>The centre is built but standing empty. Tell Islington Council: keep your promise to deliver vital support for women facing trauma, violence, poverty and homelessness.</p>
-      <div class="ic-banner-actions">
-        <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="ic-banner-btn-primary" target="_blank" rel="noopener">Sign the petition</a>
-        <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="ic-banner-btn">Learn more →</a>
+    <!-- TEDX -->
+    <Section bg="navy">
+      <Grid25>
+        <Fragment slot="narrow">
+          <Label color="electric-yellow">TEDxLondon &middot; March 2023</Label>
+          <Subheadline as="h2" color="off-white">How Collective Care Can Change Society</Subheadline>
+          <p style="color: var(--color-off-white);">Level Up's vision is a world where everyone is loved and liberated. We believe that collective care is the route to building this world. Level Up co-directors Seyi and Janey explained what this means in a TEDxLondon talk in March 2023.</p>
+        </Fragment>
+        <Fragment slot="wide">
+          <VideoEmbed src="https://www.youtube-nocookie.com/embed/xj-alDQD2fg" title="How collective care can change society | Janey Starling & Seyi Falodun-Liburd | TEDxLondon" />
+        </Fragment>
+      </Grid25>
+    </Section>
+
+    <!-- SIGN OUR PETITIONS -->
+    <Section bg="off-white">
+      <Grid25>
+        <Fragment slot="narrow">
+          <Headline as="h2">Sign our petitions</Headline>
+          <Collage index={5} />
+        </Fragment>
+        <Fragment slot="wide">
+          <div class="hp-petitions-featured">
+            {featuredRow.map((c) => (
+              <PetitionCard
+                variant="featured"
+                bg="electric-yellow"
+                text="navy"
+                buttonBg="loud-lilac"
+                buttonText="off-white"
+                secondaryHref={c.href}
+                imageSrc={c.imageSrc}
+                imageAlt={c.imageAlt}
+                title={c.name}
+                body={`${c.intro} ${signatureLine(c)}`}
+                href={c.petitionHref}
+              />
+            ))}
+          </div>
+          <Grid3 class="hp-petitions-secondary">
+            {secondaryRow.map((c) => (
+              <PetitionCard
+                variant="secondary"
+                bg="off-white"
+                text="navy"
+                buttonBg="loud-lilac"
+                buttonText="off-white"
+                secondaryHref={c.href}
+                imageSrc={c.imageSrc}
+                imageAlt={c.imageAlt}
+                title={c.name}
+                body={`${c.intro} ${signatureLine(c)}`}
+                href={c.petitionHref}
+              />
+            ))}
+          </Grid3>
+        </Fragment>
+      </Grid25>
+    </Section>
+
+    <!-- FROM THE BLOG -->
+    <Section bg="gentle-lilac">
+      <Label color="navy">Feminist thinking</Label>
+      <Headline as="h2">From the blog</Headline>
+      <div class="hp-blog-grid">
+        {featuredPost && (
+          <BlogCard
+            variant="featured-navy"
+            title={featuredPost.frontmatter.title}
+            excerpt={featuredPost.frontmatter.excerpt}
+            author={featuredPost.frontmatter.author}
+            date={featuredPost.frontmatter.date}
+            href={`/blog/${featuredPost.file.split('/').pop()?.replace(/\.md$/, '')}`}
+          />
+        )}
+        {secondaryPosts.map((post) => (
+          <BlogCard
+            variant="secondary-white"
+            title={post.frontmatter.title}
+            excerpt={post.frontmatter.excerpt}
+            author={post.frontmatter.author}
+            date={post.frontmatter.date}
+            href={`/blog/${post.file.split('/').pop()?.replace(/\.md$/, '')}`}
+          />
+        ))}
       </div>
-    </div>
-  </section>
+    </Section>
 
-  <!-- PETITIONS SECTION -->
-  <section class="home-petitions">
-    <div class="home-petitions-inner">
-      <h2 class="home-petitions-title">Sign Our Petitions</h2>
-      <div class="home-petitions-grid">
-        <article class="home-petition-card">
-          <div class="home-petition-img-wrap">
-            <img src="/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.20.png" alt="Abortion is Healthcare campaign — join Level Up to decriminalise abortion in Britain" loading="eager" />
-          </div>
-          <div class="home-petition-body" data-num="01">
-            <span class="home-petition-tag">Active Campaign</span>
-            <h3>Abortion is Healthcare</h3>
-            <p class="home-petition-desc">It's time the law treats it as such. Join the campaign.</p>
-            <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>6.1K supporters</span>
-            <div class="home-petition-actions">
-              <a href="https://levelup.yourmovement.org/p/abortion-is-healthcare" class="home-petition-sign" target="_blank" rel="noopener">Sign the petition →</a>
-              <a href="/active-campaigns/abortion-is-healthcare" class="home-petition-learn">Learn more →</a>
-            </div>
-          </div>
-        </article>
-        <article class="home-petition-card">
-          <div class="home-petition-img-wrap">
-            <img src="/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.40-e1771105055980.png" alt="Pregnancy in Prison campaign — Level Up petition to stop pregnant women being jailed" loading="eager" />
-          </div>
-          <div class="home-petition-body" data-num="02">
-            <span class="home-petition-tag">Active Campaign</span>
-            <h3>Stop sending pregnant women to prison</h3>
-            <p class="home-petition-desc">Prison will never be a safe place to be pregnant.</p>
-            <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>13.1K supporters</span>
-            <div class="home-petition-actions">
-              <a href="https://levelup.yourmovement.org/p/pregnancy-in-prison" class="home-petition-sign" target="_blank" rel="noopener">Sign the petition →</a>
-              <a href="/active-campaigns/pregnancy-in-prison" class="home-petition-learn">Learn more →</a>
-            </div>
-          </div>
-        </article>
-        <article class="home-petition-card">
-          <div class="home-petition-img-wrap">
-            <img src="/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.10-e1771105231897.png" alt="#NoMoreLyes campaign — Level Up petition against toxic hair relaxers harming Black women" loading="eager" />
-          </div>
-          <div class="home-petition-body" data-num="03">
-            <span class="home-petition-tag">Active Campaign</span>
-            <h3>#NoMoreLyes Take toxic hair relaxers off the shelves</h3>
-            <p class="home-petition-desc">Lye-based products cause serious harm. Stand up for Black women's health.</p>
-            <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>6.4K supporters</span>
-            <div class="home-petition-actions">
-              <a href="https://levelup.yourmovement.org/p/no-more-lyes" class="home-petition-sign" target="_blank" rel="noopener">Sign the petition →</a>
-              <a href="/active-campaigns/nomorelyes-2" class="home-petition-learn">Learn more →</a>
-            </div>
-          </div>
-        </article>
-        <article class="home-petition-card">
-          <div class="home-petition-img-wrap">
-            <img src="/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.28-e1771105118340.png" alt="Dignity for Dead Women campaign — Level Up media guidelines on reporting domestic abuse deaths" loading="eager" />
-          </div>
-          <div class="home-petition-body" data-num="04">
-            <span class="home-petition-tag">Active Campaign</span>
-            <h3>IPSO: Dignity for Dead Women</h3>
-            <p class="home-petition-desc">Women killed by partners deserve dignified coverage, not victim-blaming headlines.</p>
-            <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>29.2K supporters</span>
-            <div class="home-petition-actions">
-              <a href="https://levelup.movement-action.org/p/dignity-for-dead-women" class="home-petition-sign" target="_blank" rel="noopener">Sign the petition →</a>
-              <a href="/active-campaigns/media-guidelines-domestic-abuse" class="home-petition-learn">Learn more →</a>
-            </div>
-          </div>
-        </article>
-        <article class="home-petition-card">
-          <div class="home-petition-img-wrap">
-            <img src="/wp-content/uploads/2026/02/Captura-de-pantalla-2026-02-05-a-las-01.22.34.png" alt="Sexual Violence in Football campaign — Level Up petition to enforce zero tolerance policy" loading="eager" />
-          </div>
-          <div class="home-petition-body" data-num="05">
-            <span class="home-petition-tag">Active Campaign</span>
-            <h3>Premier League and FA</h3>
-            <p class="home-petition-desc">Hold football to account for sexual violence. No more silence from the top.</p>
-            <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>4.3K supporters</span>
-            <div class="home-petition-actions">
-              <a href="https://levelup.movement-action.org/p/sexual-violence-in-football" class="home-petition-sign" target="_blank" rel="noopener">Sign the petition →</a>
-              <a href="/active-campaigns/sexual-violence-in-football" class="home-petition-learn">Learn more →</a>
-            </div>
-          </div>
-        </article>
-        <article class="home-petition-card">
-          <div class="home-petition-img-wrap">
-            <img src="/wp-content/uploads/2026/02/screenshot_2026-03-13_at_11.37.42_720.png" alt="Islington Council must finish Holloway Women's Centre — Level Up petition" loading="eager" />
-          </div>
-          <div class="home-petition-body" data-num="06">
-            <span class="home-petition-tag">Active Campaign</span>
-            <h3>Islington Council: Fund Holloway Women's Centre</h3>
-            <p class="home-petition-desc">The centre is built but standing empty. Keep the promise made to women.</p>
-            <span class="home-petition-supporters"><svg width="14" height="14" viewBox="0 0 448 512" fill="currentColor"><path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/></svg>1,964 supporters</span>
-            <div class="home-petition-actions">
-              <a href="https://levelup.yourmovement.org/p/islington-council-finish-holloway-womens-centre" class="home-petition-sign" target="_blank" rel="noopener">Sign the petition →</a>
-              <a href="/active-campaigns/islington-council-finish-holloway-womens-centre" class="home-petition-learn">Learn more →</a>
-            </div>
-          </div>
-        </article>
+    <!-- JOIN THE COMMUNITY -->
+    <Section bg="navy">
+      <div class="hp-join">
+        <div class="hp-join-copy">
+          <Headline as="h2" color="off-white">Join the Level Up community</Headline>
+          <p style="color: var(--color-off-white);">Campaign updates, event invitations, and feminist thinking.</p>
+          <!-- Mockup deviation #1 continued: Gentle Lilac + navy is an allowed pairing, used here too -->
+          <Button bg="gentle-lilac" text="navy" href="https://levelup.yourmovement.org/p/join-us" label="Join us" />
+        </div>
+        <Collage index={6} class="hp-join-collage" />
       </div>
-    </div>
-  </section>
+    </Section>
 
-  <!-- BLOG SECTION -->
-  <section class="home-blog">
-    <div class="home-blog-inner">
-      <span class="home-blog-label">From the Blog</span>
-      <h2 class="home-blog-title">Feminist Thinking</h2>
-      <div class="home-blog-grid">
-        <a href="/blog/if-you-like-us-cite-us" class="home-blog-card home-blog-card--featured">
-          <span class="home-blog-tag">Solidarity &amp; Movement</span>
-          <h3>TLDR: If you like us, cite us</h3>
-          <span class="home-blog-read">Read article →</span>
-        </a>
-        <a href="/blog/its-time-to-reclaim-the-socialist-roots-of-international-womens-day" class="home-blog-card">
-          <span class="home-blog-tag">Solidarity &amp; Movement</span>
-          <h3>It's Time to Reclaim the Socialist Roots of International Women's Day</h3>
-          <span class="home-blog-read">Read →</span>
-        </a>
-        <a href="/blog/abortion-is-healthcare-why-decriminalisation-must-include-health-workers" class="home-blog-card">
-          <span class="home-blog-tag">Reproductive Rights</span>
-          <h3>Abortion Is Healthcare: Why Decriminalisation Must Include Health Workers</h3>
-          <span class="home-blog-read">Read →</span>
-        </a>
-        <a href="/blog/ending-prison-for-pregnant-women-a-non-reformist-reform" class="home-blog-card">
-          <span class="home-blog-tag">Criminalisation &amp; Justice</span>
-          <h3>Ending Prison for Pregnant Women: A Non-Reformist Reform</h3>
-          <span class="home-blog-read">Read →</span>
-        </a>
-        <a href="/blog/gender-critical-feminism-isnt-feminist" class="home-blog-card">
-          <span class="home-blog-tag">Trans-Inclusive Feminism</span>
-          <h3>"Gender-Critical" Feminism Isn't Feminist — It's Anti-Trans Politics</h3>
-          <span class="home-blog-read">Read →</span>
-        </a>
-        <a href="/blog/why-the-media-should-focus-on-diddys-violence-not-his-kinks" class="home-blog-card">
-          <span class="home-blog-tag">Media &amp; Violence</span>
-          <h3>Why the Media Should Focus on Diddy's Violence, Not His Kinks</h3>
-          <span class="home-blog-read">Read →</span>
-        </a>
-      </div>
-      <a href="/blog" class="home-blog-all">View all posts →</a>
-    </div>
-  </section>
-
-  <section class="home-cta">
-    <h2>Join the Level Up community</h2>
-    <p>Campaign updates, event invitations, and feminist thinking.</p>
-    <a href="https://levelup.yourmovement.org/p/join-us" class="home-cta-btn" target="_blank" rel="noopener">Join us</a>
-  </section>
-  <Footer />
+    <Footer bg="loud-lilac" />
+  </main>
 </Layout>
 
-<style is:global>
-  body { background-color: #0C0A3E; }
-  .home-hero { background: #0C0A3E; padding: 100px 24px 80px; font-family: 'DM Sans', sans-serif; }
-  .home-hero-inner { max-width: 900px; margin: 0 auto; }
-  .home-hero-eyebrow { font: 600 12px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; margin: 0 0 20px; }
-  .home-hero-title { font: 900 clamp(48px, 9vw, 110px)/0.88 'DM Sans', sans-serif; color: #CCFF33; letter-spacing: -0.04em; margin: 0 0 32px; }
-  .home-hero-sub { font: 400 clamp(16px, 1.8vw, 20px)/1.6 'DM Sans', sans-serif; color: rgba(238,235,211,0.75); max-width: 640px; margin: 0 0 40px; }
-  .home-hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-  .home-hero-btn-primary { background: #CCFF33; color: #0C0A3E; font: 700 15px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 16px 36px; text-decoration: none; transition: background 0.15s; }
-  .home-hero-btn-primary:hover { background: #fff; }
-  .home-hero-btn { color: #CCFF33; font: 700 15px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.08em; padding: 16px 0; text-decoration: none; border-bottom: 2px solid #CCFF33; transition: color 0.15s; }
-  .home-hero-btn:hover { color: #fff; border-color: #fff; }
-  body { overflow-x: hidden; }
-  .e-con, .e-con-boxed, .elementor-section { max-width: 100vw !important; overflow-x: hidden !important; }
-  /* ===== HERO BANNER - SINGLE COLUMN FIX ===== */
-
-  /* Contenedor principal del héroe */
-  .elementor-element-c89219b {
-    /* Altura correcta: 100vh - (nav 70px + ticker 37px) */
-    height: calc(100vh - 107px) !important;
-    min-height: calc(100vh - 107px) !important;
-
-    /* Layout de columna única */
-    display: flex !important;
-    flex-direction: column !important;
-
-    /* Espaciado interno */
-    padding: 80px 48px 48px !important;
-
-    /* Evitar desbordes */
-    overflow: hidden !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Contenedor interno flex (hereda la columna) */
-  .elementor-element-c89219b .e-con-inner {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    gap: 16px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Caja que agrupa intro + título + botón */
-  .elementor-element-9b1e9a1.home-caption {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    gap: 12px !important;
-    padding: 0 !important;
-  }
-
-  /* Texto de introducción */
-  .elementor-element-c89219b .elementor-element-5d634f6.home-subtitle p {
-    font-size: 15px !important;
-    line-height: 1.4 !important;
-    margin: 0 0 4px 0 !important;
-  }
-
-  /* Título #NO MORE LYES */
-  .elementor-element-c89219b .elementor-heading-title {
-    font-size: 48px !important;
-    font-weight: 700 !important;
-    line-height: 1.1 !important;
-    margin: 8px 0 16px 0 !important;
-    word-break: break-word !important;
-  }
-
-  /* Contenedor de los botones + descripción (antes era "columna derecha") */
-  .elementor-element-5198fdb {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    gap: 16px !important;
-    padding: 0 !important;
-  }
-
-  /* Estilo del botón principal (verde lima) */
-  .elementor-element-c89219b .elementor-button {
-    background: #CCFF33 !important;
-    color: #0C0A3E !important;
-    font-size: 15px !important;
-    padding: 12px 28px !important;
-    min-height: 44px !important;
-    border-radius: 6px !important;
-    font-weight: 700 !important;
-    display: inline-block !important;
-    border: none !important;
-    cursor: pointer !important;
-  }
-
-  /* Texto descriptivo (el que debe desaparecer en móvil) */
-  .elementor-element-c89219b .elementor-element-c703ee4 p {
-    font-size: 14px !important;
-    line-height: 1.35 !important;
-    margin: 0 !important;
-  }
-
-  /* ===== TABLET (768px - 1024px) ===== */
-  @media (max-width: 1024px) {
-    .elementor-element-c89219b {
-      height: calc(100vh - 70px) !important;
-      min-height: calc(100vh - 70px) !important;
-      padding: 24px 20px 20px !important;
-    }
-
-    .elementor-element-c89219b .e-con-inner {
-      gap: 8px !important;
-    }
-
-    .elementor-element-9b1e9a1.home-caption {
-      gap: 8px !important;
-    }
-
-    .elementor-element-c89219b .elementor-element-5d634f6.home-subtitle p {
-      font-size: clamp(13px, 2vw, 15px) !important;
-    }
-
-    .elementor-element-c89219b .elementor-heading-title {
-      font-size: clamp(28px, 6vw, 42px) !important;
-      margin: 4px 0 12px 0 !important;
-    }
-
-    .elementor-element-c89219b .elementor-element-c703ee4 p {
-      font-size: clamp(13px, 1.5vw, 14px) !important;
-    }
-  }
-
-  /* ===== MÓVIL (<768px) ===== */
-  @media (max-width: 767px) {
-    .elementor-element-c89219b {
-      height: calc(100vh - 70px) !important;
-      padding: 16px 16px 12px !important;
-    }
-
-    .elementor-element-c89219b .e-con-inner {
-      gap: 6px !important;
-    }
-
-    .elementor-element-9b1e9a1.home-caption {
-      gap: 6px !important;
-    }
-
-    .elementor-element-c89219b .elementor-element-5d634f6.home-subtitle p {
-      font-size: clamp(12px, 1.5vw, 13px) !important;
-      line-height: 1.3 !important;
-    }
-
-    .elementor-element-c89219b .elementor-heading-title {
-      font-size: clamp(20px, 4vw, 28px) !important;
-      margin: 2px 0 8px 0 !important;
-    }
-
-    /* ⭐ EL TEXTO DESCRIPTIVO DESAPARECE EN MÓVIL */
-    .elementor-element-c89219b .elementor-element-c703ee4 {
-      display: none !important;
-    }
-
-    /* Botón ligeramente más pequeño pero aún clickeable */
-    .elementor-element-c89219b .elementor-button {
-      font-size: 13px !important;
-      padding: 10px 20px !important;
-      min-height: 40px !important;
-    }
-  }
-
-
-  /* Hide the old ticker from Elementor clone */
-  .ic-bar {
-    display: none !important;
-  }
-
-  .home-h1-band {
-    background: #EEEBD3;
-    padding: 20px 24px;
-    text-align: center;
-  }
-  .home-h1-band h1 {
-    font: 700 15px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 0;
-  }
-
-  .home-cta {
-    background: #0C0A3E;
-    padding: 80px 24px 40px;
-    text-align: center;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .home-cta h2 {
-    font: 800 40px/0.9 'DM Sans', sans-serif;
-    color: #CCFF33 !important;
-    letter-spacing: -0.04em;
-    margin: 0 0 16px;
-  }
-  .home-cta p {
-    font: 400 17px/1.5 'DM Sans', sans-serif;
-    color: rgba(238, 235, 211, 0.6);
-    max-width: 440px;
-    margin: 0 auto 32px;
-  }
-  .home-cta-btn {
-    display: inline-block;
-    background: #CCFF33;
-    color: #0C0A3E;
-    font: 700 14px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 18px 40px;
-    text-decoration: none;
-  }
-  .home-cta-btn:hover { background: #fff; }
-  .home-cta-donate {
-    display: block;
-    margin-top: 16px;
-    font: 600 14px/1 'DM Sans', sans-serif;
-    color: #CCFF33 !important;
-    text-decoration: none;
-    letter-spacing: 0.04em;
-  }
-  .home-cta-donate:hover { color: #ffffff !important; }
-
-  /* Hide clone's Who We Are + Collective Care sections */
-  [data-id="ec6f030"],
-  [data-id="6555619"] {
-    display: none !important;
-  }
-
-  /* ── WHO WE ARE — Split layout ───────────────────────── */
-  .home-who { background: #EEEBD3; padding: 80px 24px; font-family: 'DM Sans', sans-serif; }
-  .home-who-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start; }
-  .home-who-left h2 { font: 800 clamp(56px, 10vw, 96px)/0.85 'DM Sans'; color: #0C0A3E; letter-spacing: -0.05em; margin: 0; }
-  .home-who-right p { font: 400 18px/1.7 'DM Sans'; color: rgba(12,10,62,0.8); margin: 0 0 20px; }
-  .home-who-right a { color: #A89CED; text-decoration: none; }
-  .home-who-right a:hover { color: #0C0A3E; text-decoration: underline; }
-
-  /* ── VIDEO — Cinematic full-width ────────────────────── */
-  .home-video { background: #0C0A3E; padding: 80px 24px 64px; font-family: 'DM Sans', sans-serif; }
-  .home-video-header { max-width: 800px; margin: 0 auto; text-align: center; padding-bottom: 48px; }
-  .home-video-tag { font: 600 11px/1 'DM Sans'; text-transform: uppercase; letter-spacing: 0.12em; color: #A89CED; display: block; margin-bottom: 20px; }
-  .home-video-header h2 { font: 800 clamp(36px, 7vw, 56px)/0.92 'DM Sans'; color: #CCFF33 !important; letter-spacing: -0.04em; margin: 0 0 20px; }
-  .home-video-header p { font: 400 18px/1.5 'DM Sans'; color: rgba(238,235,211,0.6); max-width: 550px; margin: 0 auto; }
-  .home-video-player { max-width: 900px; margin: 0 auto; }
-  .home-video-player iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
-
+<style>
+  .hp-hero { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: var(--space-8); }
+  .hp-hero-collage { justify-self: end; max-width: 360px; }
+  .hp-campaign-highlight { margin: var(--space-4) 0; }
+  .hp-campaign-body { max-width: 46ch; }
+  .hp-campaign-actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-top: var(--space-4); }
+  .hp-petitions-featured { margin-bottom: var(--space-4); }
+  .hp-blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--space-4); margin-top: var(--space-6); }
+  .hp-join { display: grid; grid-template-columns: 1.2fr 1fr; align-items: center; gap: var(--space-8); }
+  .hp-join-collage { justify-self: end; max-width: 320px; }
   @media (max-width: 768px) {
-    .home-who-inner { grid-template-columns: 1fr; gap: 24px; overflow: hidden; width: 100%; }
-    .home-who-left h2 { font-size: 56px; }
+    .hp-hero, .hp-join { grid-template-columns: 1fr; }
+    .hp-hero-collage, .hp-join-collage { justify-self: center; }
   }
-
-  /* ═══ Animated announcement bar (marquee) ═══ */
-  .ic-bar {
-    background: #CCFF33;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
-    z-index: 10;
-  }
-  .ic-bar-track {
-    display: inline-flex;
-    animation: marquee 20s linear infinite;
-  }
-  .ic-bar-item {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 48px;
-    font: 600 13px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    text-decoration: none;
-    white-space: nowrap;
-  }
-  .ic-bar:hover { background: #A89CED; }
-  .ic-bar:hover .ic-bar-item { color: #0C0A3E; }
-  .ic-bar:hover .ic-bar-track { animation-play-state: paused; }
-  .ic-bar-badge {
-    background: #0C0A3E;
-    color: #CCFF33 !important;
-    font: 700 10px/1 'DM Sans';
-    padding: 4px 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    flex-shrink: 0;
-  }
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-33.33%); }
-  }
-
-  /* ═══ PROPOSAL B: Featured banner ═══ */
-  .ic-banner {
-    background: #A89CED;
-    padding: 64px 24px;
-    font-family: 'DM Sans', sans-serif;
-    text-align: center;
-  }
-  .ic-banner-content {
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  .ic-banner-label {
-    font: 600 11px/1 'DM Sans';
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #0C0A3E;
-    opacity: 0.6;
-    display: block;
-    margin-bottom: 16px;
-  }
-  .ic-banner-content h2 {
-    font: 800 36px/0.95 'DM Sans';
-    color: #CCFF33 !important;
-    letter-spacing: -0.03em;
-    margin: 0 0 16px;
-  }
-  .ic-banner-content p {
-    font: 400 17px/1.5 'DM Sans';
-    color: rgba(12,10,62,0.7);
-    margin: 0;
-    max-width: 550px;
-    margin: 0 auto;
-  }
-  .ic-banner-actions {
-    margin-top: 24px;
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .ic-banner-btn-primary {
-    display: inline-block;
-    background: #CCFF33;
-    color: #0C0A3E;
-    font: 900 14px/1 'DM Sans';
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 16px 32px;
-    text-decoration: none;
-    transition: all 0.15s;
-  }
-  .ic-banner-btn-primary:hover { background: #fff; color: #0C0A3E; }
-  .ic-banner-btn {
-    font: 700 13px/1 'DM Sans';
-    color: #0C0A3E !important;
-    text-decoration: none !important;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .ic-banner-btn:hover { color: #CCFF33 !important; }
-
-  /* ═══ PROPOSAL C: Full hero ═══ */
-  .ic-hero-full {
-    background: #A89CED;
-    padding: 64px 24px;
-    text-align: center;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .ic-hero-full-inner { max-width: 700px; margin: 0 auto; }
-  .ic-hero-full-label {
-    font: 600 11px/1 'DM Sans';
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #0C0A3E;
-    display: block;
-    margin-bottom: 16px;
-  }
-  .ic-hero-full-title {
-    font: 800 clamp(32px, 7vw, 48px)/0.95 'DM Sans';
-    color: #0C0A3E;
-    letter-spacing: -0.03em;
-    margin: 0 0 16px;
-  }
-  .ic-hero-full p {
-    font: 400 17px/1.5 'DM Sans';
-    color: rgba(12,10,62,0.7);
-    margin: 0 0 24px;
-  }
-  .ic-hero-full-btn {
-    display: inline-block;
-    background: #0C0A3E;
-    color: #CCFF33 !important;
-    font: 700 14px/1 'DM Sans';
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 16px 36px;
-    text-decoration: none;
-  }
-  .ic-hero-full-btn:hover { background: #CCFF33; color: #0C0A3E; }
-
-  @media (max-width: 768px) {
-    .ic-banner { grid-template-columns: 1fr; }
-    .ic-banner-img { height: 200px; }
-  }
-
-  /* ═══ PETITION CARD ACTIONS ═══ */
-  .home-petition-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-  .home-petition-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: auto;
-    padding-top: 12px;
-    flex-wrap: wrap;
-  }
-  .home-petition-sign {
-    display: inline-flex !important;
-    align-items: center !important;
-    background: #0C0A3E !important;
-    color: #CCFF33 !important;
-    font: 800 11px/1 'DM Sans', sans-serif !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.08em !important;
-    padding: 16px 20px !important;
-    text-decoration: none !important;
-    position: relative !important;
-    z-index: 1 !important;
-    flex-shrink: 0 !important;
-    transition: background 0.15s;
-  }
-  .home-petition-sign:hover { background: #1a1760 !important; }
-  .home-petition-learn {
-    display: inline-flex !important;
-    align-items: center !important;
-    flex: 1 !important;
-    font: 600 11px/1 'DM Sans', sans-serif !important;
-    color: rgba(12,10,62,0.5) !important;
-    background: rgba(12,10,62,0.1) !important;
-    text-decoration: none !important;
-    padding: 16px 16px !important;
-    position: static !important;
-    z-index: 0 !important;
-    letter-spacing: 0.04em !important;
-    text-transform: uppercase !important;
-    transition: all 0.15s !important;
-  }
-  .home-petition-learn::after {
-    content: '';
-    position: absolute !important;
-    inset: 0 !important;
-    z-index: 0 !important;
-  }
-  .home-petition-learn:hover { background: rgba(12,10,62,0.18) !important; color: #0C0A3E !important; }
-
-  /* ── Petitions section ───────────────────────────────── */
-  .home-petitions {
-    background: #0C0A3E;
-    padding: 80px 24px;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .home-petitions-inner { max-width: 1100px; margin: 0 auto; }
-  .home-petitions-title {
-    font: 800 clamp(36px,6vw,56px)/0.9 'DM Sans', sans-serif !important;
-    color: #CCFF33 !important;
-    letter-spacing: -0.04em !important;
-    text-transform: uppercase !important;
-    margin: 0 0 40px !important;
-    text-align: center;
-  }
-  .home-petitions-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-
-  /* Proposal C style — lime bg, big number, image on top */
-  .home-petition-card {
-    background: #CCFF33 !important;
-    border: none !important;
-    text-decoration: none !important;
-    display: flex !important;
-    flex-direction: column !important;
-    padding: 0 !important;
-    position: relative !important;
-    overflow: hidden !important;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .home-petition-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); z-index: 1; }
-
-  /* Image on top with lime padding surround */
-  .home-petition-img-wrap {
-    margin: 16px 16px 0;
-    overflow: hidden;
-    flex-shrink: 0;
-    position: relative;
-  }
-  .home-petition-card img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s;
-  }
-  .home-petition-card:hover img { transform: scale(1.05); }
-
-  /* Body: lime area with big ghost number */
-  .home-petition-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 20px 20px 0;
-    position: relative;
-  }
-  .home-petition-body::before {
-    content: attr(data-num);
-    position: absolute;
-    top: 8px; right: 16px;
-    font: 900 64px/1 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.1);
-    letter-spacing: -0.05em;
-    pointer-events: none;
-    user-select: none;
-  }
-  .home-petition-tag {
-    font: 700 10px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(12,10,62,0.5);
-    display: block;
-    margin-bottom: 4px;
-  }
-  .home-petition-body h3 {
-    font: 800 18px/1.15 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    margin: 0;
-    letter-spacing: -0.02em;
-  }
-  .home-petition-desc {
-    font: 400 13px/1.5 'DM Sans', sans-serif;
-    color: rgba(12,10,62,0.65);
-    margin: 0;
-  }
-  .home-petition-supporters {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: rgba(12,10,62,0.5);
-    font: 700 10px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-top: auto;
-    padding: 12px 0 0;
-  }
-  .home-petition-supporters svg { flex-shrink: 0; opacity: 0.4; }
-
-  .home-petition-actions {
-    display: flex !important;
-    align-items: stretch !important;
-    flex-wrap: nowrap !important;
-    margin: 16px 0 16px !important;
-  }
-  @media (max-width: 900px) {
-    .home-petitions-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (max-width: 560px) {
-    .home-petitions-grid { grid-template-columns: 1fr; }
-  }
-
-  /* Hide empty "Next Event" section */
-  [data-id="65e0e558"],
-  [data-id="684b07bb"],
-  [data-id="484edde0"] {
-    display: none !important;
-  }
-  /* Hide duplicate "Join the Level Up Community" purple CTA section */
-  [data-id="585520af"] {
-    display: none !important;
-  }
-  /* Hide clone's broken blog section */
-  [data-id="0362161"] {
-    display: none !important;
-  }
-  /* Hide clone's broken petitions section */
-  [data-id="9f5db00"] {
-    display: none !important;
-  }
-
-  /* ── Blog section ────────────────────────────────────── */
-  .home-blog {
-    background: #EEEBD3;
-    padding: 80px 24px;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .home-blog-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .home-blog-label {
-    font: 600 12px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #A89CED;
-    display: block;
-    margin-bottom: 12px;
-  }
-  .home-blog-title {
-    font: 800 48px/0.9 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    letter-spacing: -0.04em;
-    margin: 0 0 40px;
-  }
-  .home-blog-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-  }
-  .home-blog-card {
-    background: rgba(255,255,255,0.5);
-    padding: 32px 28px;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    border: 1px solid rgba(12, 10, 62, 0.04);
-    transition: all 0.2s;
-    min-height: 180px;
-  }
-  .home-blog-card:hover {
-    border-color: #CCFF33 !important;
-    box-shadow: 0 4px 16px rgba(12,10,62,0.08);
-  }
-  .home-blog-card--featured {
-    grid-column: 1 / -1;
-    background: rgba(255,255,255,0.6);
-    border-color: rgba(12,10,62,0.06);
-    min-height: auto;
-    padding: 40px 32px;
-  }
-  .home-blog-card--featured h3 {
-    font-size: 28px !important;
-  }
-  .home-blog-tag {
-    font: 600 10px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: #A89CED;
-  }
-  .home-blog-card h3 {
-    font: 700 16px/1.2 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    margin: 0;
-    flex: 1;
-  }
-  .home-blog-read {
-    font: 600 13px/1 'DM Sans', sans-serif;
-    color: #0C0A3E;
-    margin-top: auto;
-  }
-  .home-blog-all {
-    display: inline-block;
-    margin-top: 32px;
-    font: 700 14px/1 'DM Sans', sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #0C0A3E;
-    text-decoration: none;
-  }
-  .home-blog-all:hover { color: #CCFF33 !important; }
-
-  @media (max-width: 768px) {
-    .home-blog-grid { grid-template-columns: 1fr; }
-    .home-blog-card--featured { grid-column: 1; }
-    .home-blog-title { font-size: 36px; }
-    .ic-bar { font-size: 11px; padding: 10px 16px; }
-    .ic-banner { grid-template-columns: 1fr; }
-    .ic-banner-img { height: 200px; }
-    .ic-banner-content { padding: 32px 24px; }
-    .ic-banner-content h2 { font-size: 24px; }
-    .home-petitions-title { font-size: 32px !important; }
-    .home-petitions-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-    .home-petition-card img { height: 140px; }
-    .home-petition-body h3 { font-size: 14px; }
-  }
-  @media (max-width: 480px) {
-    .home-petitions-grid { grid-template-columns: 1fr; }
-  }
-
-  /* Mobile: each section = full screen */
-  @media (max-width: 900px) {
-    .home-who { min-height: 100vh; display: flex; align-items: center; padding: 48px 20px; }
-    .home-who-inner { grid-template-columns: 1fr; gap: 24px; }
-    .home-who-left h2 { font-size: 56px; }
-    .home-video { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 48px 20px; }
-    .home-video-header { padding-bottom: 32px; }
-    .home-video-header h2 { font-size: 32px; }
-    .ic-banner { min-height: 80vh; display: flex; align-items: center; padding: 48px 20px; }
-    .home-petitions { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-    .home-blog { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
-    .home-blog-grid { grid-template-columns: 1fr; }
-    .home-blog-card--featured { grid-column: 1; }
-  }
-
 </style>
-
-<script>
-  // Force lazy-loaded images (WP Smush uses data-src)
-  document.querySelectorAll('img[data-src]').forEach((img) => {
-    const dataSrc = img.getAttribute('data-src');
-    if (dataSrc) img.setAttribute('src', dataSrc);
-  });
-
-  // Force lazy iframes (videos, embeds)
-  document.querySelectorAll('iframe[data-src]').forEach((iframe) => {
-    const dataSrc = iframe.getAttribute('data-src');
-    if (dataSrc) iframe.setAttribute('src', dataSrc);
-  });
-
-  // Force background images from data-bg
-  document.querySelectorAll('[data-bg]').forEach((el) => {
-    const bg = el.getAttribute('data-bg');
-    if (bg) (el as HTMLElement).style.backgroundImage = `url(${bg})`;
-  });
-
-  // Load srcset images
-  document.querySelectorAll('img[data-srcset]').forEach((img) => {
-    const srcset = img.getAttribute('data-srcset');
-    if (srcset) img.setAttribute('srcset', srcset);
-  });
-
-  // Load Elementor video widgets (youtube embeds stored in data-settings)
-  document.querySelectorAll('.elementor-widget-video').forEach((widget) => {
-    const settings = widget.querySelector('[data-settings]')?.getAttribute('data-settings');
-    if (!settings) return;
-    try {
-      const parsed = JSON.parse(settings);
-      const url = parsed.youtube_url;
-      if (!url) return;
-      const videoId = url.match(/(?:youtu\.be\/|v=)([^&?/]+)/)?.[1];
-      if (!videoId) return;
-      const container = widget.querySelector('.elementor-video') || widget.querySelector('.elementor-wrapper') || widget;
-      if (!container.querySelector('iframe')) {
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${videoId}?controls=1`;
-        iframe.style.cssText = 'width:100%;aspect-ratio:16/9;border:none;';
-        iframe.allow = 'accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture';
-        iframe.allowFullscreen = true;
-        container.appendChild(iframe);
-      }
-    } catch {}
-  });
-
-  // Hide "NEXT EVENT" section and empty events message
-  document.querySelectorAll('.elementor-heading-title').forEach((el) => {
-    if (el.textContent?.trim() === 'NEXT EVENT') {
-      // Hide the parent section
-      let parent = el.closest('.e-con.e-parent') || el.closest('.elementor-section');
-      if (parent) (parent as HTMLElement).style.display = 'none';
-    }
-  });
-  // Also hide the events empty message
-  document.querySelectorAll('.ue-no-posts-found').forEach((el) => {
-    let parent = el.closest('.e-con.e-parent') || el.closest('.elementor-section');
-    if (parent) (parent as HTMLElement).style.display = 'none';
-  });
-
-  // Hide duplicate "JOIN THE LEVEL UP COMMUNITY" from clone
-  let joinCount = 0;
-  document.querySelectorAll('.elementor-heading-title').forEach((el) => {
-    if (el.textContent?.trim() === 'JOIN THE LEVEL UP COMMUNITY') {
-      joinCount++;
-      if (joinCount === 1) {
-        let parent = el.closest('.e-con.e-parent') || el.closest('.elementor-section');
-        if (parent) (parent as HTMLElement).style.display = 'none';
-      }
-    }
-  });
-
-  // Remove all WP Elementor homepage sections except the hero and campaign carousel
-  document.querySelectorAll('.elementor-1818 > .elementor-element').forEach(el => {
-    const keep = ['elementor-element-c89219b', 'elementor-element-0362161'];
-    if (!keep.some(cls => el.classList.contains(cls))) el.remove();
-  });
-
-  // On mobile: move announcement bar below the hero section
-  if (window.innerWidth <= 900) {
-    const icBar = document.querySelector('.ic-bar');
-    const mobileHero = document.querySelector('[data-id="bc8074a"]');
-    const fallbackHero = document.querySelector('.e-con.e-parent');
-    const target = mobileHero || fallbackHero;
-    if (icBar && target) target.after(icBar);
-  }
-
-</script>

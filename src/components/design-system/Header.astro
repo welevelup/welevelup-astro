@@ -201,6 +201,7 @@ interface Props {
   .ds-header-bar {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-1);
     flex: 1;
   }
@@ -279,13 +280,12 @@ interface Props {
   .ds-header-drop > a {
     display: block;
     padding: var(--space-3) var(--space-5);
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 0.8rem;
+    font-family: var(--font-headline);
+    font-weight: 400;
+    font-size: 0.95rem;
     color: var(--color-loud-lilac);
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0;
   }
   .ds-header-drop > a:hover { color: var(--color-navy); background: rgba(12,10,62,0.04); }
 
@@ -299,11 +299,10 @@ interface Props {
   .ds-header-mega--center { left: 50%; transform: translateX(-50%); min-width: 560px; }
 
   .ds-header-mega-title {
-    font-family: var(--font-body);
-    font-weight: 700;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    font-family: var(--font-headline);
+    font-weight: 400;
+    font-size: 1.05rem;
+    letter-spacing: 0;
     color: var(--color-navy) !important;
     display: block !important;
     margin-bottom: var(--space-3) !important;
@@ -315,7 +314,7 @@ interface Props {
     padding: var(--space-1) 0;
     font-family: var(--font-body);
     font-weight: 700;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--color-loud-lilac);
     text-decoration: none;
     text-transform: uppercase;

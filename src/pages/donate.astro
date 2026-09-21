@@ -139,6 +139,8 @@ const { headInner, bodyClass } = extract(homeRaw);
     background: #0C0A3E;
     padding: 80px 24px 64px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
   .lu-donate__hero-inner {
     max-width: 700px;
@@ -153,7 +155,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin-bottom: 24px;
   }
   .lu-donate__hero-title {
-    font: 800 clamp(36px, 7vw, 56px)/0.95 'DM Sans', sans-serif;
+    font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; font-size: clamp(36px, 7vw, 56px); line-height: 0.95;
     color: #CCFF33 !important;
     letter-spacing: -0.04em;
     margin: 0 0 24px;
@@ -169,6 +171,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   .lu-donate__impact {
     background: #EEEBD3;
     padding: 64px 24px;
+    position: relative;
+    overflow: hidden;
   }
   .lu-donate__impact-inner {
     max-width: 900px;
@@ -192,7 +196,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   }
   .lu-donate__impact-icon {
     display: block;
-    font: 800 13px/1 'DM Sans', sans-serif;
+    font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; font-size: 13px; line-height: 1;
     color: #A89CED;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -211,13 +215,30 @@ const { headInner, bodyClass } = extract(homeRaw);
   .lu-donate__form-section {
     background: #F5F3E8;
     padding: 64px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .lu-donate__form-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/textures/texture-off-white.webp');
+    background-repeat: repeat;
+    background-size: 900px auto;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .lu-donate__form-section > * {
+    position: relative;
+    z-index: 1;
   }
   .lu-donate__form-wrap {
     max-width: 520px;
     margin: 0 auto;
   }
   .lu-donate__form-title {
-    font: 800 28px/1.1 'DM Sans', sans-serif;
+    font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; font-size: 28px; line-height: 1.1;
     color: #0C0A3E;
     margin: 0 0 32px;
     letter-spacing: -0.02em;
@@ -402,6 +423,12 @@ const { headInner, bodyClass } = extract(homeRaw);
   }
   .lu-donate__legal a { color: rgba(12, 10, 62, 0.7); }
 
+
+  /* Texture overlays — CLAUDE.md: "Apply the bitmap texture over every block of colour." */
+  .lu-donate__hero::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .lu-donate__hero > * { position: relative; z-index: 1; }
+  .lu-donate__impact::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .lu-donate__impact > * { position: relative; z-index: 1; }
 </style>
 
 <script>

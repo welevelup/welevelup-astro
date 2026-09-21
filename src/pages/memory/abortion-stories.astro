@@ -446,7 +446,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     .as-hero-title {
-      font: 800 clamp(72px, 14vw, 128px)/0.85 'DM Sans', sans-serif !important;
+      font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(72px, 14vw, 128px) !important; line-height: 0.85 !important;
       color: #0C0A3E !important;
       letter-spacing: -0.05em !important;
       margin: 0 0 32px;
@@ -474,9 +474,18 @@ const { headInner, bodyClass } = extract(homeRaw);
     .as-section {
       padding: 80px 24px;
     }
-    .as-section--cream { background: #EEEBD3; }
-    .as-section--white { background: #ffffff; }
-    .as-section--navy  { background: #0C0A3E; }
+    .as-section--cream { background: #EEEBD3;
+    position: relative;
+    overflow: hidden;
+  }
+    .as-section--white { background: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+    .as-section--navy { background: #0C0A3E;
+    position: relative;
+    overflow: hidden;
+  }
 
     .as-content {
       max-width: 840px;
@@ -488,7 +497,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     .as-section-heading {
-      font: 800 clamp(36px, 6vw, 56px)/0.9 'DM Sans', sans-serif !important;
+      font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(36px, 6vw, 56px) !important; line-height: 0.9 !important;
       color: #0C0A3E !important;
       letter-spacing: -0.04em !important;
       margin: 0 0 56px;
@@ -551,7 +560,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     .as-story-number {
-      font: 800 11px/1 'DM Sans', sans-serif;
+      font-family: var(--font-headline); font-weight: 400; font-size: 11px; line-height: 1;
       letter-spacing: 0.1em;
       opacity: 0.25;
       color: currentColor;
@@ -653,7 +662,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     /* Drop cap on card 03 */
     .as-story-quote--dropcap::first-letter {
       float: left;
-      font: 800 88px/0.7 'DM Sans', sans-serif;
+      font-family: var(--font-headline); font-weight: 400; font-size: 88px; line-height: 0.7;
       margin: 4px 12px 0 0;
       color: #0C0A3E;
       opacity: 0.18;
@@ -770,7 +779,9 @@ const { headInner, bodyClass } = extract(homeRaw);
     .as-solidarity {
       background: #CCFF33;
       padding: 56px 24px;
-    }
+    position: relative;
+    overflow: hidden;
+  }
     .as-solidarity-inner {
       max-width: 840px;
       margin: 0 auto;
@@ -809,7 +820,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     .as-share-heading {
-      font: 800 clamp(48px, 8vw, 72px)/0.85 'DM Sans', sans-serif !important;
+      font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(48px, 8vw, 72px) !important; line-height: 0.85 !important;
       color: #0C0A3E !important;
       letter-spacing: -0.05em !important;
       margin: 0 0 16px;
@@ -1039,9 +1050,11 @@ const { headInner, bodyClass } = extract(homeRaw);
     .as-cta {
       background: #0C0A3E;
       padding: 80px 24px;
-    }
+    position: relative;
+    overflow: hidden;
+  }
     .as-cta-heading {
-      font: 800 clamp(32px, 5vw, 44px)/0.9 'DM Sans', sans-serif !important;
+      font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(32px, 5vw, 44px) !important; line-height: 0.9 !important;
       color: #CCFF33 !important;
       letter-spacing: -0.04em !important;
       margin: 0 0 16px;
@@ -1161,5 +1174,19 @@ const { headInner, bodyClass } = extract(homeRaw);
         grid-template-columns: 1fr;
       }
     }
-  </style>
+  
+  /* Texture overlays — CLAUDE.md: "Apply the bitmap texture over every block of colour." */
+  .as-hero::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-hero > * { position: relative; z-index: 1; }
+  .as-section--cream::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-section--cream > * { position: relative; z-index: 1; }
+  .as-section--navy::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-section--navy > * { position: relative; z-index: 1; }
+  .as-section--white::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-section--white > * { position: relative; z-index: 1; }
+  .as-cta::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-cta > * { position: relative; z-index: 1; }
+  .as-solidarity::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-gentle-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-solidarity > * { position: relative; z-index: 1; }
+</style>
 </Layout>

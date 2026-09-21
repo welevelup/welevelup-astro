@@ -302,7 +302,7 @@ const { headInner, bodyClass } = extract(homeRaw);
   <!-- ── CTA ─────────────────────────────────────────────────── -->
   <section class="std-cta">
     <div class="std-cta-inner" style="text-align:center">
-      <h2 style="font:800 40px/0.9 'DM Sans',sans-serif;color: #CCFF33 !important;letter-spacing:-0.04em;margin:0 0 16px;">Join the Level Up community</h2>
+      <h2 style="font-family: var(--font-headline); font-weight: 400; font-size: 40px; line-height: 0.9;color: #CCFF33 !important;letter-spacing:-0.04em;margin:0 0 16px;">Join the Level Up community</h2>
       <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px;font:400 17px/1.5 'DM Sans',sans-serif;">Campaign updates, event invitations, and feminist thinking.</p>
       <a href="https://levelup.yourmovement.org/p/join-us" class="sl-btn-primary" target="_blank" rel="noopener">Join us</a>
     </div>
@@ -369,7 +369,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     .sl-label--muted { color: rgba(238,235,211,0.4); }
 
     .sl-title {
-      font: 800 clamp(52px,11vw,100px)/0.85 'DM Sans', sans-serif !important;
+      font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(52px,11vw,100px) !important; line-height: 0.85 !important;
       color: #CCFF33 !important;
       letter-spacing: -0.045em !important;
       margin: 0 0 32px !important;
@@ -391,7 +391,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       padding: 20px 32px;
     }
     .sl-count-num {
-      font: 800 48px/1 'DM Sans', sans-serif;
+      font-family: var(--font-headline); font-weight: 400; font-size: 48px; line-height: 1;
       color: #CCFF33 !important;
       letter-spacing: -0.04em;
     }
@@ -426,7 +426,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       min-width: 160px;
     }
     .sl-strip-num {
-      font: 800 36px/1 'DM Sans', sans-serif;
+      font-family: var(--font-headline); font-weight: 400; font-size: 36px; line-height: 1;
       color: #0C0A3E;
       letter-spacing: -0.04em;
       display: block;
@@ -448,9 +448,18 @@ const { headInner, bodyClass } = extract(homeRaw);
 
     /* ── SHARED SECTION / CONTENT ───────────────────────────── */
     .sl-section { padding: 80px 24px; }
-    .sl-section--cream  { background: #EEEBD3; }
-    .sl-section--white  { background: #ffffff; }
-    .sl-section--navy   { background: #0C0A3E; }
+    .sl-section--cream { background: #EEEBD3;
+    position: relative;
+    overflow: hidden;
+  }
+    .sl-section--white { background: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+    .sl-section--navy { background: #0C0A3E;
+    position: relative;
+    overflow: hidden;
+  }
 
     .sl-content {
       max-width: 900px;
@@ -458,7 +467,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     .sl-content h2 {
-      font: 800 clamp(32px,5vw,48px)/0.9 'DM Sans', sans-serif !important;
+      font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(32px,5vw,48px) !important; line-height: 0.9 !important;
       color: #0C0A3E !important;
       letter-spacing: -0.04em !important;
       margin: 8px 0 24px !important;
@@ -558,7 +567,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       text-align: center;
     }
     .sl-action-num {
-      font: 800 clamp(40px,6vw,64px)/1 'DM Sans', sans-serif;
+      font-family: var(--font-headline); font-weight: 400; font-size: clamp(40px,6vw,64px); line-height: 1;
       color: #CCFF33 !important;
       letter-spacing: -0.045em;
       display: block;
@@ -594,7 +603,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       color: rgba(12,10,62,0.35);
     }
     .sl-action-body h3 {
-      font: 800 clamp(22px,3vw,30px)/1 'DM Sans', sans-serif !important;
+      font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(22px,3vw,30px) !important; line-height: 1 !important;
       color: #0C0A3E !important;
       letter-spacing: -0.03em !important;
       margin: 0 0 14px !important;
@@ -680,7 +689,7 @@ const { headInner, bodyClass } = extract(homeRaw);
       padding-top: 24px;
     }
     .sl-why-num {
-      font: 800 32px/1 'DM Sans', sans-serif;
+      font-family: var(--font-headline); font-weight: 400; font-size: 32px; line-height: 1;
       color: #A89CED;
       letter-spacing: -0.04em;
       display: block;
@@ -699,7 +708,10 @@ const { headInner, bodyClass } = extract(homeRaw);
     }
 
     /* ── CTA ────────────────────────────────────────────────── */
-    .std-cta { background: #0C0A3E; padding: 80px 24px; }
+    .std-cta { background: #0C0A3E; padding: 80px 24px;
+    position: relative;
+    overflow: hidden;
+  }
     .std-cta-inner { max-width: 900px; margin: 0 auto; padding: 0 24px; }
     .sl-cta {
       background: #0C0A3E;
@@ -840,5 +852,17 @@ const { headInner, bodyClass } = extract(homeRaw);
         flex-direction: column;
       }
     }
-  </style>
+  
+  /* Texture overlays — CLAUDE.md: "Apply the bitmap texture over every block of colour." */
+  .sl-hero::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .sl-hero > * { position: relative; z-index: 1; }
+  .sl-section--cream::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .sl-section--cream > * { position: relative; z-index: 1; }
+  .sl-section--navy::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .sl-section--navy > * { position: relative; z-index: 1; }
+  .sl-section--white::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .sl-section--white > * { position: relative; z-index: 1; }
+  .std-cta::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .std-cta > * { position: relative; z-index: 1; }
+</style>
 </Layout>

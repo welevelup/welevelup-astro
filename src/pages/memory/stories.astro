@@ -170,7 +170,7 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
   <!-- JOIN CTA -->
   <section style="background:#0C0A3E;padding:80px 24px;text-align:center;">
     <div style="max-width:900px;margin:0 auto;padding:0 24px;">
-      <h2 style="font:800 40px/0.9 'DM Sans',sans-serif;color: #CCFF33 !important;letter-spacing:-0.04em;margin:0 0 16px;">Join the Level Up community</h2>
+      <h2 style="font-family: var(--font-headline); font-weight: 400; font-size: 40px; line-height: 0.9;color: #CCFF33 !important;letter-spacing:-0.04em;margin:0 0 16px;">Join the Level Up community</h2>
       <p style="color:rgba(238,235,211,0.65);max-width:480px;margin:16px auto 32px;font:400 17px/1.5 'DM Sans',sans-serif;">Campaign updates, event invitations, and feminist thinking.</p>
       <a href="https://levelup.yourmovement.org/p/join-us" style="display:inline-block;background:#CCFF33;color:#0C0A3E;font:700 14px/1 'DM Sans',sans-serif;text-transform:uppercase;letter-spacing:0.08em;padding:18px 36px;text-decoration:none;" target="_blank" rel="noopener">Join us</a>
     </div>
@@ -221,6 +221,8 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     padding: 72px 24px 0;
     font-family: 'DM Sans', sans-serif;
     overflow: hidden;
+    position: relative;
+    overflow: hidden;
   }
   .st-hero-inner {
     max-width: 1200px;
@@ -243,7 +245,8 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
   .st-hero-line2,
   .st-hero-line3 {
     display: block;
-    font-weight: 800;
+    font-family: var(--font-headline);
+    font-weight: 400;
     letter-spacing: -0.045em;
     color: #EEEBD3;
   }
@@ -266,7 +269,7 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     padding: 12px 20px;
   }
   .st-hero-count-num {
-    font: 800 28px/1 'DM Sans';
+    font-family: var(--font-headline); font-weight: 400; font-size: 28px; line-height: 1;
     color: #CCFF33 !important;
     letter-spacing: -0.03em;
   }
@@ -391,7 +394,7 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     background: #CCFF33;
   }
   .st-featured-title {
-    font: 800 clamp(22px,3vw,32px)/1.15 'DM Sans';
+    font-family: var(--font-headline); font-weight: 400; font-size: clamp(22px,3vw,32px); line-height: 1.15;
     color: #0C0A3E;
     letter-spacing: -0.03em;
     margin: 0 0 24px;
@@ -425,6 +428,8 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     background: #EEEBD3;
     padding: 0 24px 80px;
     font-family: 'DM Sans', sans-serif;
+    position: relative;
+    overflow: hidden;
   }
   .st-grid-inner { max-width: 1200px; margin: 0 auto; }
   .st-grid-header {
@@ -435,7 +440,7 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     border-top: 1px solid rgba(12,10,62,0.12);
   }
   .st-grid-title {
-    font: 800 18px/1 'DM Sans';
+    font-family: var(--font-headline); font-weight: 400; font-size: 18px; line-height: 1;
     color: #0C0A3E;
     letter-spacing: -0.03em;
     margin: 0;
@@ -569,12 +574,12 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     align-items: center;
   }
   .st-feature-label {
-    font: 800 clamp(28px,4vw,40px)/0.9 'DM Sans', sans-serif;
+    font-family: var(--font-headline); font-weight: 400; font-size: clamp(28px,4vw,40px); line-height: 0.9;
     color: #CCFF33 !important;
     letter-spacing: -0.03em;
   }
   .st-feature-title {
-    font: 800 clamp(28px,4vw,40px)/0.9 'DM Sans', sans-serif !important;
+    font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(28px,4vw,40px) !important; line-height: 0.9 !important;
     color: #EEEBD3 !important;
     letter-spacing: -0.04em !important;
     margin: 0 0 16px !important;
@@ -622,7 +627,7 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     margin-bottom: 20px;
   }
   .st-share-title {
-    font: 800 clamp(52px, 8vw, 96px)/0.88 'DM Sans';
+    font-family: var(--font-headline); font-weight: 400; font-size: clamp(52px, 8vw, 96px); line-height: 0.88;
     color: #CCFF33 !important;
     letter-spacing: -0.045em;
     margin: 0;
@@ -792,4 +797,12 @@ const categories = ['All', 'Workplace', 'Relationships', 'Public Spaces', 'Justi
     .st-share { padding: 60px 20px; }
     .st-share-inner { gap: 40px; }
   }
+
+  /* Texture overlays — CLAUDE.md: "Apply the bitmap texture over every block of colour." */
+  .st-hero::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .st-hero > * { position: relative; z-index: 1; }
+  .st-filters::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .st-filters > * { position: relative; z-index: 1; }
+  .st-grid-section::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .st-grid-section > * { position: relative; z-index: 1; }
 </style>

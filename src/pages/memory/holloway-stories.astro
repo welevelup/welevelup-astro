@@ -282,6 +282,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   .hws-hero {
     background: #0C0A3E;
     padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
   }
   .hws-hero-inner { max-width: 800px; margin: 0 auto; }
   .hws-back {
@@ -303,7 +305,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin-bottom: 20px;
   }
   .hws-title {
-    font: 800 clamp(48px,10vw,80px)/0.9 'DM Sans', sans-serif !important;
+    font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(48px,10vw,80px) !important; line-height: 0.9 !important;
     color: #CCFF33 !important;
     letter-spacing: -0.045em !important;
     margin: 0 0 28px !important;
@@ -316,6 +318,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   .hws-intro {
     background: #EEEBD3;
     padding: 64px 24px;
+    position: relative;
+    overflow: hidden;
   }
   .hws-content { max-width: 800px; margin: 0 auto; }
   .hws-intro p {
@@ -328,6 +332,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   .hws-stories {
     background: #EEEBD3;
     padding: 80px 24px;
+    position: relative;
+    overflow: hidden;
   }
   .hws-grid {
     max-width: 1100px;
@@ -410,10 +416,12 @@ const { headInner, bodyClass } = extract(homeRaw);
     background: #0C0A3E;
     padding: 80px 24px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
   .hws-cta-inner { max-width: 560px; margin: 0 auto; }
   .hws-cta h2 {
-    font: 800 clamp(32px,6vw,52px)/1 'DM Sans', sans-serif !important;
+    font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(32px,6vw,52px) !important; line-height: 1 !important;
     color: #CCFF33 !important;
     letter-spacing: -0.04em !important;
     margin: 0 0 20px !important;
@@ -471,4 +479,14 @@ const { headInner, bodyClass } = extract(homeRaw);
     .hws-story { padding: 28px 20px 24px; }
     .hws-back-inner { flex-direction: column; align-items: flex-start; }
   }
+
+  /* Texture overlays — CLAUDE.md: "Apply the bitmap texture over every block of colour." */
+  .hws-hero::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .hws-hero > * { position: relative; z-index: 1; }
+  .hws-intro::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .hws-intro > * { position: relative; z-index: 1; }
+  .hws-stories::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .hws-stories > * { position: relative; z-index: 1; }
+  .hws-cta::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .hws-cta > * { position: relative; z-index: 1; }
 </style>

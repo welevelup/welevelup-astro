@@ -141,6 +141,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   .hs-hero {
     background: #0C0A3E;
     padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
   }
   .hs-hero-inner { max-width: 800px; margin: 0 auto; }
   .hs-back {
@@ -162,7 +164,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin-bottom: 20px;
   }
   .hs-title {
-    font: 800 clamp(48px,10vw,80px)/0.9 'DM Sans', sans-serif !important;
+    font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(48px,10vw,80px) !important; line-height: 0.9 !important;
     color: #CCFF33 !important;
     letter-spacing: -0.045em !important;
     margin: 0 0 28px !important;
@@ -175,6 +177,8 @@ const { headInner, bodyClass } = extract(homeRaw);
   .hs-intro {
     background: #EEEBD3;
     padding: 64px 24px;
+    position: relative;
+    overflow: hidden;
   }
   .hs-content { max-width: 800px; margin: 0 auto; }
   .hs-intro p {
@@ -195,7 +199,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     padding: 16px 36px;
     transition: background 0.15s;
   }
-  .hs-share-btn:hover { background: #0C0A3E !important; color: #CCFF33 !important; }\n  .hs-share-btn {\n    display: inline-block;\n    margin-top: 28px;\n    background: #CCFF33 !important;\n    color: #0C0A3E !important;\n    font: 700 13px/1 'DM Sans', sans-serif;\n    text-transform: uppercase;\n    letter-spacing: 0.1em;\n    text-decoration: none;\n    padding: 16px 36px;\n    transition: background 0.15s;\n  }\n  .hs-share-btn:hover { background: #0C0A3E !important; color: #CCFF33 !important; }
+  .hs-share-btn:hover { background: #0C0A3E !important; color: #CCFF33 !important; }
   .hs-stories {
     background: #fff;
     padding: 80px 24px;
@@ -218,7 +222,7 @@ const { headInner, bodyClass } = extract(homeRaw);
     margin-bottom: 24px;
   }
   .hs-quote-mark {
-    font: 800 72px/0.6 'DM Sans', sans-serif;
+    font-family: var(--font-headline); font-weight: 400; font-size: 72px; line-height: 0.6;
     color: #CCFF33 !important;
     flex-shrink: 0;
   }
@@ -255,10 +259,12 @@ const { headInner, bodyClass } = extract(homeRaw);
     background: #0C0A3E;
     padding: 80px 24px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
   }
   .hs-cta-inner { max-width: 560px; margin: 0 auto; }
   .hs-cta h2 {
-    font: 800 clamp(32px,6vw,52px)/1 'DM Sans', sans-serif !important;
+    font-family: var(--font-headline) !important; font-weight: 400 !important; font-size: clamp(32px,6vw,52px) !important; line-height: 1 !important;
     color: #CCFF33 !important;
     letter-spacing: -0.04em !important;
     margin: 0 0 20px !important;
@@ -316,4 +322,12 @@ const { headInner, bodyClass } = extract(homeRaw);
     .hs-story { padding: 28px 20px 24px; }
     .hs-back-inner { flex-direction: column; align-items: flex-start; }
   }
+
+  /* Texture overlays — CLAUDE.md: "Apply the bitmap texture over every block of colour." */
+  .hs-hero::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .hs-hero > * { position: relative; z-index: 1; }
+  .hs-intro::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .hs-intro > * { position: relative; z-index: 1; }
+  .hs-cta::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .hs-cta > * { position: relative; z-index: 1; }
 </style>

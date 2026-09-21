@@ -1,0 +1,1192 @@
+---
+/**
+ * Abortion Stories — Memory subsection
+ * Safe, warm, feminist editorial space for anonymous stories.
+ * Aesthetic: warm literary journal — cream ground, typographic pull-quote cards,
+ * each story card a distinct visual treatment, not a uniform grid.
+ */
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/design-system/Header.astro';
+import Footer from '../../components/design-system/Footer.astro';
+import { extract } from '../../lib/extractHtml';
+import homeRaw from '../../_clone/index.html?raw';
+const { headInner, bodyClass } = extract(homeRaw);
+---
+<Layout
+  headHtml={headInner}
+  bodyClass={bodyClass}
+  title="Abortion Stories | Memory Space | Level Up"
+  description="Real abortion experiences told anonymously. These stories push back against shame and silence — because abortion is healthcare and your story belongs to you."
+>
+  <Header />
+
+  <!-- ── HERO ─────────────────────────────────────────── -->
+  <section class="as-hero">
+    <div class="as-hero-bg-shape" aria-hidden="true"></div>
+    <div class="as-hero-inner">
+      <a href="/memory" class="as-back-link">
+        <span class="as-back-arrow" aria-hidden="true">←</span>
+        Back to Memory
+      </a>
+      <div class="as-hero-label">
+        <span class="as-dot" aria-hidden="true"></span>
+        Anonymous stories
+      </div>
+      <h1 class="as-hero-title">
+        Abortion<br/>
+        <em>Stories</em>
+      </h1>
+      <p class="as-hero-intro">
+        A space for people to read and share experiences of abortion, each anonymous and held with care.
+      </p>
+    </div>
+    <div class="as-hero-accent-bar" aria-hidden="true"></div>
+  </section>
+
+  <!-- ── FRAMING ───────────────────────────────────────── -->
+  <section class="as-section as-section--cream">
+    <div class="as-content as-content--wide">
+      <div class="as-framing">
+        <div class="as-framing-pull">
+          <blockquote class="as-pull-statement">
+            "Abortion is healthcare and one in three women will have one in their lifetime."
+          </blockquote>
+          <cite class="as-pull-cite">Level Up</cite>
+        </div>
+        <div class="as-framing-body">
+          <p>Everyone who has accessed an abortion has a different experience, and a deeply personal story that is theirs to tell.</p>
+          <p>This is a chance for you to share your abortion story anonymously and read stories shared by other people. Sharing our own experiences is one of the ways that we can normalise abortion and build a society that shows compassion towards people who need them.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STORIES ───────────────────────────────────────── -->
+  <section class="as-section as-section--white" aria-labelledby="stories-heading">
+    <div class="as-content as-content--wide">
+      <h2 id="stories-heading" class="as-section-heading">
+        Their words
+      </h2>
+
+      <div class="as-stories-grid">
+
+        <!-- Card 01 — cream -->
+        <div class="as-story as-story--one">
+          <p class="as-story-number" aria-hidden="true">01</p>
+          <p class="as-story-quote">
+            "I got pregnant at 22 — the first time with my future husband. My doctor warned me I'd feel awful afterwards. Instead I felt completely free. I've never regretted it for a second."
+          </p>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Age 22</span>
+          </div>
+        </div>
+
+        <!-- Card 02 — navy, tall -->
+        <div class="as-story as-story--two">
+          <p class="as-story-number" aria-hidden="true">02</p>
+          <p class="as-story-overline">Abusive relationship</p>
+          <p class="as-story-quote">
+            "I was 25, in a relationship with a much older man who pressured me to keep the pregnancy. There were religious protesters outside the clinic. He read their pamphlets to me to increase the pressure. I went through weeks of fever and pain recovering alone. I have absolutely no regrets."
+          </p>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Age 25</span>
+          </div>
+        </div>
+
+        <!-- Card 03 — purple, drop cap -->
+        <div class="as-story as-story--three">
+          <p class="as-story-number" aria-hidden="true">03</p>
+          <p class="as-story-quote as-story-quote--dropcap">
+            "I already had three children. Financially and emotionally we had nothing left to give. It was the toughest decision of my life. But I made it for the children I already had. No woman takes abortion lightly. I have no regrets."
+          </p>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Mother of three</span>
+          </div>
+        </div>
+
+        <!-- Card 04 — white, full width, italic -->
+        <div class="as-story as-story--four">
+          <p class="as-story-number" aria-hidden="true">"</p>
+          <div class="as-story-body">
+            <p class="as-story-quote">
+              I was six months into my second pregnancy when my doctor told me plainly: if you continue, you will likely die, and so will the baby. It was less than a year after my caesarean. I never told anyone except my partner. The secrecy was its own weight. I still feel angry that I had to carry it in silence.
+            </p>
+          </div>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Medical necessity</span>
+          </div>
+        </div>
+
+        <!-- Card 05 — cream -->
+        <div class="as-story as-story--one">
+          <p class="as-story-number" aria-hidden="true">05</p>
+          <p class="as-story-quote">
+            "I was 43 with an irregular cycle. I didn't expect to be fertile. I am so grateful I had access. I simply did not have the mental or physical capacity to have a child. That is a complete and sufficient reason."
+          </p>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Age 43</span>
+          </div>
+        </div>
+
+        <!-- Card 06 — navy, tall -->
+        <div class="as-story as-story--two">
+          <p class="as-story-number" aria-hidden="true">06</p>
+          <p class="as-story-overline">Dismissed by healthcare</p>
+          <p class="as-story-quote">
+            "One set of pills failed. I collapsed, vomited, passed out from pain. I was admitted to hospital for two days. When I told the male doctor how much pain I was in, he told me it was normal and I should expect it. No one should have to fight to be believed when they are already going through this."
+          </p>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Medical abortion, 5 weeks</span>
+          </div>
+        </div>
+
+        <!-- Card 07 — purple -->
+        <div class="as-story as-story--three">
+          <p class="as-story-number" aria-hidden="true">07</p>
+          <p class="as-story-quote">
+            "I paid for a private consultation so there would be no record on my NHS file. I'm aware of the privilege that required. But it shows you what women do when they are afraid of being judged — even by their own doctor."
+          </p>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Anonymous</span>
+          </div>
+        </div>
+
+        <!-- Card 08 — white full width -->
+        <div class="as-story as-story--four">
+          <p class="as-story-number" aria-hidden="true">"</p>
+          <div class="as-story-body">
+            <p class="as-story-quote">
+              I had two abortions — one at 17 in 1977, one in 1990 when my IUD failed before a year of travel abroad. Both times, I had no doubt. Both times, society made me feel I should. I am now in my 60s and I have never once wished I had made a different choice.
+            </p>
+          </div>
+          <div class="as-story-footer">
+            <span class="as-story-tag">Two experiences, no regrets</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MORE VOICES ────────────────────────────────────────── -->
+  <section class="as-section as-section--cream" aria-labelledby="more-voices-heading">
+    <div class="as-content as-content--wide">
+      <h2 id="more-voices-heading" class="as-section-heading">More voices</h2>
+      <div class="as-voices-grid">
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was 17. I drove myself to the hospital alone. They put me on a ward with newborns. I wanted to break my family's cycle of early parenthood. The system did not make it easy."</p>
+          <span class="as-voice-tag">Age 17</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"My partner said there was nothing I could do about it. I relied on strangers on Reddit for information. I told no one except my mother. The NHS gave me almost nothing."</p>
+          <span class="as-voice-tag">During lockdown</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I grew up in a religious household that was against abortion. Then I had two planned children. Now I am vehemently pro-choice — because I understand what it means to actually choose."</p>
+          <span class="as-voice-tag">Mother of two</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I had PCOS and believed I couldn't conceive. I was wrong. I crossed a border to access what I needed. The secrecy alone was its own kind of punishment."</p>
+          <span class="as-voice-tag">Age 34</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"Condom and morning-after pill both failed. There were religious protesters outside the clinic on both visits. I spent all my savings on a private clinic so I wouldn't be recognised. No regrets."</p>
+          <span class="as-voice-tag">Age 25, committed relationship</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I drove to another city and paid over a thousand pounds out of pocket. The home pill experience was difficult with no follow-up support. I am still glad I had the option."</p>
+          <span class="as-voice-tag">Australia, age 25</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was 38, happily married, with a stepdaughter I love. My parents were aging. The house was small. I thought carefully about my life. Nine years later — no regrets."</p>
+          <span class="as-voice-tag">Age 38</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I switched contraception and had bad luck. I never told my partner — I knew he'd want to continue and I didn't. We split a year later. I'm now 39 and still do not want children. Zero regrets."</p>
+          <span class="as-voice-tag">Age 24, now 39</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"My copper coil fell out without me knowing. I was pregnant, my relationship was breaking down, and at the ultrasound I saw a heartbeat. I still made the decision that was right for me. The grief and the rightness can both be true."</p>
+          <span class="as-voice-tag">Age 20, university student</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"My partner became aggressive the moment I told him. I had the abortion. The relationship ended anyway. I made the right call twice."</p>
+          <span class="as-voice-tag">Anonymous</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was in a relationship with an alcoholic. I made the decision. Later I did community work I could never have done as a parent. I have no doubt the life I chose was the right one."</p>
+          <span class="as-voice-tag">Anonymous</span>
+        </div>
+
+        <div class="as-voice">
+          <p class="as-voice-quote">"I was 18. I had my mother's support, I was seen the same day, and I went back to work the next morning. Zero regrets. I wish it were this straightforward for everyone."</p>
+          <span class="as-voice-tag">Age 18</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SOLIDARITY STATEMENT ──────────────────────────── -->
+  <section class="as-solidarity">
+    <div class="as-solidarity-inner">
+      <p class="as-solidarity-text">
+        One in three women will have an abortion in their lifetime.<br/>
+        <strong>None of them owe anyone an explanation.</strong>
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SHARE YOUR STORY ──────────────────────────────── -->
+  <section class="as-section as-section--cream" id="share-your-story" aria-labelledby="share-heading">
+    <div class="as-content">
+      <div class="as-share-layout">
+        <div class="as-share-left">
+          <span class="as-label-tag">Open call</span>
+          <h2 id="share-heading" class="as-share-heading">Share<br/>your story</h2>
+          <p class="as-share-sub">Your words, your way. Completely anonymous.</p>
+        </div>
+        <div class="as-share-right">
+          <p class="as-share-body">
+            If you'd like to share your abortion story anonymously to help move the conversation from debate to compassion, we'd be honoured to receive it.
+          </p>
+          <p class="as-share-body">
+            You set the terms. You can be as brief or as detailed as you choose. You can share why you'd like it to be included — or not explain yourself at all.
+          </p>
+
+          <div class="as-form-prompt" role="group" aria-labelledby="form-legend">
+            <p id="form-legend" class="as-form-legend">What would you like to share?</p>
+
+            <div class="as-form-row">
+              <div class="as-form-field">
+                <label class="as-form-label" for="story-name">Your name (optional)</label>
+                <input
+                  id="story-name"
+                  class="as-form-input"
+                  type="text"
+                  placeholder="First name, or leave blank"
+                />
+              </div>
+              <div class="as-form-field">
+                <label class="as-form-label" for="story-email">Email address</label>
+                <input
+                  id="story-email"
+                  class="as-form-input"
+                  type="email"
+                  placeholder="So we can follow up if needed"
+                />
+              </div>
+            </div>
+
+            <div class="as-form-field">
+              <label class="as-form-label" for="story-text">Your story</label>
+              <textarea
+                id="story-text"
+                class="as-form-textarea"
+                rows="6"
+                placeholder="Write as much or as little as feels right. There is no wrong way to do this."
+                aria-describedby="story-hint"
+              ></textarea>
+              <p id="story-hint" class="as-form-hint">Your submission is handled with care. We will never publish your name or any identifying details without your explicit consent.</p>
+            </div>
+
+            <div class="as-form-field">
+              <label class="as-form-label" for="story-context">A brief context (optional)</label>
+              <input
+                id="story-context"
+                class="as-form-input"
+                type="text"
+                placeholder="e.g. Mother of one, age 28 — or leave blank"
+              />
+            </div>
+
+            <div class="as-form-checks">
+              <label class="as-form-check">
+                <input type="checkbox" class="as-check-input" id="story-anonymous" checked />
+                <span class="as-check-box" aria-hidden="true"></span>
+                <span class="as-check-label">Keep my story anonymous — do not publish my name</span>
+              </label>
+              <label class="as-form-check">
+                <input type="checkbox" class="as-check-input" id="story-share" />
+                <span class="as-check-box" aria-hidden="true"></span>
+                <span class="as-check-label">You can share my story on the Level Up website</span>
+              </label>
+            </div>
+
+            <button class="as-form-submit" type="button" aria-label="Submit your story">
+              Send your story
+              <span class="as-form-arrow" aria-hidden="true">→</span>
+            </button>
+            <p class="as-form-note">This form is not yet active. To share your story, email us at <a href="mailto:hello@welevelup.org" class="as-form-link">hello@welevelup.org</a> with the subject line "My Story".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BACK LINK / NAV ───────────────────────────────── -->
+  <section class="as-section as-section--navy">
+    <div class="as-content" style="text-align:center">
+      <h2 class="as-nav-heading">Continue exploring</h2>
+      <div class="as-nav-links">
+        <a href="/memory" class="as-nav-link">
+          <span class="as-nav-link-label">Memory</span>
+          <span class="as-nav-link-desc">Return to the full archive</span>
+          <span class="as-nav-arrow" aria-hidden="true">←</span>
+        </a>
+        <a href="/active-campaigns/abortion-is-healthcare" class="as-nav-link">
+          <span class="as-nav-link-label">Abortion Is Healthcare</span>
+          <span class="as-nav-link-desc">The campaign behind these stories</span>
+          <span class="as-nav-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── JOIN CTA ──────────────────────────────────────── -->
+  <section class="as-cta">
+    <div class="as-content" style="text-align:center">
+      <h2 class="as-cta-heading">Join the Level Up community</h2>
+      <p class="as-cta-body">Campaign updates, event invitations, and feminist thinking.</p>
+      <a href="https://levelup.yourmovement.org/p/join-us" class="as-btn-primary" target="_blank" rel="noopener">Join us</a>
+    </div>
+  </section>
+
+  <Footer bg="navy" />
+
+  <style is:global>
+    /* ═══════════════════════════════════════════════════════
+       ABORTION STORIES PAGE — as- namespace
+       Design tokens inherited from site palette:
+         navy   #0C0A3E
+         lime   #CCFF33
+         purple #A89CED
+         cream  #EEEBD3
+         font   DM Sans 800/700/400
+    ═══════════════════════════════════════════════════════ */
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .as-hero {
+      background: #EEEBD3;
+      padding: 80px 24px 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .as-hero-bg-shape {
+      position: absolute;
+      top: -40px;
+      right: -80px;
+      width: 480px;
+      height: 480px;
+      background: #A89CED;
+      border-radius: 50%;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .as-hero-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .as-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(12,10,62,0.5) !important;
+      text-decoration: none !important;
+      margin-bottom: 48px;
+      transition: color 0.2s;
+    }
+    .as-back-link:hover {
+      color: #0C0A3E !important;
+    }
+    .as-back-arrow {
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+    .as-back-link:hover .as-back-arrow {
+      transform: translateX(-3px);
+    }
+
+    .as-hero-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A89CED;
+      margin-bottom: 24px;
+    }
+    .as-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #A89CED;
+      flex-shrink: 0;
+    }
+
+    .as-hero-title {
+      font-family: var(--font-headline) !important; font-weight: 400 !important; text-transform: uppercase !important; font-size: clamp(72px, 14vw, 128px) !important; line-height: 0.85 !important;
+      color: #0C0A3E !important;
+      letter-spacing: 0 !important;
+      margin: 0 0 32px;
+    }
+    .as-hero-title em {
+      font-style: italic;
+      color: #A89CED !important;
+      font-weight: 700 !important;
+    }
+
+    .as-hero-intro {
+      font: 400 20px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.6) !important;
+      max-width: 440px;
+      margin: 0 0 64px;
+    }
+
+    .as-hero-accent-bar {
+      height: 6px;
+      background: linear-gradient(to right, #CCFF33 0%, #A89CED 50%, #0C0A3E 100%);
+      margin-top: 0;
+    }
+
+    /* ── SECTIONS ─────────────────────────────────────── */
+    .as-section {
+      padding: 80px 24px;
+    }
+    .as-section--cream { background: #EEEBD3;
+    position: relative;
+    overflow: hidden;
+  }
+    .as-section--white { background: #ffffff;
+    position: relative;
+    overflow: hidden;
+  }
+    .as-section--navy { background: #0C0A3E;
+    position: relative;
+    overflow: hidden;
+  }
+
+    .as-content {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .as-content--wide {
+      max-width: 1020px;
+    }
+
+    .as-section-heading {
+      font-family: var(--font-headline) !important; font-weight: 400 !important; text-transform: uppercase !important; font-size: clamp(36px, 6vw, 56px) !important; line-height: 0.9 !important;
+      color: #0C0A3E !important;
+      letter-spacing: 0 !important;
+      margin: 0 0 56px;
+    }
+
+    /* ── FRAMING ──────────────────────────────────────── */
+    .as-framing {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .as-framing-pull {
+      position: sticky;
+      top: 32px;
+    }
+
+    .as-pull-statement {
+      font: 700 clamp(22px, 3.5vw, 32px)/1.15 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      padding: 0;
+      border: none;
+      quotes: none;
+    }
+    .as-pull-statement::before,
+    .as-pull-statement::after { content: none; }
+
+    .as-pull-cite {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #A89CED;
+      font-style: normal;
+    }
+
+    .as-framing-body p {
+      font: 400 18px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 20px;
+    }
+    .as-framing-body p:last-child { margin-bottom: 0; }
+
+    /* ── STORY CARDS ──────────────────────────────────── */
+    .as-stories-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3px;
+    }
+
+    /* Base story card */
+    .as-story {
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      position: relative;
+    }
+
+    .as-story-number {
+      font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; font-size: 11px; line-height: 1;
+      letter-spacing: 0.1em;
+      opacity: 0.25;
+      color: currentColor;
+    }
+
+    .as-story-quote {
+      font: 400 18px/1.7 'DM Sans', sans-serif !important;
+      margin: 0 !important;
+      flex: 1;
+    }
+
+    .as-story-overline {
+      font: 700 13px/1 'DM Sans', sans-serif !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 !important;
+    }
+
+    .as-story-footer {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid currentColor;
+      opacity: 0.3;
+    }
+    .as-story-tag {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Card 01 — Cream ground, navy text, lime left border */
+    .as-story--one {
+      background: #EEEBD3;
+      color: #0C0A3E;
+      border-left: 4px solid #CCFF33;
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .as-story--one .as-story-quote {
+      color: #0C0A3E !important;
+      font-size: 20px !important;
+    }
+    .as-story--one .as-story-number {
+      color: #0C0A3E;
+    }
+
+    /* Card 02 — Navy ground, cream text, lime accent number */
+    .as-story--two {
+      background: #0C0A3E;
+      color: #EEEBD3;
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      padding: 48px 40px;
+    }
+    .as-story--two .as-story-quote {
+      color: rgba(238,235,211,0.85) !important;
+      font-size: 17px !important;
+    }
+    .as-story--two .as-story-overline {
+      color: #CCFF33 !important;
+      opacity: 1;
+    }
+    .as-story--two .as-story-number {
+      color: #CCFF33 !important;
+      opacity: 1;
+      font-size: 13px;
+    }
+    .as-story--two .as-story-footer {
+      border-top-color: rgba(238,235,211,0.2);
+      opacity: 1;
+    }
+    .as-story--two .as-story-tag {
+      color: rgba(238,235,211,0.45);
+    }
+
+    /* Card 03 — Purple ground, navy/cream text, italic drop cap */
+    .as-story--three {
+      background: #A89CED;
+      color: #0C0A3E;
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .as-story--three .as-story-quote {
+      color: #0C0A3E !important;
+      font-size: 16px !important;
+      line-height: 1.75 !important;
+    }
+    .as-story--three .as-story-number {
+      color: #0C0A3E;
+    }
+    .as-story--three .as-story-footer {
+      border-top-color: rgba(12,10,62,0.25);
+      opacity: 1;
+    }
+    .as-story--three .as-story-tag {
+      color: rgba(12,10,62,0.5);
+    }
+
+    /* Drop cap on card 03 */
+    .as-story-quote--dropcap::first-letter {
+      float: left;
+      font-family: var(--font-headline); font-weight: 400; text-transform: uppercase; font-size: 88px; line-height: 0.7;
+      margin: 4px 12px 0 0;
+      color: #0C0A3E;
+      opacity: 0.18;
+    }
+
+    /* Card 04 — White ground with navy, large typographic quote mark */
+    .as-story--four {
+      background: #ffffff;
+      color: #0C0A3E;
+      grid-column: 1 / span 2;
+      grid-row: 3;
+      border-top: 4px solid #CCFF33;
+      padding: 48px 40px;
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 32px;
+      align-items: start;
+    }
+    .as-story--four .as-story-number {
+      grid-column: 1;
+      grid-row: 1;
+      font-size: 48px !important;
+      letter-spacing: -0.04em;
+      opacity: 0.08;
+      color: #0C0A3E;
+      line-height: 1;
+    }
+    .as-story--four .as-story-body {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    .as-story--four .as-story-footer {
+      grid-column: 2;
+      grid-row: 2;
+    }
+    .as-story--four .as-story-quote {
+      color: #0C0A3E !important;
+      font-size: clamp(18px, 2.5vw, 22px) !important;
+      font-weight: 400 !important;
+      font-style: italic;
+    }
+
+    /* ── STORIES COLLECTING EMPTY STATE ──────────────── */
+    .as-stories-collecting {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .as-collecting-body {
+      font: 400 18px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 20px !important;
+    }
+    .as-collecting-body:last-child { margin-bottom: 0 !important; }
+
+    .as-collecting-empty {
+      background: #EEEBD3;
+      border: 1.5px dashed rgba(12,10,62,0.18);
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .as-empty-icon {
+      font-size: 28px;
+      color: #A89CED;
+      line-height: 1;
+    }
+
+    .as-empty-heading {
+      font: 700 22px/1.1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      letter-spacing: -0.02em;
+      margin: 0 !important;
+    }
+
+    .as-empty-body {
+      font: 400 16px/1.6 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.6) !important;
+      margin: 0 !important;
+    }
+
+    .as-empty-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      align-self: flex-start;
+      margin-top: 8px;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #0C0A3E !important;
+      text-decoration: none !important;
+      border-bottom: 2px solid #CCFF33;
+      padding-bottom: 4px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .as-empty-link:hover {
+      color: #A89CED !important;
+      border-color: #A89CED;
+    }
+
+    @media (max-width: 900px) {
+      .as-stories-collecting {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+
+    /* ── SOLIDARITY STATEMENT ─────────────────────────── */
+    .as-solidarity {
+      background: #CCFF33;
+      padding: 56px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+    .as-solidarity-inner {
+      max-width: 840px;
+      margin: 0 auto;
+      padding: 0 24px;
+      text-align: center;
+    }
+    .as-solidarity-text {
+      font: 400 clamp(20px, 3.5vw, 30px)/1.4 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      margin: 0 !important;
+      letter-spacing: -0.02em;
+    }
+    .as-solidarity-text strong {
+      font-weight: 800 !important;
+      color: #0C0A3E !important;
+      display: block;
+      font-size: 1.15em;
+      letter-spacing: -0.03em;
+    }
+
+    /* ── SHARE YOUR STORY ─────────────────────────────── */
+    .as-share-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .as-label-tag {
+      display: inline-block;
+      font: 600 10px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #A89CED;
+      margin-bottom: 20px;
+    }
+
+    .as-share-heading {
+      font-family: var(--font-headline) !important; font-weight: 400 !important; text-transform: uppercase !important; font-size: clamp(48px, 8vw, 72px) !important; line-height: 0.85 !important;
+      color: #0C0A3E !important;
+      letter-spacing: 0 !important;
+      margin: 0 0 16px;
+    }
+
+    .as-share-sub {
+      font: 400 16px/1.4 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.5) !important;
+      margin: 0;
+    }
+
+    .as-share-body {
+      font: 400 17px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 0 20px;
+    }
+    .as-share-body:last-of-type { margin-bottom: 32px; }
+
+    /* Form prompt */
+    .as-form-prompt {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .as-form-legend {
+      font: 700 14px/1 'DM Sans', sans-serif !important;
+      color: #0C0A3E !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0 !important;
+    }
+
+    .as-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .as-form-label {
+      font: 600 12px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: rgba(12,10,62,0.55);
+    }
+
+    .as-form-textarea,
+    .as-form-input {
+      font: 400 16px/1.5 'DM Sans', sans-serif;
+      color: #0C0A3E;
+      background: #ffffff;
+      border: 1.5px solid rgba(12,10,62,0.15);
+      padding: 16px 18px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: vertical;
+      outline: none;
+      border-radius: 0;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .as-form-textarea::placeholder,
+    .as-form-input::placeholder {
+      color: rgba(12,10,62,0.3);
+    }
+    .as-form-textarea:focus,
+    .as-form-input:focus {
+      border-color: #A89CED;
+      box-shadow: 0 0 0 3px rgba(168,156,237,0.15);
+    }
+
+    .as-form-hint {
+      font: 400 13px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.4) !important;
+      margin: 0 !important;
+    }
+
+    .as-form-submit {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      align-self: flex-start;
+      background: #0C0A3E;
+      color: #CCFF33 !important;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border: 2px solid #0C0A3E;
+      padding: 18px 32px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .as-form-submit:hover {
+      background: #CCFF33;
+      color: #0C0A3E;
+      border-color: #CCFF33 !important;
+    }
+    .as-form-arrow {
+      font-size: 18px;
+      transition: transform 0.2s;
+    }
+    .as-form-submit:hover .as-form-arrow {
+      transform: translateX(4px);
+    }
+
+    /* Two-column row for name + email */
+    .as-form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 600px) {
+      .as-form-row { grid-template-columns: 1fr; }
+    }
+
+    /* Checkboxes */
+    .as-form-checks {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .as-form-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+    }
+    .as-check-input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .as-check-box {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid rgba(12,10,62,0.25);
+      background: #fff;
+      margin-top: 2px;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+    }
+    .as-check-input:checked + .as-check-box {
+      background: #0C0A3E;
+      border-color: #0C0A3E;
+    }
+    .as-check-input:checked + .as-check-box::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 6px;
+      height: 10px;
+      border: 2px solid #CCFF33;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+    .as-check-label {
+      font: 400 14px/1.5 'DM Sans', sans-serif;
+      color: rgba(12,10,62,0.7);
+    }
+
+    .as-form-note {
+      font: 400 13px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.45) !important;
+      margin: 0 !important;
+    }
+    .as-form-link {
+      color: #A89CED !important;
+      text-decoration: underline !important;
+      text-underline-offset: 2px;
+    }
+    .as-form-link:hover {
+      color: #0C0A3E !important;
+    }
+
+    /* ── NAVIGATION SECTION ───────────────────────────── */
+    .as-nav-heading {
+      font: 700 12px/1 'DM Sans', sans-serif !important;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(238,235,211,0.35) !important;
+      margin: 0 0 32px;
+    }
+
+    .as-nav-links {
+      display: flex;
+      gap: 3px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .as-nav-link {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(238,235,211,0.05);
+      border: 1px solid rgba(238,235,211,0.08);
+      padding: 28px 32px;
+      text-decoration: none !important;
+      color: #EEEBD3 !important;
+      min-width: 240px;
+      flex: 1;
+      max-width: 340px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .as-nav-link:hover {
+      background: rgba(204,255,51,0.06);
+      border-color: rgba(204,255,51,0.25);
+    }
+    .as-nav-link-label {
+      font: 700 18px/1.1 'DM Sans', sans-serif;
+      color: #EEEBD3;
+    }
+    .as-nav-link-desc {
+      font: 400 13px/1.4 'DM Sans', sans-serif;
+      color: rgba(238,235,211,0.4);
+    }
+    .as-nav-arrow {
+      font-size: 20px;
+      color: #CCFF33 !important;
+      margin-top: 8px;
+    }
+
+    /* ── CTA ──────────────────────────────────────────── */
+    .as-cta {
+      background: #0C0A3E;
+      padding: 80px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+    .as-cta-heading {
+      font-family: var(--font-headline) !important; font-weight: 400 !important; text-transform: uppercase !important; font-size: clamp(32px, 5vw, 44px) !important; line-height: 0.9 !important;
+      color: #CCFF33 !important;
+      letter-spacing: 0 !important;
+      margin: 0 0 16px;
+    }
+    .as-cta-body {
+      font: 400 17px/1.5 'DM Sans', sans-serif !important;
+      color: rgba(238,235,211,0.55) !important;
+      max-width: 440px;
+      margin: 0 auto 32px !important;
+    }
+
+    .as-btn-primary {
+      display: inline-block;
+      background: #CCFF33;
+      color: #0C0A3E !important;
+      font: 700 13px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 18px 40px;
+      text-decoration: none !important;
+      transition: background 0.2s, color 0.2s;
+    }
+    .as-btn-primary:hover {
+      background: #ffffff;
+      color: #0C0A3E !important;
+    }
+
+    /* ── MORE VOICES GRID ─────────────────────────────── */
+    .as-voices-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .as-voice {
+      background: #ffffff;
+      padding: 32px 28px;
+      border-left: 3px solid #A89CED;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .as-voice:nth-child(3n+2) { border-left-color: #CCFF33 !important; }
+    .as-voice:nth-child(3n+3) { border-left-color: #0C0A3E; }
+    .as-voice-quote {
+      font: 400 16px/1.65 'DM Sans', sans-serif !important;
+      color: rgba(12,10,62,0.75) !important;
+      margin: 0 !important;
+      font-style: italic;
+      flex: 1;
+    }
+    .as-voice-tag {
+      font: 600 11px/1 'DM Sans', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(12,10,62,0.35);
+      margin-top: auto;
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 900px) {
+      .as-framing {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .as-framing-pull {
+        position: static;
+      }
+      .as-voices-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .as-stories-grid {
+        grid-template-columns: 1fr;
+      }
+      .as-story--two {
+        grid-column: 1;
+        grid-row: auto;
+      }
+      .as-story--four {
+        grid-column: 1;
+        grid-template-columns: 1fr;
+      }
+      .as-story--four .as-story-number {
+        grid-column: 1;
+        display: none;
+      }
+      .as-story--four .as-story-body,
+      .as-story--four .as-story-footer {
+        grid-column: 1;
+      }
+      .as-share-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .as-nav-links {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .as-nav-link {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .as-hero {
+        padding: 60px 24px 0;
+      }
+      .as-story {
+        padding: 32px 24px;
+      }
+      .as-story--four {
+        padding: 32px 24px;
+      }
+      .as-solidarity {
+        padding: 40px 24px;
+      }
+      .as-voices-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  
+  /* Texture overlays — CLAUDE.md: "Apply the bitmap texture over every block of colour." */
+  .as-hero::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-hero > * { position: relative; z-index: 1; }
+  .as-section--cream::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-section--cream > * { position: relative; z-index: 1; }
+  .as-section--navy::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-section--navy > * { position: relative; z-index: 1; }
+  .as-section--white::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-off-white.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-section--white > * { position: relative; z-index: 1; }
+  .as-cta::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-navy-loud-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-cta > * { position: relative; z-index: 1; }
+  .as-solidarity::before { content: ''; position: absolute; inset: 0; background-image: url('/textures/texture-gentle-lilac.webp'); background-repeat: repeat; background-size: 900px auto; opacity: 0.5; pointer-events: none; z-index: 0; }
+  .as-solidarity > * { position: relative; z-index: 1; }
+</style>
+</Layout>

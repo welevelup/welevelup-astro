@@ -1,0 +1,101 @@
+---
+// Testimonial/story card — used across the Memory Space sub-pages
+// (abortion stories, solidarity messages, hair stories, Holloway voices).
+// One accent colour per card (alternating electric-yellow/gentle-lilac),
+// dark navy text on off-white, per the Timeline component's own rule of
+// "one colour for the bar, dark text on light backgrounds."
+import type { ColorName } from '../../lib/brand-colors';
+
+interface Props {
+  name: string;
+  location?: string;
+  paragraphs: string[];
+  tag?: string;
+  accent?: Extract<ColorName, 'electric-yellow' | 'gentle-lilac'>;
+}
+const { name, location, paragraphs, tag, accent = 'electric-yellow' } = Astro.props;
+---
+
+<article class="ds-story-card" style={`border-color: var(--color-${accent});`}>
+  <div class="ds-story-card-header">
+    <span class="ds-story-card-mark" style={`color: var(--color-${accent});`}>&ldquo;</span>
+    <div>
+      <span class="ds-story-card-name">{name}</span>
+      {location && <span class="ds-story-card-location">{location}</span>}
+    </div>
+  </div>
+  <blockquote class="ds-story-card-quote">
+    {paragraphs.map((p) => <p>{p}</p>)}
+  </blockquote>
+  {tag && (
+    <div class="ds-story-card-footer">
+      <span class="ds-story-card-tag">{tag}</span>
+    </div>
+  )}
+</article>
+
+<style>
+  .ds-story-card {
+    background: var(--color-off-white);
+    border-left: 4px solid;
+    border-radius: 0 var(--radius-card) var(--radius-card) 0;
+    padding: var(--space-8) var(--space-8) var(--space-6);
+  }
+  .ds-story-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+  }
+  .ds-story-card-mark {
+    font-family: var(--font-headline);
+    font-size: 3.5rem;
+    line-height: 0.6;
+    flex-shrink: 0;
+  }
+  .ds-story-card-name {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--color-navy);
+  }
+  .ds-story-card-location {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-navy);
+    opacity: 0.45;
+    margin-top: var(--space-1);
+  }
+  .ds-story-card-quote { margin: 0; }
+  .ds-story-card-quote p {
+    font-family: var(--font-body);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--color-navy);
+    opacity: 0.85;
+    margin: 0 0 var(--space-4);
+  }
+  .ds-story-card-quote p:last-child { margin: 0; }
+  .ds-story-card-footer {
+    border-top: 1px solid rgba(12,10,62,0.08);
+    padding-top: var(--space-4);
+    margin-top: var(--space-5);
+  }
+  .ds-story-card-tag {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-navy);
+    opacity: 0.4;
+  }
+
+  @media (max-width: 640px) {
+    .ds-story-card { padding: var(--space-6) var(--space-5) var(--space-5); }
+  }
+</style>

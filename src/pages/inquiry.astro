@@ -1,0 +1,120 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/campaign-template.css';
+
+const letterText = `Dear Shabana Mahmood and Amy Rees,
+
+I am extremely concerned by the horrifying accounts of pregnant women in prison being cuffed during childbirth and antenatal examinations.
+
+I am writing to urge you to commission the Prison and Probation Ombudsman (PPO) to conduct an independent investigation into the widespread use of unlawful restraints on pregnant women by Sodexo Staff
+
+The use of unlawful restraints on pregnant women over a period of years raises the Secretary of State's obligations under Articles 3 and 8 of the European Convention of Human Rights (right to freedom from inhuman or degrading treatment, and right to respect for private and family life).
+
+This harrowing ill-treatment of women must be investigated without delay to ensure it can never happen again.
+
+Kind regards,`;
+---
+
+<Layout
+  title="Demand an investigation into illegal cuffing during childbirth | Level Up"
+  description="Shocking reports have emerged of pregnant women being handcuffed to male officers during childbirth at HMP Bronzefield. Write to the Ministry of Justice and demand an independent investigation."
+>
+  <Nav />
+
+  <!-- HERO -->
+  <section class="dp-hero inq-hero">
+    <div class="dp-hero-inner">
+      <span class="dp-label">Pregnancy in Prison</span>
+      <h1 class="dp-title">Demand an investigation<br/>into illegal cuffing</h1>
+      <p class="dp-tagline">Pregnant women were handcuffed to male officers during childbirth at HMP Bronzefield. The Ministry of Justice has ignored them.</p>
+      <div class="dp-hero-cta">
+        <a href="#write" class="dp-btn-primary">Write to the Ministry of Justice</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- THE STORY -->
+  <section class="dp-section dp-section--cream">
+    <div class="dp-content">
+      <span class="dp-label">What happened</span>
+      <h2>Handcuffed during childbirth</h2>
+      <p>Shocking reports have emerged of pregnant women being handcuffed to male officers during childbirth at HMP Bronzefield in Surrey. One woman who was cuffed to an officer for 48 hours says &ldquo;I feel I was treated as less than an animal.&rdquo;</p>
+      <p>This is unlawful and a human rights violation. The women are demanding an independent investigation into why this was allowed to happen to them &ndash; they want accountability and justice. So far, the Ministry of Justice has ignored them.</p>
+      <p>Please show your support by writing to the Secretary of State for Justice, Shabana Mahmood, and Director of HMPPS Amy Rees, to support their calls for an independent investigation into unlawful use of restraints.</p>
+      <p>Until we totally end the imprisonment of pregnant women and mothers, the most valuable action you can take is to amplify the voices, experiences and demands of women who have experienced pregnancy in prison.</p>
+    </div>
+  </section>
+
+  <!-- WRITE FORM -->
+  <section id="write" class="dp-section dp-section--neutral">
+    <div class="dp-content">
+      <span class="dp-label">Take action</span>
+      <h2>Write to the Ministry of Justice</h2>
+
+      <!--
+        Sends through the same Formspree form as the L'Oreal open letter
+        (nomorelyes-open-letter.astro). Recipients are set in the Formspree dashboard.
+      -->
+      <form class="inq-form" action="https://formspree.io/f/xdayzrlz" method="POST" aria-describedby="inq-form-note">
+        <input type="hidden" name="_subject" value="Letter to the Ministry of Justice: restraints on pregnant women" />
+        <div class="inq-row">
+          <div class="inq-field">
+            <label for="inq-name">Name</label>
+            <input id="inq-name" name="name" type="text" required />
+          </div>
+          <div class="inq-field">
+            <label for="inq-address">Address</label>
+            <input id="inq-address" name="address" type="text" />
+          </div>
+        </div>
+        <div class="inq-row">
+          <div class="inq-field">
+            <label for="inq-email">Email</label>
+            <input id="inq-email" name="email" type="email" required />
+          </div>
+          <div class="inq-field">
+            <label for="inq-postcode">ZIP / Postal Code</label>
+            <input id="inq-postcode" name="postcode" type="text" required />
+          </div>
+        </div>
+        <div class="inq-field">
+          <label for="inq-letter">Your letter</label>
+          <textarea id="inq-letter" name="letter" rows="15">{letterText}</textarea>
+        </div>
+        <p id="inq-form-note" class="inq-note">Submitting sends your name, contact details and letter. Test version: not yet addressed to the Ministry of Justice.</p>
+        <button type="submit" class="dp-btn-primary inq-submit">Submit</button>
+      </form>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
+
+<style>
+  .inq-hero .dp-hero-inner { max-width: 960px; }
+  .inq-form { display: grid; gap: 20px; margin-top: 24px; }
+  .inq-row { display: grid; gap: 20px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .inq-row { grid-template-columns: 1fr 1fr; } }
+  .inq-field { display: grid; gap: 8px; }
+  .inq-field label { font-weight: 700; color: #0C0A3E; }
+  .inq-field input,
+  .inq-field textarea {
+    font: inherit;
+    padding: 12px;
+    border: 2px solid #0C0A3E;
+    background: #FFFDF0;
+    color: #0C0A3E;
+    border-radius: 0;
+  }
+  .inq-field input:focus-visible,
+  .inq-field textarea:focus-visible,
+  .inq-submit:focus-visible,
+  .dp-hero-cta a:focus-visible {
+    outline: 3px solid #4930D9;
+    outline-offset: 2px;
+  }
+  .inq-note { font-size: 0.95rem; color: #0C0A3E; margin: 0; }
+  .inq-submit { justify-self: start; border: 0; cursor: not-allowed; opacity: 0.55; }
+</style>

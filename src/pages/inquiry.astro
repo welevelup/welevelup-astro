@@ -53,12 +53,8 @@ Kind regards,`;
       <span class="dp-label">Take action</span>
       <h2>Write to the Ministry of Justice</h2>
 
-      <!--
-        Sends through the same Formspree form as the L'Oreal open letter
-        (nomorelyes-open-letter.astro). Recipients are set in the Formspree dashboard.
-      -->
-      <form class="inq-form" action="https://formspree.io/f/xdayzrlz" method="POST" aria-describedby="inq-form-note">
-        <input type="hidden" name="_subject" value="Letter to the Ministry of Justice: restraints on pregnant women" />
+      <!-- Posts to /api/letter-moj, which emails the letter to the Ministry of Justice. -->
+      <form id="inq-form" class="inq-form" method="post" action="/api/letter-moj" aria-describedby="inq-form-note inq-status">
         <div class="inq-row">
           <div class="inq-field">
             <label for="inq-name">Name</label>
@@ -83,9 +79,36 @@ Kind regards,`;
           <label for="inq-letter">Your letter</label>
           <textarea id="inq-letter" name="letter" rows="15">{letterText}</textarea>
         </div>
-        <p id="inq-form-note" class="inq-note">Submitting sends your name, contact details and letter. Test version: not yet addressed to the Ministry of Justice.</p>
-        <button type="submit" class="dp-btn-primary inq-submit">Submit</button>
+        <p id="inq-form-note" class="inq-note">Submitting emails your letter to the Ministry of Justice. Your contact details go with it so they can reply.</p>
+        <button type="submit" class="dp-btn-primary inq-submit">Send letter</button>
+        <p id="inq-status" class="inq-note" role="status" aria-live="polite"></p>
       </form>
+
+      <script>
+        const form = document.getElementById('inq-form') as HTMLFormElement | null;
+        const status = document.getElementById('inq-status');
+        form?.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          const button = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+          if (button) button.disabled = true;
+          if (status) status.textContent = 'Sending…';
+          try {
+            const res = await fetch(form.action, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(Object.fromEntries(new FormData(form))),
+            });
+            const json = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(json.error ?? 'Failed to send letter');
+            form.reset();
+            if (status) status.textContent = 'Thank you. Your letter has been sent.';
+          } catch (err) {
+            if (status) status.textContent = err instanceof Error ? err.message : 'Failed to send letter. Please try again.';
+          } finally {
+            if (button) button.disabled = false;
+          }
+        });
+      </script>
     </div>
   </section>
 

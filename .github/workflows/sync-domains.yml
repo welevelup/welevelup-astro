@@ -1,0 +1,51 @@
+name: Sync Production Domain Aliases
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync-domains:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Vercel deployment and sync domains
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PROJECT_ID: prj_Vf4d1z9muDTkAzaPfOcMIIW0vd8z
+          TEAM_ID: team_cGwotH8cAZ8xY2RF0fmEHo3Z
+        run: |
+          echo "Waiting for production deployment to be ready..."
+
+          for i in $(seq 1 30); do
+            RESPONSE=$(curl -s \
+              "https://api.vercel.com/v6/deployments?projectId=$PROJECT_ID&teamId=$TEAM_ID&target=production&limit=1" \
+              -H "Authorization: Bearer $VERCEL_TOKEN")
+
+            STATE=$(echo "$RESPONSE" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['deployments'][0]['state'])" 2>/dev/null)
+            UID=$(echo "$RESPONSE"   | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['deployments'][0]['uid'])"   2>/dev/null)
+            URL=$(echo "$RESPONSE"   | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['deployments'][0]['url'])"   2>/dev/null)
+
+            echo "Attempt $i/30 — state: $STATE — $URL"
+
+            if [ "$STATE" = "READY" ]; then
+              echo "Deployment ready. Aliasing domains..."
+
+              alias_domain() {
+                curl -s -X POST "https://api.vercel.com/v2/now/deployments/$UID/aliases?teamId=$TEAM_ID" \
+                  -H "Authorization: Bearer $VERCEL_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  -d "{\"alias\": \"$1\"}"
+              }
+
+              alias_domain "welevelup.org"
+              alias_domain "www.welevelup.org"
+
+              echo "Done — welevelup.org and www.welevelup.org point to $URL"
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "Timed out waiting for Vercel deployment."
+          exit 1

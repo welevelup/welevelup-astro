@@ -45,7 +45,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const email = String(body?.email ?? '').trim();
   const subject = String(body?.subject ?? '').trim();
   const message = String(body?.message ?? '').trim();
+  const honeypot = String(body?.company ?? '').trim();
   const turnstileToken = String(body?.['cf-turnstile-response'] ?? '').trim();
+
+  // Honeypot: hidden field real users never see or fill. If populated, it's a bot —
+  // fake a success response so bots don't adapt, but skip sending the email.
+  if (honeypot) return res.status(200).json({ ok: true });
 
   const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
   if (turnstileSecret) {

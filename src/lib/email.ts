@@ -103,22 +103,16 @@ export async function sendDonationConfirmation({
   name,
   amount,
   recurring,
-  giftAid,
 }: {
   to: string;
   name: string;
   amount: string;
   recurring: boolean;
-  giftAid: boolean;
 }): Promise<void> {
   const resend = getResend();
   const firstName = escapeHtml(name ? name.split(' ')[0] : '');
   const greeting = firstName ? `${firstName},` : 'Thank you,';
   const typeLabel = recurring ? 'monthly donation' : 'donation';
-
-  const giftAidNote = giftAid
-    ? `<p style="margin:16px 0;font-size:14px;background:#f9ffe0;border-left:3px solid #CCFF33;padding:10px 14px;color:#333;"><strong>Gift Aid registered.</strong> We will claim an additional 25p for every £1 you donate at no extra cost to you.</p>`
-    : '';
 
   const portalNote = recurring
     ? `<p style="margin:24px 0 0;font-size:14px;color:#555;">To manage or cancel your monthly donation, visit your <a href="${SITE_URL}/donor-portal" style="color:#5b4fcf;">donor portal</a> or email <a href="mailto:hello@welevelup.org" style="color:#5b4fcf;">hello@welevelup.org</a>.</p>`
@@ -134,8 +128,6 @@ export async function sendDonationConfirmation({
       <li style="margin-bottom:8px;">Dignified media coverage of domestic abuse deaths</li>
       <li style="margin-bottom:8px;">Community bystander training — We Protect Us</li>
     </ul>
-
-    ${giftAidNote}
 
     ${ctaButton(SITE_URL, 'Visit our website')}
 
@@ -219,10 +211,9 @@ export async function sendFailedPaymentNotice({
   const html = baseTemplate(`
     <p style="margin:0 0 20px;">${greeting}</p>
     <p style="margin:0 0 20px;">We tried to process your monthly donation of <strong>£${amount}</strong> to Level Up, but the payment was unsuccessful.</p>
-    <p style="margin:0 0 20px;">This is usually caused by an expired or updated card. Mollie will automatically retry the payment over the next few days.</p>
-    <p style="margin:0 0 24px;">If you'd like to update your payment details or need any help, please get in touch:</p>
+    <p style="margin:0 0 20px;">This is usually caused by an expired or updated card. Mollie will automatically retry the payment over the next few days, but you can also sort it now in one click:</p>
 
-    ${ctaButton(`${SITE_URL}/contact`, 'Contact us')}
+    ${ctaButton(`${SITE_URL}/donate`, 'Donate again')}
 
     <p style="margin:24px 0 8px;">Thank you for your continued support.</p>
     <p style="margin:0;">Level Up</p>

@@ -66,6 +66,10 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
             <span>Message</span>
             <textarea name="message" rows="6" required></textarea>
           </label>
+          <label class="ct-hp" aria-hidden="true">
+            <span>Company</span>
+            <input type="text" name="company" tabindex="-1" autocomplete="off" />
+          </label>
           <button type="button" id="ct-submit">Send message</button>
           <p id="ct-status" class="ct-status" aria-live="polite"></p>
         </form>
@@ -83,12 +87,13 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
               return;
             }
             const subject = (form.querySelector('[name=subject]')?.value ?? '');
+            const company = (form.querySelector('[name=company]')?.value ?? '');
             btn.textContent = 'Sending…';
             btn.disabled = true;
             status.textContent = '';
             status.className = 'ct-status';
             try {
-              const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, message, subject }) });
+              const res = await fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, email, message, subject, company }) });
               let json = {};
               try { json = await res.json(); } catch(_) {}
               if (res.ok) {
@@ -204,6 +209,14 @@ const cleanHead = headInner.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, '');
     display: flex;
     flex-direction: column;
     gap: 6px;
+  }
+  .ct-hp {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
   .ct-form label span {
     font: 600 12px/1 'DM Sans';

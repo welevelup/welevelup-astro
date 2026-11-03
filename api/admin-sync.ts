@@ -1,6 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Redis } from '@upstash/redis';
 
+// Now resolves one Mollie customer lookup per distinct recurring donor (on
+// top of the 3 gateways' payment history), so this needs real headroom.
+export const config = { maxDuration: 60 };
+
 function cleanEnvVar(value: string): string {
   if (!value) return '';
   let cleaned = value
@@ -261,13 +265,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     donations.push(...(await fetchPayPalPayments(year)));
     console.log('[admin-sync] PayPal:', donations.filter(d => d.gateway === 'paypal').length);
 
+    // Mollie's payments LIST endpoint never embeds the customer, so every
+    // Mollie donation lands here with no email — donor counts then fall back
+    // to subscription/payment IDs and split the same person into several
+    // "donors". Resolve the real email once per distinct customer (not once
+    // per payment) so identity works the same way the CSV/donor-detail
+    // endpoints already do it.
+    const mollieApiKey = process.env.MOLLIE_API_KEY;
+    if (mollieApiKey) {
+      const recurringMollieCustomerIds = Array.from(new Set(
+        donations
+          .filter(d => d.gateway === 'mollie' && d.type === 'recurring' && d.currency === 'GBP' && d.customer_id)
+          .map(d => d.customer_id as string)
+      ));
+      const emailByCustomerId = new Map<string, string>();
+      for (const custId of recurringMollieCustomerIds) {
+        try {
+          const c = await fetchJson(`https://api.mollie.com/v2/customers/${custId}`, {
+            headers: { Authorization: `Bearer ${mollieApiKey}` },
+          });
+          if (c.email) emailByCustomerId.set(custId, c.email.toLowerCase());
+        } catch { /* keep the fallback identity for this customer */ }
+      }
+      for (const d of donations) {
+        if (d.gateway !== 'mollie' || !d.customer_id) continue;
+        const email = emailByCustomerId.get(d.customer_id);
+        if (email) d.payer = { ...d.payer, email };
+      }
+      console.log(`[admin-sync] Resolved ${emailByCustomerId.size}/${recurringMollieCustomerIds.length} Mollie customer emails`);
+    }
+
     donations.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     // Money figures only ever count successful charges — `donations` also
     // carries failed/cancelled attempts for the churn-reason detection.
     const total = donations.filter(d => d.status === 'paid').reduce((sum, d) => sum + d.amount, 0);
     const now = new Date();
 
-    // Calculate month keys for current and previous month
+    // Calculate month keys for current and previous month (wall-clock —
+    // used ONLY for genuinely "as of today" figures: money raised so far
+    // this month, and the day-of-month cutoff for comparing it fairly).
     const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     const prevMonth = now.getMonth() === 0
       ? `${now.getFullYear() - 1}-12`
@@ -288,13 +324,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // months, so counting them in month-over-month donor math fabricates
     // "lost" donors (and "new" ones whenever they reappear).
     const isNonMonthly = (d: Donation) => /quarterly|yearly|annual/i.test(d.description || '');
+    // Internal test donations from the site's own admin account — never real
+    // donors, but with no filter they pollute every donor count and the
+    // cancelled/joined/lost detail tables below.
+    const isInternalTest = (d: Donation) => (d.payer?.email || '').toLowerCase() === 'tech@welevelup.org';
 
     // Sorted list of distinct months present (chronological), last 12.
     const allMonths = Array.from(new Set(paidGbp.map(monthKey).filter(Boolean))).sort();
     const last12Months = allMonths.slice(-12);
 
-    // The last COMPLETE month is the most recent month that is not the current month.
-    const lastCompleteMonth = allMonths.filter(m => m !== currentMonth).slice(-1)[0] || '';
+    // "Which month is still in progress" must come from the DATA, not the
+    // wall clock: if this sync runs before this month's charges have posted
+    // (subscriptions bill on a donor's own day of month, spread across the
+    // whole month) or the wall clock and the data disagree on the date, a
+    // clock-based cutoff can call a barely-started month "complete" and make
+    // an entire donor base look like it vanished. The most recent month that
+    // actually has data is always presumed in-progress instead.
+    const latestDataMonth = allMonths[allMonths.length - 1] || currentMonth;
+
+    // The last COMPLETE month is the most recent month that is not presumed in-progress.
+    const lastCompleteMonth = allMonths.filter(m => m !== latestDataMonth).slice(-1)[0] || '';
 
     // Recurring donations of the last complete month: sum the most recent gift of each
     // active subscriber → expected monthly recurring revenue (MRR).
@@ -350,7 +399,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // consecutive months → joined / churned / net.
     const subSetByMonth = new Map<string, Set<string>>();
     for (const d of paidGbp) {
-      if (d.type !== 'recurring' || isNonMonthly(d)) continue;
+      if (d.type !== 'recurring' || isNonMonthly(d) || isInternalTest(d)) continue;
       const m = monthKey(d);
       if (!m) continue;
       if (!subSetByMonth.has(m)) subSetByMonth.set(m, new Set<string>());
@@ -359,8 +408,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // The month in progress is always mid-collection — most subscriptions just
     // haven't charged yet — so comparing it to a full month fabricates churn
     // (donors look "lost" when they are merely not-yet-billed). Flows therefore
-    // only ever compare COMPLETE months; the current month is excluded entirely.
-    const completeMonths = last12Months.filter(m => m !== currentMonth);
+    // only ever compare COMPLETE months; the most recent month with data is
+    // excluded entirely (see latestDataMonth above for why it's data-driven).
+    const completeMonths = last12Months.filter(m => m !== latestDataMonth);
     const subscriberFlows = completeMonths.map((m, idx) => {
       const cur = subSetByMonth.get(m) || new Set<string>();
       const prevMonthKey = idx > 0 ? completeMonths[idx - 1] : '';
@@ -445,6 +495,53 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         }
       }
       for (const row of lostDonorsDetail) delete row._cust;
+      // The internal-test filter above can't catch Mollie rows — their email
+      // only exists after the resolution step just ran — so filter here too.
+      lostDonorsDetail = lostDonorsDetail.filter(row => row.donor.toLowerCase() !== 'tech@welevelup.org');
+    }
+
+    // Mirror of lostDonorsDetail: donors present in the last complete month
+    // who weren't there the month before — their FIRST gift back, not a
+    // random one, so the amount shown matches what actually landed.
+    let newDonorsDetail: Array<{ donor: string; gateway: string; amount: number; firstGift: string; _cust?: string }> = [];
+    if (lostMonth && lostPrevMonth) {
+      const curSet = subSetByMonth.get(lostMonth) || new Set<string>();
+      const prevSet = subSetByMonth.get(lostPrevMonth) || new Set<string>();
+      const firstGiftByKey = new Map<string, Donation>();
+      for (const d of paidGbp) {
+        if (d.type !== 'recurring' || monthKey(d) !== lostMonth) continue;
+        const k = subKeyOf(d);
+        const prev = firstGiftByKey.get(k);
+        if (!prev || d.date < prev.date) firstGiftByKey.set(k, d);
+      }
+      for (const k of curSet) {
+        if (prevSet.has(k)) continue;
+        const g = firstGiftByKey.get(k);
+        newDonorsDetail.push({
+          donor: g?.payer?.email || g?.payer?.name || k,
+          gateway: g?.gateway || 'unknown',
+          amount: g?.amount || 0,
+          firstGift: (g?.date || '').slice(0, 10),
+          _cust: g?.customer_id,
+        });
+      }
+      newDonorsDetail.sort((a, b) => b.amount - a.amount);
+      newDonorsDetail = newDonorsDetail.slice(0, 25);
+
+      const mollieApiKeyForNew = process.env.MOLLIE_API_KEY;
+      if (mollieApiKeyForNew) {
+        for (const row of newDonorsDetail) {
+          if (row.gateway !== 'mollie' || row.donor.includes('@') || !row._cust) continue;
+          try {
+            const c = await fetchJson(`https://api.mollie.com/v2/customers/${row._cust}`, {
+              headers: { Authorization: `Bearer ${mollieApiKeyForNew}` },
+            });
+            row.donor = c.email || c.name || row.donor;
+          } catch { /* keep the ref rather than fail the sync */ }
+        }
+      }
+      for (const row of newDonorsDetail) delete row._cust;
+      newDonorsDetail = newDonorsDetail.filter(row => row.donor.toLowerCase() !== 'tech@welevelup.org');
     }
 
     // Donors giving on their own rhythm (quarterly/yearly). Excluded from the
@@ -470,6 +567,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       subscriberFlows,
       repeatOneOffDonors,
       lostDonorsDetail,
+      newDonorsDetail,
       lostDonorsMonth: lostMonth,
       otherRecurring,
     };
@@ -519,6 +617,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const existing = m.get(month) || {
             month, total: 0, monthly_donations: 0, one_off_donations: 0,
             active_subscribers: new Set<string>(),
+            one_off_donors: new Set<string>(),
             mollie_subs: new Set<string>(), gocardless_subs: new Set<string>(), paypal_subs: new Set<string>(),
             failed_payments: 0, failed_amount: 0,
             failed_mollie: 0, failed_gocardless: 0, failed_paypal: 0,
@@ -544,7 +643,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               // Donor COUNTS only include true monthly givers (same identity
               // key as the flows, email-first); quarterly/yearly money still
               // lands in monthly_donations above.
-              if (!isNonMonthly(d)) {
+              if (!isNonMonthly(d) && !isInternalTest(d)) {
                 const subKey = subKeyOf(d);
                 existing.active_subscribers.add(subKey);
                 if (d.gateway === 'mollie') existing.mollie_subs.add(subKey);
@@ -553,6 +652,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               }
             } else {
               existing.one_off_donations += d.amount;
+              if (!isInternalTest(d)) {
+                existing.one_off_donors.add((d.payer?.email || d.payer?.name || d.id).toLowerCase());
+              }
             }
           }
           m.set(month, existing);
@@ -564,6 +666,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         monthly_donations: Math.round(data.monthly_donations * 100) / 100,
         one_off_donations: Math.round(data.one_off_donations * 100) / 100,
         active_subscribers: data.active_subscribers.size,
+        one_off_donors: data.one_off_donors.size,
         mollie_count: data.mollie_subs.size,
         gocardless_count: data.gocardless_subs.size,
         paypal_count: data.paypal_subs.size,
@@ -581,16 +684,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })),
     };
 
-    // Calculate activeSubscribers and newThisMonth from monthlyTotals
-    const currentMonthData = donationData.monthlyTotals.find(m => m.month === currentMonth);
-    const prevMonthData = donationData.monthlyTotals.find(m => m.month === prevMonth);
-    const monthBeforePrev = prevMonth.substring(0, 7); // Get month before prevMonth
-    const twoMonthsAgoStr = prevMonth.substring(0, 4) === '2026' && prevMonth.substring(5) === '01'
-      ? '2025-12'
-      : `${prevMonth.substring(0, 4)}-${String(parseInt(prevMonth.substring(5)) - 1).padStart(2, '0')}`;
-    const twoMonthsAgoData = donationData.monthlyTotals.find(m => m.month === twoMonthsAgoStr);
+    // Calculate activeSubscribers and newThisMonth from monthlyTotals — driven by
+    // the same data-derived latestDataMonth/lastCompleteMonth as the donor
+    // insights above, not the wall clock (see latestDataMonth for why).
+    const currentMonthData = donationData.monthlyTotals.find(m => m.month === latestDataMonth);
+    const prevMonthData = donationData.monthlyTotals.find(m => m.month === lastCompleteMonth);
+    const twoMonthsAgoData = donationData.monthlyTotals.find(m => m.month === allMonths[allMonths.length - 3]);
 
-    // Show previous month's data: active subscribers and how many were new that month
+    // Show the last complete month's data: active subscribers and how many were new that month
     if (prevMonthData) {
       donationData.activeSubscribers = prevMonthData.active_subscribers;
       donationData.newThisMonth = prevMonthData.active_subscribers - (twoMonthsAgoData?.active_subscribers || 0);

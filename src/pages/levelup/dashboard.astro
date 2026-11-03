@@ -3,6 +3,7 @@ export const prerender = false;
 import AdminShell from '../../components/AdminShell.astro';
 import { stackedMonthlyChart } from '../../lib/admin-charts';
 import MonthExplorer from '../../components/MonthExplorer.astro';
+import KpiTrendDialog from '../../components/KpiTrendDialog.astro';
 import { fmtMoney, fmtMoney0, fmtNum, computeDelta } from '../../lib/admin-format';
 import { getAdminData } from '../../lib/admin-data';
 import type { DonationData, MonthlyTotal } from '../../lib/admin-data';
@@ -168,7 +169,7 @@ const split = insights?.splitPct ?? null;
       <section class="section">
         <div class="section-title">This month at a glance</div>
         <div class="kpi-grid">
-          <div class="kpi">
+          <div class="kpi" data-kpi="raised">
             <div class="kpi-label">Raised this month</div>
             <div class="kpi-value">{fmtMoney(curMonth?.total ?? donations?.totalMonth ?? 0)}</div>
             <div class="kpi-desc">Total received so far this month.</div>
@@ -176,9 +177,10 @@ const split = insights?.splitPct ?? null;
               {dMonthMoney && <span class={`delta ${dMonthMoney.positive ? 'pos' : 'neg'}`}>{dMonthMoney.arrow} {Math.round(Math.abs(dMonthMoney.pct))}%</span>}
               {dMonthMoney && <span class="delta-note">vs same point last month</span>}
             </div>
+            <div class="kpi-chart-hint" aria-hidden="true">See by month ↗</div>
           </div>
 
-          <div class="kpi">
+          <div class="kpi" data-kpi="donors">
             <div class="kpi-label">Active monthly donors <span class="tip" tabindex="0" role="note" aria-label="How active monthly donors are counted">ⓘ<span class="tip-text">Counted over complete months only — the current month is still collecting, so most donors simply haven't been billed yet.</span></span></div>
             <div class="kpi-value">{fmtNum(donations?.activeSubscribers ?? lastComplete?.active_subscribers ?? 0)}</div>
             <div class="kpi-desc">People who gave monthly in {monthShort(lastComplete?.month) || 'the last full month'}.</div>
@@ -190,6 +192,7 @@ const split = insights?.splitPct ?? null;
                 <span class="delta-note">{monthShort(lastComplete?.month)} vs {monthShort(prevComplete?.month)}</span>
               )}
             </div>
+            <div class="kpi-chart-hint" aria-hidden="true">See by month ↗</div>
           </div>
 
           <div class="kpi">
@@ -218,20 +221,23 @@ const split = insights?.splitPct ?? null;
           <section class="section">
             <div class="section-title">Donor insights</div>
             <div class="kpi-grid">
-              <div class="kpi">
+              <div class="kpi" data-kpi="income">
                 <div class="kpi-label">Expected monthly income <span class="tip" tabindex="0" role="note" aria-label="What expected monthly income means">ⓘ<span class="tip-text">The total you can expect each month from current recurring donors (their most recent gift, last full month). Also called MRR.</span></span></div>
                 <div class="kpi-value" style="font-size:28px">{fmtMoney(insights.mrr)}</div>
                 <div class="kpi-desc">From people giving every month.</div>
+                <div class="kpi-chart-hint" aria-hidden="true">See by month ↗</div>
               </div>
-              <div class="kpi">
+              <div class="kpi" data-kpi="joined">
                 <div class="kpi-label">New donors ({monthShort(lastFlow?.month) || 'last full month'}) <span class="tip" tabindex="0" role="note" aria-label="What new donors means">ⓘ<span class="tip-text">Monthly donors who gave in the last complete month but not the month before. One-off donations are never counted here.</span></span></div>
                 <div class="kpi-value" style="font-size:28px;color:var(--pos)">{lastFlow ? `+${fmtNum(lastFlow.joined)}` : '—'}</div>
                 <div class="kpi-desc">People who started giving monthly.</div>
+                <div class="kpi-chart-hint" aria-hidden="true">See by month ↗</div>
               </div>
-              <div class="kpi">
+              <div class="kpi" data-kpi="lost">
                 <div class="kpi-label">Lost donors ({monthShort(lastFlow?.month) || 'last full month'}) <span class="tip" tabindex="0" role="note" aria-label="What lost donors means">ⓘ<span class="tip-text">Monthly donors who gave the month before but not in the last complete month. The in-progress month is never compared — donors there mostly just haven't been billed yet.</span></span></div>
                 <div class="kpi-value" style="font-size:28px;color:var(--neg)">{lastFlow ? fmtNum(lastFlow.churned) : '—'}</div>
                 <div class="kpi-desc">People who stopped giving monthly.</div>
+                <div class="kpi-chart-hint" aria-hidden="true">See by month ↗</div>
               </div>
               {insights.otherRecurring && insights.otherRecurring.total > 0 && (
                 <div class="kpi">
@@ -370,6 +376,9 @@ const split = insights?.splitPct ?? null;
           <div class="empty"><strong>No monthly data yet</strong>Press “Refresh data” to load it.</div>
         )}
       </section>
+
+      <!-- KPI card pop-up charts -->
+      <KpiTrendDialog monthly={monthly} flows={flows} />
 
       <!-- EXPLORE A MONTH -->
       <MonthExplorer monthly={monthly} failed={failed} insights={insights} flows={flows} lastCompleteMonth={lastComplete?.month} />

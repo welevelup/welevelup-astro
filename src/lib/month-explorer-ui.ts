@@ -164,11 +164,17 @@ export function initMonthExplorer(): void {
   const showFailed = (month: string) => {
     const rows = failedForMonth(data.failed, month);
     const expected = data.monthlyFailed[month]?.count ?? 0;
+    if (!rows.length) {
+      failedPanel.innerHTML = expected > 0
+        ? message(`This month had ${expected} failed payment${expected === 1 ? '' : 's'}, but the list was not saved by the last data refresh. Press “Refresh data” (top right) to load it.`)
+        : message('No failed payments this month.');
+      return;
+    }
     const note =
       expected > rows.length
         ? `<div class="kpi-desc" style="margin-top:8px">Showing ${rows.length} of ${expected} failed payments. Press “Refresh data” to load the full list.</div>`
         : '';
-    failedPanel.innerHTML = (rows.length ? failedTable(rows) : message('No failed payments recorded for this month.')) + note;
+    failedPanel.innerHTML = failedTable(rows) + note;
   };
 
   const showPeople = (month: string, people: MonthPeople) => {

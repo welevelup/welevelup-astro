@@ -1,8 +1,9 @@
 ---
 export const prerender = false;
 import AdminShell from '../../components/AdminShell.astro';
-import { stackedMonthlyChart, joinedChurnedChart } from '../../lib/admin-charts';
-import { fmtMoney, fmtMoney0, fmtNum, fmtDay, computeDelta } from '../../lib/admin-format';
+import { stackedMonthlyChart } from '../../lib/admin-charts';
+import MonthExplorer from '../../components/MonthExplorer.astro';
+import { fmtMoney, fmtMoney0, fmtNum, computeDelta } from '../../lib/admin-format';
 import { getAdminData } from '../../lib/admin-data';
 import type { DonationData, MonthlyTotal } from '../../lib/admin-data';
 
@@ -92,16 +93,6 @@ const insights = donations?.donorInsights ?? null;
 // Guard against stale cached payloads that still include the in-progress month.
 const flows = (insights?.subscriberFlows ?? []).filter((f) => (f.month || '').slice(0, 7) !== (curMonth?.month || '').slice(0, 7));
 const lastFlow = flows.length ? flows[flows.length - 1] : null;
-const lostDetail = insights?.lostDonorsDetail ?? [];
-const lostMonthName = monthShort(insights?.lostDonorsMonth) || monthShort(lastFlow?.month);
-const REASON_CHIP: Record<string, { label: string; cls: string }> = {
-  failed: { label: 'Payment failed — fixable', cls: 'chip-warn' },
-  cancelled: { label: 'Cancelled', cls: 'chip-bad' },
-  no_charge: { label: 'No charge made', cls: 'chip-muted' },
-};
-const flowChart = flows.length
-  ? joinedChurnedChart(flows, 'New vs lost monthly donors over the last 12 months')
-  : '';
 const buckets = insights?.giftSizeBuckets ?? [];
 const maxBucketCount = buckets.reduce((m, b) => Math.max(m, b.count || 0), 1);
 const topBucket = buckets.reduce<{ bucket: string; count: number } | null>(
@@ -109,14 +100,6 @@ const topBucket = buckets.reduce<{ bucket: string; count: number } | null>(
   null
 );
 const split = insights?.splitPct ?? null;
-const newDetail = insights?.newDonorsDetail ?? [];
-// "Cancelled subscriptions" used to read raw gateway-reported cancellations,
-// which only Mollie/PayPal payment records can basically never carry (they
-// only ever report paid/failed/expired) — GoCardless is the sole exception.
-// That made the card show "0" almost always, even while donors were
-// actively leaving. Point it at the same reliable lost-donor detail instead,
-// excluding failed-charge cases (those are "expired card", not "cancelled").
-const trulyCancelled = lostDetail.filter((l) => l.reason !== 'failed');
 ---
 <AdminShell
   active="donations"
@@ -260,21 +243,6 @@ const trulyCancelled = lostDetail.filter((l) => l.reason !== 'failed');
             </div>
           </section>
 
-          <!-- JOINED vs CHURNED CHART -->
-          {flowChart && (
-            <section class="section">
-              <div class="section-title">New vs lost monthly donors</div>
-              <div class="card">
-                <Fragment set:html={flowChart} />
-                <div class="chart-legend">
-                  <span class="legend-item"><span class="legend-swatch" style="background:#15803D"></span>Joined</span>
-                  <span class="legend-item"><span class="legend-swatch" style="background:#B91C1C"></span>Lost</span>
-                  <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>Net change</span>
-                </div>
-              </div>
-            </section>
-          )}
-
           <!-- 12-MONTH CHART -->
           <section class="section">
             <div class="section-title">Donations over the last 12 months</div>
@@ -350,68 +318,6 @@ const trulyCancelled = lostDetail.filter((l) => l.reason !== 'failed');
             </div>
           </section>
 
-          <!-- WHO STARTED GIVING (mirror of the lost-donor detail) -->
-          {newDetail.length > 0 && (
-            <section class="section">
-              <div class="section-title">Who started giving in {lostMonthName}</div>
-              <div class="card">
-                <table class="data">
-                  <thead>
-                    <tr>
-                      <th>Donor</th>
-                      <th>Provider</th>
-                      <th style="text-align:right">Monthly gift</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {newDetail.map((d) => (
-                      <tr class="row-new">
-                        <td>{d.donor}</td>
-                        <td style="text-transform:capitalize">{d.gateway}</td>
-                        <td style="text-align:right">{d.amount ? fmtMoney(d.amount) : '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
-
-          <!-- WHO STOPPED GIVING (detail behind the lost number) -->
-          {lostDetail.length > 0 && (
-            <section class="section">
-              <div class="section-title">Who stopped giving in {lostMonthName}</div>
-              <div class="card">
-                <div class="kpi-desc" style="margin-bottom:12px">
-                  “Payment failed” usually means an expired card — these donors often come back with one friendly email.
-                  “No charge made” usually means a cancelled subscription.
-                </div>
-                <table class="data">
-                  <thead>
-                    <tr>
-                      <th>Donor</th>
-                      <th>Provider</th>
-                      <th style="text-align:right">Monthly gift</th>
-                      <th>What happened</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {lostDetail.map((l) => {
-                      const chip = REASON_CHIP[l.reason] ?? REASON_CHIP.no_charge;
-                      return (
-                        <tr class="row-lost">
-                          <td>{l.donor}</td>
-                          <td style="text-transform:capitalize">{l.gateway}</td>
-                          <td style="text-align:right">{l.amount ? fmtMoney(l.amount) : '—'}</td>
-                          <td><span class={`chip ${chip.cls}`}>{chip.label}</span></td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
         </>
       ) : (
         <section class="section">
@@ -465,58 +371,8 @@ const trulyCancelled = lostDetail.filter((l) => l.reason !== 'failed');
         )}
       </section>
 
-      <!-- CANCELLED + FAILED -->
-      <div class="grid-2">
-        <section class="section">
-          <div class="section-title">Cancelled subscriptions <span class="tip" tabindex="0" role="note" aria-label="How cancelled subscriptions is worked out">ⓘ<span class="tip-text">Gateways rarely report cancellations directly, so this is derived the reliable way: donors who gave last complete month but not this one, and it wasn't a failed charge.</span></span></div>
-          {trulyCancelled.length ? (
-            <div class="table-wrap">
-              <table class="data">
-                <thead>
-                  <tr><th scope="col">Donor</th><th scope="col" class="num">Amount</th><th scope="col">Provider</th><th scope="col">Last gift</th></tr>
-                </thead>
-                <tbody>
-                  {trulyCancelled.map((l) => (
-                    <tr>
-                      <td style="color:var(--text-2)">{l.donor}</td>
-                      <td class="num">{l.amount ? fmtMoney(l.amount) : '—'}</td>
-                      <td style="text-transform:capitalize">{l.gateway}</td>
-                      <td>{fmtDay(l.lastGift)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div class="empty">No cancelled subscriptions.</div>
-          )}
-        </section>
-
-        <section class="section">
-          <div class="section-title">Failed transactions</div>
-          {failed.length ? (
-            <div class="table-wrap">
-              <table class="data">
-                <thead>
-                  <tr><th scope="col">Date</th><th scope="col" class="num">Amount</th><th scope="col">Provider</th><th scope="col">Donor</th></tr>
-                </thead>
-                <tbody>
-                  {failed.map((d) => (
-                    <tr>
-                      <td>{fmtDay(d.date)}</td>
-                      <td class="num" style="color:var(--neg)">{fmtMoney(d.amount, d.currency)}</td>
-                      <td style="text-transform:capitalize">{d.gateway}</td>
-                      <td style="color:var(--text-2)">{d.payer || '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <div class="empty">No failed transactions.</div>
-          )}
-        </section>
-      </div>
+      <!-- EXPLORE A MONTH -->
+      <MonthExplorer monthly={monthly} failed={failed} insights={insights} flows={flows} lastCompleteMonth={lastComplete?.month} />
     </>
   )}
 </AdminShell>
@@ -628,6 +484,11 @@ const trulyCancelled = lostDetail.filter((l) => l.reason !== 'failed');
   .donor-accordion summary::-webkit-details-marker { display: none; }
   .donor-accordion[open] summary { background: var(--chip-bg); }
   .donor-accordion-body { padding: 0 16px 16px; }
+</style>
+
+<style is:global>
+  /* Global on purpose: these elements are built by scripts / injected SVG, so
+     Astro's scoped-style attribute never lands on them. */
   tr.row-new td { background: rgba(21, 128, 61, 0.08); }
   tr.row-lost td { background: rgba(185, 28, 28, 0.08); }
 </style>

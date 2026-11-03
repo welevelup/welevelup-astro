@@ -1,0 +1,132 @@
+---
+// "Explore a month": two clickable monthly charts (failed payments, new vs lost
+// donors) plus four tables that follow the selected month. The tables are filled
+// in the browser by src/lib/month-explorer-ui.ts, from the data embedded below
+// (default month) or a live lookup (any other month).
+import { failedMonthlyChart, joinedChurnedChart } from '../lib/admin-charts';
+import { recentMonths, monthLabel, type FailedTx } from '../lib/month-explorer';
+import type { MonthlyTotal, DonorInsights } from '../lib/admin-data';
+
+interface Props {
+  monthly: MonthlyTotal[];
+  failed: FailedTx[];
+  insights: DonorInsights | null;
+  flows: NonNullable<DonorInsights['subscriberFlows']>;
+  lastCompleteMonth?: string;
+}
+
+const { monthly, failed, insights, flows, lastCompleteMonth } = Astro.props;
+
+const currentMonth = monthly[monthly.length - 1]?.month || '';
+const last12 = monthly.slice(-12);
+const failedChart = last12.length
+  ? failedMonthlyChart(
+      last12.map((m) => ({ month: m.month, count: m.failed_payments || 0, amount: m.failed_amount || 0 })),
+      'Failed payments per month. Select a month to see its details.'
+    )
+  : '';
+const flowChart = flows.length
+  ? joinedChurnedChart(flows, 'New vs lost monthly donors over the last 12 months. Select a month to see its details.')
+  : '';
+
+const months = recentMonths(monthly, 12);
+const defaultMonth = insights?.lostDonorsMonth || lastCompleteMonth || months[0] || '';
+const lostDetail = insights?.lostDonorsDetail ?? [];
+const newDetail = insights?.newDonorsDetail ?? [];
+
+const explorerData = {
+  defaultMonth,
+  currentMonth,
+  failed,
+  monthlyFailed: Object.fromEntries(
+    monthly.map((m) => [m.month, { count: m.failed_payments || 0, amount: m.failed_amount || 0 }])
+  ),
+  monthlyFlow: Object.fromEntries(flows.map((f) => [f.month, { joined: f.joined, churned: f.churned }])),
+  started: newDetail.map((d) => ({ label: d.donor, gateway: d.gateway, amount: d.amount })),
+  stopped: lostDetail.map((l) => ({ label: l.donor, gateway: l.gateway, amount: l.amount, reason: l.reason })),
+};
+// '<' is escaped so donor-supplied text can never close the <script> tag.
+const explorerJson = JSON.stringify(explorerData).replace(/</g, '\\u003c');
+---
+<section class="section" id="month-explorer">
+  <div class="section-title">Explore a month</div>
+  <div class="card explorer-controls">
+    <label for="explorer-month" class="explorer-label">Month</label>
+    <select id="explorer-month" class="explorer-select">
+      {months.map((m) => (
+        <option value={m} selected={m === defaultMonth}>{monthLabel(m)}{m === currentMonth ? ' (so far)' : ''}</option>
+      ))}
+    </select>
+    <span class="kpi-desc">Click a month in either chart, or pick one here. The four tables below follow the month you choose.</span>
+  </div>
+
+  <div class="grid-2" style="margin-top:16px">
+    <div>
+      <div class="section-title">Failed payments per month <span class="tip" tabindex="0" role="note" aria-label="What a failed payment is">ⓘ<span class="tip-text">A charge that was tried but did not go through, so no money arrived. Mollie marks it “failed” (card declined) or “expired” (never completed); GoCardless marks it “failed” or “bounced” (for example a direct debit with no funds). It is most often an expired or replaced card.</span></span></div>
+      <div class="card">
+        {failedChart ? <Fragment set:html={failedChart} /> : <div class="kpi-desc">No monthly data yet.</div>}
+        <div class="kpi-desc" style="margin-top:8px">
+          A failed payment is a charge that was tried but didn’t go through, so no money arrived. Usually it’s an expired or replaced card. Mollie retries for a few days, and donors often come back after one friendly email.
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-title">New vs lost monthly donors</div>
+      <div class="card">
+        {flowChart ? <Fragment set:html={flowChart} /> : <div class="kpi-desc">No donor-flow data yet.</div>}
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-swatch" style="background:#15803D"></span>Joined</span>
+          <span class="legend-item"><span class="legend-swatch" style="background:#B91C1C"></span>Lost</span>
+          <span class="legend-item"><span class="legend-swatch" style="background:#5B4FCF"></span>Net change</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="explorer-summary" id="explorer-summary" aria-live="polite"></div>
+
+  <div class="grid-2">
+    <div>
+      <div class="section-title">Who started giving</div>
+      <div class="card explorer-panel" id="ex-started"></div>
+    </div>
+    <div>
+      <div class="section-title">Who stopped giving <span class="tip" tabindex="0" role="note" aria-label="What the reasons mean">ⓘ<span class="tip-text">“Payment failed” usually means an expired card — these donors often come back with one friendly email. “No charge made” usually means a cancelled subscription.</span></span></div>
+      <div class="card explorer-panel" id="ex-stopped"></div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:16px">
+    <div>
+      <div class="section-title">Cancelled subscriptions <span class="tip" tabindex="0" role="note" aria-label="How cancelled subscriptions is worked out">ⓘ<span class="tip-text">Gateways rarely report cancellations directly, so this is derived the reliable way: donors who gave the month before but not this one, and it wasn't a failed charge.</span></span></div>
+      <div class="card explorer-panel" id="ex-cancelled"></div>
+    </div>
+    <div>
+      <div class="section-title">Failed transactions</div>
+      <div class="card explorer-panel" id="ex-failed"></div>
+    </div>
+  </div>
+</section>
+<script type="application/json" id="explorer-data" is:inline set:html={explorerJson}></script>
+
+<script>
+  import { initMonthExplorer } from '../lib/month-explorer-ui';
+  initMonthExplorer();
+</script>
+
+<style is:global>
+  /* Global on purpose: the tables are built by script and the charts are injected
+     SVG, so Astro's scoped-style attribute never lands on them. */
+  .explorer-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .explorer-label { font-weight: 600; }
+  .explorer-select {
+    font: inherit; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--card-bg, #fff); color: inherit;
+  }
+  .explorer-summary { margin: 16px 0; font-weight: 600; min-height: 1.4em; }
+  .explorer-panel { overflow-x: auto; }
+  .bar-hit { cursor: pointer; outline: none; }
+  .bar-hit:hover { fill: rgba(91, 79, 207, 0.08); }
+  .bar-hit.is-selected { fill: rgba(91, 79, 207, 0.16); }
+  .bar-hit:focus-visible { stroke: var(--violet, #5B4FCF); stroke-width: 2; }
+</style>

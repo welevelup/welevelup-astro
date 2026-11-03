@@ -13,6 +13,7 @@ export const prerender = false;
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <style>
     :root {
+      color-scheme: dark;
       --bg-primary: #0C0A3E;
       --bg-secondary: #13114a;
       --bg-card: #1a1860;
@@ -142,6 +143,16 @@ export const prerender = false;
     input::placeholder {
       color: var(--text-secondary);
       opacity: 0.5;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text-primary);
+      -webkit-box-shadow: 0 0 0 1000px var(--input-bg) inset;
+      box-shadow: 0 0 0 1000px var(--input-bg) inset;
+      caret-color: var(--text-primary);
+      transition: background-color 5000s ease-in-out 0s;
     }
 
     .error-msg {

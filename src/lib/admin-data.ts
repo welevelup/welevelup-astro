@@ -42,6 +42,7 @@ export interface MonthlyTotal {
   monthly_donations: number;
   one_off_donations: number;
   active_subscribers: number;
+  one_off_donors: number;
   mollie_count: number;
   gocardless_count: number;
   paypal_count: number;
@@ -73,6 +74,13 @@ export interface DonorInsights {
     amount: number;
     lastGift: string;
     reason: 'failed' | 'cancelled' | 'no_charge';
+  }>;
+  /** Mirror of lostDonorsDetail — donors present this complete month who weren't the month before. */
+  newDonorsDetail?: Array<{
+    donor: string;
+    gateway: string;
+    amount: number;
+    firstGift: string;
   }>;
   lostDonorsMonth?: string;
   /** Quarterly/yearly givers — excluded from monthly counts, shown separately. */

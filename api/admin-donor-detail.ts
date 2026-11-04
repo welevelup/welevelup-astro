@@ -35,6 +35,24 @@ async function fetchJson(url: string, opts: any = {}) {
 
 interface Donor { name: string; email: string; amount: number; gateway: string }
 
+// Runs `fn` over `items` with at most `limit` requests in flight. The gateways'
+// per-customer lookups used to run one after another (hundreds of round trips),
+// which blew past the function time limit and left the dashboard on "Loading…".
+async function pool<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+  const results: R[] = new Array(items.length);
+  let next = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (next < items.length) {
+      const index = next++;
+      results[index] = await fn(items[index]);
+    }
+  });
+  await Promise.all(workers);
+  return results;
+}
+
+const LOOKUP_CONCURRENCY = 8;
+
 async function mollieDonors(month: string): Promise<Donor[]> {
   const apiKey = process.env.MOLLIE_API_KEY;
   if (!apiKey) return [];
@@ -49,11 +67,14 @@ async function mollieDonors(month: string): Promise<Donor[]> {
     (p) => (p.paidAt || '').startsWith(month) && p.status === 'paid' && (p.sequenceType === 'first' || p.sequenceType === 'recurring')
   );
   const custIds = Array.from(new Set(relevant.map((p) => p.customerId).filter(Boolean)));
-  const custCache: Record<string, any> = {};
-  for (const id of custIds) {
-    try { custCache[id] = await fetchJson(`https://api.mollie.com/v2/customers/${id}`, { headers: { Authorization: `Bearer ${apiKey}` } }); }
-    catch { custCache[id] = null; }
-  }
+  const custEntries = await pool(custIds as string[], LOOKUP_CONCURRENCY, async (id) => {
+    try {
+      return [id, await fetchJson(`https://api.mollie.com/v2/customers/${id}`, { headers: { Authorization: `Bearer ${apiKey}` } })] as const;
+    } catch {
+      return [id, null] as const;
+    }
+  });
+  const custCache: Record<string, any> = Object.fromEntries(custEntries);
   return relevant.map((p) => {
     const customer = p.customerId ? custCache[p.customerId] : null;
     return { name: customer?.name || 'unknown', email: (customer?.email || '').toLowerCase(), amount: parseFloat(p.amount?.value || '0'), gateway: 'mollie' };
@@ -74,17 +95,18 @@ async function gocardlessDonors(month: string): Promise<Donor[]> {
   const gcSuccess = new Set(['confirmed', 'paid_out', 'submitted', 'paid']);
   const relevant = all.filter((p) => gcSuccess.has(p.status) && (p.charge_date || p.created_at || '').startsWith(month));
   const mandateIds = Array.from(new Set(relevant.map((p) => p.links?.mandate).filter(Boolean)));
-  const mandateToCustomer: Record<string, any> = {};
-  for (const mid of mandateIds) {
+  const mandateEntries = await pool(mandateIds as string[], LOOKUP_CONCURRENCY, async (mid) => {
     try {
       const md = await fetchJson(`https://api.gocardless.com/mandates/${mid}`, { headers });
       const custId = md.mandates?.links?.customer;
-      if (custId) {
-        const cd = await fetchJson(`https://api.gocardless.com/customers/${custId}`, { headers });
-        mandateToCustomer[mid] = cd.customers;
-      }
-    } catch { /* keep going without this donor's identity */ }
-  }
+      if (!custId) return [mid, null] as const;
+      const cd = await fetchJson(`https://api.gocardless.com/customers/${custId}`, { headers });
+      return [mid, cd.customers] as const;
+    } catch {
+      return [mid, null] as const; // keep going without this donor's identity
+    }
+  });
+  const mandateToCustomer: Record<string, any> = Object.fromEntries(mandateEntries);
   return relevant.map((p) => {
     const customer = p.links?.mandate ? mandateToCustomer[p.links.mandate] : null;
     return {
@@ -148,7 +170,40 @@ async function paypalDonors(month: string): Promise<Donor[]> {
 // Internal test donations from the site's own admin account — never real donors.
 const isRealDonor = (d: Donor) => d.email !== 'tech@welevelup.org';
 
+// Past months don't change, and each lookup scans all three gateways, so cache
+// the per-month donor list. Recent months get a short TTL because late charges
+// and retries can still land; older ones can sit for a day. Fails open.
+const RECENT_TTL_SECONDS = 60 * 60;
+const OLD_TTL_SECONDS = 60 * 60 * 24;
+
+function cacheTtlFor(month: string): number {
+  const now = new Date();
+  const thisMonth = `${now.getUTCFullYear()}-${String(now.getUTCMonth() + 1).padStart(2, '0')}`;
+  return month >= prevMonthOf(thisMonth) ? RECENT_TTL_SECONDS : OLD_TTL_SECONDS;
+}
+
 async function regularDonorsForMonth(month: string): Promise<Donor[]> {
+  const cacheKey = `donor-detail:v1:${month}`;
+  try {
+    const cached = await getRedis().get<Donor[]>(cacheKey);
+    if (Array.isArray(cached)) return cached;
+  } catch { /* cache unavailable — fall through to live lookup */ }
+
+  const donors = await fetchRegularDonorsForMonth(month);
+
+  // A failed customer lookup leaves a donor with no email (all such donors then
+  // merge into one "unknown"). Don't cache that partial picture for hours —
+  // the next request should try the gateways again.
+  const looksComplete = donors.every((d) => d.email);
+  if (looksComplete) {
+    try {
+      await getRedis().set(cacheKey, donors, { ex: cacheTtlFor(month) });
+    } catch { /* not cached this time */ }
+  }
+  return donors;
+}
+
+async function fetchRegularDonorsForMonth(month: string): Promise<Donor[]> {
   const [mollie, gocardless, paypal] = await Promise.all([
     mollieDonors(month),
     gocardlessDonors(month),
@@ -177,7 +232,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
   const url = new URL(req.url || '', 'http://localhost');
   const month = url.searchParams.get('month') || '';
-  if (!/^\d{4}-\d{2}$/.test(month)) {
+  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)) {
     return res.status(400).json({ error: 'month must be YYYY-MM' });
   }
 
@@ -193,6 +248,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const donors = current.map((d) => ({ ...d, isNew: !prevEmails.has(d.email || d.name) }));
     const lost = previous.filter((d) => !curEmails.has(d.email || d.name));
 
+    res.setHeader('Cache-Control', 'private, no-store');
     return res.status(200).json({
       month,
       donors,

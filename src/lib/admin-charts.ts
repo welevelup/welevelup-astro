@@ -11,6 +11,16 @@ const shortDate = (iso: string) => {
   return `${d.getUTCDate()} ${d.toLocaleString('en-GB', { month: 'short', timeZone: 'UTC' })}`;
 };
 
+/**
+ * Transparent, full-height click target for one month's column. The dashboard's
+ * "Explore a month" script listens for `.bar-hit[data-month]` (click, Enter,
+ * Space), so the target is far bigger than the thin bar itself and works from
+ * the keyboard.
+ */
+function monthHitArea(month: string, x: number, y: number, w: number, h: number, label: string): string {
+  return `<rect class="bar-hit" data-month="${esc(month)}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" tabindex="0" role="button" aria-label="Show ${esc(label)}" fill="transparent"><title>${esc(label)}</title></rect>`;
+}
+
 interface BarChartOpts {
   ariaLabel: string;
   color?: string;
@@ -66,10 +76,10 @@ export function dailyBarChart(
  */
 export function monthlyBarChart(
   data: Array<{ month: string; value: number }>,
-  opts: { ariaLabel: string; color?: string; valueLabel?: string }
+  opts: { ariaLabel: string; color?: string; valueLabel?: string; money?: boolean; everyLabel?: boolean }
 ): string {
   if (!data || data.length === 0) return '';
-  const W = 820, H = 240, PL = 40, PR = 16, PT = 16, PB = 34;
+  const W = 820, H = 240, PL = opts.money ? 56 : 40, PR = 16, PT = 16, PB = 34;
   const gW = W - PL - PR, gH = H - PT - PB;
   const color = opts.color || '#5B4FCF';
   const max = Math.max(...data.map((d) => d.value), 1);
@@ -77,19 +87,22 @@ export function monthlyBarChart(
   const slot = gW / n;
   const bw = Math.max(2, slot * 0.62);
   const yOf = (v: number) => PT + gH - (v / max) * gH;
+  // `money` switches values to pounds: £1,234.50 in tooltips, whole pounds on the axis.
+  const tipValue = (v: number) => (opts.money ? '£' + v.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : String(v));
+  const axisValue = (v: number) => (opts.money ? '£' + Math.round(v).toLocaleString('en-GB') : String(v));
 
   const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   const mNum = (m: string) => parseInt((m || '').slice(5), 10);
   const mLabel = (m: string) => monthNames[mNum(m)] || (m || '').slice(5);
   // Show a label roughly every ~Math.ceil(n/8) months to avoid crowding, plus first/last.
-  const step = Math.max(1, Math.ceil(n / 8));
+  const step = opts.everyLabel ? 1 : Math.max(1, Math.ceil(n / 8));
 
   let bars = '', xlabels = '';
   data.forEach((d, i) => {
     const x = PL + i * slot + (slot - bw) / 2;
     const y = yOf(d.value);
     const h = PT + gH - y;
-    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="1.5" fill="${color}"><title>${esc(mLabel(d.month))} ${esc((d.month || '').slice(0, 4))}: ${d.value} ${esc(opts.valueLabel || '')}</title></rect>`;
+    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="1.5" fill="${color}"><title>${esc(mLabel(d.month))} ${esc((d.month || '').slice(0, 4))}: ${esc(tipValue(d.value))} ${esc(opts.valueLabel || '')}</title></rect>`;
     const showLabel = i === 0 || i === n - 1 || i % step === 0;
     if (showLabel) {
       const label = mNum(d.month) === 1 ? (d.month || '').slice(0, 4) : mLabel(d.month);
@@ -101,7 +114,7 @@ export function monthlyBarChart(
   let axis = '';
   axis += `<line x1="${PL}" y1="${(PT + gH).toFixed(1)}" x2="${W - PR}" y2="${(PT + gH).toFixed(1)}" stroke="var(--border)" stroke-width="1"/>`;
   axis += `<line x1="${PL}" y1="${maxLineY.toFixed(1)}" x2="${W - PR}" y2="${maxLineY.toFixed(1)}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>`;
-  axis += `<text x="${PL - 6}" y="${(maxLineY + 4).toFixed(1)}" font-size="10" fill="var(--text-3)" text-anchor="end" font-family="DM Sans,sans-serif">${max}</text>`;
+  axis += `<text x="${PL - 6}" y="${(maxLineY + 4).toFixed(1)}" font-size="10" fill="var(--text-3)" text-anchor="end" font-family="DM Sans,sans-serif">${esc(axisValue(max))}</text>`;
   axis += `<text x="${PL - 6}" y="${(PT + gH + 4).toFixed(1)}" font-size="10" fill="var(--text-3)" text-anchor="end" font-family="DM Sans,sans-serif">0</text>`;
 
   return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="img" aria-label="${esc(opts.ariaLabel)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(opts.ariaLabel)}</title>${axis}${bars}${xlabels}</svg>`;
@@ -237,8 +250,9 @@ export function joinedChurnedChart(
     const x = cx - bw / 2;
     const jh = upH(d.joined);
     const ch = upH(d.churned);
-    bars += `<rect x="${x.toFixed(1)}" y="${(zeroY - jh).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, jh).toFixed(1)}" rx="1.5" fill="${green}"><title>${esc(mLabel(d.month))}: ${d.joined} joined</title></rect>`;
-    bars += `<rect x="${x.toFixed(1)}" y="${zeroY.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, ch).toFixed(1)}" rx="1.5" fill="${red}"><title>${esc(mLabel(d.month))}: ${d.churned} lost</title></rect>`;
+    bars += monthHitArea(d.month, PL + i * slot, PT, slot, gH, `${mLabel(d.month)}: ${d.joined} joined, ${d.churned} lost`);
+    bars += `<rect x="${x.toFixed(1)}" y="${(zeroY - jh).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, jh).toFixed(1)}" rx="1.5" fill="${green}" pointer-events="none"><title>${esc(mLabel(d.month))}: ${d.joined} joined</title></rect>`;
+    bars += `<rect x="${x.toFixed(1)}" y="${zeroY.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, ch).toFixed(1)}" rx="1.5" fill="${red}" pointer-events="none"><title>${esc(mLabel(d.month))}: ${d.churned} lost</title></rect>`;
     xlabels += `<text x="${cx.toFixed(1)}" y="${H - 8}" font-size="10" fill="var(--text-3)" text-anchor="middle" font-family="DM Sans,sans-serif">${esc(mLabel(d.month))}</text>`;
   });
 
@@ -248,12 +262,56 @@ export function joinedChurnedChart(
     const y = zeroY - upH(d.net);
     return `${cx.toFixed(1)},${y.toFixed(1)}`;
   }).join(' ');
-  const netLine = `<polyline points="${netPts}" fill="none" stroke="${netColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>`;
+  const netLine = `<polyline points="${netPts}" fill="none" stroke="${netColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3" pointer-events="none"/>`;
 
   let axis = '';
   axis += `<line x1="${PL}" y1="${zeroY.toFixed(1)}" x2="${W - PR}" y2="${zeroY.toFixed(1)}" stroke="var(--border)" stroke-width="1"/>`;
   axis += `<text x="${PL - 6}" y="${(PT + 4).toFixed(1)}" font-size="10" fill="${green}" text-anchor="end" font-family="DM Sans,sans-serif">+${maxMag}</text>`;
   axis += `<text x="${PL - 6}" y="${(PT + gH).toFixed(1)}" font-size="10" fill="${red}" text-anchor="end" font-family="DM Sans,sans-serif">-${maxMag}</text>`;
 
-  return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="img" aria-label="${esc(ariaLabel)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(ariaLabel)}</title>${axis}${bars}${netLine}${xlabels}</svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="group" aria-label="${esc(ariaLabel)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(ariaLabel)}</title>${axis}${bars}${netLine}${xlabels}</svg>`;
+}
+
+/**
+ * Single-series monthly bar chart of failed charges. One axis (the count);
+ * the £ value of each month is in the tooltip and the click target's label.
+ * Columns are click targets that drive the "Explore a month" panels.
+ */
+export function failedMonthlyChart(
+  data: Array<{ month: string; count: number; amount: number }>,
+  ariaLabel: string
+): string {
+  if (!data || data.length === 0) return '';
+  const W = 820, H = 240, PL = 40, PR = 16, PT = 16, PB = 34;
+  const gW = W - PL - PR, gH = H - PT - PB;
+  const color = '#B45309';
+  const n = data.length;
+  const slot = gW / n;
+  const bw = Math.max(4, slot * 0.5);
+  const max = Math.max(...data.map((d) => d.count), 1);
+  const yOf = (v: number) => PT + gH - (v / max) * gH;
+  const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const mLabel = (m: string) => monthNames[parseInt((m || '').slice(5), 10)] || (m || '').slice(5);
+  const money = (v: number) => '£' + v.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+  let bars = '', xlabels = '';
+  data.forEach((d, i) => {
+    const cx = PL + i * slot + slot / 2;
+    const x = cx - bw / 2;
+    const y = yOf(d.count);
+    const h = PT + gH - y;
+    const tip = `${mLabel(d.month)}: ${d.count} failed, ${money(d.amount)}`;
+    bars += monthHitArea(d.month, PL + i * slot, PT, slot, gH, tip);
+    bars += `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(0, h).toFixed(1)}" rx="1.5" fill="${color}" pointer-events="none"><title>${esc(tip)}</title></rect>`;
+    xlabels += `<text x="${cx.toFixed(1)}" y="${H - 10}" font-size="10" fill="var(--text-3)" text-anchor="middle" font-family="DM Sans,sans-serif">${esc(mLabel(d.month))}</text>`;
+  });
+
+  const maxLineY = yOf(max);
+  let axis = '';
+  axis += `<line x1="${PL}" y1="${(PT + gH).toFixed(1)}" x2="${W - PR}" y2="${(PT + gH).toFixed(1)}" stroke="var(--border)" stroke-width="1"/>`;
+  axis += `<line x1="${PL}" y1="${maxLineY.toFixed(1)}" x2="${W - PR}" y2="${maxLineY.toFixed(1)}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>`;
+  axis += `<text x="${PL - 6}" y="${(maxLineY + 4).toFixed(1)}" font-size="10" fill="var(--text-3)" text-anchor="end" font-family="DM Sans,sans-serif">${max}</text>`;
+  axis += `<text x="${PL - 6}" y="${(PT + gH + 4).toFixed(1)}" font-size="10" fill="var(--text-3)" text-anchor="end" font-family="DM Sans,sans-serif">0</text>`;
+
+  return `<svg viewBox="0 0 ${W} ${H}" class="chart-svg" role="group" aria-label="${esc(ariaLabel)}" xmlns="http://www.w3.org/2000/svg"><title>${esc(ariaLabel)}</title>${axis}${bars}${xlabels}</svg>`;
 }

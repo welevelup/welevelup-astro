@@ -1,0 +1,121 @@
+---
+// Pop-up with a month-by-month chart for a KPI card. Cards opt in with
+// data-kpi="<key>" (see buildKpiTrends); the chart and table for every metric
+// are rendered here on the server and copied into the dialog on click.
+import { monthlyBarChart } from '../lib/admin-charts';
+import { buildKpiTrends, type FlowRow, type MonthlyRow } from '../lib/kpi-trends';
+import { monthLabel } from '../lib/month-explorer';
+
+interface Props {
+  monthly: MonthlyRow[];
+  flows: FlowRow[];
+}
+
+const { monthly, flows } = Astro.props;
+
+const formatValue = (value: number, money: boolean) =>
+  money ? '£' + value.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value.toLocaleString('en-GB');
+
+const trends = buildKpiTrends(monthly, flows).map((trend) => ({
+  ...trend,
+  chart: monthlyBarChart(
+    trend.points.map((p) => ({ month: p.month, value: p.value })),
+    {
+      ariaLabel: `${trend.title}, month by month`,
+      color: trend.key === 'lost' ? '#B91C1C' : trend.key === 'joined' ? '#15803D' : '#5B4FCF',
+      money: trend.money,
+      everyLabel: true,
+    }
+  ),
+  rows: [...trend.points].reverse().map((p) => ({ label: monthLabel(p.month), value: formatValue(p.value, trend.money) })),
+}));
+---
+<dialog id="kpi-dialog" class="kpi-dialog" aria-labelledby="kpi-dialog-title">
+  <div class="kpi-dialog-head">
+    <h2 id="kpi-dialog-title" class="kpi-dialog-title"></h2>
+    <button type="button" class="btn btn-ghost" data-kpi-close aria-label="Close chart">Close</button>
+  </div>
+  <div id="kpi-dialog-body"></div>
+</dialog>
+
+{trends.map((trend) => (
+  <template data-kpi-template={trend.key} data-title={trend.title}>
+    <p class="kpi-desc">{trend.description}</p>
+    <Fragment set:html={trend.chart} />
+    {trend.note && <p class="kpi-desc" style="margin-top:8px">{trend.note}</p>}
+    <details class="kpi-table-toggle">
+      <summary>See the numbers</summary>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th scope="col">Month</th><th scope="col" class="num">{trend.money ? 'Amount' : 'Donors'}</th></tr></thead>
+          <tbody>
+            {trend.rows.map((row) => (
+              <tr><td>{row.label}</td><td class="num">{row.value}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </template>
+))}
+
+<script>
+  const dialog = document.getElementById('kpi-dialog') as HTMLDialogElement | null;
+  const body = document.getElementById('kpi-dialog-body');
+  const title = document.getElementById('kpi-dialog-title');
+
+  if (dialog && body && title) {
+    let opener: HTMLElement | null = null;
+
+    const open = (card: HTMLElement) => {
+      const key = card.dataset.kpi || '';
+      const template = document.querySelector<HTMLTemplateElement>(`template[data-kpi-template="${key}"]`);
+      if (!template) return;
+      title.textContent = template.dataset.title || '';
+      body.replaceChildren(template.content.cloneNode(true));
+      opener = card;
+      dialog.showModal();
+    };
+
+    document.querySelectorAll<HTMLElement>('[data-kpi]').forEach((card) => {
+      if (!document.querySelector(`template[data-kpi-template="${card.dataset.kpi}"]`)) return;
+      card.classList.add('kpi-clickable');
+      card.setAttribute('role', 'button');
+      card.setAttribute('tabindex', '0');
+      card.setAttribute('aria-haspopup', 'dialog');
+      card.addEventListener('click', (event) => {
+        if ((event.target as Element).closest('a, .tip')) return;
+        open(card);
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.target !== card || (event.key !== 'Enter' && event.key !== ' ')) return;
+        event.preventDefault();
+        open(card);
+      });
+    });
+
+    dialog.addEventListener('click', (event) => {
+      // Click on the backdrop (the dialog element itself) or the close button.
+      if (event.target === dialog || (event.target as Element).closest('[data-kpi-close]')) dialog.close();
+    });
+    dialog.addEventListener('close', () => opener?.focus());
+  }
+</script>
+
+<style is:global>
+  .kpi-clickable { cursor: pointer; transition: box-shadow 0.15s ease, border-color 0.15s ease; }
+  .kpi-clickable:hover { border-color: var(--violet); }
+  .kpi-clickable:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  .kpi-chart-hint { font-size: 12px; font-weight: 600; color: var(--violet); margin-top: 4px; }
+  .kpi-dialog {
+    margin: auto; /* the admin CSS reset removes the default centring */
+    border: 1px solid var(--border); border-radius: 12px; padding: 24px;
+    width: min(880px, 92vw); max-height: 90vh; overflow: auto;
+    background: var(--surface); color: var(--text); box-shadow: 0 24px 64px rgba(12, 10, 62, 0.3);
+  }
+  .kpi-dialog::backdrop { background: rgba(12, 10, 62, 0.45); }
+  .kpi-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+  .kpi-dialog-title { margin: 0; font-size: 20px; }
+  .kpi-table-toggle { margin-top: 16px; }
+  .kpi-table-toggle summary { cursor: pointer; font-weight: 600; }
+</style>

@@ -606,7 +606,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         date: d.date, amount: d.amount, currency: d.currency,
         gateway: d.gateway, payer: d.payer?.email || d.payer?.name || 'Unknown',
       })),
-      failedTransactions: donations.filter(d => d.status === 'failed').slice(0, 10).map(d => ({
+      // Keep every failed charge (capped) so the dashboard can show any month,
+      // not just the 10 most recent.
+      failedTransactions: donations.filter(d => d.status === 'failed').slice(0, 400).map(d => ({
         date: d.date, amount: d.amount, currency: d.currency,
         gateway: d.gateway, payer: d.payer?.email || d.payer?.name || 'Unknown',
       })),

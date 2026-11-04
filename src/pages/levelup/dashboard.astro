@@ -4,6 +4,7 @@ import AdminShell from '../../components/AdminShell.astro';
 import { stackedMonthlyChart } from '../../lib/admin-charts';
 import MonthExplorer from '../../components/MonthExplorer.astro';
 import KpiTrendDialog from '../../components/KpiTrendDialog.astro';
+import LostDonorsMatrix from '../../components/LostDonorsMatrix.astro';
 import { fmtMoney, fmtMoney0, fmtNum, computeDelta } from '../../lib/admin-format';
 import { getAdminData } from '../../lib/admin-data';
 import type { DonationData, MonthlyTotal } from '../../lib/admin-data';
@@ -382,6 +383,9 @@ const split = insights?.splitPct ?? null;
 
       <!-- EXPLORE A MONTH -->
       <MonthExplorer monthly={monthly} failed={failed} insights={insights} flows={flows} lastCompleteMonth={lastComplete?.month} />
+
+      <!-- LOST DONORS ACROSS MONTHS (loaded on demand) -->
+      <LostDonorsMatrix />
     </>
   )}
 </AdminShell>

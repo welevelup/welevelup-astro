@@ -1,0 +1,44 @@
+---
+// "Lost donors across months": loaded on demand (it reads all three payment
+// gateways), then drawn by src/lib/lost-donors-ui.ts.
+---
+<section class="section" id="lost-donors">
+  <div class="section-title">Lost donors across months <span class="tip" tabindex="0" role="note" aria-label="What lost means">ⓘ<span class="tip-text">A donor is “lost” in a month when they gave monthly the month before but not that month. This list shows every one of them over the last 12 months, so you can see who stops once, who comes back, and who keeps stopping.</span></span></div>
+  <div class="card">
+    <p class="kpi-desc" style="margin-top:0">
+      Lost is not the same as cancelled: a late payment or a card that failed for a few days also shows up as lost for a month.
+      Here you can see whether the same people keep appearing, and whether they come back.
+    </p>
+    <div class="lost-load-row">
+      <button type="button" class="btn btn-ghost" id="lost-load">Load the last 12 months</button>
+      <span class="kpi-desc" id="lost-status" aria-live="polite"></span>
+    </div>
+    <div id="lost-results"></div>
+  </div>
+</section>
+
+<script>
+  import { initLostDonors } from '../lib/lost-donors-ui';
+  initLostDonors();
+</script>
+
+<style is:global>
+  .lost-load-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  #lost-results .kpi-grid { margin-top: 12px; }
+  .lost-controls { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin: 16px 0 8px; }
+  .lost-controls label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+  .lost-legend { margin: 8px 0 12px; }
+  .lost-table-wrap { overflow-x: auto; }
+  .lost-table th, .lost-table td { white-space: nowrap; }
+  .lost-donor { text-align: left; font-weight: 500; position: sticky; left: 0; background: var(--surface); z-index: 1; }
+  .lost-cell, .lost-cell-head { text-align: center; min-width: 34px; padding-left: 4px; padding-right: 4px; }
+  .lost-table .lost-donor { text-transform: none; letter-spacing: 0; }
+  .lost-table .lost-cell-gave { color: var(--pos); }
+  .lost-table .lost-cell-lost { color: var(--neg); font-weight: 700; background: rgba(185, 28, 28, 0.1); }
+  .lost-table .lost-cell-failed { color: #B45309; font-weight: 700; background: rgba(180, 83, 9, 0.12); }
+  .lost-table .lost-cell-away { color: var(--text-3); }
+  .lost-legend .lost-cell-gave { color: var(--pos); }
+  .lost-legend .lost-cell-lost { color: var(--neg); font-weight: 700; }
+  .lost-legend .lost-cell-failed { color: #B45309; font-weight: 700; }
+  .lost-legend .lost-cell-away { color: var(--text-3); }
+</style>

@@ -66,6 +66,11 @@ export function failedEmailSet(list: FailedTx[], month: string): Set<string> {
  * weekly sync) is kept; otherwise a failed charge that month means "fixable",
  * and anything else is "no charge made".
  */
+/** Only the stops a payment provider itself reported as a cancellation. */
+export function confirmedCancellations(rows: StoppedRow[]): StoppedRow[] {
+  return rows.filter((r) => r.reason === 'cancelled');
+}
+
 export function classifyStopped(lost: DonorRow[], failedEmails: Set<string>): StoppedRow[] {
   return lost.map((donor) => {
     if (donor.reason) return { ...donor, reason: donor.reason };

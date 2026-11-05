@@ -4,6 +4,7 @@ import {
   failedForMonth,
   failedEmailSet,
   classifyStopped,
+  confirmedCancellations,
   recentMonths,
   monthLabel,
   fromFetched,
@@ -72,4 +73,18 @@ test('fromFetched prefers name, falls back to email, then "unknown"', () => {
   assert.equal(rows[0].label, 'Ana');
   assert.equal(rows[1].label, 'b@x.com');
   assert.equal(rows[2].label, 'unknown');
+});
+
+test('confirmedCancellations keeps only cancellations reported by the gateway', () => {
+  const rows = [
+    { key: 'a', label: 'A', gateway: 'mollie', amount: 5, reason: 'cancelled' as const },
+    { key: 'b', label: 'B', gateway: 'gocardless', amount: 5, reason: 'no_charge' as const },
+    { key: 'c', label: 'C', gateway: 'mollie', amount: 5, reason: 'failed' as const },
+  ];
+  assert.deepEqual(confirmedCancellations(rows).map((r) => r.key), ['a']);
+});
+
+test('confirmedCancellations returns nothing when no stop was confirmed as a cancellation', () => {
+  const rows = [{ key: 'b', label: 'B', gateway: 'gocardless', amount: 5, reason: 'no_charge' as const }];
+  assert.deepEqual(confirmedCancellations(rows), []);
 });

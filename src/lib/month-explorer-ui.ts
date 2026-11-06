@@ -2,6 +2,7 @@
 // Pure logic lives in ./month-explorer; this file only touches the DOM.
 import {
   classifyStopped,
+  confirmedCancellations,
   failedEmailSet,
   failedForMonth,
   fromFetched,
@@ -84,7 +85,7 @@ function stoppedTable(rows: StoppedRow[]): string {
 }
 
 function cancelledTable(rows: StoppedRow[]): string {
-  if (!rows.length) return message('No cancelled subscriptions this month.');
+  if (!rows.length) return message('No cancellations were reported by the payment providers this month. People who simply stopped paying are listed under “Who stopped giving”.');
   return table(
     [{ label: 'Donor' }, { label: 'Amount', num: true }, { label: 'Provider' }],
     rows.map((r) => `<tr><td style="color:var(--text-2)">${escapeHtml(r.label)}</td>${amountCell(r.amount)}${gatewayCell(r.gateway)}</tr>`)
@@ -180,7 +181,7 @@ export function initMonthExplorer(): void {
   const showPeople = (month: string, people: MonthPeople) => {
     started.innerHTML = startedTable(people.started);
     stopped.innerHTML = stoppedTable(people.stopped);
-    cancelled.innerHTML = cancelledTable(people.stopped.filter((r) => r.reason !== 'failed'));
+    cancelled.innerHTML = cancelledTable(confirmedCancellations(people.stopped));
   };
 
   const showSummary = (month: string, people: MonthPeople | null) => {

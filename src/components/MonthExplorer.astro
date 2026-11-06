@@ -98,7 +98,7 @@ const explorerJson = JSON.stringify(explorerData).replace(/</g, '\\u003c');
 
   <div class="grid-2" style="margin-top:16px">
     <div>
-      <div class="section-title">Cancelled subscriptions <span class="tip" tabindex="0" role="note" aria-label="How cancelled subscriptions is worked out">ⓘ<span class="tip-text">Gateways rarely report cancellations directly, so this is derived the reliable way: donors who gave the month before but not this one, and it wasn't a failed charge.</span></span></div>
+      <div class="section-title">Cancelled subscriptions <span class="tip" tabindex="0" role="note" aria-label="How cancelled subscriptions is worked out">ⓘ<span class="tip-text">Only cancellations that Mollie, GoCardless or PayPal themselves reported. Mollie and PayPal rarely do, so this is often empty. It does not mean nobody stopped: people who gave last month but not this one, with no failed charge, are under “Who stopped giving” as “No charge made”.</span></span></div>
       <div class="card explorer-panel" id="ex-cancelled"></div>
     </div>
     <div>

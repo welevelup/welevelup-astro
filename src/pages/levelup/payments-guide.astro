@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 import AdminShell from '../../components/AdminShell.astro';
+import ReconcileMonths from '../../components/ReconcileMonths.astro';
 
 // Static explainer, no donor data. Counts were read from Mollie on 13 Nov 2026.
 const urlToken = Astro.url.searchParams.get('token') || '';
@@ -213,6 +214,8 @@ const urlToken = Astro.url.searchParams.get('token') || '';
       </table>
     </div>
   </section>
+
+  <ReconcileMonths />
 
   <section class="section" aria-labelledby="h-scripts">
     <h2 class="section-title" id="h-scripts">What each script does</h2>

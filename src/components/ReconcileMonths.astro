@@ -1,0 +1,47 @@
+---
+// "Reconcile months": loaded on demand (it reads all three gateways), then
+// drawn by src/lib/reconcile-months-ui.ts. Read-only.
+---
+<section class="section" id="reconcile" aria-labelledby="h-reconcile">
+  <h2 class="section-title" id="h-reconcile">Reconcile months: why were donors lost?</h2>
+  <p class="kpi-desc reconcile-intro">
+    Pick a range of months. For every donor who gave one month and not the next, this reads Mollie, GoCardless and PayPal and says why, so we can tell real losses from false alarms. It only reads: it never sends an email or changes anything.
+  </p>
+  <div class="card">
+    <div class="reconcile-form">
+      <label>From <select id="reconcile-from"></select></label>
+      <label>To <select id="reconcile-to"></select></label>
+      <button type="button" class="btn btn-ghost" id="reconcile-load">Load months</button>
+      <span class="kpi-desc" id="reconcile-status" aria-live="polite"></span>
+    </div>
+    <div id="reconcile-results"></div>
+  </div>
+</section>
+
+<script>
+  import { initReconcileMonths } from '../lib/reconcile-months-ui';
+  initReconcileMonths();
+</script>
+
+<style is:global>
+  .reconcile-intro { margin: 0 0 12px; max-width: 80ch; font-size: 13px; color: var(--text-2); }
+  .reconcile-form { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .reconcile-form label, .reconcile-controls label { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+  .reconcile-form select, .reconcile-controls select {
+    font-family: inherit; font-size: 13px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--surface); color: var(--text);
+  }
+  .reconcile-form select:focus-visible, .reconcile-controls select:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  .reconcile-headline { margin: 12px 0 16px; }
+  .reconcile-line { font-size: 16px; font-weight: 700; line-height: 1.4; margin: 0 0 12px; }
+  .reconcile-warning { margin: 0 0 8px; }
+  .reconcile-sub { font-size: 14px; font-weight: 700; margin: 20px 0 8px; }
+  .reconcile-controls { margin: 0 0 8px; }
+  .reconcile-table { min-width: 640px; }
+  .reconcile-table th, .reconcile-table td { vertical-align: top; }
+  .reconcile-table th.num { white-space: normal; }
+  .reconcile-total td { font-weight: 700; }
+  .reconcile-gateway { text-transform: capitalize; }
+  .reconcile-evidence { min-width: 260px; font-size: 13px; color: var(--text-2); }
+  #reconcile-results .table-wrap:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+</style>

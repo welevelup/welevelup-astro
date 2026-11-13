@@ -1,0 +1,31 @@
+---
+// "What are these failed payments?": loaded on demand (it reads Mollie and the
+// reminder log), then drawn by src/lib/failed-status-ui.ts.
+---
+<section class="section" id="failed-status">
+  <div class="section-title">What are these failed payments?</div>
+  <div class="card">
+    <p class="kpi-desc" style="margin-top:0">
+      Each failed payment from the last 45 days, with who it was, whether we emailed them, and whether it was fixed.
+    </p>
+    <div class="failed-load-row">
+      <button type="button" class="btn btn-ghost" id="failed-status-load">Load failed payments</button>
+      <span class="kpi-desc" id="failed-status-line" aria-live="polite"></span>
+    </div>
+    <div id="failed-status-results"></div>
+    <p class="kpi-desc" style="margin-bottom:0">
+      “Left checkout” rows are people who started a donation and never finished the first payment. They are not monthly donors yet, so we do not email them automatically.
+    </p>
+  </div>
+</section>
+
+<script>
+  import { initFailedStatus } from '../lib/failed-status-ui';
+  initFailedStatus();
+</script>
+
+<style is:global>
+  .failed-load-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  #failed-status-results .table-wrap { margin-bottom: 12px; }
+  #failed-status-results td, #failed-status-results th { white-space: nowrap; }
+</style>

@@ -5,6 +5,7 @@ import { stackedMonthlyChart } from '../../lib/admin-charts';
 import MonthExplorer from '../../components/MonthExplorer.astro';
 import KpiTrendDialog from '../../components/KpiTrendDialog.astro';
 import LostDonorsMatrix from '../../components/LostDonorsMatrix.astro';
+import FailedPaymentsStatus from '../../components/FailedPaymentsStatus.astro';
 import { fmtMoney, fmtMoney0, fmtNum, computeDelta } from '../../lib/admin-format';
 import { getAdminData } from '../../lib/admin-data';
 import type { DonationData, MonthlyTotal } from '../../lib/admin-data';
@@ -144,6 +145,9 @@ const split = insights?.splitPct ?? null;
           )}
         </div>
       </section>
+
+      <!-- WHAT ARE THESE FAILED PAYMENTS? (loaded on demand) -->
+      <FailedPaymentsStatus />
 
       <!-- GATEWAY BREAKDOWN -->
       <section class="section">

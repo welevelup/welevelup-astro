@@ -187,7 +187,7 @@ test('two gifts in the next month mean the lost month was paid late', () => {
   assert.equal(rows.length, 1);
   assert.equal(rows[0].month, '2025-12');
   assert.equal(rows[0].reason, 'paid-late');
-  assert.equal(rows[0].evidence, 'Paid twice in 2026-01: the 2025-12 payment was collected a month late.');
+  assert.equal(rows[0].evidence, 'Looks like a catch-up: paid twice in 2026-01, so the 2025-12 payment was probably collected a month late.');
 });
 
 test('one gift in the next month means the donor missed one payment but came back', () => {
@@ -251,4 +251,78 @@ test('the summary groups paid-late as a false alarm and came-back on its own', (
     s.line,
     'Of 4 lost donor-months, 1 look really lost, 1 are false alarms, 1 missed a payment but the donor came back, and 1 cannot be told (PayPal gives no failure data).'
   );
+});
+
+// Gifts for a donor across the thirteen-month window with full control of each month's gifts.
+const monthGifts = (email: string, plan: Record<string, Array<Partial<Gift>>>): Gift[] =>
+  thirteen.flatMap((m) => (plan[m] ?? [{}]).map((extra) => gift(email, m, 'mollie', extra)));
+const none: Record<string, Array<Partial<Gift>>> = { '2025-12': [] };
+
+test('a donor who normally gives twice a month is not paid-late: 2/0/2 is came-back', () => {
+  const g = monthGifts('a@x.com', { ...none, '2025-11': [{}, {}], '2026-01': [{}, {}] });
+  const row = runThirteen(g).rows.find((r) => r.month === '2025-12')!;
+  assert.equal(row.reason, 'came-back');
+});
+
+test('a 2/0/2 pattern across the year boundary uses the donor own baseline', () => {
+  const g = monthGifts('a@x.com', { '2025-11': [{}, {}], '2025-12': [], '2026-01': [{}, {}], '2026-02': [{}, {}] });
+  assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'came-back');
+});
+
+test('one gift on each of two gateways next month is a provider switch, not a catch-up', () => {
+  const g = [
+    ...thirteen.filter((m) => m <= '2025-11').map((m) => gift('a@x.com', m, 'gocardless')),
+    gift('a@x.com', '2026-01', 'gocardless'),
+    gift('a@x.com', '2026-01', 'paypal'),
+  ];
+  assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'came-back');
+});
+
+test('a monthly donor with one different-sized extra gift next month is came-back, not paid-late', () => {
+  const g = monthGifts('a@x.com', { ...none, '2026-01': [{}, { amount: 25 }] });
+  assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'came-back');
+});
+
+test('the catch-up must be on the gateway of their previous gift, using the largest gift in that month as baseline', () => {
+  const g = [
+    ...thirteen.filter((m) => m <= '2025-11' && m !== '2025-11').map((m) => gift('a@x.com', m)),
+    gift('a@x.com', '2025-11', 'mollie', { amount: 10 }),
+    gift('a@x.com', '2025-11', 'paypal', { amount: 3 }),
+    gift('a@x.com', '2026-01', 'mollie', { amount: 10 }),
+    gift('a@x.com', '2026-01', 'mollie', { amount: 10 }),
+    gift('a@x.com', '2026-01', 'mollie', { amount: 10 }),
+  ];
+  // Baseline is the 10 on Mollie (not the 3 on PayPal), and 3 gifts is more than the 2 made in November.
+  assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'paid-late');
+});
+
+test('a PayPal donor who gives once next month is came-back', () => {
+  const g = monthGifts('a@x.com', none).map((x) => ({ ...x, gateway: 'paypal' }));
+  assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'came-back');
+});
+
+test('a PayPal donor who pays twice next month on PayPal is paid-late', () => {
+  const g = monthGifts('a@x.com', { ...none, '2026-01': [{}, {}] }).map((x) => ({ ...x, gateway: 'paypal' }));
+  assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'paid-late');
+});
+
+test('a failed charge on another gateway still beats paid-late and came-back', () => {
+  const late = monthGifts('a@x.com', { ...none, '2026-01': [{}, {}] });
+  const failure: Failure = { month: '2025-12', email: 'a@x.com', gateway: 'gocardless' };
+  assert.equal(runThirteen(late, [failure]).rows.find((r) => r.month === '2025-12')?.reason, 'failed-charge');
+  assert.equal(runThirteen(monthGifts('b@x.com', none), [{ ...failure, email: 'b@x.com' }]).rows.find((r) => r.month === '2025-12')?.reason, 'failed-charge');
+});
+
+test('a donor absent next month too is not paid-late or came-back', () => {
+  const g = thirteen.filter((m) => m <= '2025-11').map((m) => gift('a@x.com', m));
+  const rows = runThirteen(g).rows;
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].reason, 'nothing-found');
+  const pp = runThirteen(g.map((x) => ({ ...x, gateway: 'paypal' }))).rows;
+  assert.equal(pp[0].reason, 'no-failure-data');
+});
+
+test('a donor who looks quarterly never gets paid-late or came-back', () => {
+  const { rows } = runWide(gifts('a@x.com', ['2026-01', '2026-04', '2026-07']));
+  assert.ok(rows.every((r) => r.reason === 'not-monthly'));
 });

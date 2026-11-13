@@ -59,8 +59,8 @@ export interface ReconcileResult {
 interface Donor {
   key: string; label: string; email: string; gateway: string; amount: number; lastMonth: string;
   present: Set<string>;
-  /** Number of gifts in each month (a catch-up month has 2). */
-  giftsIn: Map<string, number>;
+  /** Every gift in each month, in input order (a catch-up month has 2 of the same size). */
+  giftsByMonth: Map<string, Gift[]>;
 }
 
 const emptyCounts = (): Record<Reason, number> => ({
@@ -94,10 +94,11 @@ function groupDonors(gifts: readonly Gift[], months: string[]): Map<string, Dono
     if (!key) continue; // cannot tell who this was: do not merge strangers
     const existing = donors.get(key);
     const donor: Donor = existing ?? {
-      key, label: realName || email, email, gateway: g.gateway, amount: g.amount, lastMonth: g.month, present: new Set<string>(), giftsIn: new Map<string, number>(),
+      key, label: realName || email, email, gateway: g.gateway, amount: g.amount, lastMonth: g.month,
+      present: new Set<string>(), giftsByMonth: new Map<string, Gift[]>(),
     };
     donor.present.add(g.month);
-    donor.giftsIn.set(g.month, (donor.giftsIn.get(g.month) ?? 0) + 1);
+    donor.giftsByMonth.set(g.month, [...(donor.giftsByMonth.get(g.month) ?? []), g]);
     if (g.month >= donor.lastMonth) Object.assign(donor, { lastMonth: g.month, gateway: g.gateway, amount: g.amount });
     if (realName && !donor.label.includes(' ') && realName.includes(' ')) donor.label = realName;
     donors.set(key, donor);
@@ -122,6 +123,21 @@ function looksQuarterly(donor: Donor, failuresByMonth: Map<string, Map<string, s
 }
 
 const monthFromIndex = (i: number): string => `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`;
+
+/**
+ * A catch-up is two gifts in the month after the gap that repeat the donor's usual gift:
+ * on the same gateway and for the same amount as their gift in the month before the gap,
+ * and more gifts than they made that month (so a donor who always gives twice is not caught).
+ * When the month before the gap has several gifts, the baseline is the largest one, and
+ * the latest of equal ones, because that is the donor's regular payment.
+ */
+function looksLikeCatchUp(donor: Donor, previous: string, nextGifts: readonly Gift[]): boolean {
+  const before = donor.giftsByMonth.get(previous) ?? [];
+  if (nextGifts.length < 2 || nextGifts.length <= before.length) return false;
+  const baseline = before.reduce((best, g) => (g.amount >= best.amount ? g : best), before[0]);
+  const repeats = nextGifts.filter((g) => g.gateway === baseline.gateway && Math.abs(g.amount - baseline.amount) < 0.005);
+  return repeats.length >= 2;
+}
 
 function classify(
   donor: Donor,
@@ -154,9 +170,11 @@ function classify(
   if (doubled) return { reason: 'two-subscriptions', evidence: `Has ${doubled[1]} live subscriptions on ${gatewayName(doubled[0])}, so one may have replaced the other.` };
 
   // A gift next month shows whether this was timing (paid late) or a missed payment.
-  const giftsNext = next ? donor.giftsIn.get(next) ?? 0 : 0;
-  if (next && giftsNext >= 2) return { reason: 'paid-late', evidence: `Paid twice in ${next}: the ${month} payment was collected a month late.` };
-  if (next && giftsNext === 1) return { reason: 'came-back', evidence: `Gave again in ${next} but the ${month} payment was not recovered.` };
+  const nextGifts = next ? donor.giftsByMonth.get(next) ?? [] : [];
+  if (next && looksLikeCatchUp(donor, previous, nextGifts)) {
+    return { reason: 'paid-late', evidence: `Looks like a catch-up: paid twice in ${next}, so the ${month} payment was probably collected a month late.` };
+  }
+  if (next && nextGifts.length >= 1) return { reason: 'came-back', evidence: `Gave again in ${next} but the ${month} payment was not recovered.` };
   const noLater = next ? '' : ' (No later month to compare.)';
 
   if (donor.gateway === 'paypal') {

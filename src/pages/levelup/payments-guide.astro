@@ -1,0 +1,272 @@
+---
+export const prerender = false;
+import AdminShell from '../../components/AdminShell.astro';
+
+// Static explainer, no donor data. Counts were read from Mollie on 13 Nov 2026.
+const urlToken = Astro.url.searchParams.get('token') || '';
+---
+<AdminShell
+  active="guide"
+  title="Payments guide"
+  subtitle="Why donations stop, what each cause is, what we will do, and the email we would send. Open an email to read it in full."
+  token={urlToken}
+  lastSync={null}
+>
+  <div class="guide-key chart-legend" role="list" aria-label="Colour key">
+    <span class="legend-item" role="listitem"><span class="legend-swatch k-go"></span>We email</span>
+    <span class="legend-item" role="listitem"><span class="legend-swatch k-wait"></span>Check first, then decide</span>
+    <span class="legend-item" role="listitem"><span class="legend-swatch k-stop"></span>We do not email</span>
+  </div>
+
+  <section class="section" aria-labelledby="h-counts">
+    <h2 class="section-title" id="h-counts">2026 in numbers</h2>
+    <p class="kpi-desc guide-intro">Read from Mollie on 13 Nov (1 Jan to 13 Nov), read-only. Mollie only: GoCardless and PayPal are not included.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="h-counts">
+      <table class="data guide-table">
+        <thead><tr><th scope="col">#</th><th scope="col">Category</th><th scope="col">Number</th><th scope="col">Note</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Failed monthly charge</td><td><b>26</b> donors</td><td>45 failed charges. Only 3 paid again later.</td></tr>
+          <tr><td>2</td><td>Still unpaid after 14+ days</td><td><b>21</b> donors</td><td>Part of the 26.</td></tr>
+          <tr><td>3</td><td>Pending sign-ups</td><td><b>29</b></td><td>24 last payment failed, 5 never had a payment. Only 5 created in 2026.</td></tr>
+          <tr><td>4</td><td>Active, never paid</td><td><b>5</b></td><td>The 5 Nov analysis said 8. Different method.</td></tr>
+          <tr><td>5</td><td>Dead payment permission</td><td><b>Unknown</b></td><td>Mandate lookup returned nothing for all 74 active subscriptions.</td></tr>
+          <tr><td>6</td><td>February gap</td><td><b>5</b> on Mollie</td><td>Not the 15 the dashboard showed. See the February section.</td></tr>
+          <tr><td>7</td><td>Cancelled</td><td><b>15</b></td><td>All in 2026.</td></tr>
+          <tr><td>8</td><td>Abandoned checkout</td><td><b>60</b> attempts, <b>24</b> people</td><td>See the explanation in row 8.</td></tr>
+          <tr><td>9</td><td>Refunds / chargebacks</td><td><b>42</b> / <b>0</b></td><td></td></tr>
+          <tr><td>10</td><td>Quiet 2+ months</td><td><b>201</b></td><td>Includes one-off givers.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-causes">
+    <h2 class="section-title" id="h-causes">Causes, actions and emails</h2>
+    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="h-causes">
+      <table class="data guide-table guide-causes">
+        <thead>
+          <tr><th scope="col">#</th><th scope="col">Cause</th><th scope="col">What it is</th><th scope="col">2026 count</th><th scope="col">What we will do</th><th scope="col">Email</th></tr>
+        </thead>
+        <tbody>
+
+          <tr class="go">
+            <td class="num-cell">1</td>
+            <td class="cause"><b>Card or bank problem</b><small>Failed monthly charge</small></td>
+            <td>The monthly payment was rejected. Usually an expired or replaced card, no money on the day, or the bank declined. Mollie does not retry by itself.</td>
+            <td><b>26</b> donors<br />45 failed charges<br /><small>only 3 paid again later</small></td>
+            <td><ul><li>Reminder 3 days after the failure</li><li>Second reminder at 7 days</li><li>Stop as soon as a payment succeeds</li><li>Script: <code>failed-payment-reminders</code> <small>(built, not live)</small></li></ul></td>
+            <td>
+              <span class="chip chip-good">Yes · 2 emails</span>
+              <details><summary>Reminder 1: “Your Level Up donation didn’t go through”</summary>
+                <div class="mail"><p>Hi &#123;&#123;first_name&#125;&#125;,</p><p>Your monthly donation of <b>£&#123;&#123;amount&#125;&#125;</b> to Level Up could not be taken. This is often an expired card, or not enough in the account on the day.</p><p>You can update your payment details here:</p><p><span class="cta">Update payment details</span></p><p>Questions? Reply to this email and a person will help.</p><p>In solidarity,<br />Level Up</p></div>
+                <p class="when">Sent 3 days after the failure.</p></details>
+              <details><summary>Reminder 2: “Still time to keep your monthly donation going”</summary>
+                <div class="mail"><p>Hi &#123;&#123;first_name&#125;&#125;,</p><p>We wrote last week because your <b>£&#123;&#123;amount&#125;&#125;</b> donation could not be taken. It still hasn’t gone through. If you’d like to continue, updating your details takes a minute:</p><p><span class="cta">Update payment details</span></p><p>If you’d rather stop, that’s completely fine, and thank you for what you’ve given.</p><p>In solidarity,<br />Level Up</p></div>
+                <p class="when">Sent 7 days after the failure, only if still unpaid.</p></details>
+            </td>
+          </tr>
+
+          <tr class="go">
+            <td class="num-cell">2</td>
+            <td class="cause"><b>Still unpaid after reminders</b><small>Donor did not respond</small></td>
+            <td>Both reminders went out and nothing was paid. The donor needs to know the donation has stopped.</td>
+            <td><b>21</b> donors<br /><small>still unpaid after 14+ days (part of the 26)</small></td>
+            <td><ul><li>Day 14: stop the subscription first</li><li>Then send one email, no more chasing</li><li>Not built yet</li><li>Script: <code>suspend-unpaid-subscriptions</code> <small>(to build)</small></li></ul></td>
+            <td>
+              <span class="chip chip-good">Yes · once</span>
+              <details><summary>“Your monthly donation to Level Up has been paused”</summary>
+                <div class="mail"><p>Hi &#123;&#123;first_name&#125;&#125;,</p><p>Your monthly donation of <b>£&#123;&#123;amount&#125;&#125;</b> couldn’t be taken, and we haven’t been able to sort it out, so we’ve stopped it for now. Nothing more will be taken unless you choose to restart.</p><p>If you’d like to start again:</p><p><span class="cta">Restart my donation</span></p><p>If you have questions, reply to this email or write to hello@welevelup.org. Thank you for your support so far.</p><p>In solidarity,<br />Level Up</p></div>
+                <p class="when">Sent once at day 14, after the subscription is stopped.</p></details>
+            </td>
+          </tr>
+
+          <tr class="wait">
+            <td class="num-cell">3</td>
+            <td class="cause"><b>Sign-up never completed</b><small>29 pending subscriptions</small></td>
+            <td>The donor started a monthly donation but the first payment or bank approval never finished. Some left, some may have had a card problem.</td>
+            <td><b>29</b> pending<br /><small>24 last payment failed, 5 never had a payment. Only 5 were created in 2026.</small></td>
+            <td><ul><li>Run the read-only check on each one</li><li>Left checkout: nothing</li><li>Card problem: send the email</li><li>Script: <code>classify-failures</code> <small>(to build, read-only)</small></li></ul></td>
+            <td>
+              <span class="chip chip-warn">Only some</span>
+              <details><summary>“Let’s finish setting up your monthly donation”</summary>
+                <div class="mail"><p>Hi &#123;&#123;first_name&#125;&#125;,</p><p>Thank you for choosing to give <b>£&#123;&#123;amount&#125;&#125;</b> a month to Level Up. It looks like your first payment didn’t complete, so nothing has been taken yet.</p><p>You can finish setting it up here:</p><p><span class="cta">Complete my donation</span></p><p>If you changed your mind, no problem. You don’t need to do anything.</p><p>In solidarity,<br />Level Up</p></div>
+                <p class="when">Only after the check, and only to donors who must act.</p></details>
+            </td>
+          </tr>
+
+          <tr class="wait">
+            <td class="num-cell">4</td>
+            <td class="cause"><b>Active but never charged</b><small>8 subscriptions</small></td>
+            <td>Mollie says active, yet nothing was ever taken. Probably a bug on our side, not the donor’s doing.</td>
+            <td><b>5</b> active, never paid<br /><small>the 5 Nov analysis said 8. Different method, to be checked.</small></td>
+            <td><ul><li>Find the cause in our code</li><li>Fix it quietly</li><li>If the donor is still willing, create the charge</li><li>Script: <code>classify-failures</code> to find the exact cases, then a code fix</li></ul></td>
+            <td><span class="chip chip-warn">Not yet</span><br /><span class="none">No email. We would not tell a donor they haven’t paid when the fault may be ours.</span></td>
+          </tr>
+
+          <tr class="go">
+            <td class="num-cell">5</td>
+            <td class="cause"><b>Dead payment permission</b><small>Active, but the mandate is invalid</small></td>
+            <td>The donor withdrew permission with their bank, but the subscription still says active, so charges fail silently.</td>
+            <td><b>Unknown</b><br /><small>the mandate lookup returned nothing for all 74 active subscriptions, so no count yet</small></td>
+            <td><ul><li>Treat it as cause 1</li><li>Same reminders, same timing</li><li>Script: <code>classify-failures</code> to check each mandate</li></ul></td>
+            <td><span class="chip chip-good">Yes · same as 1</span><br /><span class="none">Uses reminders 1 and 2, then the paused email.</span></td>
+          </tr>
+
+          <tr class="wait">
+            <td class="num-cell">6</td>
+            <td class="cause"><b>February gap</b><small>Dashboard showed 13 of 15 with no charge</small></td>
+            <td>On Mollie alone, February has only <b>5</b> lost donors: 3 had a failed charge, 1 pays every 3 months (not lost at all), 1 has two subscriptions. The dashboard also reads GoCardless and PayPal, which I cannot read from here, and PayPal gives it no failure data, so every PayPal donor who misses a month shows as “no charge”. That is the most likely source of the 13.</td>
+            <td><b>5</b> on Mollie<br /><small>vs 15 on the dashboard. The 10 difference is GoCardless and PayPal, unchecked.</small></td>
+            <td><ul><li>Script: <code>reconcile-months</code> <small>(to build, read-only)</small> compares all three gateways for Jan to Jul</li><li>Fix the dashboard rules (see the February section)</li><li>Only then decide on contact</li></ul></td>
+            <td><span class="chip chip-warn">Not yet</span><br /><span class="none">No email. It may not be real loss.</span></td>
+          </tr>
+
+          <tr class="stop">
+            <td class="num-cell">7</td>
+            <td class="cause"><b>Donor cancelled</b><small>Confirmed by Mollie</small></td>
+            <td>The donor chose to stop. It is a decision, not a failure.</td>
+            <td><b>15</b> cancelled<br /><small>all in 2026</small></td>
+            <td><ul><li>No reminders or win-back</li><li>One confirmation when they cancel</li></ul></td>
+            <td>
+              <span class="chip chip-bad">Confirmation only</span>
+              <details><summary>“Your monthly donation has been cancelled”</summary>
+                <div class="mail"><p>Hi &#123;&#123;first_name&#125;&#125;,</p><p>This confirms we’ve cancelled your monthly donation to Level Up. Nothing more will be taken. Thank you for everything you’ve given.</p><p>If you’re happy to tell us why, just reply. It helps us, but you don’t have to.</p><p>In solidarity,<br />Level Up</p></div>
+                <p class="when">No “donate again” button.</p></details>
+            </td>
+          </tr>
+
+          <tr class="wait">
+            <td class="num-cell">8</td>
+            <td class="cause"><b>Left checkout</b><small>First payment expired or cancelled</small></td>
+            <td><b>The problem:</b> 60 abandoned attempts look like 60 lost donors, but they come from only <b>24 people</b>. Of the 54 attempts with an email, <b>27 were followed by a payment from the same person within 7 days</b>, so they tried again and gave. Only <b>23 attempts</b> were never followed by a payment. 31 of the 60 happened in <b>June alone</b>, and 40 were £5 or less. That points to testing, or a problem in June, more than to real donors walking away. 38 of the 60 never picked a payment method at all.</td>
+            <td><b>60</b> attempts<br /><b>24</b> people<br /><small>27 came back within 7 days. 23 attempts never paid. 6 have no email.</small></td>
+            <td><ul><li>Script: <code>classify-failures</code> lists the people who never paid and flags test entries</li><li>Look at June: what changed in the form or the bank step</li><li>Wait 7 days before any email, or the donor may be paying already</li></ul></td>
+            <td>
+              <span class="chip chip-warn">Optional · after 7 days</span>
+              <details><summary>“Did something go wrong with your donation?”</summary>
+                <div class="mail"><p>Hi &#123;&#123;first_name&#125;&#125;,</p><p>You started a donation to Level Up but it didn’t complete, so nothing has been taken.</p><p>If something went wrong on our side, we’d really like to know. Just reply to this email.</p><p>If you changed your mind, no problem at all, and we won’t write about this again.</p><p>In solidarity,<br />Level Up</p></div>
+                <p class="when">Only to people with no payment 7 days later, and only if Jade and data protection say yes. No donate button on purpose. Sent once. Small group, so the checkout fix matters more than the email.</p></details>
+            </td>
+          </tr>
+
+          <tr class="stop">
+            <td class="num-cell">9</td>
+            <td class="cause"><b>Refund or chargeback</b><small>Money returned</small></td>
+            <td>A mistaken or duplicate gift, a dispute with their bank, or a refund we issued.</td>
+            <td><b>42</b> refunds<br /><b>0</b> chargebacks</td>
+            <td><ul><li>No automatic message</li><li>If they write to us, answer by hand</li><li>Never send a thank-you for a refunded payment</li></ul></td>
+            <td><span class="chip chip-bad">No</span><br /><span class="none">No email.</span></td>
+          </tr>
+
+          <tr class="wait">
+            <td class="num-cell">10</td>
+            <td class="cause"><b>Quiet for 2+ months</b><small>Donor has drifted away</small></td>
+            <td>An earlier failure never fixed, a quiet cancellation, or a one-off giver counted as monthly.</td>
+            <td><b>201</b> not cancelled<br /><small>210 last paid 2+ months ago, includes one-off givers. 47 of them last gave in 2026.</small></td>
+            <td><ul><li>Only donors on the mailing list</li><li>Soft message about impact, no payment demand</li><li>Wording still to write</li></ul></td>
+            <td><span class="chip chip-warn">Opt-in only</span><br /><span class="none">Draft pending: needs two or three real wins to quote.</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-feb">
+    <h2 class="section-title" id="h-feb">February: what we checked</h2>
+    <p class="kpi-desc guide-intro">The dashboard said 13 of 15 lost donors in February had “no charge made”. I tried to reproduce it with the same rules, on the one gateway I can read (Mollie).</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="February check, donor by donor">
+      <table class="data guide-table">
+        <thead><tr><th scope="col">Donor (Mollie)</th><th scope="col">What the data shows</th><th scope="col">Really lost?</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Charge failed on 1 Feb, paid again from August</td><td>Failed, later recovered</td></tr>
+          <tr><td>2</td><td>Pays every <b>3 months</b> (17 Jan, 17 Apr, 17 Jul, 17 Oct). February is simply not a payment month.</td><td><b>No.</b> The dashboard counts them as lost</td></tr>
+          <tr><td>3</td><td>Charge failed on 9 Feb, paid again from July</td><td>Failed, later recovered</td></tr>
+          <tr><td>4</td><td>Has two subscriptions: an old pending one and a new one that started in March</td><td>Gap while the subscription was replaced</td></tr>
+          <tr><td>5</td><td>Charge failed on 21 Feb, subscription still pending, no payment since</td><td>Failed, not recovered</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout guide-callout">
+      <div>
+        <b>What this says</b>
+        <p>On Mollie, February is mostly failed cards, not charges that were never made. The “13 with no charge” cannot come from Mollie. The likely causes are in how the dashboard reads the other gateways and counts months:</p>
+        <ul>
+          <li><b>PayPal has no failure data.</b> The dashboard code returns an empty list of failures for PayPal, so a PayPal donor who misses a month always shows as “no charge”.</li>
+          <li><b>PayPal gifts are only counted if the transaction subject contains “monthly” or “subscription”.</b> Any other wording makes a real payment invisible.</li>
+          <li><b>Non-monthly donors look lost.</b> A donor who pays every 3 months or once a year is marked lost in the months in between.</li>
+          <li><b>Two subscriptions for one person</b> leave a gap while one replaces the other.</li>
+        </ul>
+        <p>This is a hypothesis. I could not check GoCardless or PayPal because their keys are not on this computer.</p>
+      </div>
+    </div>
+    <h3 class="guide-sub" id="h-feb-plan">What we will do for February</h3>
+    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="h-feb-plan">
+      <table class="data guide-table">
+        <thead><tr><th scope="col">Step</th><th scope="col">What</th><th scope="col">Script</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Get the three gateway keys onto this computer (<code>vercel env pull</code>), so we can read all of them</td><td>none, you run one command</td><td class="build">Waiting on you</td></tr>
+          <tr><td>2</td><td>For January to July, list every lost donor by gateway and give the reason: failed charge, pays every 3 months, two subscriptions, PayPal with no data, or truly nothing</td><td><code>reconcile-months</code></td><td class="build">To build</td></tr>
+          <tr><td>3</td><td>Fix the dashboard: skip non-monthly subscriptions, show PayPal as “unknown” instead of “no charge”, and merge a donor’s two subscriptions</td><td>change in <code>lost-donors.ts</code> and <code>admin-lost-donors.ts</code>, with tests</td><td class="build">To build</td></tr>
+          <tr><td>4</td><td>Re-run and replace the “13 of 15” with the real number. Decide on emails only after that</td><td><code>reconcile-months</code></td><td class="build">To build</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="h-scripts">
+    <h2 class="section-title" id="h-scripts">What each script does</h2>
+    <p class="kpi-desc guide-intro">All of them read only. None sends an email or changes anything in Mollie, unless it says so.</p>
+    <div class="table-wrap" tabindex="0" role="region" aria-labelledby="h-scripts">
+      <table class="data guide-table">
+        <thead><tr><th scope="col">Script</th><th scope="col">What it does</th><th scope="col">Reads</th><th scope="col">Changes or sends?</th><th scope="col">Status</th></tr></thead>
+        <tbody>
+          <tr><td><code>count_failures.py</code></td><td>Counts 2026 problems by category: failed charges, pending sign-ups, active but never paid, cancellations, abandoned checkouts, refunds, monthly drop-offs</td><td>Mollie</td><td>No</td><td class="done">Done</td></tr>
+          <tr><td><code>feb_and_abandoned.py</code></td><td>Reproduces February with the dashboard rules, and analyses the 60 abandoned checkouts (who, when, whether they came back)</td><td>Mollie</td><td>No</td><td class="done">Done</td></tr>
+          <tr><td><code>classify-failures</code></td><td>Looks at each donor in the “check first” rows and puts them in one bucket: our bug, dead mandate, left checkout, card problem, still in progress, cancelled, or unknown. Writes a report with the evidence for each. Also says which have an email on file and which are test entries</td><td>Mollie</td><td>No</td><td class="build">To build</td></tr>
+          <tr><td><code>reconcile-months</code></td><td>For each month, compares Mollie, GoCardless and PayPal and explains every lost donor. Used for February and July</td><td>Mollie, GoCardless, PayPal</td><td>No</td><td class="build">To build</td></tr>
+          <tr><td><code>failed-payment-reminders</code></td><td>Runs once a day. Finds failed monthly charges, skips donors who have paid since, and sends the reminders at 3 and 7 days</td><td>Mollie</td><td><b>Sends emails</b></td><td class="build">Built on a branch, not live</td></tr>
+          <tr><td><code>suspend-unpaid-subscriptions</code></td><td>At day 14 with no payment, stops the subscription first, then sends the “paused” email, so “nothing more will be taken” is true</td><td>Mollie</td><td><b>Cancels a subscription and sends an email</b></td><td class="build">To build</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="kpi-desc guide-foot">Counts for 2026 (1 Jan to 13 Nov) were read from Mollie on 13 Nov with <code>count_failures.py</code>, read-only, using the key stored as <code>MOLLIE_LEGACY_API_KEY</code>. They cover Mollie only, so PayPal donors are not included. The “13 of 15 in February” from the earlier dashboard did not reproduce on Mollie (5 lost). See the February section. Causes are likely explanations, not confirmed for each donor. Footer on every email: “You are receiving this because you set up a monthly donation to Level Up.” Have whoever handles data protection check before sending.</p>
+</AdminShell>
+
+<style is:global>
+  .guide-key { margin: 0 0 24px; }
+  .guide-key .k-go { background: var(--pos); }
+  .guide-key .k-wait { background: var(--amber); }
+  .guide-key .k-stop { background: var(--neg); }
+  .guide-intro { margin: 0 0 12px; max-width: 80ch; font-size: 13px; color: var(--text-2); }
+  .guide-sub { font-size: 14px; font-weight: 700; margin: 20px 0 10px; }
+  .guide-foot { max-width: 90ch; margin-bottom: 32px; }
+  .guide-table { min-width: 640px; }
+  .guide-table td { vertical-align: top; }
+  .guide-table code { font-family: ui-monospace, Menlo, monospace; font-size: 12px; background: var(--chip-bg); padding: 1px 5px; border-radius: 4px; }
+  .guide-table ul { padding-left: 18px; }
+  .guide-table li { margin: 3px 0; }
+  .guide-table small, .guide-table .none { color: var(--text-3); }
+  .guide-table .none { font-style: italic; }
+  .guide-table .done { color: var(--pos); font-weight: 700; }
+  .guide-table .build { color: var(--amber); font-weight: 700; }
+  .guide-causes { min-width: 1040px; }
+  .guide-causes .num-cell { font-size: 20px; font-weight: 800; color: var(--violet); border-left: 6px solid var(--border); }
+  .guide-causes tr.go .num-cell { border-left-color: var(--pos); }
+  .guide-causes tr.wait .num-cell { border-left-color: var(--amber); }
+  .guide-causes tr.stop .num-cell { border-left-color: var(--neg); }
+  .guide-causes td.cause b { display: block; margin-bottom: 3px; }
+  .guide-causes details { border: 1px solid var(--border); border-radius: 6px; margin: 8px 0 0; background: var(--surface); }
+  .guide-causes summary { cursor: pointer; padding: 8px 12px; font-size: 13px; font-weight: 700; }
+  .guide-causes summary:focus-visible, .table-wrap:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  .guide-causes .mail { padding: 4px 14px 10px; font-size: 13px; border-top: 1px solid var(--border); }
+  .guide-causes .mail p { margin: 8px 0; }
+  .guide-causes .when { font-size: 12px; color: var(--text-3); padding: 0 14px 8px; margin: 0; }
+  .guide-causes .cta { display: inline-block; background: var(--violet); color: #fff; padding: 5px 10px; font-weight: 700; font-size: 12px; border-radius: 4px; }
+  .guide-callout { color: var(--text); background: var(--chip-bg); border-color: var(--border); font-size: 13px; line-height: 1.5; }
+  .guide-callout p { margin: 8px 0; }
+  .guide-callout ul { padding-left: 18px; margin: 8px 0; }
+  .guide-callout li { margin: 4px 0; }
+</style>

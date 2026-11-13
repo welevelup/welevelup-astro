@@ -2,7 +2,7 @@
 // Shared admin shell: header + nav + theme + slot + shared styles.
 // Pages pass the active tab, their sync endpoint, the token and last-sync time.
 export interface Props {
-  active: 'donations' | 'website' | 'search' | 'audience';
+  active: 'donations' | 'website' | 'search' | 'audience' | 'guide';
   title: string;
   subtitle: string;
   token: string;
@@ -20,6 +20,7 @@ const tabs = [
   { id: 'website', label: 'Website', href: `/levelup/analytics${q}` },
   { id: 'search', label: 'Google Search', href: `/levelup/seo${q}` },
   { id: 'audience', label: 'Audience', href: `/levelup/audience${q}` },
+  { id: 'guide', label: 'Payments guide', href: `/levelup/payments-guide${q}` },
 ];
 
 const fmtDate = (s: string | null) =>

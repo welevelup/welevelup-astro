@@ -23,6 +23,8 @@ const REASON_TEXT: Record<Reason, string> = {
   'failed-charge': 'Failed charge',
   'not-monthly': 'Pays every 3 months or less often (not really lost)',
   'two-subscriptions': 'Two subscriptions',
+  'paid-late': 'Paid late (collected the next month)',
+  'came-back': 'Missed one payment, donor came back',
   'no-failure-data': 'PayPal gives no failure data',
   'nothing-found': 'Nothing found (really lost)',
 };
@@ -31,6 +33,8 @@ const REASON_CHIP: Record<Reason, string> = {
   'failed-charge': 'chip-bad',
   'not-monthly': 'chip-good',
   'two-subscriptions': 'chip-good',
+  'paid-late': 'chip-good',
+  'came-back': 'chip-warn',
   'no-failure-data': 'chip-warn',
   'nothing-found': 'chip-bad',
 };
@@ -125,7 +129,8 @@ function headline(result: ReconcileResult, partial: boolean): HTMLElement {
   const stats = el('div', undefined, 'kpi-grid');
   [
     [`Really lost${suffix}`, s.reallyLost, 'Failed charge, or nothing found.'],
-    [`False alarm${suffix}`, s.falseAlarm, 'Pays less often than monthly, or has two live subscriptions.'],
+    [`False alarm${suffix}`, s.falseAlarm, 'Pays less often than monthly, has two live subscriptions, or paid late.'],
+    [`Missed one payment, donor came back${suffix}`, s.missedButReturned, 'The payment was not recovered, but they kept giving.'],
     [`Cannot be told${suffix}`, s.unknown, 'PayPal donors: no failure data.'],
   ].forEach(([label, value, hint]) => {
     const kpi = el('div', undefined, 'kpi');

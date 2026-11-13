@@ -1,10 +1,12 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { buildFailedStatus, type FailedPaymentInput, type FailedStatusContext } from './failed-status.ts';
+import { buildFailedStatus, type FailedPaymentInput, type FailedStatusContext, type PaidPayment } from './failed-status.ts';
 
 const NOW = new Date('2026-11-13T12:00:00Z');
 const DAY = 86_400_000;
 const ago = (days: number) => new Date(NOW.getTime() - days * DAY).toISOString();
+
+const paid = (paidAt: string, sequenceType = 'recurring'): PaidPayment => ({ paidAt, sequenceType });
 
 const payment = (id: string, extra: Partial<FailedPaymentInput> = {}): FailedPaymentInput => ({
   paymentId: id, customerId: `cst_${id}`, donorName: `Donor ${id}`, email: `${id}@x.com`,
@@ -13,7 +15,7 @@ const payment = (id: string, extra: Partial<FailedPaymentInput> = {}): FailedPay
 });
 
 const context = (extra: Partial<FailedStatusContext> = {}): FailedStatusContext => ({
-  paidTimesByCustomer: new Map(), sentStages: new Set(), cancelledCustomerIds: new Set(), remindersEnabled: true, now: NOW,
+  paidByCustomer: new Map(), unverifiedCustomerIds: new Set(), sentStages: new Set(), cancelledCustomerIds: new Set(), remindersEnabled: true, now: NOW,
   ...extra,
 });
 
@@ -57,26 +59,26 @@ test('a young failure is not due yet, an older one was not sent', () => {
 });
 
 test('paying after the failure marks it fixed', () => {
-  const row = one(payment('a'), { paidTimesByCustomer: new Map([['cst_a', [ago(2)]]]) });
+  const row = one(payment('a'), { paidByCustomer: new Map([['cst_a', [paid(ago(2))]]]) });
   assert.equal(row.fixedStatus, 'paid-since');
 });
 
 test('a payment made before the failure does not count as fixed', () => {
-  const row = one(payment('a'), { paidTimesByCustomer: new Map([['cst_a', [ago(40)]]]) });
+  const row = one(payment('a'), { paidByCustomer: new Map([['cst_a', [paid(ago(40))]]]) });
   assert.equal(row.fixedStatus, 'still-unpaid');
 });
 
 test('a cancelled donor is cancelled unless they paid since', () => {
   const cancelled = new Set(['cst_a']);
   assert.equal(one(payment('a'), { cancelledCustomerIds: cancelled }).fixedStatus, 'cancelled');
-  const paid = new Map([['cst_a', [ago(1)]]]);
-  assert.equal(one(payment('a'), { cancelledCustomerIds: cancelled, paidTimesByCustomer: paid }).fixedStatus, 'paid-since');
+  const paidMap = new Map([['cst_a', [paid(ago(1))]]]);
+  assert.equal(one(payment('a'), { cancelledCustomerIds: cancelled, paidByCustomer: paidMap }).fixedStatus, 'paid-since');
 });
 
 test('rows are sorted still-unpaid first, then newest first', () => {
   const { rows } = buildFailedStatus(
     [payment('old', { failedAt: ago(9) }), payment('fixed', { failedAt: ago(1) }), payment('new', { failedAt: ago(4) })],
-    context({ paidTimesByCustomer: new Map([['cst_fixed', [ago(0.5)]]]) })
+    context({ paidByCustomer: new Map([['cst_fixed', [paid(ago(0.5))]]]) })
   );
   assert.deepEqual(rows.map((r) => r.paymentId), ['new', 'old', 'fixed']);
 });
@@ -91,7 +93,7 @@ test('summary counts total, fixed, still unpaid and emailed', () => {
   const { summary } = buildFailedStatus(
     [payment('a'), payment('b'), payment('c'), payment('d', { sequenceType: 'first' })],
     context({
-      paidTimesByCustomer: new Map([['cst_b', [ago(1)]]]),
+      paidByCustomer: new Map([['cst_b', [paid(ago(1))]]]),
       cancelledCustomerIds: new Set(['cst_c']),
       sentStages: new Set(['a:3', 'b:3']),
     })
@@ -105,4 +107,39 @@ test('does not mutate its inputs', () => {
   buildFailedStatus(inputs, context());
   assert.equal(JSON.stringify(inputs), snapshot);
   assert.deepEqual(inputs.map((p) => p.paymentId), ['b', 'a']);
+});
+
+test('a one-off gift does not fix a failed monthly charge', () => {
+  const row = one(payment('a'), { paidByCustomer: new Map([['cst_a', [paid(ago(1), 'oneoff')]]]) });
+  assert.equal(row.fixedStatus, 'still-unpaid');
+});
+
+test('a new first payment or a recurring payment fixes a failed monthly charge', () => {
+  assert.equal(one(payment('a'), { paidByCustomer: new Map([['cst_a', [paid(ago(1), 'first')]]]) }).fixedStatus, 'paid-since');
+  assert.equal(one(payment('a'), { paidByCustomer: new Map([['cst_a', [paid(ago(1), 'recurring')]]]) }).fixedStatus, 'paid-since');
+});
+
+test('any payment after a left-checkout counts as paid since', () => {
+  const row = one(payment('a', { sequenceType: 'first', status: 'expired' }), {
+    paidByCustomer: new Map([['cst_a', [paid(ago(1), 'oneoff')]]]),
+  });
+  assert.equal(row.fixedStatus, 'paid-since');
+});
+
+test('when the subscription check failed the row is unknown, not still unpaid', () => {
+  const row = one(payment('a'), { unverifiedCustomerIds: new Set(['cst_a']) });
+  assert.equal(row.fixedStatus, 'unknown');
+});
+
+test('a known payment since beats an unverified subscription check', () => {
+  const row = one(payment('a'), {
+    unverifiedCustomerIds: new Set(['cst_a']),
+    paidByCustomer: new Map([['cst_a', [paid(ago(1))]]]),
+  });
+  assert.equal(row.fixedStatus, 'paid-since');
+});
+
+test('unknown rows are not counted as still unpaid in the summary', () => {
+  const { summary } = buildFailedStatus([payment('a')], context({ unverifiedCustomerIds: new Set(['cst_a']) }));
+  assert.equal(summary.stillUnpaid, 0);
 });

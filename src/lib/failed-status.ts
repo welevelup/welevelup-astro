@@ -7,7 +7,7 @@ const FIRST_REMINDER_DAYS = 3;
 
 export type FailedKind = 'monthly-charge' | 'abandoned-checkout';
 export type EmailStatus = 'sent-day-3' | 'sent-day-7' | 'switched-off' | 'not-due-yet' | 'not-sent' | 'not-applicable';
-export type FixedStatus = 'paid-since' | 'cancelled' | 'still-unpaid';
+export type FixedStatus = 'paid-since' | 'cancelled' | 'unknown' | 'still-unpaid';
 
 export interface FailedPaymentInput {
   paymentId: string;
@@ -23,8 +23,12 @@ export interface FailedPaymentInput {
   reason?: string;
 }
 
+export interface PaidPayment { paidAt: string; sequenceType: string }
+
 export interface FailedStatusContext {
-  paidTimesByCustomer: ReadonlyMap<string, readonly string[]>;
+  paidByCustomer: ReadonlyMap<string, readonly PaidPayment[]>;
+  /** Customers whose subscriptions could not be read: we cannot say if they cancelled. */
+  unverifiedCustomerIds: ReadonlySet<string>;
   /** Entries look like `${paymentId}:3` or `${paymentId}:7`. */
   sentStages: ReadonlySet<string>;
   cancelledCustomerIds: ReadonlySet<string>;
@@ -64,8 +68,12 @@ function emailStatusOf(payment: FailedPaymentInput, kind: FailedKind, ctx: Faile
 }
 
 function fixedStatusOf(payment: FailedPaymentInput, ctx: FailedStatusContext): FixedStatus {
-  const paidTimes = ctx.paidTimesByCustomer.get(payment.customerId) ?? [];
-  if (paidTimes.some((t) => t > payment.failedAt)) return 'paid-since';
+  const paid = ctx.paidByCustomer.get(payment.customerId) ?? [];
+  // A one-off gift must not mark a broken monthly charge as fixed.
+  const countsAsFix = (p: PaidPayment) =>
+    payment.sequenceType !== 'recurring' || p.sequenceType === 'recurring' || p.sequenceType === 'first';
+  if (paid.some((p) => p.paidAt > payment.failedAt && countsAsFix(p))) return 'paid-since';
+  if (ctx.unverifiedCustomerIds.has(payment.customerId)) return 'unknown';
   if (ctx.cancelledCustomerIds.has(payment.customerId)) return 'cancelled';
   return 'still-unpaid';
 }

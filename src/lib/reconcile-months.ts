@@ -125,18 +125,18 @@ function looksQuarterly(donor: Donor, failuresByMonth: Map<string, Map<string, s
 const monthFromIndex = (i: number): string => `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`;
 
 /**
- * A catch-up is two gifts in the month after the gap that repeat the donor's usual gift:
- * on the same gateway and for the same amount as their gift in the month before the gap,
- * and more gifts than they made that month (so a donor who always gives twice is not caught).
- * When the month before the gap has several gifts, the baseline is the largest one, and
- * the latest of equal ones, because that is the donor's regular payment.
+ * A catch-up is two gifts in the month after the gap that repeat one of the donor's usual
+ * gifts: the same gateway and the same amount as a gift they made in the month before the
+ * gap. It also needs more gifts than that earlier month, so a donor who always gives twice
+ * is not caught. Any gift from the earlier month can be the usual one, so the answer does
+ * not depend on the order the gateways returned the gifts in.
  */
 function looksLikeCatchUp(donor: Donor, previous: string, nextGifts: readonly Gift[]): boolean {
   const before = donor.giftsByMonth.get(previous) ?? [];
   if (nextGifts.length < 2 || nextGifts.length <= before.length) return false;
-  const baseline = before.reduce((best, g) => (g.amount >= best.amount ? g : best), before[0]);
-  const repeats = nextGifts.filter((g) => g.gateway === baseline.gateway && Math.abs(g.amount - baseline.amount) < 0.005);
-  return repeats.length >= 2;
+  return before.some((usual) =>
+    nextGifts.filter((g) => g.gateway === usual.gateway && Math.abs(g.amount - usual.amount) < 0.005).length >= 2
+  );
 }
 
 function classify(

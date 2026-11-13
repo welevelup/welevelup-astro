@@ -283,7 +283,7 @@ test('a monthly donor with one different-sized extra gift next month is came-bac
   assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'came-back');
 });
 
-test('the catch-up must be on the gateway of their previous gift, using the largest gift in that month as baseline', () => {
+test('the catch-up must repeat one of their previous gifts (same gateway, same amount)', () => {
   const g = [
     ...thirteen.filter((m) => m <= '2025-11' && m !== '2025-11').map((m) => gift('a@x.com', m)),
     gift('a@x.com', '2025-11', 'mollie', { amount: 10 }),
@@ -292,7 +292,7 @@ test('the catch-up must be on the gateway of their previous gift, using the larg
     gift('a@x.com', '2026-01', 'mollie', { amount: 10 }),
     gift('a@x.com', '2026-01', 'mollie', { amount: 10 }),
   ];
-  // Baseline is the 10 on Mollie (not the 3 on PayPal), and 3 gifts is more than the 2 made in November.
+  // The 10 on Mollie is repeated three times, and 3 gifts is more than the 2 made in November.
   assert.equal(runThirteen(g).rows.find((r) => r.month === '2025-12')?.reason, 'paid-late');
 });
 
@@ -325,4 +325,44 @@ test('a donor absent next month too is not paid-late or came-back', () => {
 test('a donor who looks quarterly never gets paid-late or came-back', () => {
   const { rows } = runWide(gifts('a@x.com', ['2026-01', '2026-04', '2026-07']));
   assert.ok(rows.every((r) => r.reason === 'not-monthly'));
+});
+
+const reasonFor = (g: Gift[], month = '2025-12') => runThirteen(g).rows.find((r) => r.month === month)?.reason;
+
+test('an equal-amount tie across gateways gives the same answer in either input order', () => {
+  const plan = (before: Array<Partial<Gift>>) => monthGifts('a@x.com', { '2025-11': before, '2025-12': [], '2026-01': [{}, {}, {}] });
+  const mollieFirst = plan([{ gateway: 'mollie' }, { gateway: 'paypal' }]);
+  const paypalFirst = plan([{ gateway: 'paypal' }, { gateway: 'mollie' }]);
+  assert.equal(reasonFor(mollieFirst), 'paid-late');
+  assert.equal(reasonFor(paypalFirst), 'paid-late');
+});
+
+test('two catch-up gifts of different sizes are not a catch-up', () => {
+  const g = monthGifts('a@x.com', { '2025-12': [], '2026-01': [{ amount: 10 }, { amount: 12 }] });
+  assert.equal(reasonFor(g), 'came-back');
+});
+
+test('two live subscriptions on one gateway still beat paid-late', () => {
+  const g = monthGifts('a@x.com', { '2025-12': [], '2026-01': [{}, {}] });
+  const out = runThirteen(g, [], [
+    { email: 'a@x.com', gateway: 'mollie', interval: 'monthly', status: 'active' },
+    { email: 'a@x.com', gateway: 'mollie', interval: 'monthly', status: 'pending' },
+  ]);
+  assert.equal(out.rows.find((r) => r.month === '2025-12')?.reason, 'two-subscriptions');
+});
+
+test('three gifts next month where only one matches the usual gift is came-back', () => {
+  const g = monthGifts('a@x.com', { '2025-12': [], '2026-01': [{ amount: 10 }, { amount: 15 }, { amount: 20 }] });
+  assert.equal(reasonFor(g), 'came-back');
+});
+
+test('the real February shape stays paid-late: one GoCardless gift before, two of the same amount after', () => {
+  const g = [
+    ...thirteen.filter((m) => m <= '2026-01').map((m) => gift('a@x.com', m, 'gocardless', { amount: 8 })),
+    gift('a@x.com', '2026-03', 'gocardless', { amount: 8 }),
+    gift('a@x.com', '2026-03', 'gocardless', { amount: 8 }),
+  ];
+  const wideMonths = [...thirteen, '2026-03'].slice(1);
+  const out = reconcileMonths({ months: wideMonths, gifts: g, failures: [], subscriptions: [] });
+  assert.equal(out.rows.find((r) => r.month === '2026-02')?.reason, 'paid-late');
 });

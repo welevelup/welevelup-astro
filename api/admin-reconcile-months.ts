@@ -31,10 +31,30 @@ async function verifySession(req: VercelRequest): Promise<boolean> {
   }
 }
 
-async function fetchJson(url: string, opts: any = {}) {
+const MAX_RETRY_WAIT_MS = 5_000;
+
+/** GET JSON; on HTTP 429 waits (Retry-After, capped) and retries once. */
+export async function fetchJson(url: string, opts: any = {}, retried = false): Promise<any> {
   const res = await fetch(url, opts);
+  if (res.status === 429 && !retried) {
+    const seconds = Number(res.headers.get('Retry-After'));
+    const wait = Number.isFinite(seconds) && seconds >= 0 ? Math.min(seconds * 1000, MAX_RETRY_WAIT_MS) : 1_000;
+    await new Promise((resolve) => setTimeout(resolve, wait));
+    return fetchJson(url, opts, true);
+  }
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
+}
+
+/** Resolves with the fallback if the job is not done in time. The job itself cannot be cancelled. */
+export async function withDeadline<T>(job: Promise<T>, ms: number, fallback: T): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<T>((resolve) => { timer = setTimeout(() => resolve(fallback), ms); });
+  try {
+    return await Promise.race([job, late]);
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function pool<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
@@ -58,6 +78,10 @@ const FIRST_MONTH = '2026-01';
 const INTERNAL_TEST_EMAIL = 'tech@welevelup.org';
 /** Stop starting new lookups after this long, so the response still fits in maxDuration. */
 const LOOKUP_BUDGET_MS = 40_000;
+/** Payment paging stops earlier, so lookups still have time to run. */
+const PAGING_BUDGET_MS = 25_000;
+/** Each gateway job is given up on after this long, so the response always fits maxDuration. */
+const GATEWAY_BUDGET_MS = 50_000;
 
 type Interval = 'monthly' | 'quarterly' | 'half-yearly' | 'yearly' | 'other' | 'unknown';
 interface Gift { month: string; name: string; email: string; amount: number; gateway: string }
@@ -113,7 +137,7 @@ export function gocardlessInterval(unit: string, count: number): Interval {
 
 // ── Mollie ──────────────────────────────────────────────────────────────
 
-async function mollieData(months: string[], deadline: number): Promise<GatewayData> {
+async function mollieData(months: string[], deadline: number, pagingDeadline: number): Promise<GatewayData> {
   const apiKey = process.env.MOLLIE_API_KEY;
   if (!apiKey) throw new Error('not configured');
   const headers = { Authorization: `Bearer ${apiKey}` };
@@ -130,7 +154,10 @@ async function mollieData(months: string[], deadline: number): Promise<GatewayDa
     const oldest = batch[batch.length - 1]?.createdAt || '';
     if (!batch.length || oldest.slice(0, 10) < windowStart) break;
     url = body._links?.next?.href || '';
-    if (url && page === MAX_PAGES - 1) data.truncated = true;
+    if (url && (page === MAX_PAGES - 1 || Date.now() > pagingDeadline)) {
+      data.truncated = true;
+      break;
+    }
   }
 
   const paid = payments.filter(
@@ -171,7 +198,7 @@ async function mollieData(months: string[], deadline: number): Promise<GatewayDa
 
 // ── GoCardless ──────────────────────────────────────────────────────────
 
-async function gocardlessAll(base: string, key: string, headers: Record<string, string>, truncate: () => void): Promise<any[]> {
+async function gocardlessAll(base: string, key: string, headers: Record<string, string>, pagingDeadline: number, truncate: () => void): Promise<any[]> {
   const all: any[] = [];
   let after = '';
   for (let page = 0; page < MAX_PAGES; page++) {
@@ -179,12 +206,13 @@ async function gocardlessAll(base: string, key: string, headers: Record<string, 
     all.push(...(body[key] || []));
     after = body.meta?.cursors?.after || '';
     if (!after) return all;
+    if (Date.now() > pagingDeadline) break;
   }
   truncate();
   return all;
 }
 
-async function gocardlessData(months: string[], deadline: number): Promise<GatewayData> {
+async function gocardlessData(months: string[], deadline: number, pagingDeadline: number): Promise<GatewayData> {
   const token = process.env.GOCARDLESS_ACCESS_TOKEN;
   if (!token) throw new Error('not configured');
   const headers = { Authorization: `Bearer ${token}`, 'GoCardless-Version': '2015-07-06' };
@@ -193,8 +221,8 @@ async function gocardlessData(months: string[], deadline: number): Promise<Gatew
   const data = emptyData();
   const markTruncated = () => { data.truncated = true; };
 
-  const all = await gocardlessAll(`https://api.gocardless.com/payments?limit=500&created_at[gte]=${since}`, 'payments', headers, markTruncated);
-  const subscriptions = await gocardlessAll('https://api.gocardless.com/subscriptions?limit=500', 'subscriptions', headers, markTruncated);
+  const all = await gocardlessAll(`https://api.gocardless.com/payments?limit=500&created_at[gte]=${since}`, 'payments', headers, pagingDeadline, markTruncated);
+  const subscriptions = await gocardlessAll('https://api.gocardless.com/subscriptions?limit=500', 'subscriptions', headers, pagingDeadline, markTruncated);
 
   const monthOf = (p: any) => (p.charge_date || p.created_at || '').slice(0, 7);
   const success = new Set(['confirmed', 'paid_out', 'submitted', 'paid']);
@@ -202,7 +230,8 @@ async function gocardlessData(months: string[], deadline: number): Promise<Gatew
   const paid = all.filter((p) => success.has(p.status) && inWindow.has(monthOf(p)));
   const failed = all.filter((p) => failedStatuses.has(p.status) && inWindow.has(monthOf(p)));
 
-  const mandateIds = Array.from(new Set([...paid, ...failed, ...subscriptions].map((p) => p.links?.mandate).filter(Boolean))) as string[];
+  // Only donors who gave or failed in the window matter, so subscriptions are looked up for them alone.
+  const mandateIds = Array.from(new Set([...paid, ...failed].map((p) => p.links?.mandate).filter(Boolean))) as string[];
   const entries = await pool(mandateIds, LOOKUP_CONCURRENCY, async (mandateId) => {
     if (Date.now() > deadline) return { mandateId, customer: null, errors: 1 };
     try {
@@ -235,7 +264,8 @@ async function gocardlessData(months: string[], deadline: number): Promise<Gatew
       email: (customerOf(s)?.email || '').toLowerCase(),
       gateway: 'gocardless',
       interval: gocardlessInterval(String(s.interval_unit || ''), Number(s.interval || 1)),
-      status: String(s.status || ''),
+      // pending_customer_approval and pending_submission both mean "set up, not live yet".
+      status: String(s.status || '').startsWith('pending') ? 'pending' : String(s.status || ''),
     }))
     .filter((s) => s.email);
   return data;
@@ -243,7 +273,7 @@ async function gocardlessData(months: string[], deadline: number): Promise<Gatew
 
 // ── PayPal ──────────────────────────────────────────────────────────────
 
-async function paypalData(months: string[]): Promise<GatewayData> {
+async function paypalData(months: string[], pagingDeadline: number): Promise<GatewayData> {
   const clientId = process.env.PAYPAL_CLIENT_ID;
   const clientSecret = process.env.PAYPAL_CLIENT_SECRET;
   if (!clientId || !clientSecret) throw new Error('not configured');
@@ -263,6 +293,7 @@ async function paypalData(months: string[]): Promise<GatewayData> {
     const start = new Date(Date.UTC(y, mo - 1, 1, 0, 0, 0));
     const endRaw = new Date(Date.UTC(y, mo, 0, 23, 59, 59));
     if (start > today) return [];
+    if (Date.now() > pagingDeadline) { data.truncated = true; return []; }
     const end = endRaw > today ? today : endRaw;
     const gifts: Gift[] = [];
     for (let page = 1; page <= MAX_PAGES; page++) {
@@ -314,22 +345,40 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   if ('error' in resolved) return res.status(400).json({ error: resolved.error });
   const { months } = resolved;
 
-  const deadline = Date.now() + LOOKUP_BUDGET_MS;
+  const startedAt = Date.now();
+  const deadline = startedAt + LOOKUP_BUDGET_MS;
+  const pagingDeadline = startedAt + PAGING_BUDGET_MS;
+  type Outcome = { kind: 'ok'; data: GatewayData } | { kind: 'error'; notConfigured: boolean } | { kind: 'timeout' };
+  const attempt = (run: () => Promise<GatewayData>): Promise<Outcome> =>
+    withDeadline<Outcome>(
+      run().then(
+        (data): Outcome => ({ kind: 'ok', data }),
+        (err): Outcome => ({ kind: 'error', notConfigured: err instanceof Error && err.message === 'not configured' })
+      ),
+      GATEWAY_BUDGET_MS,
+      { kind: 'timeout' }
+    );
   const jobs: Array<[GatewayName, () => Promise<GatewayData>]> = [
-    ['mollie', () => mollieData(months, deadline)],
-    ['gocardless', () => gocardlessData(months, deadline)],
-    ['paypal', () => paypalData(months)],
+    ['mollie', () => mollieData(months, deadline, pagingDeadline)],
+    ['gocardless', () => gocardlessData(months, deadline, pagingDeadline)],
+    ['paypal', () => paypalData(months, pagingDeadline)],
   ];
-  const settled = await Promise.allSettled(jobs.map(([, run]) => run()));
+  const outcomes = await Promise.all(jobs.map(([, run]) => attempt(run)));
 
-  const gatewayErrors: Array<{ gateway: GatewayName; problem: 'not configured' | 'failed' }> = [];
+  const gatewayErrors: Array<{ gateway: GatewayName; problem: 'not configured' | 'failed' | 'timed out' }> = [];
   const parts: GatewayData[] = [];
-  settled.forEach((result, i) => {
-    if (result.status === 'fulfilled') return void parts.push(result.value);
-    const notConfigured = result.reason instanceof Error && result.reason.message === 'not configured';
+  let timedOut = false;
+  outcomes.forEach((outcome, i) => {
+    if (outcome.kind === 'ok') return void parts.push(outcome.data);
     // Log the gateway and the kind of failure only: error text can echo URLs or donor details.
-    if (!notConfigured) console.error(`admin-reconcile-months: ${jobs[i][0]} failed`);
-    gatewayErrors.push({ gateway: jobs[i][0], problem: notConfigured ? 'not configured' : 'failed' });
+    if (outcome.kind === 'timeout') {
+      timedOut = true;
+      console.error(`admin-reconcile-months: ${jobs[i][0]} timed out`);
+      gatewayErrors.push({ gateway: jobs[i][0], problem: 'timed out' });
+      return;
+    }
+    if (!outcome.notConfigured) console.error(`admin-reconcile-months: ${jobs[i][0]} failed`);
+    gatewayErrors.push({ gateway: jobs[i][0], problem: outcome.notConfigured ? 'not configured' : 'failed' });
   });
 
   return res.status(200).json({
@@ -337,7 +386,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     gifts: parts.flatMap((p) => p.gifts).filter((g) => g.email !== INTERNAL_TEST_EMAIL),
     failures: parts.flatMap((p) => p.failures),
     subscriptions: parts.flatMap((p) => p.subscriptions),
-    truncated: parts.some((p) => p.truncated),
+    truncated: timedOut || parts.some((p) => p.truncated),
     lookupErrors: parts.reduce((sum, p) => sum + p.lookupErrors, 0),
     gatewayErrors,
   });

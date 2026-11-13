@@ -2,7 +2,7 @@
 // The rules live in ./failed-status; this file only fetches and draws, with DOM
 // methods and textContent (donor names and emails are never put into innerHTML).
 import {
-  buildFailedStatus, type EmailStatus, type FailedPaymentInput, type FailedStatusResult, type FailedStatusRow, type FixedStatus,
+  buildFailedStatus, type EmailStatus, type FailedPaymentInput, type PaidPayment, type FailedStatusResult, type FailedStatusRow, type FixedStatus,
 } from './failed-status';
 
 const FETCH_TIMEOUT_MS = 65_000;
@@ -11,7 +11,11 @@ interface FailedStatusResponse {
   now: string;
   remindersEnabled: boolean;
   payments: FailedPaymentInput[];
-  paidTimesByCustomer: Record<string, string[]>;
+  truncated: boolean;
+  scanned: number;
+  lookupErrors: number;
+  paidByCustomer: Record<string, PaidPayment[]>;
+  unverifiedCustomerIds: string[];
   sentStages: string[];
   cancelledCustomerIds: string[];
 }
@@ -28,6 +32,7 @@ const EMAIL_TEXT: Record<EmailStatus, { text: string; cls: string }> = {
 const FIXED_TEXT: Record<FixedStatus, { text: string; cls: string }> = {
   'paid-since': { text: 'Paid since', cls: 'chip-good' },
   cancelled: { text: 'Cancelled', cls: 'chip-muted' },
+  unknown: { text: 'Could not check', cls: 'chip-warn' },
   'still-unpaid': { text: 'Still unpaid', cls: 'chip-bad' },
 };
 
@@ -118,9 +123,14 @@ function tableNode(result: FailedStatusResult): HTMLElement {
   return wrap;
 }
 
-function summaryText(result: FailedStatusResult): string {
+function summaryText(result: FailedStatusResult, data: FailedStatusResponse): string {
   const s = result.summary;
-  return `${s.total} failed payment${s.total === 1 ? '' : 's'} in the last 45 days: ${s.stillUnpaid} still unpaid, ${s.fixed} paid since, ${s.emailed} with a reminder email sent.`;
+  const base = `${s.total} failed payment${s.total === 1 ? '' : 's'} in the last 45 days: ${s.stillUnpaid} still unpaid, ${s.fixed} paid since, ${s.emailed} with a reminder email sent.`;
+  const cut = data.truncated ? ` Showing the newest ${data.scanned} payments only, so older failures may be missing.` : '';
+  const warn = data.lookupErrors > 0
+    ? ` Warning: ${data.lookupErrors} donor lookup${data.lookupErrors === 1 ? '' : 's'} failed, so some rows may say "Could not check" or show no name. Reload to try again.`
+    : '';
+  return base + cut + warn;
 }
 
 export function initFailedStatus(): void {
@@ -135,13 +145,14 @@ export function initFailedStatus(): void {
     try {
       const data = await load();
       const result = buildFailedStatus(data.payments, {
-        paidTimesByCustomer: new Map(Object.entries(data.paidTimesByCustomer)),
+        paidByCustomer: new Map(Object.entries(data.paidByCustomer)),
+        unverifiedCustomerIds: new Set(data.unverifiedCustomerIds),
         sentStages: new Set(data.sentStages),
         cancelledCustomerIds: new Set(data.cancelledCustomerIds),
         remindersEnabled: data.remindersEnabled,
         now: new Date(data.now),
       });
-      status.textContent = result.rows.length ? summaryText(result) : 'No failed payments in the last 45 days.';
+      status.textContent = result.rows.length ? summaryText(result, data) : `No failed payments in the last 45 days.${data.truncated ? ` Showing the newest ${data.scanned} payments only.` : ''}`;
       button.textContent = 'Reload';
       results.replaceChildren(...(result.rows.length ? [tableNode(result)] : []));
     } catch (err) {

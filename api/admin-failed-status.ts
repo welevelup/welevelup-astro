@@ -71,6 +71,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     // Newest first; stop once a whole page is older than the window.
     const payments: any[] = [];
+    let truncated = false;
     let url = '/payments?limit=250';
     for (let page = 0; page < MAX_PAGES && url; page++) {
       const data = await mollieGet(url, apiKey);
@@ -78,29 +79,61 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       payments.push(...batch);
       if (!batch.length || batch[batch.length - 1].createdAt < windowStart) break;
       url = data._links?.next?.href || '';
+      // Stopped by the page cap, not by reaching the window: the list is incomplete.
+      if (url && page === MAX_PAGES - 1) truncated = true;
     }
     const recent = payments.filter((p) => p.createdAt >= windowStart);
     const failed = recent.filter((p) => p.status === 'failed' || p.status === 'expired');
 
     const customerIds = Array.from(new Set(failed.map((p) => p.customerId).filter(Boolean))) as string[];
+
+    const paidByCustomer: Record<string, { paidAt: string; sequenceType: string }[]> = {};
+    for (const p of recent) {
+      if (p.status !== 'paid' || !p.paidAt || !p.customerId) continue;
+      paidByCustomer[p.customerId] = [
+        ...(paidByCustomer[p.customerId] || []),
+        { paidAt: p.paidAt, sequenceType: p.sequenceType || 'oneoff' },
+      ];
+    }
+    // Same rule as src/lib/failed-status.ts: a one-off gift does not fix a monthly charge.
+    const isFixed = (p: any): boolean =>
+      (paidByCustomer[p.customerId] || []).some(
+        (q) => q.paidAt > p.createdAt && (p.sequenceType !== 'recurring' || q.sequenceType === 'recurring' || q.sequenceType === 'first')
+      );
+    const failedByCustomer = new Map<string, any[]>();
+    for (const p of failed) {
+      if (p.customerId) failedByCustomer.set(p.customerId, [...(failedByCustomer.get(p.customerId) || []), p]);
+    }
+
+    let lookupErrors = 0;
     const lookups = await pool(customerIds, LOOKUP_CONCURRENCY, async (id) => {
-      const [customer, subs] = await Promise.all([
-        mollieGet(`/customers/${id}`, apiKey).catch(() => null),
-        mollieGet(`/customers/${id}/subscriptions`, apiKey).catch(() => null),
-      ]);
-      const list: any[] = subs?._embedded?.subscriptions || [];
-      const hasCanceled = list.some((s) => s.status === 'canceled');
-      const hasLive = list.some((s) => s.status === 'active' || s.status === 'pending');
-      return { id, customer, cancelled: hasCanceled && !hasLive };
+      // Nothing to learn from subscriptions when every failure here was already followed by a payment.
+      const allFixed = (failedByCustomer.get(id) || []).every(isFixed);
+      let customer: any = null;
+      let cancelled = false;
+      let subscriptionsChecked = true;
+      try {
+        customer = await mollieGet(`/customers/${id}`, apiKey);
+      } catch {
+        lookupErrors++;
+      }
+      if (!allFixed) {
+        try {
+          const subs = await mollieGet(`/customers/${id}/subscriptions`, apiKey);
+          const list: any[] = subs?._embedded?.subscriptions || [];
+          const hasCanceled = list.some((s) => s.status === 'canceled');
+          const hasLive = list.some((s) => s.status === 'active' || s.status === 'pending');
+          // Customer-wide on purpose: a donor with any live subscription is not "cancelled",
+          // and one with only cancelled ones has stopped, whichever payment failed.
+          cancelled = hasCanceled && !hasLive;
+        } catch {
+          lookupErrors++;
+          subscriptionsChecked = false;
+        }
+      }
+      return { id, customer, cancelled, subscriptionsChecked };
     });
     const customerOf = new Map(lookups.map((l) => [l.id, l.customer] as const));
-
-    const inScope = new Set(customerIds);
-    const paidTimesByCustomer: Record<string, string[]> = {};
-    for (const p of recent) {
-      if (p.status !== 'paid' || !p.paidAt || !p.customerId || !inScope.has(p.customerId)) continue;
-      paidTimesByCustomer[p.customerId] = [...(paidTimesByCustomer[p.customerId] || []), p.paidAt];
-    }
 
     const reminderKeys = failed.flatMap((p) => STAGES.map((stage) => `${p.id}:${stage}`));
     const sentStages: string[] = [];
@@ -111,6 +144,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     return res.status(200).json({
       now: now.toISOString(),
+      truncated,
+      scanned: payments.length,
+      lookupErrors,
       remindersEnabled: process.env.FAILED_REMINDERS_ENABLED === 'true',
       payments: failed.map((p) => ({
         paymentId: p.id,
@@ -124,7 +160,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         status: p.status,
         failedAt: p.createdAt,
       })),
-      paidTimesByCustomer,
+      paidByCustomer: Object.fromEntries(customerIds.filter((id) => paidByCustomer[id]).map((id) => [id, paidByCustomer[id]])),
+      unverifiedCustomerIds: lookups.filter((l) => !l.subscriptionsChecked).map((l) => l.id),
       sentStages,
       cancelledCustomerIds: lookups.filter((l) => l.cancelled).map((l) => l.id),
     });

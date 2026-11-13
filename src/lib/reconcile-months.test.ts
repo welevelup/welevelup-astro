@@ -8,6 +8,8 @@ const gift = (email: string, month: string, gateway = 'mollie', extra: Partial<G
   month, name: email.split('@')[0], email, amount: 10, gateway, ...extra,
 });
 const gifts = (email: string, ms: string[], gateway = 'mollie') => ms.map((m) => gift(email, m, gateway));
+const wide = ['2026-01', '2026-02', '2026-03', '2026-04', '2026-05', '2026-06', '2026-07', '2026-08'];
+const runWide = (g: Gift[], f: Failure[] = [], sub: Subscription[] = []) => reconcileMonths({ months: wide, gifts: g, failures: f, subscriptions: sub });
 const run = (g: Gift[], f: Failure[] = [], s: Subscription[] = []) => reconcileMonths({ months, gifts: g, failures: f, subscriptions: s });
 
 test('the first month is context only and never a column', () => {
@@ -28,7 +30,8 @@ test('a donor is lost in the month after their last gift', () => {
 test('a failed charge in the lost month is the reason, with its gateway', () => {
   const { rows } = run(gifts('a@x.com', ['2026-01', '2026-02']), [{ month: '2026-03', email: 'A@x.com', gateway: 'gocardless' }]);
   assert.equal(rows[0].reason, 'failed-charge');
-  assert.match(rows[0].evidence, /gocardless/);
+  assert.match(rows[0].evidence, /GoCardless/);
+  assert.match(rows[0].evidence, /2026-03/);
 });
 
 test('failed charge wins over a known quarterly subscription', () => {
@@ -41,7 +44,7 @@ test('failed charge wins over a known quarterly subscription', () => {
 });
 
 test('a known quarterly or yearly subscription is not-monthly', () => {
-  for (const interval of ['quarterly', 'yearly', 'other'] as const) {
+  for (const interval of ['quarterly', 'half-yearly', 'yearly'] as const) {
     const { rows } = run(gifts('a@x.com', ['2026-01']), [], [{ email: 'a@x.com', gateway: 'mollie', interval, status: 'active' }]);
     assert.equal(rows[0].reason, 'not-monthly', interval);
   }
@@ -55,21 +58,50 @@ test('a monthly subscription alongside a quarterly one is not treated as not-mon
   assert.notEqual(rows[0].reason, 'not-monthly');
 });
 
-test('with no subscription info, gifts every 3 months mean not-monthly', () => {
-  const { rows } = run(gifts('a@x.com', ['2026-01', '2026-04']));
-  assert.deepEqual(rows.map((r) => [r.month, r.reason]), [['2026-02', 'not-monthly'], ['2026-05', 'not-monthly']]);
+test('with no subscription info, three gifts 3 months apart are inferred as not-monthly, and the evidence says so', () => {
+  const { rows } = runWide(gifts('a@x.com', ['2026-01', '2026-04', '2026-07']));
+  assert.deepEqual(rows.map((r) => [r.month, r.reason]), [['2026-02', 'not-monthly'], ['2026-05', 'not-monthly'], ['2026-08', 'not-monthly']]);
+  assert.match(rows[0].evidence, /inferred/i);
 });
 
-test('with unknown interval, gifts 12 months apart mean not-monthly', () => {
-  const wide = ['2025-01', '2025-02', '2025-03', '2025-04', '2025-05', '2025-06', '2025-07', '2025-08', '2025-09', '2025-10', '2025-11', '2025-12', '2026-01', '2026-02'];
-  const out = reconcileMonths({
-    months: wide,
-    gifts: [gift('a@x.com', '2025-01'), gift('a@x.com', '2026-01')],
-    failures: [],
-    subscriptions: [{ email: 'a@x.com', gateway: 'mollie', interval: 'unknown', status: 'active' }],
-  });
-  assert.ok(out.rows.length > 0);
-  assert.ok(out.rows.every((r) => r.reason === 'not-monthly'));
+test('two gifts 3 months apart are not enough to infer quarterly giving', () => {
+  const { rows } = runWide(gifts('a@x.com', ['2026-01', '2026-04']));
+  assert.ok(rows.length > 0);
+  assert.ok(rows.every((r) => r.reason === 'nothing-found'));
+});
+
+test('a failed charge in a gap month blocks the quarterly inference', () => {
+  const { rows } = runWide(gifts('a@x.com', ['2026-01', '2026-04', '2026-07']), [{ month: '2026-03', email: 'a@x.com', gateway: 'mollie' }]);
+  assert.equal(rows.find((r) => r.month === '2026-02')?.reason, 'nothing-found');
+});
+
+test('gifts 12 months apart are never inferred as yearly: that needs subscription data', () => {
+  const { rows } = run(gifts('a@x.com', ['2026-01', '2026-02']), [], [{ email: 'a@x.com', gateway: 'mollie', interval: 'yearly', status: 'active' }]);
+  assert.equal(rows[0].reason, 'not-monthly');
+  assert.match(rows[0].evidence, /once a year/);
+});
+
+test('a cancelled quarterly subscription is a real loss, not a false alarm', () => {
+  const { rows } = run(gifts('a@x.com', ['2026-01']), [], [{ email: 'a@x.com', gateway: 'mollie', interval: 'quarterly', status: 'canceled' }]);
+  assert.equal(rows[0].reason, 'nothing-found');
+  assert.match(rows[0].evidence, /cancelled/);
+});
+
+test('a cancelled subscription blocks the quarterly inference', () => {
+  const { rows } = runWide(gifts('a@x.com', ['2026-01', '2026-04', '2026-07']), [], [
+    { email: 'a@x.com', gateway: 'mollie', interval: 'unknown', status: 'canceled' },
+  ]);
+  assert.ok(rows.every((r) => r.reason === 'nothing-found'));
+});
+
+test('weekly or other short intervals behave like monthly: a miss is a real loss', () => {
+  const { rows } = run(gifts('a@x.com', ['2026-01']), [], [{ email: 'a@x.com', gateway: 'mollie', interval: 'other', status: 'active' }]);
+  assert.equal(rows[0].reason, 'nothing-found');
+});
+
+test('a pending quarterly subscription counts as live', () => {
+  const { rows } = run(gifts('a@x.com', ['2026-01']), [], [{ email: 'a@x.com', gateway: 'mollie', interval: 'quarterly', status: 'pending' }]);
+  assert.equal(rows[0].reason, 'not-monthly');
 });
 
 test('irregular gaps are not mistaken for quarterly giving', () => {
@@ -83,6 +115,14 @@ test('two subscriptions on one gateway explain the gap', () => {
     { email: 'a@x.com', gateway: 'mollie', interval: 'monthly', status: 'active' },
   ]);
   assert.equal(rows[0].reason, 'two-subscriptions');
+});
+
+test('a cancelled subscription plus a new one is not two live subscriptions', () => {
+  const { rows } = run(gifts('a@x.com', ['2026-01', '2026-02']), [], [
+    { email: 'a@x.com', gateway: 'mollie', interval: 'monthly', status: 'canceled' },
+    { email: 'a@x.com', gateway: 'mollie', interval: 'monthly', status: 'active' },
+  ]);
+  assert.equal(rows[0].reason, 'nothing-found');
 });
 
 test('one subscription on each of two gateways is not a replacement gap', () => {

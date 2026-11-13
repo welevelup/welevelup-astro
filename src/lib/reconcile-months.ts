@@ -2,7 +2,8 @@
 // (gave the month before, not this month) across Mollie, GoCardless and PayPal.
 // Pure: no DOM, no network. The "lost" rule is the same as src/lib/lost-donors.ts.
 
-export type Interval = 'monthly' | 'quarterly' | 'yearly' | 'other' | 'unknown';
+/** 'other' is anything not clearly slower than monthly (weekly, daily, odd intervals): it behaves like monthly. */
+export type Interval = 'monthly' | 'quarterly' | 'half-yearly' | 'yearly' | 'other' | 'unknown';
 export type Reason = 'failed-charge' | 'not-monthly' | 'two-subscriptions' | 'no-failure-data' | 'nothing-found';
 
 export const REASONS: readonly Reason[] = ['failed-charge', 'not-monthly', 'two-subscriptions', 'no-failure-data', 'nothing-found'];
@@ -61,9 +62,16 @@ const monthIndex = (month: string): number => {
   return y * 12 + (m - 1);
 };
 
-const INTERVAL_TEXT: Record<Exclude<Interval, 'monthly' | 'unknown'>, string> = {
-  quarterly: 'every 3 months', yearly: 'once a year', other: 'on a schedule that is not monthly',
+const SLOW_INTERVAL_TEXT: Partial<Record<Interval, string>> = {
+  quarterly: 'every 3 months', 'half-yearly': 'every 6 months', yearly: 'once a year',
 };
+
+const GATEWAY_NAME: Record<string, string> = { mollie: 'Mollie', gocardless: 'GoCardless', paypal: 'PayPal' };
+const gatewayName = (gateway: string): string => GATEWAY_NAME[gateway] ?? gateway;
+
+/** Only a live subscription says how the donor pays today. */
+const isLive = (s: Subscription): boolean => s.status === 'active' || s.status === 'pending';
+const isCancelled = (s: Subscription): boolean => s.status === 'canceled' || s.status === 'cancelled';
 
 function groupDonors(gifts: readonly Gift[], months: string[]): Map<string, Donor> {
   const inWindow = new Set(months);
@@ -86,15 +94,23 @@ function groupDonors(gifts: readonly Gift[], months: string[]): Map<string, Dono
   return donors;
 }
 
-/** Gaps (in months) between a donor's gift months when they are all the same 3 or 12. */
-function regularSpacing(present: Set<string>): 3 | 12 | null {
-  const sorted = Array.from(present).map(monthIndex).sort((a, b) => a - b);
-  if (sorted.length < 2) return null;
-  const gaps = sorted.slice(1).map((v, i) => v - sorted[i]);
-  const first = gaps[0];
-  if ((first === 3 || first === 12) && gaps.every((g) => g === first)) return first;
-  return null;
+/**
+ * Inferred quarterly giving: at least 3 gift months, every gap exactly 3 months, and no
+ * failed charge in the months between (a failure means a monthly donor who stopped paying).
+ */
+function looksQuarterly(donor: Donor, failuresByMonth: Map<string, Map<string, string>>): boolean {
+  const sorted = Array.from(donor.present).sort();
+  if (sorted.length < 3) return false;
+  const indexes = sorted.map(monthIndex);
+  const gaps = indexes.slice(1).map((v, i) => v - indexes[i]);
+  if (!gaps.every((g) => g === 3)) return false;
+  for (let i = indexes[0]; i <= indexes[indexes.length - 1]; i++) {
+    if (donor.email && failuresByMonth.get(monthFromIndex(i))?.has(donor.email)) return false;
+  }
+  return true;
 }
+
+const monthFromIndex = (i: number): string => `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, '0')}`;
 
 function classify(
   donor: Donor,
@@ -104,36 +120,33 @@ function classify(
   subs: readonly Subscription[]
 ): { reason: Reason; evidence: string } {
   const failedOn = donor.email ? failuresByMonth.get(month)?.get(donor.email) : undefined;
-  if (failedOn) return { reason: 'failed-charge', evidence: `A charge on ${failedOn} failed in ${month}.` };
+  if (failedOn) return { reason: 'failed-charge', evidence: `A ${gatewayName(failedOn)} charge failed in ${month}.` };
 
-  const known = subs.filter((s) => s.interval !== 'unknown');
-  const nonMonthly = known.find((s) => s.interval !== 'monthly');
-  if (nonMonthly && !known.some((s) => s.interval === 'monthly')) {
-    return { reason: 'not-monthly', evidence: `Their subscription pays ${intervalText(nonMonthly.interval)}, so ${month} is not a payment month.` };
+  const live = subs.filter(isLive);
+  const liveKnown = live.filter((s) => s.interval !== 'unknown');
+  const slow = liveKnown.find((s) => SLOW_INTERVAL_TEXT[s.interval]);
+  const paysMonthlyToo = liveKnown.some((s) => !SLOW_INTERVAL_TEXT[s.interval]);
+  if (slow && !paysMonthlyToo) {
+    return { reason: 'not-monthly', evidence: `Their subscription pays ${SLOW_INTERVAL_TEXT[slow.interval]}, so ${month} is not a payment month.` };
   }
-  if (!known.length) {
-    const spacing = regularSpacing(donor.present);
-    if (spacing) {
-      return {
-        reason: 'not-monthly',
-        evidence: `They gave ${spacing === 3 ? 'every 3 months' : 'once a year'} (${Array.from(donor.present).sort().join(', ')}), so ${month} is not a payment month.`,
-      };
-    }
+  if (!liveKnown.length && !subs.some(isCancelled) && looksQuarterly(donor, failuresByMonth)) {
+    return {
+      reason: 'not-monthly',
+      evidence: `Inferred, not confirmed: they gave every 3 months (${Array.from(donor.present).sort().join(', ')}), so ${month} is probably not a payment month.`,
+    };
   }
 
-  const perGateway = new Map<string, number>();
-  for (const s of subs) perGateway.set(s.gateway, (perGateway.get(s.gateway) ?? 0) + 1);
-  const doubled = Array.from(perGateway.entries()).find(([, n]) => n >= 2);
-  if (doubled) return { reason: 'two-subscriptions', evidence: `Has ${doubled[1]} subscriptions on ${doubled[0]}, so one may have replaced the other.` };
+  const liveByGateway = new Map<string, number>();
+  for (const s of live) liveByGateway.set(s.gateway, (liveByGateway.get(s.gateway) ?? 0) + 1);
+  const doubled = Array.from(liveByGateway.entries()).find(([, n]) => n >= 2);
+  if (doubled) return { reason: 'two-subscriptions', evidence: `Has ${doubled[1]} live subscriptions on ${gatewayName(doubled[0])}, so one may have replaced the other.` };
 
   if (donor.gateway === 'paypal') {
     return { reason: 'no-failure-data', evidence: 'PayPal gives no failure data, so we cannot tell why they stopped.' };
   }
-  return { reason: 'nothing-found', evidence: `Gave in ${previous}, then no gift and no failed charge in ${month}.` };
-}
-
-function intervalText(interval: Interval): string {
-  return interval === 'monthly' || interval === 'unknown' ? '' : INTERVAL_TEXT[interval];
+  const cancelled = subs.find(isCancelled);
+  const note = cancelled ? ` Their ${gatewayName(cancelled.gateway)} subscription was cancelled.` : '';
+  return { reason: 'nothing-found', evidence: `Gave in ${previous}, then no gift and no failed charge in ${month}.${note}` };
 }
 
 export function reconcileMonths(input: ReconcileInput): ReconcileResult {

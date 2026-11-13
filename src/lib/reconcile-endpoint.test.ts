@@ -9,7 +9,8 @@ test('Mollie interval text maps to monthly, quarterly, yearly or other', () => {
   assert.equal(mollieInterval('12 months'), 'yearly');
   assert.equal(mollieInterval('1 year'), 'yearly');
   assert.equal(mollieInterval('2 weeks'), 'other');
-  assert.equal(mollieInterval('6 months'), 'other');
+  assert.equal(mollieInterval('6 months'), 'half-yearly');
+  assert.equal(mollieInterval('2 months'), 'other');
   assert.equal(mollieInterval(''), 'unknown');
 });
 
@@ -17,6 +18,7 @@ test('GoCardless interval unit and count map the same way', () => {
   assert.equal(gocardlessInterval('monthly', 1), 'monthly');
   assert.equal(gocardlessInterval('monthly', 3), 'quarterly');
   assert.equal(gocardlessInterval('yearly', 1), 'yearly');
+  assert.equal(gocardlessInterval('monthly', 6), 'half-yearly');
   assert.equal(gocardlessInterval('weekly', 1), 'other');
   assert.equal(gocardlessInterval('', 1), 'unknown');
 });

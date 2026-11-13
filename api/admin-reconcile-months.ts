@@ -59,7 +59,7 @@ const INTERNAL_TEST_EMAIL = 'tech@welevelup.org';
 /** Stop starting new lookups after this long, so the response still fits in maxDuration. */
 const LOOKUP_BUDGET_MS = 40_000;
 
-type Interval = 'monthly' | 'quarterly' | 'yearly' | 'other' | 'unknown';
+type Interval = 'monthly' | 'quarterly' | 'half-yearly' | 'yearly' | 'other' | 'unknown';
 interface Gift { month: string; name: string; email: string; amount: number; gateway: string }
 interface Failure { month: string; email: string; gateway: string }
 interface Subscription { email: string; gateway: string; interval: Interval; status: string }
@@ -90,6 +90,7 @@ export function resolveMonths(from: string, to: string): { months: string[] } | 
 function monthsToInterval(n: number): Interval {
   if (n === 1) return 'monthly';
   if (n === 3) return 'quarterly';
+  if (n === 6) return 'half-yearly';
   if (n === 12) return 'yearly';
   return 'other';
 }

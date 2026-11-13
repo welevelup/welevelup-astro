@@ -21,7 +21,7 @@ interface ReconcileResponse {
 
 const REASON_TEXT: Record<Reason, string> = {
   'failed-charge': 'Failed charge',
-  'not-monthly': 'Pays every 3 months or yearly (not really lost)',
+  'not-monthly': 'Pays every 3 months or less often (not really lost)',
   'two-subscriptions': 'Two subscriptions',
   'no-failure-data': 'PayPal gives no failure data',
   'nothing-found': 'Nothing found (really lost)',
@@ -114,15 +114,19 @@ function tableOf(label: string, head: HTMLElement[], rows: HTMLTableRowElement[]
   return wrap;
 }
 
-function headline(result: ReconcileResult): HTMLElement {
+function headline(result: ReconcileResult, partial: boolean): HTMLElement {
   const s = result.summary;
   const box = el('div', undefined, 'reconcile-headline');
-  box.append(el('p', result.summary.line, 'reconcile-line'));
+  const text = partial
+    ? `Partial data: a payment provider is missing, so do not rely on these numbers. ${s.line}`
+    : s.line;
+  box.append(el('p', text, partial ? 'reconcile-line reconcile-partial' : 'reconcile-line'));
+  const suffix = partial ? ' (partial data)' : '';
   const stats = el('div', undefined, 'kpi-grid');
   [
-    ['Really lost', s.reallyLost, 'Failed charge, or nothing found.'],
-    ['False alarm', s.falseAlarm, 'Pays every 3 months or yearly, or has two subscriptions.'],
-    ['Cannot be told', s.unknown, 'PayPal donors: no failure data.'],
+    [`Really lost${suffix}`, s.reallyLost, 'Failed charge, or nothing found.'],
+    [`False alarm${suffix}`, s.falseAlarm, 'Pays less often than monthly, or has two live subscriptions.'],
+    [`Cannot be told${suffix}`, s.unknown, 'PayPal donors: no failure data.'],
   ].forEach(([label, value, hint]) => {
     const kpi = el('div', undefined, 'kpi');
     kpi.append(el('div', String(label), 'kpi-label'), el('div', String(value), 'kpi-value'), el('div', String(hint), 'kpi-desc'));
@@ -171,9 +175,8 @@ function detailTable(rows: ReconcileRow[]): HTMLElement {
 function warnings(data: ReconcileResponse): string[] {
   const out: string[] = [];
   for (const g of data.gatewayErrors) {
-    out.push(g.problem === 'not configured'
-      ? `${g.gateway} is not set up here, so its donors are missing from this picture.`
-      : `${g.gateway} could not be read, so its donors are missing from this picture.`);
+    const why = g.problem === 'not configured' ? 'is not set up here' : g.problem === 'timed out' ? 'took too long (try fewer months)' : 'could not be read';
+    out.push(`${g.gateway} ${why}, so its donors are missing from this picture.`);
   }
   if (data.truncated) out.push('Some gateway had more payments than we read, so older ones may be missing. Try fewer months.');
   if (data.lookupErrors > 0) out.push(`${data.lookupErrors} donor or subscription lookup${data.lookupErrors === 1 ? '' : 's'} failed, so some reasons may say "Nothing found". Try again.`);
@@ -234,7 +237,7 @@ export function initReconcileMonths(): void {
     detail.id = 'reconcile-detail';
 
     const notes = warnings(data).map((w) => el('p', w, 'callout reconcile-warning'));
-    results.replaceChildren(...notes, headline(result), summaryTable(result), el('h3', 'Every lost donor-month', 'reconcile-sub'), controls, detail);
+    results.replaceChildren(...notes, headline(result, data.gatewayErrors.length > 0), summaryTable(result), el('h3', 'Every lost donor-month', 'reconcile-sub'), controls, detail);
     drawDetail('');
   };
 

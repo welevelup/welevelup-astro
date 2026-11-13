@@ -23,7 +23,7 @@ const REASON_TEXT: Record<Reason, string> = {
   'failed-charge': 'Failed charge',
   'not-monthly': 'Pays every 3 months or less often (not really lost)',
   'two-subscriptions': 'Two subscriptions',
-  'paid-late': 'Paid late (collected the next month)',
+  'paid-late': 'Probably paid late (caught up the next month)',
   'came-back': 'Missed one payment, donor came back',
   'no-failure-data': 'PayPal gives no failure data',
   'nothing-found': 'Nothing found (really lost)',

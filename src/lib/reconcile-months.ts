@@ -4,9 +4,12 @@
 
 /** 'other' is anything not clearly slower than monthly (weekly, daily, odd intervals): it behaves like monthly. */
 export type Interval = 'monthly' | 'quarterly' | 'half-yearly' | 'yearly' | 'other' | 'unknown';
-export type Reason = 'failed-charge' | 'not-monthly' | 'two-subscriptions' | 'no-failure-data' | 'nothing-found';
+export type Reason =
+  | 'failed-charge' | 'not-monthly' | 'two-subscriptions' | 'paid-late' | 'came-back' | 'no-failure-data' | 'nothing-found';
 
-export const REASONS: readonly Reason[] = ['failed-charge', 'not-monthly', 'two-subscriptions', 'no-failure-data', 'nothing-found'];
+export const REASONS: readonly Reason[] = [
+  'failed-charge', 'not-monthly', 'two-subscriptions', 'paid-late', 'came-back', 'no-failure-data', 'nothing-found',
+];
 
 export interface Gift { month: string; name: string; email: string; amount: number; gateway: string }
 export interface Failure { month: string; email: string; gateway: string }
@@ -37,8 +40,10 @@ export interface ReconcileSummary {
   counts: Record<Reason, number>;
   /** failed-charge + nothing-found. */
   reallyLost: number;
-  /** not-monthly + two-subscriptions. */
+  /** not-monthly + two-subscriptions + paid-late. */
   falseAlarm: number;
+  /** came-back: one payment was missed, the donor kept giving. */
+  missedButReturned: number;
   /** no-failure-data. */
   unknown: number;
   line: string;
@@ -51,10 +56,15 @@ export interface ReconcileResult {
   summary: ReconcileSummary;
 }
 
-interface Donor { key: string; label: string; email: string; gateway: string; amount: number; lastMonth: string; present: Set<string> }
+interface Donor {
+  key: string; label: string; email: string; gateway: string; amount: number; lastMonth: string;
+  present: Set<string>;
+  /** Number of gifts in each month (a catch-up month has 2). */
+  giftsIn: Map<string, number>;
+}
 
 const emptyCounts = (): Record<Reason, number> => ({
-  'failed-charge': 0, 'not-monthly': 0, 'two-subscriptions': 0, 'no-failure-data': 0, 'nothing-found': 0,
+  'failed-charge': 0, 'not-monthly': 0, 'two-subscriptions': 0, 'paid-late': 0, 'came-back': 0, 'no-failure-data': 0, 'nothing-found': 0,
 });
 
 const monthIndex = (month: string): number => {
@@ -84,9 +94,10 @@ function groupDonors(gifts: readonly Gift[], months: string[]): Map<string, Dono
     if (!key) continue; // cannot tell who this was: do not merge strangers
     const existing = donors.get(key);
     const donor: Donor = existing ?? {
-      key, label: realName || email, email, gateway: g.gateway, amount: g.amount, lastMonth: g.month, present: new Set<string>(),
+      key, label: realName || email, email, gateway: g.gateway, amount: g.amount, lastMonth: g.month, present: new Set<string>(), giftsIn: new Map<string, number>(),
     };
     donor.present.add(g.month);
+    donor.giftsIn.set(g.month, (donor.giftsIn.get(g.month) ?? 0) + 1);
     if (g.month >= donor.lastMonth) Object.assign(donor, { lastMonth: g.month, gateway: g.gateway, amount: g.amount });
     if (realName && !donor.label.includes(' ') && realName.includes(' ')) donor.label = realName;
     donors.set(key, donor);
@@ -116,6 +127,7 @@ function classify(
   donor: Donor,
   month: string,
   previous: string,
+  next: string | undefined,
   failuresByMonth: Map<string, Map<string, string>>,
   subs: readonly Subscription[]
 ): { reason: Reason; evidence: string } {
@@ -141,12 +153,18 @@ function classify(
   const doubled = Array.from(liveByGateway.entries()).find(([, n]) => n >= 2);
   if (doubled) return { reason: 'two-subscriptions', evidence: `Has ${doubled[1]} live subscriptions on ${gatewayName(doubled[0])}, so one may have replaced the other.` };
 
+  // A gift next month shows whether this was timing (paid late) or a missed payment.
+  const giftsNext = next ? donor.giftsIn.get(next) ?? 0 : 0;
+  if (next && giftsNext >= 2) return { reason: 'paid-late', evidence: `Paid twice in ${next}: the ${month} payment was collected a month late.` };
+  if (next && giftsNext === 1) return { reason: 'came-back', evidence: `Gave again in ${next} but the ${month} payment was not recovered.` };
+  const noLater = next ? '' : ' (No later month to compare.)';
+
   if (donor.gateway === 'paypal') {
-    return { reason: 'no-failure-data', evidence: 'PayPal gives no failure data, so we cannot tell why they stopped.' };
+    return { reason: 'no-failure-data', evidence: `PayPal gives no failure data, so we cannot tell why they stopped.${noLater}` };
   }
   const cancelled = subs.find(isCancelled);
   const note = cancelled ? ` Their ${gatewayName(cancelled.gateway)} subscription was cancelled.` : '';
-  return { reason: 'nothing-found', evidence: `Gave in ${previous}, then no gift and no failed charge in ${month}.${note}` };
+  return { reason: 'nothing-found', evidence: `Gave in ${previous}, then no gift and no failed charge in ${month}.${note}${noLater}` };
 }
 
 export function reconcileMonths(input: ReconcileInput): ReconcileResult {
@@ -173,7 +191,7 @@ export function reconcileMonths(input: ReconcileInput): ReconcileResult {
     const subs = donor.email ? subsByEmail.get(donor.email) ?? [] : [];
     for (let i = 1; i < months.length; i++) {
       if (donor.present.has(months[i]) || !donor.present.has(months[i - 1])) continue;
-      const { reason, evidence } = classify(donor, months[i], months[i - 1], failuresByMonth, subs);
+      const { reason, evidence } = classify(donor, months[i], months[i - 1], months[i + 1], failuresByMonth, subs);
       rows.push({ month: months[i], label: donor.label, email: donor.email, gateway: donor.gateway, amount: donor.amount, reason, evidence });
     }
   }
@@ -189,10 +207,11 @@ export function reconcileMonths(input: ReconcileInput): ReconcileResult {
   const counts = emptyCounts();
   for (const r of rows) counts[r.reason] += 1;
   const reallyLost = counts['failed-charge'] + counts['nothing-found'];
-  const falseAlarm = counts['not-monthly'] + counts['two-subscriptions'];
+  const falseAlarm = counts['not-monthly'] + counts['two-subscriptions'] + counts['paid-late'];
+  const missedButReturned = counts['came-back'];
   const unknown = counts['no-failure-data'];
   const totalLost = rows.length;
-  const line = `Of ${totalLost} lost donor-months, ${reallyLost} look really lost, ${falseAlarm} are false alarms, and ${unknown} cannot be told (PayPal gives no failure data).`;
+  const line = `Of ${totalLost} lost donor-months, ${reallyLost} look really lost, ${falseAlarm} are false alarms, ${missedButReturned} missed a payment but the donor came back, and ${unknown} cannot be told (PayPal gives no failure data).`;
 
-  return { months: months.slice(1), rows, byMonth, summary: { totalLost, counts, reallyLost, falseAlarm, unknown, line } };
+  return { months: months.slice(1), rows, byMonth, summary: { totalLost, counts, reallyLost, falseAlarm, missedButReturned, unknown, line } };
 }

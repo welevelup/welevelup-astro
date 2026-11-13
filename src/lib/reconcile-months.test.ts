@@ -174,3 +174,81 @@ test('does not mutate its inputs', () => {
   run(g);
   assert.equal(JSON.stringify(g), snapshot);
 });
+
+const thirteen = Array.from({ length: 13 }, (_, i) => `${2025 + Math.floor((1 + i) / 12)}-${String(((1 + i) % 12) + 1).padStart(2, '0')}`);
+// 2025-02 ... 2026-02
+const runThirteen = (g: Gift[], f: Failure[] = [], sub: Subscription[] = []) =>
+  reconcileMonths({ months: thirteen, gifts: g, failures: f, subscriptions: sub });
+const feb25to26 = (email: string, skip: string[], twice: string[] = []) =>
+  thirteen.filter((m) => !skip.includes(m)).flatMap((m) => (twice.includes(m) ? [gift(email, m), gift(email, m)] : [gift(email, m)]));
+
+test('two gifts in the next month mean the lost month was paid late', () => {
+  const { rows } = runThirteen(feb25to26('a@x.com', ['2025-12'], ['2026-01']));
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].month, '2025-12');
+  assert.equal(rows[0].reason, 'paid-late');
+  assert.equal(rows[0].evidence, 'Paid twice in 2026-01: the 2025-12 payment was collected a month late.');
+});
+
+test('one gift in the next month means the donor missed one payment but came back', () => {
+  const { rows } = runThirteen(feb25to26('a@x.com', ['2025-12']));
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].reason, 'came-back');
+  assert.equal(rows[0].evidence, 'Gave again in 2026-01 but the 2025-12 payment was not recovered.');
+});
+
+test('a failed charge still wins over paid-late and came-back', () => {
+  const { rows } = runThirteen(feb25to26('a@x.com', ['2025-12'], ['2026-01']), [{ month: '2025-12', email: 'a@x.com', gateway: 'mollie' }]);
+  assert.equal(rows[0].reason, 'failed-charge');
+});
+
+test('not-monthly and two-subscriptions still win over paid-late', () => {
+  const quarterly = runThirteen(feb25to26('a@x.com', ['2025-12'], ['2026-01']), [], [{ email: 'a@x.com', gateway: 'mollie', interval: 'quarterly', status: 'active' }]);
+  assert.equal(quarterly.rows[0].reason, 'not-monthly');
+  const doubled = runThirteen(feb25to26('b@x.com', ['2025-12'], ['2026-01']), [], [
+    { email: 'b@x.com', gateway: 'mollie', interval: 'monthly', status: 'active' },
+    { email: 'b@x.com', gateway: 'mollie', interval: 'monthly', status: 'pending' },
+  ]);
+  assert.equal(doubled.rows[0].reason, 'two-subscriptions');
+});
+
+test('paid-late and came-back beat no-failure-data for a PayPal donor', () => {
+  const g = feb25to26('a@x.com', ['2025-12'], ['2026-01']).map((x) => ({ ...x, gateway: 'paypal' }));
+  assert.equal(runThirteen(g).rows[0].reason, 'paid-late');
+});
+
+test('in the last month there is no later month to compare, and the evidence says so', () => {
+  const { rows } = runThirteen(feb25to26('a@x.com', ['2026-02']));
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].month, '2026-02');
+  assert.equal(rows[0].reason, 'nothing-found');
+  assert.match(rows[0].evidence, /no later month to compare/i);
+});
+
+test('in the last month a PayPal donor is still no-failure-data, with the same note', () => {
+  const g = feb25to26('a@x.com', ['2026-02']).map((x) => ({ ...x, gateway: 'paypal' }));
+  const { rows } = runThirteen(g);
+  assert.equal(rows[0].reason, 'no-failure-data');
+  assert.match(rows[0].evidence, /no later month to compare/i);
+});
+
+test('the summary groups paid-late as a false alarm and came-back on its own', () => {
+  const out = runThirteen([
+    ...feb25to26('late@x.com', ['2025-12'], ['2026-01']),
+    ...feb25to26('back@x.com', ['2025-12']),
+    ...feb25to26('gone@x.com', ['2026-02']),
+    ...feb25to26('pp@x.com', ['2026-02']).map((x) => ({ ...x, gateway: 'paypal' })),
+  ]);
+  const s = out.summary;
+  assert.equal(s.counts['paid-late'], 1);
+  assert.equal(s.counts['came-back'], 1);
+  assert.equal(s.falseAlarm, 1);
+  assert.equal(s.missedButReturned, 1);
+  assert.equal(s.reallyLost, 1);
+  assert.equal(s.unknown, 1);
+  assert.equal(s.reallyLost + s.falseAlarm + s.missedButReturned + s.unknown, s.totalLost);
+  assert.equal(
+    s.line,
+    'Of 4 lost donor-months, 1 look really lost, 1 are false alarms, 1 missed a payment but the donor came back, and 1 cannot be told (PayPal gives no failure data).'
+  );
+});

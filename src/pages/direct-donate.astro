@@ -304,6 +304,32 @@ const { headInner, bodyClass } = extract(homeRaw);
     });
   });
 
+  // Pre-fill from URL, e.g. /donate?amount=10&frequency=monthly
+  (() => {
+    const params = new URLSearchParams(window.location.search);
+    const freq = params.get('frequency');
+    if (freq === 'monthly' || freq === 'one-time') {
+      const freqRadio = form.querySelector(`input[name="frequency"][value="${freq}"]`) as HTMLInputElement | null;
+      if (freqRadio) {
+        freqRadio.checked = true;
+        updateCancelNote();
+      }
+    }
+    const amt = Number(params.get('amount'));
+    if (Number.isFinite(amt) && amt >= 1 && amt <= 10000) {
+      const presetRadio = form.querySelector(`input[name="preset"][value="${amt}"]`) as HTMLInputElement | null;
+      if (presetRadio) {
+        presetRadio.checked = true;
+        customLabel.hidden = true;
+      } else {
+        const customRadio = form.querySelector('input[name="preset"][value="custom"]') as HTMLInputElement | null;
+        if (customRadio) customRadio.checked = true;
+        customLabel.hidden = false;
+        customInput.value = String(Math.round(amt));
+      }
+    }
+  })();
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorEl.hidden = true;
